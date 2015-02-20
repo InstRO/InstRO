@@ -1,7 +1,3 @@
-/**
- *
- */
-
 /** \mainpage
  * InstRO is an instrumentation framework initially based on the ROSE compiler infrastructure.
  * It is in development at TU Darmstadt, Germany.

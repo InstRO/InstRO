@@ -8,6 +8,9 @@ namespace InstRO
 	{
 		class LLVMSelector:public Selector
 		{};
+		class ProgramEntrySelector:public ::InstRO::Selectors::ProgramEntrySelector, public LLVMSelector
+		{
+		};
 		class LLVMExampleSelector:public Selector
 		{
 
