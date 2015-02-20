@@ -4,7 +4,9 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include <vector>
 
+using std::vector;
 namespace InstRO{
 class Pass;
 class Selector;
@@ -95,32 +97,66 @@ private:
 };
 
 
-class Pass
-{};
-
 class ConstructSet
-{};
+{
+};
+
+
+class Pass
+{
+public:
+	std::vector<ConstructSet*> getInputConstructSets();
+protected:
+	std::vector<ConstructSet*> inputSets;
+	std::vector<ConstructSet*> outputSets;
+private:
+};
+
 
 
 
 
 
 namespace Selectors{
-class Selector:public Pass
-{};
-class ProgramEntrySelector: public Selector
-{
-};
+	class Selector:public Pass	{};
+
+	/* FileSelector: selects all constructs in files matching the predicate*/
+	class FileSelector:public Selector{};
+
+	/* IncludeSelector: selects included files from a depth and up to a depth */
+	class IncludeFileSelector: public Selector{};
+
+	/* Gammer Based Selectors*/
+	/* CGrammerSelector: selects constructs based on their specific grammer defintions, such as, Declarations, Defintion, FunctionDefintion */
+	class CGrammerSelector: public Selector{};
+	class CxxGrammerSelector: public Selector{};
+	class FORTRANGrammerSelector: public Selector{};
+
+	class ProgramEntrySelector: public Selector{};
+	class OpenMPSelector: public Selector{};
+	class GlobalScopeSelector: public Selector{};
+
+
+	/* NamePredicateSelectorTemplate: */
+	class NamePredicateSelectorTemplate:public Selector{};
+	class PragmaPredicateSelectorTemplate:public Selector{};
+	class PragmaSelectorTemplate: public Selector{};
+	class NamedEntitySelectorTemplate: public Selector{};
+	
+
+	/* Analysis and Structure Based Selectors */
+	class CallPathSelector: public Selector{};
+	class CallDepthSelector: public Selector{};
+	class CashesSelector: public Selector{};
+	class UniqueCallpathSelector: public Selector{};
+	class CubeEdgeBaseSelector: public Selector{};
 }
-namespace Transformers
-{
-class Transformer:public Pass
-{};
+
+namespace Transformers{
+	class Transformer:public Pass{};
 }
-namespace Adapters
-{
-class Adapter:public Pass
-{};
+namespace Adapters{
+	class Adapter:public Pass{};
 }
 
 }

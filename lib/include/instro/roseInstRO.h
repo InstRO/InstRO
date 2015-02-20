@@ -9,7 +9,7 @@ namespace InstRO
 		class RoseSelector:public Selector
 		{};
 
-		class ProgramEntrySelector:public ::InstRO::ProgramEntrySelector, public RoseSelector
+		class ProgramEntrySelector:public ::InstRO::Selectors::ProgramEntrySelector, public RoseSelector
 		{
 		};
 
@@ -26,6 +26,8 @@ namespace InstRO
 			}
 		};
 	}
+
+
 	class RoseInstrumentor:public InstRO
 	{
 	public:
