@@ -3,115 +3,125 @@
 #include <hash_map>
 
 namespace InstRO{
-class ConstructSet
-{
-public:
-	int getConstructLevel(){};
-	int getMaxConstructLevel(){};
-	int getMinConstructLevel(){};
-	ConstructSet(int level){};
-	ConstructSet(int minLevel,int maxLevel){};
-	int setCurrentMinLevel(){};
-	int setCurrentMaxLevel(){};
-};
-typedef std::vector<ConstructSet*> ConstructSetContainer;
-
-class PassConstructSetManagement
-{
-public:
-		ConstructSet* getOutput();
-	//
-	void setInput(std::vector<ConstructSet*> input);
-protected:
-	// Internal Interface used by the derived passes	
-	ConstructSet* registerInput(int maxConstructLevel,std::string name);
-	ConstructSet* registerInput(int maxConstructLevel);
-	ConstructSetContainer * getInputConstructSets();
-	ConstructSet* registerOutput(int minConstructLevel);
-private:
-	std::vector<ConstructSet*> inputSets;
-	std::vector<ConstructSet*> outputSets;
-};
-
-
-const int LiteralLevel=1;
-
-
-class PassConstructLevelManagement
-{
-public:
-	int getConstructLevelSupport();
-protected:
-	PassConstructLevelManagement(int min,int max)
+	namespace Core
 	{
-	}
-	int getMinSupportedConstructLevel(){return minSupportedConstructLevel;}
-	int getMaxSupportedConstructLevel(){return maxSupportedConstructLevel;}
-private:
-	int minSupportedConstructLevel,maxSupportedConstructLevel;
-};
-
-class Pass:public PassConstructSetManagement, public PassConstructLevelManagement
-{
-public:
-	// External Interface used by the PassManager
-	void init(){};
-	void enableInput(){};
-	void disableInput(){};
-	bool isInputEnabled(){};
-	void enableOutput(){};
-	void finalizeOutput(){};
-	bool isOutputEnabled(){};
-	void execute(){};
-	void finalize(){};/*
-};
-
-template <class T|> class PassImpl:public Pass
-	*/
-	ConstructSet* getInput(Pass* from)
+	class ConstructSet
 	{
-		if (inputOverride.find(from)==inputOverride.end())
-		{
-			return from->getOutput();
-		}
-		else
-		{
-			return inputOverride[from];
-		}
-		throw std::string("I should no be here. It is impossible!!!");
-	}
-	void overrideInput(Pass * from, ConstructSet* overrideSet)
-	{
-		inputOverride[from]=overrideSet;
-	}
-private:
-	std::hash_map<Pass*,ConstructSet*> inputOverride;
-};
-
-class PassEnvelope{
-	friend class PassManager;
 	public:
-		PassEnvelope(Pass * newPass)
-		{
-			pass=newPass;
-//			successor=NULL;
-		}
-	protected:
-		Pass * pass;
-		//Pass * successor;
-		std::vector<Pass*> predecessors;
-};
+		int getConstructLevel(){};
+		int getMaxConstructLevel(){};
+		int getMinConstructLevel(){};
+		ConstructSet(int level){};
+		ConstructSet(int minLevel,int maxLevel){};
+		int setCurrentMinLevel(){};
+		int setCurrentMaxLevel(){};
+	};
+	
+	typedef std::vector<ConstructSet*> ConstructSetCollection;
 
-class PassManager
-{
-public:
-	// Enable the Pass Manager to query the pass for its dependencies
-	PassEnvelope * registerPass(Pass * currentPass)
+	class PassConstructSetManagement
 	{
-		PassEnvelope * newPass=new PassEnvelope(currentPass);
-		passList.push_back(newPass);
-		return newPass;
+	public:
+		ConstructSet* getInput(Pass* from)
+		{
+			if (inputOverride.find(from)==inputOverride.end())
+			{
+				return from->getOutput();
+			}
+			else
+			{
+				return inputOverride[from];
+			}
+			throw std::string("I should no be here. It is impossible!!!");
+		}
+		void overrideInput(Pass * from, ConstructSet* overrideSet)
+		{
+			inputOverride[from]=overrideSet;
+		}
+	private:
+		std::hash_map<Pass*,ConstructSet*> inputOverride;
+	public:
+		ConstructSet* getOutput();
+		//
+		void setInput(std::vector<ConstructSet*> input);
+	protected:
+		// Internal Interface used by the derived passes	
+		ConstructSet* registerInput(int maxConstructLevel,std::string name);
+		ConstructSet* registerInput(int maxConstructLevel);
+		ConstructSetContainer * getInputConstructSets();
+		ConstructSet* registerOutput(int minConstructLevel);
+	private:
+		std::vector<ConstructSet*> inputSets;
+		std::vector<ConstructSet*> outputSets;
+	};
+
+	typedef enum ConstructLevelType
+	{
+		FirstConstructLevel=0,
+		LastConstructLevel=1
+	} ConstructLevelType;
+
+	const int LiteralLevel=1;
+
+	class PassConstructLevelManagement
+	{
+	public:
+		int getConstructLevelSupport();
+	protected:
+		PassConstructLevelManagement(int min,int max)
+		{
+		}
+		int getMinSupportedConstructLevel(){return minSupportedConstructLevel;}
+		int getMaxSupportedConstructLevel(){return maxSupportedConstructLevel;}
+	private:
+		int minSupportedConstructLevel,maxSupportedConstructLevel;
+	};
 	}
+	class Pass:public Core::PassConstructSetManagement, public Core::PassConstructLevelManagement
+	{
+	public:
+		// External Interface used by the PassManager
+		void init(){};
+		void enableInput(){};
+		void disableInput(){};
+		bool isInputEnabled(){};
+		void enableOutput(){};
+		void finalizeOutput(){};
+		bool isOutputEnabled(){};
+		void execute(){};
+		void finalize(){};/*
+			};
+			template <class T|> class PassImpl:public Pass
+			*/
+	
+	};
+
+	namespace Core
+	{
+		class PassEnvelope
+		{
+			friend class PassManager;
+		public:
+			PassEnvelope(Pass * newPass)
+			{
+				pass=newPass;
+				//			successor=NULL;
+			}
+		protected:
+			Pass * pass;
+			//Pass * successor;
+			std::vector<Pass*> predecessors;
+		};
+		class PassManager
+	{
+	public:
+		// Enable the Pass Manager to query the pass for its dependencies
+		PassEnvelope * registerPass(Pass * currentPass)
+		{
+			PassEnvelope * newPass=new PassEnvelope(currentPass);
+			passList.push_back(newPass);
+			return newPass;
+		}
 	//TODO: FIX
 	void addDependency(Pass * pass, Pass * dependency)
 	{
@@ -168,40 +178,56 @@ public:
 protected:
 	std::vector<PassEnvelope*> passList;
 };
+	}
 
-class PassFactory{
-				public:	
-					PassFactory(PassManager * refManager):refToGobalPassManager(refManager){};
-				virtual Pass * createBlackNWhiteFilter(Pass * input);
-				virtual Pass * createBlackNWhiteSelector(std::string string);
-				virtual Pass * createBooleanOrSelector(Pass * inputA,Pass * inputB);
-				virtual Pass * createProgramEntrySelector();
-				virtual Pass * createCygProfileAdapter(Pass * input);
-protected:
-			PassManager * refToGobalPassManager;
-};
-
-class InstRO
-{
-public:
-	typedef enum CompilationPhase
+	class PassFactory
 	{
-		firstPhase,
-		defaultPhase,
-		frontend,
-		afterOptimization,
-		afterAssebling,
-		afterLinkin,
-		lastPhase
-	}CompilationPhase;
-public:
-		
+	public:	
+		PassFactory(::InstRO::Core::PassManager * refManager):refToGobalPassManager(refManager){};
+		virtual Pass * createBlackNWhiteFilter(Pass * input);
+		virtual Pass * createBlackNWhiteSelector(std::string string);
+		virtual Pass * createBooleanOrSelector(Pass * inputA,Pass * inputB);
+		virtual Pass * createProgramEntrySelector();
+		virtual Pass * createCygProfileAdapter(Pass * input);
+	protected:
+		::InstRO::Core::PassManager * refToGobalPassManager;
+	};
+
+	class InstRO
+	{
+	public:
+		typedef enum CompilationPhase
+		{
+			firstPhase,
+			defaultPhase,
+			frontend,
+			afterOptimization,
+			afterAssebling,
+			afterLinkin,
+			lastPhase
+		}CompilationPhase;
+	public:		
 		virtual PassFactory * getFactory(CompilationPhase phase=frontend)=0;
-protected:
-	PassManager * passManager;
-	virtual init()=0;
-	virtual execute()=0;
+		PassManager * getPassManager()
+		{
+			return passManager;
+		}
+		void setPassManager(PassManager * manager)
+		{
+			if (passManagerLocked)
+				throw std::string("PassManager already in use and locked");
+			else
+			{
+				passManager=manager;
+			}
+		}
+	protected:
+		bool passManagerLocked;
+		PassManager * passManager;
+		virtual init()=0;
+		virtual execute()=0;
 };
+	namespace PassManagement{};
 
 	
 }
@@ -244,6 +270,17 @@ namespace InstRO
 	public: 
 		::InstRO::Rose::RosePassFactory * getFactory(CompilationPhase phase){return new ::InstRO::Rose::RosePassFactory(passManager);}
 	};
+}
+namespace InstRO
+{
+		namespace LLVM
+		{
+
+		}
+		class InstRO4LLVM: public InstRO
+		{
+
+		};
 }
 
 

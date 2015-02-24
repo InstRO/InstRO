@@ -6,8 +6,18 @@ namespace InstRO
 {
 	namespace ROSE
 	{
-		class RoseSelector:public Selector
-		{};
+		class RoseConstructSet:public ::InstRO::ConstructSet{};
+		
+		class RosePass: public Pass{
+			public:
+				RoseConstructSet* registerInput(int maxConstructLevel,Pass *);
+				RoseConstructSet* registerOutput(int minConstructLevel){
+					return dynamic_cast<::InstRO::ROSE::RoseConstructSet*>(::InstRO::Pass::registerOutput(minConstructLevel));
+				//	::InstRO::Pass::registerOutput(minConstructLevel);
+				};
+		};
+		class RoseSelector:public Selectors::Selector,public RosePass {};
+
 
 		class ProgramEntrySelector:public ::InstRO::Selectors::ProgramEntrySelector, public RoseSelector
 		{

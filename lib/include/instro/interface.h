@@ -99,14 +99,21 @@ private:
 
 class ConstructSet
 {
-};
+public:
+	int getConstructLevel();
 
+};
+typedef std::vector<ConstructSet*> ConstructSetContainer;
 
 class Pass
 {
 public:
+	ConstructSet* registerInput(int maxConstructLevel,Pass *);
+	ConstructSetContainer * getInputSets();
+	ConstructSet* registerOutput(int minConstructLevel);
 	std::vector<ConstructSet*> getInputConstructSets();
 protected:
+	
 	std::vector<ConstructSet*> inputSets;
 	std::vector<ConstructSet*> outputSets;
 private:
