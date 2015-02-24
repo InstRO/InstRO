@@ -10,33 +10,41 @@
 #include "llvm/PassManager.h"
 #include "llvm/Transforms/IPO/PassManagerBuilder.h"
 
-/*
- * Implements the CG analysis the InstRO Shadow Stack paper was based on
- * Since we need the CallGraph of the module we need to have this is as a
- * ModulePass!
- */
-class CashesSelector : public ::InstRO::LLVM::Pass, public llvm::ModulePass {
- public:
-	static char ID;
+namespace InstRO {
+	namespace LLVM {
 
-	CashesSelector();
+		/*
+		 * Implements the CG analysis the InstRO Shadow Stack paper was based on
+		 * Since we need the CallGraph of the module we need to have this is as a
+		 * ModulePass!
+		 */
+		class CashesSelector : public ::InstRO::LLVM::Pass,
+													 public llvm::ModulePass {
+		 public:
+			static char ID;
 
-	const char *getPassName() const { return pn.c_str(); }
+			CashesSelector();
 
-	void getAnalysisUsage(llvm::AnalysisUsage &info);
+			const char *getPassName() const { return pn.c_str(); }
 
-	/*
-	 * The runOnModule method implements the Cashes Selector behavior.
-	 * It iterates over all functions and marks all functions which are a parent
-	 * of a call
-	 * graph node which has two or more predecessors to be instrumented.
-	 */
-	bool runOnModule(llvm::Module &m);
+			void getAnalysisUsage(llvm::AnalysisUsage &info);
 
- private:
-	const std::string pn;
+			/*
+			 * The runOnModule method implements the Cashes Selector behavior.
+			 * It iterates over all functions and marks all functions which are a
+			 * parent
+			 * of a call
+			 * graph node which has two or more predecessors to be instrumented.
+			 */
+			bool runOnModule(llvm::Module &m);
 
-	std::vector<llvm::Function *> selectionSet;
-};
+		 private:
+			const std::string pn;
+
+			std::vector<llvm::Function *> selectionSet;
+		};
+
+	}	// LLVM
+}	// InstRO
 
 #endif
