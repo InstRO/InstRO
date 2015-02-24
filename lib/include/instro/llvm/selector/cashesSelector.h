@@ -1,6 +1,7 @@
-#ifndef INSTRO_LLVM_CASHESSELECTOR
-#define INSTRO_LLVM_CASHESSELECTOR
+#ifndef INSTRO_LLVM_CASHESSELECTOR_H
+#define INSTRO_LLVM_CASHESSELECTOR_H
 
+/* LLVM related includes */
 #include "llvm/Analysis/CallGraphSCCPass.h"
 #include "llvm/Pass.h"
 #include "llvm/IR/Module.h"
@@ -9,6 +10,9 @@
 #include "llvm/IR/LegacyPassManager.h"
 #include "llvm/PassManager.h"
 #include "llvm/Transforms/IPO/PassManagerBuilder.h"
+
+/* InstRO related includes */
+#include "llvm/Pass.h"
 
 namespace InstRO {
 	namespace LLVM {
