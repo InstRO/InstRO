@@ -11,12 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\lib\include\instro.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\interface.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\llvmInstRO.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\main.cxx" />
   </ItemGroup>
   <ItemGroup>
