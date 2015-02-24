@@ -4,37 +4,19 @@
 #include "instro/interface.h"
 namespace InstRO
 {
-	namespace LLVM
-	{
-		class LLVMSelector:public Selector
-		{};
-		class ProgramEntrySelector:public ::InstRO::Selectors::ProgramEntrySelector, public LLVMSelector
-		{
-		};
-		class LLVMExampleSelector:public Selector
-		{
+	namespace LLVM {
+		class Pass : public ::InstRO::Pass {
 
 		};
 
-		class LLVMFactory: public Factory
-		{
-			LLVMExampleSelector * createExampleSelector()
-			{
-					return new LLVMExampleSelector();
-			}
+		class PassFactory : public ::InstRO::PassFactory {
+
+		};
+
+		class InstRO : public ::InstRO::InstRO {
+			public:
+				PassFactory * getFactory();
 		};
 	}
-	class LLVMInstrumentor:public InstRO
-	{
-	public:
-		LLVMInstrumentor(int * argc,char**argv)
-		{
-		};
-		LLVM::LLVMFactory * getFactory(){};
-	protected:
-
-	private:
-
-	};
 }
 #endif
