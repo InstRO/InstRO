@@ -1,3 +1,5 @@
+#ifdef INSTRO_INSTRUMENTOR_H
+#define INSTRO_INSTRUMENTOR_H
 /*
  * This is our user-level interface. A typical use case in our minds is
  * int main(...){
@@ -30,3 +32,4 @@ namespace InstRO {
 	};
 
 }
+#endif
