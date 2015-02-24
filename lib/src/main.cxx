@@ -1,5 +1,6 @@
 //#include "instro.h"
 #include <vector>
+#include <hash_map>
 
 namespace InstRO{
 class ConstructSet
@@ -55,15 +56,42 @@ class Pass:public PassConstructSetManagement, public PassConstructLevelManagemen
 public:
 	// External Interface used by the PassManager
 	void init(){};
+	void enableInput(){};
+	void disableInput(){};
+	bool isInputEnabled(){};
+	void enableOutput(){};
+	void finalizeOutput(){};
+	bool isOutputEnabled(){};
 	void execute(){};
-	void finalize(){};
-
+	void finalize(){};/*
 };
 
-class PassContainer{
+template <class T|> class PassImpl:public Pass
+	*/
+	ConstructSet* getInput(Pass* from)
+	{
+		if (inputOverride.find(from)==inputOverride.end())
+		{
+			return from->getOutput();
+		}
+		else
+		{
+			return inputOverride[from];
+		}
+		throw std::string("I should no be here. It is impossible!!!");
+	}
+	void overrideInput(Pass * from, ConstructSet* overrideSet)
+	{
+		inputOverride[from]=overrideSet;
+	}
+private:
+	std::hash_map<Pass*,ConstructSet*> inputOverride;
+};
+
+class PassEnvelope{
 	friend class PassManager;
 	public:
-		PassContainer(Pass * newPass)
+		PassEnvelope(Pass * newPass)
 		{
 			pass=newPass;
 //			successor=NULL;
@@ -77,15 +105,17 @@ class PassContainer{
 class PassManager
 {
 public:
-	PassContainer * registerPass(Pass * currentPass)
+	// Enable the Pass Manager to query the pass for its dependencies
+	PassEnvelope * registerPass(Pass * currentPass)
 	{
-		PassContainer * newPass=new PassContainer(currentPass);
+		PassEnvelope * newPass=new PassEnvelope(currentPass);
 		passList.push_back(newPass);
 		return newPass;
 	}
+	//TODO: FIX
 	void addDependency(Pass * pass, Pass * dependency)
 	{
-		for (std::vector<PassContainer *>::iterator i:passList)
+		for (std::vector<PassEnvelope *>::iterator i:passList)
 		{
 			if ((*i)->pass==pass)
 			{
@@ -97,7 +127,7 @@ public:
 		}
 		// this pass is not registere
 		registerPass(pass);
-		addDependency(pass,dependency,requirement);
+	//	addDependency(pass,dependency,requirement);
 		//std::vector<Pass*>::iterator it=std::find(passList.begin(),passList.end(),pass);
 		//if (it!=passList.end())
 		//{
@@ -105,12 +135,12 @@ public:
 	};
 	int execute()
 	{
-		for (PassContainer * passContainer: passList)
+		for (PassEnvelope * passContainer: passList)
 		{
 			// Allow the Pass to Initialize iself. E.g. start reading input data from files, allocated named input fields, etc.
-			passContainer->pass->init();
+			// passContainer->pass->init();
 		}
-		for (PassContainer * passContainer: passList)
+		for (PassEnvelope * passContainer: passList)
 		{
 				std::vector<ConstructSet*> constructSets;
 				// Collect Output from preceeding Passes
@@ -120,16 +150,23 @@ public:
 					constructSets.push_back(predPass->getOutput());
 				}
 				
-				passContainer->pass->setInput(constructSets);
+			//	passContainer->pass->setInput(constructSets);
+				passContainer->pass->enableInput();
+				passContainer->pass->init();
 				passContainer->pass->execute();
+				passContainer->pass->finalize();
 		}
-		for (PassContainer * passContainer: passList)
+		for (PassEnvelope * passContainer: passList)
 		{
-			passContainer->pass->finalize();
+			passContainer->pass->disableInput();
+		}
+		for (PassEnvelope * passContainer: passList)
+		{
+			passContainer->pass->finalizeOutput();
 		}
 	};
 protected:
-	std::vector<PassContainer*> passList;
+	std::vector<PassEnvelope*> passList;
 };
 
 class PassFactory{
@@ -162,7 +199,8 @@ public:
 		virtual PassFactory * getFactory(CompilationPhase phase=frontend)=0;
 protected:
 	PassManager * passManager;
-
+	virtual init()=0;
+	virtual execute()=0;
 };
 
 	
@@ -173,16 +211,25 @@ namespace InstRO
 	namespace Rose{
 		class RosePass: public Pass
 		{};
+		class Selector:public RosePass
+		{
+		};
+		class Adapter:public RosePass
+		{
+		};
+		class Transformer: public RosePass
+		{
+		};
 			class RosePassFactory:public PassFactory
 			{
 			public:	
 				RosePassFactory(PassManager * refManager):PassFactory(refManager){};
 				RosePass * createBlackNWhiteFilter(RosePass * input)
 				{
-					RosePass * pass=new RosePass();
-					PassContainer * passContainer=refToGobalPassManager->registerPass(pass);
-					//input->getMi
-					refToGobalPassManager->addDependency(pass,input);
+					RosePass * pass=new RosePass(input);
+					refToGobalPassManager->registerPass(pass);
+					
+//					refToGobalPassManager->addDependency(pass,input,1);
 					//,std::vector<Pass*>().push_back(input));
 				}
 				RosePass * createBlackNWhiteSelector(std::string string);
@@ -211,7 +258,11 @@ int main(int argc,char ** argv)
 	programEntrySelector=factory->createProgramEntrySelector();
 	orSelector=factory->createBooleanOrSelector(bnwSelector,programEntrySelector);
 	adapter=factory->createCygProfileAdapter(orSelector);
-
+	instro->init();
+	::InstRO::Rose::Selector * myDevelopStuff=new ::InstRO::Rose::Selector();
+	instro->getPassManager()->registerPass
+	instro->apply();
+	instro->finalize();
 
 
 /*	::InstRO::InstRO * instro;
