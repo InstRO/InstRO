@@ -1,6 +1,12 @@
 #ifndef INSTRO_LLVM_CONSTRUCTSET_H
 #define INSTRO_LLVM_CONSTRUCTSET_H
 
+/* LLVM related includes */
+#include "llvm/IR/Value.h"
+
+/* InstRO related includes */
+#include "interface.h"
+
 namespace InstRO {
 
 	namespace LLVM {
