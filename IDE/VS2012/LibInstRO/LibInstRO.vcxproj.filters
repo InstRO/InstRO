@@ -14,4 +14,24 @@
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\lib\include\instro.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\interface.h">
+      <Filter>include\instro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\instrumentor.h">
+      <Filter>include\instro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\pass_management.h">
+      <Filter>include\instro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core.h">
+      <Filter>include\instro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h">
+      <Filter>include\instro</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

@@ -2,61 +2,49 @@
 #define ROSEINSTRO_H
 
 #include "instro/interface.h"
+
 namespace InstRO
 {
-	namespace ROSE
-	{
-		class RoseConstructSet:public ::InstRO::ConstructSet{};
-		
-		class RosePass: public Pass{
-			public:
-				RoseConstructSet* registerInput(int maxConstructLevel,Pass *);
-				RoseConstructSet* registerOutput(int minConstructLevel){
-					return dynamic_cast<::InstRO::ROSE::RoseConstructSet*>(::InstRO::Pass::registerOutput(minConstructLevel));
-				//	::InstRO::Pass::registerOutput(minConstructLevel);
-				};
-		};
-		class RoseSelector:public Selectors::Selector,public RosePass {};
-
-
-		class ProgramEntrySelector:public ::InstRO::Selectors::ProgramEntrySelector, public RoseSelector
+	namespace Rose{
+		class RosePass: public InstRO::Pass
+		{};
+		class Selector:public RosePass
 		{
 		};
-
-		class RoseExampleSelector:public RoseSelector
+		class Adapter:public RosePass
 		{
-
 		};
-
-		class RoseFactory: public Factory
+		class Transformer: public RosePass
 		{
-			RoseExampleSelector * createExampleSelector()
+		};
+			class RosePassFactory:public PassFactory
 			{
-					return new RoseExampleSelector();
-			}
-		};
-	}
+			public:	
+				RosePassFactory(PassManagement::PassManager * refManager):PassFactory(refManager){};
+				RosePass * createBlackNWhiteFilter(Pass * input)
+				{
+					return NULL;
+				//	RosePass * pass=new RosePass(input);
+			//		refToGobalPassManager->registerPass(pass);
+					
+//					refToGobalPassManager->addDependency(pass,input,1);
+					//,std::vector<Pass*>().push_back(input));
+				}
+				RosePass * createBlackNWhiteSelector(std::string string){return NULL;};
+				RosePass * createBooleanOrSelector(Pass * inputA,Pass * inputB){return NULL;};
+				RosePass * createProgramEntrySelector(){return NULL;};
+				RosePass * createCygProfileAdapter(Pass * input){return NULL;};
+			};
+		}; // Rose Name Space
 
-
-	class RoseInstrumentor:public InstRO
+	class RoseInstrumentor: public Instrumentor
 	{
-	public:
-		RoseInstrumentor(int * argc,char***argv)
-		{
-			factory=new ROSE::RoseFactory();
-		};
-		ROSE::RoseFactory * getFactory(){return factory;};
-
-		virtual void printDebugStatus()
-		{
-			std::cout <<"RoseInstrumentor Class" << std::endl;
-			::InstRO::InstRO::printDebugStatus();
-		}
-	protected:
-
-	private:
-		ROSE::RoseFactory * factory;
-
+	public: 
+		Rose::RosePassFactory * getFactory(Instrumentor::CompilationPhase phase){return new Rose::RosePassFactory(passManager);}
+//		PassFactory * getFactory(In
+		void init(){};
+		void apply(){};
+		void finalize(){};
 	};
 }
 #endif
