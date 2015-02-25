@@ -9,21 +9,21 @@
 
 namespace InstRO {
 
-	namespace LLVM {
-		/*
-		 * A Construct Set stores the selected nodes. This is implementation
-		 * specific
-		 * and one generally needs to cast to the specific type
-		 */
-		class ConstructSet : public ::InstRO::ConstructSet {
-		 public:
-			std::vector<llvm::Value *> &get();
+namespace LLVM {
+/*
+ * A Construct Set stores the selected nodes. This is implementation
+ * specific
+ * and one generally needs to cast to the specific type
+ */
+class ConstructSet : public ::InstRO::ConstructSet {
+ public:
+	std::vector<llvm::Value *> &get();
 
-		 private:
-			// Value is LLVMs most abstract type
-			std::vector<llvm::Value *> constructs;
-		};
-	}
+ private:
+	// Value is LLVMs most abstract type
+	std::vector<llvm::Value *> constructs;
+};
+}
 }
 
 #endif

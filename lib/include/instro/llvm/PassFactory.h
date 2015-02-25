@@ -4,14 +4,14 @@
 #include "llvm/Pass.h"
 
 namespace InstRO {
-	namespace LLVM {
+namespace LLVM {
 
-		/** An LLVM Passes factory */
-		class PassFactory : public ::InstRO::PassFactory {
-		 public:
-			Pass *createCygProfileAdapterPass(Pass *inputPass);
-		};
-	}
+/** An LLVM Passes factory */
+class PassFactory : public ::InstRO::PassFactory {
+ public:
+	Pass *createCygProfileAdapterPass(Pass *inputPass);
+};
+}
 }
 
 #endif
