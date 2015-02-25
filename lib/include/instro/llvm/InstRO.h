@@ -8,19 +8,18 @@
 #include "llvm/Pass.h"
 #include "llvm/PassFactory.h"
 
-
 /*
  * Within the LLVM namespace lives the implementation of the Clang and LLVM
  * dependent
  * components and infrastructure.
  */
 namespace InstRO {
-	namespace LLVM {
-		/** InstRO for LLVM */
-		class InstRO : public ::InstRO::InstRO {
-		 public:
-			PassFactory *getFactory();
-		};
-	}
+namespace LLVM {
+/** InstRO for LLVM */
+class InstRO : public ::InstRO::InstRO {
+ public:
+	PassFactory *getFactory();
+};
+}
 }
 #endif
