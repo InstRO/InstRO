@@ -4,28 +4,22 @@
 #include <vector>
 
 namespace InstRO{
-	class Pass;
-	namespace Core{
-		class ConstructSet;
-	}
-	namespace PassManagement{
-
-class PassEnvelope
+class Pass;
+namespace Core{
+typedef int ContstructLevelType;
+/* CI: The ConstructSet class is intended to be specialized for each compiler interface. It provides the basic mechanisms to specify what construct level are contained. */
+class ConstructSet
 {
-	friend class PassManager;
 	public:
-		PassEnvelope(Pass * newPass)
-		{
-			pass=newPass;
-			//			successor=NULL;
-		}
-	protected:
-		Pass * pass;
-		//Pass * successor;
-		std::vector<Pass*> predecessors;
-	};
-
-	} // End namespace PassManagement
+		ContstructLevelType getConstructLevel(){};
+		ContstructLevelType getMaxConstructLevel(){};
+		ContstructLevelType getMinConstructLevel(){};
+		ConstructSet(ContstructLevelType level){};
+		ConstructSet(ContstructLevelType minLevel,ContstructLevelType maxLevel){};
+		ContstructLevelType setCurrentMinLevel(){};
+		ContstructLevelType setCurrentMaxLevel(){};
+};
+}
 } // End namespace InstRO
 
 #endif

@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\lib\src\core\ConstructSetManagement.cpp" />
     <ClCompile Include="..\..\..\lib\src\main.cxx" />
   </ItemGroup>
   <ItemGroup>
@@ -19,15 +20,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructLevelManagrment.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSetManagement.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Instrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Pass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\PassFactory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\PassManager.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\rose\Instrumentor.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\rose\Pass.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\rose\PassFactory.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\misc\VisualPassManager.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\BlackAndWhiteListSelector.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F1C97F48-F74E-488B-8D38-1783F44DAED0}</ProjectGuid>

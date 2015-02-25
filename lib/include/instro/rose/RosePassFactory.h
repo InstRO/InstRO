@@ -4,7 +4,7 @@
 #include "instro/core/PassFactory.h"
 #include "instro/core/PassManager.h"
 
-#include "instro/rose/Pass.h"
+#include "instro/rose/RosePass.h"
 #include "instro/rose/selectors/BlackAndWhiteListSelector.h"
 
 namespace InstRO
@@ -15,16 +15,11 @@ class RosePassFactory:public PassFactory
 {
 	public:	
 		RosePassFactory(PassManagement::PassManager * refManager):PassFactory(refManager){};
-		RosePass * createBlackNWhiteFilter(Pass * input)
+		RosePass * createBlackAndWhiteListSelector(std::vector<std::string> rules)
 		{
-			RosePass * blackAn
-			refToGobalPassManager->registerPass(
-			return NULL;
-			//	RosePass * pass=new RosePass(input);
-			//		refToGobalPassManager->registerPass(pass);
-					
-			//					refToGobalPassManager->addDependency(pass,input,1);
-			//,std::vector<Pass*>().push_back(input));
+			Selectors::BlackAndWhiteListSelector * bnwlSelector=new Selectors::BlackAndWhiteListSelector(rules);
+			refToGobalPassManager->registerPass(bnwlSelector);
+			return bnwlSelector;
 		}
 		RosePass * createBlackNWhiteSelector(std::string string){return NULL;};
 		RosePass * createBooleanOrSelector(Pass * inputA,Pass * inputB){return NULL;};

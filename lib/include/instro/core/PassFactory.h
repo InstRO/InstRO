@@ -18,6 +18,7 @@
 #include <vector>
 
 #include <vector>
+#include <string>
 #include <hash_map>
 
 
@@ -35,8 +36,7 @@ namespace InstRO{
 		public:	
 			/* CI: A PassFactory must be initialized with the PassManager. */
 			PassFactory(PassManagement::PassManager * refManager):refToGobalPassManager(refManager){};
-			virtual Pass * createBlackNWhiteFilter(Pass * input)=0;
-			virtual Pass * createBlackNWhiteSelector(std::string string)=0;
+			virtual Pass * createBlackAndWhiteListSelector(std::vector<std::string> rules)=0;
 			virtual Pass * createBooleanOrSelector(Pass * inputA,Pass * inputB)=0;
 			virtual Pass * createProgramEntrySelector()=0;
 			virtual Pass * createCygProfileAdapter(Pass * input)=0;
