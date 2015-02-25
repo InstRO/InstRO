@@ -7,31 +7,50 @@
     <Filter Include="include\instro">
       <UniqueIdentifier>{3ee2c1fe-ed57-492a-8144-4c3538577119}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\instro\core">
+      <UniqueIdentifier>{46ecd823-5f49-41c5-ba58-f6f5299d9c53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\instro\rose">
+      <UniqueIdentifier>{358b68ac-b9b9-4f80-a04f-683755c9658e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\main.cxx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram3.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\interface.h">
-      <Filter>include\instro</Filter>
+    <ClInclude Include="..\..\..\lib\include\instro\core\Pass.h">
+      <Filter>include\instro\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\instrumentor.h">
-      <Filter>include\instro</Filter>
+    <ClInclude Include="..\..\..\lib\include\instro\core\Instrumentor.h">
+      <Filter>include\instro\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\pass_management.h">
-      <Filter>include\instro</Filter>
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassManager.h">
+      <Filter>include\instro\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\core.h">
-      <Filter>include\instro</Filter>
+    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h">
+      <Filter>include\instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassFactory.h">
+      <Filter>include\instro\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h">
-      <Filter>include\instro</Filter>
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\Instrumentor.h">
+      <Filter>include\instro\rose</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\Pass.h">
+      <Filter>include\instro\rose</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\PassFactory.h">
+      <Filter>include\instro\rose</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

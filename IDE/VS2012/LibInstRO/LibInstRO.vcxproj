@@ -15,14 +15,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram3.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\core.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\instrumentor.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\interface.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\pass_management.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\Instrumentor.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\Pass.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassFactory.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\Instrumentor.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\Pass.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\PassFactory.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F1C97F48-F74E-488B-8D38-1783F44DAED0}</ProjectGuid>

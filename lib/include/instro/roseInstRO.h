@@ -1,7 +1,13 @@
 #ifndef ROSEINSTRO_H
 #define ROSEINSTRO_H
 
-#include "instro/interface.h"
+// #include "instro/core/ConstructSet.h"
+#include "instro/core/Instrumentor.h"
+#include "instro/core/Pass.h"
+#include "instro/core/PassFactory.h"
+#include "instro/core/PassManager.h"
+
+
 
 namespace InstRO
 {

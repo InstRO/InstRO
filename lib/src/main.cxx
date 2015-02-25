@@ -1,10 +1,21 @@
 #define USING_ROSE
 #include "instro.h"
 
+
 //using namespace InstRO;
+
+
 
 int main(int argc,char ** argv)
 {
+	InstRO::Instrumentor * instro=new InstRO::RoseInstrumentor();
+	InstRO::PassFactory * aFactory=instro->getFactory();
+	InstRO::Pass * aPass= aFactory->createBlackNWhiteSelector("HelloWorld");
+
+	
+	
+
+	/*
 	InstRO::Instrumentor * instro=new InstRO::RoseInstrumentor();
 	InstRO::PassFactory * factory = instro->getFactory();
 	InstRO::Pass * bnwSelector,* programEntrySelector,*orSelector,*adapter;
@@ -18,7 +29,7 @@ int main(int argc,char ** argv)
 	instro->apply();
 	instro->finalize();
 
-
+	*/
 /*	::InstRO::InstRO * instro;
 	//CI: Rose specific constructor for the RoseInstrumentor - factory
 	instro=new ::InstRO::RoseInstrumentor(&argc,&argv);
