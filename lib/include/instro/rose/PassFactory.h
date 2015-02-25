@@ -5,6 +5,7 @@
 #include "instro/core/PassManager.h"
 
 #include "instro/rose/Pass.h"
+#include "instro/rose/selectors/BlackAndWhiteListSelector.h"
 
 namespace InstRO
 {
@@ -16,6 +17,8 @@ class RosePassFactory:public PassFactory
 		RosePassFactory(PassManagement::PassManager * refManager):PassFactory(refManager){};
 		RosePass * createBlackNWhiteFilter(Pass * input)
 		{
+			RosePass * blackAn
+			refToGobalPassManager->registerPass(
 			return NULL;
 			//	RosePass * pass=new RosePass(input);
 			//		refToGobalPassManager->registerPass(pass);
