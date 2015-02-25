@@ -21,7 +21,8 @@
 #include <hash_map>
 
 
-#include "instro/core.h"
+#include "instro/core/ConstructSetManagement.h"
+#include "instro/core/ConstructLevelManagrment.h"
 
 //#include "instro/roseInstRO.h"
 
@@ -32,10 +33,11 @@ namespace InstRO{
 		class PassManager;
 	}
 	
-	class Pass:public ::InstRO::Core::PassConstructSetManagement, public ::InstRO::Core::PassConstructLevelManagement
+	class Pass:public ::InstRO::Core::PassConstructSetManagement, public ::InstRO::Core::ConstructLevelManagrment
 	{
 	public:
 		Pass(){};
+
 		// External Interface used by the PassManager
 		void init(){};
 		void enableInput(){};

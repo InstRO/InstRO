@@ -33,9 +33,9 @@
 
 
 #ifdef USING_ROSE
-#include "instro/rose/Pass.h"
-#include "instro/rose/PassFactory.h"
-#include "instro/rose/Instrumentor.h"
+#include "instro/rose/RosePass.h"
+#include "instro/rose/RosePassFactory.h"
+#include "instro/rose/RoseInstrumentor.h"
 #endif
 
 #ifdef USING_LLVM

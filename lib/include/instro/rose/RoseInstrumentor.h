@@ -4,7 +4,7 @@
 #include "instro/core/Instrumentor.h"
 // #include "instro/core/PassFactory.h"
 
-#include "instro/rose/PassFactory.h"
+#include "instro/rose/RosePassFactory.h"
 
 namespace InstRO
 {

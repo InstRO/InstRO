@@ -20,8 +20,10 @@
 #include <vector>
 #include <hash_map>
 
-
-#include "instro/core.h"
+#include "instro/core/ConstructLevelManagrment.h"
+#include "instro/core/ConstructSetManagement.h"
+#include "instro/core/ConstructSet.h"
+//#include "instro/core.h"
 
 //#include "instro/roseInstRO.h"
 

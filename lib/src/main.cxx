@@ -1,6 +1,7 @@
 #define USING_ROSE
 #include "instro.h"
-
+#include <vector>
+#include <string>
 
 //using namespace InstRO;
 
@@ -10,7 +11,7 @@ int main(int argc,char ** argv)
 {
 	InstRO::Instrumentor * instro=new InstRO::RoseInstrumentor();
 	InstRO::PassFactory * aFactory=instro->getFactory();
-	InstRO::Pass * aPass= aFactory->createBlackNWhiteSelector("HelloWorld");
+	InstRO::Pass * aPass= aFactory->createBlackAndWhiteListSelector(std::vector<std::string>().push_back(std::string("HelloWorld")));
 
 	
 	

@@ -9,15 +9,24 @@ namespace InstRO
 		class RosePass: public Pass
 		{
 		};
+		namespace Adapters{
 		class Adapter:public RosePass
 		{
 		};
+		}
+		namespace Selectors
+		{
+
 		class Selector:public RosePass
 		{
 		};
+		}
+		namespace Transformer
+		{
 		class Transformer: public RosePass
 		{
 		};
+		}
 	}
 };
 #endif

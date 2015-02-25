@@ -37,8 +37,14 @@ class PassManager
 		// Enable the Pass Manager to query the pass for its dependencies
 		PassEnvelope * registerPass(Pass * currentPass)
 		{
+			// CI: Create a new pass envelope to store the dependencies of this pass.
 			PassEnvelope * newPass=new PassEnvelope(currentPass);
 			passList.push_back(newPass);
+			// for all predecessors inquired the pass dependencies
+			for (auto & i:newPass->predecessors)
+			{
+				int requiredInputLevel=newPass->getInputLevel(i);
+			}
 			return newPass;
 		}
 	//TODO: FIX
