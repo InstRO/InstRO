@@ -14,7 +14,11 @@ namespace InstRO
 	class RoseInstrumentor: public Instrumentor
 	{
 	public: 
-		PassFactory * getFactory(Instrumentor::CompilationPhase phase){return dynamic_cast<PassFactory*>(new Rose::RosePassFactory(passManager));}
+		PassFactory * getFactory(Instrumentor::CompilationPhase phase)
+		{
+			lockPassManager();
+			return dynamic_cast<PassFactory*>(new Rose::RosePassFactory(passManager));
+		}
 //		PassFactory * getFactory(In
 		void init(){};
 		void apply(){};

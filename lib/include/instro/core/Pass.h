@@ -18,7 +18,7 @@
 #include <vector>
 
 #include <vector>
-#include <hash_map>
+#include <unordered_map>
 
 
 #include "instro/core/ConstructSet.h"
@@ -37,18 +37,35 @@ namespace InstRO{
 	class Pass:public ::InstRO::Core::PassConstructSetManagement, public ::InstRO::Core::ConstructLevelManagrment
 	{
 	public:
-		virtual std::string passName(){return std::string("PassInterface");};
-		Pass(){};
+		// Info Functions:
+		bool providesOutput(){return passProvidesOutputFlag;}
+		bool requiresInput(){return passRequiresInputFlag;}
+	protected:
+		void setProvidesOuput(){passProvidesOutputFlag=true;};
+		void setRequiresInput(){passRequiresInputFlag=true;};
+				void unsetProvidesOuput(){passProvidesOutputFlag=false;};
+		void unsetRequiresInput(){passRequiresInputFlag=false;};
+	private:
+		bool passRequiresInputFlag,passProvidesOutputFlag;
+
+	public:
+		virtual std::string className(){return std::string("Pass");};
+		virtual std::string passName(){return passNameString;};
+		void setPassName(std::string passNAME){passNameString=passNAME;};
+	private:
+		std::string passNameString;
+	public:
+		Pass():passRequiresInputFlag(true),passProvidesOutputFlag(true),passNameString("DefaultPassName"){};
 
 		// External Interface used by the PassManager
 		void init(){};
 		void enableInput(){};
 		void disableInput(){};
-		bool isInputEnabled(){};
+		bool isInputEnabled(){return true;};
 		void enableOutput(){};
 		void disableOutput(){};
 		void finalizeOutput(){};
-		bool isOutputEnabled(){};
+		bool isOutputEnabled(){return true;};
 		void execute(){};
 		void finalize(){};
 	/* Interface for managing construct levels of input passes*/
