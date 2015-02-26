@@ -1,7 +1,7 @@
 #ifndef INSTRO_CORE_CONSTRUCTSETMANAGEMENT_H
 #define INSTRO_CORE_CONSTRUCTSETMANAGEMENT_H
 #include "instro/core/ConstructSet.h"
-#include <hash_map>
+#include <unordered_map>
 namespace InstRO
 {
 namespace Core
@@ -16,7 +16,7 @@ class PassConstructSetManagement
 		void overrideInput(PassConstructSetManagement * from, ConstructSet* overrideSet);
 
 	private:
-		std::hash_map<PassConstructSetManagement*,ConstructSet*> inputOverride;
+		std::unordered_map<PassConstructSetManagement*,ConstructSet*> inputOverride;
 		ConstructSet * output;
 
 	public:

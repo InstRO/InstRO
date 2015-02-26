@@ -78,7 +78,7 @@ namespace InstRO{
 		Core::ContstructLevelType getInputLevelRequirement(Pass *pass){return inputRequiredLevels[pass];};
 		std::vector<Pass*> inputPasses;
 		Core::ContstructLevelType outputLevel;
-		std::hash_map<Pass*,Core::ContstructLevelType> inputRequiredLevels;
+		std::unordered_map<Pass*,Core::ContstructLevelType> inputRequiredLevels;
 		/*
 			};
 			template <class T|> class PassImpl:public Pass

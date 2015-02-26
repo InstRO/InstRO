@@ -2,8 +2,7 @@
 #include "instro.h"
 
 #include "instro/misc/VisualizingPassManager.h"
-#include "instro/rose/adapters/CygProfileAdapter.h"
-#include "instro/rose/selectors/CompoundSelectors.h"
+
 
 #include <vector>
 #include <string>
