@@ -5,7 +5,7 @@
 #include "llvm/IR/Value.h"
 
 /* InstRO related includes */
-#include "interface.h"
+#include "instrumentor.h"
 
 namespace InstRO {
 

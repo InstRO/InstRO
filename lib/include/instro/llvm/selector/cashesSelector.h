@@ -12,7 +12,7 @@
 #include "llvm/Transforms/IPO/PassManagerBuilder.h"
 
 /* InstRO related includes */
-#include "llvm/Pass.h"
+#include "Pass.h"
 
 namespace InstRO {
 namespace LLVM {
