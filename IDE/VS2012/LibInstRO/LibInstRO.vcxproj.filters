@@ -34,6 +34,9 @@
     <ClCompile Include="..\..\..\lib\src\core\ConstructSetManagement.cpp">
       <Filter>source\lib\core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp">
+      <Filter>source\lib\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
@@ -79,5 +82,8 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructLevelManagrment.h">
       <Filter>include\instro\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\test\TestInstrumentor.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\test\TestPass.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\test\TestPassFactory.h" />
   </ItemGroup>
 </Project>

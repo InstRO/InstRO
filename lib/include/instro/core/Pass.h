@@ -21,6 +21,7 @@
 #include <hash_map>
 
 
+#include "instro/core/ConstructSet.h"
 #include "instro/core/ConstructSetManagement.h"
 #include "instro/core/ConstructLevelManagrment.h"
 
@@ -36,6 +37,7 @@ namespace InstRO{
 	class Pass:public ::InstRO::Core::PassConstructSetManagement, public ::InstRO::Core::ConstructLevelManagrment
 	{
 	public:
+		virtual std::string passName(){return std::string("PassInterface");};
 		Pass(){};
 
 		// External Interface used by the PassManager
@@ -44,10 +46,23 @@ namespace InstRO{
 		void disableInput(){};
 		bool isInputEnabled(){};
 		void enableOutput(){};
+		void disableOutput(){};
 		void finalizeOutput(){};
 		bool isOutputEnabled(){};
 		void execute(){};
-		void finalize(){};/*
+		void finalize(){};
+	/* Interface for managing construct levels of input passes*/
+	public:
+		void setOutputLevel(Core::ContstructLevelType level){outputLevel=level;};
+		Core::ContstructLevelType getOutputLevel(){return outputLevel;};
+		void registerInputPass(Pass * pass ,Core::ContstructLevelType level){inputPasses.push_back(pass);setInputLevelRequirement(pass,level);}
+		std::vector<Pass*> getInputPasses(){return inputPasses;};
+		void setInputLevelRequirement(Pass * pass,Core::ContstructLevelType level){inputRequiredLevels[pass]=level;}
+		Core::ContstructLevelType getInputLevelRequirement(Pass *pass){return inputRequiredLevels[pass];};
+		std::vector<Pass*> inputPasses;
+		Core::ContstructLevelType outputLevel;
+		std::hash_map<Pass*,Core::ContstructLevelType> inputRequiredLevels;
+		/*
 			};
 			template <class T|> class PassImpl:public Pass
 			*/
