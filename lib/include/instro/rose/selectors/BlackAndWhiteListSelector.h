@@ -12,7 +12,13 @@ namespace Selectors
 {
 
 class BlackAndWhiteListSelector:public Selector{
-	BlackAndWhiteListSelector(std::vector<std::string> matchRules){};
+public:
+	BlackAndWhiteListSelector(std::vector<std::string> matchRules)
+	{
+		disableInput();
+		setOutputLevel(Core::LiteralConstructLevel);
+	};
+	std::string passName(){return std::string("ROSE-BlackAndWhiteListSelector");}
 };
 }// End namespace Selectors
 }// End namespace Rose

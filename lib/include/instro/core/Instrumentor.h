@@ -23,6 +23,7 @@
 #include "instro/core/ConstructLevelManagrment.h"
 #include "instro/core/ConstructSetManagement.h"
 #include "instro/core/ConstructSet.h"
+#include "instro/core/PassManager.h"
 //#include "instro/core.h"
 
 //#include "instro/roseInstRO.h"
@@ -46,7 +47,12 @@ namespace InstRO{
 			afterLinking,
 			lastPhase
 		}CompilationPhase;
-	public:		
+	public:	
+		Instrumentor()
+		{
+			passManagerLocked=false;
+			setPassManager(new PassManagement::SimplePassManager());
+		}
 		virtual PassFactory * getFactory(CompilationPhase phase=frontend)=0;
 		PassManagement::PassManager * getPassManager()
 		{

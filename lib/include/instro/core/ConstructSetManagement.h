@@ -11,7 +11,7 @@ class PassConstructSetManagement
 	public:
 		PassConstructSetManagement(){output=NULL;};		
 		void setOutput(ConstructSet * output);
-		ConstructSet* getOutput();
+		ConstructSet* getOutput(){return new ConstructSet();};
 		ConstructSet* getInput(PassConstructSetManagement * from);
 		void overrideInput(PassConstructSetManagement * from, ConstructSet* overrideSet);
 

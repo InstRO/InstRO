@@ -11,7 +11,9 @@ int main(int argc,char ** argv)
 {
 	InstRO::Instrumentor * instro=new InstRO::RoseInstrumentor();
 	InstRO::PassFactory * aFactory=instro->getFactory();
-	InstRO::Pass * aPass= aFactory->createBlackAndWhiteListSelector(std::vector<std::string>().push_back(std::string("HelloWorld")));
+	std::vector<std::string> filterRules;
+	filterRules.push_back("main");
+	InstRO::Pass * aPass= aFactory->createBlackAndWhiteListSelector(filterRules);
 
 	
 	
