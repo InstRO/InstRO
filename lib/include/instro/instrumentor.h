@@ -9,24 +9,26 @@
  * }
  */
 namespace InstRO {
-	
-	class Pass {
-		public:
-			/** What exactly is our public interface? */
-			virtual void run();
-	};
 
-	class PassFactory {
-		public:
-			virtual Pass * createFunctionDefinitionSelector() = 0;
-			virtual Pass * createCygProfileAdapter(Pass *inputSelector) = 0;
-	};
+class PassManager;
 
-	class InstRO {
-		public:
-			PassFactory * getFactory() = 0;
-		protected:
-			PassManager * pm;
-	};
+class Pass {
+ public:
+	/** What exactly is our public interface? */
+	virtual void run();
+};
 
+class PassFactory {
+ public:
+	virtual Pass *createFunctionDefinitionSelector() = 0;
+	virtual Pass *createCygProfileAdapter(Pass *inputSelector) = 0;
+};
+
+class InstRO {
+ public:
+	virtual PassFactory *getFactory() = 0;
+
+ protected:
+	PassManager *pm;
+};
 }
