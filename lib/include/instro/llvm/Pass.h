@@ -4,10 +4,10 @@
 #include <map>
 
 /* Do we need this for the top-level Pass class? */
-//#include "interface.h"
+#include "instro/core/Pass.h"
 
 /* Gives us an LLVM Construct Set */
-#include "core/ConstructSet.h"
+#include "instro/llvm/core/ConstructSet.h"
 
 namespace InstRO {
 namespace LLVM {

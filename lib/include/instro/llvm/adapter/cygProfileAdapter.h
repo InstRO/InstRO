@@ -10,7 +10,7 @@
 #include "llvm/Support/raw_ostream.h"
 
 /* InstRO related includes */
-#include "llvm/Pass.h"
+#include "instro/llvm/Pass.h"
 
 namespace InstRO {
 namespace LLVM {
@@ -38,6 +38,8 @@ class CygProfileAdapter : public ::InstRO::LLVM::Pass,
 	const std::string pn;
 	const std::string exitName;
 	const std::string entryName;
+
+	::InstRO::LLVM::Pass  *inputSelector;
 
 	llvm::CallInst *entryFunc;
 	llvm::CallInst *exitFunc;

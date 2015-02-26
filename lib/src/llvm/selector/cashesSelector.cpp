@@ -1,8 +1,8 @@
 #include "cashesSelector.h"
 
-char CashesSelector::ID = 0;
+char ::InstRO::LLVM::CashesSelector::ID = 0;
 
-void CashesSelector::getAnalysisUsage(llvm::AnalysisUsage &info) {
+void ::InstRO::LLVM::CashesSelector::getAnalysisUsage(llvm::AnalysisUsage &info) {
 	/*
 	 * For the use within Clang I tried to use the CallGraphWrapperPass as a
 	 * required
@@ -22,7 +22,7 @@ void CashesSelector::getAnalysisUsage(llvm::AnalysisUsage &info) {
  * a call
  * graph node which has two or more predecessors to be instrumented.
  */
-bool CashesSelector::runOnModule(llvm::Module &m) {
+bool ::InstRO::LLVM::CashesSelector::runOnModule(llvm::Module &m) {
 	llvm::CallGraph cg(m);
 	for (auto &f : m.getFunctionList()) {
 		const llvm::CallGraphNode *cgf = cg[&f];

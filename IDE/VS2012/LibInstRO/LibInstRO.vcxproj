@@ -11,16 +11,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\lib\include\instro.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\interface.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\llvmInstRO.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp" />
+    <ClCompile Include="..\..\..\lib\src\core\ConstructSetManagement.cpp" />
     <ClCompile Include="..\..\..\lib\src\main.cxx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram3.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\lib\include\instro.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructLevelManagrment.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSetManagement.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\Instrumentor.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\Pass.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassFactory.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassManager.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\misc\VisualPassManager.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\BlackAndWhiteListSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\test\TestInstrumentor.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\test\TestPass.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\test\TestPassFactory.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F1C97F48-F74E-488B-8D38-1783F44DAED0}</ProjectGuid>
@@ -56,7 +71,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)/../../lib/include;C:\Users\ci24amun\Documents\Development\rose\git-rose\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\..\lib\include;C:\Users\ci24amun\Documents\Development\rose\git-rose\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

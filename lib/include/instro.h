@@ -21,10 +21,24 @@
 #define USING_LLVM
 #endif
 
-#include "instro/interface.h"
+#include "instro/core/Pass.h"
+#include "instro/core/PassFactory.h"
+#include "instro/core/Instrumentor.h"
+
+
+//#include "instro/core/Pass.h"
+//#include "instro/core/PassFactory.h"
+//#include "instro/core/ConstructSet.h"
+//#include "instro/core/Factory.h"
+//#include "instro/core/Instrumentor.h"
+
+//#include "instro/core/PassManager.h"
+
 
 #ifdef USING_ROSE
-#include "instro/roseInstRO.h"
+#include "instro/rose/RosePass.h"
+#include "instro/rose/RosePassFactory.h"
+#include "instro/rose/RoseInstrumentor.h"
 #endif
 
 #ifdef USING_LLVM

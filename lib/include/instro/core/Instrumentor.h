@@ -1,6 +1,5 @@
-#ifndef INSTRO_INTERFACE_H
-#define INSTRO_INTERFACE_H "5.0_Alpha"
-
+#ifndef INSTRO_CORE_INSTRUMENTOR_H
+#define INSTRO_CORE_INSTRUMENTOR_H
 /*
  * This is our user-level interface. A typical use case in our minds is
  * int main(...){
@@ -21,30 +20,19 @@
 #include <vector>
 #include <hash_map>
 
-
-#include "instro/core.h"
+#include "instro/core/ConstructLevelManagrment.h"
+#include "instro/core/ConstructSetManagement.h"
+#include "instro/core/ConstructSet.h"
+#include "instro/core/PassManager.h"
+//#include "instro/core.h"
 
 //#include "instro/roseInstRO.h"
 
 namespace InstRO{
-	/* PassFactory: Interface for the mandatory InstRO Passes. */
 	namespace PassManagement
 	{
 		class PassManager;
 	}
-	class PassFactory
-	{
-		public:	
-			/* CI: A PassFactory must be initialized with the PassManager. */
-			PassFactory(PassManagement::PassManager * refManager):refToGobalPassManager(refManager){};
-			virtual Pass * createBlackNWhiteFilter(Pass * input)=0;
-			virtual Pass * createBlackNWhiteSelector(std::string string)=0;
-			virtual Pass * createBooleanOrSelector(Pass * inputA,Pass * inputB)=0;
-			virtual Pass * createProgramEntrySelector()=0;
-			virtual Pass * createCygProfileAdapter(Pass * input)=0;
-		protected:
-			PassManagement::PassManager * refToGobalPassManager;
-	};
 
 	class Instrumentor
 	{
@@ -59,7 +47,12 @@ namespace InstRO{
 			afterLinking,
 			lastPhase
 		}CompilationPhase;
-	public:		
+	public:	
+		Instrumentor()
+		{
+			passManagerLocked=false;
+			setPassManager(new PassManagement::SimplePassManager());
+		}
 		virtual PassFactory * getFactory(CompilationPhase phase=frontend)=0;
 		PassManagement::PassManager * getPassManager()
 		{
@@ -82,26 +75,6 @@ namespace InstRO{
 		virtual void apply()=0;
 		virtual void finalize()=0;
 };
-
-	class Pass:public ::InstRO::Core::PassConstructSetManagement, public ::InstRO::Core::PassConstructLevelManagement
-	{
-	public:
-		Pass(){};
-		// External Interface used by the PassManager
-		void init(){};
-		void enableInput(){};
-		void disableInput(){};
-		bool isInputEnabled(){};
-		void enableOutput(){};
-		void finalizeOutput(){};
-		bool isOutputEnabled(){};
-		void execute(){};
-		void finalize(){};/*
-			};
-			template <class T|> class PassImpl:public Pass
-			*/
-	};
 }
-
 
 #endif

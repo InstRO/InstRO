@@ -7,25 +7,83 @@
     <Filter Include="include\instro">
       <UniqueIdentifier>{3ee2c1fe-ed57-492a-8144-4c3538577119}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\instro\core">
+      <UniqueIdentifier>{46ecd823-5f49-41c5-ba58-f6f5299d9c53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\instro\rose">
+      <UniqueIdentifier>{358b68ac-b9b9-4f80-a04f-683755c9658e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\instro\misc">
+      <UniqueIdentifier>{266d33c7-0c68-4f2c-aedc-81cd4cd6c7e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\instro\rose\selector">
+      <UniqueIdentifier>{d5318fac-ff30-4021-9dfb-196c511d999e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{90c09a93-d15b-4a18-b139-6c52534a394c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib">
+      <UniqueIdentifier>{cb2bafdb-9a8e-44a2-ae42-3b0f2910ff4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib\core">
+      <UniqueIdentifier>{160bd7c1-e1aa-4635-ba0f-a1c02bb43f6f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\lib\src\main.cxx" />
+    <ClCompile Include="..\..\..\lib\src\core\ConstructSetManagement.cpp">
+      <Filter>source\lib\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp">
+      <Filter>source\lib\core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram3.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\interface.h">
-      <Filter>include\instro</Filter>
+    <ClInclude Include="..\..\..\lib\include\instro\core\Pass.h">
+      <Filter>include\instro\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h">
-      <Filter>include\instro</Filter>
+    <ClInclude Include="..\..\..\lib\include\instro\core\Instrumentor.h">
+      <Filter>include\instro\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\llvmInstRO.h">
-      <Filter>include\instro</Filter>
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassManager.h">
+      <Filter>include\instro\core</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\lib\src\main.cxx" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h">
+      <Filter>include\instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassFactory.h">
+      <Filter>include\instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\misc\VisualPassManager.h">
+      <Filter>include\instro\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h">
+      <Filter>include\instro\rose</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h">
+      <Filter>include\instro\rose</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h">
+      <Filter>include\instro\rose</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\BlackAndWhiteListSelector.h">
+      <Filter>include\instro\rose\selector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSetManagement.h">
+      <Filter>include\instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructLevelManagrment.h">
+      <Filter>include\instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\test\TestInstrumentor.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\test\TestPass.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\test\TestPassFactory.h" />
   </ItemGroup>
 </Project>
