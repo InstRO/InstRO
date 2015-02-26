@@ -1,13 +1,15 @@
 #include "cygProfileAdapter.h"
 
-char CygProfileAdapter::ID = 0;
+char ::InstRO::LLVM::CygProfileAdapter::ID = 0;
 
-CygProfileAdapter::CygProfileAdapter(::InstRO::LLVM::Pass *inputSel)
-		: pn("CygProfileAdapter"),
+::InstRO::LLVM::CygProfileAdapter::CygProfileAdapter(
+		::InstRO::LLVM::Pass *inputSel)
+		: llvm::FunctionPass(ID),
+			pn("CygProfileAdapter"),
 			exitName("__cyg_profile_func_exit"),
-			entryName("__cyg_profile_func_enter") {}
+			entryName("__cyg_profile_func_enter"), inputSelector(inputSel) {}
 
-bool CygProfileAdapter::doInitialization(llvm::Module &m) {
+bool ::InstRO::LLVM::CygProfileAdapter::doInitialization(llvm::Module &m) {
 	mod = &m;
 	llvm::Function *func = buildFunction(exitName);
 	mod->getOrInsertFunction(exitName, func->getFunctionType());
@@ -15,12 +17,12 @@ bool CygProfileAdapter::doInitialization(llvm::Module &m) {
 	mod->getOrInsertFunction(entryName, func->getFunctionType());
 }
 
-bool CygProfileAdapter::runOnFunction(llvm::Function &f) {
+bool ::InstRO::LLVM::CygProfileAdapter::runOnFunction(llvm::Function &f) {
 	// This method is implemented in InstRO::LLVM::Pass to be able
 	// to abstract away a map, which is used by the pass manager to maybe
 	// fool the pass requesting the construct set.
-	auto &cs = getInput(inputSelector);
-	auto constructs = cs.get();
+	auto cs = getInput(inputSelector);
+	auto constructs = cs->get();
 	// If the function was marked for adaption
 	auto res = std::find(std::begin(constructs), std::end(constructs), &f);
 	// we build the instrumentation
@@ -44,16 +46,18 @@ bool CygProfileAdapter::runOnFunction(llvm::Function &f) {
 	}
 }
 
-llvm::CallInst *CygProfileAdapter::buildExitCall(llvm::Function &f,
-																								 llvm::ReturnInst *ri) {
+llvm::CallInst * ::InstRO::LLVM::CygProfileAdapter::buildExitCall(
+		llvm::Function &f, llvm::ReturnInst *ri) {
 	return buildTCall(f, llvm::Twine(exitName), ri);
 }
 
-llvm::CallInst *CygProfileAdapter::buildEntryCall(llvm::Function &f) {
+llvm::CallInst * ::InstRO::LLVM::CygProfileAdapter::buildEntryCall(
+		llvm::Function &f) {
 	return buildTCall(f, llvm::Twine(entryName), nullptr);
 }
 
-llvm::Function *CygProfileAdapter::buildFunction(std::string name) {
+llvm::Function * ::InstRO::LLVM::CygProfileAdapter::buildFunction(
+		std::string name) {
 	llvm::PointerType *voidPtr =
 			llvm::PointerType::getUnqual(llvm::Type::getInt8Ty(mod->getContext()));
 	std::vector<llvm::Type *> argTypes(2, voidPtr);
@@ -70,9 +74,8 @@ llvm::Function *CygProfileAdapter::buildFunction(std::string name) {
 	return func;
 }
 
-llvm::CallInst *CygProfileAdapter::buildTCall(llvm::Function &f,
-																							llvm::Twine &&name,
-																							llvm::Instruction *insertBefore) {
+llvm::CallInst * ::InstRO::LLVM::CygProfileAdapter::buildTCall(
+		llvm::Function &f, llvm::Twine &&name, llvm::Instruction *insertBefore) {
 	// constructs a ptr to void type in the general address space
 	llvm::PointerType *voidPtr =
 			llvm::PointerType::getUnqual(llvm::Type::getInt8Ty(mod->getContext()));

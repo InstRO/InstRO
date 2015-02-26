@@ -5,7 +5,7 @@
 #include "llvm/IR/Value.h"
 
 /* InstRO related includes */
-#include "instrumentor.h"
+#include "instro/llvm/core/ConstructSet.h"
 
 namespace InstRO {
 
@@ -15,7 +15,7 @@ namespace LLVM {
  * specific
  * and one generally needs to cast to the specific type
  */
-class ConstructSet : public ::InstRO::ConstructSet {
+class ConstructSet : public ::InstRO::Core::ConstructSet {
  public:
 	std::vector<llvm::Value *> &get();
 
