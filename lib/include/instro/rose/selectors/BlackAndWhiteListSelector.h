@@ -15,8 +15,10 @@ class BlackAndWhiteListSelector:public Selector{
 public:
 	BlackAndWhiteListSelector(std::vector<std::string> matchRules)
 	{
-		disableInput();
-		setOutputLevel(Core::LiteralConstructLevel);
+		unsetRequiresInput();
+		setProvidesOuput();
+		setOutputLevel(Core::ConstructLevelLiteral);
+		
 	};
 	std::string passName(){return std::string("ROSE-BlackAndWhiteListSelector");}
 };

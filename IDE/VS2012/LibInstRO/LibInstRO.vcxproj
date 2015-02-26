@@ -28,11 +28,13 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\Pass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\PassFactory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\PassManager.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\misc\VisualPassManager.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingPassManager.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\adapters\CygProfileAdapter.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\BlackAndWhiteListSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\CompoundSelectors.h" />
     <ClInclude Include="..\..\..\lib\include\instro\test\TestInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\test\TestPass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\test\TestPassFactory.h" />

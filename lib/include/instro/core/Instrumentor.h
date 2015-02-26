@@ -60,7 +60,7 @@ namespace InstRO{
 		}
 		void setPassManager(PassManagement::PassManager * manager)
 		{
-			if (passManagerLocked)
+			if (isPassManagerLocked())
 				throw std::string("PassManager already in use and locked");
 			else
 			{
@@ -68,6 +68,10 @@ namespace InstRO{
 			}
 		}
 	protected:
+		bool isPassManagerLocked(){
+			return passManagerLocked;
+		}
+		void lockPassManager(){passManagerLocked=true;}
 		bool passManagerLocked;
 		PassManagement::PassManager * passManager;
 	public:

@@ -7,8 +7,10 @@ namespace InstRO{
 class Pass;
 namespace Core{
 typedef enum ContstructLevelEnum{
-	MinConstructLevel=1,
-	LiteralConstructLevel=1,
+	ConstructLevelMin=1,
+	ConstructLevelLiteral=1,
+	ConstructLevelExpression=2,
+	ConstructLevelStatement,
 	MaxConstructLevel=1
 }ContstructLevelType;
 
@@ -19,9 +21,9 @@ class ConstructSet
 {
 	public:
 		ConstructSet(){};
-		ContstructLevelType getConstructLevel(){return MinConstructLevel;};
-		ContstructLevelType getMaxConstructLevel(){return MinConstructLevel;};
-		ContstructLevelType getMinConstructLevel(){return MinConstructLevel;};
+		ContstructLevelType getConstructLevel(){return ConstructLevelMin;};
+		ContstructLevelType getMaxConstructLevel(){return ConstructLevelMin;};
+		ContstructLevelType getMinConstructLevel(){return ConstructLevelMin;};
 		ConstructSet(ContstructLevelType level){};
 		ConstructSet(ContstructLevelType minLevel,ContstructLevelType maxLevel){};
 		void setCurrentMinLevel(ContstructLevelType minLevel){};

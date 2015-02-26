@@ -19,15 +19,18 @@ namespace InstRO{
 
 class PassEnvelope
 {
-	friend class PassManager;
+//	friend class PassManager;
 	friend class SimplePassManager;
 	public:
 		PassEnvelope(Pass * newPass)
 		{
 			pass=newPass;
+			existingOuputDependency=false;
 			//			successor=NULL;
 		}
 	protected:
+		bool existingOuputDependency;
+//		bool existingInputDependency;
 		Pass * pass;
 		//Pass * successor;
 		std::vector<Pass*> predecessors;
@@ -39,21 +42,27 @@ class PassManager
 		// Enable the Pass Manager to query the pass for its dependencies
 		virtual void registerPass(Pass * currentPass)=0;
 		virtual int execute()=0;
+//		virtual bool usesInput(Pass * pass){hasInputDependencies;
+		//virtual bool isInput(Pass * pass)=0;
+		virtual bool hasOutputDependencies(Pass*)=0;
+		virtual bool hasInputDependencies(Pass*)=0;
 protected:
 
 };
 
 class SimplePassManager: public InstRO::PassManagement::PassManager
 {
+public:
 		// Enable the Pass Manager to query the pass for its dependencies
 		void registerPass(Pass * currentPass)
 		{
 			// CI: Create a new pass envelope to store the dependencies of this pass.
 			PassEnvelope * newPass=new PassEnvelope(currentPass);
+			std::vector<Pass*> inputs=currentPass->getInputPasses();
 			passList.push_back(newPass);
 		//	newPass->predecessors=currentPass->getInputPasses();
 			// for all predecessors inquired the pass dependencies
-			for (auto & i:newPass->predecessors)
+			for (auto & i:inputs)
 			{
 				Core::ContstructLevelType maxInputLevel=currentPass->getInputLevelRequirement(i);
 				Core::ContstructLevelType minOutputLevelProvided=i->getOutputLevel();
@@ -67,6 +76,7 @@ class SimplePassManager: public InstRO::PassManagement::PassManager
 	{
 	// TODO(CI): implement storing of construct level graph
 		getEnvelope(currentPass)->predecessors.push_back(input);
+		getEnvelope(input)->existingOuputDependency=true;
 	};
 	int execute()
 	{
@@ -113,6 +123,9 @@ class SimplePassManager: public InstRO::PassManagement::PassManager
 		}
 		return 0;
 	};
+
+	virtual bool hasOutputDependencies(Pass* pass){return getEnvelope(pass)->existingOuputDependency;};
+	virtual bool hasInputDependencies(Pass* pass){return getPredecessors(getEnvelope(pass)).size()>0;};
 protected:
 	ConstructSet * elevate(Core::ContstructLevelType inputLevel){
 		// TODO(CI): Implement Elevation
@@ -131,8 +144,10 @@ protected:
 		else return (*result);*/
 	};
 	std::vector<Pass*> getPredecessors(PassEnvelope * envelope){return envelope->predecessors;};
+	Pass * getPass(PassEnvelope * env){return env->pass;};
 
 	std::vector<PassEnvelope*> passList;
+	typedef std::vector<PassEnvelope*> PassEnvelopeListType;
 
 };
 
