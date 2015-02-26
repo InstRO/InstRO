@@ -36,6 +36,8 @@
 #include "instro/rose/RosePass.h"
 #include "instro/rose/RosePassFactory.h"
 #include "instro/rose/RoseInstrumentor.h"
+#include "instro/rose/adapters/CygProfileAdapter.h"
+#include "instro/rose/selectors/CompoundSelectors.h"
 #endif
 
 #ifdef USING_LLVM
