@@ -2,6 +2,8 @@
 
 char ::InstRO::LLVM::CashesSelector::ID = 0;
 
+::InstRO::LLVM::CashesSelector::CashesSelector() : ModulePass(ID){}
+
 void ::InstRO::LLVM::CashesSelector::getAnalysisUsage(llvm::AnalysisUsage &info) {
 	/*
 	 * For the use within Clang I tried to use the CallGraphWrapperPass as a
