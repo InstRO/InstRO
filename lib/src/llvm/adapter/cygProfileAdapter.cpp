@@ -7,9 +7,12 @@ char ::InstRO::LLVM::CygProfileAdapter::ID = 0;
 		: llvm::FunctionPass(ID),
 			pn("CygProfileAdapter"),
 			exitName("__cyg_profile_func_exit"),
-			entryName("__cyg_profile_func_enter"), inputSelector(inputSel) {}
+			entryName("__cyg_profile_func_enter"), inputSelector(inputSel) {
+			llvm::errs() << "Running construction" << "\n";
+			}
 
 bool ::InstRO::LLVM::CygProfileAdapter::doInitialization(llvm::Module &m) {
+	llvm::errs() << "Running initialization\n";
 	mod = &m;
 	llvm::Function *func = buildFunction(exitName);
 	mod->getOrInsertFunction(exitName, func->getFunctionType());
