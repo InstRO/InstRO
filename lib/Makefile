@@ -63,9 +63,9 @@ MYINCLUDE=$(TOP_LEVEL)/lib/include/instro/llvm
 
 INSTRO_INCLUDES=-I$(TOP_LEVEL)/lib/include -I$(MYINCLUDE) -I$(MYINCLUDE)/selector -I$(MYINCLUDE)/adapter -I$(MYINCLUDE)/core 
 
-SOURCES=$(TOP_LEVEL)/lib/src/llvm/selector/cashesSelector.cpp \
-				$(TOP_LEVEL)/lib/src/llvm/adapter/cygProfileAdapter.cpp 
-#				$(TOP_LEVEL)/lib/src/llvm/Register.cpp
+SOURCES=$(TOP_LEVEL)/lib/src/llvm/selector/CashesSelector.cpp \
+				$(TOP_LEVEL)/lib/src/llvm/adapter/CygProfileAdapter.cpp \
+				$(TOP_LEVEL)/lib/src/llvm/Register.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
 
