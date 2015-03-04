@@ -6,6 +6,7 @@
 
 #include "instro/rose/RosePass.h"
 #include "instro/rose/selectors/BlackAndWhiteListSelector.h"
+#include "instro/rose/selectors/CompoundSelectors.h"
 #include "instro/rose/adapters/GenericAdapter.h"
 #include "instro/rose/adapters/CygProfileAdapter.h"
 
@@ -36,8 +37,18 @@ public:
 			refToGobalPassManager->registerPass(bnwlSelector);
 			return bnwlSelector;
 		}
-		RosePass * createBlackNWhiteSelector(std::string string){return NULL;};
-		RosePass * createBooleanOrSelector(Pass * inputA,Pass * inputB){return NULL;};
+		RosePass * createBlackNWhiteSelector(std::string string)
+		{
+			std::vector<std::string> filters;
+			filters.push_back(string);
+			return createBlackAndWhiteListSelector(filters);
+		};
+		RosePass * createBooleanOrSelector(Pass * inputA,Pass * inputB){
+			Selectors::CompoundSelector * sel=new Selectors::CompoundSelector(dynamic_cast<RosePass*>(inputA),dynamic_cast<RosePass*>(inputB));
+			refToGobalPassManager->registerPass(sel);
+			return sel;
+
+		};
 		RosePass * createProgramEntrySelector(){return NULL;};
 		RosePass * createCygProfileAdapter(Pass * input)
 		{

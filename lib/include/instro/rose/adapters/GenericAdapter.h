@@ -17,9 +17,9 @@ namespace Rose
 				setRequiresInput();
 				unsetProvidesOuput();
 				setPassName("ROSE_GenericAdapter");
-				registerInputPass(functionInstrumentation,Core::ConstructLevelStatement);
-				registerInputPass(loopInstrumentation,Core::ConstructLevelStatement);
-				registerInputPass(loopBodyInstrumentation,Core::ConstructLevelStatement);
+				if (functionInstrumentation!=NULL) registerInputPass(functionInstrumentation,Core::ConstructLevelStatement);
+				if (loopInstrumentation!=NULL) registerInputPass(loopInstrumentation,Core::ConstructLevelStatement);
+				if (loopBodyInstrumentation!=NULL) registerInputPass(loopBodyInstrumentation,Core::ConstructLevelStatement);
 			}
 		};
 

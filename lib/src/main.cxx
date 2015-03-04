@@ -20,15 +20,22 @@ int main(int argc,char ** argv)
 		InstRO::Ext::VisualizingPassManager * passManager=new InstRO::Ext::VisualizingPassManager();
 		instro->setPassManager(passManager);
 
-		InstRO::PassFactory * aFactory=instro->getFactory();
+		InstRO::Rose::RosePassFactory * aFactory=dynamic_cast<InstRO::Rose::RosePassFactory*>(instro->getFactory());
 		std::vector<std::string> filterRules;
 		filterRules.push_back("main");
 		InstRO::Pass * aPass= aFactory->createBlackAndWhiteListSelector(filterRules);
 		InstRO::Pass * bPass= aFactory->createBlackAndWhiteListSelector(filterRules);
-		InstRO::Pass * compound=new InstRO::Rose::Selectors::CompoundSelector(dynamic_cast<InstRO::Rose::Selectors::Selector*>(aPass),dynamic_cast<InstRO::Rose::Selectors::Selector*>(bPass));
-		passManager->registerPass(compound);
-		InstRO::Rose::Adapters::CygProfileAdapter * cygProfileAdapter=new InstRO::Rose::Adapters::CygProfileAdapter(dynamic_cast<InstRO::Rose::Selectors::Selector*>(compound));
-		passManager->registerPass(cygProfileAdapter);
+		InstRO::Pass * cPass= aFactory->createBlackAndWhiteListSelector(filterRules);
+		InstRO::Pass * compound=aFactory->createBooleanOrSelector(aPass,bPass);
+
+		// Get the configuration container
+		InstRO::Rose::RosePassFactory::GenericAdapterConfiguration gac;
+		// Add the pass responsible for selecting function for instrumentation
+		gac.instrumentFunctions(compound);
+		// Add the pass for loop-construct selection to the loop input-channel
+		gac.instrumentLoopConstruct(cPass);
+		
+		InstRO::Pass * adapter= aFactory->createGenericAdapter(gac);
 
 		passManager->outputConfiguration("InstRO-CFG.dot");
 

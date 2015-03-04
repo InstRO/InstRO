@@ -1,259 +1,151 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="InstRO::LLVM::LLVMFactory" Collapsed="true">
-    <Position X="17" Y="5.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\llvmInstRO.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::ROSE::RoseFactory" Collapsed="true">
-    <Position X="9.75" Y="4.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\roseInstRO.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="std::vector&lt;_Ty, _Alloc&gt;" Collapsed="true">
-    <Position X="9.75" Y="5.5" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Methods" Collapsed="true" />
-    </Compartments>
-    <TypeIdentifier>
-      <HashCode>IUoEEIEqCLBMUEBAAKMIAgISAgUESAIAxQEwggAEAAI=</HashCode>
-      <FileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::ROSE::RoseConstructSet" Collapsed="true">
-    <Position X="3.25" Y="3.5" Width="1.5" />
+  <Class Name="InstRO::Core::ConstructLevelManagrment" Collapsed="true">
+    <Position X="9.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\roseInstRO.h</FileName>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\ConstructLevelManagrment.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="InstRO::LLVM::LLVMSelector" Collapsed="true">
-    <Position X="7.25" Y="3.5" Width="1.5" />
+  <Class Name="InstRO::Core::ConstructSet" Collapsed="true">
+    <Position X="13.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\llvmInstRO.h</FileName>
+      <HashCode>CAAAAAAAAAAAKAAAAAAAgAAAAAAAAAAAAAACCAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\ConstructSet.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="InstRO::LLVM::ProgramEntrySelector" Collapsed="true">
-    <Position X="7.25" Y="5" Width="1.5" />
+  <Class Name="InstRO::Core::PassConstructSetManagement" Collapsed="true">
+    <Position X="6.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\llvmInstRO.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::LLVMInstrumentor" Collapsed="true">
-    <Position X="12.25" Y="5.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAACAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\llvmInstRO.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::RoseInstrumentor" Collapsed="true">
-    <Position X="11.5" Y="4.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAgAAAAAMAAAAAAAAAAAAAAAACAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\roseInstRO.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::LLVM::LLVMExampleSelector" Collapsed="true">
-    <Position X="23" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\llvmInstRO.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::ROSE::RoseExampleSelector" Collapsed="true">
-    <Position X="4.25" Y="5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\roseInstRO.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::Selector" Collapsed="true">
-    <Position X="22" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::FileSelector" Collapsed="true">
-    <Position X="41" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::IncludeFileSelector" Collapsed="true">
-    <Position X="9.5" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::CGrammerSelector" Collapsed="true">
-    <Position X="16.25" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::CxxGrammerSelector" Collapsed="true">
-    <Position X="25.25" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::FORTRANGrammerSelector" Collapsed="true">
-    <Position X="32" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::ProgramEntrySelector" Collapsed="true">
-    <Position X="36.5" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::OpenMPSelector" Collapsed="true">
-    <Position X="43.25" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::GlobalScopeSelector" Collapsed="true">
-    <Position X="11.75" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::NamePredicateSelectorTemplate" Collapsed="true">
-    <Position X="18.5" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::PragmaPredicateSelectorTemplate" Collapsed="true">
-    <Position X="27.5" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::PragmaSelectorTemplate" Collapsed="true">
-    <Position X="34.25" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::NamedEntitySelectorTemplate" Collapsed="true">
-    <Position X="38.75" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::CallPathSelector" Collapsed="true">
-    <Position X="45.5" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::CallDepthSelector" Collapsed="true">
-    <Position X="14" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::CashesSelector" Collapsed="true">
-    <Position X="20.75" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Selectors::UniqueCallpathSelector" Collapsed="true">
-    <Position X="29.75" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Transformers::Transformer" Collapsed="true">
-    <Position X="17.5" Y="1.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Adapters::Adapter" Collapsed="true">
-    <Position X="15" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Factory" Collapsed="true">
-    <Position X="18" Y="4.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::PassSequencer" Collapsed="true">
-    <Position X="27.25" Y="6.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAIIAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
+      <HashCode>AAAAAAECACAAAIAAAABAAAAACEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\ConstructSetManagement.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="InstRO::Pass" Collapsed="true">
-    <Position X="17.5" Y="0.5" Width="1.5" />
+    <Position X="6.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAgAAgAAAABAAAAAAAAAAAAAABAAAAAAAAAEAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
+      <HashCode>AgACAsABUgQAAQAAAAAEAAAIAhYJoEoAAIAAAAAkEAg=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\Pass.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="InstRO::InstRO" Collapsed="true">
-    <Position X="17" Y="7.25" Width="1.5" />
+  <Class Name="InstRO::Instrumentor" Collapsed="true">
+    <Position X="5" Y="7.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAIAACAAAEAIIAAAAAAAAIAFAAAABCAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
+      <HashCode>AAAAEAABAAABAQAAAIAAAAAAAACAgAKIAIAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\Instrumentor.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="InstRO::DefaultPassSequencer" Collapsed="true">
-    <Position X="22.25" Y="8.25" Width="1.5" />
+  <Class Name="InstRO::PassFactory" Collapsed="true">
+    <Position X="2" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
+      <HashCode>AAAAAAgAAAAAgAAAAAAFQAAAAAAAAAABAAAAAAAAIAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\PassFactory.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="InstRO::AutoSortSequencer" Collapsed="true">
-    <Position X="29" Y="9.25" Width="1.5" />
+  <Class Name="InstRO::RoseInstrumentor" Collapsed="true">
+    <Position X="5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAIAAAAAAAAAAAAIAAIAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\RoseInstrumentor.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InstRO::PassManagement::PassManager" Collapsed="true">
+    <Position X="2" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAACAAAEAAAAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\PassManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InstRO::PassManagement::PassEnvelope" Collapsed="true">
+    <Position X="15.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAEQAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\PassManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InstRO::PassManagement::SimplePassManager" Collapsed="true">
+    <Position X="2" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAACAAAECAAACAEAAAAQAQCAAAIAAEAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\PassManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InstRO::Rose::RosePass" Collapsed="true">
+    <Position X="6.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\RosePass.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InstRO::Rose::Adapters::Adapter" Collapsed="true">
+    <Position X="10.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\RosePass.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InstRO::Rose::Adapters::CygProfileAdapter" Collapsed="true">
+    <Position X="9" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\adapters\CygProfileAdapter.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InstRO::Rose::Adapters::GenericAdapter" Collapsed="true">
+    <Position X="11.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\adapters\GenericAdapter.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InstRO::Rose::Selectors::Selector" Collapsed="true">
+    <Position X="5.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\RosePass.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InstRO::Rose::Selectors::BlackAndWhiteListSelector" Collapsed="true">
+    <Position X="4.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\selectors\BlackAndWhiteListSelector.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InstRO::Rose::Selectors::CompoundSelector" Collapsed="true">
+    <Position X="6.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\selectors\CompoundSelectors.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InstRO::Rose::Transformer::Transformer" Collapsed="true">
+    <Position X="2.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\RosePass.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InstRO::Ext::VisualizingPassManager" Collapsed="true">
+    <Position X="2" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\misc\VisualizingPassManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Typedef Name="InstRO::Core::ContstructLevelType" Collapsed="true">
+    <Position X="9" Y="9.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\interface.h</FileName>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\ConstructSet.h</FileName>
     </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::ROSE::ProgramEntrySelector" Collapsed="true">
-    <Position X="2.25" Y="5" Width="1.5" />
+  </Typedef>
+  <Enum Name="InstRO::Core::ContstructLevelEnum" Collapsed="true">
+    <Position X="9" Y="11.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\roseInstRO.h</FileName>
+      <HashCode>AAgAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAEAAAAQCAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\ConstructSet.h</FileName>
     </TypeIdentifier>
-  </Class>
+  </Enum>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
