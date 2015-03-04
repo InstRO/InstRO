@@ -1,5 +1,7 @@
 #include "instro/core/ConstructSet.h"
 
+#include "clang/AST/Decl.h"
+
 namespace InstRO {
 namespace Clang {
 
@@ -13,19 +15,9 @@ struct ClangConstruct {
 	clang::Type *type;
 };
 
-template <typename T>
-T getAs(const ClangConstruct &cc) {
-	if (dynamic_cast<T>(cc.decl) != NULL) {
-		return cc.decl;
-	}
-	if (dynamic_cast<T>(cc.stmt) != NULL) {
-		return cc.stmt;
-	}
-	if (dynamic_cast<T>(cc.type) != NULL) {
-		return cc.type;
-	}
-	assert(false && "default reached");
-}
+clang::Decl * getAsDecl(const ClangConstruct &c);
+clang::Stmt * getAsStmt(const ClangConstruct &c);
+clang::Type * getAsType(const ClangConstruct &c);
 
 class ClangConstructSet : public ::InstRO::Core::ConstructSet {
  public:

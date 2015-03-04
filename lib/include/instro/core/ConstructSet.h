@@ -2,6 +2,7 @@
 #define INSTRO_CORE_CONSTRUCTSET_H 0.1
 
 #include <vector>
+#include <string>
 
 namespace InstRO{
 
