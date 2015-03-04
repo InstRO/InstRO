@@ -40,6 +40,7 @@ namespace InstRO{
 			virtual Pass * createBooleanOrSelector(Pass * inputA,Pass * inputB)=0;
 			virtual Pass * createProgramEntrySelector()=0;
 			virtual Pass * createCygProfileAdapter(Pass * input)=0;
+			virtual Pass * createGenericAdapter(Pass * functionSelection, Pass * loopSelection, Pass * branchingSelection)=0;
 		protected:
 			PassManagement::PassManager * refToGobalPassManager;
 	};

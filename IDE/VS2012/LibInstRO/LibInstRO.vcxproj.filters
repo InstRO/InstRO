@@ -94,5 +94,8 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\CompoundSelectors.h">
       <Filter>include\instro\rose\selector</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\adapters\GenericAdapter.h">
+      <Filter>include\instro\rose\adapter</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

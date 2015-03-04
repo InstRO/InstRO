@@ -6,6 +6,8 @@
 
 #include "instro/rose/RosePass.h"
 #include "instro/rose/selectors/BlackAndWhiteListSelector.h"
+#include "instro/rose/adapters/GenericAdapter.h"
+#include "instro/rose/adapters/CygProfileAdapter.h"
 
 namespace InstRO
 {
@@ -13,6 +15,19 @@ namespace InstRO
 
 class RosePassFactory:public PassFactory
 {
+public:
+	class GenericAdapterConfiguration {
+	public:
+		GenericAdapterConfiguration(){loopPass=functionPass=loopBodyPass=NULL;}
+		void instrumentFunctions(Pass * functionSelector){functionPass=functionSelector;};
+		void instrumentLoopConstruct(Pass * loopConstructSelector){loopPass=loopConstructSelector;};
+		void instrumentLoopBody(Pass * loopBodySelector){loopBodyPass=loopBodySelector;};
+		Pass * getFunctionSelector(){return functionPass;}
+		Pass * getLoopConstructSelector(){return loopPass;}
+		Pass * getLoopBodySelector(){return loopBodyPass;}
+	protected:
+		Pass * loopPass,* functionPass,*loopBodyPass;
+	};
 	public:	
 		RosePassFactory(PassManagement::PassManager * refManager):PassFactory(refManager){};
 		RosePass * createBlackAndWhiteListSelector(std::vector<std::string> rules)
@@ -24,7 +39,19 @@ class RosePassFactory:public PassFactory
 		RosePass * createBlackNWhiteSelector(std::string string){return NULL;};
 		RosePass * createBooleanOrSelector(Pass * inputA,Pass * inputB){return NULL;};
 		RosePass * createProgramEntrySelector(){return NULL;};
-		RosePass * createCygProfileAdapter(Pass * input){return NULL;};
+		RosePass * createCygProfileAdapter(Pass * input)
+		{
+//			::InstRO::Rose::Adapters::
+			return NULL;
+		};
+		RosePass * createGenericAdapter(Pass * functionSelection, Pass * loopSelection, Pass * branchingSelection)
+		{
+			Adapters::GenericAdapter *newAdapter=new Adapters::GenericAdapter(dynamic_cast<RosePass*>(functionSelection),dynamic_cast<RosePass*>(loopSelection),dynamic_cast<RosePass*>(branchingSelection));
+			refToGobalPassManager->registerPass(newAdapter);
+			return newAdapter;
+		};
+		RosePass * createGenericAdapter(GenericAdapterConfiguration gac){return createGenericAdapter(gac.getFunctionSelector(),gac.getLoopConstructSelector(),gac.getLoopBodySelector());};
+
 };
 
 	}

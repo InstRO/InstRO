@@ -30,6 +30,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\PassManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingPassManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\adapters\CygProfileAdapter.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\adapters\GenericAdapter.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h" />
