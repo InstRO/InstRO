@@ -69,9 +69,11 @@ INSTRO_INCLUDES+=-I$(INSTROCLANGINCLUDE) -I$(INSTROCLANGINCLUDE)/selector -I$(IN
 
 SOURCES=$(TOP_LEVEL)/lib/src/llvm/selector/CashesSelector.cpp \
 				$(TOP_LEVEL)/lib/src/llvm/adapter/CygProfileAdapter.cpp \
+				$(TOP_LEVEL)/lib/src/llvm/Register.cpp \
 				$(TOP_LEVEL)/lib/src/clang/selector/FunctionDefinitionSelector.cpp \
 				$(TOP_LEVEL)/lib/src/clang/adapter/CygProfileAdapter.cpp \
-				$(TOP_LEVEL)/lib/src/llvm/Register.cpp
+				$(TOP_LEVEL)/lib/src/clang/core/ConstructSet.cpp \
+				$(TOP_LEVEL)/lib/src/clang/Instrumentor.cpp
 #				$(TOP_LEVEL)/lib/src/clang/selector/BlackWhitelistSelector.cpp 
 
 OBJECTS=$(SOURCES:.cpp=.o)
