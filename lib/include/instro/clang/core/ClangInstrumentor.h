@@ -2,6 +2,7 @@
 #define INSTRO_CLANG_CLANGINSTRUMENTOR_H
 
 #include "clang/Tooling/Tooling.h"
+#include "clang/Tooling/Refactoring.h"
 
 #include "instro/clang/core/PassFactory.h"
 
@@ -14,9 +15,10 @@ namespace Clang {
  * return
  * to the caller
  */
-class Instrumentor {
+class ClangInstrumentor {
  public:
-	clang::ASTConsumer* getClangConsumer();
+ 	ClangInstrumentor(::InstRO::Core::PassManagement::PassManager *manager) : fac(manager){}
+	clang::tooling::ToolAction* getClangAction();
 	::InstRO::Clang::PassFactory * getFactory();
 
 private:

@@ -21,10 +21,11 @@
 #include <string>
 #include <hash_map>
 
-
+#include "instro/core/Pass.h"
 //#include "instro/roseInstRO.h"
 
 namespace InstRO{
+namespace Core{
 	namespace PassManagement
 	{
 		class PassManager;
@@ -36,13 +37,14 @@ namespace InstRO{
 		public:	
 			/* CI: A PassFactory must be initialized with the PassManager. */
 			PassFactory(PassManagement::PassManager * refManager):refToGobalPassManager(refManager){};
-			virtual Pass * createBlackAndWhiteListSelector(std::vector<std::string> rules)=0;
-			virtual Pass * createBooleanOrSelector(Pass * inputA,Pass * inputB)=0;
-			virtual Pass * createProgramEntrySelector()=0;
-			virtual Pass * createCygProfileAdapter(Pass * input)=0;
+			virtual ::InstRO::Pass * createBlackAndWhiteListSelector(std::vector<std::string> rules)=0;
+			virtual ::InstRO::Pass * createBooleanOrSelector(::InstRO::Pass * inputA,::InstRO::Pass * inputB)=0;
+			virtual ::InstRO::Pass * createProgramEntrySelector()=0;
+			virtual ::InstRO::Pass * createCygProfileAdapter(::InstRO::Pass * input)=0;
 		protected:
 			PassManagement::PassManager * refToGobalPassManager;
 	};
-}
+}// Core
+}//InstRO
 
 #endif

@@ -1,5 +1,6 @@
-#include "llvm/support/CommandLine.h"
+#include "llvm/Support/CommandLine.h"
 #include "clang/Tooling/Refactoring.h"
+#include "clang/Tooling/CommonOptionsParser.h"
 
 #include "instro/clang/core/ClangInstrumentor.h"
 
@@ -11,10 +12,10 @@
 
 static llvm::cl::OptionCategory MyTool("InstRO");
 
-int main(int argc, char ** argv){
-	clang::tooling::CommonOptionsParser cop(argc, argv, MyTool);
-  clang::tooling::RefactoringTool tool(OptionsParser.getCompilations(), OptionsParser.getSourcePathList());
-	ClangInstrumentor instro;
-	tool.run(instro.getClangConsumer());
+int main(int argc, char **argv){
+	clang::tooling::CommonOptionsParser cop(argc, const_cast<const char **>(argv), MyTool);
+  clang::tooling::RefactoringTool tool(cop.getCompilations(), cop.getSourcePathList());
+	::InstRO::Clang::ClangInstrumentor instro(NULL);
+	tool.run(instro.getClangAction());
 return 0;
 }
