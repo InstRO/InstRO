@@ -59,13 +59,20 @@ all: cashes-pass
 
 
 TOP_LEVEL=/home/j_lehr/all_repos/instro-v5/repo
-MYINCLUDE=$(TOP_LEVEL)/lib/include/instro/llvm
+INSTROLLVMINCLUDE=$(TOP_LEVEL)/lib/include/instro/llvm
+INSTROCLANGINCLUDE=$(TOP_LEVEL)/lib/include/instro/clang
 
-INSTRO_INCLUDES=-I$(TOP_LEVEL)/lib/include -I$(MYINCLUDE) -I$(MYINCLUDE)/selector -I$(MYINCLUDE)/adapter -I$(MYINCLUDE)/core 
+INSTRO_INCLUDES=-I$(TOP_LEVEL)/lib/include -I$(INSTROLLVMINCLUDE) -I$(INSTROLLVMINCLUDE)/selector -I$(INSTROLLVMINCLUDE)/adapter -I$(INSTROLLVMINCLUDE)/core 
+
+INSTRO_INCLUDES+=-I$(INSTROCLANGINCLUDE) -I$(INSTROCLANGINCLUDE)/selector -I$(INSTROCLANGINCLUDE)/adapter -I$(INSTROCLANGINCLUDE)/core 
+
 
 SOURCES=$(TOP_LEVEL)/lib/src/llvm/selector/CashesSelector.cpp \
 				$(TOP_LEVEL)/lib/src/llvm/adapter/CygProfileAdapter.cpp \
+				$(TOP_LEVEL)/lib/src/clang/selector/FunctionDefinitionSelector.cpp \
+				$(TOP_LEVEL)/lib/src/clang/adapter/CygProfileAdapter.cpp \
 				$(TOP_LEVEL)/lib/src/llvm/Register.cpp
+#				$(TOP_LEVEL)/lib/src/clang/selector/BlackWhitelistSelector.cpp 
 
 OBJECTS=$(SOURCES:.cpp=.o)
 

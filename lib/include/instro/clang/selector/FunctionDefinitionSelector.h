@@ -5,13 +5,13 @@
 #include "clang/AST/RecursiveASTVisitor.h"
 
 // InstRO includes
-#include "instro/core/Pass.h"
+#include "instro/clang/core/Pass.h"
 #include "instro/clang/core/ConstructSet.h"
 
 namespace InstRO {
 namespace Clang {
 class FunctionDefinitionSelector
-		: public ::InstRO::Pass,
+		: public ::InstRO::Clang::Pass,
 			public clang::RecursiveASTVisitor<
 					::InstRO::Clang::FunctionDefinitionSelector> {
  public:
