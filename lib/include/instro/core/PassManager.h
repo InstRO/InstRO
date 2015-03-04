@@ -64,6 +64,7 @@ public:
 			// for all predecessors inquired the pass dependencies
 			for (auto & i:inputs)
 			{
+				if (i==NULL) continue;
 				Core::ContstructLevelType maxInputLevel=currentPass->getInputLevelRequirement(i);
 				Core::ContstructLevelType minOutputLevelProvided=i->getOutputLevel();
 				if (minOutputLevelProvided>maxInputLevel) throw std::string("InputPass ")+i->passName()+std::string(" can not provide ConstructLevel \"")+contstructLevelToString(maxInputLevel)+std::string("\"");

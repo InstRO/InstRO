@@ -13,7 +13,7 @@ namespace Selectors
 
 class CompoundSelector:public Selector{
 public:
-	CompoundSelector(Selector * inputA,Selector * inputB)
+	CompoundSelector(RosePass * inputA,RosePass * inputB)
 	{
 		setRequiresInput();
 		setProvidesOuput();

@@ -42,6 +42,10 @@ namespace InstRO{
 			virtual Pass * createCygProfileAdapter(Pass * input)=0;
 			virtual Pass * createGenericAdapter(Pass * functionSelection, Pass * loopSelection, Pass * branchingSelection)=0;
 		protected:
+		/*	void registerPass(Pass * pass)
+			{
+				refToGobalPassManager->registerPass(pass);
+			}*/
 			PassManagement::PassManager * refToGobalPassManager;
 	};
 }
