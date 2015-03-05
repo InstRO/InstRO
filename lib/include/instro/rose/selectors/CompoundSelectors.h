@@ -14,15 +14,13 @@ namespace Selectors
 class CompoundSelector:public Selector{
 public:
 	CompoundSelector(RosePass * inputA,RosePass * inputB)
-	{
-		setRequiresInput();
-		setProvidesOuput();
-		setOutputLevel(Core::ConstructLevelMin);
-		registerInputPass(inputA,Core::ConstructLevelMin);
-		registerInputPass(inputB,Core::ConstructLevelMin);
-		
+	{		
 	};
-	std::string passName(){return std::string("ROSE-CompoundSelector");}
+	void init(){};
+	void execute(){};
+	void finalize(){};
+	void releaseOutput(){};
+	ConstructSet*getOuput(){return new ConstructSet();}
 };
 }// End namespace Selectors
 }// End namespace Rose

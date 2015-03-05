@@ -21,12 +21,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructElevator.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructLevelManagrment.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSetManagement.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Instrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Pass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\PassFactory.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassImplementation.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\PassManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingPassManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\adapters\CygProfileAdapter.h" />

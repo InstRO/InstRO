@@ -1,20 +1,18 @@
 #ifndef INSTRO_ROSE_ROSEPASS_H
 #define INSTRO_ROSE_ROSEPASS_H
 
-#include "instro/core/Pass.h"
+#include "instro/core/PassImplementation.h"
 
 namespace InstRO
 {
 	namespace Rose{
-		class RosePass: public Pass
+		class RosePass: public PassImplementation
 		{
 		public:
-			virtual std::string className(){return std::string("InstRO::Rose::Selector::RosePass");};
 		};
 		namespace Adapters{
 		class Adapter:public RosePass
 		{
-			virtual std::string className(){return std::string("InstRO::Rose::Selector::Adapter");};
 		};
 		}
 		namespace Selectors
@@ -23,7 +21,6 @@ namespace InstRO
 		class Selector:public RosePass
 		{
 		public:
-			virtual std::string className(){return std::string("InstRO::Rose::Selector::Selector");};
 		};
 		}
 		namespace Transformer
@@ -31,7 +28,6 @@ namespace InstRO
 		class Transformer: public RosePass
 		{
 			public:
-			virtual std::string className(){return std::string("InstRO::Rose::Selector::Transformer");};
 		};
 		}
 	}

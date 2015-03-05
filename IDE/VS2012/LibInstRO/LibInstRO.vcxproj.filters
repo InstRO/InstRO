@@ -97,5 +97,11 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\adapters\GenericAdapter.h">
       <Filter>include\instro\rose\adapter</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructElevator.h">
+      <Filter>include\instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassImplementation.h">
+      <Filter>include\instro\core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

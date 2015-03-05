@@ -101,26 +101,26 @@ public:
 				}
 			}
 			// 1rst enable the input for the current pass. Since this is the basic pass manager, the sequence is linear with no intelligence. Hence, all preceeding passes must have already completed.
-			passEnvelope->pass->enableInput();
+			passEnvelope->pass->setInputEnabled();
 
 			// 2nd: Allow the pass to initlialize its internal state, such that it can execute. This allows, e.g. to allocate large amounts of memory. Or preprocessing input. or whatever. However, modification or selection is not allowed.
-			passEnvelope->pass->init();
+			passEnvelope->pass->initPass();
 
 			// 3rd: Execute the pass
-			passEnvelope->pass->execute();
+			passEnvelope->pass->executePass();
 
 			// 4th: Tell the pass to finalize. It is supposed to release memory, close files, etc. However, the output set must be maintained unitl disableOutput is called
-			passEnvelope->pass->finalize();
+			passEnvelope->pass->finalizePass();
 			
 			// 5th: Disable input and deallocated potentially create construct sets
-			passEnvelope->pass->disableInput();
+			passEnvelope->pass->setInputDisabled();
 			for (auto &i:tempConstructSets) delete i;
 
 		}
 		for (PassEnvelope * passContainer: passList)
 		{
 			// disable output for all passes. This allows to release the output construct set
-			passContainer->pass->finalizeOutput();
+			passContainer->pass->releaseOutput();
 		}
 		return 0;
 	};

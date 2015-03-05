@@ -14,13 +14,13 @@ namespace Rose
 			std::string className(){return std::string("GenericAdapter");}
 			GenericAdapter(RosePass * functionInstrumentation,RosePass * loopInstrumentation,RosePass * loopBodyInstrumentation)
 			{
-				setRequiresInput();
-				unsetProvidesOuput();
-				setPassName("ROSE_GenericAdapter");
-				if (functionInstrumentation!=NULL) registerInputPass(functionInstrumentation,Core::ConstructLevelStatement);
-				if (loopInstrumentation!=NULL) registerInputPass(loopInstrumentation,Core::ConstructLevelStatement);
-				if (loopBodyInstrumentation!=NULL) registerInputPass(loopBodyInstrumentation,Core::ConstructLevelStatement);
+				
 			}
+				void init(){};
+	void execute(){};
+	void finalize(){};
+	void releaseOutput(){};
+	ConstructSet*getOuput(){return new ConstructSet();}
 		};
 
 	}

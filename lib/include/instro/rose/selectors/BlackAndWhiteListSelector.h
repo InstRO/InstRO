@@ -15,12 +15,13 @@ class BlackAndWhiteListSelector:public Selector{
 public:
 	BlackAndWhiteListSelector(std::vector<std::string> matchRules)
 	{
-		unsetRequiresInput();
-		setProvidesOuput();
-		setOutputLevel(Core::ConstructLevelLiteral);
-		
+	
 	};
-	std::string passName(){return std::string("ROSE-BlackAndWhiteListSelector");}
+	void execute(){};
+	void init(){};
+	void finalize(){};
+	void releaseOutput(){};
+	ConstructSet*getOuput(){return new ConstructSet();}
 };
 }// End namespace Selectors
 }// End namespace Rose

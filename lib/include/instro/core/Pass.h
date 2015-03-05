@@ -22,6 +22,8 @@
 
 
 #include "instro/core/ConstructSet.h"
+#include "instro/core/PassImplementation.h"
+
 #include "instro/core/ConstructSetManagement.h"
 #include "instro/core/ConstructLevelManagrment.h"
 
@@ -33,32 +35,31 @@ namespace InstRO{
 	{
 		class PassManager;
 	}
-class PassImplementation
-{
-public:
-	virtual void initPass()=0;
-	virtual void executePass()=0;
-	virtual void finalizePass()=0;
-	virtual void releaseOutput()=0;
-	virtual ConstructSet * getOuput(PassImplementation * pass)=0;
-};
 
+// Make it a sane world
 class Pass:public ::InstRO::Core::PassConstructSetManagement, public ::InstRO::Core::ConstructLevelManagrment
 {
+	private:
+	Pass(){};
 	public:
-		Pass(PassImplementation * pImpl):passImplementation(pImpl),passInitialized(false),passExecuted(false),passFinalize(false),passOutputReleased(false){};
+		Pass(PassImplementation * pImpl):passImplementation(pImpl),passInitialized(false),passExecuted(false),passFinalize(false),passOutputReleased(false),inputReady(false){};
 		PassImplementation * getPassImplementation(){return passImplementation;};
+		~Pass()
+		{
+			delete (passImplementation);
+			passImplementation=NULL;
+		}
 		void initPass()
 		{	
 			if (inputReady)
-				passImplementation->initPass();
+				passImplementation->init();
 			else throw std::string("Input not ready!");
 			passInitialized=true;
 		}
 		void executePass()
 		{
 			if (passInitialized)
-				passImplementation->executePass();
+				passImplementation->execute();
 			else
 				throw std::string("Pass not Initialized!");
 			passExecuted=true;
@@ -66,10 +67,10 @@ class Pass:public ::InstRO::Core::PassConstructSetManagement, public ::InstRO::C
 		void finalizePass()
 		{	
 			if (passInitialized)
-				passImplementation->finalizePass();
+				passImplementation->finalize();
 			else
 				throw std::string("Must Initialize Pass First!");
-			finalizePass=true;
+			passFinalize=true;
 		}
 		void releaseOutput()
 		{
@@ -80,44 +81,26 @@ class Pass:public ::InstRO::Core::PassConstructSetManagement, public ::InstRO::C
 			passOutputReleased=true;
 
 		}
-	private:
-		PassImplementation * passImplementation;
-		bool passInitialized,passExecuted,passFinalize,passOutputReleased;
-		bool inputReady;
-		// CI: everything below is currently to be considered deprecated
+		// CI: Enable Input is called externally to indicate, that  the input passes have beend processed and that the current pass can now use the getInput(Pass*) to obtain the construct sets of its predecessors
+		void setInputEnabled(){inputReady=true;};
+		// CI: Disable Input is called externally to indicate, that the input passes have cleared their internal state AND their output construct set such that the
+		//     getInput(Pass*) does not provide a vaild construct set. The provided construct set may no longer be used as it could have been deallocated
+		void setInputDisabled(){inputReady=false;};
+		// CI: queryFunction to determin, if the input is enabled
+		bool isInputEnabled(){return true;};
+		bool isOutputEnabled(){return passExecuted &&!passOutputReleased;}
 
 		// Info Functions:
 		bool providesOutput(){return passProvidesOutputFlag;}
 		bool requiresInput(){return passRequiresInputFlag;}
-	protected:
 		void setProvidesOuput(){passProvidesOutputFlag=true;};
 		void setRequiresInput(){passRequiresInputFlag=true;};
 		void unsetProvidesOuput(){passProvidesOutputFlag=false;};
 		void unsetRequiresInput(){passRequiresInputFlag=false;};
-	private:
-		bool passRequiresInputFlag,passProvidesOutputFlag;
 
-	public:
-		virtual std::string className(){return std::string("Pass");};
 		virtual std::string passName(){return passNameString;};
 		void setPassName(std::string passNAME){passNameString=passNAME;};
-	private:
-		std::string passNameString;
-	public:
-		Pass():passRequiresInputFlag(true),passProvidesOutputFlag(true),passNameString("DefaultPassName"){};
 
-		// External Interface used by the PassManager
-		void init(){};
-		void enableInput(){};
-		void disableInput(){};
-		bool isInputEnabled(){return true;};
-		void enableOutput(){};
-		void disableOutput(){};
-		void finalizeOutput(){};
-		bool isOutputEnabled(){return true;};
-		void execute(){};
-		void finalize(){};
-		/* Interface for managing construct levels of input passes*/
 	public:
 		void setOutputLevel(Core::ContstructLevelType level){outputLevel=level;};
 		Core::ContstructLevelType getOutputLevel(){return outputLevel;};
@@ -125,13 +108,17 @@ class Pass:public ::InstRO::Core::PassConstructSetManagement, public ::InstRO::C
 		std::vector<Pass*> getInputPasses(){return inputPasses;};
 		void setInputLevelRequirement(Pass * pass,Core::ContstructLevelType level){inputRequiredLevels[pass]=level;}
 		Core::ContstructLevelType getInputLevelRequirement(Pass *pass){return inputRequiredLevels[pass];};
+
+	private:
+		bool passRequiresInputFlag,passProvidesOutputFlag;
+		PassImplementation * passImplementation;
+		bool passInitialized,passExecuted,passFinalize,passOutputReleased;
+		bool inputReady;
+		std::string passNameString;
+
 		std::vector<Pass*> inputPasses;
 		Core::ContstructLevelType outputLevel;
 		std::unordered_map<Pass*,Core::ContstructLevelType> inputRequiredLevels;
-		/*
-		   };
-		   template <class T|> class PassImpl:public Pass
-		 */
 		};
 }
 
