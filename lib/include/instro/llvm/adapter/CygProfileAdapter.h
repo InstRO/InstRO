@@ -10,7 +10,7 @@
 #include "llvm/Support/raw_ostream.h"
 
 /* InstRO related includes */
-#include "instro/llvm/Pass.h"
+#include "instro/llvm/LLVMPass.h"
 
 namespace InstRO {
 namespace LLVM {

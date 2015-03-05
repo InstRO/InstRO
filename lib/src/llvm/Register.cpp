@@ -1,6 +1,6 @@
 
-#include "instro/llvm/selector/cashesSelector.h"
-#include "instro/llvm/adapter/cygProfileAdapter.h"
+#include "instro/llvm/selector/CashesSelector.h"
+#include "instro/llvm/adapter/CygProfileAdapter.h"
 
 #include "llvm/PassInfo.h"
 
