@@ -11,7 +11,6 @@
 #include "instro/clang/core/ClangConsumerFactory.h"
 #include "instro/clang/core/PassFactory.h"
 
-
 namespace InstRO {
 namespace Clang {
 
@@ -21,14 +20,16 @@ namespace Clang {
  * return
  * to the caller
  */
-class ClangInstrumentor : public ::InstRO::Instrumentor{
+class ClangInstrumentor : public ::InstRO::Instrumentor {
  public:
 	/** CTor a user wants to use */
-	ClangInstrumentor(int argc, const char **argv, ::InstRO::Core::PassManagement::PassManager* manager);
-	ClangInstrumentor(int argc, const char **argv);
+	ClangInstrumentor(int argc, const char** argv,
+										::InstRO::Core::PassManagement::PassManager* manager);
+	ClangInstrumentor(int argc, const char** argv);
 	/** Provides the ToolAction, which a clang::RefactoringTool awaits */
 	clang::tooling::ToolAction* getClangAction();
-	/** Returns the factory used to create the passes a user builds the instrumentor with */
+	/** Returns the factory used to create the passes a user builds the
+	 * instrumentor with */
 	InstRO::Core::PassFactory* getFactory(CompilationPhase phase = frontend);
 
 	void init();
@@ -37,7 +38,7 @@ class ClangInstrumentor : public ::InstRO::Instrumentor{
 
  private:
 	int argc;
-	const char **argv;
+	const char** argv;
 	std::unique_ptr<InstRO::Clang::PassFactory> fac;
 };
 }	// Clang

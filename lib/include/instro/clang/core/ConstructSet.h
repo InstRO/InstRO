@@ -15,9 +15,9 @@ struct ClangConstruct {
 	clang::Type *type;
 };
 
-clang::Decl * getAsDecl(const ClangConstruct &c);
-clang::Stmt * getAsStmt(const ClangConstruct &c);
-clang::Type * getAsType(const ClangConstruct &c);
+clang::Decl *getAsDecl(const ClangConstruct &c);
+clang::Stmt *getAsStmt(const ClangConstruct &c);
+clang::Type *getAsType(const ClangConstruct &c);
 
 class ClangConstructSet : public ::InstRO::Core::ConstructSet {
  public:
