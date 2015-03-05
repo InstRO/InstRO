@@ -28,6 +28,9 @@
     <Filter Include="source\lib\core">
       <UniqueIdentifier>{160bd7c1-e1aa-4635-ba0f-a1c02bb43f6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\instro\rose\adapter">
+      <UniqueIdentifier>{f335cffd-5c61-4bed-a63a-d68a1228097b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\main.cxx" />
@@ -61,9 +64,6 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\PassFactory.h">
       <Filter>include\instro\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\misc\VisualPassManager.h">
-      <Filter>include\instro\misc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h">
       <Filter>include\instro\rose</Filter>
     </ClInclude>
@@ -85,5 +85,23 @@
     <ClInclude Include="..\..\..\lib\include\instro\test\TestInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\test\TestPass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\test\TestPassFactory.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingPassManager.h">
+      <Filter>include\instro\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\adapters\CygProfileAdapter.h">
+      <Filter>include\instro\rose\adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\CompoundSelectors.h">
+      <Filter>include\instro\rose\selector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\adapters\GenericAdapter.h">
+      <Filter>include\instro\rose\adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructElevator.h">
+      <Filter>include\instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassImplementation.h">
+      <Filter>include\instro\core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

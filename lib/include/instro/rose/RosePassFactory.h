@@ -6,6 +6,9 @@
 
 #include "instro/rose/RosePass.h"
 #include "instro/rose/selectors/BlackAndWhiteListSelector.h"
+#include "instro/rose/selectors/CompoundSelectors.h"
+#include "instro/rose/adapters/GenericAdapter.h"
+#include "instro/rose/adapters/CygProfileAdapter.h"
 
 namespace InstRO
 {
@@ -13,18 +16,97 @@ namespace InstRO
 
 class RosePassFactory:public PassFactory
 {
+protected:
+	RosePass * getPass(Pass * pass)
+	{
+		if (pass==NULL) return NULL;
+		RosePass * rosePass=dynamic_cast<RosePass*>(pass->getPassImplementation());
+		if (pass->getPassImplementation()!=NULL && rosePass==NULL) throw std::string("Oh my god, what is going on");
+		return rosePass;
+	}
+public:
+	class GenericAdapterConfiguration {
+	public:
+		GenericAdapterConfiguration(){loopPass=functionPass=loopBodyPass=NULL;}
+		void instrumentFunctions(Pass * functionSelector){functionPass=functionSelector;};
+		void instrumentLoopConstruct(Pass * loopConstructSelector){loopPass=loopConstructSelector;};
+		void instrumentLoopBody(Pass * loopBodySelector){loopBodyPass=loopBodySelector;};
+		Pass * getFunctionSelector(){return functionPass;}
+		Pass * getLoopConstructSelector(){return loopPass;}
+		Pass * getLoopBodySelector(){return loopBodyPass;}
+	protected:
+		Pass * loopPass,* functionPass,*loopBodyPass;
+	};
 	public:	
 		RosePassFactory(PassManagement::PassManager * refManager):PassFactory(refManager){};
-		RosePass * createBlackAndWhiteListSelector(std::vector<std::string> rules)
+
+		Pass * createBlackAndWhiteListSelector(std::vector<std::string> rules)
 		{
-			Selectors::BlackAndWhiteListSelector * bnwlSelector=new Selectors::BlackAndWhiteListSelector(rules);
-			refToGobalPassManager->registerPass(bnwlSelector);
-			return bnwlSelector;
+			Pass * bwlPass = new Pass(new Selectors::BlackAndWhiteListSelector(rules));
+			bwlPass->setPassName("ROSE_BlackAndWhiteList");
+			bwlPass->unsetRequiresInput();
+			bwlPass->setProvidesOuput();
+			bwlPass->setOutputLevel(Core::ConstructLevelLiteral);
+			refToGobalPassManager->registerPass(bwlPass);
+			return bwlPass;
 		}
-		RosePass * createBlackNWhiteSelector(std::string string){return NULL;};
-		RosePass * createBooleanOrSelector(Pass * inputA,Pass * inputB){return NULL;};
-		RosePass * createProgramEntrySelector(){return NULL;};
-		RosePass * createCygProfileAdapter(Pass * input){return NULL;};
+
+		Pass * createBlackNWhiteSelector(std::string string)
+		{
+			std::vector<std::string> filters;
+			filters.push_back(string);
+			return createBlackAndWhiteListSelector(filters);
+		};
+
+		Pass * createBooleanOrSelector(Pass * inputA,Pass * inputB)
+		{
+			
+			Pass * compoundPass=new Pass(new Selectors::CompoundSelector(getPass(inputA),getPass(inputB)));
+			compoundPass->setPassName("ROSE_BooleanOr");
+			compoundPass->setRequiresInput();
+			compoundPass->setProvidesOuput();
+			compoundPass->setOutputLevel(Core::ConstructLevelMin);
+			compoundPass->registerInputPass(inputA,Core::ConstructLevelMin);
+			compoundPass->registerInputPass(inputB,Core::ConstructLevelMin);
+			refToGobalPassManager->registerPass(compoundPass);
+			return compoundPass;
+
+		};
+
+		Pass * createProgramEntrySelector(){return NULL;};
+
+		Pass * createCygProfileAdapter(Pass * input)
+		{
+			Pass * newPass=new Pass(new Adapters::CygProfileAdapter(getPass(input)));
+			newPass->setRequiresInput();
+			newPass->unsetProvidesOuput();
+			newPass->setPassName("ROSE_CygProfileAdapter");
+			newPass->registerInputPass(input,Core::ConstructLevelStatement);
+			return newPass;
+		};
+
+		Pass * createGenericAdapter(Pass * functionSelection, Pass * loopSelection, Pass * branchingSelection)
+		{
+			//RosePass * roseFunctionSelectionPass,* roseLoopSelectionPass,*roseBranchingSelectionPass;
+			
+			Adapters::GenericAdapter * roseAdapter=new Adapters::GenericAdapter(getPass(functionSelection),getPass(loopSelection),getPass(branchingSelection));
+			Pass * newPass=new Pass(roseAdapter);
+			newPass->setRequiresInput();
+			newPass->unsetProvidesOuput();
+			newPass->setPassName("ROSE_GenericAdapter");
+			if (functionSelection!=NULL) newPass->registerInputPass(functionSelection,Core::ConstructLevelStatement);
+			if (loopSelection!=NULL) newPass->registerInputPass(loopSelection,Core::ConstructLevelStatement);
+			if (branchingSelection!=NULL) newPass->registerInputPass(branchingSelection,Core::ConstructLevelStatement);
+			
+			refToGobalPassManager->registerPass(newPass);
+			return newPass;
+		};
+
+		Pass * createGenericAdapter(GenericAdapterConfiguration gac)
+		{
+			return createGenericAdapter(gac.getFunctionSelector(),gac.getLoopConstructSelector(),gac.getLoopBodySelector());
+		};
+
 };
 
 	}

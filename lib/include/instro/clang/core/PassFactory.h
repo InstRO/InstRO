@@ -24,11 +24,11 @@ class PassFactory : public ::InstRO::Core::PassFactory {
 	PassFactory(::InstRO::Core::PassManagement::PassManager* manager)
 			: ::InstRO::Core::PassFactory(manager){};
 	Pass* createBlackAndWhiteListSelector(std::vector<std::string> rules);
-	Pass* createBooleanOrSelector(::InstRO::Pass* inputA,
-																::InstRO::Pass* inputB);
+	Pass* createBooleanOrSelector(InstRO::Pass* inputA,
+																InstRO::Pass* inputB);
 	Pass* createFunctionDefinitionSelector();
 	Pass* createProgramEntrySelector(){};
-	Pass* createCygProfileAdapter(::InstRO::Pass* input);
+	Pass* createCygProfileAdapter(InstRO::Pass* input);
 };
 }	// Clang
 }	// INstRO

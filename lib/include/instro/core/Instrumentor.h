@@ -17,8 +17,6 @@
 #include <iostream>
 #include <vector>
 
-#include <vector>
-
 #include "instro/core/ConstructLevelManagrment.h"
 #include "instro/core/ConstructSetManagement.h"
 #include "instro/core/ConstructSet.h"
@@ -46,11 +44,11 @@ class Instrumentor {
  public:
 	Instrumentor() {
 		passManagerLocked = false;
-		setPassManager(new ::InstRO::Core::PassManagement::SimplePassManager());
+		setPassManager(new InstRO::Core::PassManagement::SimplePassManager());
 	}
 	virtual ::InstRO::Core::PassFactory* getFactory(
 			CompilationPhase phase = frontend) = 0;
-	::InstRO::Core::PassManagement::PassManager* getPassManager() {
+	InstRO::Core::PassManagement::PassManager* getPassManager() {
 		return passManager;
 	}
 	void setPassManager(::InstRO::Core::PassManagement::PassManager* manager) {
@@ -64,7 +62,7 @@ class Instrumentor {
 
  protected:
 	bool passManagerLocked;
-	::InstRO::Core::PassManagement::PassManager* passManager;
+	InstRO::Core::PassManagement::PassManager* passManager;
 
  public:
 	virtual void init() = 0;

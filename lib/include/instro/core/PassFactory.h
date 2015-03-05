@@ -17,8 +17,6 @@
 #include <iostream>
 #include <vector>
 
-#include <vector>
-#include <string>
 
 #include "instro/core/Pass.h"
 
@@ -35,11 +33,15 @@ namespace Core{
 		public:	
 			/* CI: A PassFactory must be initialized with the PassManager. */
 			PassFactory(PassManagement::PassManager * refManager):refToGobalPassManager(refManager){};
-			virtual ::InstRO::Pass * createBlackAndWhiteListSelector(std::vector<std::string> rules)=0;
-			virtual ::InstRO::Pass * createBooleanOrSelector(::InstRO::Pass * inputA,::InstRO::Pass * inputB)=0;
-			virtual ::InstRO::Pass * createProgramEntrySelector()=0;
-			virtual ::InstRO::Pass * createCygProfileAdapter(::InstRO::Pass * input)=0;
+			virtual InstRO::Pass * createBlackAndWhiteListSelector(std::vector<std::string> rules)=0;
+			virtual InstRO::Pass * createBooleanOrSelector(::InstRO::Pass * inputA,::InstRO::Pass * inputB)=0;
+			virtual InstRO::Pass * createProgramEntrySelector()=0;
+			virtual InstRO::Pass * createCygProfileAdapter(::InstRO::Pass * input)=0;
 		protected:
+		/*	void registerPass(Pass * pass)
+			{
+				refToGobalPassManager->registerPass(pass);
+			}*/
 			PassManagement::PassManager * refToGobalPassManager;
 	};
 }// Core

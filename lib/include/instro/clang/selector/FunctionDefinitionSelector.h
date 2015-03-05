@@ -15,12 +15,18 @@ namespace Clang {
  * A Selector, which selects all function defintions in an AST
  */
 class FunctionDefinitionSelector
-		: public ::InstRO::Clang::Pass,
+		: public ::InstRO::Clang::PassImplementation,
 			public clang::RecursiveASTVisitor<
 					::InstRO::Clang::FunctionDefinitionSelector> {
  public:
 	FunctionDefinitionSelector();
 	bool VisitFunctionDecl(clang::FunctionDecl *fDecl);
+	
+	void init(){};
+	void execute(){};
+	void finalize(){};
+	void releaseOutput(){};
+	InstRO::Clang::ClangConstructSet *getOutput(){};
 
  private:
 	ClangConstructSet cs;
