@@ -7,7 +7,7 @@ namespace InstRO {
 namespace Clang {
 
 class PassImplementation : public ::InstRO::PassImplementation {
-public:
+ public:
 	void run();
 };
 

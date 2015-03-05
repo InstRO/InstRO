@@ -19,8 +19,10 @@ class InstROASTConsumer : public clang::ASTConsumer {
 	/* Gets invoked per Translation Unit. Runs all passes, registered in
 	 * PassManager on the TranslationUnit */
 	void HandleTranslationUnit(clang::ASTContext &context);
+
  private:
-	// This is a raw pointer, since it is a reference to an entity that is owned by the Instrumentor
+	// This is a raw pointer, since it is a reference to an entity that is owned
+	// by the Instrumentor
 	::InstRO::Core::PassManagement::PassManager *passManager;
 };
 }

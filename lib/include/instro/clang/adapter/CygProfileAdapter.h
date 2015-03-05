@@ -20,8 +20,9 @@ class CygProfileAdapter : public ::InstRO::Pass,
 	void adapt(::InstRO::Clang::ClangConstruct c);
 
 	void transform(clang::SourceManager *sm, clang::Decl *decl);
+
  private:
- 	Pass *decidingSelector;
+	Pass *decidingSelector;
 	ClangConstructSet cs;
 	clang::SourceManager *sm;
 	clang::tooling::Replacements *replacements;

@@ -28,6 +28,6 @@ class BlackWhitelistSelector
 	std::vector<std::string> whitelist;
 	std::vector<std::string> blacklist;
 };
-} // Clang
+}	// Clang
 }	// InstRO
 #endif

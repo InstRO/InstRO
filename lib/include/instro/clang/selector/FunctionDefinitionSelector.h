@@ -21,7 +21,7 @@ class FunctionDefinitionSelector
  public:
 	FunctionDefinitionSelector();
 	bool VisitFunctionDecl(clang::FunctionDecl *fDecl);
-	
+
 	void init(){};
 	void execute(){};
 	void finalize(){};
