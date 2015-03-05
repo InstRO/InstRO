@@ -1,4 +1,4 @@
-#include "cygProfileAdapter.h"
+#include "CygProfileAdapter.h"
 
 char ::InstRO::LLVM::CygProfileAdapter::ID = 0;
 
