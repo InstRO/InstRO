@@ -6,3 +6,7 @@ Setupsteps
 2) autoconf
 3) code
 4) autoreconf
+
+
+Requirements:
+libtool 2.4
