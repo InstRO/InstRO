@@ -1,151 +1,113 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="InstRO::Core::ConstructLevelManagrment" Collapsed="true">
-    <Position X="9.75" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\ConstructLevelManagrment.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Core::ConstructSet" Collapsed="true">
-    <Position X="13.75" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>CAAAAAAAAAAAKAAAAAAAgAAAAAAAAAAAAAACCAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\ConstructSet.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Core::PassConstructSetManagement" Collapsed="true">
-    <Position X="6.75" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAECACAAAIAAAABAAAAACEAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\ConstructSetManagement.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Pass" Collapsed="true">
-    <Position X="6.75" Y="1.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AgACAsABUgQAAQAAAAAEAAAIAhYJoEoAAIAAAAAkEAg=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\Pass.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Instrumentor" Collapsed="true">
-    <Position X="5" Y="7.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAEAABAAABAQAAAIAAAAAAAACAgAKIAIAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\Instrumentor.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::PassFactory" Collapsed="true">
-    <Position X="2" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAgAAAAAgAAAAAAFQAAAAAAAAAABAAAAAAAAIAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\PassFactory.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::RoseInstrumentor" Collapsed="true">
-    <Position X="5" Y="8.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAEAAAAAAAAAAAAIAAAAAAAAAAAAIAAIAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\RoseInstrumentor.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::PassManagement::PassManager" Collapsed="true">
-    <Position X="2" Y="6.5" Width="1.5" />
+  <Class Name="InstRO::PassManagement::PassManager">
+    <Position X="0.5" Y="1.75" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAIAAAACAAAEAAAAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\PassManager.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="InstRO::PassManagement::PassEnvelope" Collapsed="true">
-    <Position X="15.5" Y="0.5" Width="1.5" />
+  <Class Name="InstRO::Pass">
+    <Position X="4.5" Y="1.75" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAACAAAAAEQAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\PassManager.h</FileName>
+      <HashCode>RgAQAkABUkQEEQABUCAAAAAIChYIoEgAgAAACAAkEAg=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\Pass.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="passImplementation" />
+      <Field Name="inputPasses" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="InstRO::PassImplementation" Collapsed="true">
+    <Position X="9.5" Y="1.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAACAAAAAACCAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\PassImplementation.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="InstRO::PassManagement::SimplePassManager" Collapsed="true">
-    <Position X="2" Y="7.75" Width="1.5" />
+  <Class Name="std::vector&lt;_Ty, _Alloc&gt;">
+    <Position X="8.5" Y="3.5" Width="1.5" />
+    <NestedTypes>
+      <Typedef Name="std::vector&lt;_Ty, _Alloc&gt;::reference" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="std::vector&lt;_Ty, _Alloc&gt;::const_iterator" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="std::vector&lt;_Ty, _Alloc&gt;::difference_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="std::vector&lt;_Ty, _Alloc&gt;::_Mybase" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="std::vector&lt;_Ty, _Alloc&gt;::_Myt" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="std::vector&lt;_Ty, _Alloc&gt;::allocator_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="std::vector&lt;_Ty, _Alloc&gt;::pointer" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="std::vector&lt;_Ty, _Alloc&gt;::const_pointer" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="std::vector&lt;_Ty, _Alloc&gt;::size_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="std::vector&lt;_Ty, _Alloc&gt;::const_reference" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="std::vector&lt;_Ty, _Alloc&gt;::reverse_iterator" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="std::vector&lt;_Ty, _Alloc&gt;::_Alty" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="std::vector&lt;_Ty, _Alloc&gt;::iterator" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="std::vector&lt;_Ty, _Alloc&gt;::value_type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="std::vector&lt;_Ty, _Alloc&gt;::const_reverse_iterator" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAIAAAACAAAECAAACAEAAAAQAQCAAAIAAEAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\PassManager.h</FileName>
+      <HashCode>IUoEEIEqCLBMUEBAAKMIAgISAgUESAIAxQEwggAEAAI=</HashCode>
+      <FileName>c:\program files (x86)\microsoft visual studio 11.0\vc\include\vector</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="InstRO::Rose::RosePass" Collapsed="true">
-    <Position X="6.75" Y="3.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\RosePass.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Rose::Adapters::Adapter" Collapsed="true">
-    <Position X="10.25" Y="4.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\RosePass.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Rose::Adapters::CygProfileAdapter" Collapsed="true">
-    <Position X="9" Y="6.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>IAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\adapters\CygProfileAdapter.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Rose::Adapters::GenericAdapter" Collapsed="true">
-    <Position X="11.25" Y="6.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAgAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\adapters\GenericAdapter.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Rose::Selectors::Selector" Collapsed="true">
-    <Position X="5.75" Y="4.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\RosePass.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Rose::Selectors::BlackAndWhiteListSelector" Collapsed="true">
-    <Position X="4.5" Y="6.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\selectors\BlackAndWhiteListSelector.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Rose::Selectors::CompoundSelector" Collapsed="true">
-    <Position X="6.75" Y="6.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAQAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\selectors\CompoundSelectors.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Rose::Transformer::Transformer" Collapsed="true">
-    <Position X="2.25" Y="4.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\rose\RosePass.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="InstRO::Ext::VisualizingPassManager" Collapsed="true">
-    <Position X="2" Y="9.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\misc\VisualizingPassManager.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Typedef Name="InstRO::Core::ContstructLevelType" Collapsed="true">
-    <Position X="9" Y="9.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\ConstructSet.h</FileName>
-    </TypeIdentifier>
-  </Typedef>
-  <Enum Name="InstRO::Core::ContstructLevelEnum" Collapsed="true">
-    <Position X="9" Y="11.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAgAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAEAAAAQCAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\ConstructSet.h</FileName>
-    </TypeIdentifier>
-  </Enum>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

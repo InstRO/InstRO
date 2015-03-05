@@ -14,11 +14,12 @@ namespace Rose
 			std::string className(){return std::string("CygProfileAdapter");}
 			CygProfileAdapter(RosePass * pass)
 			{
-				setRequiresInput();
-				unsetProvidesOuput();
-				setPassName("ROSE_CygProfileAdapter");
-				registerInputPass(pass,Core::ConstructLevelStatement);
 			}
+				void init(){};
+	void execute(){};
+	void finalize(){};
+	void releaseOutput(){};
+	ConstructSet*getOuput(){return new ConstructSet();}
 		};
 
 	}

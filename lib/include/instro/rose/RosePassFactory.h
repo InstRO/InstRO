@@ -16,6 +16,14 @@ namespace InstRO
 
 class RosePassFactory:public PassFactory
 {
+protected:
+	RosePass * getPass(Pass * pass)
+	{
+		if (pass==NULL) return NULL;
+		RosePass * rosePass=dynamic_cast<RosePass*>(pass->getPassImplementation());
+		if (pass->getPassImplementation()!=NULL && rosePass==NULL) throw std::string("Oh my god, what is going on");
+		return rosePass;
+	}
 public:
 	class GenericAdapterConfiguration {
 	public:
@@ -31,37 +39,73 @@ public:
 	};
 	public:	
 		RosePassFactory(PassManagement::PassManager * refManager):PassFactory(refManager){};
-		RosePass * createBlackAndWhiteListSelector(std::vector<std::string> rules)
+
+		Pass * createBlackAndWhiteListSelector(std::vector<std::string> rules)
 		{
-			Selectors::BlackAndWhiteListSelector * bnwlSelector=new Selectors::BlackAndWhiteListSelector(rules);
-			refToGobalPassManager->registerPass(bnwlSelector);
-			return bnwlSelector;
+			Pass * bwlPass = new Pass(new Selectors::BlackAndWhiteListSelector(rules));
+			bwlPass->setPassName("ROSE_BlackAndWhiteList");
+			bwlPass->unsetRequiresInput();
+			bwlPass->setProvidesOuput();
+			bwlPass->setOutputLevel(Core::ConstructLevelLiteral);
+			refToGobalPassManager->registerPass(bwlPass);
+			return bwlPass;
 		}
-		RosePass * createBlackNWhiteSelector(std::string string)
+
+		Pass * createBlackNWhiteSelector(std::string string)
 		{
 			std::vector<std::string> filters;
 			filters.push_back(string);
 			return createBlackAndWhiteListSelector(filters);
 		};
-		RosePass * createBooleanOrSelector(Pass * inputA,Pass * inputB){
-			Selectors::CompoundSelector * sel=new Selectors::CompoundSelector(dynamic_cast<RosePass*>(inputA),dynamic_cast<RosePass*>(inputB));
-			refToGobalPassManager->registerPass(sel);
-			return sel;
+
+		Pass * createBooleanOrSelector(Pass * inputA,Pass * inputB)
+		{
+			
+			Pass * compoundPass=new Pass(new Selectors::CompoundSelector(getPass(inputA),getPass(inputB)));
+			compoundPass->setPassName("ROSE_BooleanOr");
+			compoundPass->setRequiresInput();
+			compoundPass->setProvidesOuput();
+			compoundPass->setOutputLevel(Core::ConstructLevelMin);
+			compoundPass->registerInputPass(inputA,Core::ConstructLevelMin);
+			compoundPass->registerInputPass(inputB,Core::ConstructLevelMin);
+			refToGobalPassManager->registerPass(compoundPass);
+			return compoundPass;
 
 		};
-		RosePass * createProgramEntrySelector(){return NULL;};
-		RosePass * createCygProfileAdapter(Pass * input)
+
+		Pass * createProgramEntrySelector(){return NULL;};
+
+		Pass * createCygProfileAdapter(Pass * input)
 		{
-//			::InstRO::Rose::Adapters::
-			return NULL;
+			Pass * newPass=new Pass(new Adapters::CygProfileAdapter(getPass(input)));
+			newPass->setRequiresInput();
+			newPass->unsetProvidesOuput();
+			newPass->setPassName("ROSE_CygProfileAdapter");
+			newPass->registerInputPass(input,Core::ConstructLevelStatement);
+			return newPass;
 		};
-		RosePass * createGenericAdapter(Pass * functionSelection, Pass * loopSelection, Pass * branchingSelection)
+
+		Pass * createGenericAdapter(Pass * functionSelection, Pass * loopSelection, Pass * branchingSelection)
 		{
-			Adapters::GenericAdapter *newAdapter=new Adapters::GenericAdapter(dynamic_cast<RosePass*>(functionSelection),dynamic_cast<RosePass*>(loopSelection),dynamic_cast<RosePass*>(branchingSelection));
-			refToGobalPassManager->registerPass(newAdapter);
-			return newAdapter;
+			//RosePass * roseFunctionSelectionPass,* roseLoopSelectionPass,*roseBranchingSelectionPass;
+			
+			Adapters::GenericAdapter * roseAdapter=new Adapters::GenericAdapter(getPass(functionSelection),getPass(loopSelection),getPass(branchingSelection));
+			Pass * newPass=new Pass(roseAdapter);
+			newPass->setRequiresInput();
+			newPass->unsetProvidesOuput();
+			newPass->setPassName("ROSE_GenericAdapter");
+			if (functionSelection!=NULL) newPass->registerInputPass(functionSelection,Core::ConstructLevelStatement);
+			if (loopSelection!=NULL) newPass->registerInputPass(loopSelection,Core::ConstructLevelStatement);
+			if (branchingSelection!=NULL) newPass->registerInputPass(branchingSelection,Core::ConstructLevelStatement);
+			
+			refToGobalPassManager->registerPass(newPass);
+			return newPass;
 		};
-		RosePass * createGenericAdapter(GenericAdapterConfiguration gac){return createGenericAdapter(gac.getFunctionSelector(),gac.getLoopConstructSelector(),gac.getLoopBodySelector());};
+
+		Pass * createGenericAdapter(GenericAdapterConfiguration gac)
+		{
+			return createGenericAdapter(gac.getFunctionSelector(),gac.getLoopConstructSelector(),gac.getLoopBodySelector());
+		};
 
 };
 

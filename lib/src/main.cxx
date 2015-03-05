@@ -47,8 +47,6 @@ int main(int argc,char ** argv)
 	}
 
 
-	
-	
 
 	/*
 	InstRO::Instrumentor * instro=new InstRO::RoseInstrumentor();
