@@ -1,5 +1,5 @@
-#ifndef ROSE_BLACKANDWHITELISTSELECTOR_H
-#define ROSE_BLACKANDWHITELISTSELECTOR_H
+#ifndef ROSE_COMPOUNDSELECTORS_H
+#define ROSE_COMPOUNDSELECTORS_H
 #include <vector>
 #include <string>
 #include "instro/rose/RosePass.h"
@@ -11,14 +11,13 @@ namespace Rose
 namespace Selectors
 {
 
-class BlackAndWhiteListSelector:public Selector{
+class CompoundSelector:public Selector{
 public:
-	BlackAndWhiteListSelector(std::vector<std::string> matchRules)
-	{
-	
+	CompoundSelector(RosePass * inputA,RosePass * inputB)
+	{		
 	};
-	void execute(){};
 	void init(){};
+	void execute(){};
 	void finalize(){};
 	void releaseOutput(){};
 	ConstructSet*getOuput(){return new ConstructSet();}

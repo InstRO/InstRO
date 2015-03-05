@@ -1,0 +1,13 @@
+#!/bin/sh
+
+autoscan
+
+libtoolize -i
+
+aclocal -I ./config/m4
+
+autoheader
+
+automake --add-missing
+
+autoconf

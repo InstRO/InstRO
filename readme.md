@@ -1,6 +1,3 @@
-The directory doc contains instructions how to use Autotools to update InstRO. 
-
-
 Style guidelines
 
 Filenames
@@ -21,3 +18,4 @@ Naming
 
 Although we use namespaces to separate disstinct entities, we still reflect this in a classes name.
 For example would a Pass which is specialized to work with Rose be named RosePass and put into the Rose namespace - LLVMPass accordingly.
+

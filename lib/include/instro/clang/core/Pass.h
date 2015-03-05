@@ -6,7 +6,7 @@
 namespace InstRO {
 namespace Clang {
 
-class Pass : public ::InstRO::Pass {
+class PassImplementation : public ::InstRO::PassImplementation {
 public:
 	void run();
 };

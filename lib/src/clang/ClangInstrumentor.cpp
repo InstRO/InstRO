@@ -15,7 +15,7 @@ clang::tooling::ToolAction* ::InstRO::Clang::ClangInstrumentor::
 						 ::InstRO::Clang::ClangConsumerFactory>(&fac).get();
 }*/
 
-InstRO::Core::PassFactory* ::InstRO::Clang::ClangInstrumentor::getFactory() {
+InstRO::Core::PassFactory* ::InstRO::Clang::ClangInstrumentor::getFactory(CompilationPhase phase) {
 	if (fac == nullptr) {
 		std::unique_ptr<::InstRO::Clang::PassFactory> t(
 				new ::InstRO::Clang::PassFactory(getPassManager()));
