@@ -11,10 +11,6 @@ LLVM_BIN_PATH=$(CLANG_BASE_PATH)/install/bin
 
 CXX=g++
 
-INCLUDE_FLAGS=-I.
-
-CXXFLAGS= -O0 -g $(INCLUDE_FLAGS)
-PLUGIN_CXXFLAGS= -fpic
 
 LLVM_CXXFLAGS = `$(LLVM_BIN_PATH)/llvm-config --cxxflags`
 LLVM_LDFLAGS = `$(LLVM_BIN_PATH)/llvm-config --ldflags --libs --system-libs`
@@ -55,7 +51,11 @@ CLANG_LIBS := \
 
 
 #all: clang_howto first_matcher fDefMatcher
-all: cashes-pass
+all: clang-tool
+
+INCLUDE_FLAGS=-I.
+CXXFLAGS+=-O0 -g $(INCLUDE_FLAGS) -fexceptions
+PLUGIN_CXXFLAGS= -fpic
 
 
 TOP_LEVEL=/home/j_lehr/all_repos/instro-v5/repo
@@ -67,19 +67,29 @@ INSTRO_INCLUDES=-I$(TOP_LEVEL)/lib/include -I$(INSTROLLVMINCLUDE) -I$(INSTROLLVM
 INSTRO_INCLUDES+=-I$(INSTROCLANGINCLUDE) -I$(INSTROCLANGINCLUDE)/selector -I$(INSTROCLANGINCLUDE)/adapter -I$(INSTROCLANGINCLUDE)/core 
 
 
-SOURCES=$(TOP_LEVEL)/lib/src/llvm/selector/CashesSelector.cpp \
+LLVM_SOURCES=$(TOP_LEVEL)/lib/src/llvm/selector/CashesSelector.cpp \
 				$(TOP_LEVEL)/lib/src/llvm/adapter/CygProfileAdapter.cpp \
-				$(TOP_LEVEL)/lib/src/llvm/Register.cpp \
+				$(TOP_LEVEL)/lib/src/llvm/Register.cpp
+
+CLANG_SOURCES= \
 				$(TOP_LEVEL)/lib/src/clang/selector/FunctionDefinitionSelector.cpp \
 				$(TOP_LEVEL)/lib/src/clang/adapter/CygProfileAdapter.cpp \
+				$(TOP_LEVEL)/lib/src/clang/core/PassFactory.cpp \
 				$(TOP_LEVEL)/lib/src/clang/core/ConstructSet.cpp \
+				$(TOP_LEVEL)/lib/src/clang/ClangInstrumentor.cpp \
+				$(TOP_LEVEL)/lib/src/clang/support/InstROASTConsumer.cpp \
+				$(TOP_LEVEL)/lib/src/clang/support/ClangAdapterFactory.cpp \
 				$(TOP_LEVEL)/lib/src/clang/Instrumentor.cpp
 #				$(TOP_LEVEL)/lib/src/clang/selector/BlackWhitelistSelector.cpp 
 
-OBJECTS=$(SOURCES:.cpp=.o)
+LLVM_OBJECTS=$(LLVM_SOURCES:.cpp=.o)
+CLANG_OBJECTS=$(CLANG_SOURCES:.cpp=.o)
 
-cashes-pass: $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $(LLVM_CXXFLAGS) $(PLUGIN_LDFLAGS) $(OBJECTS) $(CLANG_LIBS) $(LLVM_LDFLAGS_NOLIBS) -o cashesPass.so
+cashes-pass: $(LLVM_OBJECTS)
+	$(CXX) $(CXXFLAGS) $(LLVM_CXXFLAGS) $(PLUGIN_LDFLAGS) $(LLVM_OBJECTS) $(CLANG_LIBS) $(LLVM_LDFLAGS_NOLIBS) -o cashesPass.so
+
+clang-tool: $(CLANG_OBJECTS)
+	$(CXX) $(LLVM_CXXFLAGS) $(CXXFLAGS)  $(PLUGIN_LDFLAGS) $(CLANG_OBJECTS) $(CLANG_LIBS) $(LLVM_LDFLAGS_NOLIBS) -o ClangInstrumentor.out
 
 .cpp.o:
 	$(CXX) $(INSTRO_INCLUDES) $(CXXFLAGS) $(LLVM_CXXFLAGS) $(PLUGIN_LDFLAGS) -c $< $(CLANG_LIBS) $(LLVM_LDFLAGS_NOLIBS) -o $@

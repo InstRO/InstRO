@@ -10,6 +10,10 @@
 
 namespace InstRO {
 namespace Clang {
+
+/*
+ * A Selector, which selects all function defintions in an AST
+ */
 class FunctionDefinitionSelector
 		: public ::InstRO::Clang::Pass,
 			public clang::RecursiveASTVisitor<
