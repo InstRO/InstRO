@@ -19,10 +19,8 @@
 
 #include <vector>
 #include <string>
-#include <hash_map>
 
 #include "instro/core/Pass.h"
-//#include "instro/roseInstRO.h"
 
 namespace InstRO{
 namespace Core{
