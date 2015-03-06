@@ -5,8 +5,8 @@ InstRO::Clang::ClangInstrumentor::ClangInstrumentor(
 		: argc(argc), argv(argv), fac(new ::InstRO::Clang::PassFactory(manager)) {}
 
 InstRO::Clang::ClangInstrumentor::ClangInstrumentor(int argc,
-																											const char** argv)
-		: argc(argc), argv(argv) {}
+																											const char** argv, void *llvmThing)
+		: argc(argc), argv(argv), bla(llvmThing) {}
 /*
 clang::tooling::ToolAction* ::InstRO::Clang::ClangInstrumentor::
 		getClangAction() {
@@ -26,10 +26,10 @@ InstRO::Core::PassFactory* ::InstRO::Clang::ClangInstrumentor::getFactory(Compil
 
 void InstRO::Clang::ClangInstrumentor::init() {}
 
-static llvm::cl::OptionCategory MyTool("my tool");
+//extern llvm::cl::OptionCategory MyTool;
 
 void InstRO::Clang::ClangInstrumentor::apply() {
-	clang::tooling::CommonOptionsParser cop(argc, argv, MyTool);
+	clang::tooling::CommonOptionsParser cop(argc, argv, *static_cast<llvm::cl::OptionCategory *>(bla));
 	clang::tooling::RefactoringTool tool(cop.getCompilations(),
 																			 cop.getSourcePathList());
 	InstRO::Clang::Support::ClangConsumerFactory f(getPassManager(), tool.getReplacements());
