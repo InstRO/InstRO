@@ -19,7 +19,7 @@ class ClangConsumerFactory : public clang::ASTFrontendAction {
 	ClangConsumerFactory(const ClangConsumerFactory &other) = delete;
 	ClangConsumerFactory(InstRO::Core::PassManagement::PassManager *manager,
 											 clang::tooling::Replacements &replacements);
-
+	~ClangConsumerFactory();
 	std::unique_ptr<clang::ASTConsumer> newASTConsumer();
 	std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
 			clang::CompilerInstance &ci, llvm::StringRef strRef);

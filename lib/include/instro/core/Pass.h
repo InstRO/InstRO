@@ -36,10 +36,8 @@ class PassManager;
 // Make it a sane world
 class Pass : public ::InstRO::Core::PassConstructSetManagement,
 						 public ::InstRO::Core::ConstructLevelManagrment {
- private:
-	Pass(){};
-
  public:
+	Pass() = delete;
 	Pass(PassImplementation *pImpl)
 			: passImplementation(pImpl),
 				passInitialized(false),
@@ -52,51 +50,10 @@ class Pass : public ::InstRO::Core::PassConstructSetManagement,
 		delete (passImplementation);
 		passImplementation = NULL;
 	}
-	void initPass() {
-		if (inputReady)
-			passImplementation->init();
-		else
-#ifdef __EXCEPTIONS
-			throw std::string("Input not ready!");
-#else
-			std::cerr << "Pass: Input not ready" << std::endl;
-#endif
-		passInitialized = true;
-	}
-	void executePass() {
-		if (passInitialized)
-			passImplementation->execute();
-		else
-#ifdef __EXCEPTIONS
-			throw std::string("Pass not Initialized!");
-#else
-			std::cerr << "Pass: Pass not initialized" << std::endl;
-#endif
-		passExecuted = true;
-	}
-	void finalizePass() {
-		if (passInitialized)
-			passImplementation->finalize();
-		else
-#ifdef __EXCEPTIONS
-			throw std::string("Must Initialize Pass First!");
-#else
-			std::cerr << "Pass: Must Initialize Pass First" << std::endl;
-#endif
-		passFinalize = true;
-	}
-	void releaseOutput() {
-		if (passExecuted)
-			passImplementation->releaseOutput();
-		else
-#ifdef __EXCEPTIONS
-			throw std::string("Pass not Executed, Execute Pass First!");
-#else
-			std::cerr << "Pass: Pass not executed. Need to execute pass first"
-								<< std::endl;
-#endif
-		passOutputReleased = true;
-	}
+	void initPass();
+	void executePass();
+	void finalizePass();
+	void releaseOutput();
 	// CI: Enable Input is called externally to indicate, that  the input passes
 	// have beend processed and that the current pass can now use the
 	// getInput(Pass*) to obtain the construct sets of its predecessors

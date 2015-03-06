@@ -12,3 +12,10 @@ InstRO::Clang::Support::ClangConsumerFactory::newASTConsumer() {
 	return std::unique_ptr<InstRO::Clang::Support::InstROASTConsumer>(
 			new InstRO::Clang::Support::InstROASTConsumer(manager));
 }
+
+std::unique_ptr<clang::ASTConsumer> InstRO::Clang::Support::ClangConsumerFactory::CreateASTConsumer(
+			clang::CompilerInstance &ci, llvm::StringRef strRef){
+	return std::unique_ptr<clang::ASTConsumer>(nullptr);
+}
+
+

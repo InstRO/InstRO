@@ -9,11 +9,10 @@
  * syntax and to check whether instantiations would compile :)
  */
 
-static llvm::cl::OptionCategory MyTool("InstRO");
+static llvm::cl::OptionCategory MyTool("my tool");
 
 int main(int argc, char **argv) {
-//	::InstRO::Clang::ClangInstrumentor instro(argc, argv, nullptr);
-	::InstRO::Clang::ClangInstrumentor instro(argc, const_cast<const char **>(argv));
+	::InstRO::Clang::ClangInstrumentor instro(argc, const_cast<const char **>(argv), (void*)&MyTool);
 	instro.apply();
 	return 0;
 }

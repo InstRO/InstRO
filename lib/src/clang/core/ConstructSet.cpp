@@ -10,4 +10,8 @@ clang::Type * ::InstRO::Clang::getAsType(const ::InstRO::Clang::ClangConstruct &
 	return c.type;
 }
 
+void InstRO::Clang::ClangConstructSet::put(clang::Decl *decl){}
+void InstRO::Clang::ClangConstructSet::put(clang::Stmt *stmt){}
+std::vector<InstRO::Clang::ClangConstruct> InstRO::Clang::ClangConstructSet::getConstructSet(){}
+
 

@@ -7,6 +7,7 @@
 #include "clang/Tooling/Tooling.h"
 #include "clang/Tooling/Refactoring.h"
 
+#include "instro/core/SimplePassManager.h"
 #include "instro/core/Instrumentor.h"
 #include "instro/clang/core/ClangConsumerFactory.h"
 #include "instro/clang/core/PassFactory.h"
@@ -25,7 +26,7 @@ class ClangInstrumentor : public ::InstRO::Instrumentor {
 	/** CTor a user wants to use */
 	ClangInstrumentor(int argc, const char** argv,
 										::InstRO::Core::PassManagement::PassManager* manager);
-	ClangInstrumentor(int argc, const char** argv);
+	ClangInstrumentor(int argc, const char** argv, void* llvmThing);
 	/** Provides the ToolAction, which a clang::RefactoringTool awaits */
 	clang::tooling::ToolAction* getClangAction();
 	/** Returns the factory used to create the passes a user builds the
@@ -40,6 +41,7 @@ class ClangInstrumentor : public ::InstRO::Instrumentor {
 	int argc;
 	const char** argv;
 	std::unique_ptr<InstRO::Clang::PassFactory> fac;
+	void *bla;
 };
 }	// Clang
 }	// INstRO
