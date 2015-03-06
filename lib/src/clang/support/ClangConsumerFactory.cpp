@@ -5,6 +5,8 @@ InstRO::Clang::Support::ClangConsumerFactory::ClangConsumerFactory(
 		clang::tooling::Replacements &replacements)
 		: manager(manager), replacements(replacements) {}
 
+InstRO::Clang::Support::ClangConsumerFactory::~ClangConsumerFactory() {}
+
 std::unique_ptr<clang::ASTConsumer>
 InstRO::Clang::Support::ClangConsumerFactory::newASTConsumer() {
 	return std::unique_ptr<InstRO::Clang::Support::InstROASTConsumer>(
