@@ -54,7 +54,7 @@ CLANG_LIBS := \
 all: clang-tool
 
 INCLUDE_FLAGS=-I.
-CXXFLAGS+=-O0 -g $(INCLUDE_FLAGS) -fexceptions
+CXXFLAGS+=-O0 -g $(INCLUDE_FLAGS) 
 PLUGIN_CXXFLAGS= -fpic
 
 
@@ -72,13 +72,15 @@ LLVM_SOURCES=$(TOP_LEVEL)/lib/src/llvm/selector/CashesSelector.cpp \
 				$(TOP_LEVEL)/lib/src/llvm/Register.cpp
 
 CLANG_SOURCES= \
+				$(TOP_LEVEL)/lib/src/core/SimplePassManager.cpp \
+				$(TOP_LEVEL)/lib/src/core/Pass.cpp \
 				$(TOP_LEVEL)/lib/src/clang/selector/FunctionDefinitionSelector.cpp \
 				$(TOP_LEVEL)/lib/src/clang/adapter/CygProfileAdapter.cpp \
 				$(TOP_LEVEL)/lib/src/clang/core/PassFactory.cpp \
 				$(TOP_LEVEL)/lib/src/clang/core/ConstructSet.cpp \
 				$(TOP_LEVEL)/lib/src/clang/ClangInstrumentor.cpp \
 				$(TOP_LEVEL)/lib/src/clang/support/InstROASTConsumer.cpp \
-				$(TOP_LEVEL)/lib/src/clang/support/ClangAdapterFactory.cpp \
+				$(TOP_LEVEL)/lib/src/clang/support/ClangConsumerFactory.cpp \
 				$(TOP_LEVEL)/lib/src/clang/Instrumentor.cpp
 #				$(TOP_LEVEL)/lib/src/clang/selector/BlackWhitelistSelector.cpp 
 
@@ -86,13 +88,14 @@ LLVM_OBJECTS=$(LLVM_SOURCES:.cpp=.o)
 CLANG_OBJECTS=$(CLANG_SOURCES:.cpp=.o)
 
 cashes-pass: $(LLVM_OBJECTS)
-	$(CXX) $(CXXFLAGS) $(LLVM_CXXFLAGS) $(PLUGIN_LDFLAGS) $(LLVM_OBJECTS) $(CLANG_LIBS) $(LLVM_LDFLAGS_NOLIBS) -o cashesPass.so
+	$(CXX) $(CXXFLAGS) $(LLVM_CXXFLAGS) $(PLUGIN_LDFLAGS) $(LLVM_OBJECTS) $(CLANG_LIBS) $(LLVM_LDFLAGS) -o cashesPass.so
 
 clang-tool: $(CLANG_OBJECTS)
-	$(CXX) $(LLVM_CXXFLAGS) $(CXXFLAGS)  $(PLUGIN_LDFLAGS) $(CLANG_OBJECTS) $(CLANG_LIBS) $(LLVM_LDFLAGS_NOLIBS) -o ClangInstrumentor.out
+	$(CXX) $(LLVM_CXXFLAGS) $(CXXFLAGS)  $(CLANG_OBJECTS) $(CLANG_LIBS) $(LLVM_LDFLAGS) -o ClangInstrumentor.out
 
 .cpp.o:
-	$(CXX) $(INSTRO_INCLUDES) $(CXXFLAGS) $(LLVM_CXXFLAGS) $(PLUGIN_LDFLAGS) -c $< $(CLANG_LIBS) $(LLVM_LDFLAGS_NOLIBS) -o $@
+	$(CXX) $(INSTRO_INCLUDES) $(CXXFLAGS) $(LLVM_CXXFLAGS) $(PLUGIN_LDFLAGS) -c $< -o $@
+#$(CLANG_LIBS) $(LLVM_LDFLAGS) 
 
 cashes-pass-depr:
 	$(CXX) $(CXXFLAGS) $(LLVM_CXXFLAGS) $(PLUGIN_LDFLAGS) cashesSelectorPass.cpp $(CLANG_LIBS) $(LLVM_LDFLAGS_NOLIBS) -o b_cashes.so
