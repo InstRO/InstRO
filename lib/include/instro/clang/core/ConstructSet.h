@@ -1,3 +1,6 @@
+#ifndef INSTRO_CLANG_CONSTRUCTSET_H
+#define INSTRO_CLANG_CONSTRUCTSET_H
+
 #include "instro/core/ConstructSet.h"
 
 #include "clang/AST/Decl.h"
@@ -31,3 +34,5 @@ class ClangConstructSet : public ::InstRO::Core::ConstructSet {
 
 }	// Clang
 }	// InstRO
+
+#endif

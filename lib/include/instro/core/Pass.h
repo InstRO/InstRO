@@ -28,6 +28,7 @@
 
 //#include "instro/roseInstRO.h"
 namespace InstRO {
+//	namespace Core{
 /* PassFactory: Interface for the mandatory InstRO Passes. */
 namespace PassManagement {
 class PassManager;
@@ -105,6 +106,6 @@ class Pass : public ::InstRO::Core::PassConstructSetManagement,
 	Core::ContstructLevelType outputLevel;
 	std::unordered_map<Pass *, Core::ContstructLevelType> inputRequiredLevels;
 };
-}
-
+//}// Core
+}	// InstRO
 #endif

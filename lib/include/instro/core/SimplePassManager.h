@@ -12,7 +12,7 @@ class SimplePassManager : public InstRO::Core::PassManagement::PassManager {
  public:
 	// Enable the Pass Manager to query the pass for its dependencies
 	void registerPass(Pass *currentPass);
-
+	void setExecuter(PassExecuter *executer);
 	// TODO: FIX
 	void addDependency(Pass *input, Core::ContstructLevelType inputLevel,
 										 Pass *currentPass,

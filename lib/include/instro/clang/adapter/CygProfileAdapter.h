@@ -1,31 +1,48 @@
 #ifndef INSTRO_CLANG_CYGPROFILEADAPTER_H
 #define INSTRO_CLANG_CYGPROFILEADAPTER_H
 
+#include <cassert>
+
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/Tooling/Core/Replacement.h"
 
 #include "instro/clang/core/ConstructSet.h"
 #include "instro/clang/core/Pass.h"
+#include "instro/clang/core/ClangAdapterPass.h"
 
 namespace InstRO {
 namespace Clang {
 
-class CygProfileAdapter : public ::InstRO::Pass,
+#if 0
+class CygProfileAdapter : public InstRO::PassImplementation,
+													public InstRO::Clang::Core::ClangAdapterPass,
 													public clang::RecursiveASTVisitor<CygProfileAdapter> {
- public:
-	CygProfileAdapter(::InstRO::Pass *selector, clang::SourceManager *sm);
+#else
+class CygProfileAdapter : public InstRO::Clang::Core::ClangPassImplementation {
+#endif
 
-	void run();
+public:
+CygProfileAdapter(InstRO::Pass *selector, clang::SourceManager *sm);
 
-	void adapt(::InstRO::Clang::ClangConstruct c);
+void init();
 
-	void transform(clang::SourceManager *sm, clang::Decl *decl);
+void execute();
 
- private:
-	Pass *decidingSelector;
-	ClangConstructSet cs;
-	clang::SourceManager *sm;
-	clang::tooling::Replacements *replacements;
+void finalize();
+
+void releaseOutput();
+
+InstRO::Clang::ClangConstructSet *getOutput();
+
+void adapt(InstRO::Clang::ClangConstruct c);
+
+void transform(clang::SourceManager *sm, clang::Decl *decl);
+
+private:
+Pass *decidingSelector;
+ClangConstructSet cs;
+clang::SourceManager *sm;
+clang::tooling::Replacements *replacements;
 };
 
 }	// Clang

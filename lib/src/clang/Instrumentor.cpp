@@ -12,7 +12,12 @@
 static llvm::cl::OptionCategory MyTool("my tool");
 
 int main(int argc, char **argv) {
-	::InstRO::Clang::ClangInstrumentor instro(argc, const_cast<const char **>(argv), (void*)&MyTool);
+	std::cout << "Start" << std::endl;
+	InstRO::Clang::ClangInstrumentor instro(argc, const_cast<const char **>(argv), (void*)&MyTool);
+	auto fac = instro.getFactory();
+	auto fDefSel = fac->createFunctionDefinitionSelector();
+	fac->createCygProfileAdapter(fDefSel);
 	instro.apply();
+	std::cout << "End" << std::endl;
 	return 0;
 }

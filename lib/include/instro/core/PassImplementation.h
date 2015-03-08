@@ -4,17 +4,17 @@
 
 //#include "instro/roseInstRO.h"
 
-namespace InstRO{
-	// Do the compiler stuff
-class PassImplementation
-{
-public:
-	virtual void init()=0;
-	virtual void execute()=0;
-	virtual void finalize()=0;
-	virtual void releaseOutput()=0;
-	virtual Core::ConstructSet * getOutput()=0;
+namespace InstRO {
+// Do the compiler stuff
+class PassImplementation {
+ public:
+	virtual void init() = 0;
+	virtual void execute() = 0;
+	virtual void finalize() = 0;
+	virtual void releaseOutput() = 0;
+	virtual Core::ConstructSet* getOutput() = 0;
+	virtual PassImplementation * identity(){return this;}
 };
 }
 
-#endif 
+#endif
