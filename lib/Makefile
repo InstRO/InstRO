@@ -78,6 +78,7 @@ CLANG_SOURCES= \
 				$(TOP_LEVEL)/lib/src/clang/adapter/CygProfileAdapter.cpp \
 				$(TOP_LEVEL)/lib/src/clang/core/PassFactory.cpp \
 				$(TOP_LEVEL)/lib/src/clang/core/ConstructSet.cpp \
+				$(TOP_LEVEL)/lib/src/clang/core/ClangPassExecuter.cpp \
 				$(TOP_LEVEL)/lib/src/clang/ClangInstrumentor.cpp \
 				$(TOP_LEVEL)/lib/src/clang/support/InstROASTConsumer.cpp \
 				$(TOP_LEVEL)/lib/src/clang/support/ClangConsumerFactory.cpp \

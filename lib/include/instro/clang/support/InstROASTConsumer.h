@@ -4,7 +4,7 @@
 #include "clang/AST/ASTConsumer.h"
 
 #include "instro/core/PassManager.h"
-
+#include "instro/clang/core/ClangPassExecuter.h"
 namespace InstRO {
 namespace Clang {
 namespace Support {

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "instro/core/Pass.h"
+#include "instro/core/PassExecuter.h"
 
 namespace InstRO {
 namespace Core {
@@ -33,16 +34,18 @@ class PassManager {
  public:
 	// Enable the Pass Manager to query the pass for its dependencies
 	virtual void registerPass(Pass *currentPass) = 0;
+	virtual void setExecuter(PassExecuter *executer) = 0;
 	virtual int execute() = 0;
 	//		virtual bool usesInput(Pass * pass){hasInputDependencies;
 	// virtual bool isInput(Pass * pass)=0;
 	virtual bool hasOutputDependencies(Pass *) = 0;
 	virtual bool hasInputDependencies(Pass *) = 0;
-
  protected:
 	Pass *pass;
 	// Pass * successor;
 	std::vector<Pass *> predecessors;
+	// delegate for compiler specific invocation of a pass implementation
+	PassExecuter *executer;
 };
 
 }	// End namespace PassManagement

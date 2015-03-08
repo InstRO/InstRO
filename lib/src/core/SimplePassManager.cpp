@@ -25,7 +25,12 @@ void InstRO::Core::PassManagement::SimplePassManager::registerPass(Pass *current
 		}
 }
 
+void InstRO::Core::PassManagement::SimplePassManager::setExecuter(InstRO::Core::PassManagement::PassExecuter *executer){
+	this->executer = executer;
+}
+
 int InstRO::Core::PassManagement::SimplePassManager::execute(){
+	std::cout << "Running execute in SimplePassManager" << std::endl;
 		for (PassEnvelope *passContainer : passList) {
 			// Allow the Pass to Initialize iself. E.g. start reading input data from
 			// files, allocated named input fields, etc.
@@ -56,7 +61,8 @@ int InstRO::Core::PassManagement::SimplePassManager::execute(){
 			// not allowed.
 			passEnvelope->pass->initPass();
 
-			// 3rd: Execute the pass
+			// 3rd: Execute the pass (using delegate)
+			executer->execute(passEnvelope->pass->getPassImplementation());
 			passEnvelope->pass->executePass();
 
 			// 4th: Tell the pass to finalize. It is supposed to release memory, close

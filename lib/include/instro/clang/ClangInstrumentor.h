@@ -24,8 +24,11 @@ namespace Clang {
 class ClangInstrumentor : public ::InstRO::Instrumentor {
  public:
 	/** CTor a user wants to use */
-	ClangInstrumentor(int argc, const char** argv,
+#if 0
+	 ClangInstrumentor(int argc, const char** argv,
 										::InstRO::Core::PassManagement::PassManager* manager);
+#endif
+	 ClangInstrumentor() = delete;
 	ClangInstrumentor(int argc, const char** argv, void* llvmThing);
 	/** Provides the ToolAction, which a clang::RefactoringTool awaits */
 	clang::tooling::ToolAction* getClangAction();
@@ -40,6 +43,8 @@ class ClangInstrumentor : public ::InstRO::Instrumentor {
  private:
 	int argc;
 	const char** argv;
+	clang::tooling::CommonOptionsParser cop;
+	clang::tooling::RefactoringTool tool;
 	std::unique_ptr<InstRO::Clang::PassFactory> fac;
 	void *bla;
 };
