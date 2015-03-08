@@ -1,14 +1,17 @@
 /** \mainpage
- * InstRO is an instrumentation framework initially based on the ROSE compiler infrastructure.
+ * InstRO is an instrumentation framework initially based on the ROSE compiler
+ *infrastructure.
  * It is in development at TU Darmstadt, Germany.
  * Development started at RWTH Aachen, Germany.
  *
- * define INSTRUMENT_COMPILER_INSTANTIATED_TEMPLATES compiler flag to use InstRO experimental
+ * define INSTRUMENT_COMPILER_INSTANTIATED_TEMPLATES compiler flag to use InstRO
+ *experimental
  * instrumentation of templated c++ code.
  * This depends on ROSE and its capability of handling template sources.
- * 
- * Its goal is to provide a powerful tool for performance analysis of C/C++ and Fortran codes.
- * 
+ *
+ * Its goal is to provide a powerful tool for performance analysis of C/C++ and
+ *Fortran codes.
+ *
  *
  */
 
@@ -41,5 +44,5 @@
 #endif
 
 #ifdef USING_LLVM
-// #include "instro/llvmInstRO.h"
-#endif 
+#include "instro/llvmInstRO.h"
+#endif

@@ -17,67 +17,57 @@
 #include <iostream>
 #include <vector>
 
-#include <vector>
-#include <unordered_map>
-
 #include "instro/core/ConstructLevelManagrment.h"
 #include "instro/core/ConstructSetManagement.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/core/PassManager.h"
-//#include "instro/core.h"
+#include "instro/core/PassFactory.h"
 
-//#include "instro/roseInstRO.h"
+namespace InstRO {
+namespace Core {
+namespace PassManagement {
+class PassManager;
+}	// PassManagement
+}	// Core
+class Instrumentor {
+ public:
+	typedef enum CompilationPhase {
+		firstPhase = 1,
+		defaultPhase = 1,
+		frontend,
+		afterOptimization,
+		afterAssebling,
+		afterLinking,
+		lastPhase
+	} CompilationPhase;
 
-namespace InstRO{
-	namespace PassManagement
-	{
-		class PassManager;
+ public:
+	Instrumentor() {
+		passManagerLocked = false;
+		setPassManager(new InstRO::Core::PassManagement::SimplePassManager());
+	}
+	virtual ::InstRO::Core::PassFactory* getFactory(
+			CompilationPhase phase = frontend) = 0;
+	InstRO::Core::PassManagement::PassManager* getPassManager() {
+		return passManager;
+	}
+	void setPassManager(::InstRO::Core::PassManagement::PassManager* manager) {
+		if (passManagerLocked)
+//			throw std::string("PassManager already in use and locked");
+			std::cerr << "PassManager already in use and locked" << std::endl;
+		else {
+			passManager = manager;
+		}
 	}
 
-	class Instrumentor
-	{
-	public:
-		typedef enum CompilationPhase
-		{
-			firstPhase=1,
-			defaultPhase=1,
-			frontend,
-			afterOptimization,
-			afterAssebling,
-			afterLinking,
-			lastPhase
-		}CompilationPhase;
-	public:	
-		Instrumentor()
-		{
-			passManagerLocked=false;
-			setPassManager(new PassManagement::SimplePassManager());
-		}
-		virtual PassFactory * getFactory(CompilationPhase phase=frontend)=0;
-		PassManagement::PassManager * getPassManager()
-		{
-			return passManager;
-		}
-		void setPassManager(PassManagement::PassManager * manager)
-		{
-			if (isPassManagerLocked())
-				throw std::string("PassManager already in use and locked");
-			else
-			{
-				passManager=manager;
-			}
-		}
-	protected:
-		bool isPassManagerLocked(){
-			return passManagerLocked;
-		}
-		void lockPassManager(){passManagerLocked=true;}
-		bool passManagerLocked;
-		PassManagement::PassManager * passManager;
-	public:
-		virtual void init()=0;
-		virtual void apply()=0;
-		virtual void finalize()=0;
+ protected:
+	bool passManagerLocked;
+	InstRO::Core::PassManagement::PassManager* passManager;
+
+ public:
+	virtual void init() = 0;
+	virtual void apply() = 0;
+	virtual void finalize() = 0;
 };
 }
 
