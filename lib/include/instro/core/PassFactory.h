@@ -17,37 +17,35 @@
 #include <iostream>
 #include <vector>
 
-#include <vector>
-#include <string>
-#include <unordered_map>
 
-
-//#include "instro/roseInstRO.h"
+#include "instro/core/Pass.h"
 
 namespace InstRO{
+	class Pass;
+namespace Core{
 	namespace PassManagement
 	{
 		class PassManager;
 	}
-	class Pass;
 	/* PassFactory: Interface for the mandatory InstRO Passes. */
 	class PassFactory
 	{
 		public:	
 			/* CI: A PassFactory must be initialized with the PassManager. */
-			PassFactory(PassManagement::PassManager * refManager):refToGobalPassManager(refManager){};
-			virtual Pass * createBlackAndWhiteListSelector(std::vector<std::string> rules)=0;
-			virtual Pass * createBooleanOrSelector(Pass * inputA,Pass * inputB)=0;
-			virtual Pass * createProgramEntrySelector()=0;
-			virtual Pass * createCygProfileAdapter(Pass * input)=0;
-			virtual Pass * createGenericAdapter(Pass * functionSelection, Pass * loopSelection, Pass * branchingSelection)=0;
+			PassFactory(PassManagement::PassManager * manager):passManager(manager){};
+			virtual InstRO::Pass * createBlackAndWhiteListSelector(std::vector<std::string> rules)=0;
+			virtual InstRO::Pass * createBooleanOrSelector(InstRO::Pass * inputA,InstRO::Pass * inputB)=0;
+			virtual InstRO::Pass * createProgramEntrySelector()=0;
+			virtual InstRO::Pass * createFunctionDefinitionSelector()=0;
+			virtual InstRO::Pass * createCygProfileAdapter(InstRO::Pass * input)=0;
 		protected:
 		/*	void registerPass(Pass * pass)
 			{
 				refToGobalPassManager->registerPass(pass);
 			}*/
-			PassManagement::PassManager * refToGobalPassManager;
+			PassManagement::PassManager * passManager;
 	};
-}
+}// Core
+}//InstRO
 
 #endif
