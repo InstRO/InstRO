@@ -5,7 +5,7 @@
 #include "clang/AST/RecursiveASTVisitor.h"
 
 // InstRO includes
-#include "instro/clang/core/Pass.h"
+#include "instro/clang/core/ClangAdapterPass.h"
 #include "instro/clang/core/ConstructSet.h"
 
 namespace InstRO {
@@ -15,18 +15,17 @@ namespace Clang {
  * A Selector, which selects all function defintions in an AST
  */
 class FunctionDefinitionSelector
-		: public ::InstRO::Clang::PassImplementation,
-			public clang::RecursiveASTVisitor<
-					::InstRO::Clang::FunctionDefinitionSelector> {
+//		: public InstRO::Clang::Core::ClangPassImplementationT<InstRO::Clang::ClangConstructSet> {
+		: public InstRO::Clang::Core::ClangPassImplementation {
  public:
 	FunctionDefinitionSelector();
-	bool VisitFunctionDecl(clang::FunctionDecl *fDecl);
+	bool VisitFunctionDecl(clang::FunctionDecl *fDecl) override;
 
 	void init(){};
 	void execute(){};
 	void finalize(){};
 	void releaseOutput(){};
-	InstRO::Clang::ClangConstructSet *getOutput(){};
+	InstRO::Clang::ClangConstructSet *getOutput();
 
  private:
 	ClangConstructSet cs;

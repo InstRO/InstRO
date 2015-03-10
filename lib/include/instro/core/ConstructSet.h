@@ -16,22 +16,22 @@ typedef enum ContstructLevelEnum{
 	ConstructLevelExpression=2,
 	ConstructLevelStatement,
 	MaxConstructLevel=1
-}ContstructLevelType;
+}ConstructLevelType;
 
-std::string contstructLevelToString(ContstructLevelType type);
-std::string operator+(const std::string &lhs,const ContstructLevelEnum &type);
+std::string contstructLevelToString(ConstructLevelType type);
+std::string operator+(const std::string &lhs,const ConstructLevelType &type);
 /* CI: The ConstructSet class is intended to be specialized for each compiler interface. It provides the basic mechanisms to specify what construct level are contained. */
 class ConstructSet
 {
 	public:
 		ConstructSet(){};
-		ContstructLevelType getConstructLevel(){return ConstructLevelMin;};
-		ContstructLevelType getMaxConstructLevel(){return ConstructLevelMin;};
-		ContstructLevelType getMinConstructLevel(){return ConstructLevelMin;};
-		ConstructSet(ContstructLevelType level){};
-		ConstructSet(ContstructLevelType minLevel,ContstructLevelType maxLevel){};
-		void setCurrentMinLevel(ContstructLevelType minLevel){};
-		void setCurrentMaxLevel(ContstructLevelType maxLevel){};
+		ConstructLevelType getConstructLevel(){return ConstructLevelMin;};
+		ConstructLevelType getMaxConstructLevel(){return ConstructLevelMin;};
+		ConstructLevelType getMinConstructLevel(){return ConstructLevelMin;};
+		ConstructSet(ConstructLevelType level){};
+		ConstructSet(ConstructLevelType minLevel,ConstructLevelType maxLevel){};
+		void setCurrentMinLevel(ConstructLevelType minLevel){};
+		void setCurrentMaxLevel(ConstructLevelType maxLevel){};
 };
 }
 } // End namespace InstRO

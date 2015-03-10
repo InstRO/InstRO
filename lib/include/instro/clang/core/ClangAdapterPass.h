@@ -1,7 +1,11 @@
 #ifndef INSTRO_CLANG_CORE_CLANGADAPTERPASS_H
 #define INSTRO_CLANG_CORE_CLANGADAPTERPASS_H
 
+#include <iostream>
+
 #include "clang/AST/ASTContext.h"
+
+#include "instro/core/PassImplementation.h"
 
 namespace InstRO {
 namespace Clang {
@@ -20,9 +24,12 @@ class ClangPassImplementation
 		this->context = context;
 	};
 
+	virtual bool VisitFunctionDecl(clang::FunctionDecl *decl) = 0;
+
  protected:
 	clang::ASTContext *context;
 };
+
 }
 }
 }

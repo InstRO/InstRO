@@ -5,6 +5,7 @@
 #include "instro/core/Pass.h"
 #include "instro/core/PassExecuter.h"
 
+
 namespace InstRO {
 namespace Core {
 class ConstructSet;
@@ -41,9 +42,12 @@ class PassManager {
 	virtual bool hasOutputDependencies(Pass *) = 0;
 	virtual bool hasInputDependencies(Pass *) = 0;
  protected:
+	// FIXME Why is that here?
 	Pass *pass;
 	// Pass * successor;
-	std::vector<Pass *> predecessors;
+	// FIXME Why is that here?
+	std::vector<Pass *> predeciessors;
+
 	// delegate for compiler specific invocation of a pass implementation
 	PassExecuter *executer;
 };

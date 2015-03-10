@@ -22,7 +22,7 @@ clang::Decl *getAsDecl(const ClangConstruct &c);
 clang::Stmt *getAsStmt(const ClangConstruct &c);
 clang::Type *getAsType(const ClangConstruct &c);
 
-class ClangConstructSet : public ::InstRO::Core::ConstructSet {
+class ClangConstructSet : public InstRO::Core::ConstructSet {
  public:
 	void put(clang::Decl *decl);
 	void put(clang::Stmt *stmt);
