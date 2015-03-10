@@ -14,9 +14,9 @@ class SimplePassManager : public InstRO::Core::PassManagement::PassManager {
 	void registerPass(Pass *currentPass);
 	void setExecuter(PassExecuter *executer);
 	// TODO: FIX
-	void addDependency(Pass *input, Core::ContstructLevelType inputLevel,
+	void addDependency(Pass *input, Core::ConstructLevelType inputLevel,
 										 Pass *currentPass,
-										 Core::ContstructLevelType requiredInputLevel) {
+										 Core::ConstructLevelType requiredInputLevel) {
 		// TODO(CI): implement storing of construct level graph
 		getEnvelope(currentPass)->predecessors.push_back(input);
 		getEnvelope(input)->existingOuputDependency = true;
@@ -31,7 +31,7 @@ class SimplePassManager : public InstRO::Core::PassManagement::PassManager {
 	};
 
  protected:
-	ConstructSet *elevate(Core::ContstructLevelType inputLevel) {
+	ConstructSet *elevate(Core::ConstructLevelType inputLevel) {
 		// TODO(CI): Implement Elevation
 		return new ConstructSet();
 	}

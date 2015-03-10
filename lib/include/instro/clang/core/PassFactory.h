@@ -26,13 +26,16 @@ namespace Clang {
  */
 class PassFactory : public InstRO::Core::PassFactory {
  public:
-	PassFactory(InstRO::Core::PassManagement::PassManager* manager)
-			: InstRO::Core::PassFactory(manager){};
+	PassFactory(InstRO::Core::PassManagement::PassManager* manager, clang::tooling::Replacements &reps)
+			: InstRO::Core::PassFactory(manager), replacements(reps){};
 	Pass* createBlackAndWhiteListSelector(std::vector<std::string> rules);
 	Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
 	Pass* createFunctionDefinitionSelector();
 	Pass* createProgramEntrySelector(){};
 	Pass* createCygProfileAdapter(InstRO::Pass* input);
+
+ private:
+	clang::tooling::Replacements &replacements;
 };
 }	// Clang
 }	// INstRO

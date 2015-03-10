@@ -1,83 +1,98 @@
 #include "instro/core/SimplePassManager.h"
 
-
-void InstRO::Core::PassManagement::SimplePassManager::registerPass(Pass *currentPass){
-		// CI: Create a new pass envelope to store the dependencies of this pass.
-		PassEnvelope *newPass = new PassEnvelope(currentPass);
-		std::vector<Pass *> inputs = currentPass->getInputPasses();
-		passList.push_back(newPass);
-		//	newPass->predecessors=currentPass->getInputPasses();
-		// for all predecessors inquired the pass dependencies
-		for (auto &i : inputs) {
-			if (i == NULL) continue;
-			Core::ContstructLevelType maxInputLevel =
-					currentPass->getInputLevelRequirement(i);
-			Core::ContstructLevelType minOutputLevelProvided = i->getOutputLevel();
-			if (minOutputLevelProvided > maxInputLevel)
+void InstRO::Core::PassManagement::SimplePassManager::registerPass(
+		Pass *currentPass) {
+	// CI: Create a new pass envelope to store the dependencies of this pass.
+	PassEnvelope *newPass = new PassEnvelope(currentPass);
+	std::vector<Pass *> inputs = currentPass->getInputPasses();
+	passList.push_back(newPass);
+	//	newPass->predecessors=currentPass->getInputPasses();
+	// for all predecessors inquired the pass dependencies
+	for (auto &i : inputs) {
+		if (i == NULL) continue;
+		Core::ConstructLevelType maxInputLevel =
+				currentPass->getInputLevelRequirement(i);
+		Core::ConstructLevelType minOutputLevelProvided = i->getOutputLevel();
+		if (minOutputLevelProvided > maxInputLevel)
 #ifdef __EXCEPTIONS
-				throw std::string("InputPass ") + i->passName() +
-						std::string(" can not provide ConstructLevel \"") +
-						contstructLevelToString(maxInputLevel) + std::string("\"");
+			// btw this is a memory leak :D (using 'new' above and throwing here.
+			throw std::string("InputPass ") + i->passName() +
+					std::string(" can not provide ConstructLevel \"") +
+					constructLevelToString(maxInputLevel) + std::string("\"");
 #else
-			std::cerr << "InputPass " + i->passName() + " cannot provide ConstructLevel X" << std::endl;
+			std::cerr << "InputPass " + i->passName() +
+											 " cannot provide ConstructLevel X" << std::endl;
 #endif
-			addDependency(i, minOutputLevelProvided, currentPass, maxInputLevel);
-		}
+		addDependency(i, minOutputLevelProvided, currentPass, maxInputLevel);
+	}
 }
 
-void InstRO::Core::PassManagement::SimplePassManager::setExecuter(InstRO::Core::PassManagement::PassExecuter *executer){
+void InstRO::Core::PassManagement::SimplePassManager::setExecuter(
+		InstRO::Core::PassManagement::PassExecuter *executer) {
 	this->executer = executer;
 }
 
-int InstRO::Core::PassManagement::SimplePassManager::execute(){
+int InstRO::Core::PassManagement::SimplePassManager::execute() {
 	std::cout << "Running execute in SimplePassManager" << std::endl;
-		for (PassEnvelope *passContainer : passList) {
-			// Allow the Pass to Initialize iself. E.g. start reading input data from
-			// files, allocated named input fields, etc.
-			// passContainer->pass->init();
-		}
-		for (PassEnvelope *passEnvelope : passList) {
-			std::vector<ConstructSet *> tempConstructSets(
-					getPredecessors(passEnvelope).size());
-			// check if some input needs to be explicitly elevated
-			for (auto &i : getPredecessors(passEnvelope)) {
-				if (i->getOutputLevel() <
-						passEnvelope->pass->getInputLevelRequirement(i)) {
-					ConstructSet *newConstructSet =
-							elevate(passEnvelope->pass->getInputLevelRequirement(i));
-					passEnvelope->pass->overrideInput(i, newConstructSet);
-					tempConstructSets.push_back(newConstructSet);
-				}
+	for (PassEnvelope *passContainer : passList) {
+		// Allow the Pass to Initialize iself. E.g. start reading input data from
+		// files, allocated named input fields, etc.
+		// passContainer->pass->init();
+	}
+	for (PassEnvelope *passEnvelope : passList) {
+		std::vector<ConstructSet *> tempConstructSets(
+				getPredecessors(passEnvelope).size());
+		// check if some input needs to be explicitly elevated
+		std::unordered_map<InstRO::Pass *, InstRO::Core::ConstructSet *> mymap;
+		for (auto &i : getPredecessors(passEnvelope)) {
+			if (i->getOutputLevel() <
+					passEnvelope->pass->getInputLevelRequirement(i)) {
+				ConstructSet *newConstructSet =
+						elevate(passEnvelope->pass->getInputLevelRequirement(i));
+				passEnvelope->pass->overrideInput(i, newConstructSet);
+				tempConstructSets.push_back(newConstructSet);
 			}
-			// 1rst enable the input for the current pass. Since this is the basic
-			// pass
-			// manager, the sequence is linear with no intelligence. Hence, all
-			// preceeding passes must have already completed.
-			passEnvelope->pass->setInputEnabled();
-
-			// 2nd: Allow the pass to initlialize its internal state, such that it can
-			// execute. This allows, e.g. to allocate large amounts of memory. Or
-			// preprocessing input. or whatever. However, modification or selection is
-			// not allowed.
-			passEnvelope->pass->initPass();
-
-			// 3rd: Execute the pass (using delegate)
-			executer->execute(passEnvelope->pass->getPassImplementation());
-			passEnvelope->pass->executePass();
-
-			// 4th: Tell the pass to finalize. It is supposed to release memory, close
-			// files, etc. However, the output set must be maintained unitl
-			// disableOutput is called
-			passEnvelope->pass->finalizePass();
-
-			// 5th: Disable input and deallocated potentially create construct sets
-			passEnvelope->pass->setInputDisabled();
-			for (auto &i : tempConstructSets) delete i;
+		
+		// I introduced the concept of an input aggregation for the pass
+		// implementation. This entity encapsulates the Construct sets for all the
+		// predeccor Passes. So the PassManager sets the according construct sets
+		// inside the input aggregation.
+		mymap[i] = i->getPassImplementation()->getOutput();
 		}
-		for (PassEnvelope *passContainer : passList) {
-			// disable output for all passes. This allows to release the output
-			// construct set
-			passContainer->pass->releaseOutput();
-		}
-		return 0;
+		InstRO::Core::Support::InputAggregation ia(mymap);
+		
+		// After this we can enable the input, and pass impls can query for the
+		// result of pass p
+		passEnvelope->pass->getPassImplementation()->setInputAggregation(ia);
+
+		// 1rst enable the input for the current pass. Since this is the basic
+		// pass manager, the sequence is linear with no intelligence. Hence, all
+		// preceeding passes must have already completed.
+		passEnvelope->pass->setInputEnabled();
+
+		// 2nd: Allow the pass to initlialize its internal state, such that it can
+		// execute. This allows, e.g. to allocate large amounts of memory. Or
+		// preprocessing input. or whatever. However, modification or selection is
+		// not allowed.
+		passEnvelope->pass->initPass();
+
+		// 3rd: Execute the pass (using delegate)
+		executer->execute(passEnvelope->pass->getPassImplementation());
+		passEnvelope->pass->executePass();
+
+		// 4th: Tell the pass to finalize. It is supposed to release memory, close
+		// files, etc. However, the output set must be maintained unitl
+		// disableOutput is called
+		passEnvelope->pass->finalizePass();
+
+		// 5th: Disable input and deallocated potentially create construct sets
+		passEnvelope->pass->setInputDisabled();
+		for (auto &i : tempConstructSets) delete i;
+	}
+	for (PassEnvelope *passContainer : passList) {
+		// disable output for all passes. This allows to release the output
+		// construct set
+		passContainer->pass->releaseOutput();
+	}
+	return 0;
 }

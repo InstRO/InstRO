@@ -23,20 +23,13 @@ void InstRO::Clang::Core::PassManagement::ClangPassExecuter::execute(
 			<< std::endl;
 	// Since we are inside a compile-time-type-safe wall, we can safely
 	// reinterpret cast
-	reinterpret_cast<InstRO::Clang::Core::ClangPassImplementation *>(pass)
-			->setASTContext(context);
+	pImpl->setASTContext(context);
 	//	}
 	// After this is set, we invoke the pass
-	if (std::is_base_of<clang::RecursiveASTVisitor<
-													InstRO::Clang::Core::ClangPassImplementation>,
-											decltype(pImpl)>::value) {
-		std::cout << "RecursiveASTVisitor, so TraverseDecl" << std::endl;
-		// Since we are inside a compile-time-type-safe wall, we can safely
-		// reinterpret cast
-		reinterpret_cast<clang::RecursiveASTVisitor<
-				InstRO::Clang::Core::ClangPassImplementation> *>(pass)
-				->TraverseDecl(context->getTranslationUnitDecl());
-	}
+	std::cout << "RecursiveASTVisitor, so TraverseDecl" << std::endl;
+	// Since we are inside a compile-time-type-safe wall, we can safely
+	// reinterpret cast
+	pImpl->TraverseDecl(context->getTranslationUnitDecl());
 }
 
 void InstRO::Clang::Core::PassManagement::ClangPassExecuter::setASTContext(
