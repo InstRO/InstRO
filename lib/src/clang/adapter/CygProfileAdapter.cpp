@@ -47,15 +47,15 @@ void InstRO::Clang::CygProfileAdapter::transform(clang::SourceManager *sm,
 	// I assume that a function body always is a compound statement
 	clang::CompoundStmt *fBody = llvm::dyn_cast<clang::CompoundStmt>(fBodyStmt);
 	// We add the calls to our entry functions
-	std::string entryReplaceStr("__cyg_profile_func_enter((void*) " +
+	std::string entryReplaceStr("{__cyg_profile_func_enter((void*) " +
 															fDef->getNameInfo().getName().getAsString() +
 															", 0);");
-	clang::Stmt *startStmt = *(fBody->body().begin());
-	clang::tooling::Replacement repMent(*sm, startStmt->getLocStart(), 0, entryReplaceStr);
+	clang::Stmt *startStmt = fBody;//*(fBody->body().begin());
+	clang::tooling::Replacement repMent(*sm, startStmt->getLocStart(), 1, entryReplaceStr);
 	replacements.insert(repMent);
 	std::cout << "replacement: " << repMent.toString() << std::endl;
 	// we are inserting the exit hooks as well
-	std::string exitReplaceStr("__cyg_profile_func_exit((void*( " +
+	std::string exitReplaceStr("__cyg_profile_func_exit((void*) " +
 														 fDef->getNameInfo().getName().getAsString() +
 														 ", 0);");
 	for (auto &st : fBody->body()) {
