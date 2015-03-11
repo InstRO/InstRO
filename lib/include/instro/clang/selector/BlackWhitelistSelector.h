@@ -12,8 +12,7 @@ namespace Clang {
  * XXX Double check semantics with Christian/Roman
  */
 class BlackWhitelistSelector
-		: public ::InstRO::Clang::Pass,
-			public clang::RecursiveASTVisitor<BlackWhitelistSelector> {
+		: public InstRO::Clang::Core::ClangPassImplementation {
  public:
 	bool VisitFunctionDecl(clang::FunctionDecl *decl);
 
