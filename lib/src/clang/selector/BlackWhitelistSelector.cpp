@@ -11,11 +11,13 @@ bool BlackWhitelistSelector::VisitFunctionDecl(clang::FunctionDecl *decl){
 		if(decl->doesThisDieclarationHaveABody()){
 			// This is "picker prefer whitelist"
 			if((isOnList(decl->getAsString(), whitelist)) || (! isOnList(decl->getNameAsString(), blacklist))){
+				std::cout << "Selecting node" << std::endl;
 				// select node
+				cs.put(decl);
 			}
 		}
 	}
-	return false;
+	return true;
 }
 
 void BlackWhitelistSelector::readFilterFile(std::string filename){

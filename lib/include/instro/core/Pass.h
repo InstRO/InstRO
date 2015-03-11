@@ -21,6 +21,7 @@
 #include <unordered_map>
 
 #include "instro/core/ConstructSet.h"
+#include "instro/core/PassExecuter.h"
 #include "instro/core/PassImplementation.h"
 
 #include "instro/core/ConstructSetManagement.h"
@@ -53,6 +54,7 @@ class Pass : public InstRO::Core::PassConstructSetManagement,
 	}
 	void initPass();
 	void executePass();
+	void execute(InstRO::Core::PassManagement::PassExecuter *executer);
 	void finalizePass();
 	void releaseOutput();
 	// CI: Enable Input is called externally to indicate, that  the input passes

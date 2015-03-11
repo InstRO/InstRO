@@ -52,15 +52,15 @@ int InstRO::Core::PassManagement::SimplePassManager::execute() {
 				passEnvelope->pass->overrideInput(i, newConstructSet);
 				tempConstructSets.push_back(newConstructSet);
 			}
-		
-		// I introduced the concept of an input aggregation for the pass
-		// implementation. This entity encapsulates the Construct sets for all the
-		// predeccor Passes. So the PassManager sets the according construct sets
-		// inside the input aggregation.
-		mymap[i] = i->getPassImplementation()->getOutput();
+
+			// I introduced the concept of an input aggregation for the pass
+			// implementation. This entity encapsulates the Construct sets for all the
+			// predeccor Passes. So the PassManager sets the according construct sets
+			// inside the input aggregation.
+			mymap[i] = i->getPassImplementation()->getOutput();
 		}
 		InstRO::Core::Support::InputAggregation ia(mymap);
-		
+
 		// After this we can enable the input, and pass impls can query for the
 		// result of pass p
 		passEnvelope->pass->getPassImplementation()->setInputAggregation(ia);
@@ -76,9 +76,9 @@ int InstRO::Core::PassManagement::SimplePassManager::execute() {
 		// not allowed.
 		passEnvelope->pass->initPass();
 
-		// 3rd: Execute the pass (using delegate)
-		executer->execute(passEnvelope->pass->getPassImplementation());
-		passEnvelope->pass->executePass();
+		// 3rd: Execute the pass (using delegate, since the delegate know what to do
+		// exactly)
+		passEnvelope->pass->execute(executer);
 
 		// 4th: Tell the pass to finalize. It is supposed to release memory, close
 		// files, etc. However, the output set must be maintained unitl
