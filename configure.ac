@@ -11,7 +11,7 @@
 # 1.1 Init the Autoconf
 # -------------------------------
 AC_PREREQ([2.63])
-AC_INIT([instro], [0.2], [christian.iwainsky@sc.tu-darmstadt.de],[instro])
+AC_INIT([instro], [0.3], [christian.iwainsky@sc.tu-darmstadt.de],[instro])
 #CI: FOOLING AROUND AC_DEFINE([HELLO_WORLD], ["Hello, World\n"])
 # # AC_LANG_CONFTEST(
 # #   [AC_LANG_SOURCE([[const char hw[] = "Hello, World\n";]])])
@@ -310,7 +310,6 @@ AC_CHECK_FUNCS([select])
 #                 lib/Makefile])
 AC_CONFIG_FILES([Makefile
 		 lib/Makefile
-		 examples/Makefile
 		 ])
 
 #AM_COND_IF([BUILD_PUBLICATIONS_TOOLS], [
