@@ -64,7 +64,11 @@ INSTROCLANGINCLUDE=$(TOP_LEVEL)/lib/include/instro/clang
 
 INSTRO_INCLUDES=-I$(TOP_LEVEL)/lib/include -I$(INSTROLLVMINCLUDE) -I$(INSTROLLVMINCLUDE)/selector -I$(INSTROLLVMINCLUDE)/adapter -I$(INSTROLLVMINCLUDE)/core 
 
-INSTRO_INCLUDES+=-I$(INSTROCLANGINCLUDE) -I$(INSTROCLANGINCLUDE)/selector -I$(INSTROCLANGINCLUDE)/adapter -I$(INSTROCLANGINCLUDE)/core 
+INSTRO_INCLUDES+=-I$(INSTROCLANGINCLUDE) \
+								 -I$(INSTROCLANGINCLUDE)/selector \
+								 -I$(INSTROCLANGINCLUDE)/adapter \
+								 -I$(INSTROCLANGINCLUDE)/core \
+								 -I$(BOOST)/include
 
 
 LLVM_SOURCES=$(TOP_LEVEL)/lib/src/llvm/selector/CashesSelector.cpp \
@@ -74,7 +78,9 @@ LLVM_SOURCES=$(TOP_LEVEL)/lib/src/llvm/selector/CashesSelector.cpp \
 CLANG_SOURCES= \
 				$(TOP_LEVEL)/lib/src/core/SimplePassManager.cpp \
 				$(TOP_LEVEL)/lib/src/core/Pass.cpp \
+				$(TOP_LEVEL)/lib/src/core/ConstructSetManagement.cpp \
 				$(TOP_LEVEL)/lib/src/clang/selector/FunctionDefinitionSelector.cpp \
+				$(TOP_LEVEL)/lib/src/clang/selector/BlackWhitelistSelector.cpp \
 				$(TOP_LEVEL)/lib/src/clang/adapter/CygProfileAdapter.cpp \
 				$(TOP_LEVEL)/lib/src/clang/core/PassFactory.cpp \
 				$(TOP_LEVEL)/lib/src/clang/core/ConstructSet.cpp \
@@ -82,8 +88,8 @@ CLANG_SOURCES= \
 				$(TOP_LEVEL)/lib/src/clang/ClangInstrumentor.cpp \
 				$(TOP_LEVEL)/lib/src/clang/support/InstROASTConsumer.cpp \
 				$(TOP_LEVEL)/lib/src/clang/support/ClangConsumerFactory.cpp \
+				$(TOP_LEVEL)/lib/src/support/BWLFileReader.cpp \
 				$(TOP_LEVEL)/lib/src/clang/Instrumentor.cpp
-#				$(TOP_LEVEL)/lib/src/clang/selector/BlackWhitelistSelector.cpp 
 
 LLVM_OBJECTS=$(LLVM_SOURCES:.cpp=.o)
 CLANG_OBJECTS=$(CLANG_SOURCES:.cpp=.o)

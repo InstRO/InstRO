@@ -1,8 +1,14 @@
 #include "instro/clang/core/PassFactory.h"
 
 InstRO::Pass* InstRO::Clang::PassFactory::createBlackAndWhiteListSelector(
-		std::vector<std::string> rules) {
-	return NULL;
+		std::vector<std::string> blacklist, std::vector<std::string> whitelist) {
+	InstRO::Pass *p = new InstRO::Pass(new InstRO::Clang::BlackWhitelistSelector(blacklist, whitelist));
+	p->setRequiresInput(false);
+	p->setProvidesOutput(true);
+	p->setPassName("BlackWhitelist Selector");
+	p->setOutputLevel(InstRO::Core::ConstructLevelType::ConstructLevelStatement);
+	passManager->registerPass(p);
+	return p;
 }
 
 InstRO::Pass* InstRO::Clang::PassFactory::createBooleanOrSelector(

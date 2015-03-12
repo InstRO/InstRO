@@ -16,9 +16,17 @@ namespace Clang {
 class BlackWhitelistSelector
 		: public InstRO::Clang::Core::ClangPassImplementation {
  public:
+	BlackWhitelistSelector(std::vector<std::string> blacklist,
+												 std::vector<std::string> whitelist);
 	bool VisitFunctionDecl(clang::FunctionDecl *decl);
 
 	void readFilterFile(std::string filename);
+
+	void init() override;
+	void execute() override;
+	void finalize() override;
+	void releaseOutput() override;
+	InstRO::Clang::ClangConstructSet *getOutput() override;
 
 	bool isOnList(std::string functionName, std::vector<std::string> &list);
 

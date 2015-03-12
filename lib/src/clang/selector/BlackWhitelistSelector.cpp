@@ -1,5 +1,14 @@
 #include "instro/clang/selector/BlackWhitelistSelector.h"
 
+InstRO::Clang::BlackWhitelistSelector::BlackWhitelistSelector(
+		std::vector<std::string> blacklist, std::vector<std::string> whitelist)
+		: blacklist(blacklist), whitelist(whitelist) {
+			std::cout << "Creating BW Selector with blacklist(-) and whitelist (+):\n";
+			for(auto &s : blacklist){std::cout << "- " << s << "\n";}
+			for(auto &s : whitelist){std::cout << "+ " << s < "\n";}
+			std::cout << std::endl;
+		}
+
 bool InstRO::Clang::BlackWhitelistSelector::VisitFunctionDecl(
 		clang::FunctionDecl *decl) {
 	/*
@@ -7,6 +16,8 @@ bool InstRO::Clang::BlackWhitelistSelector::VisitFunctionDecl(
 	 */
 	if (decl->hasBody()) {
 		if (decl->doesThisDeclarationHaveABody()) {
+			std::cout << "Testing " << decl->getNameInfo().getAsString()
+								<< " whether it is black or white listed." << std::endl;
 			// This is "picker prefer whitelist"
 			if ((isOnList(decl->getNameInfo().getAsString(), whitelist)) ||
 					(!isOnList(decl->getNameInfo().getAsString(), blacklist))) {
@@ -27,9 +38,22 @@ void InstRO::Clang::BlackWhitelistSelector::readFilterFile(
 	whitelist = lists.second;
 }
 
+void InstRO::Clang::BlackWhitelistSelector::init() {}
+
+void InstRO::Clang::BlackWhitelistSelector::execute() {}
+
+void InstRO::Clang::BlackWhitelistSelector::finalize() {}
+
+void InstRO::Clang::BlackWhitelistSelector::releaseOutput() {}
+
+InstRO::Clang::ClangConstructSet *
+InstRO::Clang::BlackWhitelistSelector::getOutput() {
+	return &cs;
+}
+
 bool InstRO::Clang::BlackWhitelistSelector::isOnList(
 		std::string functionName, std::vector<std::string> &list) {
-	return std::find(list.begin(), list.end(), functionName) == list.end();
+	return std::find(list.begin(), list.end(), functionName) != list.end();
 }
 
 void InstRO::Clang::BlackWhitelistSelector::addBlacklistEntry(
