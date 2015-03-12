@@ -3,11 +3,15 @@
 InstRO::Clang::BlackWhitelistSelector::BlackWhitelistSelector(
 		std::vector<std::string> blacklist, std::vector<std::string> whitelist)
 		: blacklist(blacklist), whitelist(whitelist) {
-			std::cout << "Creating BW Selector with blacklist(-) and whitelist (+):\n";
-			for(auto &s : blacklist){std::cout << "- " << s << "\n";}
-			for(auto &s : whitelist){std::cout << "+ " << s < "\n";}
-			std::cout << std::endl;
-		}
+	std::cout << "Creating BW Selector with blacklist(-) and whitelist (+):\n";
+	for (auto &s : blacklist) {
+		std::cout << "- " << s << "\n";
+	}
+	for (auto &s : whitelist) {
+		std::cout << "+ " << s < "\n";
+	}
+	std::cout << std::endl;
+}
 
 bool InstRO::Clang::BlackWhitelistSelector::VisitFunctionDecl(
 		clang::FunctionDecl *decl) {
