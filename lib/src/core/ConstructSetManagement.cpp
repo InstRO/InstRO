@@ -13,7 +13,11 @@ ConstructSet * PassConstructSetManagement::getInput(PassConstructSetManagement *
 	{
 		return inputOverride[from];
 	}
+#ifdef __EXCEPTIONS
 	throw std::string("I should no be here. It is impossible!!!");
+#else
+	std::cerr << "I should not be here. It is impossible!" << std::endl;
+#endif
 }
 
 void PassConstructSetManagement::overrideInput(PassConstructSetManagement * from, ConstructSet* overrideSet)
