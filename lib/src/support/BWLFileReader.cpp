@@ -1,5 +1,5 @@
 
-#include "BWLFileReader.h"
+#include "instro/support/BWLFileReader.h"
 
 using namespace InstRO;
 

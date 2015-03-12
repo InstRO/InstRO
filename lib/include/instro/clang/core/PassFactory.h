@@ -9,7 +9,7 @@
  * I guess we would need to know all the passes...
  */
 #include "instro/clang/selector/FunctionDefinitionSelector.h"
-//#include "instro/clang/selector/GrammarTraitSelector.h"
+#include "instro/clang/selector/BlackWhitelistSelector.h"
 
 #include "instro/clang/adapter/CygProfileAdapter.h"
 
@@ -26,16 +26,18 @@ namespace Clang {
  */
 class PassFactory : public InstRO::Core::PassFactory {
  public:
-	PassFactory(InstRO::Core::PassManagement::PassManager* manager, clang::tooling::Replacements &reps)
+	PassFactory(InstRO::Core::PassManagement::PassManager* manager,
+							clang::tooling::Replacements& reps)
 			: InstRO::Core::PassFactory(manager), replacements(reps){};
-	Pass* createBlackAndWhiteListSelector(std::vector<std::string> rules);
+	Pass* createBlackAndWhiteListSelector(std::vector<std::string> blacklist,
+																				std::vector<std::string> whitelist);
 	Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
 	Pass* createFunctionDefinitionSelector();
 	Pass* createProgramEntrySelector(){};
 	Pass* createCygProfileAdapter(InstRO::Pass* input);
 
  private:
-	clang::tooling::Replacements &replacements;
+	clang::tooling::Replacements& replacements;
 };
 }	// Clang
 }	// INstRO
