@@ -3,7 +3,9 @@
 
 #include "clang/AST/RecursiveASTVisitor.h"
 
+#include "instro/clang/core/ConstructSet.h"
 #include "instro/support/BWLFileReader.h"
+#include "instro/clang/core/ClangAdapterPass.h"
 
 namespace InstRO {
 namespace Clang {
@@ -26,6 +28,7 @@ class BlackWhitelistSelector
  private:
 	std::vector<std::string> whitelist;
 	std::vector<std::string> blacklist;
+	InstRO::Clang::ClangConstructSet cs;
 };
 }	// Clang
 }	// InstRO

@@ -10,6 +10,7 @@ namespace Core {
 namespace PassManagement {
 class SimplePassManager : public InstRO::Core::PassManagement::PassManager {
  public:
+	 SimplePassManager(){};
 	// Enable the Pass Manager to query the pass for its dependencies
 	void registerPass(Pass *currentPass);
 	void setExecuter(PassExecuter *executer);

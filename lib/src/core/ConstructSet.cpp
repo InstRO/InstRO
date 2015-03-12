@@ -4,7 +4,7 @@
 namespace InstRO{
 namespace Core{
 
-std::string contstructLevelToString(ContstructLevelType type)
+std::string constructLevelToString(ConstructLevelType type)
 {
 	switch(type)
 	{
@@ -12,7 +12,7 @@ std::string contstructLevelToString(ContstructLevelType type)
 	default: return std::string("UnknownConstructLevel");break;
 	}
 }
-std::string operator+(const std::string &lhs,const ContstructLevelType &type)
+std::string operator+(const std::string &lhs,const ConstructLevelType &type)
 {
 	switch(type)
 	{

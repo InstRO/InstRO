@@ -12,26 +12,25 @@
 # #	examples
 
 SUBDIRS= \
-	lib \
-	examples
+	lib 
 
-help:
-	@echo To build and use InstRO
-	@echo first update the Make.def file with the paths to 
-	@echo a\) ROSE
-	@echo b\) BOOST
-	@echo Please also provide an installation path.
-	@echo You may then compile InstRO by either calling make library or by 
-	@echo entering the library directory lib and building there.
-	@echo The libraries can be installed by calling \"make install\" which
-	@echo will install instro to the specified directory
+#help:
+#	@echo To build and use InstRO
+#	@echo first update the Make.def file with the paths to 
+#	@echo a\) ROSE
+#	@echo b\) BOOST
+#	@echo Please also provide an installation path.
+#	@echo You may then compile InstRO by either calling make library or by 
+#	@echo entering the library directory lib and building there.
+#	@echo The libraries can be installed by calling \"make install\" which
+#	@echo will install instro to the specified directory
 
-lib/libinstro.a:
-library:
-	cd ./lib;make
+#lib/libinstro.a:
+#library:
+#	cd ./lib;make
 
-install:
-	cd ./lib;make install
+#install:
+#	cd ./lib;make install
 	
 
 
