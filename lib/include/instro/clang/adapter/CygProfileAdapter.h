@@ -22,7 +22,9 @@ class CygProfileAdapter : public InstRO::Clang::Core::ClangPassImplementation {
 #endif
 
 public:
-CygProfileAdapter(InstRO::Pass *selector, clang::SourceManager *sm);
+CygProfileAdapter(InstRO::Pass *selector, clang::tooling::Replacements &replacements, clang::SourceManager *sm);
+
+bool VisitFunctionDecl(clang::FunctionDecl *decl) override {return true;}
 
 void init();
 
@@ -42,7 +44,7 @@ private:
 Pass *decidingSelector;
 ClangConstructSet cs;
 clang::SourceManager *sm;
-clang::tooling::Replacements *replacements;
+clang::tooling::Replacements &replacements;
 };
 
 }	// Clang

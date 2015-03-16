@@ -3,7 +3,9 @@
 
 #include "clang/AST/RecursiveASTVisitor.h"
 
+#include "instro/clang/core/ConstructSet.h"
 #include "instro/support/BWLFileReader.h"
+#include "instro/clang/core/ClangAdapterPass.h"
 
 namespace InstRO {
 namespace Clang {
@@ -12,12 +14,19 @@ namespace Clang {
  * XXX Double check semantics with Christian/Roman
  */
 class BlackWhitelistSelector
-		: public ::InstRO::Clang::Pass,
-			public clang::RecursiveASTVisitor<BlackWhitelistSelector> {
+		: public InstRO::Clang::Core::ClangPassImplementation {
  public:
+	BlackWhitelistSelector(std::vector<std::string> blacklist,
+												 std::vector<std::string> whitelist);
 	bool VisitFunctionDecl(clang::FunctionDecl *decl);
 
 	void readFilterFile(std::string filename);
+
+	void init() override;
+	void execute() override;
+	void finalize() override;
+	void releaseOutput() override;
+	InstRO::Clang::ClangConstructSet *getOutput() override;
 
 	bool isOnList(std::string functionName, std::vector<std::string> &list);
 
@@ -27,6 +36,7 @@ class BlackWhitelistSelector
  private:
 	std::vector<std::string> whitelist;
 	std::vector<std::string> blacklist;
+	InstRO::Clang::ClangConstructSet cs;
 };
 }	// Clang
 }	// InstRO

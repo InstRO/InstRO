@@ -11,11 +11,7 @@
 # 1.1 Init the Autoconf
 # -------------------------------
 AC_PREREQ([2.63])
-AC_INIT([instro], [0.2], [christian.iwainsky@sc.tu-darmstadt.de],[instro])
-#CI: FOOLING AROUND AC_DEFINE([HELLO_WORLD], ["Hello, World\n"])
-# # AC_LANG_CONFTEST(
-# #   [AC_LANG_SOURCE([[const char hw[] = "Hello, World\n";]])])
-
+AC_INIT([instro], [0.3], [christian.iwainsky@sc.tu-darmstadt.de],[instro])
 
 # 1.01 Set the aclocal
 
@@ -26,9 +22,8 @@ AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_MACRO_DIR([config/m4])
 # CI: not available until autoconf 1.14
 # AC_CONFIG_MACRO_DIRS([config/m4])
-AM_INIT_AUTOMAKE([foreign])
+AM_INIT_AUTOMAKE([foreign subdir-objects])
 PKG_PROG_PKG_CONFIG
-##CI: my old AM_INIT_AUTOMAKE([InstRO],[0.2])
 
 
 # -------------------------------
@@ -46,7 +41,6 @@ AM_CONFIG_HEADER([config.h])
 # -------------------------------
 AC_PROG_RANLIB
 
-#   CI: LibTool is too heavy for me at this point, but I keep it, after all, it works
 # -------------------------------
 # 1.4 get Libtool started
 # -------------------------------
@@ -143,17 +137,47 @@ else
     ROSE_LIBDIR=/usr/lib
 fi
 
-# JP: I outcommented this line, since I did not find any use of this
-#LIBS="-L$ROSE_LIBDIR -lrose $LIBS"
-
-## I prefer not to have ROSE_INCLUDEDIR and ROSE_LIBDIR written to the Makefiles, therefore disable it
-# AM_SUBST_NOTMAKE(ROSE_INCLUDEDIR)
-# AM_SUBST_NOTMAKE(ROSE_LIBDIR)
-
 ## set @ROSE_INCLUDEDIR@ and @ROSE_LIBDIR@ variables
 AC_SUBST(ROSE_INCLUDEDIR)
 AC_SUBST(ROSE_NEW_INCLUDEDIR)
 AC_SUBST(ROSE_LIBDIR)
+
+# ---------------------------
+# 2.2) Add Clang flag
+# ---------------------------
+AC_ARG_WITH([clang], [AS_HELP_STRING([--with-clang=prefix], 
+						[Tells the build process the toplevel directory of the clang installation])], 
+						[CLANGPATHSET=1],[CLANGPATHSET=0])
+if test $CLANGPATHSET = 1 ; then
+	CLANG_BASE_PATH="$with_clang"
+	CLANG_INCLUDE_PATH=$CLANG_BASE_PATH/include
+	CLANG_LIB_DIR=$CLANG_BASE_PATH/lib
+	LLVM_INCLUDE_PATH=$CLANG_BASE_PATH/include
+# in order to query the tools for the compile flags we need to know the binary dir
+	CLANG_BIN_SUPPORT=$CLANG_BASE_PATH/bin
+	AC_MSG_NOTICE(["Clang base path has been set to $CLANG_BASE_PATH"])
+	AC_MSG_NOTICE(["Clang include path has been set to $CLANG_INCLUDE_PATH"])
+
+	# we list all the libraries we need to link, when we build with clang
+	CLANG_LIBS_LIST='-Wl,--start-group,-lclangAST,-lclangAnalysis,-lclangBasic,-lclangDriver,-lclangEdit,-lclangFrontend,-lclangFrontendTool,-lclangLex,-lclangParse,-lclangSema,-lclangEdit,-lclangASTMatchers,-lclangRewrite,-lclangRewriteFrontend,-lclangStaticAnalyzerFrontend,-lclangStaticAnalyzerCheckers,-lclangStaticAnalyzerCore,-lclangSerialization,-lclangToolingCore,-lclangTooling,-lclangToolingCore,--end-group'
+
+	AC_MSG_NOTICE(["Clang Libs: $CLANG_LIBS_LIST"])
+	# if the clang path is set, then we export those variables
+	AC_SUBST(CLANG_INCLUDE_PATH)
+	AC_SUBST(LLVM_INCLUDE_PATH)
+	# This is ONLY Clang
+	AC_SUBST(CLANG_BIN_SUPPORT)
+	AC_SUBST(CLANG_LIB_DIR)
+	AC_SUBST(CLANG_LIBS_LIST)
+	# We also need LLVM
+	LLVM_INCLUDE_FLAGS="\`$CLANG_BIN_SUPPORT/llvm-config --cxxflags\`"
+	LLVM_LINK_COMMAND="\`$CLANG_BIN_SUPPORT/llvm-config --ldflags --libs --system-libs\`"
+	AC_SUBST(LLVM_INCLUDE_FLAGS)
+	AC_SUBST(LLVM_LINK_COMMAND)
+else
+	echo "No clang path set"
+fi
+
 
 # -------------------------------
 # 4.1) add BOOST
@@ -169,26 +193,6 @@ AX_BOOST_REGEX
 # AX_BOOST_REQUIRE([1.47])
 BOOST_INCLUDEDIR="$ac_boost_path/include"
 BOOST_LIBDIR="$ac_boost_path/lib"
-
-
-# CI DEPRECATED  # introduce the optional configure parameter for a non-standard install prefix of BOOST
-# CI DEPRECATED  AC_ARG_WITH([BOOST],
-# CI DEPRECATED      [AS_HELP_STRING([--with-BOOST=prefix],
-# CI DEPRECATED      [AS_HELP_STRING([--with-BOOST=prefix],
-# CI DEPRECATED          [try this for a non-standard install prefix of the BOOST library])],
-# CI DEPRECATED      [BOOSTPATHSET=1],
-# CI DEPRECATED      [BOOSTPATHSET=0])
-# CI DEPRECATED  
-# CI DEPRECATED  # if optional parameter used, extend path flags for compliler and linker
-# CI DEPRECATED  if test $BOOSTPATHSET = 1 ; then
-# CI DEPRECATED      # extend the compiler and linker flags according to the path set
-# CI DEPRECATED      BOOST_INCLUDEDIR="$with_BOOST/include"
-# CI DEPRECATED      BOOST_LIBDIR="$with_BOOST/lib"
-# CI DEPRECATED      echo "Using BOOST in $with_BOOST"
-# CI DEPRECATED  else
-# CI DEPRECATED      BOOST_INCLUDEDIR=/usr/include
-# CI DEPRECATED      BOOST_LIBDIR=/usr/lib
-# CI DEPRECATED  fi
 
 
 # ------ enable libtool support
@@ -213,9 +217,6 @@ AC_PROG_CC
 # AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 # LT_INIT
-
-
-
 
 
 # -------------------------------
@@ -310,7 +311,6 @@ AC_CHECK_FUNCS([select])
 #                 lib/Makefile])
 AC_CONFIG_FILES([Makefile
 		 lib/Makefile
-		 examples/Makefile
 		 ])
 
 #AM_COND_IF([BUILD_PUBLICATIONS_TOOLS], [

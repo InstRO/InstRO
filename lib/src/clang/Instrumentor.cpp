@@ -13,10 +13,13 @@ static llvm::cl::OptionCategory MyTool("my tool");
 
 int main(int argc, char **argv) {
 	std::cout << "Start" << std::endl;
-	InstRO::Clang::ClangInstrumentor instro(argc, const_cast<const char **>(argv), (void*)&MyTool);
+	InstRO::Clang::ClangInstrumentor instro(argc, const_cast<const char **>(argv), MyTool);
 	auto fac = instro.getFactory();
 	auto fDefSel = fac->createFunctionDefinitionSelector();
-	fac->createCygProfileAdapter(fDefSel);
+	std::vector<std::string> bList, wList;
+	wList.push_back("main");
+	auto bwSel = fac->createBlackAndWhiteListSelector(bList, wList);
+	fac->createCygProfileAdapter(bwSel);
 	instro.apply();
 	std::cout << "End" << std::endl;
 	return 0;
