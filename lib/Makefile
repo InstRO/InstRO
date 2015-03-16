@@ -58,7 +58,8 @@ CXXFLAGS+=-O0 -g $(INCLUDE_FLAGS)
 PLUGIN_CXXFLAGS= -fpic
 
 
-TOP_LEVEL=/home/j_lehr/all_repos/instro-v5/repo
+#TOP_LEVEL=/home/j_lehr/all_repos/instro-v5/repo
+TOP_LEVEL=/home/jan/Documents/repos/instro-v5/repo
 INSTROLLVMINCLUDE=$(TOP_LEVEL)/lib/include/instro/llvm
 INSTROCLANGINCLUDE=$(TOP_LEVEL)/lib/include/instro/clang
 
@@ -83,6 +84,7 @@ CLANG_SOURCES= \
 				$(TOP_LEVEL)/lib/src/clang/selector/BlackWhitelistSelector.cpp \
 				$(TOP_LEVEL)/lib/src/clang/selector/BooleanCompoundSelector.cpp \
 				$(TOP_LEVEL)/lib/src/clang/adapter/CygProfileAdapter.cpp \
+				$(TOP_LEVEL)/lib/src/clang/core/ClangPassImplementation.cpp \
 				$(TOP_LEVEL)/lib/src/clang/core/PassFactory.cpp \
 				$(TOP_LEVEL)/lib/src/clang/core/ConstructSet.cpp \
 				$(TOP_LEVEL)/lib/src/clang/core/ClangPassExecuter.cpp \

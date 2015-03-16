@@ -4,6 +4,7 @@
 #include "instro/core/PassFactory.h"
 #include "instro/core/PassManager.h"
 #include "instro/clang/core/Pass.h"
+#include "instro/clang/core/ClangPassExecuter.h"
 
 /*
  * I guess we would need to know all the passes...
@@ -27,8 +28,8 @@ namespace Clang {
 class PassFactory : public InstRO::Core::PassFactory {
  public:
 	PassFactory(InstRO::Core::PassManagement::PassManager* manager,
-							clang::tooling::Replacements& reps)
-			: InstRO::Core::PassFactory(manager), replacements(reps){};
+							clang::tooling::Replacements& reps, InstRO::Clang::Core::PassManagement::ClangPassExecuter *executer)
+			: InstRO::Core::PassFactory(manager), replacements(reps), executer(executer){};
 	Pass* createBlackAndWhiteListSelector(std::vector<std::string> blacklist,
 																				std::vector<std::string> whitelist);
 	Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
@@ -38,6 +39,7 @@ class PassFactory : public InstRO::Core::PassFactory {
 
  private:
 	clang::tooling::Replacements& replacements;
+	InstRO::Clang::Core::PassManagement::ClangPassExecuter *executer;
 };
 }	// Clang
 }	// INstRO

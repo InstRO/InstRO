@@ -40,6 +40,7 @@ int InstRO::Core::PassManagement::SimplePassManager::execute() {
 		// passContainer->pass->init();
 	}
 	for (PassEnvelope *passEnvelope : passList) {
+		std::cout << "Running pass: " << passEnvelope->pass->passName() << std::endl;
 		std::vector<ConstructSet *> tempConstructSets(
 				getPredecessors(passEnvelope).size());
 		// check if some input needs to be explicitly elevated
@@ -78,7 +79,8 @@ int InstRO::Core::PassManagement::SimplePassManager::execute() {
 
 		// 3rd: Execute the pass (using delegate, since the delegate know what to do
 		// exactly)
-		passEnvelope->pass->execute(executer);
+		std::cout << "now invoking executePass" << std::endl;
+		passEnvelope->pass->executePass();
 
 		// 4th: Tell the pass to finalize. It is supposed to release memory, close
 		// files, etc. However, the output set must be maintained unitl

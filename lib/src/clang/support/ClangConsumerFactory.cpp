@@ -2,8 +2,8 @@
 
 InstRO::Clang::Support::ClangConsumerFactory::ClangConsumerFactory(
 		::InstRO::Core::PassManagement::PassManager *manager,
-		clang::tooling::Replacements &replacements)
-		: manager(manager), replacements(replacements) {}
+		clang::tooling::Replacements &replacements, InstRO::Clang::Core::PassManagement::ClangPassExecuter *executer)
+		: manager(manager), executer(executer), replacements(replacements) {}
 
 InstRO::Clang::Support::ClangConsumerFactory::~ClangConsumerFactory() {}
 
@@ -11,7 +11,7 @@ std::unique_ptr<clang::ASTConsumer>
 InstRO::Clang::Support::ClangConsumerFactory::newASTConsumer() {
 	std::cout << "Creating new ASTConsumer" << std::endl;
 	return std::unique_ptr<InstRO::Clang::Support::InstROASTConsumer>(
-			new InstRO::Clang::Support::InstROASTConsumer(manager));
+			new InstRO::Clang::Support::InstROASTConsumer(manager, executer));
 }
 
 std::unique_ptr<clang::ASTConsumer> InstRO::Clang::Support::ClangConsumerFactory::CreateASTConsumer(

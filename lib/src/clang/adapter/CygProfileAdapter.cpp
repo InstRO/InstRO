@@ -7,17 +7,23 @@ InstRO::Clang::CygProfileAdapter::CygProfileAdapter(InstRO::Pass *selector, clan
 void InstRO::Clang::CygProfileAdapter::init() {}
 
 void InstRO::Clang::CygProfileAdapter::execute() {
+	executer->execute(this);
+}
+
+bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *decl){
 	std::cout << "Executing CygProfileAdapter" << std::endl;
 	if (context == nullptr) std::cerr << "Context NULL" << std::endl;
 	sm = &context->getSourceManager();
-	
+	std::cout << "about to fetch input" << std::endl;
 	InstRO::Core::ConstructSet *c = getInput(decidingSelector);
+	std::cout << "Fetched input" << std::endl;
 	// since we are in a Clang Adapter, we cast. I KNOW THIS IS UGLY
 	cs = *(reinterpret_cast<InstRO::Clang::ClangConstructSet *>(c));
 	for (auto &construct : cs.getConstructSet()) {
 		std::cout << "handling construct" << std::endl;
 		adapt(construct);
 	}
+	return true;
 }
 
 void InstRO::Clang::CygProfileAdapter::finalize() {}

@@ -22,7 +22,9 @@ class FunctionDefinitionSelector
 	bool VisitFunctionDecl(clang::FunctionDecl *fDecl) override;
 
 	void init(){};
-	void execute(){};
+	void execute(){
+		executer->execute(this);
+	};
 	void finalize(){};
 	void releaseOutput(){};
 	InstRO::Clang::ClangConstructSet *getOutput();
