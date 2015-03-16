@@ -21,6 +21,7 @@
 #include <unordered_map>
 
 #include "instro/core/ConstructSet.h"
+#include "instro/core/PassExecuter.h"
 #include "instro/core/PassImplementation.h"
 
 #include "instro/core/ConstructSetManagement.h"
@@ -35,8 +36,8 @@ class PassManager;
 }
 
 // Make it a sane world
-class Pass : public ::InstRO::Core::PassConstructSetManagement,
-						 public ::InstRO::Core::ConstructLevelManagrment {
+class Pass : public InstRO::Core::PassConstructSetManagement,
+						 public InstRO::Core::ConstructLevelManagrment {
  public:
 	Pass() = delete;
 	Pass(PassImplementation *pImpl)
@@ -53,6 +54,7 @@ class Pass : public ::InstRO::Core::PassConstructSetManagement,
 	}
 	void initPass();
 	void executePass();
+	void execute(InstRO::Core::PassManagement::PassExecuter *executer);
 	void finalizePass();
 	void releaseOutput();
 	// CI: Enable Input is called externally to indicate, that  the input passes
@@ -72,39 +74,37 @@ class Pass : public ::InstRO::Core::PassConstructSetManagement,
 	// Info Functions:
 	bool providesOutput() { return passProvidesOutputFlag; }
 	bool requiresInput() { return passRequiresInputFlag; }
-	void setProvidesOuput() { passProvidesOutputFlag = true; };
-	void setRequiresInput() { passRequiresInputFlag = true; };
-	void unsetProvidesOuput() { passProvidesOutputFlag = false; };
-	void unsetRequiresInput() { passRequiresInputFlag = false; };
+	void setProvidesOutput(bool value = true) { passProvidesOutputFlag = value; };
+	void setRequiresInput(bool value = true) { passRequiresInputFlag = value; };
 
 	virtual std::string passName() { return passNameString; };
-	void setPassName(std::string passNAME) { passNameString = passNAME; };
+	void setPassName(std::string passName) { passNameString = passName; };
 
  public:
-	void setOutputLevel(Core::ContstructLevelType level) { outputLevel = level; };
-	Core::ContstructLevelType getOutputLevel() { return outputLevel; };
-	void registerInputPass(Pass *pass, Core::ContstructLevelType level) {
+	void setOutputLevel(Core::ConstructLevelType level) { outputLevel = level; };
+	Core::ConstructLevelType getOutputLevel() { return outputLevel; };
+	void registerInputPass(Pass *pass, Core::ConstructLevelType level) {
 		inputPasses.push_back(pass);
 		setInputLevelRequirement(pass, level);
 	}
 	std::vector<Pass *> getInputPasses() { return inputPasses; };
-	void setInputLevelRequirement(Pass *pass, Core::ContstructLevelType level) {
+	void setInputLevelRequirement(Pass *pass, Core::ConstructLevelType level) {
 		inputRequiredLevels[pass] = level;
 	}
-	Core::ContstructLevelType getInputLevelRequirement(Pass *pass) {
+	Core::ConstructLevelType getInputLevelRequirement(Pass *pass) {
 		return inputRequiredLevels[pass];
 	};
 
  private:
 	bool passRequiresInputFlag, passProvidesOutputFlag;
-	PassImplementation *passImplementation;
 	bool passInitialized, passExecuted, passFinalize, passOutputReleased;
 	bool inputReady;
 	std::string passNameString;
+	PassImplementation *passImplementation;
 
 	std::vector<Pass *> inputPasses;
-	Core::ContstructLevelType outputLevel;
-	std::unordered_map<Pass *, Core::ContstructLevelType> inputRequiredLevels;
+	Core::ConstructLevelType outputLevel;
+	std::unordered_map<Pass *, Core::ConstructLevelType> inputRequiredLevels;
 };
 //}// Core
 }	// InstRO

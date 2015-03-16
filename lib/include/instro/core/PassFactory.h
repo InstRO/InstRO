@@ -17,35 +17,36 @@
 #include <iostream>
 #include <vector>
 
-
 #include "instro/core/Pass.h"
 
-namespace InstRO{
-	class Pass;
-namespace Core{
-	namespace PassManagement
-	{
-		class PassManager;
-	}
-	/* PassFactory: Interface for the mandatory InstRO Passes. */
-	class PassFactory
-	{
-		public:	
-			/* CI: A PassFactory must be initialized with the PassManager. */
-			PassFactory(PassManagement::PassManager * manager):passManager(manager){};
-			virtual InstRO::Pass * createBlackAndWhiteListSelector(std::vector<std::string> rules)=0;
-			virtual InstRO::Pass * createBooleanOrSelector(InstRO::Pass * inputA,InstRO::Pass * inputB)=0;
-			virtual InstRO::Pass * createProgramEntrySelector()=0;
-			virtual InstRO::Pass * createFunctionDefinitionSelector()=0;
-			virtual InstRO::Pass * createCygProfileAdapter(InstRO::Pass * input)=0;
-		protected:
-		/*	void registerPass(Pass * pass)
-			{
-				refToGobalPassManager->registerPass(pass);
-			}*/
-			PassManagement::PassManager * passManager;
-	};
-}// Core
-}//InstRO
+namespace InstRO {
+class Pass;
+namespace Core {
+namespace PassManagement {
+class PassManager;
+}
+/* PassFactory: Interface for the mandatory InstRO Passes. */
+class PassFactory {
+ public:
+	/* CI: A PassFactory must be initialized with the PassManager. */
+	PassFactory(PassManagement::PassManager* manager) : passManager(manager){};
+	virtual InstRO::Pass* createBlackAndWhiteListSelector(
+			std::vector<std::string> blacklist,
+					std::vector<std::string> whitelist) = 0;
+	virtual InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA,
+																								InstRO::Pass* inputB) = 0;
+	virtual InstRO::Pass* createProgramEntrySelector() = 0;
+	virtual InstRO::Pass* createFunctionDefinitionSelector() = 0;
+	virtual InstRO::Pass* createCygProfileAdapter(InstRO::Pass* input) = 0;
+
+ protected:
+	/*	void registerPass(Pass * pass)
+		{
+			refToGobalPassManager->registerPass(pass);
+		}*/
+	PassManagement::PassManager* passManager;
+};
+}	// Core
+}	// InstRO
 
 #endif

@@ -44,8 +44,8 @@ public:
 		{
 			Pass * bwlPass = new Pass(new Selectors::BlackAndWhiteListSelector(rules));
 			bwlPass->setPassName("ROSE_BlackAndWhiteList");
-			bwlPass->unsetRequiresInput();
-			bwlPass->setProvidesOuput();
+			bwlPass->setRequiresInput(false);
+			bwlPass->setProvidesOutput();
 			bwlPass->setOutputLevel(Core::ConstructLevelLiteral);
 			passManager->registerPass(bwlPass);
 			return bwlPass;
@@ -64,7 +64,7 @@ public:
 			Pass * compoundPass=new Pass(new Selectors::CompoundSelector(getPass(inputA),getPass(inputB)));
 			compoundPass->setPassName("ROSE_BooleanOr");
 			compoundPass->setRequiresInput();
-			compoundPass->setProvidesOuput();
+			compoundPass->setProvidesOutput();
 			compoundPass->setOutputLevel(Core::ConstructLevelMin);
 			compoundPass->registerInputPass(inputA,Core::ConstructLevelMin);
 			compoundPass->registerInputPass(inputB,Core::ConstructLevelMin);
@@ -79,7 +79,7 @@ public:
 		{
 			Pass * newPass=new Pass(new Adapters::CygProfileAdapter(getPass(input)));
 			newPass->setRequiresInput();
-			newPass->unsetProvidesOuput();
+			newPass->setProvidesOutput(false);
 			newPass->setPassName("ROSE_CygProfileAdapter");
 			newPass->registerInputPass(input,Core::ConstructLevelStatement);
 			return newPass;
@@ -92,7 +92,7 @@ public:
 			Adapters::GenericAdapter * roseAdapter=new Adapters::GenericAdapter(getPass(functionSelection),getPass(loopSelection),getPass(branchingSelection));
 			Pass * newPass=new Pass(roseAdapter);
 			newPass->setRequiresInput();
-			newPass->unsetProvidesOuput();
+			newPass->setProvidesOutput(false);
 			newPass->setPassName("ROSE_GenericAdapter");
 			if (functionSelection!=NULL) newPass->registerInputPass(functionSelection,Core::ConstructLevelStatement);
 			if (loopSelection!=NULL) newPass->registerInputPass(loopSelection,Core::ConstructLevelStatement);

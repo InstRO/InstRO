@@ -1,38 +1,71 @@
-#include "BlackWhitelistSelector.h"
+#include "instro/clang/selector/BlackWhitelistSelector.h"
 
+InstRO::Clang::BlackWhitelistSelector::BlackWhitelistSelector(
+		std::vector<std::string> blacklist, std::vector<std::string> whitelist)
+		: blacklist(blacklist), whitelist(whitelist) {
+	std::cout << "Creating BW Selector with blacklist(-) and whitelist (+):\n";
+	for (auto &s : blacklist) {
+		std::cout << "- " << s << "\n";
+	}
+	for (auto &s : whitelist) {
+		std::cout << "+ " << s < "\n";
+	}
+	std::cout << std::endl;
+}
 
-using namespace InstRO;
-
-bool BlackWhitelistSelector::VisitFunctionDecl(clang::FunctionDecl *decl){
+bool InstRO::Clang::BlackWhitelistSelector::VisitFunctionDecl(
+		clang::FunctionDecl *decl) {
 	/*
 	 * We match the black and white list entries against the function name
 	 */
-	if(decl->hasBody()){
-		if(decl->doesThisDieclarationHaveABody()){
+	if (decl->hasBody()) {
+		if (decl->doesThisDeclarationHaveABody()) {
+			std::cout << "Testing " << decl->getNameInfo().getAsString()
+								<< " whether it is black or white listed." << std::endl;
 			// This is "picker prefer whitelist"
-			if((isOnList(decl->getAsString(), whitelist)) || (! isOnList(decl->getNameAsString(), blacklist))){
+			if ((isOnList(decl->getNameInfo().getAsString(), whitelist)) ||
+					(!isOnList(decl->getNameInfo().getAsString(), blacklist))) {
+				std::cout << "Selecting node" << std::endl;
 				// select node
+				cs.put(decl);
 			}
 		}
 	}
-	return false;
+	return true;
 }
 
-void BlackWhitelistSelector::readFilterFile(std::string filename){
+void InstRO::Clang::BlackWhitelistSelector::readFilterFile(
+		std::string filename) {
 	util::BWLFileReader reader(filename);
 	auto lists = reader.getBWList();
 	blacklist = lists.first;
 	whitelist = lists.second;
 }
 
-bool BlackWhitelistSelector::isOnList(std::string functionName, std::vector<std::string> &list){
-	return std::find(list.begin(), list.end(), functionName) == list.end();
+void InstRO::Clang::BlackWhitelistSelector::init() {}
+
+void InstRO::Clang::BlackWhitelistSelector::execute() {}
+
+void InstRO::Clang::BlackWhitelistSelector::finalize() {}
+
+void InstRO::Clang::BlackWhitelistSelector::releaseOutput() {}
+
+InstRO::Clang::ClangConstructSet *
+InstRO::Clang::BlackWhitelistSelector::getOutput() {
+	return &cs;
 }
 
-void BlackWhitelistSelector::addBlacklistEntry(std::string functionName){
+bool InstRO::Clang::BlackWhitelistSelector::isOnList(
+		std::string functionName, std::vector<std::string> &list) {
+	return std::find(list.begin(), list.end(), functionName) != list.end();
+}
+
+void InstRO::Clang::BlackWhitelistSelector::addBlacklistEntry(
+		std::string functionName) {
 	blacklist.push_back(functionName);
 }
 
-void BlackWhitelistSelector::addWhitelistEntry(std::string functionName){
+void InstRO::Clang::BlackWhitelistSelector::addWhitelistEntry(
+		std::string functionName) {
 	whitelist.push_back(functionName);
 }

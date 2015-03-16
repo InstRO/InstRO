@@ -14,12 +14,17 @@
  *
  *
  */
-
-// InstRO includes
-#ifndef DEFAULT_INSTRO
+#ifndef USING_ROSE
+#else
+#ifndef USING_LLVM
 #define USING_ROSE
-#define USING_LLVM
 #endif
+#endif
+// InstRO includes
+// #ifndef DEFAULT_INSTRO
+// #define USING_ROSE
+// #define USING_LLVM
+// #endif
 
 #include "instro/core/Pass.h"
 #include "instro/core/PassFactory.h"

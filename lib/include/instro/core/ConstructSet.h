@@ -1,42 +1,43 @@
 #ifndef INSTRO_CORE_CONSTRUCTSET_H
 #define INSTRO_CORE_CONSTRUCTSET_H 0.1
 
-#include <vector>
 #include <string>
+#include <list>
 
-namespace InstRO{
+namespace InstRO {
 
-//class Pass;
+namespace Core {
 
-namespace Core{
-
-typedef enum ContstructLevelEnum{
-	ConstructLevelMin=1,
-	ConstructLevelLiteral=1,
-	ConstructLevelExpression=2,
+typedef enum ContstructLevelEnum {
+	ConstructLevelMin = 1,
+	ConstructLevelLiteral = 1,
+	ConstructLevelExpression = 2,
 	ConstructLevelStatement,
-	MaxConstructLevel=1
-}ContstructLevelType;
-
-std::string contstructLevelToString(ContstructLevelType type);
-std::string operator+(const std::string &lhs,const ContstructLevelEnum &type);
+	MaxConstructLevel = 1
+} ConstructLevelType;
 
 class Construct
 {
 };
 
-/* CI: The ConstructSet class is intended to be specialized for each compiler interface. It provides the basic mechanisms to specify what construct level are contained. */
-class ConstructSet
-{
-	public:
-		ConstructSet():minimalSupportedLevel(ConstructLevelMin),maximalSupportedLevel(){};
-		ContstructLevelType getConstructLevel(){return ConstructLevelMin;};
-		ContstructLevelType getMaxConstructLevel(){return ConstructLevelMin;};
-		ContstructLevelType getMinConstructLevel(){return ConstructLevelMin;};
-		ConstructSet(ContstructLevelType level){};
-		ConstructSet(ContstructLevelType minLevel,ContstructLevelType maxLevel){};
-		void setCurrentMinLevel(ContstructLevelType minLevel){};
-		void setCurrentMaxLevel(ContstructLevelType maxLevel){};
+std::string contstructLevelToString(ConstructLevelType type);
+std::string operator+(const std::string &lhs, const ConstructLevelType &type);
+
+
+/* CI: The ConstructSet class is intended to be specialized for each compiler
+ * interface. It provides the basic mechanisms to specify what construct level
+ * are contained. 
+ */
+class ConstructSet {
+ public:
+	ConstructSet():minimalSupportedLevel(ConstructLevelMin),maximalSupportedLevel(){};
+    ConstructSet(ConstructLevelType level){};
+	ConstructSet(ConstructLevelType minLevel, ConstructLevelType maxLevel){};        
+	ConstructLevelType getConstructLevel() { return ConstructLevelMin; };
+	ConstructLevelType getMaxConstructLevel() { return ConstructLevelMin; };
+	ConstructLevelType getMinConstructLevel() { return ConstructLevelMin; };
+	void setCurrentMinLevel(ConstructLevelType minLevel){};
+	void setCurrentMaxLevel(ConstructLevelType maxLevel){};
 		virtual std::list<Construct*> getConstructs()=0;
 		virtual void selectConstruct(Construct*)=0;
 		virtual void selectConstructs(std::list<Construct*> constructs);
@@ -44,7 +45,6 @@ class ConstructSet
 			ContstructLevelType minimalSupportedLevel,maximalSupportedLevel;
 };
 
-}
+} // End Namespace Core
 } // End namespace InstRO
-
 #endif

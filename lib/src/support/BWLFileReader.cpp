@@ -1,5 +1,7 @@
 
-#include "BWLFileReader.h"
+#include "instro/support/BWLFileReader.h"
+#include <vector>
+#include <iostream>
 
 using namespace InstRO;
 

@@ -1,8 +1,14 @@
 #include "instro/clang/core/PassFactory.h"
 
 InstRO::Pass* InstRO::Clang::PassFactory::createBlackAndWhiteListSelector(
-		std::vector<std::string> rules) {
-	return NULL;
+		std::vector<std::string> blacklist, std::vector<std::string> whitelist) {
+	InstRO::Pass *p = new InstRO::Pass(new InstRO::Clang::BlackWhitelistSelector(blacklist, whitelist));
+	p->setRequiresInput(false);
+	p->setProvidesOutput(true);
+	p->setPassName("BlackWhitelist Selector");
+	p->setOutputLevel(InstRO::Core::ConstructLevelType::ConstructLevelStatement);
+	passManager->registerPass(p);
+	return p;
 }
 
 InstRO::Pass* InstRO::Clang::PassFactory::createBooleanOrSelector(
@@ -12,13 +18,21 @@ InstRO::Pass* InstRO::Clang::PassFactory::createBooleanOrSelector(
 
 InstRO::Pass* InstRO::Clang::PassFactory::createFunctionDefinitionSelector() {
 	InstRO::Pass *p = new InstRO::Pass(new InstRO::Clang::FunctionDefinitionSelector());
+	p->setRequiresInput(false);
+	p->setProvidesOutput(true);
+	p->setPassName(std::string("Function Definition Selector"));
+	p->setOutputLevel(InstRO::Core::ConstructLevelType::ConstructLevelStatement);
 	passManager->registerPass(p);
 	return p;
 }
 
 InstRO::Pass* InstRO::Clang::PassFactory::createCygProfileAdapter(
 		InstRO::Pass* input) {
-	InstRO::Pass *p = new InstRO::Pass(new InstRO::Clang::CygProfileAdapter(input, NULL));
+	InstRO::Pass *p = new InstRO::Pass(new InstRO::Clang::CygProfileAdapter(input, replacements, NULL));
+	p->setRequiresInput(true);
+	p->setProvidesOutput(false);
+	p->setPassName(std::string("CygProfile Adapter"));
+	p->registerInputPass(input, InstRO::Core::ConstructLevelType::ConstructLevelStatement);
 	passManager->registerPass(p);
 	return p;
 }
