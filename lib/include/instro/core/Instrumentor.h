@@ -48,7 +48,7 @@ class Instrumentor {
 	}
 	virtual ::InstRO::Core::PassFactory* getFactory(
 			CompilationPhase phase = frontend) = 0;
-	InstRO::Core::PassManagement::PassManager* getPassManager() {
+	virtual InstRO::Core::PassManagement::PassManager* getPassManager() {
 		return passManager;
 	}
 	void setPassManager(::InstRO::Core::PassManagement::PassManager* manager) {

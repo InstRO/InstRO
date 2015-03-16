@@ -14,7 +14,7 @@ namespace InstRO
 {
 	namespace Rose{
 
-class RosePassFactory:public PassFactory
+class RosePassFactory:public Core::PassFactory
 {
 protected:
 	RosePass * getPass(Pass * pass)
@@ -47,7 +47,7 @@ public:
 			bwlPass->unsetRequiresInput();
 			bwlPass->setProvidesOuput();
 			bwlPass->setOutputLevel(Core::ConstructLevelLiteral);
-			refToGobalPassManager->registerPass(bwlPass);
+			passManager->registerPass(bwlPass);
 			return bwlPass;
 		}
 
@@ -68,7 +68,7 @@ public:
 			compoundPass->setOutputLevel(Core::ConstructLevelMin);
 			compoundPass->registerInputPass(inputA,Core::ConstructLevelMin);
 			compoundPass->registerInputPass(inputB,Core::ConstructLevelMin);
-			refToGobalPassManager->registerPass(compoundPass);
+			passManager->registerPass(compoundPass);
 			return compoundPass;
 
 		};
@@ -98,7 +98,7 @@ public:
 			if (loopSelection!=NULL) newPass->registerInputPass(loopSelection,Core::ConstructLevelStatement);
 			if (branchingSelection!=NULL) newPass->registerInputPass(branchingSelection,Core::ConstructLevelStatement);
 			
-			refToGobalPassManager->registerPass(newPass);
+			passManager->registerPass(newPass);
 			return newPass;
 		};
 

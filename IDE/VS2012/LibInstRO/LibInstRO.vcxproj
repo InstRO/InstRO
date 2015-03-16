@@ -13,7 +13,10 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\ConstructSetManagement.cpp" />
+    <ClCompile Include="..\..\..\lib\src\core\Pass.cpp" />
+    <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp" />
     <ClCompile Include="..\..\..\lib\src\main.cxx" />
+    <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
@@ -25,11 +28,17 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructLevelManagrment.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSetManagement.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\Factory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Instrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Pass.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassExecuter.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\PassFactory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\PassImplementation.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\PassManager.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\SimplePassManager.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\llvm\LLVMInstrumentor.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\llvm\LLVMPass.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\llvm\LLVMPassFactory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingPassManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\adapters\CygProfileAdapter.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\adapters\GenericAdapter.h" />

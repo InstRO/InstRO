@@ -20,11 +20,16 @@ typedef enum ContstructLevelEnum{
 
 std::string contstructLevelToString(ContstructLevelType type);
 std::string operator+(const std::string &lhs,const ContstructLevelEnum &type);
+
+class Construct
+{
+};
+
 /* CI: The ConstructSet class is intended to be specialized for each compiler interface. It provides the basic mechanisms to specify what construct level are contained. */
 class ConstructSet
 {
 	public:
-		ConstructSet(){};
+		ConstructSet():minimalSupportedLevel(ConstructLevelMin),maximalSupportedLevel(){};
 		ContstructLevelType getConstructLevel(){return ConstructLevelMin;};
 		ContstructLevelType getMaxConstructLevel(){return ConstructLevelMin;};
 		ContstructLevelType getMinConstructLevel(){return ConstructLevelMin;};
@@ -32,7 +37,13 @@ class ConstructSet
 		ConstructSet(ContstructLevelType minLevel,ContstructLevelType maxLevel){};
 		void setCurrentMinLevel(ContstructLevelType minLevel){};
 		void setCurrentMaxLevel(ContstructLevelType maxLevel){};
+		virtual std::list<Construct*> getConstructs()=0;
+		virtual void selectConstruct(Construct*)=0;
+		virtual void selectConstructs(std::list<Construct*> constructs);
+	protected:
+			ContstructLevelType minimalSupportedLevel,maximalSupportedLevel;
 };
+
 }
 } // End namespace InstRO
 
