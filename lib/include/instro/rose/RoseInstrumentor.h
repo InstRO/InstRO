@@ -14,6 +14,10 @@ namespace InstRO
 	class RoseInstrumentor: public Instrumentor
 	{
 	public: 
+		RoseInstrumentor(int & argc,char *** argv)
+		{
+			// TODO: Initialize Rose here
+		};
 		Rose::RosePassFactory * getFactory(Instrumentor::CompilationPhase phase)
 		{
 			lockPassManager();

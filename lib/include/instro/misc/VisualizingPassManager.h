@@ -12,7 +12,7 @@ namespace InstRO{
 class Pass;
 
 namespace Ext{
-	class VisualizingPassManager: public ::InstRO::PassManagement::SimplePassManager
+	class VisualizingPassManager: public Core::PassManagement::SimplePassManager
 {
 	public:
 		void outputConfiguration(std::string fileName)

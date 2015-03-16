@@ -31,6 +31,24 @@
     <Filter Include="include\instro\rose\adapter">
       <UniqueIdentifier>{f335cffd-5c61-4bed-a63a-d68a1228097b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\lib\support">
+      <UniqueIdentifier>{9ef82a8b-1407-4496-a65e-e12b483b5092}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib\rose">
+      <UniqueIdentifier>{78cbcad0-d1fb-421a-a4d0-b2ffa9a7cb7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib\rose\selectors">
+      <UniqueIdentifier>{e09023cd-8004-498e-b058-e5d4b2f809fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib\rose\adapters">
+      <UniqueIdentifier>{ed5fe33a-97ad-49ea-97c4-edba55afff83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\instro\llvm">
+      <UniqueIdentifier>{f2330133-299d-4666-966e-8356af661b42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\instro\test">
+      <UniqueIdentifier>{75be12fc-0f08-45db-ab1b-03426ae84bce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\main.cxx" />
@@ -39,6 +57,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp">
       <Filter>source\lib\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\Pass.cpp">
+      <Filter>source\lib\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp">
+      <Filter>source\lib\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp">
+      <Filter>source\lib\support</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -82,9 +109,6 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructLevelManagrment.h">
       <Filter>include\instro\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\test\TestInstrumentor.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\test\TestPass.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\test\TestPassFactory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingPassManager.h">
       <Filter>include\instro\misc</Filter>
     </ClInclude>
@@ -101,6 +125,33 @@
       <Filter>include\instro\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\core\PassImplementation.h">
+      <Filter>include\instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\llvm\LLVMInstrumentor.h">
+      <Filter>include\instro\llvm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\llvm\LLVMPass.h">
+      <Filter>include\instro\llvm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\llvm\LLVMPassFactory.h">
+      <Filter>include\instro\llvm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\test\TestInstrumentor.h">
+      <Filter>include\instro\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\test\TestPass.h">
+      <Filter>include\instro\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\test\TestPassFactory.h">
+      <Filter>include\instro\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\SimplePassManager.h">
+      <Filter>include\instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\Factory.h">
+      <Filter>include\instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassExecuter.h">
       <Filter>include\instro\core</Filter>
     </ClInclude>
   </ItemGroup>
