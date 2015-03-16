@@ -18,6 +18,7 @@
 #include <vector>
 
 #include "instro/core/Pass.h"
+#include "instro/clang/core/ClangPassExecuter.h"
 
 namespace InstRO {
 class Pass;

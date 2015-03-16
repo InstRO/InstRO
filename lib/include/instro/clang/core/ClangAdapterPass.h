@@ -2,15 +2,19 @@
 #define INSTRO_CLANG_CORE_CLANGADAPTERPASS_H
 
 #include <iostream>
+#include <cassert>
 
 #include "clang/AST/ASTContext.h"
 
 #include "instro/core/PassImplementation.h"
+#include "instro/clang/core/ClangPassExecuter.h"
 
 namespace InstRO {
 namespace Clang {
 namespace Core {
-
+namespace PassManagement{
+	class ClangPassExecuter;
+}
 /*
  * This is to have a common base class for all passes which require information
  * from the ASTContext
@@ -24,10 +28,17 @@ class ClangPassImplementation
 		this->context = context;
 	};
 
+	void execute() override;
+
+	void setPassExecuter(InstRO::Clang::Core::PassManagement::ClangPassExecuter *executer){
+		this->executer = executer;
+	}
+
 	virtual bool VisitFunctionDecl(clang::FunctionDecl *decl) = 0;
 
  protected:
 	clang::ASTContext *context;
+	InstRO::Clang::Core::PassManagement::ClangPassExecuter *executer;
 };
 
 }

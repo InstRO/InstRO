@@ -18,7 +18,7 @@ class ClangConsumerFactory : public clang::ASTFrontendAction {
 	ClangConsumerFactory() = delete;
 	ClangConsumerFactory(const ClangConsumerFactory &other) = delete;
 	ClangConsumerFactory(InstRO::Core::PassManagement::PassManager *manager,
-											 clang::tooling::Replacements &replacements);
+											 clang::tooling::Replacements &replacements, InstRO::Clang::Core::PassManagement::ClangPassExecuter *executer);
 	~ClangConsumerFactory();
 	std::unique_ptr<clang::ASTConsumer> newASTConsumer();
 	std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
@@ -26,6 +26,7 @@ class ClangConsumerFactory : public clang::ASTFrontendAction {
 
  private:
 	InstRO::Core::PassManagement::PassManager *manager;
+	InstRO::Clang::Core::PassManagement::ClangPassExecuter *executer;
 	clang::tooling::Replacements &replacements;
 };
 }	// Support

@@ -48,6 +48,7 @@
 		clang::tooling::CommonOptionsParser cop;
 		clang::tooling::RefactoringTool tool;
 		std::unique_ptr<InstRO::Clang::PassFactory> fac;
+		InstRO::Clang::Core::PassManagement::ClangPassExecuter executer;
 	};
 	}	// Clang
 }	// INstRO

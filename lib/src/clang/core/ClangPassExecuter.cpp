@@ -2,7 +2,9 @@
 
 InstRO::Clang::Core::PassManagement::ClangPassExecuter::ClangPassExecuter(
 		clang::ASTContext *context)
-		: context(context) {}
+		: context(context) {
+			std::cout << "Creating new PassExecuter object @" << this << std::endl;
+		}
 
 void InstRO::Clang::Core::PassManagement::ClangPassExecuter::execute(
 		InstRO::PassImplementation *pass) {
@@ -22,7 +24,7 @@ void InstRO::Clang::Core::PassManagement::ClangPassExecuter::execute(
 	// traverse the Clang AST
 	pImpl->TraverseDecl(context->getTranslationUnitDecl());
 	// invoke the execute function of the pass implementation
-	pImpl->execute();
+//	pImpl->execute();
 }
 
 void InstRO::Clang::Core::PassManagement::ClangPassExecuter::setASTContext(

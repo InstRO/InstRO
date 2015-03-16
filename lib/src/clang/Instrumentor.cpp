@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
 	std::vector<std::string> bList, wList;
 	wList.push_back("main");
 	auto bwSel = fac->createBlackAndWhiteListSelector(bList, wList);
-	fac->createCygProfileAdapter(bwSel);
+	fac->createCygProfileAdapter(fDefSel);
 	instro.apply();
 	std::cout << "End" << std::endl;
 	return 0;
