@@ -22,7 +22,9 @@ class CygProfileAdapter : public InstRO::Clang::Core::ClangPassImplementation {
 #endif
 
 public:
-CygProfileAdapter(InstRO::Pass *selector, clang::tooling::Replacements &replacements, clang::SourceManager *sm);
+CygProfileAdapter(InstRO::Pass *selector,
+									clang::tooling::Replacements &replacements,
+									clang::SourceManager *sm);
 
 bool VisitFunctionDecl(clang::FunctionDecl *decl) override;
 
@@ -36,15 +38,25 @@ void releaseOutput();
 
 InstRO::Clang::ClangConstructSet *getOutput();
 
-void adapt(InstRO::Clang::ClangConstruct c);
+void dispatch(clang::Decl *c);
 
-void transform(clang::SourceManager *sm, clang::Decl *decl);
+void transform(clang::SourceManager *sm, clang::FunctionDecl *decl);
+void transform(clang::SourceManager *sm, clang::CXXMethodDecl *decl);
 
+protected:
+	std::string generateFunctionEntry(clang::FunctionDecl *d);
+	std::string generateFunctionExit(clang::FunctionDecl *d);
+	std::string generateMethodEntry(clang::CXXMethodDecl *d);
+	std::string generateMethodExit(clang::CXXMethodDecl *d);
+	void instrumentFunctionBody(clang::CompoundStmt *body, std::string &entryStr, std::string &exitStr);
+	void handleEmptyBody(clang::CompoundStmt *body, std::string &entryStr, std::string &exitStr);
+	void instrumentReturnStatements(clang::CompoundStmt *body, std::string &entryStr, std::string &exitStr);
 private:
 Pass *decidingSelector;
 ClangConstructSet cs;
 clang::SourceManager *sm;
 clang::tooling::Replacements &replacements;
+int labelCount;
 };
 
 }	// Clang
