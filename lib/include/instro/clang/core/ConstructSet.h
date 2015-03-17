@@ -27,6 +27,8 @@ class ClangConstructSet : public InstRO::Core::ConstructSet {
 	void put(clang::Decl *decl);
 	void put(clang::Stmt *stmt);
 	std::vector<ClangConstruct> getConstructSet();
+	void selectConstruct(InstRO::Core::Construct *c) override {};
+	std::vector<InstRO::Core::Construct*> getConstructs() override {};
 
  private:
 	std::vector<ClangConstruct> constructs;
