@@ -4,6 +4,7 @@
 #include <cassert>
 
 #include "clang/AST/RecursiveASTVisitor.h"
+#include "clang/Basic/SourceLocation.h"
 #include "clang/Tooling/Core/Replacement.h"
 
 #include "instro/clang/core/ConstructSet.h"
@@ -51,6 +52,8 @@ protected:
 	void instrumentFunctionBody(clang::CompoundStmt *body, std::string &entryStr, std::string &exitStr);
 	void handleEmptyBody(clang::CompoundStmt *body, std::string &entryStr, std::string &exitStr);
 	void instrumentReturnStatements(clang::CompoundStmt *body, std::string &entryStr, std::string &exitStr);
+	bool retStmtNeedsTransformation(clang::ReturnStmt *st);
+	void transformReturnStmt(clang::ReturnStmt *retStmt);
 private:
 Pass *decidingSelector;
 ClangConstructSet cs;
