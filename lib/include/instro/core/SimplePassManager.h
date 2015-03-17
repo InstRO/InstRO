@@ -34,7 +34,7 @@ class SimplePassManager : public InstRO::Core::PassManagement::PassManager {
  protected:
 	ConstructSet *elevate(Core::ConstructLevelType inputLevel) {
 		// TODO(CI): Implement Elevation
-		return new ConstructSet();
+		return NULL;
 	}
 	bool isElevationRequired() { return false; };
 	PassEnvelope *getEnvelope(Pass *pass) {
