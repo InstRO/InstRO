@@ -9,8 +9,6 @@ void InstRO::Clang::CygProfileAdapter::init() {}
 void InstRO::Clang::CygProfileAdapter::execute() { executer->execute(this); }
 
 bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *decl) {
-	std::cout << "Executing CygProfileAdapter" << std::endl;
-
 	if (context == nullptr) {
 		std::cerr << "Context NULL, stopping adapter pass." << std::endl;
 		return false;
@@ -28,6 +26,7 @@ bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *de
 			dispatch(decl);
 		}
 	}
+	
 	labelCount++;
 	return true;
 }
@@ -39,16 +38,12 @@ void InstRO::Clang::CygProfileAdapter::releaseOutput() {}
 InstRO::Clang::ClangConstructSet *InstRO::Clang::CygProfileAdapter::getOutput() { return nullptr; }
 
 void InstRO::Clang::CygProfileAdapter::dispatch(clang::Decl *c) {
-	std::cout << "Dispatching" << std::endl;
-	// Depending on the actual type we dispatch the clang::Decl to the correct
-	// transform function
 	clang::CXXMethodDecl *mDef = llvm::dyn_cast<clang::CXXMethodDecl>(c);
 	if (mDef != nullptr) {
 		transform(sm, mDef);
 		return;
 	}
 
-	// This is a function
 	clang::FunctionDecl *fDef = llvm::dyn_cast<clang::FunctionDecl>(c);
 	if (fDef != nullptr) {
 		transform(sm, fDef);
@@ -56,7 +51,6 @@ void InstRO::Clang::CygProfileAdapter::dispatch(clang::Decl *c) {
 }
 
 void InstRO::Clang::CygProfileAdapter::transform(clang::SourceManager *sm, clang::FunctionDecl *decl) {
-	std::cout << "Instance of function decl" << std::endl;
 	// We are assuming we are only instrumenting function definitions!
 	clang::FunctionDecl *fDef = llvm::dyn_cast<clang::FunctionDecl>(decl);
 
@@ -69,11 +63,9 @@ void InstRO::Clang::CygProfileAdapter::transform(clang::SourceManager *sm, clang
 	clang::CompoundStmt *fBody = llvm::dyn_cast<clang::CompoundStmt>(fBodyStmt);
 
 	instrumentFunctionBody(fBody, entryReplaceStr, exitReplaceStr);
-	std::cout << "Transforming declaration" << std::endl;
 }
 
 void InstRO::Clang::CygProfileAdapter::transform(clang::SourceManager *sm, clang::CXXMethodDecl *decl) {
-	std::cout << "Instance of cxxmethod decl" << std::endl;
 	clang::CXXMethodDecl *fDef = llvm::dyn_cast<clang::CXXMethodDecl>(decl);
 
 	std::string entryReplaceStr = generateMethodEntry(fDef);
@@ -85,8 +77,6 @@ void InstRO::Clang::CygProfileAdapter::transform(clang::SourceManager *sm, clang
 	clang::CompoundStmt *fBody = llvm::dyn_cast<clang::CompoundStmt>(fBodyStmt);
 
 	instrumentFunctionBody(fBody, entryReplaceStr, exitReplaceStr);
-
-	std::cout << "Transforming declaration" << std::endl;
 }
 
 void InstRO::Clang::CygProfileAdapter::instrumentFunctionBody(clang::CompoundStmt *body, std::string &entryStr,
@@ -103,12 +93,15 @@ void InstRO::Clang::CygProfileAdapter::instrumentFunctionBody(clang::CompoundStm
 	//	clang::Stmt *startStmt = body;	//*(fBody->body().begin());
 	clang::tooling::Replacement repMent(*sm, body->getLBracLoc(), 1, std::string("{" + entryStr));
 	replacements.insert(repMent);
-	std::cout << "replacement: " << repMent.toString() << std::endl;
 }
 
 void InstRO::Clang::CygProfileAdapter::handleEmptyBody(clang::CompoundStmt *body, std::string &entryStr,
 																											 std::string &exitStr) {
-	std::cout << "Determined size was zero" << std::endl;
+	/*
+	 * If this is an empty body we insert the exit function at the end and replace
+	 * the opening bracket with the opening bracket followed by the function call
+	 * to the measurement function
+	 */
 	replacements.insert(clang::tooling::Replacement(*sm, body->getRBracLoc(), 0, exitStr));
 	replacements.insert(clang::tooling::Replacement(*sm, body->getLBracLoc(), 1, std::string("{" + entryStr)));
 }
@@ -117,12 +110,15 @@ void InstRO::Clang::CygProfileAdapter::instrumentReturnStatements(clang::Compoun
 																																	std::string &exitStr) {
 	for (auto &st : body->body()) {
 		clang::ReturnStmt *rSt = llvm::dyn_cast<clang::ReturnStmt>(st);
-		if (rSt) {
+		if (rSt != nullptr) {
+			/* 
+			 * If an expression other than just a literal or a declaration reference we want to transform
+			 * the return statement, so that we capture the time it takes to evaluate the expression
+			 */
 			if (retStmtNeedsTransformation(rSt)) {
-				// create temporary variable to store the expression hidden in the
-				// return stmt
 				transformReturnStmt(rSt);
 			}
+
 			// instrument return statements
 			replacements.insert(clang::tooling::Replacement(*sm, rSt->getLocStart(), 0, exitStr));
 		} else if (st == body->body_back()) {
@@ -132,17 +128,25 @@ void InstRO::Clang::CygProfileAdapter::instrumentReturnStatements(clang::Compoun
 	}
 }
 void InstRO::Clang::CygProfileAdapter::transformReturnStmt(clang::ReturnStmt *retStmt) {
+	/*
+	 * create temporary variable to store the expression hidden in the return stmt
+ 	 */
 	clang::Expr *e = retStmt->getRetValue();
 	clang::QualType t = e->getType();
+	
+	// clangs style to get the "original string representation" of the expression
 	std::string exprStr;
 	llvm::raw_string_ostream s(exprStr);
 	e->printPretty(s, 0, context->getPrintingPolicy());
+	// ---
+	
 	std::string iVarName(" __instro_" + std::to_string(reinterpret_cast<unsigned long>(this)));
 	std::string tVar(t.getAsString() + iVarName + " = " + s.str() + ";");
 
 	// refer in return statement to newly created variable
 	replacements.insert(clang::tooling::Replacement(*sm, e, iVarName));
 
+	// insert the declaration of the newly created temporary
 	replacements.insert(clang::tooling::Replacement(*sm, retStmt->getLocStart(), 0, tVar));
 }
 
@@ -155,6 +159,10 @@ std::string InstRO::Clang::CygProfileAdapter::generateFunctionExit(clang::Functi
 }
 
 std::string InstRO::Clang::CygProfileAdapter::generateMethodEntry(clang::CXXMethodDecl *d) {
+	/*
+	 * For member function we insert inline assembly since, we are not allowed to take a function pointer
+	 * for member functions
+	 */
 	std::string asmString("__asm__(\"_");
 	asmString += std::to_string(labelCount);
 	asmString +=
@@ -166,6 +174,10 @@ std::string InstRO::Clang::CygProfileAdapter::generateMethodEntry(clang::CXXMeth
 }
 
 std::string InstRO::Clang::CygProfileAdapter::generateMethodExit(clang::CXXMethodDecl *d) {
+	/*
+	 * For member function we insert inline assembly since, we are not allowed to take a function pointer
+	 * for member functions
+	 */
 	std::string asmString("__asm__(\"_");
 	asmString +=
 			"\tmovq %rdi, -8(%rbp)\n\tmovq 8(%rbp), %rax\n\tmovq %rax, %rsi\n\tmovl "
@@ -184,6 +196,7 @@ bool InstRO::Clang::CygProfileAdapter::retStmtNeedsTransformation(clang::ReturnS
 	 * IntegerLiteral
 	 * ImaginaryLiteral
 	 * StringLiteral
+	 * DeclRefExpr
 	 * For all other expression types we need to transform the return statement
 	 */
 	clang::Expr *retExpr = st->getRetValue();
