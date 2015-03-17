@@ -64,16 +64,16 @@ void InstRO::Clang::CygProfileAdapter::transform(clang::SourceManager *sm,
 	std::cout << "Instance of function decl" << std::endl;
 	// We are assuming we are only instrumenting function definitions!
 	clang::FunctionDecl *fDef = llvm::dyn_cast<clang::FunctionDecl>(decl);
-
+	
 	std::string entryReplaceStr = generateFunctionEntry(fDef);
 	std::string exitReplaceStr = generateFunctionExit(fDef);
-
+	
 	clang::Stmt *fBodyStmt = fDef->getBody();
+	
 	// I assume that a function body always is a compound statement
 	clang::CompoundStmt *fBody = llvm::dyn_cast<clang::CompoundStmt>(fBodyStmt);
-
+	
 	instrumentFunctionBody(fBody, entryReplaceStr, exitReplaceStr);
-
 	std::cout << "Transforming declaration" << std::endl;
 }
 
@@ -102,15 +102,15 @@ void InstRO::Clang::CygProfileAdapter::instrumentFunctionBody(
 		handleEmptyBody(body, entryStr, exitStr);
 		return;
 	}
-	// We add the calls to our entry functions
-	clang::Stmt *startStmt = body->body_front();	//*(fBody->body().begin());
-	clang::tooling::Replacement repMent(*sm, startStmt->getLocStart(), 1,
-																			entryStr);
-	replacements.insert(repMent);
-	std::cout << "replacement: " << repMent.toString() << std::endl;
-
 	// we are inserting the exit hooks as well
 	instrumentReturnStatements(body, entryStr, exitStr);
+
+	// We add the calls to our entry functions
+	//	clang::Stmt *startStmt = body;	//*(fBody->body().begin());
+	clang::tooling::Replacement repMent(*sm, body->getLBracLoc(), 1,
+																			std::string("{" + entryStr));
+	replacements.insert(repMent);
+	std::cout << "replacement: " << repMent.toString() << std::endl;
 }
 
 void InstRO::Clang::CygProfileAdapter::handleEmptyBody(
@@ -118,8 +118,8 @@ void InstRO::Clang::CygProfileAdapter::handleEmptyBody(
 	std::cout << "Determined size was zero" << std::endl;
 	replacements.insert(
 			clang::tooling::Replacement(*sm, body->getRBracLoc(), 0, exitStr));
-	replacements.insert(
-			clang::tooling::Replacement(*sm, body->getLBracLoc(), 1, entryStr));
+	replacements.insert(clang::tooling::Replacement(*sm, body->getLBracLoc(), 1,
+																									std::string("{" + entryStr)));
 }
 
 void InstRO::Clang::CygProfileAdapter::instrumentReturnStatements(
@@ -127,6 +127,11 @@ void InstRO::Clang::CygProfileAdapter::instrumentReturnStatements(
 	for (auto &st : body->body()) {
 		clang::ReturnStmt *rSt = llvm::dyn_cast<clang::ReturnStmt>(st);
 		if (rSt) {
+			if (retStmtNeedsTransformation(rSt)) {
+				// create temporary variable to store the expression hidden in the
+				// return stmt
+				transformReturnStmt(rSt);
+			}
 			// instrument return statements
 			replacements.insert(
 					clang::tooling::Replacement(*sm, rSt->getLocStart(), 0, exitStr));
@@ -137,10 +142,27 @@ void InstRO::Clang::CygProfileAdapter::instrumentReturnStatements(
 		}
 	}
 }
+void InstRO::Clang::CygProfileAdapter::transformReturnStmt(
+		clang::ReturnStmt *retStmt) {
+	clang::Expr *e = retStmt->getRetValue();
+	clang::QualType t = e->getType();
+	std::string exprStr;
+	llvm::raw_string_ostream s(exprStr);
+	e->printPretty(s, 0, context->getPrintingPolicy());
+	std::string iVarName(" __instro_" +
+											 std::to_string(reinterpret_cast<unsigned long>(this)));
+	std::string tVar(t.getAsString() + iVarName + " = " + s.str() + ";");
+	
+	// refer in return statement to newly created variable
+	replacements.insert(clang::tooling::Replacement(*sm, e, iVarName));
+
+	replacements.insert(
+			clang::tooling::Replacement(*sm, retStmt->getLocStart(), 0, tVar));
+}
 
 std::string InstRO::Clang::CygProfileAdapter::generateFunctionEntry(
 		clang::FunctionDecl *d) {
-	return std::string("{__cyg_profile_func_enter((void*) " +
+	return std::string("__cyg_profile_func_enter((void*) " +
 										 d->getNameInfo().getName().getAsString() + ", 0);");
 }
 
@@ -152,7 +174,7 @@ std::string InstRO::Clang::CygProfileAdapter::generateFunctionExit(
 
 std::string InstRO::Clang::CygProfileAdapter::generateMethodEntry(
 		clang::CXXMethodDecl *d) {
-	std::string asmString("{__asm__(\"_");
+	std::string asmString("__asm__(\"_");
 	asmString += std::to_string(labelCount);
 	asmString +=
 			"Laf:\n\tmovq %rdi, -8(%rbp)\n\tmovq 8(%rbp), %rax\n\tmovq %rax, "
@@ -173,3 +195,34 @@ std::string InstRO::Clang::CygProfileAdapter::generateMethodExit(
 	return asmString;
 }
 
+bool InstRO::Clang::CygProfileAdapter::retStmtNeedsTransformation(
+		clang::ReturnStmt *st) {
+	/*
+	 * We want to check whether the expression within the Return statement is of
+	 * type
+	 * CXXBoolLiteralExpr,
+	 * FloatingLiteral
+	 * IntegerLiteral
+	 * ImaginaryLiteral
+	 * StringLiteral
+	 * For all other expression types we need to transform the return statement
+	 */
+	clang::Expr *retExpr = st->getRetValue();
+	if (llvm::dyn_cast<clang::CXXBoolLiteralExpr>(retExpr) != nullptr) {
+		return false;
+	}
+	if (llvm::dyn_cast<clang::FloatingLiteral>(retExpr) != nullptr) {
+		return false;
+	}
+	if (llvm::dyn_cast<clang::IntegerLiteral>(retExpr) != nullptr) {
+		return false;
+	}
+	if (llvm::dyn_cast<clang::ImaginaryLiteral>(retExpr) != nullptr) {
+		return false;
+	}
+	if (llvm::dyn_cast<clang::StringLiteral>(retExpr) != nullptr) {
+		return false;
+	}
+
+	return true;
+}
