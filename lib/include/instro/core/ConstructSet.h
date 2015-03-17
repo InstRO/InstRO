@@ -2,7 +2,9 @@
 #define INSTRO_CORE_CONSTRUCTSET_H 0.1
 
 #include <string>
-#include <list>
+// XXX Why do we want to use list here? I would prefer using vector!
+//#include <list>
+#include <vector>
 
 namespace InstRO {
 
@@ -38,11 +40,18 @@ class ConstructSet {
 	ConstructLevelType getMinConstructLevel() { return ConstructLevelMin; };
 	void setCurrentMinLevel(ConstructLevelType minLevel){};
 	void setCurrentMaxLevel(ConstructLevelType maxLevel){};
-		virtual std::list<Construct*> getConstructs()=0;
+		virtual std::vector<Construct*> getConstructs()=0;
+		/*
+		 * XXX What is the reasoning behind these functions?
+		 * Why do Constructs within a ConstructSet get selected? This is responsibility of a Selector
+		 * The Selector takes one or more sets, evaluates whatever it is configured with and creates
+		 * a new ConstructSet by placing the selected Constructs in the new ConstructSet.
+		 * I don't think we need these two functions!
+		 */
 		virtual void selectConstruct(Construct*)=0;
-		virtual void selectConstructs(std::list<Construct*> constructs);
+		virtual void selectConstructs(std::vector<Construct*> constructs){};
 	protected:
-			ContstructLevelType minimalSupportedLevel,maximalSupportedLevel;
+			ConstructLevelType minimalSupportedLevel,maximalSupportedLevel;
 };
 
 } // End Namespace Core
