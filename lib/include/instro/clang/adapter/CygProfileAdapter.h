@@ -14,37 +14,28 @@
 namespace InstRO {
 namespace Clang {
 
-#if 0
-class CygProfileAdapter : public InstRO::PassImplementation,
-													public InstRO::Clang::Core::ClangAdapterPass,
-													public clang::RecursiveASTVisitor<CygProfileAdapter> {
-#else
 class CygProfileAdapter : public InstRO::Clang::Core::ClangPassImplementation {
-#endif
+ public:
+	CygProfileAdapter(InstRO::Pass *selector, clang::tooling::Replacements &replacements, clang::SourceManager *sm);
 
-public:
-CygProfileAdapter(InstRO::Pass *selector,
-									clang::tooling::Replacements &replacements,
-									clang::SourceManager *sm);
+	bool VisitFunctionDecl(clang::FunctionDecl *decl) override;
 
-bool VisitFunctionDecl(clang::FunctionDecl *decl) override;
+	void init();
 
-void init();
+	void execute();
 
-void execute();
+	void finalize();
 
-void finalize();
+	void releaseOutput();
 
-void releaseOutput();
+	InstRO::Clang::ClangConstructSet *getOutput();
 
-InstRO::Clang::ClangConstructSet *getOutput();
+	void dispatch(clang::Decl *c);
 
-void dispatch(clang::Decl *c);
+	void transform(clang::SourceManager *sm, clang::FunctionDecl *decl);
+	void transform(clang::SourceManager *sm, clang::CXXMethodDecl *decl);
 
-void transform(clang::SourceManager *sm, clang::FunctionDecl *decl);
-void transform(clang::SourceManager *sm, clang::CXXMethodDecl *decl);
-
-protected:
+ protected:
 	std::string generateFunctionEntry(clang::FunctionDecl *d);
 	std::string generateFunctionExit(clang::FunctionDecl *d);
 	std::string generateMethodEntry(clang::CXXMethodDecl *d);
@@ -54,12 +45,13 @@ protected:
 	void instrumentReturnStatements(clang::CompoundStmt *body, std::string &entryStr, std::string &exitStr);
 	bool retStmtNeedsTransformation(clang::ReturnStmt *st);
 	void transformReturnStmt(clang::ReturnStmt *retStmt);
-private:
-Pass *decidingSelector;
-ClangConstructSet cs;
-clang::SourceManager *sm;
-clang::tooling::Replacements &replacements;
-int labelCount;
+
+ private:
+	Pass *decidingSelector;
+	ClangConstructSet cs;
+	clang::SourceManager *sm;
+	clang::tooling::Replacements &replacements;
+	int labelCount;
 };
 
 }	// Clang
