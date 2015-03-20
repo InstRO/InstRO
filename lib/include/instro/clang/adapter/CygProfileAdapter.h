@@ -40,6 +40,7 @@ class CygProfileAdapter : public InstRO::Clang::Core::ClangPassImplementation {
 	std::string generateFunctionExit(clang::FunctionDecl *d);
 	std::string generateMethodEntry(clang::CXXMethodDecl *d);
 	std::string generateMethodExit(clang::CXXMethodDecl *d);
+	bool isOverloadedFunction(clang::FunctionDecl *decl);
 	void instrumentFunctionBody(clang::CompoundStmt *body, std::string &entryStr, std::string &exitStr);
 	void handleEmptyBody(clang::CompoundStmt *body, std::string &entryStr, std::string &exitStr);
 	void instrumentReturnStatements(clang::CompoundStmt *body, std::string &entryStr, std::string &exitStr);
