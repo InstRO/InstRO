@@ -26,7 +26,7 @@ bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *de
 			dispatch(decl);
 		}
 	}
-	
+
 	labelCount++;
 	return true;
 }
@@ -38,14 +38,19 @@ void InstRO::Clang::CygProfileAdapter::releaseOutput() {}
 InstRO::Clang::ClangConstructSet *InstRO::Clang::CygProfileAdapter::getOutput() { return nullptr; }
 
 void InstRO::Clang::CygProfileAdapter::dispatch(clang::Decl *c) {
+	std::cout << "Dispatching..." << std::endl;
 	clang::CXXMethodDecl *mDef = llvm::dyn_cast<clang::CXXMethodDecl>(c);
 	if (mDef != nullptr) {
 		transform(sm, mDef);
 		return;
 	}
 
+	/*
+	 * FIXME This guy still cannot handle overloaded functions
+	 */
 	clang::FunctionDecl *fDef = llvm::dyn_cast<clang::FunctionDecl>(c);
 	if (fDef != nullptr) {
+		// Inside this case we need to check for the overload
 		transform(sm, fDef);
 	}
 }
@@ -53,6 +58,9 @@ void InstRO::Clang::CygProfileAdapter::dispatch(clang::Decl *c) {
 void InstRO::Clang::CygProfileAdapter::transform(clang::SourceManager *sm, clang::FunctionDecl *decl) {
 	// We are assuming we are only instrumenting function definitions!
 	clang::FunctionDecl *fDef = llvm::dyn_cast<clang::FunctionDecl>(decl);
+
+	// Depending on whether the funciton is overloaded we need to generate different strings
+	std::cout << "Trying to query the decl context" << std::endl;
 
 	std::string entryReplaceStr = generateFunctionEntry(fDef);
 	std::string exitReplaceStr = generateFunctionExit(fDef);
@@ -63,6 +71,41 @@ void InstRO::Clang::CygProfileAdapter::transform(clang::SourceManager *sm, clang
 	clang::CompoundStmt *fBody = llvm::dyn_cast<clang::CompoundStmt>(fBodyStmt);
 
 	instrumentFunctionBody(fBody, entryReplaceStr, exitReplaceStr);
+}
+
+bool InstRO::Clang::CygProfileAdapter::isOverloadedFunction(clang::FunctionDecl *decl) {
+	auto funcLookUp = decl->getEnclosingNamespaceContext()->lookup(decl->getNameInfo().getName());
+	int overloadCount = 0;
+	for (auto &res : funcLookUp) {
+		clang::FunctionDecl *testDecl = llvm::dyn_cast<clang::FunctionDecl>(res);
+		if (testDecl != nullptr) {
+			// the found declaration actually is a function declaration
+			if (decl->getDeclName() != testDecl->getDeclName()) {
+//				std::cout << "decl: " << decl->getNameAsString() << " testDecl: " << testDecl->getNameAsString() << std::endl;
+//				std::cout << "Found a different name" << std::endl;
+				continue;
+			}
+			clang::QualType qt = testDecl->getType();
+			const clang::Type *typePtr = qt.getTypePtr();
+			// In clang a function can be of two types
+			const clang::FunctionType *fType = llvm::dyn_cast<clang::FunctionType>(typePtr);
+			if (fType != nullptr) {
+				clang::QualType dqt = decl->getType();
+				const clang::Type *dtypePtr = dqt.getTypePtr();
+				const clang::FunctionType *dfType = llvm::dyn_cast<clang::FunctionType>(dtypePtr);
+				if (dfType && fType == dfType) {
+//					std::cout << "Function Type pointer were equal." << std::endl;
+				} else {
+//					std::cout << "Function type were different" << std::endl;
+					overloadCount++;
+				}
+			}
+		}
+		if (overloadCount > 0) {
+			std::cout << "The result " << res->getNameAsString() << " was an overload" << std::endl;
+		}
+	}
+	return (overloadCount > 0);
 }
 
 void InstRO::Clang::CygProfileAdapter::transform(clang::SourceManager *sm, clang::CXXMethodDecl *decl) {
@@ -111,7 +154,7 @@ void InstRO::Clang::CygProfileAdapter::instrumentReturnStatements(clang::Compoun
 	for (auto &st : body->body()) {
 		clang::ReturnStmt *rSt = llvm::dyn_cast<clang::ReturnStmt>(st);
 		if (rSt != nullptr) {
-			/* 
+			/*
 			 * If an expression other than just a literal or a declaration reference we want to transform
 			 * the return statement, so that we capture the time it takes to evaluate the expression
 			 */
@@ -130,16 +173,16 @@ void InstRO::Clang::CygProfileAdapter::instrumentReturnStatements(clang::Compoun
 void InstRO::Clang::CygProfileAdapter::transformReturnStmt(clang::ReturnStmt *retStmt) {
 	/*
 	 * create temporary variable to store the expression hidden in the return stmt
- 	 */
+	 */
 	clang::Expr *e = retStmt->getRetValue();
 	clang::QualType t = e->getType();
-	
+
 	// clangs style to get the "original string representation" of the expression
 	std::string exprStr;
 	llvm::raw_string_ostream s(exprStr);
 	e->printPretty(s, 0, context->getPrintingPolicy());
 	// ---
-	
+
 	std::string iVarName(" __instro_" + std::to_string(reinterpret_cast<unsigned long>(this)));
 	std::string tVar(t.getAsString() + iVarName + " = " + s.str() + ";");
 
