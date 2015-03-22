@@ -37,8 +37,7 @@ class PassManager;
 }
 
 // Make it a sane world
-class Pass : public InstRO::Core::PassConstructSetManagement,
-						 public InstRO::Core::ConstructLevelManagrment {
+class Pass : public InstRO::Core::PassConstructSetManagement, public InstRO::Core::ConstructLevelManagrment {
  public:
 	Pass() = delete;
 	Pass(PassImplementation *pImpl)
@@ -81,24 +80,19 @@ class Pass : public InstRO::Core::PassConstructSetManagement,
 	virtual std::string passName() { return passNameString; };
 	void setPassName(std::string passName) { passNameString = passName; };
 
- public:
 	void setOutputLevel(Core::ConstructLevelType level) { outputLevel = level; };
 	Core::ConstructLevelType getOutputLevel() { return outputLevel; };
-	
+
 	void registerInputPass(Pass *pass, Core::ConstructLevelType level) {
 		inputPasses.push_back(pass);
 		setInputLevelRequirement(pass, level);
 	}
-	
-	std::vector<Pass *> getInputPasses() { return inputPasses; };
-	
-	void setInputLevelRequirement(Pass *pass, Core::ConstructLevelType level) {
-		inputRequiredLevels[pass] = level;
-	}
 
-	Core::ConstructLevelType getInputLevelRequirement(Pass *pass) {
-		return inputRequiredLevels[pass];
-	};
+	std::vector<Pass *> getInputPasses() { return inputPasses; };
+
+	void setInputLevelRequirement(Pass *pass, Core::ConstructLevelType level) { inputRequiredLevels[pass] = level; }
+
+	Core::ConstructLevelType getInputLevelRequirement(Pass *pass) { return inputRequiredLevels[pass]; };
 
  private:
 	bool passRequiresInputFlag, passProvidesOutputFlag;

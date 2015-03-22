@@ -19,7 +19,7 @@ bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *de
 	// since we are in a Clang Adapter, we cast. I KNOW THIS IS UGLY
 	InstRO::Core::ConstructSet *c = getInput(decidingSelector);
 	cs = *(reinterpret_cast<InstRO::Clang::ClangConstructSet *>(c));
-	
+
 	for (auto &construct : cs.getConstructSet()) {
 		if (InstRO::Clang::getAsDecl(construct) == decl) {
 			// the function declaration we are visitting has actually been selected
@@ -195,7 +195,7 @@ void InstRO::Clang::CygProfileAdapter::transformReturnStmt(clang::ReturnStmt *re
 }
 
 std::string InstRO::Clang::CygProfileAdapter::generateFunctionEntry(clang::FunctionDecl *d) {
-	if(isOverloadedFunction(d)){
+	if (isOverloadedFunction(d)) {
 		std::string declStr = generateFunctionPointerDecl(cygProfFuncPtrName, d);
 		std::string callStr = generateCallTo("enter", cygProfFuncPtrName);
 		return std::string(declStr + callStr);
@@ -205,7 +205,7 @@ std::string InstRO::Clang::CygProfileAdapter::generateFunctionEntry(clang::Funct
 }
 
 std::string InstRO::Clang::CygProfileAdapter::generateFunctionExit(clang::FunctionDecl *d) {
-	if(isOverloadedFunction(d)){
+	if (isOverloadedFunction(d)) {
 		return generateCallTo("exit", cygProfFuncPtrName);
 	} else {
 		return generateCallTo("exit", d);

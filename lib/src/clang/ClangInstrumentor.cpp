@@ -17,8 +17,8 @@ InstRO::Clang::ClangInstrumentor::ClangInstrumentor(int argc, const char** argv,
 
 InstRO::Core::PassFactory* ::InstRO::Clang::ClangInstrumentor::getFactory(CompilationPhase phase) {
 	if (fac == nullptr) {
-		std::unique_ptr<InstRO::Clang::PassFactory> t(
-				new InstRO::Clang::PassFactory(getPassManager(), tool.getReplacements(), &visitingExecuter, &nonVisitingExecuter));
+		std::unique_ptr<InstRO::Clang::PassFactory> t(new InstRO::Clang::PassFactory(
+				getPassManager(), tool.getReplacements(), &visitingExecuter, &nonVisitingExecuter));
 		fac = std::move(t);
 	}
 	return fac.get();

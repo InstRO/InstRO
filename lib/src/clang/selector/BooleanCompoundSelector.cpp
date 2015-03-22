@@ -1,7 +1,7 @@
 #include "instro/clang/selector/BooleanCompoundSelector.h"
 
-InstRO::Clang::BooleanCompoundSelector::BooleanCompoundSelector(
-		InstRO::Pass *inA, InstRO::Pass *inB, InstRO::Clang::BooleanCompoundSelector::op_t operation)
+InstRO::Clang::BooleanCompoundSelector::BooleanCompoundSelector(InstRO::Pass *inA, InstRO::Pass *inB,
+																																InstRO::Clang::BooleanCompoundSelector::op_t operation)
 		: inA(inA), inB(inB), operation(operation) {}
 
 void InstRO::Clang::BooleanCompoundSelector::init() {}
@@ -9,13 +9,11 @@ void InstRO::Clang::BooleanCompoundSelector::execute() {
 	auto setA = getInput(inA);
 	auto setB = getInput(inB);
 
-	InstRO::Clang::ClangConstructSet *ccsA =
-			reinterpret_cast<InstRO::Clang::ClangConstructSet *>(setA);
-	InstRO::Clang::ClangConstructSet *ccsB =
-			reinterpret_cast<InstRO::Clang::ClangConstructSet *>(setB);
+	InstRO::Clang::ClangConstructSet *ccsA = reinterpret_cast<InstRO::Clang::ClangConstructSet *>(setA);
+	InstRO::Clang::ClangConstructSet *ccsB = reinterpret_cast<InstRO::Clang::ClangConstructSet *>(setB);
 
 	// evaluate a boolean predicate
-	switch (operation){
+	switch (operation) {
 		case AND:
 			doAnd(*ccsA, *ccsB);
 			break;
@@ -31,11 +29,10 @@ void InstRO::Clang::BooleanCompoundSelector::execute() {
 	}
 }
 
-bool InstRO::Clang::BooleanCompoundSelector::VisitFunctionDecl(clang::FunctionDecl *d){}
+bool InstRO::Clang::BooleanCompoundSelector::VisitFunctionDecl(clang::FunctionDecl *d) {}
 
-void InstRO::Clang::BooleanCompoundSelector::doOr(
-		InstRO::Clang::ClangConstructSet &a, InstRO::Clang::ClangConstructSet &b) {
-	
+void InstRO::Clang::BooleanCompoundSelector::doOr(InstRO::Clang::ClangConstructSet &a,
+																									InstRO::Clang::ClangConstructSet &b) {
 	std::cout << "BooleanCompoundSelector doOr, input A:\n";
 	InstRO::Clang::print(std::cout, &a);
 	std::cout << "BooleanCompoundSelector doOr, input B:\n";
@@ -52,8 +49,8 @@ void InstRO::Clang::BooleanCompoundSelector::doOr(
 	InstRO::Clang::print(std::cout, &cs);
 }
 
-void InstRO::Clang::BooleanCompoundSelector::doAnd(
-		InstRO::Clang::ClangConstructSet &a, InstRO::Clang::ClangConstructSet &b) {
+void InstRO::Clang::BooleanCompoundSelector::doAnd(InstRO::Clang::ClangConstructSet &a,
+																									 InstRO::Clang::ClangConstructSet &b) {
 	// I am pretty sure this can be improved.
 	// the problem is, that ClangConstruct wraps around Decl, Stmt or Type. So I
 	// am not sure whether we can use stl algorithms to do the actual operation.
@@ -71,8 +68,5 @@ void InstRO::Clang::BooleanCompoundSelector::doAnd(
 
 void InstRO::Clang::BooleanCompoundSelector::finalize() {}
 void InstRO::Clang::BooleanCompoundSelector::releaseOutput() {}
-InstRO::Clang::ClangConstructSet *
-InstRO::Clang::BooleanCompoundSelector::getOutput() {
-	return &cs;
-}
+InstRO::Clang::ClangConstructSet *InstRO::Clang::BooleanCompoundSelector::getOutput() { return &cs; }
 
