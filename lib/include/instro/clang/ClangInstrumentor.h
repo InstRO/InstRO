@@ -49,6 +49,7 @@
 		clang::tooling::RefactoringTool tool;
 		std::unique_ptr<InstRO::Clang::PassFactory> fac;
 		InstRO::Clang::Core::PassManagement::VisitingClangPassExecuter visitingExecuter;
+		InstRO::Clang::Core::PassManagement::NonVisitingClangPassExecuter nonVisitingExecuter;
 	};
 	}	// Clang
 }	// INstRO

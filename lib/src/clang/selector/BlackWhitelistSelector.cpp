@@ -25,7 +25,7 @@ bool InstRO::Clang::BlackWhitelistSelector::VisitFunctionDecl(
 			// This is "picker prefer whitelist"
 			if ((isOnList(decl->getNameInfo().getAsString(), whitelist)) ||
 					(!isOnList(decl->getNameInfo().getAsString(), blacklist))) {
-				std::cout << "Selecting node" << std::endl;
+				std::cout << "BW Selector: Selecting node" << std::endl;
 				// select node
 				cs.put(decl);
 			}
@@ -44,7 +44,9 @@ void InstRO::Clang::BlackWhitelistSelector::readFilterFile(
 
 void InstRO::Clang::BlackWhitelistSelector::init() {}
 
-void InstRO::Clang::BlackWhitelistSelector::execute() {}
+void InstRO::Clang::BlackWhitelistSelector::execute() {
+	executer->execute(this);
+}
 
 void InstRO::Clang::BlackWhitelistSelector::finalize() {}
 

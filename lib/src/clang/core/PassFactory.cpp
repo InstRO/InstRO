@@ -3,7 +3,7 @@
 InstRO::Pass* InstRO::Clang::PassFactory::createBlackAndWhiteListSelector(
 		std::vector<std::string> blacklist, std::vector<std::string> whitelist) {
 	InstRO::Clang::Core::ClangPassImplementation *pImpl = new InstRO::Clang::BlackWhitelistSelector(blacklist, whitelist);
-	pImpl->setPassExecuter(executer);
+	pImpl->setPassExecuter(vExecuter);
 	InstRO::Pass *p = new InstRO::Pass(pImpl);
 	p->setRequiresInput(false);
 	p->setProvidesOutput(true);
@@ -16,7 +16,7 @@ InstRO::Pass* InstRO::Clang::PassFactory::createBlackAndWhiteListSelector(
 InstRO::Pass* InstRO::Clang::PassFactory::createBooleanOrSelector(
 		InstRO::Pass* inputA, InstRO::Pass* inputB) {
 	InstRO::Clang::Core::ClangPassImplementation *pImpl = new InstRO::Clang::BooleanCompoundSelector(inputA, inputB, InstRO::Clang::BooleanCompoundSelector::OR);
-	pImpl->setPassExecuter(executer);
+	pImpl->setPassExecuter(nvExecuter);
 	InstRO::Pass *p = new InstRO::Pass(pImpl);
 	p->setRequiresInput(true);
 	p->setProvidesOutput(true);
@@ -28,7 +28,7 @@ InstRO::Pass* InstRO::Clang::PassFactory::createBooleanOrSelector(
 
 InstRO::Pass* InstRO::Clang::PassFactory::createFunctionDefinitionSelector() {
 	InstRO::Clang::Core::ClangPassImplementation *pImpl = new InstRO::Clang::FunctionDefinitionSelector();
-	pImpl->setPassExecuter(executer);
+	pImpl->setPassExecuter(vExecuter);
 	InstRO::Pass *p = new InstRO::Pass(pImpl);
 	p->setRequiresInput(false);
 	p->setProvidesOutput(true);
@@ -41,7 +41,7 @@ InstRO::Pass* InstRO::Clang::PassFactory::createFunctionDefinitionSelector() {
 InstRO::Pass* InstRO::Clang::PassFactory::createCygProfileAdapter(
 		InstRO::Pass* input) {
 	InstRO::Clang::Core::ClangPassImplementation *pImpl = new InstRO::Clang::CygProfileAdapter(input, replacements, NULL);
-	pImpl->setPassExecuter(executer);
+	pImpl->setPassExecuter(vExecuter);
 	InstRO::Pass *p = new InstRO::Pass(pImpl);
 	p->setRequiresInput(true);
 	p->setProvidesOutput(false);

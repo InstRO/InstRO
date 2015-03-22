@@ -30,11 +30,11 @@ void InstRO::Clang::Core::PassManagement::VisitingClangPassExecuter::execute(Ins
 	//	pImpl->execute();
 }
 
-InstRO::Clang::Core::PassManagement::ClangNonVisitingPassExecuter::ClangNonVisitingPassExecuter(
+InstRO::Clang::Core::PassManagement::NonVisitingClangPassExecuter::NonVisitingClangPassExecuter(
 		clang::ASTContext *context)
 		: InstRO::Clang::Core::PassManagement::ClangPassExecuter(context) {}
 
-void InstRO::Clang::Core::PassManagement::ClangNonVisitingPassExecuter::execute(InstRO::PassImplementation *pass) {
+void InstRO::Clang::Core::PassManagement::NonVisitingClangPassExecuter::execute(InstRO::PassImplementation *pass) {
 	/*	if (llvm::dyn_cast<InstRO::Clang::Core::ClangPassImplementation>(pass) != nullptr) {
 			std::cout << "Got an instance of ClangPassImplementation" << std::endl;
 			InstRO::Clang::Core::ClangPassImplementation *pImpl =
