@@ -28,7 +28,6 @@ namespace PassManagement {
 class PassManager;
 }	// PassManagement
 
-
 class Instrumentor {
  public:
 	typedef enum CompilationPhase {
@@ -46,14 +45,11 @@ class Instrumentor {
 		passManagerLocked = false;
 		setPassManager(new InstRO::PassManagement::SimplePassManager());
 	}
-	virtual InstRO::Core::PassFactory* getFactory(
-			CompilationPhase phase = frontend) = 0;
-	virtual InstRO::PassManagement::PassManager* getPassManager() {
-		return passManager;
-	}
+	virtual InstRO::Core::PassFactory* getFactory(CompilationPhase phase = frontend) = 0;
+	virtual InstRO::PassManagement::PassManager* getPassManager() { return passManager; }
 	void setPassManager(InstRO::PassManagement::PassManager* manager) {
 		if (passManagerLocked)
-//			throw std::string("PassManager already in use and locked");
+			//			throw std::string("PassManager already in use and locked");
 			std::cerr << "PassManager already in use and locked" << std::endl;
 		else {
 			passManager = manager;
