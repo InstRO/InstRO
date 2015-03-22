@@ -35,12 +35,21 @@ bool InstRO::Clang::BooleanCompoundSelector::VisitFunctionDecl(clang::FunctionDe
 
 void InstRO::Clang::BooleanCompoundSelector::doOr(
 		InstRO::Clang::ClangConstructSet &a, InstRO::Clang::ClangConstructSet &b) {
+	
+	std::cout << "BooleanCompoundSelector doOr, input A:\n";
+	InstRO::Clang::print(std::cout, &a);
+	std::cout << "BooleanCompoundSelector doOr, input B:\n";
+	InstRO::Clang::print(std::cout, &b);
+
 	for (auto c : a.getConstructSet()) {
 		cs.put(InstRO::Clang::getAsDecl(c));
 	}
 	for (auto c : b.getConstructSet()) {
 		cs.put(InstRO::Clang::getAsDecl(c));
 	}
+
+	std::cout << "BooleanCompoundSelector doOr, output:\n";
+	InstRO::Clang::print(std::cout, &cs);
 }
 
 void InstRO::Clang::BooleanCompoundSelector::doAnd(

@@ -19,6 +19,8 @@ InstRO::Pass* InstRO::Clang::PassFactory::createBooleanOrSelector(
 	pImpl->setPassExecuter(nvExecuter);
 	InstRO::Pass *p = new InstRO::Pass(pImpl);
 	p->setRequiresInput(true);
+	p->registerInputPass(inputA, inputA->getOutputLevel());
+	p->registerInputPass(inputB, inputB->getOutputLevel());
 	p->setProvidesOutput(true);
 	p->setPassName("Boolean OR Selector");
 	p->setOutputLevel(InstRO::Core::ConstructLevelType::ConstructLevelStatement);
@@ -44,6 +46,7 @@ InstRO::Pass* InstRO::Clang::PassFactory::createCygProfileAdapter(
 	pImpl->setPassExecuter(vExecuter);
 	InstRO::Pass *p = new InstRO::Pass(pImpl);
 	p->setRequiresInput(true);
+	p->registerInputPass(input, input->getOutputLevel());
 	p->setProvidesOutput(false);
 	p->setPassName(std::string("CygProfile Adapter"));
 	p->registerInputPass(input, InstRO::Core::ConstructLevelType::ConstructLevelStatement);

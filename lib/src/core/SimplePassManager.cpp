@@ -58,6 +58,7 @@ int InstRO::Core::PassManagement::SimplePassManager::execute() {
 			// implementation. This entity encapsulates the Construct sets for all the
 			// predeccor Passes. So the PassManager sets the according construct sets
 			// inside the input aggregation.
+			std::cout << "Key in ConstructSetOverride map " << i << std::endl;
 			mymap[i] = i->getPassImplementation()->getOutput();
 		}
 		InstRO::Core::Support::InputAggregation ia(mymap);
@@ -79,7 +80,7 @@ int InstRO::Core::PassManagement::SimplePassManager::execute() {
 
 		// 3rd: Execute the pass (using delegate, since the delegate know what to do
 		// exactly)
-		std::cout << "now invoking executePass" << std::endl;
+//		std::cout << "now invoking executePass" << std::endl;
 		passEnvelope->pass->executePass();
 
 		// 4th: Tell the pass to finalize. It is supposed to release memory, close
