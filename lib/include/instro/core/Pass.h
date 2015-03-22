@@ -54,7 +54,7 @@ class Pass : public InstRO::Core::PassConstructSetManagement, public InstRO::Cor
 	}
 	void initPass();
 	void executePass();
-	void execute(InstRO::Core::PassManagement::PassExecuter *executer);
+	void execute(InstRO::PassManagement::PassExecuter *executer);
 	void finalizePass();
 	void releaseOutput();
 	// CI: Enable Input is called externally to indicate, that  the input passes

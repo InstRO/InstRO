@@ -24,11 +24,11 @@
 #include "instro/core/PassFactory.h"
 
 namespace InstRO {
-namespace Core {
 namespace PassManagement {
 class PassManager;
 }	// PassManagement
-}	// Core
+
+
 class Instrumentor {
  public:
 	typedef enum CompilationPhase {
@@ -44,14 +44,14 @@ class Instrumentor {
  public:
 	Instrumentor() {
 		passManagerLocked = false;
-		setPassManager(new InstRO::Core::PassManagement::SimplePassManager());
+		setPassManager(new InstRO::PassManagement::SimplePassManager());
 	}
-	virtual ::InstRO::Core::PassFactory* getFactory(
+	virtual InstRO::Core::PassFactory* getFactory(
 			CompilationPhase phase = frontend) = 0;
-	virtual InstRO::Core::PassManagement::PassManager* getPassManager() {
+	virtual InstRO::PassManagement::PassManager* getPassManager() {
 		return passManager;
 	}
-	void setPassManager(::InstRO::Core::PassManagement::PassManager* manager) {
+	void setPassManager(InstRO::PassManagement::PassManager* manager) {
 		if (passManagerLocked)
 //			throw std::string("PassManager already in use and locked");
 			std::cerr << "PassManager already in use and locked" << std::endl;
@@ -62,7 +62,7 @@ class Instrumentor {
 
  protected:
 	bool passManagerLocked;
-	InstRO::Core::PassManagement::PassManager* passManager;
+	InstRO::PassManagement::PassManager* passManager;
 
  public:
 	virtual void init() = 0;

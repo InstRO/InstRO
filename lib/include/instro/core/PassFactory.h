@@ -22,10 +22,10 @@
 
 namespace InstRO {
 class Pass;
-namespace Core {
 namespace PassManagement {
 class PassManager;
 }
+namespace Core {
 /* PassFactory: Interface for the mandatory InstRO Passes. */
 class PassFactory {
  public:

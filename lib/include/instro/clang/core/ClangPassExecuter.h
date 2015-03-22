@@ -13,10 +13,9 @@
 
 namespace InstRO {
 namespace Clang {
-namespace Core {
 namespace PassManagement {
 
-class ClangPassExecuter : public InstRO::Core::PassManagement::PassExecuter {
+class ClangPassExecuter : public InstRO::PassManagement::PassExecuter {
  public:
 	ClangPassExecuter(clang::ASTContext *context);
 	void setASTContext(clang::ASTContext *context);
@@ -35,7 +34,7 @@ class ClangPassExecuter : public InstRO::Core::PassManagement::PassExecuter {
  * It first sets the ASTContext in those classes. It then invokes the traversal
  * mechanism.
  */
-class VisitingClangPassExecuter : public InstRO::Clang::Core::PassManagement::ClangPassExecuter {
+class VisitingClangPassExecuter : public InstRO::Clang::PassManagement::ClangPassExecuter {
  public:
 	VisitingClangPassExecuter(clang::ASTContext *context);
 	/**
@@ -50,14 +49,13 @@ class VisitingClangPassExecuter : public InstRO::Clang::Core::PassManagement::Cl
 	int counter;
 };
 
-class NonVisitingClangPassExecuter : public InstRO::Clang::Core::PassManagement::ClangPassExecuter {
+class NonVisitingClangPassExecuter : public InstRO::Clang::PassManagement::ClangPassExecuter {
  public:
 	NonVisitingClangPassExecuter(clang::ASTContext *context);
 	void execute(InstRO::PassImplementation *pass) override;
 };
 
 }	// PassManagement
-}	// COre
 }	// Clang
 }	// IsntRO
 

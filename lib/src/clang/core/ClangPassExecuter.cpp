@@ -1,18 +1,18 @@
 #include "instro/clang/core/ClangPassExecuter.h"
 
-InstRO::Clang::Core::PassManagement::ClangPassExecuter::ClangPassExecuter(clang::ASTContext *context)
+InstRO::Clang::PassManagement::ClangPassExecuter::ClangPassExecuter(clang::ASTContext *context)
 		: context(context) {}
 
-void InstRO::Clang::Core::PassManagement::ClangPassExecuter::setASTContext(clang::ASTContext *context) {
+void InstRO::Clang::PassManagement::ClangPassExecuter::setASTContext(clang::ASTContext *context) {
 	this->context = context;
 }
 
-InstRO::Clang::Core::PassManagement::VisitingClangPassExecuter::VisitingClangPassExecuter(clang::ASTContext *context)
-		: InstRO::Clang::Core::PassManagement::ClangPassExecuter(context) {
+InstRO::Clang::PassManagement::VisitingClangPassExecuter::VisitingClangPassExecuter(clang::ASTContext *context)
+		: InstRO::Clang::PassManagement::ClangPassExecuter(context) {
 	std::cout << "Creating new VisitingPassExecuter object @" << this << std::endl;
 }
 
-void InstRO::Clang::Core::PassManagement::VisitingClangPassExecuter::execute(InstRO::PassImplementation *pass) {
+void InstRO::Clang::PassManagement::VisitingClangPassExecuter::execute(InstRO::PassImplementation *pass) {
 	std::cout << "Executing pass " << pass << " with VisitingClangPassExecuter" << std::endl;
 	// We are inside the Clang Pass Executer. So cast it!
 	// FIXME while this is somewhat "reasonable" it still is a cast, which I don't
@@ -31,11 +31,11 @@ void InstRO::Clang::Core::PassManagement::VisitingClangPassExecuter::execute(Ins
 	//	pImpl->execute();
 }
 
-InstRO::Clang::Core::PassManagement::NonVisitingClangPassExecuter::NonVisitingClangPassExecuter(
+InstRO::Clang::PassManagement::NonVisitingClangPassExecuter::NonVisitingClangPassExecuter(
 		clang::ASTContext *context)
-		: InstRO::Clang::Core::PassManagement::ClangPassExecuter(context) {}
+		: InstRO::Clang::PassManagement::ClangPassExecuter(context) {}
 
-void InstRO::Clang::Core::PassManagement::NonVisitingClangPassExecuter::execute(InstRO::PassImplementation *pass) {
+void InstRO::Clang::PassManagement::NonVisitingClangPassExecuter::execute(InstRO::PassImplementation *pass) {
 	/*	if (llvm::dyn_cast<InstRO::Clang::Core::ClangPassImplementation>(pass) != nullptr) {
 			std::cout << "Got an instance of ClangPassImplementation" << std::endl;
 			InstRO::Clang::Core::ClangPassImplementation *pImpl =

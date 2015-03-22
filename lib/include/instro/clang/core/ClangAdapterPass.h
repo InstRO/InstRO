@@ -11,10 +11,11 @@
 
 namespace InstRO {
 namespace Clang {
-namespace Core {
 namespace PassManagement{
 	class ClangPassExecuter;
 }
+
+namespace Core {
 /*
  * This is to have a common base class for all passes which require information
  * from the ASTContext
@@ -30,7 +31,7 @@ class ClangPassImplementation
 
 	void execute() override;
 
-	void setPassExecuter(InstRO::Clang::Core::PassManagement::ClangPassExecuter *executer){
+	void setPassExecuter(InstRO::Clang::PassManagement::ClangPassExecuter *executer){
 		this->executer = executer;
 	}
 
@@ -38,11 +39,10 @@ class ClangPassImplementation
 
  protected:
 	clang::ASTContext *context;
-	InstRO::Clang::Core::PassManagement::ClangPassExecuter *executer;
+	InstRO::Clang::PassManagement::ClangPassExecuter *executer;
 };
 
 }
 }
 }
-
 #endif
