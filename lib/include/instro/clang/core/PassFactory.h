@@ -11,6 +11,7 @@
  */
 #include "instro/clang/selector/FunctionDefinitionSelector.h"
 #include "instro/clang/selector/BlackWhitelistSelector.h"
+#include "instro/clang/selector/BooleanCompoundSelector.h"
 
 #include "instro/clang/adapter/CygProfileAdapter.h"
 

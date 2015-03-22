@@ -1,8 +1,8 @@
 #include "instro/clang/selector/BooleanCompoundSelector.h"
 
 InstRO::Clang::BooleanCompoundSelector::BooleanCompoundSelector(
-		InstRO::Pass *inA, InstRO::Pass *inB)
-		: inA(inA), inB(inB) {}
+		InstRO::Pass *inA, InstRO::Pass *inB, InstRO::Clang::BooleanCompoundSelector::op_t operation)
+		: inA(inA), inB(inB), operation(operation) {}
 
 void InstRO::Clang::BooleanCompoundSelector::init() {}
 void InstRO::Clang::BooleanCompoundSelector::execute() {
@@ -15,7 +15,23 @@ void InstRO::Clang::BooleanCompoundSelector::execute() {
 			reinterpret_cast<InstRO::Clang::ClangConstructSet *>(setB);
 
 	// evaluate a boolean predicate
+	switch (operation){
+		case AND:
+			doAnd(*ccsA, *ccsB);
+			break;
+		case OR:
+			doOr(*ccsA, *ccsB);
+			break;
+		case NOT:
+			std::cerr << "What is the intention of a NOT on two sets?" << std::endl;
+			break;
+		default:
+			std::cerr << "This should never be reached" << std::endl;
+			exit(-1);
+	}
 }
+
+bool InstRO::Clang::BooleanCompoundSelector::VisitFunctionDecl(clang::FunctionDecl *d){}
 
 void InstRO::Clang::BooleanCompoundSelector::doOr(
 		InstRO::Clang::ClangConstructSet &a, InstRO::Clang::ClangConstructSet &b) {
@@ -47,5 +63,7 @@ void InstRO::Clang::BooleanCompoundSelector::doAnd(
 void InstRO::Clang::BooleanCompoundSelector::finalize() {}
 void InstRO::Clang::BooleanCompoundSelector::releaseOutput() {}
 InstRO::Clang::ClangConstructSet *
-InstRO::Clang::BooleanCompoundSelector::getOutput() {}
+InstRO::Clang::BooleanCompoundSelector::getOutput() {
+	return &cs;
+}
 
