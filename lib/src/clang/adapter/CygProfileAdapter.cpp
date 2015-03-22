@@ -2,7 +2,7 @@
 
 InstRO::Clang::CygProfileAdapter::CygProfileAdapter(InstRO::Pass *selector, clang::tooling::Replacements &reps,
 																										clang::SourceManager *sm)
-		: decidingSelector(selector), sm(sm), replacements(reps), labelCount(0) {}
+		: decidingSelector(selector), sm(sm), replacements(reps), labelCount(0), cygProfFuncPtrName("__instro_func_ptr") {}
 
 void InstRO::Clang::CygProfileAdapter::init() {}
 
@@ -81,8 +81,9 @@ bool InstRO::Clang::CygProfileAdapter::isOverloadedFunction(clang::FunctionDecl 
 		if (testDecl != nullptr) {
 			// the found declaration actually is a function declaration
 			if (decl->getDeclName() != testDecl->getDeclName()) {
-//				std::cout << "decl: " << decl->getNameAsString() << " testDecl: " << testDecl->getNameAsString() << std::endl;
-//				std::cout << "Found a different name" << std::endl;
+				//				std::cout << "decl: " << decl->getNameAsString() << " testDecl: " << testDecl->getNameAsString() <<
+				// std::endl;
+				//				std::cout << "Found a different name" << std::endl;
 				continue;
 			}
 			clang::QualType qt = testDecl->getType();
@@ -94,9 +95,9 @@ bool InstRO::Clang::CygProfileAdapter::isOverloadedFunction(clang::FunctionDecl 
 				const clang::Type *dtypePtr = dqt.getTypePtr();
 				const clang::FunctionType *dfType = llvm::dyn_cast<clang::FunctionType>(dtypePtr);
 				if (dfType && fType == dfType) {
-//					std::cout << "Function Type pointer were equal." << std::endl;
+					//					std::cout << "Function Type pointer were equal." << std::endl;
 				} else {
-//					std::cout << "Function type were different" << std::endl;
+					//					std::cout << "Function type were different" << std::endl;
 					overloadCount++;
 				}
 			}
@@ -194,11 +195,64 @@ void InstRO::Clang::CygProfileAdapter::transformReturnStmt(clang::ReturnStmt *re
 }
 
 std::string InstRO::Clang::CygProfileAdapter::generateFunctionEntry(clang::FunctionDecl *d) {
-	return std::string("__cyg_profile_func_enter((void*) " + d->getNameInfo().getName().getAsString() + ", 0);");
+	if(isOverloadedFunction(d)){
+		std::string declStr = generateFunctionPointerDecl(cygProfFuncPtrName, d);
+		std::string callStr = generateCallTo("enter", cygProfFuncPtrName);
+		return std::string(declStr + callStr);
+	} else {
+		return generateCallTo("enter", d);
+	}
 }
 
 std::string InstRO::Clang::CygProfileAdapter::generateFunctionExit(clang::FunctionDecl *d) {
-	return std::string("__cyg_profile_func_exit((void*) " + d->getNameInfo().getName().getAsString() + ", 0);");
+	if(isOverloadedFunction(d)){
+		return generateCallTo("exit", cygProfFuncPtrName);
+	} else {
+		return generateCallTo("exit", d);
+	}
+}
+
+std::string InstRO::Clang::CygProfileAdapter::generateFunctionPointerDecl(std::string declName,
+																																					clang::FunctionDecl *d) {
+	std::string funcRefSnippet("");
+	// we need to create something like
+	// foo_t (* thisFoo) (foo_t1, foo_t2) = foo;
+	funcRefSnippet += d->getReturnType().getAsString();
+	funcRefSnippet += " (* ";
+	funcRefSnippet += declName;
+	funcRefSnippet += ") (";
+	for (int i = 0; i < d->parameters().size() - 1; ++i) {
+		funcRefSnippet += d->getParamDecl(i)->getType().getAsString() + ", ";
+	}
+	funcRefSnippet += d->getParamDecl(d->parameters().size() - 1)->getType().getAsString();
+	funcRefSnippet += ") = ";
+	funcRefSnippet += d->getNameInfo().getName().getAsString();
+	funcRefSnippet += ";";
+	return funcRefSnippet;
+}
+
+std::string InstRO::Clang::CygProfileAdapter::generateCallTo(std::string fName, std::string newDecl) {
+	std::string snippet("__cyg_profile_func_");
+	snippet += fName;
+	snippet += "((void*) ";
+	snippet += newDecl;
+	snippet += " , 0);";
+
+	std::cout << "Cyg Profile call: " << snippet << std::endl;
+
+	return snippet;
+}
+
+std::string InstRO::Clang::CygProfileAdapter::generateCallTo(std::string fName, clang::FunctionDecl *d) {
+	std::string snippet("__cyg_profile_func_");
+	snippet += fName;
+	snippet += "((void*) ";
+	snippet += d->getNameInfo().getName().getAsString();
+	snippet += ", 0);";
+
+	std::cout << "Cyg Profile call: " << snippet << std::endl;
+
+	return snippet;
 }
 
 std::string InstRO::Clang::CygProfileAdapter::generateMethodEntry(clang::CXXMethodDecl *d) {
