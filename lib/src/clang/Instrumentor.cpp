@@ -19,7 +19,8 @@ int main(int argc, char **argv) {
 	std::vector<std::string> bList, wList;
 	wList.push_back("foo");
 	auto bwSel = fac->createBlackAndWhiteListSelector(bList, wList);
-	fac->createCygProfileAdapter(bwSel);
+	auto bcSel = fac->createBooleanOrSelector(fDefSel, bwSel);
+	fac->createCygProfileAdapter(bcSel);
 	instro.apply();
 	std::cout << "End" << std::endl;
 	return 0;

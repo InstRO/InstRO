@@ -84,14 +84,18 @@ class Pass : public InstRO::Core::PassConstructSetManagement,
  public:
 	void setOutputLevel(Core::ConstructLevelType level) { outputLevel = level; };
 	Core::ConstructLevelType getOutputLevel() { return outputLevel; };
+	
 	void registerInputPass(Pass *pass, Core::ConstructLevelType level) {
 		inputPasses.push_back(pass);
 		setInputLevelRequirement(pass, level);
 	}
+	
 	std::vector<Pass *> getInputPasses() { return inputPasses; };
+	
 	void setInputLevelRequirement(Pass *pass, Core::ConstructLevelType level) {
 		inputRequiredLevels[pass] = level;
 	}
+
 	Core::ConstructLevelType getInputLevelRequirement(Pass *pass) {
 		return inputRequiredLevels[pass];
 	};
