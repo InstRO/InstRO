@@ -1,7 +1,7 @@
 #include "instro/clang/core/PassFactory.h"
 
-InstRO::Pass* InstRO::Clang::PassFactory::createBlackAndWhiteListSelector(
-		std::vector<std::string> blacklist, std::vector<std::string> whitelist) {
+InstRO::Pass *InstRO::Clang::PassFactory::createBlackAndWhiteListSelector(std::vector<std::string> blacklist,
+																																					std::vector<std::string> whitelist) {
 	InstRO::Clang::Core::ClangPassImplementation *pImpl = new InstRO::Clang::BlackWhitelistSelector(blacklist, whitelist);
 	pImpl->setPassExecuter(vExecuter);
 	InstRO::Pass *p = new InstRO::Pass(pImpl);
@@ -13,9 +13,9 @@ InstRO::Pass* InstRO::Clang::PassFactory::createBlackAndWhiteListSelector(
 	return p;
 }
 
-InstRO::Pass* InstRO::Clang::PassFactory::createBooleanOrSelector(
-		InstRO::Pass* inputA, InstRO::Pass* inputB) {
-	InstRO::Clang::Core::ClangPassImplementation *pImpl = new InstRO::Clang::BooleanCompoundSelector(inputA, inputB, InstRO::Clang::BooleanCompoundSelector::OR);
+InstRO::Pass *InstRO::Clang::PassFactory::createBooleanOrSelector(InstRO::Pass *inputA, InstRO::Pass *inputB) {
+	InstRO::Clang::Core::ClangPassImplementation *pImpl =
+			new InstRO::Clang::BooleanCompoundSelector(inputA, inputB, InstRO::Clang::BooleanCompoundSelector::OR);
 	pImpl->setPassExecuter(nvExecuter);
 	InstRO::Pass *p = new InstRO::Pass(pImpl);
 	p->setRequiresInput(true);
@@ -28,7 +28,7 @@ InstRO::Pass* InstRO::Clang::PassFactory::createBooleanOrSelector(
 	return p;
 }
 
-InstRO::Pass* InstRO::Clang::PassFactory::createFunctionDefinitionSelector() {
+InstRO::Pass *InstRO::Clang::PassFactory::createFunctionDefinitionSelector() {
 	InstRO::Clang::Core::ClangPassImplementation *pImpl = new InstRO::Clang::FunctionDefinitionSelector();
 	pImpl->setPassExecuter(vExecuter);
 	InstRO::Pass *p = new InstRO::Pass(pImpl);
@@ -40,8 +40,7 @@ InstRO::Pass* InstRO::Clang::PassFactory::createFunctionDefinitionSelector() {
 	return p;
 }
 
-InstRO::Pass* InstRO::Clang::PassFactory::createCygProfileAdapter(
-		InstRO::Pass* input) {
+InstRO::Pass *InstRO::Clang::PassFactory::createCygProfileAdapter(InstRO::Pass *input) {
 	InstRO::Clang::Core::ClangPassImplementation *pImpl = new InstRO::Clang::CygProfileAdapter(input, replacements, NULL);
 	pImpl->setPassExecuter(vExecuter);
 	InstRO::Pass *p = new InstRO::Pass(pImpl);

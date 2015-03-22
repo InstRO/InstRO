@@ -1,7 +1,6 @@
 #include "instro/core/SimplePassManager.h"
 
-void InstRO::Core::PassManagement::SimplePassManager::registerPass(
-		Pass *currentPass) {
+void InstRO::Core::PassManagement::SimplePassManager::registerPass(Pass *currentPass) {
 	// CI: Create a new pass envelope to store the dependencies of this pass.
 	PassEnvelope *newPass = new PassEnvelope(currentPass);
 	std::vector<Pass *> inputs = currentPass->getInputPasses();
@@ -10,18 +9,15 @@ void InstRO::Core::PassManagement::SimplePassManager::registerPass(
 	// for all predecessors inquired the pass dependencies
 	for (auto &i : inputs) {
 		if (i == NULL) continue;
-		Core::ConstructLevelType maxInputLevel =
-				currentPass->getInputLevelRequirement(i);
+		Core::ConstructLevelType maxInputLevel = currentPass->getInputLevelRequirement(i);
 		Core::ConstructLevelType minOutputLevelProvided = i->getOutputLevel();
 		if (minOutputLevelProvided > maxInputLevel)
 #ifdef __EXCEPTIONS
 			// btw this is a memory leak :D (using 'new' above and throwing here.
-			throw std::string("InputPass ") + i->passName() +
-					std::string(" can not provide ConstructLevel \"") +
+			throw std::string("InputPass ") + i->passName() + std::string(" can not provide ConstructLevel \"") +
 					constructLevelToString(maxInputLevel) + std::string("\"");
 #else
-			std::cerr << "InputPass " + i->passName() +
-											 " cannot provide ConstructLevel X" << std::endl;
+			std::cerr << "InputPass " + i->passName() + " cannot provide ConstructLevel X" << std::endl;
 #endif
 		addDependency(i, minOutputLevelProvided, currentPass, maxInputLevel);
 	}
@@ -41,15 +37,12 @@ int InstRO::Core::PassManagement::SimplePassManager::execute() {
 	}
 	for (PassEnvelope *passEnvelope : passList) {
 		std::cout << "Running pass: " << passEnvelope->pass->passName() << std::endl;
-		std::vector<ConstructSet *> tempConstructSets(
-				getPredecessors(passEnvelope).size());
+		std::vector<ConstructSet *> tempConstructSets(getPredecessors(passEnvelope).size());
 		// check if some input needs to be explicitly elevated
 		std::unordered_map<InstRO::Pass *, InstRO::Core::ConstructSet *> mymap;
 		for (auto &i : getPredecessors(passEnvelope)) {
-			if (i->getOutputLevel() <
-					passEnvelope->pass->getInputLevelRequirement(i)) {
-				ConstructSet *newConstructSet =
-						elevate(passEnvelope->pass->getInputLevelRequirement(i));
+			if (i->getOutputLevel() < passEnvelope->pass->getInputLevelRequirement(i)) {
+				ConstructSet *newConstructSet = elevate(passEnvelope->pass->getInputLevelRequirement(i));
 				passEnvelope->pass->overrideInput(i, newConstructSet);
 				tempConstructSets.push_back(newConstructSet);
 			}
@@ -80,7 +73,7 @@ int InstRO::Core::PassManagement::SimplePassManager::execute() {
 
 		// 3rd: Execute the pass (using delegate, since the delegate know what to do
 		// exactly)
-//		std::cout << "now invoking executePass" << std::endl;
+		//		std::cout << "now invoking executePass" << std::endl;
 		passEnvelope->pass->executePass();
 
 		// 4th: Tell the pass to finalize. It is supposed to release memory, close

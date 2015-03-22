@@ -1,6 +1,7 @@
 #include "instro/clang/core/ClangPassExecuter.h"
 
-InstRO::Clang::Core::PassManagement::ClangPassExecuter::ClangPassExecuter(clang::ASTContext *context) : context(context) {}
+InstRO::Clang::Core::PassManagement::ClangPassExecuter::ClangPassExecuter(clang::ASTContext *context)
+		: context(context) {}
 
 void InstRO::Clang::Core::PassManagement::ClangPassExecuter::setASTContext(clang::ASTContext *context) {
 	this->context = context;
