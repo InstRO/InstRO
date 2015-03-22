@@ -7,18 +7,18 @@ InstRO::Clang::ClangInstrumentor::ClangInstrumentor(
 		: argc(argc), argv(argv), fac(new ::InstRO::Clang::PassFactory(manager)) {}
 #endif
 
-InstRO::Clang::ClangInstrumentor::ClangInstrumentor(
-		int argc, const char** argv, llvm::cl::OptionCategory& llvmThing)
+InstRO::Clang::ClangInstrumentor::ClangInstrumentor(int argc, const char** argv, llvm::cl::OptionCategory& llvmThing)
 		: argc(argc),
 			argv(argv),
 			cop(argc, argv, llvmThing),
-			tool(cop.getCompilations(), cop.getSourcePathList()), visitingExecuter(nullptr) {}
+			tool(cop.getCompilations(), cop.getSourcePathList()),
+			visitingExecuter(nullptr),
+			nonVisitingExecuter(nullptr) {}
 
-InstRO::Core::PassFactory* ::InstRO::Clang::ClangInstrumentor::getFactory(
-		CompilationPhase phase) {
+InstRO::Core::PassFactory* ::InstRO::Clang::ClangInstrumentor::getFactory(CompilationPhase phase) {
 	if (fac == nullptr) {
 		std::unique_ptr<InstRO::Clang::PassFactory> t(
-				new InstRO::Clang::PassFactory(getPassManager(), tool.getReplacements(), &visitingExecuter));
+				new InstRO::Clang::PassFactory(getPassManager(), tool.getReplacements(), &visitingExecuter, &nonVisitingExecuter));
 		fac = std::move(t);
 	}
 	return fac.get();
@@ -30,10 +30,8 @@ void InstRO::Clang::ClangInstrumentor::init() {}
 
 void InstRO::Clang::ClangInstrumentor::apply() {
 	std::cout << "Preparing to run Clang tool" << std::endl;
-	InstRO::Clang::Support::ClangConsumerFactory f(getPassManager(),
-																								 tool.getReplacements(), &visitingExecuter);
-	tool.runAndSave(clang::tooling::newFrontendActionFactory<
-							 InstRO::Clang::Support::ClangConsumerFactory>(&f).get());
+	InstRO::Clang::Support::ClangConsumerFactory f(getPassManager(), tool.getReplacements(), &visitingExecuter);
+	tool.runAndSave(clang::tooling::newFrontendActionFactory<InstRO::Clang::Support::ClangConsumerFactory>(&f).get());
 }
 
 void InstRO::Clang::ClangInstrumentor::finalize() {}

@@ -50,9 +50,9 @@ class VisitingClangPassExecuter : public InstRO::Clang::Core::PassManagement::Cl
 	int counter;
 };
 
-class ClangNonVisitingPassExecuter : public InstRO::Clang::Core::PassManagement::ClangPassExecuter {
+class NonVisitingClangPassExecuter : public InstRO::Clang::Core::PassManagement::ClangPassExecuter {
  public:
-	ClangNonVisitingPassExecuter(clang::ASTContext *context);
+	NonVisitingClangPassExecuter(clang::ASTContext *context);
 	void execute(InstRO::PassImplementation *pass) override;
 };
 

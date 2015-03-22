@@ -29,8 +29,8 @@ namespace Clang {
 class PassFactory : public InstRO::Core::PassFactory {
  public:
 	PassFactory(InstRO::Core::PassManagement::PassManager* manager,
-							clang::tooling::Replacements& reps, InstRO::Clang::Core::PassManagement::ClangPassExecuter *executer)
-			: InstRO::Core::PassFactory(manager), replacements(reps), executer(executer){};
+							clang::tooling::Replacements& reps, InstRO::Clang::Core::PassManagement::VisitingClangPassExecuter *vExecuter, InstRO::Clang::Core::PassManagement::NonVisitingClangPassExecuter *nvExecuter)
+			: InstRO::Core::PassFactory(manager), replacements(reps), vExecuter(vExecuter), nvExecuter(nvExecuter){};
 	Pass* createBlackAndWhiteListSelector(std::vector<std::string> blacklist,
 																				std::vector<std::string> whitelist);
 	Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
@@ -40,7 +40,8 @@ class PassFactory : public InstRO::Core::PassFactory {
 
  private:
 	clang::tooling::Replacements& replacements;
-	InstRO::Clang::Core::PassManagement::ClangPassExecuter *executer;
+	InstRO::Clang::Core::PassManagement::VisitingClangPassExecuter *vExecuter;
+	InstRO::Clang::Core::PassManagement::NonVisitingClangPassExecuter *nvExecuter;
 };
 }	// Clang
 }	// INstRO

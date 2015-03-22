@@ -17,9 +17,9 @@ int main(int argc, char **argv) {
 	auto fac = instro.getFactory();
 	auto fDefSel = fac->createFunctionDefinitionSelector();
 	std::vector<std::string> bList, wList;
-	wList.push_back("main");
+	wList.push_back("foo");
 	auto bwSel = fac->createBlackAndWhiteListSelector(bList, wList);
-	fac->createCygProfileAdapter(fDefSel);
+	fac->createCygProfileAdapter(bwSel);
 	instro.apply();
 	std::cout << "End" << std::endl;
 	return 0;

@@ -16,6 +16,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <cassert>
 
 #include <vector>
 #include <unordered_map>
