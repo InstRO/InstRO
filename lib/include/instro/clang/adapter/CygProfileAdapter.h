@@ -41,6 +41,9 @@ class CygProfileAdapter : public InstRO::Clang::Core::ClangPassImplementation {
 	std::string generateMethodEntry(clang::CXXMethodDecl *d);
 	std::string generateMethodExit(clang::CXXMethodDecl *d);
 	bool isOverloadedFunction(clang::FunctionDecl *decl);
+	std::string generateFunctionPointerDecl(std::string name, clang::FunctionDecl *d);
+	std::string generateCallTo(std::string fName, std::string newDecl);
+	std::string generateCallTo(std::string fName, clang::FunctionDecl *decl);
 	void instrumentFunctionBody(clang::CompoundStmt *body, std::string &entryStr, std::string &exitStr);
 	void handleEmptyBody(clang::CompoundStmt *body, std::string &entryStr, std::string &exitStr);
 	void instrumentReturnStatements(clang::CompoundStmt *body, std::string &entryStr, std::string &exitStr);
@@ -53,6 +56,7 @@ class CygProfileAdapter : public InstRO::Clang::Core::ClangPassImplementation {
 	clang::SourceManager *sm;
 	clang::tooling::Replacements &replacements;
 	int labelCount;
+	const std::string cygProfFuncPtrName;
 };
 
 }	// Clang
