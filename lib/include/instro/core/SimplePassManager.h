@@ -6,9 +6,8 @@
 #include "instro/core/PassManager.h"
 
 namespace InstRO {
-namespace Core {
 namespace PassManagement {
-class SimplePassManager : public InstRO::Core::PassManagement::PassManager {
+class SimplePassManager : public InstRO::PassManagement::PassManager {
  public:
 	 SimplePassManager(){};
 	// Enable the Pass Manager to query the pass for its dependencies
@@ -32,7 +31,7 @@ class SimplePassManager : public InstRO::Core::PassManagement::PassManager {
 	};
 
  protected:
-	ConstructSet *elevate(Core::ConstructLevelType inputLevel) {
+	InstRO::Core::ConstructSet *elevate(Core::ConstructLevelType inputLevel) {
 		// TODO(CI): Implement Elevation
 		return NULL;
 	}
@@ -57,6 +56,5 @@ class SimplePassManager : public InstRO::Core::PassManagement::PassManager {
 	std::vector<PassEnvelope *> passList;
 };
 }	// PassManagement
-}	// Core
 }	// InstRO
 #endif

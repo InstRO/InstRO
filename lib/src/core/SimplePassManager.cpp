@@ -1,6 +1,6 @@
 #include "instro/core/SimplePassManager.h"
 
-void InstRO::Core::PassManagement::SimplePassManager::registerPass(Pass *currentPass) {
+void InstRO::PassManagement::SimplePassManager::registerPass(Pass *currentPass) {
 	// CI: Create a new pass envelope to store the dependencies of this pass.
 	PassEnvelope *newPass = new PassEnvelope(currentPass);
 	std::vector<Pass *> inputs = currentPass->getInputPasses();
@@ -23,12 +23,12 @@ void InstRO::Core::PassManagement::SimplePassManager::registerPass(Pass *current
 	}
 }
 
-void InstRO::Core::PassManagement::SimplePassManager::setExecuter(
-		InstRO::Core::PassManagement::PassExecuter *executer) {
+void InstRO::PassManagement::SimplePassManager::setExecuter(
+		InstRO::PassManagement::PassExecuter *executer) {
 	this->executer = executer;
 }
 
-int InstRO::Core::PassManagement::SimplePassManager::execute() {
+int InstRO::PassManagement::SimplePassManager::execute() {
 	std::cout << "Running execute in SimplePassManager" << std::endl;
 	for (PassEnvelope *passContainer : passList) {
 		// Allow the Pass to Initialize iself. E.g. start reading input data from
@@ -37,12 +37,12 @@ int InstRO::Core::PassManagement::SimplePassManager::execute() {
 	}
 	for (PassEnvelope *passEnvelope : passList) {
 		std::cout << "Running pass: " << passEnvelope->pass->passName() << std::endl;
-		std::vector<ConstructSet *> tempConstructSets(getPredecessors(passEnvelope).size());
+		std::vector<InstRO::Core::ConstructSet *> tempConstructSets(getPredecessors(passEnvelope).size());
 		// check if some input needs to be explicitly elevated
 		std::unordered_map<InstRO::Pass *, InstRO::Core::ConstructSet *> mymap;
 		for (auto &i : getPredecessors(passEnvelope)) {
 			if (i->getOutputLevel() < passEnvelope->pass->getInputLevelRequirement(i)) {
-				ConstructSet *newConstructSet = elevate(passEnvelope->pass->getInputLevelRequirement(i));
+				InstRO::Core::ConstructSet *newConstructSet = elevate(passEnvelope->pass->getInputLevelRequirement(i));
 				passEnvelope->pass->overrideInput(i, newConstructSet);
 				tempConstructSets.push_back(newConstructSet);
 			}

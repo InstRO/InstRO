@@ -9,6 +9,7 @@
 namespace InstRO {
 namespace Core {
 class ConstructSet;
+}
 
 namespace PassManagement {
 
@@ -53,7 +54,6 @@ class PassManager {
 };
 
 }	// End namespace PassManagement
-}	// Core
 }	// End namespace InstRO
 
 #endif

@@ -25,7 +25,7 @@ void InstRO::Pass::executePass() {
 	passExecuted = true;
 }
 
-void InstRO::Pass::execute(InstRO::Core::PassManagement::PassExecuter *executer) {
+void InstRO::Pass::execute(InstRO::PassManagement::PassExecuter *executer) {
 	assert(false);
 	if (passInitialized)
 		executer->execute(passImplementation);
