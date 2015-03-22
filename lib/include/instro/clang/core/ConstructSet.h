@@ -34,6 +34,9 @@ class ClangConstructSet : public InstRO::Core::ConstructSet {
 	std::vector<ClangConstruct> constructs;
 };
 
+
+void print(std::ostream &outStream, ClangConstructSet *cs);
+
 }	// Clang
 }	// InstRO
 
