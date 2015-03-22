@@ -15,7 +15,15 @@ InstRO::Pass* InstRO::Clang::PassFactory::createBlackAndWhiteListSelector(
 
 InstRO::Pass* InstRO::Clang::PassFactory::createBooleanOrSelector(
 		InstRO::Pass* inputA, InstRO::Pass* inputB) {
-	return NULL;
+	InstRO::Clang::Core::ClangPassImplementation *pImpl = new InstRO::Clang::BooleanCompoundSelector(inputA, inputB, InstRO::Clang::BooleanCompoundSelector::OR);
+	pImpl->setPassExecuter(executer);
+	InstRO::Pass *p = new InstRO::Pass(pImpl);
+	p->setRequiresInput(true);
+	p->setProvidesOutput(true);
+	p->setPassName("Boolean OR Selector");
+	p->setOutputLevel(InstRO::Core::ConstructLevelType::ConstructLevelStatement);
+	passManager->registerPass(p);
+	return p;
 }
 
 InstRO::Pass* InstRO::Clang::PassFactory::createFunctionDefinitionSelector() {
