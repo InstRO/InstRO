@@ -1,10 +1,13 @@
 #include "CashesSelector.h"
 
-char ::InstRO::LLVM::CashesSelector::ID = 0;
+char InstRO::LLVM::CashesSelector::ID = 0;
 
-::InstRO::LLVM::CashesSelector::CashesSelector() : ModulePass(ID){}
+InstRO::LLVM::CashesSelector::CashesSelector() : ModulePass(ID){
+	std::cout << "Constructing Cashes Selector;" << std::endl;
+}
 
-void ::InstRO::LLVM::CashesSelector::getAnalysisUsage(llvm::AnalysisUsage &info) {
+void InstRO::LLVM::CashesSelector::getAnalysisUsage(llvm::AnalysisUsage &info) {
+	std::cout << "get Analysis Usage" << std::endl;
 	/*
 	 * For the use within Clang I tried to use the CallGraphWrapperPass as a
 	 * required
@@ -24,7 +27,8 @@ void ::InstRO::LLVM::CashesSelector::getAnalysisUsage(llvm::AnalysisUsage &info)
  * a call
  * graph node which has two or more predecessors to be instrumented.
  */
-bool ::InstRO::LLVM::CashesSelector::runOnModule(llvm::Module &m) {
+bool InstRO::LLVM::CashesSelector::runOnModule(llvm::Module &m) {
+	std::cout << "Cashes Selector run on module" << std::endl;
 	llvm::CallGraph cg(m);
 	for (auto &f : m.getFunctionList()) {
 		const llvm::CallGraphNode *cgf = cg[&f];
@@ -41,12 +45,12 @@ bool ::InstRO::LLVM::CashesSelector::runOnModule(llvm::Module &m) {
 				if (cgn->getFunction() == NULL) {
 					continue;
 				}
-				selectionSet.push_back(&f);
+				put(&f);
 				// if we found one reason to instrument we don't need a second.
 				continue;
 			}
 		}
 	}
-	llvm::errs() << "CashesSelector marked " << selectionSet.size() << " nodes\n";
+//	llvm::errs() << "CashesSelector marked " << selectionSet.size() << " nodes\n";
 	return false;
 }

@@ -1,6 +1,8 @@
 #ifndef INSTRO_LLVM_CYGPROFILEADAPTER_H
 #define INSTRO_LLVM_CYGPROFILEADAPTER_H
 
+#include <iostream>
+
 /* LLVM related includes */
 #include "llvm/Pass.h"
 #include "llvm/IR/Module.h"
@@ -10,7 +12,7 @@
 #include "llvm/Support/raw_ostream.h"
 
 /* InstRO related includes */
-#include "instro/llvm/LLVMPass.h"
+#include "instro/llvm/core/ConstructSetPassing.h"
 
 namespace InstRO {
 namespace LLVM {
@@ -18,10 +20,10 @@ namespace LLVM {
  * Implements the cyg profile function adapter.
  * This version relies on the cashes selector.
  */
-class CygProfileAdapter : public ::InstRO::LLVM::Pass,
+class CygProfileAdapter : public InstRO::LLVM::Core::ConstructSetPassing,
 													public llvm::FunctionPass {
  public:
-	CygProfileAdapter(::InstRO::LLVM::Pass *inputSel);
+	CygProfileAdapter(InstRO::LLVM::Core::ConstructSetPassing *inputSel);
 
 	const char *getPassName() const { return pn.c_str(); }
 
@@ -39,7 +41,7 @@ class CygProfileAdapter : public ::InstRO::LLVM::Pass,
 	const std::string exitName;
 	const std::string entryName;
 
-	::InstRO::LLVM::Pass  *inputSelector;
+	InstRO::LLVM::Core::ConstructSetPassing  *inputSelector;
 
 	llvm::CallInst *entryFunc;
 	llvm::CallInst *exitFunc;
