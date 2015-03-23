@@ -7,12 +7,15 @@
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Function.h"
 #include "llvm/Support/raw_ostream.h"
-#include "llvm/IR/LegacyPassManager.h"
-#include "llvm/PassManager.h"
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
+//#include "llvm/IR/LegacyPassManager.h"
+//#include "llvm/IR/PassManager.h"
+//#include "llvm/Transforms/IPO/PassManagerBuilder.h"
 
 /* InstRO related includes */
-#include "LLVMPass.h"
+//#include "LLVMPass.h"
+
+#include <iostream>
+#include "instro/llvm/core/ConstructSetPassing.h"
 
 namespace InstRO {
 namespace LLVM {
@@ -22,7 +25,7 @@ namespace LLVM {
  * Since we need the CallGraph of the module we need to have this is as a
  * ModulePass!
  */
-class CashesSelector : public ::InstRO::LLVM::Pass, public llvm::ModulePass {
+class CashesSelector : public InstRO::LLVM::Core::ConstructSetPassing, public llvm::ModulePass {
  public:
 	static char ID;
 
@@ -43,8 +46,6 @@ class CashesSelector : public ::InstRO::LLVM::Pass, public llvm::ModulePass {
 
  private:
 	const std::string pn;
-
-	std::vector<llvm::Function *> selectionSet;
 };
 
 }	// LLVM

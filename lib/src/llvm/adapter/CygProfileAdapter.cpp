@@ -1,17 +1,17 @@
 #include "CygProfileAdapter.h"
 
-char ::InstRO::LLVM::CygProfileAdapter::ID = 0;
+char InstRO::LLVM::CygProfileAdapter::ID = 0;
 
-::InstRO::LLVM::CygProfileAdapter::CygProfileAdapter(
-		::InstRO::LLVM::Pass *inputSel)
+InstRO::LLVM::CygProfileAdapter::CygProfileAdapter(InstRO::LLVM::Core::ConstructSetPassing *inputSel)
 		: llvm::FunctionPass(ID),
 			pn("CygProfileAdapter"),
 			exitName("__cyg_profile_func_exit"),
-			entryName("__cyg_profile_func_enter"), inputSelector(inputSel) {
-			llvm::errs() << "Running construction" << "\n";
-			}
+			entryName("__cyg_profile_func_enter"),
+			inputSelector(inputSel) {
+	llvm::errs() << "Running construction " << inputSelector << "\n";
+}
 
-bool ::InstRO::LLVM::CygProfileAdapter::doInitialization(llvm::Module &m) {
+bool InstRO::LLVM::CygProfileAdapter::doInitialization(llvm::Module &m) {
 	llvm::errs() << "Running initialization\n";
 	mod = &m;
 	llvm::Function *func = buildFunction(exitName);
@@ -20,12 +20,13 @@ bool ::InstRO::LLVM::CygProfileAdapter::doInitialization(llvm::Module &m) {
 	mod->getOrInsertFunction(entryName, func->getFunctionType());
 }
 
-bool ::InstRO::LLVM::CygProfileAdapter::runOnFunction(llvm::Function &f) {
+bool InstRO::LLVM::CygProfileAdapter::runOnFunction(llvm::Function &f) {
 	// This method is implemented in InstRO::LLVM::Pass to be able
 	// to abstract away a map, which is used by the pass manager to maybe
 	// fool the pass requesting the construct set.
-	auto cs = getInput(inputSelector);
-	auto constructs = cs->get();
+	auto cs = inputSelector->getConstructSet();
+	auto constructs = cs->getConstructSet();
+	std::cout << constructs.size() << std::endl;
 	// If the function was marked for adaption
 	auto res = std::find(std::begin(constructs), std::end(constructs), &f);
 	// we build the instrumentation
@@ -49,44 +50,36 @@ bool ::InstRO::LLVM::CygProfileAdapter::runOnFunction(llvm::Function &f) {
 	}
 }
 
-llvm::CallInst * ::InstRO::LLVM::CygProfileAdapter::buildExitCall(
-		llvm::Function &f, llvm::ReturnInst *ri) {
+llvm::CallInst *InstRO::LLVM::CygProfileAdapter::buildExitCall(llvm::Function &f, llvm::ReturnInst *ri) {
 	return buildTCall(f, llvm::Twine(exitName), ri);
 }
 
-llvm::CallInst * ::InstRO::LLVM::CygProfileAdapter::buildEntryCall(
-		llvm::Function &f) {
+llvm::CallInst *InstRO::LLVM::CygProfileAdapter::buildEntryCall(llvm::Function &f) {
 	return buildTCall(f, llvm::Twine(entryName), nullptr);
 }
 
-llvm::Function * ::InstRO::LLVM::CygProfileAdapter::buildFunction(
-		std::string name) {
-	llvm::PointerType *voidPtr =
-			llvm::PointerType::getUnqual(llvm::Type::getInt8Ty(mod->getContext()));
+llvm::Function *InstRO::LLVM::CygProfileAdapter::buildFunction(std::string name) {
+	llvm::PointerType *voidPtr = llvm::PointerType::getUnqual(llvm::Type::getInt8Ty(mod->getContext()));
 	std::vector<llvm::Type *> argTypes(2, voidPtr);
 	llvm::ArrayRef<llvm::Type *> argsT(argTypes);
 
 	// We get ourselves the pointer to the function type
-	llvm::FunctionType *fType = llvm::FunctionType::get(
-			llvm::Type::getVoidTy(mod->getContext()), argsT, false);
+	llvm::FunctionType *fType = llvm::FunctionType::get(llvm::Type::getVoidTy(mod->getContext()), argsT, false);
 
 	// Creates a new llvm Function object, that can be used inside a call
 	// instruction
-	llvm::Function *func = llvm::Function::Create(
-			fType, llvm::GlobalValue::ExternalLinkage, llvm::Twine(name));
+	llvm::Function *func = llvm::Function::Create(fType, llvm::GlobalValue::ExternalLinkage, llvm::Twine(name));
 	return func;
 }
 
-llvm::CallInst * ::InstRO::LLVM::CygProfileAdapter::buildTCall(
-		llvm::Function &f, llvm::Twine &&name, llvm::Instruction *insertBefore) {
+llvm::CallInst *InstRO::LLVM::CygProfileAdapter::buildTCall(llvm::Function &f, llvm::Twine &&name,
+																														llvm::Instruction *insertBefore) {
 	// constructs a ptr to void type in the general address space
-	llvm::PointerType *voidPtr =
-			llvm::PointerType::getUnqual(llvm::Type::getInt8Ty(mod->getContext()));
+	llvm::PointerType *voidPtr = llvm::PointerType::getUnqual(llvm::Type::getInt8Ty(mod->getContext()));
 	std::vector<llvm::Type *> argTypes(2, voidPtr);
 	llvm::ArrayRef<llvm::Type *> argsT(argTypes);
 
-	llvm::FunctionType *fType = llvm::FunctionType::get(
-			llvm::Type::getVoidTy(mod->getContext()), argsT, false);
+	llvm::FunctionType *fType = llvm::FunctionType::get(llvm::Type::getVoidTy(mod->getContext()), argsT, false);
 	// Get a pointer to the function
 	llvm::Constant *castExpr = llvm::ConstantExpr::getPointerCast(&f, voidPtr);
 	llvm::Constant *callsite = llvm::ConstantPointerNull::get(voidPtr);
@@ -97,11 +90,9 @@ llvm::CallInst * ::InstRO::LLVM::CygProfileAdapter::buildTCall(
 	a.push_back(callsite);
 	llvm::ArrayRef<llvm::Value *> args(a);
 	llvm::Twine n("");
-	llvm::Constant *func =
-			mod->getOrInsertFunction(name.getSingleStringRef(), fType);
+	llvm::Constant *func = mod->getOrInsertFunction(name.getSingleStringRef(), fType);
 
-	llvm::CallInst *callInst =
-			llvm::CallInst::Create(func, args, n, insertBefore);
+	llvm::CallInst *callInst = llvm::CallInst::Create(func, args, n, insertBefore);
 	return callInst;
 }
 
