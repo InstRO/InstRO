@@ -18,9 +18,11 @@ typedef enum ContstructLevelEnum {
 	MaxConstructLevel = 1
 } ConstructLevelType;
 
+/*
 class Construct
 {
 };
+*/
 
 std::string contstructLevelToString(ConstructLevelType type);
 std::string operator+(const std::string &lhs, const ConstructLevelType &type);
@@ -40,16 +42,6 @@ class ConstructSet {
 	ConstructLevelType getMinConstructLevel() { return ConstructLevelMin; };
 	void setCurrentMinLevel(ConstructLevelType minLevel){};
 	void setCurrentMaxLevel(ConstructLevelType maxLevel){};
-		virtual std::vector<Construct*> getConstructs()=0;
-		/*
-		 * XXX What is the reasoning behind these functions?
-		 * Why do Constructs within a ConstructSet get selected? This is responsibility of a Selector
-		 * The Selector takes one or more sets, evaluates whatever it is configured with and creates
-		 * a new ConstructSet by placing the selected Constructs in the new ConstructSet.
-		 * I don't think we need these two functions!
-		 */
-		virtual void selectConstruct(Construct*)=0;
-		virtual void selectConstructs(std::vector<Construct*> constructs){};
 	protected:
 			ConstructLevelType minimalSupportedLevel,maximalSupportedLevel;
 };
