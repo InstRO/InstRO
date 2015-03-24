@@ -53,3 +53,15 @@ InstRO::Pass *InstRO::Clang::PassFactory::createCygProfileAdapter(InstRO::Pass *
 	return p;
 }
 
+InstRO::Pass *InstRO::Clang::PassFactory::createLLVMInputAdapter(InstRO::Pass *input) {
+	InstRO::Clang::Core::ClangPassImplementation *pImpl = new InstRO::Clang::LLVMInputAdapter(input);
+	pImpl->setPassExecuter(nvExecuter);
+	InstRO::Pass *p = new InstRO::Pass(pImpl);
+	p->setRequiresInput(true);
+	p->registerInputPass(input, input->getOutputLevel());
+	p->setProvidesOutput(false);
+	p->setPassName(std::string("LLVM Input Adapter"));
+	p->registerInputPass(input, InstRO::Core::ConstructLevelType::ConstructLevelStatement);
+	passManager->registerPass(p);
+	return p;
+}

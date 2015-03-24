@@ -14,6 +14,7 @@
 #include "instro/clang/selector/BooleanCompoundSelector.h"
 
 #include "instro/clang/adapter/CygProfileAdapter.h"
+#include "instro/clang/adapter/LLVMInputAdapter.h"
 
 namespace InstRO {
 namespace Clang {
@@ -37,6 +38,8 @@ class PassFactory : public InstRO::Core::PassFactory {
 	Pass* createFunctionDefinitionSelector();
 	Pass* createProgramEntrySelector(){};
 	Pass* createCygProfileAdapter(InstRO::Pass* input);
+
+	Pass* createLLVMInputAdapter(InstRO::Pass *input);
 
  private:
 	clang::tooling::Replacements& replacements;
