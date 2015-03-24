@@ -19,7 +19,7 @@ bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *de
 	// since we are in a Clang Adapter, we cast. I KNOW THIS IS UGLY
 	InstRO::Core::ConstructSet *c = getInput(decidingSelector);
 	cs = *(reinterpret_cast<InstRO::Clang::ClangConstructSet *>(c));
-
+	
 	for (auto &construct : cs.getConstructSet()) {
 		if (InstRO::Clang::getAsDecl(construct) == decl) {
 			// the function declaration we are visitting has actually been selected
@@ -45,9 +45,6 @@ void InstRO::Clang::CygProfileAdapter::dispatch(clang::Decl *c) {
 		return;
 	}
 
-	/*
-	 * FIXME This guy still cannot handle overloaded functions
-	 */
 	clang::FunctionDecl *fDef = llvm::dyn_cast<clang::FunctionDecl>(c);
 	if (fDef != nullptr) {
 		// Inside this case we need to check for the overload
