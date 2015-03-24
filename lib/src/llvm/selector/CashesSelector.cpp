@@ -2,7 +2,7 @@
 
 char InstRO::LLVM::CashesSelector::ID = 0;
 
-InstRO::LLVM::CashesSelector::CashesSelector() : ModulePass(ID){
+InstRO::LLVM::CashesSelector::CashesSelector() : ModulePass(ID) {
 	std::cout << "Constructing Cashes Selector;" << std::endl;
 }
 
@@ -51,6 +51,6 @@ bool InstRO::LLVM::CashesSelector::runOnModule(llvm::Module &m) {
 			}
 		}
 	}
-//	llvm::errs() << "CashesSelector marked " << selectionSet.size() << " nodes\n";
+	//	llvm::errs() << "CashesSelector marked " << selectionSet.size() << " nodes\n";
 	return false;
 }
