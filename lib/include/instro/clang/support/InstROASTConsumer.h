@@ -17,7 +17,8 @@ class InstROASTConsumer : public clang::ASTConsumer {
 	/* Pass Manager knows when to run which pass */
 	InstROASTConsumer(InstRO::PassManagement::PassManager *passManager);
 	InstROASTConsumer(InstRO::PassManagement::PassManager *passManager,
-										InstRO::Clang::PassManagement::ClangPassExecuter *executer);
+										InstRO::Clang::PassManagement::ClangPassExecuter *vExecuter,
+										InstRO::Clang::PassManagement::ClangPassExecuter *nvExecuter);
 	/* Gets invoked per Translation Unit. Runs all passes, registered in
 	 * PassManager on the TranslationUnit */
 	void HandleTranslationUnit(clang::ASTContext &context);
@@ -26,7 +27,8 @@ class InstROASTConsumer : public clang::ASTConsumer {
 	// This is a raw pointer, since it is a reference to an entity that is owned
 	// by the Instrumentor
 	InstRO::PassManagement::PassManager *passManager;
-	InstRO::Clang::PassManagement::ClangPassExecuter *executer;
+	InstRO::Clang::PassManagement::ClangPassExecuter *vExecuter;
+	InstRO::Clang::PassManagement::ClangPassExecuter *nvExecuter;
 };
 }
 }
