@@ -2,8 +2,9 @@
 #define INSTRO_CLANG_CONSTRUCTSET_H
 
 #include "instro/core/ConstructSet.h"
-
+#include "clang/AST/Mangle.h"
 #include "clang/AST/Decl.h"
+#include "clang/AST/ASTContext.h"
 
 namespace InstRO {
 namespace Clang {
@@ -33,7 +34,7 @@ class ClangConstructSet : public InstRO::Core::ConstructSet {
 
 
 void print(std::ostream &outStream, ClangConstructSet *cs);
-
+void print(std::ostream &outStream, ClangConstructSet *cs, clang::ASTContext *astContext);
 }	// Clang
 }	// InstRO
 
