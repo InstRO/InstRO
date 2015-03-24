@@ -39,8 +39,9 @@ void InstRO::Clang::PassManagement::NonVisitingClangPassExecuter::execute(InstRO
 			InstRO::Clang::Core::ClangPassImplementation *pImpl =
 		 llvm::dyn_cast<InstRO::Clang::Core::ClangPassImplementation>(pass);
 		*/
+	std::cout << "executing inside non-visiting pass executer" << std::endl;
 	InstRO::Clang::Core::ClangPassImplementation *pImpl =
 			reinterpret_cast<InstRO::Clang::Core::ClangPassImplementation *>(pass);
 	pImpl->setASTContext(context);
-	pImpl->execute();
+	pImpl->exec();
 }
