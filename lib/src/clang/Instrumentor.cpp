@@ -20,8 +20,12 @@ int main(int argc, char **argv) {
 	wList.push_back("foo");
 	auto bwSel = fac->createBlackAndWhiteListSelector(bList, wList);
 	auto bcSel = fac->createBooleanOrSelector(fDefSel, bwSel);
-	fac->createCygProfileAdapter(bcSel);
+
+//	fac->createCygProfileAdapter(fDefSel);
+	fac->createLLVMInputAdapter(fDefSel);
+
 	instro.apply();
+	
 	std::cout << "End" << std::endl;
 	return 0;
 }
