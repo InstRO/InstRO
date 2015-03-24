@@ -15,7 +15,7 @@ InstRO::Clang::ClangInstrumentor::ClangInstrumentor(int argc, const char** argv,
 			visitingExecuter(nullptr),
 			nonVisitingExecuter(nullptr) {}
 
-InstRO::Core::PassFactory* ::InstRO::Clang::ClangInstrumentor::getFactory(CompilationPhase phase) {
+InstRO::Clang::PassFactory* ::InstRO::Clang::ClangInstrumentor::getFactory(CompilationPhase phase) {
 	if (fac == nullptr) {
 		std::unique_ptr<InstRO::Clang::PassFactory> t(new InstRO::Clang::PassFactory(
 				getPassManager(), tool.getReplacements(), &visitingExecuter, &nonVisitingExecuter));
@@ -30,7 +30,8 @@ void InstRO::Clang::ClangInstrumentor::init() {}
 
 void InstRO::Clang::ClangInstrumentor::apply() {
 	std::cout << "Preparing to run Clang tool" << std::endl;
-	InstRO::Clang::Support::ClangConsumerFactory f(getPassManager(), tool.getReplacements(), &visitingExecuter);
+	InstRO::Clang::Support::ClangConsumerFactory f(getPassManager(), tool.getReplacements(), &visitingExecuter,
+																								 &nonVisitingExecuter);
 	tool.runAndSave(clang::tooling::newFrontendActionFactory<InstRO::Clang::Support::ClangConsumerFactory>(&f).get());
 }
 

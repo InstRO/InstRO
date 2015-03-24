@@ -36,7 +36,7 @@ class ClangInstrumentor : public InstRO::Instrumentor {
 	clang::tooling::ToolAction* getClangAction();
 	/** Returns the factory used to create the passes a user builds the
 	 * instrumentor with */
-	InstRO::Core::PassFactory* getFactory(CompilationPhase phase = frontend);
+	InstRO::Clang::PassFactory* getFactory(CompilationPhase phase = frontend);
 
 	void init();
 	void apply();
