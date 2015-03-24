@@ -91,6 +91,7 @@ CLANG_SOURCES= \
 	$(TOP_LEVEL)/lib/src/clang/selector/BlackWhitelistSelector.cpp \
 	$(TOP_LEVEL)/lib/src/clang/selector/BooleanCompoundSelector.cpp \
 	$(TOP_LEVEL)/lib/src/clang/adapter/CygProfileAdapter.cpp \
+	$(TOP_LEVEL)/lib/src/clang/adapter/LLVMInputAdapter.cpp \
 	$(TOP_LEVEL)/lib/src/clang/core/ClangPassImplementation.cpp \
 	$(TOP_LEVEL)/lib/src/clang/core/PassFactory.cpp \
 	$(TOP_LEVEL)/lib/src/clang/core/ConstructSet.cpp \
