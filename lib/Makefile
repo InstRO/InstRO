@@ -54,7 +54,7 @@ CLANG_LIBS := \
 all: clang-tool
 
 INCLUDE_FLAGS=-I.
-CXXFLAGS+=-O0 -g $(INCLUDE_FLAGS) 
+CXXFLAGS+=-O0 -g -Wall $(INCLUDE_FLAGS) 
 PLUGIN_CXXFLAGS= -fpic
 
 
@@ -80,6 +80,7 @@ INSTRO_INCLUDES+= \
 
 LLVM_SOURCES= \
 	$(TOP_LEVEL)/lib/src/llvm/selector/CashesSelector.cpp \
+	$(TOP_LEVEL)/lib/src/llvm/selector/ClangFrontendSelector.cpp \
 	$(TOP_LEVEL)/lib/src/llvm/adapter/CygProfileAdapter.cpp \
 	$(TOP_LEVEL)/lib/src/llvm/Register.cpp
 
