@@ -48,10 +48,10 @@ struct InstRORegisterPass : public llvm::PassInfo {
 // InstRORegisterPass<InstRO::LLVM::CygProfileAdapterT<InstRO::LLVM::CashesSelector> > X("foobar",	"CygProfileAdapter
 // World Pass");
 
-llvm::RegisterPass<InstRO::LLVM::CashesSelector> Y("cash", "instro cash");
+llvm::RegisterPass<InstRO::LLVM::CashesSelector> CGBSelector("cgb-sel", "Callgraph based selector");
 
-llvm::RegisterPass<InstRO::LLVM::ClangFrontendSelector> Z("asd", "sssks");
+llvm::RegisterPass<InstRO::LLVM::ClangFrontendSelector> CFESelector("cfe-sel", "CLang Frontend Selector");
 
-InstRORegisterPass<InstantiationHelper<InstRO::LLVM::CygProfileAdapterT, InstRO::LLVM::ClangFrontendSelector> > Test(
-		"asdf", "asdasfwe");
+InstRORegisterPass<InstantiationHelper<InstRO::LLVM::CygProfileAdapterT, InstRO::LLVM::ClangFrontendSelector> >
+		CGBInstRO("-cgb-instro", "Callgraph analysis based function instrumentation");
 
