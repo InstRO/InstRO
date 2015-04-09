@@ -58,8 +58,8 @@ CXXFLAGS+=-O0 -g -Wall $(INCLUDE_FLAGS)
 PLUGIN_CXXFLAGS= -fpic
 
 
-#TOP_LEVEL=/home/j_lehr/all_repos/instro-v5/repo
-TOP_LEVEL=/home/jan/Documents/repos/instro-v5/repo
+TOP_LEVEL=/home/j_lehr/all_repos/instro-v5/repo
+#TOP_LEVEL=/home/jan/Documents/repos/instro-v5/repo
 INSTROLLVMINCLUDE=$(TOP_LEVEL)/lib/include/instro/llvm
 INSTROCLANGINCLUDE=$(TOP_LEVEL)/lib/include/instro/clang
 
@@ -81,6 +81,7 @@ INSTRO_INCLUDES+= \
 LLVM_SOURCES= \
 	$(TOP_LEVEL)/lib/src/llvm/selector/CashesSelector.cpp \
 	$(TOP_LEVEL)/lib/src/llvm/selector/ClangFrontendSelector.cpp \
+	$(TOP_LEVEL)/lib/src/llvm/selector/FunctionDefinitionSelector.cpp \
 	$(TOP_LEVEL)/lib/src/llvm/adapter/CygProfileAdapter.cpp \
 	$(TOP_LEVEL)/lib/src/llvm/Register.cpp
 

@@ -48,9 +48,9 @@ bool InstRO::LLVM::CygProfileAdapterT<T>::runOnFunction(llvm::Function &f) {
 	auto cs = getAnalysis<TemplT>().getConstructSet();
 	auto constructs = cs->getConstructSet();
 	std::cout << constructs.size() << std::endl;
-	for(auto &c : constructs){
-		std::cout << c << " == " << &f << std::endl;
-	}
+//	for(auto &c : constructs){
+//		std::cout << c << " == " << &f << std::endl;
+//	}
 	// If the function was marked for adaption
 	auto res = std::find(std::begin(constructs), std::end(constructs), &f);
 	// we build the instrumentation
