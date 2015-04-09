@@ -1,10 +1,11 @@
 
 #include <iostream>
 
+#include "instro/llvm/selector/FunctionDefinitionSelector.h"
+#include "instro/llvm/selector/ClangFrontendSelector.h"
 #include "instro/llvm/selector/CashesSelector.h"
 #include "instro/llvm/adapter/CygProfileAdapter.h"
 #include "instro/llvm/adapter/CygProfileAdapterT.h"
-#include "instro/llvm/selector/ClangFrontendSelector.h"
 
 #include "llvm/PassInfo.h"
 
@@ -48,10 +49,15 @@ struct InstRORegisterPass : public llvm::PassInfo {
 // InstRORegisterPass<InstRO::LLVM::CygProfileAdapterT<InstRO::LLVM::CashesSelector> > X("foobar",	"CygProfileAdapter
 // World Pass");
 
+llvm::RegisterPass<InstRO::LLVM::FunctionDefinitionSelector> FDEFSelector("fdef-sel", "Function Definition Selector");
+
 llvm::RegisterPass<InstRO::LLVM::CashesSelector> CGBSelector("cgb-sel", "Callgraph based selector");
 
 llvm::RegisterPass<InstRO::LLVM::ClangFrontendSelector> CFESelector("cfe-sel", "CLang Frontend Selector");
 
-InstRORegisterPass<InstantiationHelper<InstRO::LLVM::CygProfileAdapterT, InstRO::LLVM::ClangFrontendSelector> >
-		CGBInstRO("-cgb-instro", "Callgraph analysis based function instrumentation");
+InstRORegisterPass<InstantiationHelper<InstRO::LLVM::CygProfileAdapterT, InstRO::LLVM::CashesSelector> >
+		CGBInstRO("cgb-instro", "Callgraph analysis based function instrumentation");
+
+InstRORegisterPass<InstantiationHelper<InstRO::LLVM::CygProfileAdapterT, InstRO::LLVM::FunctionDefinitionSelector> >
+		FDEFInstRO("fdef-instro", "Simple function definition instrumentation");
 
