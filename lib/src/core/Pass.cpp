@@ -25,18 +25,6 @@ void InstRO::Pass::executePass() {
 	passExecuted = true;
 }
 
-void InstRO::Pass::execute(InstRO::PassManagement::PassExecuter *executer) {
-	assert(false);
-	if (passInitialized)
-		executer->execute(passImplementation);
-	else
-#ifdef __EXCEPTIONS
-		throw std::string("Pass not Initialized!");
-#else
-		std::cerr << "Pass: Pass not initialized" << std::endl;
-#endif
-	passExecuted = true;
-}
 void InstRO::Pass::finalizePass() {
 	if (passInitialized)
 		passImplementation->finalize();

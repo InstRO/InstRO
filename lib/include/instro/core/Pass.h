@@ -1,21 +1,9 @@
 #ifndef INSTRO_CORE_PASS_H
 #define INSTRO_CORE_PASS_H
-/*
- * This is our user-level interface. A typical use case in our minds is
- * int main(...){
- *   InstRO myinstro = ROSE::getInstRO();
- *   ROSE::InstROFactory fac = myinstro.getFactory();
- *   Pass *sel = fac.getSelectionPass(myinstro.getPassManager());
- *   Pass *adapter = fac.getAdapterPass(myinstro.getPassManager(), sel);
- *   myinstro.run();
- * }
- */
 
-#include <list>
 #include <map>
 #include <string>
 #include <iostream>
-#include <vector>
 #include <cassert>
 
 #include <vector>
@@ -28,15 +16,18 @@
 #include "instro/core/ConstructSetManagement.h"
 #include "instro/core/ConstructLevelManagrment.h"
 
-//#include "instro/roseInstRO.h"
 namespace InstRO {
-//	namespace Core{
 /* PassFactory: Interface for the mandatory InstRO Passes. */
 namespace PassManagement {
 class PassManager;
 }
 
-// Make it a sane world
+/*
+ * The Pass class is the administration class used within the pass manager.
+ * It holds information necessary in order to singalize the pass implementation
+ * whether it can be run or not.
+ * Also it exposes a clear interface to the PassManager
+ */
 class Pass : public InstRO::Core::PassConstructSetManagement, public InstRO::Core::ConstructLevelManagrment {
  public:
 	Pass() = delete;
@@ -54,7 +45,6 @@ class Pass : public InstRO::Core::PassConstructSetManagement, public InstRO::Cor
 	}
 	void initPass();
 	void executePass();
-	void execute(InstRO::PassManagement::PassExecuter *executer);
 	void finalizePass();
 	void releaseOutput();
 	// CI: Enable Input is called externally to indicate, that  the input passes
