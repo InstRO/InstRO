@@ -1,29 +1,15 @@
 #ifndef INSTRO_CORE_FACTORY_H
 #define INSTRO_CORE_FACTORY_H
-/*
- * This is our user-level interface. A typical use case in our minds is
- * int main(...){
- *   InstRO myinstro = ROSE::getInstRO();
- *   ROSE::InstROFactory fac = myinstro.getFactory();
- *   Pass *sel = fac.getSelectionPass(myinstro.getPassManager());
- *   Pass *adapter = fac.getAdapterPass(myinstro.getPassManager(), sel);
- *   myinstro.run();
- * }
- */
 
-#include <list>
-#include <map>
+
 #include <string>
 #include <iostream>
-#include <vector>
 
 #include <vector>
 #include <hash_map>
 
 
 #include "instro/core.h"
-
-//#include "instro/roseInstRO.h"
 
 namespace InstRO{
 	/* PassFactory: Interface for the mandatory InstRO Passes. */
