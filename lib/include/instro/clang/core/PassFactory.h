@@ -4,14 +4,17 @@
 #include "instro/core/PassFactory.h"
 #include "instro/core/PassManager.h"
 #include "instro/clang/core/Pass.h"
+#include "instro/clang/core/ClangPassExecuter.h"
 
 /*
  * I guess we would need to know all the passes...
  */
 #include "instro/clang/selector/FunctionDefinitionSelector.h"
 #include "instro/clang/selector/BlackWhitelistSelector.h"
+#include "instro/clang/selector/BooleanCompoundSelector.h"
 
 #include "instro/clang/adapter/CygProfileAdapter.h"
+#include "instro/clang/adapter/LLVMInputAdapter.h"
 
 namespace InstRO {
 namespace Clang {
@@ -26,18 +29,22 @@ namespace Clang {
  */
 class PassFactory : public InstRO::Core::PassFactory {
  public:
-	PassFactory(InstRO::Core::PassManagement::PassManager* manager,
-							clang::tooling::Replacements& reps)
-			: InstRO::Core::PassFactory(manager), replacements(reps){};
-	Pass* createBlackAndWhiteListSelector(std::vector<std::string> blacklist,
-																				std::vector<std::string> whitelist);
+	PassFactory(InstRO::PassManagement::PassManager* manager, clang::tooling::Replacements& reps,
+							InstRO::Clang::PassManagement::VisitingClangPassExecuter* vExecuter,
+							InstRO::Clang::PassManagement::NonVisitingClangPassExecuter* nvExecuter)
+			: InstRO::Core::PassFactory(manager), replacements(reps), vExecuter(vExecuter), nvExecuter(nvExecuter){};
+	Pass* createBlackAndWhiteListSelector(std::vector<std::string> blacklist, std::vector<std::string> whitelist);
 	Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
 	Pass* createFunctionDefinitionSelector();
 	Pass* createProgramEntrySelector(){};
 	Pass* createCygProfileAdapter(InstRO::Pass* input);
 
+	Pass* createLLVMInputAdapter(InstRO::Pass *input);
+
  private:
 	clang::tooling::Replacements& replacements;
+	InstRO::Clang::PassManagement::VisitingClangPassExecuter* vExecuter;
+	InstRO::Clang::PassManagement::NonVisitingClangPassExecuter* nvExecuter;
 };
 }	// Clang
 }	// INstRO

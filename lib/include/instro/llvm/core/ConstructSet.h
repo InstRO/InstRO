@@ -5,24 +5,26 @@
 #include "llvm/IR/Value.h"
 
 /* InstRO related includes */
-#include "instro/llvm/core/ConstructSet.h"
+#include "instro/core/ConstructSet.h"
 
 namespace InstRO {
 
 namespace LLVM {
+namespace Core {
 /*
  * A Construct Set stores the selected nodes. This is implementation
  * specific
  * and one generally needs to cast to the specific type
  */
-class ConstructSet : public ::InstRO::Core::ConstructSet {
+class LLVMConstructSet : public InstRO::Core::ConstructSet {
  public:
-	std::vector<llvm::Value *> &get();
+	std::vector<llvm::Value *> &getConstructSet() { return constructs; }
 
  private:
 	// Value is LLVMs most abstract type
 	std::vector<llvm::Value *> constructs;
 };
+}
 }
 }
 
