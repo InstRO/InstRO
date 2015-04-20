@@ -1,5 +1,5 @@
-#ifndef INSTRO_LLVM_CYGPROFILEADAPTER_H
-#define INSTRO_LLVM_CYGPROFILEADAPTER_H
+#ifndef INSTRO_LLVM_CYGPROFILEADAPTERT_H
+#define INSTRO_LLVM_CYGPROFILEADAPTERT_H
 
 #include <iostream>
 
@@ -20,28 +20,30 @@ namespace LLVM {
  * Implements the cyg profile function adapter.
  * This version relies on the cashes selector.
  */
-class CygProfileAdapter : public InstRO::LLVM::Core::ConstructSetPassing,
+template<typename T>
+class CygProfileAdapterT : public InstRO::LLVM::Core::ConstructSetPassing,
 													public llvm::FunctionPass {
  public:
-	CygProfileAdapter(InstRO::LLVM::Core::ConstructSetPassing *inputSel);
+	CygProfileAdapterT ();
+	CygProfileAdapterT (T *inputSel);
 
 	const char *getPassName() const { return pn.c_str(); }
 
-	bool doInitialization(llvm::Module &m);
+	bool doInitialization(llvm::Module &m) override;
 	bool runOnFunction(llvm::Function &f) override;
 
 	bool doFinalization(llvm::Module &m) {}
 
-	void getAnalysisUsage(llvm::AnalysisUsage &info) const {}
-
+	void getAnalysisUsage(llvm::AnalysisUsage &info) const;
 	static char ID;
 
  private:
+	typedef T TemplT;
 	const std::string pn;
 	const std::string exitName;
 	const std::string entryName;
 
-	InstRO::LLVM::Core::ConstructSetPassing  *inputSelector;
+	T  *inputSelector;
 
 	llvm::CallInst *entryFunc;
 	llvm::CallInst *exitFunc;
@@ -57,4 +59,7 @@ class CygProfileAdapter : public InstRO::LLVM::Core::ConstructSetPassing,
 
 }	// LLVM
 }	// InstRO
+
+#include "../src/llvm/adapter/CygProfileAdapterT.cpp"
+
 #endif

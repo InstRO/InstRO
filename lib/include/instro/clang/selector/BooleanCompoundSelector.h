@@ -9,14 +9,20 @@ namespace InstRO {
 namespace Clang {
 class BooleanCompoundSelector
 		: public InstRO::Clang::Core::ClangPassImplementation {
+
  public:
-	BooleanCompoundSelector(InstRO::Pass *inA, InstRO::Pass *inB);
+
+	typedef enum {AND, OR, NOT} op_t;
+
+	BooleanCompoundSelector(InstRO::Pass *inA, InstRO::Pass *inB, op_t operation);
 
 	void init() override;
 	void execute() override;
 	void finalize() override;
 	void releaseOutput() override;
 	InstRO::Clang::ClangConstructSet *getOutput() override;
+
+	bool VisitFunctionDecl(clang::FunctionDecl *decl) override;
 
  protected:
 	void doOr(InstRO::Clang::ClangConstructSet &a,
@@ -27,6 +33,7 @@ class BooleanCompoundSelector
  private:
 	InstRO::Pass *inA, *inB;
 	InstRO::Clang::ClangConstructSet cs;
+	op_t operation;
 };
 }
 }

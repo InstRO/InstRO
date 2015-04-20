@@ -2,7 +2,9 @@
 #define INSTRO_CORE_CONSTRUCTSET_H 0.1
 
 #include <string>
-#include <list>
+// XXX Why do we want to use list here? I would prefer using vector!
+//#include <list>
+#include <vector>
 
 namespace InstRO {
 
@@ -16,9 +18,11 @@ typedef enum ContstructLevelEnum {
 	MaxConstructLevel = 1
 } ConstructLevelType;
 
+/*
 class Construct
 {
 };
+*/
 
 std::string contstructLevelToString(ConstructLevelType type);
 std::string operator+(const std::string &lhs, const ConstructLevelType &type);
@@ -38,11 +42,8 @@ class ConstructSet {
 	ConstructLevelType getMinConstructLevel() { return ConstructLevelMin; };
 	void setCurrentMinLevel(ConstructLevelType minLevel){};
 	void setCurrentMaxLevel(ConstructLevelType maxLevel){};
-		virtual std::list<Construct*> getConstructs()=0;
-		virtual void selectConstruct(Construct*)=0;
-		virtual void selectConstructs(std::list<Construct*> constructs);
 	protected:
-			ContstructLevelType minimalSupportedLevel,maximalSupportedLevel;
+			ConstructLevelType minimalSupportedLevel,maximalSupportedLevel;
 };
 
 } // End Namespace Core
