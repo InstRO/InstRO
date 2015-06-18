@@ -18,27 +18,30 @@
 #include <vector>
 
 #include "instro/core/Pass.h"
-#include "instro/clang/core/ClangPassExecuter.h"
+//  CI: There is a reference to the ClangPassExecuturer in the InstRO Core Layer. 
+// TODO-JP:  Please put this somewhere more suitable, e.g. in the clang section
+//  #include "instro/clang/core/ClangPassExecuter.h"
 
 namespace InstRO {
 class Pass;
 namespace PassManagement {
 class PassManager;
 }
-namespace Core {
+
+
 /* PassFactory: Interface for the mandatory InstRO Passes. */
 class PassFactory {
  public:
 	/* CI: A PassFactory must be initialized with the PassManager. */
 	PassFactory(PassManagement::PassManager* manager) : passManager(manager){};
-	virtual InstRO::Pass* createBlackAndWhiteListSelector(
-			std::vector<std::string> blacklist,
-					std::vector<std::string> whitelist) = 0;
-	virtual InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA,
-																								InstRO::Pass* inputB) = 0;
+	virtual InstRO::Pass* createStringBasedSelector(std::vector<std::string> matchList) = 0;
+
+	virtual InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA,InstRO::Pass* inputB) = 0;
+
+	// Convenience 
 	virtual InstRO::Pass* createProgramEntrySelector() = 0;
-	virtual InstRO::Pass* createFunctionDefinitionSelector() = 0;
-	virtual InstRO::Pass* createCygProfileAdapter(InstRO::Pass* input) = 0;
+	virtual InstRO::Pass* createFunctionSelector() = 0;
+	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input) = 0;
 
  protected:
 	/*	void registerPass(Pass * pass)
@@ -47,7 +50,7 @@ class PassFactory {
 		}*/
 	PassManagement::PassManager* passManager;
 };
-}	// Core
+
 }	// InstRO
 
 #endif

@@ -2,60 +2,47 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="include">
-      <UniqueIdentifier>{319cd47b-0476-43c4-aea8-47b1d043f67b}</UniqueIdentifier>
+      <UniqueIdentifier>{460098e1-6e5a-40dd-92c1-fb1a19f7e831}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\instro">
-      <UniqueIdentifier>{3ee2c1fe-ed57-492a-8144-4c3538577119}</UniqueIdentifier>
+      <UniqueIdentifier>{aec1a036-b1d2-4a83-9847-181b4c28434b}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\instro\core">
-      <UniqueIdentifier>{46ecd823-5f49-41c5-ba58-f6f5299d9c53}</UniqueIdentifier>
+      <UniqueIdentifier>{963ad70a-ad7d-4ca3-a95e-58ff4da24aae}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\instro\rose">
-      <UniqueIdentifier>{358b68ac-b9b9-4f80-a04f-683755c9658e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="include\instro\misc">
-      <UniqueIdentifier>{266d33c7-0c68-4f2c-aedc-81cd4cd6c7e3}</UniqueIdentifier>
+      <UniqueIdentifier>{9ddd7f44-b779-4318-ac37-461259cb2fce}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\instro\rose\selector">
-      <UniqueIdentifier>{d5318fac-ff30-4021-9dfb-196c511d999e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source">
-      <UniqueIdentifier>{90c09a93-d15b-4a18-b139-6c52534a394c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\lib">
-      <UniqueIdentifier>{cb2bafdb-9a8e-44a2-ae42-3b0f2910ff4a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\lib\core">
-      <UniqueIdentifier>{160bd7c1-e1aa-4635-ba0f-a1c02bb43f6f}</UniqueIdentifier>
+      <UniqueIdentifier>{4af22494-0362-4f30-a387-b7b53cacc301}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\instro\rose\adapter">
-      <UniqueIdentifier>{f335cffd-5c61-4bed-a63a-d68a1228097b}</UniqueIdentifier>
+      <UniqueIdentifier>{1b31f1c0-a77d-4562-90b4-23be6d054d7b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\lib\support">
-      <UniqueIdentifier>{9ef82a8b-1407-4496-a65e-e12b483b5092}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\lib\rose">
-      <UniqueIdentifier>{78cbcad0-d1fb-421a-a4d0-b2ffa9a7cb7d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\lib\rose\selectors">
-      <UniqueIdentifier>{e09023cd-8004-498e-b058-e5d4b2f809fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\lib\rose\adapters">
-      <UniqueIdentifier>{ed5fe33a-97ad-49ea-97c4-edba55afff83}</UniqueIdentifier>
+    <Filter Include="include\instro\misc">
+      <UniqueIdentifier>{22e1ab6b-f6de-46b7-8edd-21092df36525}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\instro\llvm">
-      <UniqueIdentifier>{f2330133-299d-4666-966e-8356af661b42}</UniqueIdentifier>
+      <UniqueIdentifier>{d013ed9f-acba-4c06-bd6e-981b6529ec56}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\instro\test">
-      <UniqueIdentifier>{75be12fc-0f08-45db-ab1b-03426ae84bce}</UniqueIdentifier>
+      <UniqueIdentifier>{872a2657-6864-4e6d-9a2e-950dcd2637fc}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\instro\support">
-      <UniqueIdentifier>{0035fc90-4d68-4ff7-96ad-fd73b7c60730}</UniqueIdentifier>
+      <UniqueIdentifier>{8b9876e8-07c6-4813-8046-45194d90456a}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-    <None Include="ClassDiagram3.cd" />
+    <Filter Include="source">
+      <UniqueIdentifier>{0f79c7e0-9fdc-4796-9a9e-15109530cfbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib">
+      <UniqueIdentifier>{e9ddab49-6a6d-4d00-853c-528ac33d9568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib\core">
+      <UniqueIdentifier>{ed292247-d84b-464a-94d6-9e78c50b92b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib\support">
+      <UniqueIdentifier>{099f4105-2705-47d4-accf-531dd5ce3014}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro.h">
@@ -103,14 +90,20 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\SimplePassManager.h">
       <Filter>include\instro\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h">
+      <Filter>include\instro\rose</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h">
+      <Filter>include\instro\rose</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h">
+      <Filter>include\instro\rose</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingManager.h">
       <Filter>include\instro\misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingPassManager.h">
       <Filter>include\instro\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\support\BWLFileReader.h">
-      <Filter>include\instro\support</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\test\TestInstrumentor.h">
       <Filter>include\instro\test</Filter>
@@ -121,10 +114,13 @@
     <ClInclude Include="..\..\..\lib\include\instro\test\TestPassFactory.h">
       <Filter>include\instro\test</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\support\BWLFileReader.h">
+      <Filter>include\instro\support</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp">
-      <Filter>source\lib\support</Filter>
+    <ClCompile Include="..\..\..\lib\src\main.cxx">
+      <Filter>source\lib</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp">
       <Filter>source\lib\core</Filter>
@@ -138,17 +134,8 @@
     <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp">
       <Filter>source\lib\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\common.cpp">
-      <Filter>source\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\instrumentor.cpp">
-      <Filter>source\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\main.cxx">
-      <Filter>source\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\marker.cpp">
-      <Filter>source\lib</Filter>
+    <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp">
+      <Filter>source\lib\support</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

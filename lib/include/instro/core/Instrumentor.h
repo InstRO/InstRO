@@ -21,6 +21,7 @@
 #include "instro/core/ConstructSetManagement.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/core/PassManager.h"
+#include "instro/core/SimplePassManager.h"
 #include "instro/core/PassFactory.h"
 
 namespace InstRO {
@@ -43,9 +44,10 @@ class Instrumentor {
  public:
 	Instrumentor() {
 		passManagerLocked = false;
+		new InstRO::PassManagement::SimplePassManager();
 		setPassManager(new InstRO::PassManagement::SimplePassManager());
 	}
-	virtual InstRO::Core::PassFactory* getFactory(CompilationPhase phase = frontend) = 0;
+	virtual InstRO::PassFactory* getFactory(CompilationPhase phase = frontend) = 0;
 	virtual InstRO::PassManagement::PassManager* getPassManager() { return passManager; }
 	void setPassManager(InstRO::PassManagement::PassManager* manager) {
 		if (passManagerLocked)

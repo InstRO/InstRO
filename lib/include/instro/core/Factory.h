@@ -21,7 +21,7 @@
 #include <hash_map>
 
 
-#include "instro/core.h"
+#include "instro/core/Pass.h"
 
 //#include "instro/roseInstRO.h"
 
