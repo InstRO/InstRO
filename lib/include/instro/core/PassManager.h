@@ -49,6 +49,7 @@ class PassManager {
 	// FIXME Why is that here?
 	std::vector<Pass *> predeciessors;
 
+	//2015-06-18 CI: JP - please explain to me why the exctutor has to be part of the pass manager ...
 	// delegate for compiler specific invocation of a pass implementation
 	PassExecuter *executer;
 };

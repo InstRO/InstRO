@@ -1,6 +1,8 @@
 #ifndef INSTRO_CORE_CONSTRUCTELEVATOR_H
 #define INSTRO_CORE_CONSTRUCTELEVATOR_H 0.1
+
 #include "instro/core/ConstructSet.h"
+
 #include <vector>
 
 namespace InstRO{

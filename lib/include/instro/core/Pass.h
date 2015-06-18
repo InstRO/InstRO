@@ -39,6 +39,7 @@ class PassManager;
 // Make it a sane world
 class Pass : public InstRO::Core::PassConstructSetManagement, public InstRO::Core::ConstructLevelManagrment {
  public:
+	//CI empty pass construction disallowed. Each Pass is an container for the corresponding PassImplementation Object from the ToolingSpace
 	Pass() = delete;
 	Pass(PassImplementation *pImpl)
 			: passImplementation(pImpl),

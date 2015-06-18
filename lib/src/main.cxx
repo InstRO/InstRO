@@ -1,4 +1,4 @@
-#define USING_ROSE
+#define USING_TEST
 #include "instro.h"
 
 #include "instro/misc/VisualizingPassManager.h"
@@ -16,29 +16,22 @@ int main(int argc,char ** argv)
 {
 	try
 	{
-		InstRO::Instrumentor * instro=new InstRO::RoseInstrumentor();
-		InstRO::Ext::VisualizingPassManager * passManager=new InstRO::Ext::VisualizingPassManager();
-		instro->setPassManager(passManager);
+		InstRO::Instrumentor * instro = new InstRO::TestInstrumentor();
+		// CI - Reseting Classic Implementation  InstRO::Ext::VisualizingPassManager * passManager=new InstRO::Ext::VisualizingPassManager();
+		// CI - Reseting Classic Implementation  instro->setPassManager(passManager);
+		
+		auto aFactory = dynamic_cast<InstRO::Test::TestPassFactory*>(instro->getFactory());
 
-		InstRO::Rose::RosePassFactory * aFactory=dynamic_cast<InstRO::Rose::RosePassFactory*>(instro->getFactory());
 		std::vector<std::string> filterRules;
 		filterRules.push_back("main");
-		InstRO::Pass * aPass= aFactory->createBlackAndWhiteListSelector(filterRules);
-		InstRO::Pass * bPass= aFactory->createBlackAndWhiteListSelector(filterRules);
-		InstRO::Pass * cPass= aFactory->createBlackAndWhiteListSelector(filterRules);
-		InstRO::Pass * compound=aFactory->createBooleanOrSelector(aPass,bPass);
-
-		// Get the configuration container
-		InstRO::Rose::RosePassFactory::GenericAdapterConfiguration gac;
-		// Add the pass responsible for selecting function for instrumentation
-		gac.instrumentFunctions(compound);
-		// Add the pass for loop-construct selection to the loop input-channel
-		gac.instrumentLoopConstruct(cPass);
+		auto aPass= aFactory->createStringBasedSelector(filterRules);
+		auto bPass = aFactory->createStringBasedSelector(filterRules);
+		auto compound = aFactory->createBooleanOrSelector(aPass, bPass);
 		
-		InstRO::Pass * adapter= aFactory->createGenericAdapter(gac);
+		auto adapter = aFactory->createGPIAdapter(compound);
 
-		passManager->outputConfiguration("InstRO-CFG.dot");
-
+		// CI - Reseting Classic Implementation   passManager->outputConfiguration("InstRO-CFG.dot");
+		
 	}
 	catch(std::string stringBasedException)
 	{

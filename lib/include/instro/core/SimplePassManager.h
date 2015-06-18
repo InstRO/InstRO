@@ -7,12 +7,13 @@
 
 namespace InstRO {
 namespace PassManagement {
+
 class SimplePassManager : public InstRO::PassManagement::PassManager {
  public:
 	 SimplePassManager(){};
 	// Enable the Pass Manager to query the pass for its dependencies
-	void registerPass(Pass *currentPass);
-	void setExecuter(PassExecuter *executer);
+	 void registerPass(Pass *currentPass) override ;
+	 
 	// TODO: FIX
 	void addDependency(Pass *input, Core::ConstructLevelType inputLevel,
 										 Pass *currentPass,
@@ -21,7 +22,8 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 		getEnvelope(currentPass)->predecessors.push_back(input);
 		getEnvelope(input)->existingOuputDependency = true;
 	};
-	int execute();
+	void setExecuter(PassExecuter *executer) override;
+	int execute() override;
 
 	virtual bool hasOutputDependencies(Pass *pass) {
 		return getEnvelope(pass)->existingOuputDependency;
