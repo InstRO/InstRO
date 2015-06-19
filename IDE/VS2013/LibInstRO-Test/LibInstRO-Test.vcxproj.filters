@@ -43,6 +43,9 @@
     <Filter Include="source\lib\support">
       <UniqueIdentifier>{099f4105-2705-47d4-accf-531dd5ce3014}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\instro\abstract layer">
+      <UniqueIdentifier>{4376da53-a68d-4786-8acf-c6360f96632b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro.h">
@@ -117,6 +120,12 @@
     <ClInclude Include="..\..\..\lib\include\instro\support\BWLFileReader.h">
       <Filter>include\instro\support</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\abstractlayer\analysisInterface.h">
+      <Filter>include\instro\abstract layer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\test\CallPathSelector.h">
+      <Filter>include\instro\test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\main.cxx">
@@ -137,5 +146,11 @@
     <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp">
       <Filter>source\lib\support</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\test\CallPathSelector.cpp">
+      <Filter>source\lib</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

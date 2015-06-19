@@ -42,6 +42,18 @@ class ConstructSet {
 	ConstructLevelType getMinConstructLevel() { return ConstructLevelMin; };
 	void setCurrentMinLevel(ConstructLevelType minLevel){};
 	void setCurrentMaxLevel(ConstructLevelType maxLevel){};
+
+	void clear(){};
+	size_t size(){
+		return 0;
+	}
+
+	void add(ConstructSet * setB)
+	{
+	}
+	void add(ConstructSet set)
+	{
+	}
 	protected:
 			ConstructLevelType minimalSupportedLevel,maximalSupportedLevel;
 };
