@@ -88,7 +88,7 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 	for (PassEnvelope *passContainer : passList) {
 		// disable output for all passes. This allows to release the output
 		// construct set
-		passContainer->pass->releaseOutput();
+		passContainer->pass->finalizePass();
 	}
 	return 0;
 }

@@ -43,23 +43,30 @@ class Pass : public InstRO::Core::PassConstructSetManagement, public InstRO::Cor
  public:
 	//CI empty pass construction disallowed. Each Pass is an container for the corresponding PassImplementation Object from the ToolingSpace
 	Pass() = delete;
-	Pass(PassImplementation *pImpl)
-			: passImplementation(pImpl),
-				passInitialized(false),
-				passExecuted(false),
-				passFinalize(false),
-				passOutputReleased(false),
-				inputReady(false){};
+	Pass(PassImplementation *pImpl): 
+		passImplementation(pImpl),
+		passInitialized(false),
+		passExecuted(false),
+		passFinalize(false),
+		passOutputReleased(false),
+		inputReady(false){
+	};
 	PassImplementation *getPassImplementation() { return passImplementation; };
 	~Pass() {
 		delete (passImplementation);
 		passImplementation = NULL;
 	}
+	//CI: Tell the pass, that is is allowed to initialize itself
 	void initPass();
+	//CI: Execute the pass, this generates the output-constructset
 	void executePass();
-	void execute(InstRO::PassManagement::PassExecuter *executer);
+
+//CI: Refactoring to remove the Executor stuff|	void execute(InstRO::PassManagement::PassExecuter *executer);
+
 	void finalizePass();
-	void releaseOutput();
+	
+//2015-06-19 - Deprecated:	void releaseOutput();
+
 	// CI: Enable Input is called externally to indicate, that  the input passes
 	// have beend processed and that the current pass can now use the
 	// getInput(Pass*) to obtain the construct sets of its predecessors
@@ -102,6 +109,7 @@ class Pass : public InstRO::Core::PassConstructSetManagement, public InstRO::Cor
 	bool passInitialized, passExecuted, passFinalize, passOutputReleased;
 	bool inputReady;
 	std::string passNameString;
+
 	PassImplementation *passImplementation;
 
 	std::vector<Pass *> inputPasses;

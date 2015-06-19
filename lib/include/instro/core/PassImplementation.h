@@ -22,7 +22,8 @@ class InputAggregation {
 	}
 
  private:
-	std::unordered_map<InstRO::Pass *, InstRO::Core::ConstructSet *> pToCMap;
+	 // CI: Us the Pass as a AccessHandle to the RespectiveConstruct set
+	 std::unordered_map<InstRO::Pass *, InstRO::Core::ConstructSet *> pToCMap;
 };
 }
 }

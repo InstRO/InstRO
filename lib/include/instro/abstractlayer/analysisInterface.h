@@ -51,7 +51,7 @@ namespace AnalysisLayer
 		class ExtendedCallGraph
 		{
 		public:
-			std::vector<ExtendedCallGraphNode*> findNodes(Core::ConstructSet * cs);
+			std::vector<ExtendedCallGraphNode*> findNodes(Core::ConstructSet * cs){ return std::vector<ExtendedCallGraphNode*>(); };
 			//std::vector<ExtendedCallGraphNode*> findNodes(GrammarInterface::GrammerTypes type);
 		};
 	}
@@ -59,8 +59,8 @@ namespace AnalysisLayer
 	class AnalysisManager
 	{
 	public:
-		ExtendedCallGraph::ExtendedCallGraph * getECG();
-		ControlFlowGraph::ControlFlowGraph * getCFG();
+		ExtendedCallGraph::ExtendedCallGraph * getECG(){ return new ExtendedCallGraph::ExtendedCallGraph(); };
+		ControlFlowGraph::ControlFlowGraph * getCFG(){ return new ControlFlowGraph::ControlFlowGraph(); };
 		ConstructElevator::ConstructElevator * getCSElevator();
 		GrammarInterface::ConstructToGrammarTypeMapper *getConstructToGrammarTypeMaper();
 		GrammarInterface::RequestCSByGrammarTypeInterface * getRequestCSByGrammarTypeInterface();
