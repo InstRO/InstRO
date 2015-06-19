@@ -5,6 +5,7 @@
 #include "instro/core/PassManager.h"
 
 #include "instro/test/TestPass.h"
+#include "instro/test/CallPathSelector.h"
 // #include "instro/test/selectors/BlackAndWhiteListSelector.h"
 
 namespace InstRO
@@ -18,6 +19,11 @@ class TestPassFactory:public PassFactory
 
 		InstRO::Pass* createStringBasedSelector(std::vector<std::string> matchList) override { return NULL; };
 		InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) override { return NULL; };
+
+		InstRO::Pass* createCallPathSelector(InstRO::Pass * from, InstRO::Pass * to)
+		{
+			return new InstRO::Pass(new Selectors::CallPathSelector(from, to));
+		}
 
 		// Convenience 
 		InstRO::Pass* createProgramEntrySelector() override { return NULL; };

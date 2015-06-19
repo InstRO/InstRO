@@ -36,6 +36,8 @@ namespace PassManagement {
 class PassManager;
 }
 
+
+
 // Make it a sane world
 class Pass : public InstRO::Core::PassConstructSetManagement, public InstRO::Core::ConstructLevelManagrment {
  public:

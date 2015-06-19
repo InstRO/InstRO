@@ -5,17 +5,19 @@
 
 namespace InstRO
 {
-	namespace Test{
-		class TestPass: public Pass
+namespace Test{
+	class TestPass : public PassImplementation
 		{
 		};
-		namespace Adapters{
-		class Adapter:public TestPass
+namespace Adapters{
+	class Adapter :public TestPass
+	{
+	};
+}
+
+namespace Selectors
 		{
-		};
-		}
-		namespace Selectors
-		{
+// Simple test implementation of a CPS
 
 		class Selector:public TestPass
 		{
