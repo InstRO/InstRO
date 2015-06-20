@@ -28,6 +28,20 @@ class InputAggregation {
 }
 }
 
+class CFG
+{
+public:
+	std::vector<Pass*> passList;
+	template <class ... PassList> CFG(Pass * first, PassList... rest)
+	{
+		passList.push(first);
+		passList.push(rest);
+	}
+};
+
+class ChannelConfiguration{
+
+};
 /*
  * This class is the user-interface to create his own pass.
  * One needs to inherit from this class and implement a compiler dependent pass.
@@ -35,7 +49,23 @@ class InputAggregation {
  * predecessors.
  */
 class PassImplementation {
- public:
+private:
+	ChannelConfiguration cfg;
+protected:
+
+	ChannelConfiguration & getChannelCFG(){
+		return cfg;
+	}
+public:
+	ChannelConfiguration const getWriteChannelCFG(){
+		return cfg;
+	}
+
+	PassImplementation() = delete;
+
+	PassImplementation(ChannelConfiguration cfg):cfg(cfg){
+	}
+
 	virtual void init() = 0;
 	virtual void execute() = 0;
 	virtual void finalize() = 0;
