@@ -40,7 +40,23 @@ public:
 };
 
 class ChannelConfiguration{
+protected:
+	std::vector<Pass*> inputChannelPasses;
+public:
+	// CI: Empty Configuration - No Input Passes used
+	ChannelConfiguration(){
+	};
 
+	ChannelConfiguration(Pass * p1){
+		inputChannelPasses.push_back(p1);
+	}
+	
+	template <class ... PassList> ChannelConfiguration(Pass * p1,PassList... passes){
+		inputChannelPasses.insert(inputChannelPasses.begin(), {p1, passes... });
+	}
+
+	void setConstructLevel(Pass* inputPass, int minLevel, int maxLevel){
+	}
 };
 /*
  * This class is the user-interface to create his own pass.
@@ -57,7 +73,7 @@ protected:
 		return cfg;
 	}
 public:
-	ChannelConfiguration const getWriteChannelCFG(){
+	ChannelConfiguration const channelCFG(){
 		return cfg;
 	}
 

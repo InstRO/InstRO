@@ -128,9 +128,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\lib\src\main.cxx">
-      <Filter>source\lib</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp">
       <Filter>source\lib\core</Filter>
     </ClCompile>
@@ -148,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\test\CallPathSelector.cpp">
       <Filter>source\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\main.cxx">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
