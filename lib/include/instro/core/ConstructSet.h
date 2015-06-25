@@ -12,9 +12,16 @@ namespace Core {
 
 typedef enum ContstructLevelEnum {
 	ConstructLevelMin = 1,
-	ConstructLevelLiteral = 1,
-	ConstructLevelExpression = 2,
-	ConstructLevelStatement,
+	CLFragment = 1,
+	CLExpression = 2,
+	CLStatement,
+	CLLoop,
+	CLConditional,
+	CLScope,
+	CLSimple,
+	CLFunction,
+	CLFileScope,
+	CLGlobalScope,
 	MaxConstructLevel = 1
 } ConstructLevelType;
 
