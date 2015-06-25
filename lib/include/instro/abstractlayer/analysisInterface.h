@@ -20,7 +20,12 @@ namespace AnalysisLayer
 	{
 		class ConstructElevator
 		{
-
+			Core::ConstructSet raise(Core::ConstructSet input,Core::ConstructLevelType cl)
+			{
+			}
+			Core::ConstructSet lower(Core::ConstructSet input,Core::ConstructLevelType cl)
+			{
+			}
 		};
 	}
 	namespace GrammarInterface
@@ -30,14 +35,21 @@ namespace AnalysisLayer
 			OpenMP,
 			DoWhile,
 			Expression,
-			Return
-		} GrammerTypes;
+			Return,
+			Operator,
+		} GrammarTypesType;
 
-		class ConstructToGrammarTypeMapper
+		class GrammarInterface
 		{
-		};
-		class RequestCSByGrammarTypeInterface
-		{
+		//class ConstructSetToGrammarTypeMapper
+			std::list<GrammarTypesType> getGrammerTypes(Core::ConstructSet cs){
+				return std::list<GrammarTypesType>();
+			}
+		
+		//class RequestCSByGrammarTypeInterface
+			Core::ConstructSet getConstructsByType(GrammarTypesType types){
+				return Core::ConstructSet();
+			}
 
 		};
 	}
