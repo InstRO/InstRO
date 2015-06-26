@@ -1,3 +1,4 @@
+
 typedef struct
 {
   unsigned char _x[4]
@@ -12,7 +13,7 @@ typedef struct
 
 
 #ifdef __cplusplus
-"C" {
+extern "C" {
 # define __GOMP_NOTHROW throw ()
 #else
 # define __GOMP_NOTHROW __attribute__((__nothrow__))
@@ -51,4 +52,3 @@ double omp_get_wtick (void) __GOMP_NOTHROW{return 0.0;};
 }
 #endif
 
-#endif /* OMP_H */
