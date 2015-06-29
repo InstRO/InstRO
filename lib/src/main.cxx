@@ -1,7 +1,7 @@
 #define USING_EXAMPLE
 #include "instro.h"
 
-#include "instro/misc/VisualizingPassManager.h"
+// #include "instro/misc/VisualizingPassManager.h"
 
 
 #include <vector>

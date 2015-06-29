@@ -52,6 +52,9 @@
     <Filter Include="source\lib\example">
       <UniqueIdentifier>{f02c97f0-6b58-4bd8-8cf3-2843e6698fed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\instro\example\tooling">
+      <UniqueIdentifier>{17f75d3c-8dc1-42f7-b794-9adef9f1c10f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro.h">
@@ -66,13 +69,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructElevator.h">
       <Filter>include\instro\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructLevelManagrment.h">
-      <Filter>include\instro\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h">
-      <Filter>include\instro\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSetManagement.h">
       <Filter>include\instro\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\core\Factory.h">
@@ -108,12 +105,6 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h">
       <Filter>include\instro\rose</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingManager.h">
-      <Filter>include\instro\extra</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingPassManager.h">
-      <Filter>include\instro\extra</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\support\BWLFileReader.h">
       <Filter>include\instro\support</Filter>
     </ClInclude>
@@ -134,6 +125,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePassFactory.h">
       <Filter>include\instro\example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructSet.h">
+      <Filter>include\instro\example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleAnalysisInterface.h">
+      <Filter>include\instro\example\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\Singleton.h">
+      <Filter>include\instro\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +160,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp">
       <Filter>source\lib\example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp">
+      <Filter>source\lib\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

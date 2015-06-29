@@ -81,9 +81,7 @@
     <ClInclude Include="..\..\..\lib\include\instro.h" />
     <ClInclude Include="..\..\..\lib\include\instro\agnosticSupport.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructElevator.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructLevelManagrment.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSetManagement.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Factory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Instrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Pass.h" />
@@ -92,12 +90,13 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\PassImplementation.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\PassManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\SimplePassManager.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\Singleton.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\CallPathSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleAnalysisInterface.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePassFactory.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingManager.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingPassManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h" />
@@ -111,6 +110,7 @@
     <ClCompile Include="..\..\..\lib\src\core\ConstructSetManagement.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Pass.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp" />
+    <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\main.cxx" />
     <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp" />

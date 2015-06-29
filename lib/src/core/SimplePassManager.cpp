@@ -1,4 +1,7 @@
+#include "instro/core/Singleton.h"
+#include "instro/core/Instrumentor.h"
 #include "instro/core/SimplePassManager.h"
+#include "instro/core/ConstructSet.h"
 
 void InstRO::PassManagement::SimplePassManager::registerPass(Pass *currentPass) {
 	// CI: Create a new pass envelope to store the dependencies of this pass.
@@ -9,17 +12,10 @@ void InstRO::PassManagement::SimplePassManager::registerPass(Pass *currentPass) 
 	// for all predecessors inquired the pass dependencies
 	for (auto &i : inputs) {
 		if (i == NULL) continue;
-		Core::ConstructLevelType maxInputLevel = currentPass->getInputLevelRequirement(i);
-		Core::ConstructLevelType minOutputLevelProvided = i->getOutputLevel();
-		if (minOutputLevelProvided > maxInputLevel)
-#ifdef __EXCEPTIONS
-			// btw this is a memory leak :D (using 'new' above and throwing here.
-			throw std::string("InputPass ") + i->passName() + std::string(" can not provide ConstructLevel \"") +
-					constructLevelToString(maxInputLevel) + std::string("\"");
-#else
-			std::cerr << "InputPass " + i->passName() + " cannot provide ConstructLevel X" << std::endl;
-#endif
-		addDependency(i, minOutputLevelProvided, currentPass, maxInputLevel);
+		Core::ConstructLevelType maxInputLevel = currentPass->getMaxInputLevelRequirement(i);
+	//	Core::ConstructLevelType minOutputLevelProvided = i->getOutputLevel();
+		
+		addDependency(i,currentPass);
 	}
 }
 
@@ -29,22 +25,48 @@ void InstRO::PassManagement::SimplePassManager::setExecuter(
 }
 
 int InstRO::PassManagement::SimplePassManager::execute() {
+
 	std::cout << "Running execute in SimplePassManager" << std::endl;
+
 	for (PassEnvelope *passContainer : passList) {
+		
 		// Allow the Pass to Initialize iself. E.g. start reading input data from
 		// files, allocated named input fields, etc.
-		// passContainer->pass->init();
+
+		passContainer->pass->initPass();
 	}
+
 	for (PassEnvelope *passEnvelope : passList) {
+
 		std::cout << "Running pass: " << passEnvelope->pass->passName() << std::endl;
+
 		std::vector<InstRO::Core::ConstructSet *> tempConstructSets(getPredecessors(passEnvelope).size());
+
 		// check if some input needs to be explicitly elevated
 		std::unordered_map<InstRO::Pass *, InstRO::Core::ConstructSet *> mymap;
 		for (auto &i : getPredecessors(passEnvelope)) {
-			if (i->getOutputLevel() < passEnvelope->pass->getInputLevelRequirement(i)) {
-				InstRO::Core::ConstructSet *newConstructSet = elevate(passEnvelope->pass->getInputLevelRequirement(i));
-				passEnvelope->pass->overrideInput(i, newConstructSet);
-				tempConstructSets.push_back(newConstructSet);
+			if (i->getOutput()->getMinConstructLevel() < passEnvelope->pass->getMinInputLevelRequirement(i) || 
+				i->getOutput()->getMaxConstructLevel() > passEnvelope->pass->getMaxInputLevelRequirement(i)) {
+				// We need to cast the construct set.
+				// Create a copy of the output construct set
+				Core::ConstructSet * copy = i->getOutput()->copy();
+				Core::ConstructLevelType cropMin = Core::ContstructLevelEnum::CLMin;
+				Core::ConstructLevelType cropMax = Core::ContstructLevelEnum::CLMax;
+				
+				if (InstRO::getInstrumentorInstance()->getConstructLoweringPolicyCrop()) cropMax = passEnvelope->pass->getMaxInputLevelRequirement(i);
+				if (InstRO::getInstrumentorInstance()->getConstructRaisingPolicyCrop()) cropMin = passEnvelope->pass->getMinInputLevelRequirement(i);
+				InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->crop(*copy, cropMin, cropMax);
+				
+				if (InstRO::getInstrumentorInstance()->getConstructRaisingPolicyElevate())
+					InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->raise(*copy, passEnvelope->pass->getMinInputLevelRequirement(i));
+
+				if (InstRO::getInstrumentorInstance()->getConstructLoweringPolicyElevate())
+					InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->lower(*copy, passEnvelope->pass->getMinInputLevelRequirement(i));
+
+
+			//	InstRO::Core::ConstructSet *newConstructSet = elevate(passEnvelope->pass->getInputLevelRequirement(i));
+				passEnvelope->pass->overrideInput(i, copy);
+				tempConstructSets.push_back(copy);
 			}
 
 			// I introduced the concept of an input aggregation for the pass
@@ -63,7 +85,7 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 		// 1rst enable the input for the current pass. Since this is the basic
 		// pass manager, the sequence is linear with no intelligence. Hence, all
 		// preceeding passes must have already completed.
-		passEnvelope->pass->setInputEnabled();
+//CI refactorying|		passEnvelope->pass->setInputEnabled();
 
 		// 2nd: Allow the pass to initlialize its internal state, such that it can
 		// execute. This allows, e.g. to allocate large amounts of memory. Or
@@ -82,7 +104,7 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 		passEnvelope->pass->finalizePass();
 
 		// 5th: Disable input and deallocated potentially create construct sets
-		passEnvelope->pass->setInputDisabled();
+//CI refactorying|		passEnvelope->pass->setInputDisabled();
 		for (auto &i : tempConstructSets) delete i;
 	}
 	for (PassEnvelope *passContainer : passList) {

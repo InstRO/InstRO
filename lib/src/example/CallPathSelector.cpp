@@ -49,11 +49,11 @@ void CallPathSelector::finalize()
 	
 };
 void CallPathSelector::releaseOutput()  { 
-	output.clear(); 
+//	output.clear(); 
 };
 Core::ConstructSet * CallPathSelector::getOutput()  
 {
-	return &output;
+	return NULL;
 };
 
 
