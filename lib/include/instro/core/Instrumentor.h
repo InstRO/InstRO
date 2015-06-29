@@ -23,6 +23,7 @@
 #include "instro/core/PassManager.h"
 #include "instro/core/SimplePassManager.h"
 #include "instro/core/PassFactory.h"
+#include "instro/abstractLayer/analysisInterface.h"
 
 namespace InstRO {
 namespace PassManagement {
@@ -57,10 +58,19 @@ class Instrumentor {
 			passManager = manager;
 		}
 	}
-
+	AbstractLayer::AnalysisManager * getAbstractLayer(){
+		if (analysisManager != NULL)
+			return analysisManager;
+		else {
+			analysisManager = new AbstractLayer::AnalysisManager();
+			return analysisManager;
+		}
+	}
+	//AbstractLayer::
  protected:
 	bool passManagerLocked;
 	InstRO::PassManagement::PassManager* passManager;
+	InstRO::AbstractLayer::AnalysisManager * analysisManager;
 
  public:
 	virtual void init() = 0;
