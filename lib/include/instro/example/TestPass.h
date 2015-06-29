@@ -6,12 +6,12 @@
 namespace InstRO
 {
 
-namespace Test	{
-	class TestPass : public Core::PassImplementation		{
+	namespace Example	{
+		class ExamplePass : public Core::PassImplementation		{
 		public:
 			// CI: delete implicit c-tor of the test-pass. Otherwise, it would try to invoce the deted PassImplementation c-tor and cause an error
-			TestPass() = delete;
-			TestPass(Core::ChannelConfiguration ccfg) :InstRO::Core::PassImplementation(ccfg){};
+			ExamplePass() = delete;
+			ExamplePass(Core::ChannelConfiguration ccfg) :InstRO::Core::PassImplementation(ccfg){};
 
 		};
 namespace Adapters	{

@@ -4,7 +4,7 @@
 
 namespace InstRO
 {
-namespace ToolingLayer
+namespace Tooling
 {
 	
 	namespace ControlFlowGraph
