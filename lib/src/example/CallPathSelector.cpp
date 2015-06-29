@@ -1,12 +1,12 @@
 #include <memory>
 #include <set>
 
-#include "instro/test/CallPathSelector.h"
-#include "instro/toolingLayer/analysisInterface.h"
+#include "instro/example/CallPathSelector.h"
+#include "instro/tooling/analysisInterface.h"
 
 namespace InstRO
 {
-namespace Test
+namespace Example
 {
 namespace Selectors
 {
@@ -23,7 +23,7 @@ namespace Selectors
 	auto fromCS = this->getInput(fromPass);
 	auto toCS = this->getInput(toPass);
 	// toCS = this->getInput(toPass);
-	InstRO::ToolingLayer::ExtendedCallGraph::ExtendedCallGraph *ecg = ToolingLayer::analysisManager->getECG();
+	InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph *ecg = Tooling::analysisManager->getECG();
 	auto fromNodes=ecg->findNodes(fromCS);
 	auto toNodes = ecg->findNodes(toCS);
 

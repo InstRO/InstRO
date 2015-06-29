@@ -92,6 +92,10 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\PassImplementation.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\PassManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\SimplePassManager.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\CallPathSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleInstrumentor.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePass.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePassFactory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingPassManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h" />
@@ -99,22 +103,18 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\support\BWLFileReader.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\test\CallPathSelector.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\test\TestInstrumentor.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\test\TestPass.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\test\TestPassFactory.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\toolingLayer\analysisInterface.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\toolingLayer\transformationInterface.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\analysisInterface.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\transformationInterface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\ConstructSetManagement.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Pass.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp" />
+    <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\main.cxx" />
     <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp" />
-    <ClCompile Include="..\..\..\lib\src\test\CallPathSelector.cpp" />
-    <ClCompile Include="..\..\..\lib\src\toolingLayer\analysisInterface.cpp" />
+    <ClCompile Include="..\..\..\lib\src\tooling\analysisInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

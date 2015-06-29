@@ -1,4 +1,4 @@
-#define USING_TEST
+#define USING_EXAMPLE
 #include "instro.h"
 
 #include "instro/misc/VisualizingPassManager.h"
@@ -16,11 +16,11 @@ int main(int argc,char ** argv)
 {
 	try
 	{
-		InstRO::Instrumentor * instro = new InstRO::TestInstrumentor();
+		InstRO::Instrumentor * instro = new InstRO::ExampleInstrumentor();
 		// CI - Reseting Classic Implementation  InstRO::Ext::VisualizingPassManager * passManager=new InstRO::Ext::VisualizingPassManager();
 		// CI - Reseting Classic Implementation  instro->setPassManager(passManager);
 		
-		auto aFactory = dynamic_cast<InstRO::Test::TestPassFactory*>(instro->getFactory());
+		auto aFactory = dynamic_cast<InstRO::Example::ExamplePassFactory*>(instro->getFactory());
 
 		std::vector<std::string> filterRules;
 		filterRules.push_back("main");

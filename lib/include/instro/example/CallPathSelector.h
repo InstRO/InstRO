@@ -1,5 +1,5 @@
 #include "instro/core/PassImplementation.h"
-#include "instro/example/TestPass.h"
+#include "instro/example/ExamplePass.h"
 
 
 namespace InstRO

@@ -9,12 +9,12 @@
 namespace InstRO
 {
 	namespace Example{
-	class TestPassFactory;
+		class ExamplePassFactory;
 	}
-	class TestInstrumentor: public Instrumentor
+	class ExampleInstrumentor : public Instrumentor
 	{
 	public: 
-		Example::TestPassFactory * getFactory(Instrumentor::CompilationPhase phase){ return new Example::TestPassFactory(passManager); }
+		Example::ExamplePassFactory * getFactory(Instrumentor::CompilationPhase phase){ return new Example::ExamplePassFactory(passManager); }
 		// TestPassFactory * getFactory(Instrumentor::CompilationPhase phase){return dynamic_cast<PassFactory*>(new Test::TestPassFactory(passManager));}
 //		PassFactory * getFactory(In
 		void init(){};

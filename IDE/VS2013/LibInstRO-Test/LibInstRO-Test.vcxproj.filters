@@ -22,9 +22,6 @@
     <Filter Include="include\instro\llvm">
       <UniqueIdentifier>{d013ed9f-acba-4c06-bd6e-981b6529ec56}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\instro\test">
-      <UniqueIdentifier>{872a2657-6864-4e6d-9a2e-950dcd2637fc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\instro\support">
       <UniqueIdentifier>{8b9876e8-07c6-4813-8046-45194d90456a}</UniqueIdentifier>
     </Filter>
@@ -40,14 +37,20 @@
     <Filter Include="source\lib\support">
       <UniqueIdentifier>{099f4105-2705-47d4-accf-531dd5ce3014}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\instro\toolingLayer">
-      <UniqueIdentifier>{c1cf7131-bba8-4085-9f55-90d5ce7a8b87}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\lib\toolingLayer">
-      <UniqueIdentifier>{a7ecd454-95d0-4236-99f7-2d553b8a11b9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\instro\extra">
       <UniqueIdentifier>{22e1ab6b-f6de-46b7-8edd-21092df36525}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\instro\tooling">
+      <UniqueIdentifier>{c1cf7131-bba8-4085-9f55-90d5ce7a8b87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib\tooling">
+      <UniqueIdentifier>{a7ecd454-95d0-4236-99f7-2d553b8a11b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\instro\example">
+      <UniqueIdentifier>{872a2657-6864-4e6d-9a2e-950dcd2637fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib\example">
+      <UniqueIdentifier>{f02c97f0-6b58-4bd8-8cf3-2843e6698fed}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -111,26 +114,26 @@
     <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingPassManager.h">
       <Filter>include\instro\extra</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\test\TestInstrumentor.h">
-      <Filter>include\instro\test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\test\TestPass.h">
-      <Filter>include\instro\test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\test\TestPassFactory.h">
-      <Filter>include\instro\test</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\support\BWLFileReader.h">
       <Filter>include\instro\support</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\test\CallPathSelector.h">
-      <Filter>include\instro\test</Filter>
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\analysisInterface.h">
+      <Filter>include\instro\tooling</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\toolingLayer\analysisInterface.h">
-      <Filter>include\instro\toolingLayer</Filter>
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\transformationInterface.h">
+      <Filter>include\instro\tooling</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\toolingLayer\transformationInterface.h">
-      <Filter>include\instro\toolingLayer</Filter>
+    <ClInclude Include="..\..\..\lib\include\instro\example\CallPathSelector.h">
+      <Filter>include\instro\example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleInstrumentor.h">
+      <Filter>include\instro\example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePass.h">
+      <Filter>include\instro\example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePassFactory.h">
+      <Filter>include\instro\example</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -149,14 +152,14 @@
     <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp">
       <Filter>source\lib\support</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\test\CallPathSelector.cpp">
-      <Filter>source\lib</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\lib\src\main.cxx">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\toolingLayer\analysisInterface.cpp">
-      <Filter>source\lib\toolingLayer</Filter>
+    <ClCompile Include="..\..\..\lib\src\tooling\analysisInterface.cpp">
+      <Filter>source\lib\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp">
+      <Filter>source\lib\example</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

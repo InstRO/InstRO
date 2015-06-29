@@ -1,8 +1,8 @@
 #include <memory> // Shared_ptr
-#include "instro/toolingLayer/analysisInterface.h"
+#include "instro/tooling/analysisInterface.h"
 
 namespace InstRO{
-	namespace ToolingLayer{
-		std::shared_ptr<InstRO::ToolingLayer::AnalysisManager> analysisManager;
+	namespace Tooling{
+		std::shared_ptr<InstRO::Tooling::AnalysisManager> analysisManager;
 	}
 }
