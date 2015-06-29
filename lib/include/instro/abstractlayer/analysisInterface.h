@@ -2,7 +2,7 @@
 
 namespace InstRO
 {
-namespace AnalysisLayer
+namespace AbstractLayer
 {
 	
 	namespace ControlFlowGraph
@@ -73,10 +73,12 @@ namespace AnalysisLayer
 	public:
 		ExtendedCallGraph::ExtendedCallGraph * getECG(){ return new ExtendedCallGraph::ExtendedCallGraph(); };
 		ControlFlowGraph::ControlFlowGraph * getCFG(){ return new ControlFlowGraph::ControlFlowGraph(); };
-		ConstructElevator::ConstructElevator * getCSElevator();
-		GrammarInterface::ConstructToGrammarTypeMapper *getConstructToGrammarTypeMaper();
-		GrammarInterface::RequestCSByGrammarTypeInterface * getRequestCSByGrammarTypeInterface();
+		ConstructElevator::ConstructElevator * getCSElevator() {
+			return new ConstructElevator::ConstructElevator();
+		};
+		GrammarInterface::GrammarInterface *getGrammarInterface(){ 
+			return new GrammarInterface::GrammarInterface();
+		}
 	};
-	AnalysisManager * analysisManager;
 }
 }

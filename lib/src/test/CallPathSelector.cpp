@@ -23,7 +23,7 @@ namespace Selectors
 	auto fromCS = this->getInput(fromPass);
 	auto toCS = this->getInput(toPass);
 	// toCS = this->getInput(toPass);
-	InstRO::AnalysisLayer::ExtendedCallGraph::ExtendedCallGraph *ecg =InstRO::AnalysisLayer::analysisManager->getECG();
+	InstRO::AbstractLayer::ExtendedCallGraph::ExtendedCallGraph *ecg = InstRO::AbstractLayer::analysisManager->getECG();
 	auto fromNodes=ecg->findNodes(fromCS);
 	auto toNodes = ecg->findNodes(toCS);
 
