@@ -43,7 +43,7 @@ class Pass : public InstRO::Core::PassConstructSetManagement, public InstRO::Cor
  public:
 	//CI empty pass construction disallowed. Each Pass is an container for the corresponding PassImplementation Object from the ToolingSpace
 	Pass() = delete;
-	Pass(PassImplementation *pImpl): 
+	Pass(Core::PassImplementation *pImpl) :
 		passImplementation(pImpl),
 		passInitialized(false),
 		passExecuted(false),
@@ -51,7 +51,7 @@ class Pass : public InstRO::Core::PassConstructSetManagement, public InstRO::Cor
 		passOutputReleased(false),
 		inputReady(false){
 	};
-	PassImplementation *getPassImplementation() { return passImplementation; };
+	Core::PassImplementation *getPassImplementation() { return passImplementation; };
 	~Pass() {
 		delete (passImplementation);
 		passImplementation = NULL;
@@ -110,7 +110,7 @@ class Pass : public InstRO::Core::PassConstructSetManagement, public InstRO::Cor
 	bool inputReady;
 	std::string passNameString;
 
-	PassImplementation *passImplementation;
+	Core::PassImplementation *passImplementation;
 
 	std::vector<Pass *> inputPasses;
 	Core::ConstructLevelType outputLevel;

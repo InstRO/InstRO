@@ -79,7 +79,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\abstractlayer\analysisInterface.h" />
     <ClInclude Include="..\..\..\lib\include\instro\agnosticSupport.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructElevator.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructLevelManagrment.h" />
@@ -104,6 +103,8 @@
     <ClInclude Include="..\..\..\lib\include\instro\test\TestInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\test\TestPass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\test\TestPassFactory.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\toolingLayer\analysisInterface.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\toolingLayer\transformationInterface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp" />
@@ -113,6 +114,7 @@
     <ClCompile Include="..\..\..\lib\src\main.cxx" />
     <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp" />
     <ClCompile Include="..\..\..\lib\src\test\CallPathSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\toolingLayer\analysisInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

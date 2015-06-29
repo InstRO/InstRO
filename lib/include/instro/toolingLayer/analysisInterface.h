@@ -1,8 +1,10 @@
+#include <memory> // We need shared pointers
+#include <list> // We use List in the GrammarInterface
 #include "instro/core/ConstructSet.h"
 
 namespace InstRO
 {
-namespace AbstractLayer
+namespace ToolingLayer
 {
 	
 	namespace ControlFlowGraph
@@ -53,7 +55,6 @@ namespace AbstractLayer
 
 		};
 	}
-
 	namespace ExtendedCallGraph{
 		class ExtendedCallGraphNode
 		{
@@ -80,5 +81,7 @@ namespace AbstractLayer
 			return new GrammarInterface::GrammarInterface();
 		}
 	};
+
+	extern std::shared_ptr<AnalysisManager> analysisManager;
 }
 }

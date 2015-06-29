@@ -14,7 +14,7 @@ namespace InstRO
 				Pass * fromPass, *toPass;
 				CallPathSelector() = delete;
 			public:
-				CallPathSelector(Pass * from, Pass * to):TestPass(ChannelConfiguration(from,to)), fromPass(from), toPass(to){};
+				CallPathSelector(Pass * from, Pass * to) :TestPass(Core::ChannelConfiguration(from, to)), fromPass(from), toPass(to){};
 				virtual void init() override;
 				virtual void execute() override;
 				virtual void finalize() override ;

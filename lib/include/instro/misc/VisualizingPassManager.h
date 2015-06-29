@@ -11,7 +11,7 @@ namespace InstRO{
 
 class Pass;
 
-namespace Ext{
+namespace Extra{
 	class VisualizingPassManager: public PassManagement::SimplePassManager
 {
 	public:
