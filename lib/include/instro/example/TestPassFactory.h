@@ -4,18 +4,18 @@
 #include "instro/core/PassFactory.h"
 #include "instro/core/PassManager.h"
 
-#include "instro/test/TestPass.h"
-#include "instro/test/CallPathSelector.h"
+#include "instro/example/ExamplePass.h"
+#include "instro/example/CallPathSelector.h"
 // #include "instro/test/selectors/BlackAndWhiteListSelector.h"
 
 namespace InstRO
 {
 	namespace Test{
 
-class TestPassFactory:public PassFactory
+		class ExamplePassFactory :public PassFactory
 {
 	public:	
-		TestPassFactory(PassManagement::PassManager * refManager):PassFactory(refManager){};
+		ExamplePassFactory(PassManagement::PassManager * refManager) :PassFactory(refManager){};
 
 		InstRO::Pass* createStringBasedSelector(std::vector<std::string> matchList) override { return NULL; };
 		InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) override { return NULL; };

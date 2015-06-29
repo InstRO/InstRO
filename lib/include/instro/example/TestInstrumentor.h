@@ -4,17 +4,17 @@
 #include "instro/core/Instrumentor.h"
 // #include "instro/core/PassFactory.h"
 
-#include "instro/test/TestPassFactory.h"
+#include "instro/example/ExamplePassFactory.h"
 
 namespace InstRO
 {
-	namespace Test{
+	namespace Example{
 	class TestPassFactory;
 	}
 	class TestInstrumentor: public Instrumentor
 	{
 	public: 
-		Test::TestPassFactory * getFactory(Instrumentor::CompilationPhase phase){ return new Test::TestPassFactory(passManager); }
+		Example::TestPassFactory * getFactory(Instrumentor::CompilationPhase phase){ return new Example::TestPassFactory(passManager); }
 		// TestPassFactory * getFactory(Instrumentor::CompilationPhase phase){return dynamic_cast<PassFactory*>(new Test::TestPassFactory(passManager));}
 //		PassFactory * getFactory(In
 		void init(){};
