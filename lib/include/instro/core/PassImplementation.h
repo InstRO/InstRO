@@ -31,7 +31,9 @@ namespace InstRO {
 
 	class ChannelConfiguration{
 	protected:
-		std::vector<Pass*> inputChannelPasses;
+		std::vector<InstRO::Pass*> inputChannelPasses;
+		std::unordered_map<Pass*,InstRO::Core::ContstructLevelEnum> inputChannelMin;
+		std::unordered_map<Pass*, InstRO::Core::ContstructLevelEnum> inputChannelMax;
 	public:
 		// CI: Empty Configuration - No Input Passes used
 		ChannelConfiguration(){
@@ -39,14 +41,21 @@ namespace InstRO {
 
 		ChannelConfiguration(Pass * p1){
 			inputChannelPasses.push_back(p1);
+			inputChannelMin[p1] = InstRO::Core::ContstructLevelEnum::CLMin;
+			inputChannelMax[p1] = InstRO::Core::ContstructLevelEnum::CLMax;
 		}
 
 		template <class ... PassList> ChannelConfiguration(Pass * p1, PassList... passes){
 			inputChannelPasses.insert(inputChannelPasses.begin(), { p1, passes... });
 		}
 
-		void setConstructLevel(Pass* inputPass, int minLevel, int maxLevel){
+		void setConstructLevel(Pass* inputPass, InstRO::Core::ContstructLevelEnum minLevel, InstRO::Core::ContstructLevelEnum maxLevel){
+			inputChannelMin[inputPass] = minLevel;
+			inputChannelMax[inputPass] = maxLevel;
 		}
+		InstRO::Core::ContstructLevelEnum getMinConstructLevel(Pass* inputPass){ return inputChannelMin[inputPass];}
+		InstRO::Core::ContstructLevelEnum getMaxConstructLevel(Pass* inputPass){ return inputChannelMax[inputPass];}
+		std::vector<InstRO::Pass*> const getPasses(){ return inputChannelPasses; };
 	};
 	}
 	/*
@@ -66,7 +75,7 @@ namespace InstRO {
 				return cfg;
 			}
 		public:
-			Core::ChannelConfiguration const channelCFG(){
+			Core::ChannelConfiguration channelCFG(){
 				return cfg;
 			}
 

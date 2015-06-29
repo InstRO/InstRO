@@ -17,8 +17,8 @@
 #include <iostream>
 #include <vector>
 
-#include "instro/core/ConstructLevelManagrment.h"
-#include "instro/core/ConstructSetManagement.h"
+//CI: deprecated | #include "instro/core/ConstructLevelManagrment.h"
+//CI: deprecated | #include "instro/core/ConstructSetManagement.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/core/PassManager.h"
 #include "instro/core/SimplePassManager.h"
@@ -59,14 +59,25 @@ class Instrumentor {
 			passManager = manager;
 		}
 	}
-	Tooling::AnalysisManager * getAbstractLayer(){
-		if (analysisManager != NULL)
-			return analysisManager;
-		else {
-			analysisManager = new Tooling::AnalysisManager();
-			return analysisManager;
-		}
-	}
+	/*typedef enum {
+		CROPCONSTRUCTS = 1,
+		ELEVATECONSTRUCTS = 2
+	}ConstructElevationPolicy;*/
+protected:
+	bool constructRaisingPolicyElevate, constructLoweringPolicyElevate;
+public:
+	void setConstructRaisingPolicyCrop(){ constructRaisingPolicyElevate = false; };
+	void setConstructRaisingPolicyElevate(){ constructRaisingPolicyElevate = true; }
+	void setConstructLoweringPolicyCrop(){ constructLoweringPolicyElevate = false; }
+	void setConstructLoweringPolicyElevate(){ constructLoweringPolicyElevate = true; }
+
+	bool getConstructRaisingPolicyCrop(){ return constructRaisingPolicyElevate; }
+	bool getConstructRaisingPolicyElevate(){ return constructRaisingPolicyElevate; }
+	bool getConstructLoweringPolicyCrop(){ return constructLoweringPolicyElevate; }
+	bool getConstructLoweringPolicyElevate(){ return constructLoweringPolicyElevate; }
+
+	// Interface to access the implementation specific Analysis Layer Container
+	virtual Tooling::AnalysisManager * getAnalysisManager() = 0;
 	//AbstractLayer::
  protected:
 	bool passManagerLocked;
@@ -78,6 +89,8 @@ class Instrumentor {
 	virtual void apply() = 0;
 	virtual void finalize() = 0;
 };
+
+
 }
 
 #endif

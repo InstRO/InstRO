@@ -4,11 +4,10 @@
 
 namespace InstRO
 {
-
-	namespace Example
-	{
-		namespace Selectors
-		{
+namespace Example
+{
+namespace Selectors
+{
 			class CallPathSelector :public ExamplePass{
 			protected:
 				Pass * fromPass, *toPass;
@@ -21,10 +20,10 @@ namespace InstRO
 				virtual void releaseOutput() override;
 				virtual Core::ConstructSet *getOutput() override ;
 			protected:
-				Core::ConstructSet output;
+				//InstRO::Example::output;
 
 			};
-		}
 
-	}
-}
+} // namespace Selectors
+} // namespace Example 
+} // namespace InstRO

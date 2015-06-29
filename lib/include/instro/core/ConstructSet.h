@@ -5,13 +5,14 @@
 // XXX Why do we want to use list here? I would prefer using vector!
 //#include <list>
 #include <vector>
+#include <set>
 
 namespace InstRO {
 
 namespace Core {
 
 typedef enum ContstructLevelEnum {
-	ConstructLevelMin = 1,
+	CLMin = 0,
 	CLFragment = 1,
 	CLExpression = 2,
 	CLStatement,
@@ -22,7 +23,7 @@ typedef enum ContstructLevelEnum {
 	CLFunction,
 	CLFileScope,
 	CLGlobalScope,
-	MaxConstructLevel = 1
+	CLMax
 } ConstructLevelType;
 
 /*
@@ -41,28 +42,31 @@ std::string operator+(const std::string &lhs, const ConstructLevelType &type);
  */
 class ConstructSet {
  public:
-	ConstructSet():minimalSupportedLevel(ConstructLevelMin),maximalSupportedLevel(){};
-    ConstructSet(ConstructLevelType level){};
-	ConstructSet(ConstructLevelType minLevel, ConstructLevelType maxLevel){};        
-	ConstructLevelType getConstructLevel() { return ConstructLevelMin; };
-	ConstructLevelType getMaxConstructLevel() { return ConstructLevelMin; };
-	ConstructLevelType getMinConstructLevel() { return ConstructLevelMin; };
-	void setCurrentMinLevel(ConstructLevelType minLevel){};
-	void setCurrentMaxLevel(ConstructLevelType maxLevel){};
+	ConstructSet(){};
 
-	void clear(){};
-	size_t size(){
-		return 0;
-	}
+	// CI: return a vector (ordered) with all construct levels from the set
+	virtual ::std::vector<ConstructLevelType> getConstructLevels() = NULL;
+	virtual ConstructLevelType getMaxConstructLevel()=NULL;
+	virtual ConstructLevelType getMinConstructLevel()=NULL;
+	virtual void clear()=NULL;
+	virtual size_t size() = NULL;
+	/*
+	virtual void add(ConstructSet * setB) = NULL;
+	virtual void add(ConstructSet & set) = NULL;*/
+	//virtual ConstructSet intersect(ConstructSet b) = NULL;
+	
+	virtual void put(ConstructSet &) = NULL;
+	virtual void erase(ConstructSet &) = NULL;
 
-	void add(ConstructSet * setB)
-	{
-	}
-	void add(ConstructSet set)
-	{
-	}
-	protected:
-			ConstructLevelType minimalSupportedLevel,maximalSupportedLevel;
+	// https://en.wikipedia.org/wiki/Set_(mathematics)
+	//virtual unique_ptr<ConstructSet*> combine()
+	virtual ConstructSet & combine(ConstructSet &) = NULL;
+	virtual ConstructSet & intersect(ConstructSet &) = NULL;
+	virtual ConstructSet & relativecomplement(ConstructSet &) = NULL;
+	virtual ConstructSet & symmerticDifference(ConstructSet&) = NULL;
+	virtual ConstructSet * copy(){ return this; };
+	//virtual ::std::set<ConstructSet &> split() = NULL;
+	// CI: I would like to have s.th. like a begin() and end() returning an iterator of constructset containing individual constructs
 };
 
 } // End Namespace Core

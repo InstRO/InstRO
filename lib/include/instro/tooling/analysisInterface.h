@@ -1,3 +1,6 @@
+#ifndef INSTRO_ANALYSIS_INTERFACE
+#define INSTRO_ANALYSIS_INTERFACE
+
 #include <memory> // We need shared pointers
 #include <list> // We use List in the GrammarInterface
 #include "instro/core/ConstructSet.h"
@@ -20,14 +23,17 @@ namespace Tooling
 	}
 	namespace ConstructElevator
 	{
+		/* CI: The ConstructSet class is intended to be specialized for each compiler interface. It provides the basic mechanisms to specify what construct level are contained. */
 		class ConstructElevator
 		{
-			Core::ConstructSet raise(Core::ConstructSet input,Core::ConstructLevelType cl)
-			{
-			}
-			Core::ConstructSet lower(Core::ConstructSet input,Core::ConstructLevelType cl)
-			{
-			}
+		public:
+
+			// This is the implicit way, that the PassManager will allways apply
+			virtual Core::ConstructSet & raise(Core::ConstructSet & input, Core::ConstructLevelType cl) = NULL;
+			// This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
+			virtual Core::ConstructSet & lower(Core::ConstructSet & input, Core::ConstructLevelType cl) = NULL;
+			// Crop Construct up to, or down to a level
+			virtual Core::ConstructSet & crop(Core::ConstructSet & input, Core::ConstructLevelType min, Core::ConstructLevelType max) = NULL;
 		};
 	}
 	namespace GrammarInterface
@@ -44,27 +50,23 @@ namespace Tooling
 		class GrammarInterface
 		{
 		//class ConstructSetToGrammarTypeMapper
-			std::list<GrammarTypesType> getGrammerTypes(Core::ConstructSet cs){
-				return std::list<GrammarTypesType>();
-			}
+			virtual std::list<GrammarTypesType> getGrammerTypes(const Core::ConstructSet & cs) = NULL;
 		
 		//class RequestCSByGrammarTypeInterface
-			Core::ConstructSet getConstructsByType(GrammarTypesType types){
-				return Core::ConstructSet();
-			}
+			virtual Core::ConstructSet && getConstructsByType(const GrammarTypesType & types) = NULL;
 
 		};
 	}
 	namespace ExtendedCallGraph{
 		class ExtendedCallGraphNode
 		{
-			Core::ConstructSet * getCS(){ return new Core::ConstructSet(); };
+			virtual Core::ConstructSet * getCS() = NULL;
 
 		};
 		class ExtendedCallGraph
 		{
 		public:
-			std::vector<ExtendedCallGraphNode*> findNodes(Core::ConstructSet * cs){ return std::vector<ExtendedCallGraphNode*>(); };
+			virtual std::vector<ExtendedCallGraphNode*> findNodes(Core::ConstructSet * cs) = 0;
 			//std::vector<ExtendedCallGraphNode*> findNodes(GrammarInterface::GrammerTypes type);
 		};
 	}
@@ -72,16 +74,14 @@ namespace Tooling
 	class AnalysisManager
 	{
 	public:
-		ExtendedCallGraph::ExtendedCallGraph * getECG(){ return new ExtendedCallGraph::ExtendedCallGraph(); };
-		ControlFlowGraph::ControlFlowGraph * getCFG(){ return new ControlFlowGraph::ControlFlowGraph(); };
-		ConstructElevator::ConstructElevator * getCSElevator() {
-			return new ConstructElevator::ConstructElevator();
-		};
-		GrammarInterface::GrammarInterface *getGrammarInterface(){ 
-			return new GrammarInterface::GrammarInterface();
-		}
+		virtual ExtendedCallGraph::ExtendedCallGraph * getECG() = 0;
+		virtual ControlFlowGraph::ControlFlowGraph * getCFG() = 0;
+		virtual ConstructElevator::ConstructElevator * getCSElevator() = 0;
+		virtual GrammarInterface::GrammarInterface *getGrammarInterface() = 0;
 	};
 
 	extern std::shared_ptr<AnalysisManager> analysisManager;
+
 }
 }
+#endif

@@ -34,6 +34,7 @@ class PassEnvelope {
 
 class PassManager {
  public:
+	 friend Pass;
 	// Enable the Pass Manager to query the pass for its dependencies
 	virtual void registerPass(Pass *currentPass) = 0;
 	virtual void setExecuter(PassExecuter *executer) = 0;
