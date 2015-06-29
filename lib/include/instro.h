@@ -14,7 +14,7 @@
  *
  *
  */
-#ifndef USING_TEST
+#ifndef USING_EXAMPLE
 #ifndef USING_ROSE
 #ifndef USING_LLVM
 #define USING_ROSE
@@ -37,6 +37,7 @@ namespace InstRO{
 	namespace Rose{};		// Contains the implementation for ROSE
 	namespace LLVM{};		// Contains the implementation for LLVM
 	namespace CLANG{};		// Contains the implementation for CLANG
+	namespace Example{};	// An example implementation and usage of the InstRO interface without actual functionality. This serves to demonstrate what must be implemented, to obtain a minimal functional InstRo
 }
 
 #include "instro/core/Pass.h"
@@ -68,8 +69,8 @@ namespace InstRO{
 #endif
 
 
-#ifdef USING_TEST
-#include "instro/test/TestInstrumentor.h"
-#include "instro/test/TestPass.h"
-#include "instro/test/TestPassFactory.h"
+#ifdef USING_EXAMPLE
+#include "instro/example/ExampleInstrumentor.h"
+#include "instro/example/ExamplePass.h"
+#include "instro/example/ExamplePassFactory.h"
 #endif

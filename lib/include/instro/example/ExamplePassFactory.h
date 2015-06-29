@@ -10,7 +10,7 @@
 
 namespace InstRO
 {
-	namespace Test{
+	namespace Example{
 
 		class ExamplePassFactory :public PassFactory
 {
