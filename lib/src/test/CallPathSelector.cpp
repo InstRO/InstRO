@@ -2,7 +2,7 @@
 #include <set>
 
 #include "instro/test/CallPathSelector.h"
-#include "instro/abstractlayer/analysisInterface.h"
+#include "instro/toolingLayer/analysisInterface.h"
 
 namespace InstRO
 {
@@ -23,7 +23,7 @@ namespace Selectors
 	auto fromCS = this->getInput(fromPass);
 	auto toCS = this->getInput(toPass);
 	// toCS = this->getInput(toPass);
-	InstRO::AbstractLayer::ExtendedCallGraph::ExtendedCallGraph *ecg = InstRO::AbstractLayer::analysisManager->getECG();
+	InstRO::ToolingLayer::ExtendedCallGraph::ExtendedCallGraph *ecg = ToolingLayer::analysisManager->getECG();
 	auto fromNodes=ecg->findNodes(fromCS);
 	auto toNodes = ecg->findNodes(toCS);
 

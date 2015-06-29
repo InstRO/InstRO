@@ -10,7 +10,7 @@
 
 namespace InstRO {
 
-	namespace util {
+	namespace Utility {
 		/*
 		 * The class handles the reading of a provided black white list secification file.
 		 */
