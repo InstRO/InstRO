@@ -50,7 +50,10 @@ class Instrumentor {
 		setPassManager(new InstRO::PassManagement::SimplePassManager());
 	}
 	virtual InstRO::PassFactory* getFactory(CompilationPhase phase = frontend) = 0;
-	virtual InstRO::PassManagement::PassManager* getPassManager() { return passManager; }
+	virtual InstRO::PassManagement::PassManager* getPassManager() { 
+		return passManager; 
+	}
+
 	void setPassManager(InstRO::PassManagement::PassManager* manager) {
 		if (passManagerLocked)
 			//			throw std::string("PassManager already in use and locked");
