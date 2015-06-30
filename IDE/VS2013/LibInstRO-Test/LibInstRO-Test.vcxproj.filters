@@ -140,9 +140,6 @@
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp">
       <Filter>source\lib\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\core\ConstructSetManagement.cpp">
-      <Filter>source\lib\core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\lib\src\core\Pass.cpp">
       <Filter>source\lib\core</Filter>
     </ClCompile>
