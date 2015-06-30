@@ -1,4 +1,4 @@
-#include "instro/tooling/analysisInterface.h"
+#include "instro/tooling/AnalysisInterface.h"
 #include "instro/example/ExampleConstructSet.h"
 
 namespace InstRO
