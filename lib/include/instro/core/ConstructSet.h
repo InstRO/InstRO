@@ -24,7 +24,8 @@ typedef enum ContstructLevelEnum {
 	CLFunction,
 	CLFileScope,
 	CLGlobalScope,
-	CLMax
+	CLMax,
+	CLNotALevel
 } ConstructLevelType;
 
 /*
@@ -46,6 +47,9 @@ public:
 	ConstructLevelType getLevel(){ return construct_level; }
 
 protected:
+	void setLevel(ConstructLevelType level){
+		construct_level = level;
+};
 	ConstructLevelType construct_level;
 
 };
