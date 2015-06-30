@@ -49,16 +49,18 @@ std::string operator+(const std::string &lhs,const ConstructLevelType &type)
 
 // CI: return a vector (ordered) with all construct levels from the set
 ::std::vector<ConstructLevelType> ConstructSet::getConstructLevels(){
-	std::unordered_map<ConstructLevelType, int> levels;
+	std::vector<int> levels;
+	for (int i = ConstructLevelType::CLMin; i < ConstructLevelType::CLMax; i++)
+		levels[i] = 0;
 	for (auto construct : this->constructs)
 	{
 		levels[(*construct).getLevel()]++;
 	}
 	std::vector<ConstructLevelType> returnVector;
-	for (auto counter : levels)
+	for (int i = ConstructLevelType::CLMin; i < ConstructLevelType::CLMax; i++)
 	{
-		if (counter.second)
-			returnVector.push_back(counter.first);				
+		if (levels[i])
+			returnVector.push_back(ConstructLevelType(i));
 	}
 	return returnVector;
 }
@@ -153,11 +155,13 @@ ConstructSet ConstructSet::symmerticDifference(const ConstructSet & other) const
 	return retSet;
 }
 	//virtual ConstructSet copy(){ return  };
-::std::set<ConstructSet> ConstructSet::split() const{
-	std::set<ConstructSet> retSet;
+::std::vector<ConstructSet> ConstructSet::split() const{
+	std::vector<ConstructSet> retSet;
+	retSet.reserve(constructs.size());
+//	retSet.insert(constructs.begin(), constructs.end());
 	for (auto construct : constructs)
 	{
-		retSet.insert(ConstructSet(construct));
+		retSet.push_back(ConstructSet(construct));
 	}
 	return retSet;
 }

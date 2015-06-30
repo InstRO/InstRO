@@ -93,7 +93,7 @@ public:
 	virtual ConstructSet relativecomplement(const ConstructSet &) const;
 	virtual ConstructSet symmerticDifference(const ConstructSet &) const;
 	//virtual ConstructSet copy(){ return  };
-	virtual ::std::set<ConstructSet> split() const;
+	virtual ::std::vector<ConstructSet> split() const;
 	// CI: I would like to have s.th. like a begin() and end() returning an iterator of constructset containing individual constructs
 
 private:
