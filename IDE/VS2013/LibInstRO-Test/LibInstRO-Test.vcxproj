@@ -107,7 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp" />
-    <ClCompile Include="..\..\..\lib\src\core\ConstructSetManagement.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Pass.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp" />
