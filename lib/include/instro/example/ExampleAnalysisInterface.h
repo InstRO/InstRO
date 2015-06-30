@@ -23,17 +23,17 @@ namespace InstRO
 
 
 					// This is the implicit way, that the PassManager will allways apply
-					virtual InstRO::Core::ConstructSet & raise(InstRO::Core::ConstructSet & input, InstRO::Core::ConstructLevelType cl) override {
-						return Example::Core::ExampleConstructSet();
+					virtual InstRO::Core::ConstructSet raise(InstRO::Core::ConstructSet & input, InstRO::Core::ConstructLevelType cl) override {
+						return InstRO::Core::ConstructSet();
 					}
 					// This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
-					virtual InstRO::Core::ConstructSet & lower(InstRO::Core::ConstructSet & input, InstRO::Core::ConstructLevelType cl) {
-						return Example::Core::ExampleConstructSet();
+					virtual InstRO::Core::ConstructSet lower(InstRO::Core::ConstructSet & input, InstRO::Core::ConstructLevelType cl) {
+						return InstRO::Core::ConstructSet();
 					}
 
-					virtual InstRO::Core::ConstructSet & crop(InstRO::Core::ConstructSet & input, InstRO::Core::ConstructLevelType min, InstRO::Core::ConstructLevelType max)
+					virtual InstRO::Core::ConstructSet crop(InstRO::Core::ConstructSet & input, InstRO::Core::ConstructLevelType min, InstRO::Core::ConstructLevelType max)
 					{
-						return Example::Core::ExampleConstructSet();
+						return InstRO::Core::ConstructSet();
 					}
 				};
 
@@ -46,8 +46,8 @@ namespace InstRO
 					}
 
 					//class RequestCSByGrammarTypeInterface
-					virtual InstRO::Core::ConstructSet && getConstructsByType(const InstRO::Tooling::GrammarInterface::GrammarTypesType & types) override {
-						return Example::Core::ExampleConstructSet();
+					virtual InstRO::Core::ConstructSet getConstructsByType(const InstRO::Tooling::GrammarInterface::GrammarTypesType & types) override {
+						return InstRO::Core::ConstructSet();
 					};
 
 				};

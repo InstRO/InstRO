@@ -49,24 +49,25 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 				i->getOutput()->getMaxConstructLevel() > passEnvelope->pass->getMaxInputLevelRequirement(i)) {
 				// We need to cast the construct set.
 				// Create a copy of the output construct set
-				Core::ConstructSet * copy = i->getOutput()->copy();
+				Core::ConstructSet  copy = *(i->getOutput());
 				Core::ConstructLevelType cropMin = Core::ContstructLevelEnum::CLMin;
 				Core::ConstructLevelType cropMax = Core::ContstructLevelEnum::CLMax;
 				
 				if (InstRO::getInstrumentorInstance()->getConstructLoweringPolicyCrop()) cropMax = passEnvelope->pass->getMaxInputLevelRequirement(i);
 				if (InstRO::getInstrumentorInstance()->getConstructRaisingPolicyCrop()) cropMin = passEnvelope->pass->getMinInputLevelRequirement(i);
-				InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->crop(*copy, cropMin, cropMax);
+				copy=InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->crop(copy, cropMin, cropMax);
 				
 				if (InstRO::getInstrumentorInstance()->getConstructRaisingPolicyElevate())
-					InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->raise(*copy, passEnvelope->pass->getMinInputLevelRequirement(i));
+					copy=InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->raise(copy, passEnvelope->pass->getMinInputLevelRequirement(i));
 
 				if (InstRO::getInstrumentorInstance()->getConstructLoweringPolicyElevate())
-					InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->lower(*copy, passEnvelope->pass->getMinInputLevelRequirement(i));
+					copy=InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->lower(copy, passEnvelope->pass->getMinInputLevelRequirement(i));
 
 
 			//	InstRO::Core::ConstructSet *newConstructSet = elevate(passEnvelope->pass->getInputLevelRequirement(i));
-				passEnvelope->pass->overrideInput(i, copy);
-				tempConstructSets.push_back(copy);
+				Core::ConstructSet * newCS = new Core::ConstructSet(copy);
+				passEnvelope->pass->overrideInput(i, newCS);
+				tempConstructSets.push_back(newCS);
 			}
 
 			// I introduced the concept of an input aggregation for the pass

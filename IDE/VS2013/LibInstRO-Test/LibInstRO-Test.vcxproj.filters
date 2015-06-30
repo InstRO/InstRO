@@ -66,9 +66,6 @@
     <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h">
       <Filter>include\instro</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructElevator.h">
-      <Filter>include\instro\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h">
       <Filter>include\instro\core</Filter>
     </ClInclude>
@@ -108,12 +105,6 @@
     <ClInclude Include="..\..\..\lib\include\instro\support\BWLFileReader.h">
       <Filter>include\instro\support</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\tooling\analysisInterface.h">
-      <Filter>include\instro\tooling</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\tooling\transformationInterface.h">
-      <Filter>include\instro\tooling</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\example\CallPathSelector.h">
       <Filter>include\instro\example</Filter>
     </ClInclude>
@@ -135,6 +126,12 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\Singleton.h">
       <Filter>include\instro\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\AnalysisInterface.h">
+      <Filter>include\instro\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\TransformationInterface.h">
+      <Filter>include\instro\tooling</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp">
@@ -152,14 +149,14 @@
     <ClCompile Include="..\..\..\lib\src\main.cxx">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\tooling\analysisInterface.cpp">
-      <Filter>source\lib\tooling</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp">
       <Filter>source\lib\example</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp">
       <Filter>source\lib\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp">
+      <Filter>source\lib\tooling</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
