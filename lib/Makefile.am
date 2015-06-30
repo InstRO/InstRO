@@ -95,6 +95,7 @@ if USELIBTOOL
 # LIBTOOL RULE FOR LIBINSTRO
 #lib_LTLIBRARIES= libInstRO_core.la libInstRO_clang.la libInstRO.la
 lib_LTLIBRARIES= libInstRO_core.la libInstRO_example.la
+bin_PROGRAMS=ExampleInstrumentor
 
 libInstRO_core_la_SOURCES= \
 	$(CORE_SFILES) \
@@ -107,6 +108,13 @@ libInstRO_example_la_SOURCES= \
 	$(EXAMPLE_HFILES) 
 
 libInstRO_example_la_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+
+ExampleInstrumentor_SOURCES = \
+	./src/example_main.cpp
+
+ExampleInstrumentor_LDADD= libInstRO_example.a
+# ExampleInstrumentor_LDFLAGS=
+ExampleInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
 
 #libInstRO_clang_la_SOURCES= \
 #	$(CLANG_SFILES) \
