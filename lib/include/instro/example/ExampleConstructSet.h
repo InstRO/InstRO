@@ -8,9 +8,9 @@ namespace InstRO
 	{
 		namespace Core
 		{
-			class ExampleConstruct
+			class ExampleConstruct: public InstRO::Core::Construct
 			{};
-
+#ifdef DEPRECATEDCS
 class ExampleConstructSet :public InstRO::Core::ConstructSet
 {
 	protected:
@@ -68,14 +68,8 @@ class ExampleConstructSet :public InstRO::Core::ConstructSet
 				virtual ConstructSet & intersect(ConstructSet &) { return ExampleConstructSet(); }
 				virtual ConstructSet & relativecomplement(ConstructSet &) { return ExampleConstructSet(); }
 				virtual ConstructSet & symmerticDifference(ConstructSet&) { return ExampleConstructSet(); }
-			/*	virtual std::set<ConstructSet &> & split() { 
-				//return std::set<ConstructSet &>();
-					std::set<ExampleConstructSet &> retSet;
-					for (auto iter = constructs.begin(); iter != constructs.end(); iter++);
-						//retSet.insert(ExampleConstructSet(*iter));
-					return dynamic_cast<std::set<ConstructSet &>&>(retSet);
-				}*/
 			};
+#endif
 		}
 	}
 }

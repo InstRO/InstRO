@@ -80,7 +80,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro.h" />
     <ClInclude Include="..\..\..\lib\include\instro\agnosticSupport.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructElevator.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Factory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Instrumentor.h" />
@@ -102,8 +101,8 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\support\BWLFileReader.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\tooling\analysisInterface.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\tooling\transformationInterface.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\AnalysisInterface.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\TransformationInterface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp" />
@@ -113,7 +112,7 @@
     <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\main.cxx" />
     <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp" />
-    <ClCompile Include="..\..\..\lib\src\tooling\analysisInterface.cpp" />
+    <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

@@ -2,6 +2,7 @@
 #define INSTRO_CORE_CONSTRUCTSET_H 0.1
 
 #include <string>
+#include <memory> // Shared pointers
 // XXX Why do we want to use list here? I would prefer using vector!
 //#include <list>
 #include <vector>
@@ -36,6 +37,19 @@ std::string contstructLevelToString(ConstructLevelType type);
 std::string operator+(const std::string &lhs, const ConstructLevelType &type);
 
 
+/* CI: Construct Set implementation. Contribution by Roman Neﬂ */
+class Construct{
+public:
+	virtual bool operator<(const  Construct & b){ return false; }
+	Construct() = delete;
+	Construct(ConstructLevelType level) :construct_level(level){};
+	ConstructLevelType getLevel(){ return construct_level; }
+
+protected:
+	ConstructLevelType construct_level;
+
+};
+
 /* CI: The ConstructSet class is intended to be specialized for each compiler
  * interface. It provides the basic mechanisms to specify what construct level
  * are contained. 
@@ -45,28 +59,46 @@ class ConstructSet {
 	ConstructSet(){};
 
 	// CI: return a vector (ordered) with all construct levels from the set
-	virtual ::std::vector<ConstructLevelType> getConstructLevels() = 0;
-	virtual ConstructLevelType getMaxConstructLevel()=0;
-	virtual ConstructLevelType getMinConstructLevel()=0;
-	virtual void clear()=0;
-	virtual size_t size() = 0;
+	virtual ::std::vector<ConstructLevelType> getConstructLevels();
+	virtual ConstructLevelType getMaxConstructLevel();
+	virtual ConstructLevelType getMinConstructLevel();
+	virtual void clear();
+	virtual bool empty();
+	virtual size_t size();
 	/*
 	virtual void add(ConstructSet * setB) = NULL;
 	virtual void add(ConstructSet & set) = NULL;*/
 	//virtual ConstructSet intersect(ConstructSet b) = NULL;
-	
-	virtual void put(ConstructSet &) = 0;
-	virtual void erase(ConstructSet &) = 0;
 
+protected:	// this will be in the protected developer interface
+	virtual void put(const std::shared_ptr<Construct>& construct);
+	virtual void erase(const std::shared_ptr<Construct>& construct);
+	virtual void put(ConstructSet cs);
+	virtual void erase(ConstructSet cs);
+	bool contains(const std::shared_ptr<Construct>& construct) const;
+	ConstructSet(const std::shared_ptr<Construct>& construct){
+		constructs.insert(construct);
+	};
+
+
+	std::set<std::shared_ptr<Construct> >::iterator begin();
+	std::set<std::shared_ptr<Construct> >::iterator end();
+	std::set<std::shared_ptr<Construct> >::const_iterator  cbegin()const;
+	std::set<std::shared_ptr<Construct> >::const_iterator  cend()const;
+public:
 	// https://en.wikipedia.org/wiki/Set_(mathematics)
 	//virtual unique_ptr<ConstructSet*> combine()
-	virtual ConstructSet & combine(ConstructSet &) = 0;
-	virtual ConstructSet & intersect(ConstructSet &) = 0;
-	virtual ConstructSet & relativecomplement(ConstructSet &) = 0;
-	virtual ConstructSet & symmerticDifference(ConstructSet&) = 0;
-	virtual ConstructSet * copy(){ return this; };
-	//virtual ::std::set<ConstructSet &> split() = NULL;
+	virtual ConstructSet combine(const ConstructSet &) const;
+	virtual ConstructSet intersect(const ConstructSet &) const ;
+	virtual ConstructSet relativecomplement(const ConstructSet &) const;
+	virtual ConstructSet symmerticDifference(const ConstructSet &) const;
+	//virtual ConstructSet copy(){ return  };
+	virtual ::std::set<ConstructSet> split() const;
 	// CI: I would like to have s.th. like a begin() and end() returning an iterator of constructset containing individual constructs
+
+private:
+
+	std::set<std::shared_ptr<Construct> > constructs;
 };
 
 } // End Namespace Core
