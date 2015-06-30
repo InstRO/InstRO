@@ -45,25 +45,25 @@ class ConstructSet {
 	ConstructSet(){};
 
 	// CI: return a vector (ordered) with all construct levels from the set
-	virtual ::std::vector<ConstructLevelType> getConstructLevels() = NULL;
-	virtual ConstructLevelType getMaxConstructLevel()=NULL;
-	virtual ConstructLevelType getMinConstructLevel()=NULL;
-	virtual void clear()=NULL;
-	virtual size_t size() = NULL;
+	virtual ::std::vector<ConstructLevelType> getConstructLevels() = 0;
+	virtual ConstructLevelType getMaxConstructLevel()=0;
+	virtual ConstructLevelType getMinConstructLevel()=0;
+	virtual void clear()=0;
+	virtual size_t size() = 0;
 	/*
 	virtual void add(ConstructSet * setB) = NULL;
 	virtual void add(ConstructSet & set) = NULL;*/
 	//virtual ConstructSet intersect(ConstructSet b) = NULL;
 	
-	virtual void put(ConstructSet &) = NULL;
-	virtual void erase(ConstructSet &) = NULL;
+	virtual void put(ConstructSet &) = 0;
+	virtual void erase(ConstructSet &) = 0;
 
 	// https://en.wikipedia.org/wiki/Set_(mathematics)
 	//virtual unique_ptr<ConstructSet*> combine()
-	virtual ConstructSet & combine(ConstructSet &) = NULL;
-	virtual ConstructSet & intersect(ConstructSet &) = NULL;
-	virtual ConstructSet & relativecomplement(ConstructSet &) = NULL;
-	virtual ConstructSet & symmerticDifference(ConstructSet&) = NULL;
+	virtual ConstructSet & combine(ConstructSet &) = 0;
+	virtual ConstructSet & intersect(ConstructSet &) = 0;
+	virtual ConstructSet & relativecomplement(ConstructSet &) = 0;
+	virtual ConstructSet & symmerticDifference(ConstructSet&) = 0;
 	virtual ConstructSet * copy(){ return this; };
 	//virtual ::std::set<ConstructSet &> split() = NULL;
 	// CI: I would like to have s.th. like a begin() and end() returning an iterator of constructset containing individual constructs
