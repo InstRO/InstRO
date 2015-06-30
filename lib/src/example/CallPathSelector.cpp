@@ -2,7 +2,7 @@
 #include <set>
 
 #include "instro/example/CallPathSelector.h"
-#include "instro/tooling/analysisInterface.h"
+#include "instro/tooling/AnalysisInterface.h"
 
 namespace InstRO
 {

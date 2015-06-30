@@ -24,7 +24,7 @@
 #include "instro/core/SimplePassManager.h"
 #include "instro/core/PassFactory.h"
 
-#include "instro/tooling/analysisInterface.h"
+#include "instro/tooling/AnalysisInterface.h"
 
 namespace InstRO {
 namespace PassManagement {

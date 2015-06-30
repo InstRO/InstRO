@@ -1,5 +1,5 @@
 AM_CPPFLAGS=-I$(top_srcdir)/lib/include
-AM_CFLAGS=-O0
+# AM_CFLAGS=-O0
 
 if DEBUG
 AM_CFLAGS = -g3 -O0
@@ -16,7 +16,7 @@ CORE_SFILES= \
 ./src/core/Pass.cpp \
 ./src/support/BWLFileReader.cpp \
 ./src/tooling/AnalysisInterface.cpp
-# ./src/core/ConstructSetManagement.cpp \
+# ./src/core/ConstructSetManagement.cpp 
 
 
 
@@ -51,7 +51,7 @@ CORE_HFILES= \
 
 # ./include/instro/core/ConstructSetManagement.h \
 #./include/instro/core/ConstructLevelManagrment.h \
-#./include/instro/core/ConstructElevator.h \
+#./include/instro/core/ConstructElevator.h 
 
 CLANG_HFILES= \
 ./include/instro/clang/adapter/CygProfileAdapter.h \

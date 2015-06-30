@@ -1,5 +1,5 @@
 #include <memory> // Shared_ptr
-#include "instro/tooling/analysisInterface.h"
+#include "instro/tooling/AnalysisInterface.h"
 
 namespace InstRO{
 	namespace Tooling{

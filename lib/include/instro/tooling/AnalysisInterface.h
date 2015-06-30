@@ -29,11 +29,11 @@ namespace Tooling
 		public:
 
 			// This is the implicit way, that the PassManager will allways apply
-			virtual Core::ConstructSet & raise(Core::ConstructSet & input, Core::ConstructLevelType cl) = NULL;
+			virtual Core::ConstructSet & raise(Core::ConstructSet & input, Core::ConstructLevelType cl) = 0;
 			// This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
-			virtual Core::ConstructSet & lower(Core::ConstructSet & input, Core::ConstructLevelType cl) = NULL;
+			virtual Core::ConstructSet & lower(Core::ConstructSet & input, Core::ConstructLevelType cl) = 0;
 			// Crop Construct up to, or down to a level
-			virtual Core::ConstructSet & crop(Core::ConstructSet & input, Core::ConstructLevelType min, Core::ConstructLevelType max) = NULL;
+			virtual Core::ConstructSet & crop(Core::ConstructSet & input, Core::ConstructLevelType min, Core::ConstructLevelType max) = 0;
 		};
 	}
 	namespace GrammarInterface
@@ -50,17 +50,17 @@ namespace Tooling
 		class GrammarInterface
 		{
 		//class ConstructSetToGrammarTypeMapper
-			virtual std::list<GrammarTypesType> getGrammerTypes(const Core::ConstructSet & cs) = NULL;
+			virtual std::list<GrammarTypesType> getGrammerTypes(const Core::ConstructSet & cs) = 0;
 		
 		//class RequestCSByGrammarTypeInterface
-			virtual Core::ConstructSet && getConstructsByType(const GrammarTypesType & types) = NULL;
+			virtual Core::ConstructSet && getConstructsByType(const GrammarTypesType & types) = 0;
 
 		};
 	}
 	namespace ExtendedCallGraph{
 		class ExtendedCallGraphNode
 		{
-			virtual Core::ConstructSet * getCS() = NULL;
+			virtual Core::ConstructSet * getCS() = 0;
 
 		};
 		class ExtendedCallGraph
