@@ -10,6 +10,8 @@
 #include "instro/rose/adapters/GenericAdapter.h"
 #include "instro/rose/adapters/CygProfileAdapter.h"
 
+#include "rose.h"
+
 namespace InstRO
 {
 	namespace Rose{
@@ -24,6 +26,7 @@ protected:
 		if (pass->getPassImplementation()!=NULL && rosePass==NULL) throw std::string("Oh my god, what is going on");
 		return rosePass;
 	}
+	SgProject* project;
 public:
 	class GenericAdapterConfiguration {
 	public:
@@ -38,7 +41,7 @@ public:
 		Pass * loopPass,* functionPass,*loopBodyPass;
 	};
 	public:	
-		RosePassFactory(PassManagement::PassManager * refManager):PassFactory(refManager){};
+		RosePassFactory(PassManagement::PassManager * refManager, SgProject* proj) :PassFactory(refManager), project(proj){};
 
 		Pass * createBlackAndWhiteListSelector(std::vector<std::string> rules)
 		{
