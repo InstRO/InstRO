@@ -4,11 +4,16 @@
 #include <memory> // We need shared pointers
 #include <list> // We use List in the GrammarInterface
 #include "instro/core/ConstructSet.h"
+#include "instro/tooling/NamedConstructAccess.h"
 
 namespace InstRO
 {
 namespace Tooling
 {
+	namespace NamedConstructAccess {
+		
+
+	}
 	
 	namespace ControlFlowGraph
 	{
@@ -78,6 +83,7 @@ namespace Tooling
 		virtual ControlFlowGraph::ControlFlowGraph * getCFG() = 0;
 		virtual ConstructElevator::ConstructElevator * getCSElevator() = 0;
 		virtual GrammarInterface::GrammarInterface *getGrammarInterface() = 0;
+		virtual NamedConstructAccess::NamedConstructAccess * getNamedConstructAccessFacility() = 0;
 	};
 
 	extern std::shared_ptr<AnalysisManager> analysisManager;
