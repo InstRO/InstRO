@@ -81,6 +81,20 @@ CLANG_HFILES= \
 #./include/instro/roseInstRO.h \
 #./include/instro/llvmInstRO.h
 
+ROSE_HFILES= \
+./include/instro/rose/RoseInstrumentor.h  \
+./include/instro/rose/RosePassFactory.h  \
+./include/instro/rose/RosePass.h  \
+./include/instro/rose/core/RoseConstructSet.h  \
+./include/instro/rose/tooling/RoseAnalysisInterface.h  \
+./include/instro/rose/tooling/RoseNamedConstructAccess.h  \
+./include/instro/rose/selectorsNameBasedSelector.h 
+
+ROSE_SFILES= \
+./src/rose/core/RoseConstructSet.cpp   \
+./src/rose/NamedConstructAccess.cpp   \
+./src/rose/selectorsNameBasedSelector.cpp  
+
 EXAMPLE_HFILES= \
 ./include/instro/example/ExampleConstructSet.h \
 ./include/instro/example/ExampleInstrumentor.h \
@@ -94,8 +108,8 @@ EXAMPLE_HFILES= \
 if USELIBTOOL
 # LIBTOOL RULE FOR LIBINSTRO
 #lib_LTLIBRARIES= libInstRO_core.la libInstRO_clang.la libInstRO.la
-lib_LTLIBRARIES= libInstRO_core.la libInstRO_example.la
-bin_PROGRAMS=ExampleInstrumentor
+lib_LTLIBRARIES= libInstRO_core.la libInstRO_example.la libInstRO_rose.la
+bin_PROGRAMS=ExampleInstrumentor RoseInstrumentor
 
 libInstRO_core_la_SOURCES= \
 	$(CORE_SFILES) \
@@ -107,7 +121,18 @@ libInstRO_example_la_SOURCES= \
 	$(EXAMPLE_SFILES) \
 	$(EXAMPLE_HFILES) 
 
+libInstRO_example_la_SOURCES= \
+	$(CORE_SFILES) \
+	$(CORE_HFILES) \
+	$(ROSE_SFILES) \
+	$(ROSE_HFILES) 
+
 libInstRO_example_la_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+
+libInstRO_rose_la_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+
+RoseInstrumentor_SOURCES = \
+	./src/rose_main.cpp
 
 ExampleInstrumentor_SOURCES = \
 	./src/example_main.cpp
@@ -138,10 +163,10 @@ libInstRO_core_la_CPPFLAGS=-I$(srcdir)/include -I@CLANG_INCLUDE_PATH@ -I@LLVM_IN
 else
 # STATIC LIBRARY FOR LIBINSTRO
 #lib_LIBRARIES=libInstRO.a
-lib_LIBRARIES= libInstRO_core.a libInstRO_example.a
+lib_LIBRARIES= libInstRO_core.a libInstRO_example.a libInstRO_rose.a
 #libInstRO_clang.a
 
-bin_PROGRAMS=ClangInstrumentor ExampleInstrumentor
+bin_PROGRAMS=ClangInstrumentor ExampleInstrumentor RoseInstrumentor
 
 ClangInstrumentor_SOURCES = \
 	./src/clang/Instrumentor.cpp
@@ -149,6 +174,14 @@ ClangInstrumentor_SOURCES = \
 ClangInstrumentor_LDADD= libInstRO_core.a -L@CLANG_LIB_DIR@ @CLANG_LIBS_LIST@ @LLVM_LINK_COMMAND@ -lclang
 ClangInstrumentor_LDFLAGS= -L@CLANG_LIB_DIR@ @CLANG_LIBS_LIST@ @LLVM_LINK_COMMAND@ -lclang
 ClangInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include @LLVM_INCLUDE_FLAGS@ -I@CLANG_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+
+RoseInstrumentor_SOURCES = \
+	./src/rose_main.cpp
+
+RoseInstrumentor_LDADD= libInstRO_core.a libInstRO_rose.a
+RoseInstrumentor_LDFLAGS= @ROSE_LIB_DIR@ @ROSE_LIBS_LIST@ -lrose
+RoseInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+
 
 
 ExampleInstrumentor_SOURCES = \
@@ -164,6 +197,13 @@ libInstRO_example_a_SOURCES= \
 	$(EXAMPLE_SFILES) \
 	$(EXAMPLE_HFILES) 
 libInstRO_example_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+
+libInstRO_rose_a_SOURCES= \
+	$(CORE_SFILES) \
+	$(CORE_HFILES) \
+	$(ROSE_SFILES) \
+	$(ROSE_HFILES) 
+libInstRO_rose_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@
 
 libInstRO_core_a_SOURCES= \
 	$(CORE_SFILES) \
