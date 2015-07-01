@@ -2,20 +2,19 @@
 
 #include <memory> // We need shared pointers
 #include <list> // We use List in the GrammarInterface
+#include <string>
 #include "instro/core/ConstructSet.h"
-
+#include "instro/rose/tooling/RoseNamedConstructAccess.h"
 namespace InstRO{ namespace Rose {	namespace Tooling	{	namespace NamedConstructAccess {
 
-class NameMatchingASTTraversal : public AstPrePostProcessing{
-
-void preOrderVisit(SgNode* n) {
+void NameMatchingASTTraversal::preOrderVisit(SgNode* n) {
 	if (this->matchingObject == NULL || this->listToMatchAgainst == NULL) {
 		std::cerr << "Matching object and/or listToMatchAgainst are NULL. Please use init(...) before invoking the traversal." << std::endl;
-		throw InstroException("NameMatchingSelector was not initialized before starting traversal.");
+		throw std::string("NameMatchingSelector was not initialized before starting traversal.");
 	}
 	
 	// generate a string from the rose AST node ...
-	stdd::string generatedName = toString(n);
+	std::string generatedName = toString(n);
 	if (generatedName.compare("INSTRUMENTOR_NOT_SUPPORTED_ATM") != 0) {
 			// Check the generated name against the stored list
 				/* 2013-10-15 JP: This was based on a previous implementation in the matcher.
@@ -48,6 +47,30 @@ void preOrderVisit(SgNode* n) {
 			}
 
 	}
-};
+std::string NameMatchingASTTraversal::toString(SgNode* n) {
+        // generates a string representation of n
+        if (isSgFunctionDefinition(n) != NULL) {
+                // This is a function definition node which has a name
+                return isSgFunctionDefinition(n)->get_declaration()->get_qualified_name().getString();
+        } else if (isSgFunctionRefExp(n) != NULL) {
+                // This is a function reference node which has a name
+                return isSgFunctionRefExp(n)->getAssociatedFunctionDeclaration()->get_qualified_name().getString();
+        } else if (isSgMemberFunctionRefExp(n) != NULL) {
+                // This is a member function reference node which has a name
+                return isSgMemberFunctionRefExp(n)->getAssociatedMemberFunctionDeclaration()->get_qualified_name().getString();
+        }
+        /* JPL: At the moment it is not sensible to give the opportunity to mark single variables.
+         else if(isSgVarRefExp(n) != NULL){
+         // This is a variable reference node which has a name
+         return isSgVarRefExp(n)->get_symbol()->get_name().getString();
+         } else if(isSgVariableDefinition(n) != NULL){
+         // This is a variable definition which has a name
+         return isSgVariableDefinition(n)->get_vardefn()->get_name().getString();
+         }
+         */
+        // If we reach this statement we know, that this node is not supported.
+        return std::string("INSTRUMENTOR_NOT_SUPPORTED_ATM");
+
+}
 
 }}}} // Cose the namespaces

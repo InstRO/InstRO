@@ -64,6 +64,12 @@ public:
 			this->selectionEnd(SageInterface::getEnclosingNode<SgProject>(start, true));
 		}
 		InstRO::Core::ConstructSet getConstructs(){ return cs; }
+		
+		/** This method can be used to generate Strings from SgNodes.
+		 * At the moment it will use only those SgNodes which are mentioned in the class documentation
+		 * \todo move to some utility namespace / entity
+		 */
+		std::string toString(SgNode* n);
 private:
 	InstRO::Core::ConstructSet cs;
 	IN_enum nodetypeToMark; // Where to save the ASTMarker

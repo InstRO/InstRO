@@ -92,8 +92,8 @@ ROSE_HFILES= \
 
 ROSE_SFILES= \
 ./src/rose/core/RoseConstructSet.cpp   \
-./src/rose/NamedConstructAccess.cpp   \
-./src/rose/selectorsNameBasedSelector.cpp  
+./src/rose/tooling/NamedConstructAccess.cpp   \
+./src/rose/selectors/NameBasedSelector.cpp  
 
 EXAMPLE_HFILES= \
 ./include/instro/example/ExampleConstructSet.h \
