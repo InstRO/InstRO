@@ -92,7 +92,7 @@ ROSE_HFILES= \
 
 ROSE_SFILES= \
 ./src/rose/core/RoseConstructSet.cpp   \
-./src/rose/tooling/NamedConstructAccess.cpp   \
+./src/rose/tooling/RoseNamedConstructAccess.cpp   \
 ./src/rose/selectors/NameBasedSelector.cpp  
 
 EXAMPLE_HFILES= \

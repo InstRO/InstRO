@@ -5,7 +5,8 @@
 #include "instro/core/PassManager.h"
 
 #include "instro/rose/RosePass.h"
-#include "instro/rose/selectors/BlackAndWhiteListSelector.h"
+// #include "instro/rose/selectors/BlackAndWhiteListSelector.h"
+#include "instro/rose/selectors/NameBasedSelector.h"
 #include "instro/rose/selectors/CompoundSelectors.h"
 #include "instro/rose/adapters/GenericAdapter.h"
 #include "instro/rose/adapters/CygProfileAdapter.h"
@@ -102,8 +103,19 @@ public:
 			return createGenericAdapter(gac.getFunctionSelector(),gac.getLoopConstructSelector(),gac.getLoopBodySelector());
 		};
 
-		InstRO::Pass* createStringBasedSelector(std::vector<std::string> matchList) override {
-			return NULL;
+
+		InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) override {
+			Pass * newPass = new Pass(new Selectors::NameBasedSelector(matchList));
+			newPass->setPassName("InstRO::Rose::NameBasedSelector");
+			passManager->registerPass(newPass);
+			return newPass;
+		};
+
+		InstRO::Pass * createNameBasedFilter(std::vector<std::string> matchList, Pass * filterInput) {
+			Pass * newPass = new Pass(new Selectors::NameBasedSelector(matchList, filterInput));
+			newPass->setPassName("InstRO::Rose::NameBasedFilter");
+			passManager->registerPass(newPass);
+			return newPass;
 		};
 		/*
 		InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA,InstRO::Pass* inputB) override {
