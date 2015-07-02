@@ -34,7 +34,7 @@ class PassFactory {
  public:
 	/* CI: A PassFactory must be initialized with the PassManager. */
 	PassFactory(PassManagement::PassManager* manager) : passManager(manager){};
-	virtual InstRO::Pass* createStringBasedSelector(std::vector<std::string> matchList) = 0;
+	virtual InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) = 0;
 
 	virtual InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA,InstRO::Pass* inputB) = 0;
 
