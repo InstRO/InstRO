@@ -54,12 +54,12 @@ namespace InstRO{
 					};
 					void setMatchAll(){ continueDescend = true; preOrderMatch = true; postOrderMatch = false; };
 
-					Core::ConstructSet matchUserSymbols(::InstRO::Tooling::NamedConstructAccess::Matcher * matcher, SgProject * proj){
+					Core::ConstructSet matchUserIdentifyer(::InstRO::Tooling::NamedConstructAccess::Matcher * matcher, SgProject * proj){
 						matchingObject = matcher;
 						traverseAST(proj);
 						return cs;
 					}
-					Core::ConstructSet matchUserText(::InstRO::Tooling::NamedConstructAccess::Matcher * matcher, SgProject * proj){
+					Core::ConstructSet matchUserTextString(::InstRO::Tooling::NamedConstructAccess::Matcher * matcher, SgProject * proj){
 						matchingObject = matcher;
 						traverseAST(proj);
 						return cs;
@@ -117,22 +117,22 @@ namespace InstRO{
 					SgProject* project;
 				public:
 					RoseNamedConstructAccess(SgProject * proj) :project(proj){};
-					Core::ConstructSet getConstructsByIdentifyerName(::InstRO::Tooling::NamedConstructAccess::Matcher & matcher, ::InstRO::Tooling::NamedConstructAccess::NamedConstructAccess::MatchPreferenceType matchPreference = ::InstRO::Tooling::NamedConstructAccess::NamedConstructAccess::mpMin) override{
+					Core::ConstructSet getConstructsByIdentifyerName(::InstRO::Tooling::NamedConstructAccess::Matcher & matcher) override{
 						traversal.reset();
 						traversal.setMatchMin();
 						return traversal.matchUserSymbols(&matcher, project);
 					};
-					Core::ConstructSet getConstructsByUserTextMatch(::InstRO::Tooling::NamedConstructAccess::Matcher & matcher, ::InstRO::Tooling::NamedConstructAccess::NamedConstructAccess::MatchPreferenceType matchPreference = ::InstRO::Tooling::NamedConstructAccess::NamedConstructAccess::mpMin) override{
+					Core::ConstructSet getConstructsByUserTextStringMatch(::InstRO::Tooling::NamedConstructAccess::Matcher & matcher) override{
 						traversal.reset();
 						traversal.setMatchMin();
 						return traversal.matchUserText(&matcher, project);
 					}; 
-					
-					Core::ConstructSet getConstructsByCodeMatch(::InstRO::Tooling::NamedConstructAccess::Matcher & matcher, ::InstRO::Tooling::NamedConstructAccess::NamedConstructAccess::MatchPreferenceType matchPreference = ::InstRO::Tooling::NamedConstructAccess::NamedConstructAccess::mpMin) override{
+					/* Not implemented in current instro
+					Core::ConstructSet getConstructsByCodeMatch(::InstRO::Tooling::NamedConstructAccess::Matcher & matcher) override{
 						traversal.reset();
 						traversal.setMatchMin();
 						return traversal.matchCode(&matcher, project);
-					};
+					};*/
 				};
 			}
 		}
