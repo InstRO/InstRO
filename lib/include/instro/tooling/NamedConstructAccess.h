@@ -83,6 +83,9 @@ namespace InstRO
 				//    1) topDown - maximal match  (i.e. the first match in a  given AST tree is only reported)
 				//    2) bottomUp - minimal match (i.e. the smallest possible match is only reported)
 				//    3) every match, i.e. every construct that matches is reported. This WILL result in one match resulting in multiple constructs
+
+				// After fooling around with the implementation and testing some potential scenarious I consider the top-down, bottom up schematic 
+				// flawed. In principle, a single selection is sufficient.
 				typedef enum {
 					mpMax,
 					mpMin,
@@ -90,11 +93,13 @@ namespace InstRO
 				} MatchPreferenceType;
 
 				// a) any userdefined symbols, e.g. variable names, function / method names, labels
-				virtual Core::ConstructSet getConstructsByIdentifyerName(Matcher &, MatchPreferenceType matchPreference = mpMin) = 0;
-				// b) user supplied text, e.g. symbols, but also contents of strings and comments
-				virtual Core::ConstructSet getConstructsByUserTextMatch(Matcher &, MatchPreferenceType matchPreference = mpMin) = 0;
-				// c) raw source code
-				virtual Core::ConstructSet getConstructsByCodeMatch(Matcher &, MatchPreferenceType matchPreference = mpMin) = 0;
+				virtual Core::ConstructSet getConstructsByIdentifyerName(Matcher &) = 0;
+				// b) contents of strings
+				virtual Core::ConstructSet getConstructsByUserTextStringMatch(Matcher &) = 0;
+				// c) raw source code. First all symbols, then the upward expressions, then the upward statement are matched. Last is the whole function matched.
+				virtual Core::ConstructSet getConstructsByCodeMatch(Matcher &) {
+					throw std::string("Not Implemented");
+				}
 
 			//	virtual Core::ConstructSet getConstructsByName(Matcher &) = 0;
 			//	virtual Core::ConstructSet getConstructsByName(Matcher *) = 0;
