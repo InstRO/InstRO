@@ -11,6 +11,10 @@ namespace InstRO
 		public:
 			RosePass(InstRO::Core::ChannelConfiguration ccfg) :PassImplementation(ccfg){}
 		};
+
+		class RoseLegcyPass:public RosePass{
+		};
+
 		namespace Adapters{
 		class Adapter:public RosePass
 		{
