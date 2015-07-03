@@ -1,15 +1,15 @@
 
-#include "instro/support/BWLFileReader.h"
+#include "instro/utility/BWLFileReader.h"
 #include <vector>
 #include <iostream>
 
 using namespace InstRO;
 
-util::BWLFileReader::BWLFileReader(std::string filename) : wSpecifier("+"), bSpecifier("-"), filename(filename){
+Utility::BWLFileReader::BWLFileReader(std::string filename) : wSpecifier("+"), bSpecifier("-"), filename(filename){
 }
 
 std::pair<std::vector<std::string>, std::vector<std::string> > 
-util::BWLFileReader::getBWList(){
+Utility::BWLFileReader::getBWList(){
 	if(! hasBeenRead){
 		readFile();
 	}
@@ -17,7 +17,7 @@ util::BWLFileReader::getBWList(){
 	return std::make_pair(blacklist, whitelist);
 }
 
-void util::BWLFileReader::readFile(){
+void Utility::BWLFileReader::readFile(){
 	if(filename.empty()){
 		std::cerr << "InstRO Error: The filename was empty in BWLFileReader\n" << std::endl;
 		return;
@@ -40,7 +40,7 @@ void util::BWLFileReader::readFile(){
 	inFile.close();
 }
 
-std::string util::BWLFileReader::prepareName(std::string name, std::string specifier){
+std::string Utility::BWLFileReader::prepareName(std::string name, std::string specifier){
 	name.erase(0, specifier.length());
 	boost::trim(name);
 

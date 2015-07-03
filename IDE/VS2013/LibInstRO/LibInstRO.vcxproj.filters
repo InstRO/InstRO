@@ -148,9 +148,6 @@
     <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp">
       <Filter>source\lib\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\common.cpp">
-      <Filter>source\lib</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\lib\src\main.cxx">
       <Filter>source\lib</Filter>
     </ClCompile>

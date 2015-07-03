@@ -1,5 +1,5 @@
 AM_CPPFLAGS=-I$(top_srcdir)/lib/include
-AM_CFLAGS=-O0
+# AM_CFLAGS=-O0
 
 if DEBUG
 AM_CFLAGS = -g3 -O0
@@ -11,9 +11,14 @@ endif
 
 CORE_SFILES= \
 ./src/core/ConstructSet.cpp \
-./src/core/ConstructSetManagement.cpp \
 ./src/core/SimplePassManager.cpp \
-./src/core/Pass.cpp
+./src/core/Singleton.cpp \
+./src/core/Pass.cpp \
+./src/support/BWLFileReader.cpp \
+./src/tooling/AnalysisInterface.cpp
+# ./src/core/ConstructSetManagement.cpp 
+
+
 
 CLANG_SFILES= \
 ./src/clang/adapter/CygProfileAdapter.cpp \
@@ -26,20 +31,41 @@ CLANG_SFILES= \
 ./src/clang/support/ClangConsumerFactory.cpp \
 ./src/clang/support/InstROASTConsumer.cpp
 
+EXAMPLE_SFILES= \
+./src/example/CallPathSelector.cpp \
+./src/example/ExampleConstructPrinter.cpp \
+./src/example/ExampleConstructSet.cpp \
+./src/example/ExampleInstrumentor.cpp \
+./src/example/ExampleNamedConstructAccess.cpp \
+./src/example/NameBasedSelector.cpp 
+
 #./src/clang/Instrumentor.cpp 
 
 CORE_HFILES= \
 ./include/instro.h \
 ./include/instro/core/ConstructSet.h \
-./include/instro/core/ConstructSetManagement.h \
 ./include/instro/core/Factory.h \
 ./include/instro/core/Instrumentor.h \
 ./include/instro/core/Pass.h \
 ./include/instro/core/PassFactory.h \
 ./include/instro/core/PassManager.h \
-./include/instro/core/ConstructLevelManagrment.h \
-./include/instro/core/ConstructElevator.h \
-./include/instro/core/PassImplementation.h 
+./include/instro/core/PassImplementation.h \
+./include/instro/core/Singleton.h \
+./include/instro/tooling/AnalysisInterface.h \
+./include/instro/tooling/NamedConstructAccess.h \
+./include/instro/tooling/TransformationInterface.h 
+
+CORE_SFILES= \
+./src/core/ConstructSet.cpp \
+./src/core/Pass.cpp \
+./src/core/PassImplemention.cpp \
+./src/core/SimplePassManager.cpp \
+./src/core/Singleton.cpp \
+./src/tooling/NamedConstructAccess.cpp 
+
+# ./include/instro/core/ConstructSetManagement.h \
+#./include/instro/core/ConstructLevelManagrment.h \
+#./include/instro/core/ConstructElevator.h 
 
 CLANG_HFILES= \
 ./include/instro/clang/adapter/CygProfileAdapter.h \
@@ -69,13 +95,68 @@ CLANG_HFILES= \
 #./include/instro/roseInstRO.h \
 #./include/instro/llvmInstRO.h
 
+ROSE_HFILES= \
+./include/instro/rose/RoseInstrumentor.h  \
+./include/instro/rose/RosePassFactory.h  \
+./include/instro/rose/RosePass.h  \
+./include/instro/rose/core/RoseConstructSet.h  \
+./include/instro/rose/tooling/RoseAnalysisInterface.h  \
+./include/instro/rose/tooling/RoseNamedConstructAccess.h  \
+./include/instro/rose/selectorsNameBasedSelector.h 
+
+ROSE_SFILES= \
+./src/rose/core/RoseConstructSet.cpp   \
+./src/rose/tooling/RoseNamedConstructAccess.cpp   \
+./src/rose/selectors/NameBasedSelector.cpp  
+
+EXAMPLE_HFILES= \
+./include/instro/example/ExampleConstructSet.h \
+./include/instro/example/ExampleInstrumentor.h \
+./include/instro/example/ExamplePassFactory.h \
+./include/instro/example/ExamplePass.h \
+./include/instro/example/ExampleAnalysisInterface.h \
+./include/instro/example/CallPathSelector.h \
+./include/instro/example/ExampleConstructPrinter.h  \
+./include/instro/example/ExampleNamedConstructAccess.h \
+./include/instro/example/NameBasedSelector.h
+
+
+
 if USELIBTOOL
 # LIBTOOL RULE FOR LIBINSTRO
 #lib_LTLIBRARIES= libInstRO_core.la libInstRO_clang.la libInstRO.la
-lib_LTLIBRARIES= libInstRO_core.la
+lib_LTLIBRARIES= libInstRO_core.la libInstRO_example.la libInstRO_rose.la
+bin_PROGRAMS=ExampleInstrumentor RoseInstrumentor
+
 libInstRO_core_la_SOURCES= \
 	$(CORE_SFILES) \
 	$(CORE_HFILES)
+
+libInstRO_example_la_SOURCES= \
+	$(CORE_SFILES) \
+	$(CORE_HFILES) \
+	$(EXAMPLE_SFILES) \
+	$(EXAMPLE_HFILES) 
+
+libInstRO_example_la_SOURCES= \
+	$(CORE_SFILES) \
+	$(CORE_HFILES) \
+	$(ROSE_SFILES) \
+	$(ROSE_HFILES) 
+
+libInstRO_example_la_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+
+libInstRO_rose_la_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+
+RoseInstrumentor_SOURCES = \
+	./src/rose_main.cpp
+
+ExampleInstrumentor_SOURCES = \
+	./src/example_main.cpp
+
+ExampleInstrumentor_LDADD= libInstRO_example.a
+# ExampleInstrumentor_LDFLAGS=
+ExampleInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
 
 #libInstRO_clang_la_SOURCES= \
 #	$(CLANG_SFILES) \
@@ -99,35 +180,69 @@ libInstRO_core_la_CPPFLAGS=-I$(srcdir)/include -I@CLANG_INCLUDE_PATH@ -I@LLVM_IN
 else
 # STATIC LIBRARY FOR LIBINSTRO
 #lib_LIBRARIES=libInstRO.a
-lib_LIBRARIES= libInstRO_core.a 
+lib_LIBRARIES= libInstRO_core.a libInstRO_example.a libInstRO_rose.a
 #libInstRO_clang.a
 
-bin_PROGRAMS=ClangInstrumentor
+bin_PROGRAMS=ClangInstrumentor ExampleInstrumentor RoseInstrumentor
 
 ClangInstrumentor_SOURCES = \
 	./src/clang/Instrumentor.cpp
+
+ClangInstrumentor_LDADD= libInstRO_core.a -L@CLANG_LIB_DIR@ @CLANG_LIBS_LIST@ @LLVM_LINK_COMMAND@ -lclang
+ClangInstrumentor_LDFLAGS= -L@CLANG_LIB_DIR@ @CLANG_LIBS_LIST@ @LLVM_LINK_COMMAND@ -lclang
+ClangInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include @LLVM_INCLUDE_FLAGS@ -I@CLANG_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+
+RoseInstrumentor_SOURCES = \
+	./src/rose_main.cpp
+
+RoseInstrumentor_LDADD= libInstRO_core.a libInstRO_rose.a
+RoseInstrumentor_LDFLAGS= @ROSE_LIB_DIR@ @ROSE_LIBS_LIST@ -lrose
+RoseInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+
+
+
+ExampleInstrumentor_SOURCES = \
+	./src/example_main.cpp
+
+ExampleInstrumentor_LDADD= libInstRO_example.a
+# ExampleInstrumentor_LDFLAGS=
+ExampleInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+
+libInstRO_example_a_SOURCES= \
+	$(CORE_SFILES) \
+	$(CORE_HFILES) \
+	$(EXAMPLE_SFILES) \
+	$(EXAMPLE_HFILES) 
+libInstRO_example_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+
+libInstRO_rose_a_SOURCES= \
+	$(CORE_SFILES) \
+	$(CORE_HFILES) \
+	$(ROSE_SFILES) \
+	$(ROSE_HFILES) 
+libInstRO_rose_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@
 
 libInstRO_core_a_SOURCES= \
 	$(CORE_SFILES) \
 	$(CORE_HFILES) \
 	$(CLANG_SFILES) \
 	$(CLANG_HFILES)
+
+libInstRO_core_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include @LLVM_INCLUDE_FLAGS@ -I@CLANG_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+
+
 #libInstRO_clang_a_SOURCES= 
 
 #libInstRO_core_a_LIBADD=-L@CLANG_LIB_DIR@ @CLANG_LIBS_LIST@ @LLVM_LINK_COMMAND@ -lclangToolingCore
 #ClangInstrumentor_LDADD= libInstRO_core.a libInstRO_clang.a -L@CLANG_LIB_DIR@ @CLANG_LIBS_LIST@ @LLVM_LINK_COMMAND@
-ClangInstrumentor_LDADD= libInstRO_core.a -L@CLANG_LIB_DIR@ @CLANG_LIBS_LIST@ @LLVM_LINK_COMMAND@ -lclang
-ClangInstrumentor_LDFLAGS= -L@CLANG_LIB_DIR@ @CLANG_LIBS_LIST@ @LLVM_LINK_COMMAND@ -lclang
 
 #libInstRO_a_SOURCES=\
 #$(SFILES) \
 #$(HFILES)
 
-libInstRO_core_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include @LLVM_INCLUDE_FLAGS@ -I@CLANG_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 
 #libInstRO_clang_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include @LLVM_INCLUDE_FLAGS@ -I@CLANG_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 
-ClangInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include @LLVM_INCLUDE_FLAGS@ -I@CLANG_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 
 endif
 
@@ -135,7 +250,8 @@ include_HEADERS=./include/instro.h
 
 pkginclude_HEADERS=\
 	$(CORE_HFILES) \
-	$(CLANG_HFILES)
+	$(CLANG_HFILES) \
+	$(EXAMPLE_HFILES)
 
 
 

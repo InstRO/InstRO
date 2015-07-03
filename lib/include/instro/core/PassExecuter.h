@@ -12,7 +12,7 @@ namespace PassManagement {
  */
 class PassExecuter {
  public:
-	virtual void execute(InstRO::PassImplementation *pass) = 0;
+	 virtual void execute(InstRO::Core::PassImplementation *pass) = 0;
 };
 }
 }

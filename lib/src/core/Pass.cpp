@@ -1,15 +1,16 @@
 #include "instro/core/Pass.h"
 
 void InstRO::Pass::initPass() {
-	if (inputReady)
+	if (!passInitialized && !passFinalized){
 		passImplementation->init();
+		passInitialized = true;
+	}
 	else
 #ifdef __EXCEPTIONS
-		throw std::string("Input not ready!");
+		throw std::string("Pass Initialized after Finalize! Not Supported!");
 #else
-		std::cerr << "Pass: Input not ready" << std::endl;
+		std::cerr << "Pass Initialized after Finalize! Not Supported!" << std::endl;
 #endif
-	passInitialized = true;
 }
 
 void InstRO::Pass::executePass() {
@@ -42,7 +43,7 @@ void InstRO::Pass::execute(InstRO::PassManagement::PassExecuter *executer) {
 
 
 void InstRO::Pass::finalizePass() {
-	if (passInitialized)
+	if (passInitialized && passExecuted)
 		passImplementation->finalize();
 	else
 #ifdef __EXCEPTIONS
@@ -50,6 +51,7 @@ void InstRO::Pass::finalizePass() {
 #else
 		std::cerr << "Pass: Must Initialize Pass First" << std::endl;
 #endif
-	passFinalize = true;
+	passFinalized = true;
+	passInitialized = false;
 }
 

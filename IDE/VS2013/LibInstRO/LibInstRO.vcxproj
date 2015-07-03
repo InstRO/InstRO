@@ -42,7 +42,6 @@
     <ClInclude Include="..\..\..\lib\include\instro\test\TestPassFactory.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\lib\src\common.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\ConstructSetManagement.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Pass.cpp" />
