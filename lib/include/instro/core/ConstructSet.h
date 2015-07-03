@@ -10,9 +10,16 @@ namespace Core {
 
 typedef enum ContstructLevelEnum {
 	ConstructLevelMin = 1,
-	ConstructLevelLiteral = 1,
-	ConstructLevelExpression = 2,
-	ConstructLevelStatement,
+	CLFragment = 1,
+	CLExpression = 2,
+	CLStatement,
+	CLLoop,
+	CLConditional,
+	CLScope,
+	CLSimple,
+	CLFunction,
+	CLFileScope,
+	CLGlobalScope,
 	MaxConstructLevel = 1
 } ConstructLevelType;
 
@@ -34,8 +41,19 @@ class ConstructSet {
 	void setCurrentMinLevel(ConstructLevelType minLevel){};
 	void setCurrentMaxLevel(ConstructLevelType maxLevel){};
 
- protected:
-	ConstructLevelType minimalSupportedLevel, maximalSupportedLevel;
+	void clear(){};
+	size_t size(){
+		return 0;
+	}
+
+	void add(ConstructSet * setB)
+	{
+	}
+	void add(ConstructSet set)
+	{
+	}
+	protected:
+			ConstructLevelType minimalSupportedLevel,maximalSupportedLevel;
 };
 
 }	// End Namespace Core

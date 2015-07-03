@@ -8,7 +8,7 @@ InstRO::Pass *InstRO::Clang::PassFactory::createBlackAndWhiteListSelector(std::v
 	p->setRequiresInput(false);
 	p->setProvidesOutput(true);
 	p->setPassName("BlackWhitelist Selector");
-	p->setOutputLevel(InstRO::Core::ConstructLevelType::ConstructLevelStatement);
+	p->setOutputLevel(InstRO::Core::ConstructLevelType::CLStatement);
 	passManager->registerPass(p);
 	return p;
 }
@@ -23,7 +23,7 @@ InstRO::Pass *InstRO::Clang::PassFactory::createBooleanOrSelector(InstRO::Pass *
 	p->registerInputPass(inputB, inputB->getOutputLevel());
 	p->setProvidesOutput(true);
 	p->setPassName("Boolean OR Selector");
-	p->setOutputLevel(InstRO::Core::ConstructLevelType::ConstructLevelStatement);
+	p->setOutputLevel(InstRO::Core::ConstructLevelType::CLStatement);
 	passManager->registerPass(p);
 	return p;
 }
@@ -35,7 +35,7 @@ InstRO::Pass *InstRO::Clang::PassFactory::createFunctionDefinitionSelector() {
 	p->setRequiresInput(false);
 	p->setProvidesOutput(true);
 	p->setPassName(std::string("Function Definition Selector"));
-	p->setOutputLevel(InstRO::Core::ConstructLevelType::ConstructLevelStatement);
+	p->setOutputLevel(InstRO::Core::ConstructLevelType::CLStatement);
 	passManager->registerPass(p);
 	return p;
 }
@@ -48,7 +48,7 @@ InstRO::Pass *InstRO::Clang::PassFactory::createCygProfileAdapter(InstRO::Pass *
 	p->registerInputPass(input, input->getOutputLevel());
 	p->setProvidesOutput(false);
 	p->setPassName(std::string("CygProfile Adapter"));
-	p->registerInputPass(input, InstRO::Core::ConstructLevelType::ConstructLevelStatement);
+	p->registerInputPass(input, InstRO::Core::ConstructLevelType::CLStatement);
 	passManager->registerPass(p);
 	return p;
 }
@@ -61,7 +61,7 @@ InstRO::Pass *InstRO::Clang::PassFactory::createLLVMInputAdapter(InstRO::Pass *i
 	p->registerInputPass(input, input->getOutputLevel());
 	p->setProvidesOutput(false);
 	p->setPassName(std::string("LLVM Input Adapter"));
-	p->registerInputPass(input, InstRO::Core::ConstructLevelType::ConstructLevelStatement);
+	p->registerInputPass(input, InstRO::Core::ConstructLevelType::CLStatement);
 	passManager->registerPass(p);
 	return p;
 }

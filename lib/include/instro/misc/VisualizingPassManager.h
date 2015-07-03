@@ -6,13 +6,13 @@
 #include <fstream>
 // CI: This Class Extends the PassManger to enable output of the configuration graph
 #include "instro/core/PassManager.h"
-
+#include "instro/core/SimplePassManager.h"
 namespace InstRO{
 
 class Pass;
 
 namespace Ext{
-	class VisualizingPassManager: public Core::PassManagement::SimplePassManager
+	class VisualizingPassManager: public PassManagement::SimplePassManager
 {
 	public:
 		void outputConfiguration(std::string fileName)

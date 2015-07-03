@@ -14,10 +14,13 @@
  *
  *
  */
+#ifndef USING_TEST
 #ifndef USING_ROSE
-#else
 #ifndef USING_LLVM
 #define USING_ROSE
+#endif
+#else
+
 #endif
 #endif
 // InstRO includes
@@ -29,6 +32,8 @@
 #include "instro/core/Pass.h"
 #include "instro/core/PassFactory.h"
 #include "instro/core/Instrumentor.h"
+
+
 
 
 //#include "instro/core/Pass.h"
@@ -50,4 +55,11 @@
 
 #ifdef USING_LLVM
 #include "instro/llvmInstRO.h"
+#endif
+
+
+#ifdef USING_TEST
+#include "instro/test/TestInstrumentor.h"
+#include "instro/test/TestPass.h"
+#include "instro/test/TestPassFactory.h"
 #endif
