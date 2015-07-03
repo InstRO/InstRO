@@ -2,8 +2,8 @@
 
 using namespace InstRO;
 
-BackendInstrumentationAdapterBuilder::BackendInstrumentationAdapterBuilder(Selector* selector, std::string attribute) :
-		AdapterBuilder(selector) {
+BackendInstrumentationAdapterBuilder::BackendInstrumentationAdapterBuilder(Selector* selector, std::string attribute)
+		: AdapterBuilder(selector) {
 	this->compilerAttribute = attribute;
 }
 #if 0
@@ -52,10 +52,12 @@ void BackendInstrumentationAdapterBuilder::buildForNode(SgNode* node) {
 #if 0
 			SageInterface::addTextForUnparser(isSgFunctionDefinition(node)->get_declaration()->get_firstNondefiningDeclaration(), compilerAttribute, AstUnparseAttribute::e_before);
 #else
-			std::cout << "Old Modifier: " << isSgFunctionDefinition(node)->get_declaration()->get_functionModifier() << std::endl;
+			std::cout << "Old Modifier: " << isSgFunctionDefinition(node)->get_declaration()->get_functionModifier()
+								<< std::endl;
 			isSgFunctionDefinition(node)->get_declaration()->get_functionModifier().setGnuAttributeNoInstrumentFunction();
 			isSgFunctionDefinition(node)->get_declaration()->get_file_info()->setOutputInCodeGeneration();
-			std::cout << "New Modifier: " << isSgFunctionDefinition(node)->get_declaration()->get_functionModifier() << std::endl;
+			std::cout << "New Modifier: " << isSgFunctionDefinition(node)->get_declaration()->get_functionModifier()
+								<< std::endl;
 #endif
 		}
 	}
@@ -66,6 +68,4 @@ void BackendInstrumentationAdapterBuilder::setCompilerSpecificAttribute(std::str
 	this->compilerAttribute = attribute;
 }
 
-std::string BackendInstrumentationAdapterBuilder::getCompilerSpecificAttribute() {
-	return this->compilerAttribute;
-}
+std::string BackendInstrumentationAdapterBuilder::getCompilerSpecificAttribute() { return this->compilerAttribute; }

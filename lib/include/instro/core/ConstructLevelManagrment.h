@@ -2,14 +2,11 @@
 #define ROSE_CORE_ConstructLevelManagrment_H
 #include "instro/core/ConstructSet.h"
 
-namespace InstRO
-{
-namespace Core
-{
-	class ConstructLevelManagement
-	{
-	public:
-	};
+namespace InstRO {
+namespace Core {
+class ConstructLevelManagement {
+ public:
+};
 }
 }
 

@@ -21,11 +21,11 @@ int main(int argc, char **argv) {
 	auto bwSel = fac->createBlackAndWhiteListSelector(bList, wList);
 	auto bcSel = fac->createBooleanOrSelector(fDefSel, bwSel);
 
-//	fac->createCygProfileAdapter(fDefSel);
+	//	fac->createCygProfileAdapter(fDefSel);
 	fac->createLLVMInputAdapter(fDefSel);
 
 	instro.apply();
-	
+
 	std::cout << "End" << std::endl;
 	return 0;
 }

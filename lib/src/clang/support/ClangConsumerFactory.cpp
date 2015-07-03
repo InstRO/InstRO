@@ -2,7 +2,8 @@
 
 InstRO::Clang::Support::ClangConsumerFactory::ClangConsumerFactory(
 		InstRO::PassManagement::PassManager *manager, clang::tooling::Replacements &replacements,
-		InstRO::Clang::PassManagement::ClangPassExecuter *vExecuter, InstRO::Clang::PassManagement::ClangPassExecuter *nvExecuter)
+		InstRO::Clang::PassManagement::ClangPassExecuter *vExecuter,
+		InstRO::Clang::PassManagement::ClangPassExecuter *nvExecuter)
 		: manager(manager), vExecuter(vExecuter), nvExecuter(nvExecuter), replacements(replacements) {}
 
 InstRO::Clang::Support::ClangConsumerFactory::~ClangConsumerFactory() {}
@@ -17,4 +18,3 @@ std::unique_ptr<clang::ASTConsumer> InstRO::Clang::Support::ClangConsumerFactory
 		clang::CompilerInstance &ci, llvm::StringRef strRef) {
 	return std::unique_ptr<clang::ASTConsumer>(nullptr);
 }
-

@@ -9,32 +9,31 @@
 
 #include "instro/core/Singleton.h"
 
-namespace InstRO
-{
-	namespace Example{
-		class ExamplePassFactory;
-	}
-	class ExampleInstrumentor : public Instrumentor
-	{
-	protected:
-		Example::Tooling::ExampleAnalysisManager * analysis_manager;
-	public: 
-		ExampleInstrumentor() :analysis_manager(new Example::Tooling::ExampleAnalysisManager()){
-			InstRO::setInstrumentorInstance(this);
-		};
+namespace InstRO {
+namespace Example {
+class ExamplePassFactory;
+}
+class ExampleInstrumentor : public Instrumentor {
+ protected:
+	Example::Tooling::ExampleAnalysisManager* analysis_manager;
 
-		Example::ExamplePassFactory * getFactory(Instrumentor::CompilationPhase phase){ return new Example::ExamplePassFactory(passManager); }
-		// TestPassFactory * getFactory(Instrumentor::CompilationPhase phase){return dynamic_cast<PassFactory*>(new Test::TestPassFactory(passManager));}
-//		PassFactory * getFactory(In
-		void init();
-		void apply();
-		void finalize();
-
-		// Interface to access the implementation specific Analysis Layer Container
-		virtual Tooling::AnalysisManager * getAnalysisManager() {
-			return analysis_manager;
-		}
+ public:
+	ExampleInstrumentor() : analysis_manager(new Example::Tooling::ExampleAnalysisManager()) {
+		InstRO::setInstrumentorInstance(this);
 	};
-	
+
+	Example::ExamplePassFactory* getFactory(Instrumentor::CompilationPhase phase) {
+		return new Example::ExamplePassFactory(passManager);
+	}
+	// TestPassFactory * getFactory(Instrumentor::CompilationPhase phase){return dynamic_cast<PassFactory*>(new
+	// Test::TestPassFactory(passManager));}
+	//		PassFactory * getFactory(In
+	void init();
+	void apply();
+	void finalize();
+
+	// Interface to access the implementation specific Analysis Layer Container
+	virtual Tooling::AnalysisManager* getAnalysisManager() { return analysis_manager; }
+};
 };
 #endif

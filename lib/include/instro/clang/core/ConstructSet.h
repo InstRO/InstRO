@@ -28,10 +28,10 @@ class ClangConstructSet : public InstRO::Core::ConstructSet {
 	void put(clang::Decl *decl);
 	void put(clang::Stmt *stmt);
 	std::vector<ClangConstruct> getConstructSet();
+
  private:
 	std::vector<ClangConstruct> constructs;
 };
-
 
 void print(std::ostream &outStream, ClangConstructSet *cs);
 void print(std::ostream &outStream, ClangConstructSet *cs, clang::ASTContext *astContext);

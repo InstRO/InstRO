@@ -17,15 +17,14 @@ namespace InstRO {
  * \author Jan-Patrick Lehr
  */
 class CashesSelector : public SelectorBasedSelector {
-
-public:
+ public:
 	CashesSelector(SgProject* project, SgStatement* start);
 
 	CashesSelector(SgProject* project, Selector* subSelector);
 
 	~CashesSelector() {}
 
-private:
+ private:
 	/** manages (interaction with) the call graph */
 	CallGraphManager* cgManager;
 
@@ -34,16 +33,13 @@ private:
 	/** holds the nodes that shall be selected */
 	std::set<SgGraphNode*> nodesToSelect;
 
-
 	/* gather starting function declarations */
 	void findStartingNodes();
 	/** find ancestors of all starting nodes */
 	void findNodesToSelect();
 	/** select the nodes that have been added to nodesToMark */
 	void selectFoundNodes();
-
 };
-
 }
 
-#endif // CASHESSELECTOR_H
+#endif	// CASHESSELECTOR_H

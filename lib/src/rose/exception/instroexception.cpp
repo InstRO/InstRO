@@ -2,13 +2,8 @@
 
 using namespace InstRO;
 
-InstroException::InstroException(std::string message) : exceptionMessage(message){
-}
+InstroException::InstroException(std::string message) : exceptionMessage(message) {}
 
-InstroException::~InstroException() throw(){
+InstroException::~InstroException() throw() {}
 
-}
-
-const char* InstroException::what(){
-		return exceptionMessage.c_str();
-	}
+const char* InstroException::what() { return exceptionMessage.c_str(); }

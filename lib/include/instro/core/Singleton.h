@@ -1,8 +1,7 @@
 #include "instro/core/Instrumentor.h"
 
-namespace InstRO{
+namespace InstRO {
 
-	InstRO::Instrumentor * getInstrumentorInstance();
-	void setInstrumentorInstance(InstRO::Instrumentor * instance);
-
+InstRO::Instrumentor* getInstrumentorInstance();
+void setInstrumentorInstance(InstRO::Instrumentor* instance);
 }

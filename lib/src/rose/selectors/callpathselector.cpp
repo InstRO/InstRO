@@ -5,28 +5,26 @@
 using namespace InstRO;
 
 /**
-  * \brief Constructor when used with a starting statement
-  * \param project The project to be traversed
-  * \param start The starting Statement in the AST
-  * \param maxDepth The relative max depth of selected functions in the call graph
-  */
+	* \brief Constructor when used with a starting statement
+	* \param project The project to be traversed
+	* \param start The starting Statement in the AST
+	* \param maxDepth The relative max depth of selected functions in the call graph
+	*/
 CallPathSelector::CallPathSelector(SgProject* project, SgStatement* start, int maxDepth)
-: SelectorBasedSelector(project,0) {
-
+		: SelectorBasedSelector(project, 0) {
 	init(project, maxDepth);
 
-	startingStatements.insert( start );
+	startingStatements.insert(start);
 }
 
 /**
-  * \brief Constructor when used with another selector as input
-  * \param project The project to be traversed
-  * \param selectorId The Id of the other (input) selector
-  * \param maxDepth The relative max depth of selected functions in the call graph
-  */
+	* \brief Constructor when used with another selector as input
+	* \param project The project to be traversed
+	* \param selectorId The Id of the other (input) selector
+	* \param maxDepth The relative max depth of selected functions in the call graph
+	*/
 CallPathSelector::CallPathSelector(SgProject* project, Selector* subSelector, int maxDepth)
-: SelectorBasedSelector(project,subSelector) {
-
+		: SelectorBasedSelector(project, subSelector) {
 	init(project, maxDepth);
 	// Starting statements are added by the visitor
 }
@@ -37,7 +35,6 @@ CallPathSelector::CallPathSelector(SgProject* project, Selector* subSelector, in
  * \param maxDepth The relative max depth of selected functions in the call graph
  */
 void CallPathSelector::init(SgProject* project, int maxDepth) {
-
 	this->maxDepth = maxDepth;
 
 	// Initiate CallGraphManager
@@ -47,23 +44,18 @@ void CallPathSelector::init(SgProject* project, int maxDepth) {
 /**
  * \brief Get starting function declarations
  */
-void CallPathSelector::findStartingNodes() {
-	startingDecls = getEnclosingDeclarations();
-}
+void CallPathSelector::findStartingNodes() { startingDecls = getEnclosingDeclarations(); }
 
 /**
-  * \brief Find call graph ancestors for all starting function declarations
-  */
+	* \brief Find call graph ancestors for all starting function declarations
+	*/
 void CallPathSelector::findNodesToSelect() {
-
 	typedef std::set<SgFunctionDeclaration*>::iterator FDeclIt;
-	for(FDeclIt it=startingDecls.begin(); it!=startingDecls.end(); it++) {
-
+	for (FDeclIt it = startingDecls.begin(); it != startingDecls.end(); it++) {
 		// Find the entry point in the call graph
 		SgGraphNode* entryPoint = cgManager->getCallGraphNode(*it);
 
-		if(entryPoint==NULL) {
-
+		if (entryPoint == NULL) {
 #if VERBOSE
 			std::cout << "Found no call graph node for: " << (*it)->get_name() << std::endl;
 #endif
@@ -82,19 +74,17 @@ void CallPathSelector::findNodesToSelect() {
 }
 
 /**
-  * \brief select all previously marked nodes via select(..)
-  */
+	* \brief select all previously marked nodes via select(..)
+	*/
 void CallPathSelector::selectFoundNodes() {
-
-	for(std::set<SgGraphNode*>::iterator it=nodesToSelect.begin(); it!=nodesToSelect.end(); it++) {
+	for (std::set<SgGraphNode*>::iterator it = nodesToSelect.begin(); it != nodesToSelect.end(); it++) {
 		SgFunctionDeclaration* funcDecl = isSgFunctionDeclaration((*it)->get_SgNode());
 
 		// ignore declarations without definitions
-		if(funcDecl->get_definingDeclaration() == 0) {
+		if (funcDecl->get_definingDeclaration() == 0) {
 #if VERBOSE
 			std::cout << funcDecl->unparseToString()
-					<< " - will not be selected because a defining declaration was not found."
-					<< std::endl;
+								<< " - will not be selected because a defining declaration was not found." << std::endl;
 #endif
 
 			continue;
@@ -105,4 +95,3 @@ void CallPathSelector::selectFoundNodes() {
 		select(funcDef);
 	}
 }
-

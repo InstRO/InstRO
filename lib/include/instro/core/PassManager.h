@@ -5,7 +5,6 @@
 #include "instro/core/Pass.h"
 #include "instro/core/PassExecuter.h"
 
-
 namespace InstRO {
 namespace Core {
 class ConstructSet;
@@ -34,7 +33,7 @@ class PassEnvelope {
 
 class PassManager {
  public:
-	 friend Pass;
+	friend Pass;
 	// Enable the Pass Manager to query the pass for its dependencies
 	virtual void registerPass(Pass *currentPass) = 0;
 	virtual void setExecuter(PassExecuter *executer) = 0;
@@ -43,6 +42,7 @@ class PassManager {
 	// virtual bool isInput(Pass * pass)=0;
 	virtual bool hasOutputDependencies(Pass *) = 0;
 	virtual bool hasInputDependencies(Pass *) = 0;
+
  protected:
 	// FIXME Why is that here?
 	Pass *pass;
@@ -50,7 +50,7 @@ class PassManager {
 	// FIXME Why is that here?
 	std::vector<Pass *> predeciessors;
 
-	//2015-06-18 CI: JP - please explain to me why the exctutor has to be part of the pass manager ...
+	// 2015-06-18 CI: JP - please explain to me why the exctutor has to be part of the pass manager ...
 	// delegate for compiler specific invocation of a pass implementation
 	PassExecuter *executer;
 };

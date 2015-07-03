@@ -1,6 +1,5 @@
 #include "instro/utility/asthelper.h"
 
-
 using namespace InstRO;
 
 /**
@@ -46,20 +45,18 @@ SgFunctionDeclaration* ASTHelper::getFirstNondefDeclaration(SgFunctionDefinition
 SgFunctionDefinition* ASTHelper::getFunctionDefinition(SgFunctionCallExp* callExp) {
 	SgFunctionDeclaration* funcDecl = callExp->getAssociatedFunctionDeclaration();
 
-	if(!funcDecl) {
-		std::cout << "Cannot get associated declaration of function call: "
-				<< callExp->unparseToString() << std::endl;
+	if (!funcDecl) {
+		std::cout << "Cannot get associated declaration of function call: " << callExp->unparseToString() << std::endl;
 		return NULL;
 	}
 
 	SgFunctionDeclaration* fDefDecl = ASTHelper::getDefiningDeclaration(funcDecl);
-	if(fDefDecl == NULL)
+	if (fDefDecl == NULL)
 		return NULL;
 	SgFunctionDefinition* funcDef = fDefDecl->get_definition();
 
-	if(!funcDef) {
-		std::cout << "Cannot get FuncDef of declaration:"
-				<< funcDecl->unparseToString() << std::endl;
+	if (!funcDef) {
+		std::cout << "Cannot get FuncDef of declaration:" << funcDecl->unparseToString() << std::endl;
 	}
 
 	return funcDef;
@@ -70,10 +67,10 @@ SgFunctionDefinition* ASTHelper::getFunctionDefinition(SgFunctionCallExp* callEx
  * \param n A node of the AST
  */
 int ASTHelper::getLoopNestingLevel(SgLocatedNode* n) {
-	int nestingCount=0;
+	int nestingCount = 0;
 	SgScopeStatement* enclosingLoop = getEnclosingLoop(n);
 
-	while(enclosingLoop) {
+	while (enclosingLoop) {
 		nestingCount++;
 		enclosingLoop = getEnclosingLoop(enclosingLoop);
 	}
@@ -93,12 +90,12 @@ std::string ASTHelper::nondefUnparseToString(SgFunctionDefinition* funcDef) {
  * \param n A node of the AST
  */
 SgScopeStatement* ASTHelper::getEnclosingLoop(SgLocatedNode* n) {
-	SgScopeStatement* enclosingScope = SageInterface::getEnclosingNode<SgScopeStatement>(n,false);
+	SgScopeStatement* enclosingScope = SageInterface::getEnclosingNode<SgScopeStatement>(n, false);
 
-	if(isLoop(enclosingScope)) {
+	if (isLoop(enclosingScope)) {
 		return enclosingScope;
 
-	} else if(isSgGlobal(enclosingScope)){
+	} else if (isSgGlobal(enclosingScope)) {
 		return NULL;	// reached global scope
 
 	} else {
@@ -117,7 +114,6 @@ bool ASTHelper::isLoop(SgScopeStatement* scope) {
 
 /** \brief Returns the corresponding function signature like "foo(int,float*)" */
 std::string ASTHelper::getFunctionSignature(SgFunctionDefinition* funcDef) {
-
 	if (funcDef == NULL) {
 		std::cout << "getFunctionSignature: funcDef was null" << std::endl;
 		return "null";
@@ -130,8 +126,8 @@ std::string ASTHelper::getFunctionSignature(SgFunctionDefinition* funcDef) {
 	std::stringstream ss;
 	ss << funcDecl->get_qualified_name().getString() << "(";
 
-	for (int i=0; i<params.size(); i++) {
-		if (i!=0) {
+	for (int i = 0; i < params.size(); i++) {
+		if (i != 0) {
 			ss << ",";
 		}
 		ss << params[i]->get_type()->unparseToString();

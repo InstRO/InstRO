@@ -20,16 +20,20 @@ namespace InstROBuilder {
 /** \{ */
 SgDeclarationStatement* buildProfileFuncDeclarationEnter(SgScopeStatement* scope);
 SgDeclarationStatement* buildProfileFuncDeclarationExit(SgScopeStatement* scope);
-SgExprStatement* buildFunctionCallEnter(SgScopeStatement* scope, SgExpression* firstArgument, SgExpression* secondArgument);
-SgExprStatement* buildFunctionCallExit(SgScopeStatement* scope, SgExpression* firstArgument, SgExpression* secondArgument);
+SgExprStatement* buildFunctionCallEnter(SgScopeStatement* scope, SgExpression* firstArgument,
+																				SgExpression* secondArgument);
+SgExprStatement* buildFunctionCallExit(SgScopeStatement* scope, SgExpression* firstArgument,
+																			 SgExpression* secondArgument);
 SgExprListExp* buildFunctionCallArgumentList(SgExpression* firstArgument, SgExpression* secondArgument);
 /** \} */
 
 /** \name Build stack shadowing profiling functions */
 /** \{ */
-//SgExprStatement* buildCallToPushIdentifierToStackFunction(size_t identifier, size_t threadIdentifier, SgScopeStatement* scope);
-SgExprStatement* buildCallToPushIdentifierToStackFunction(size_t identifier, SgExpression* threadIdentifierExpr, SgScopeStatement* scope);
-//SgExprStatement* buildCallToPopIdentifierFromStackFunction(size_t threadIdentifier, SgScopeStatement* scope);
+// SgExprStatement* buildCallToPushIdentifierToStackFunction(size_t identifier, size_t threadIdentifier,
+// SgScopeStatement* scope);
+SgExprStatement* buildCallToPushIdentifierToStackFunction(size_t identifier, SgExpression* threadIdentifierExpr,
+																													SgScopeStatement* scope);
+// SgExprStatement* buildCallToPopIdentifierFromStackFunction(size_t threadIdentifier, SgScopeStatement* scope);
 SgExprStatement* buildCallToPopIdentifierFromStackFunction(SgExpression* threadIdentifierExp, SgScopeStatement* scope);
 SgFunctionDeclaration* buildPushIdentifierToStackDeclaration(SgScopeStatement* scope);
 SgFunctionDeclaration* buildPopIdentifierFromStackDeclaration(SgScopeStatement* scope);
@@ -38,18 +42,28 @@ SgFunctionDeclaration* buildPopIdentifierFromStackDeclaration(SgScopeStatement* 
 /** \name Build templates */
 /** \{ */
 SgTemplateInstantiationFunctionDecl* buildForwardDeclaration(SgTemplateInstantiationFunctionDecl* originalDeclaration);
-SgTemplateInstantiationMemberFunctionDecl* buildForwardDeclaration(SgTemplateInstantiationMemberFunctionDecl* originalDeclaration);
-SgTemplateInstantiationFunctionDecl* buildForwardDeclaration(SgTemplateInstantiationFunctionDecl* originalDeclaration, SgScopeStatement* futureScope);
+SgTemplateInstantiationMemberFunctionDecl* buildForwardDeclaration(
+		SgTemplateInstantiationMemberFunctionDecl* originalDeclaration);
+SgTemplateInstantiationFunctionDecl* buildForwardDeclaration(SgTemplateInstantiationFunctionDecl* originalDeclaration,
+																														 SgScopeStatement* futureScope);
 
-//		static SgTemplateInstantiationMemberFunctionDecl* buildForwardDeclaration(SgTemplateInstantiationMemberFunctionDecl* originalDeclaration, SgScopeStatement* futureScope);
+//		static SgTemplateInstantiationMemberFunctionDecl*
+//buildForwardDeclaration(SgTemplateInstantiationMemberFunctionDecl* originalDeclaration, SgScopeStatement*
+//futureScope);
 /** \} */
 
 /** \name Build unions */
 /** \{ */
-SgClassDeclaration* buildUnion(SgFunctionDefinition* functionDefinition, SgVariableDeclaration*& unionMemberfunctionPointer, SgVariableDeclaration*& unionVoidPointer);
+SgClassDeclaration* buildUnion(SgFunctionDefinition* functionDefinition,
+															 SgVariableDeclaration*& unionMemberfunctionPointer,
+															 SgVariableDeclaration*& unionVoidPointer);
 SgVariableDeclaration* buildUnionVariableDeclaration(SgScopeStatement* scope, SgClassDeclaration* unionDeclaration);
-SgExprStatement* buildMemberfunctionPointerAssignment(SgScopeStatement* scope, SgScopeStatement* functionDefinition, SgClassDeclaration* unionDeclaration, SgVariableDeclaration* unionMemberfunctionPointer, SgVariableDeclaration* unionVariableDeclaration);
-SgExpression* buildMemberVariableReferenceExpression(SgVariableDeclaration* unionVariableDeclaration, SgVariableDeclaration* memberVariableDeclaration);
+SgExprStatement* buildMemberfunctionPointerAssignment(SgScopeStatement* scope, SgScopeStatement* functionDefinition,
+																											SgClassDeclaration* unionDeclaration,
+																											SgVariableDeclaration* unionMemberfunctionPointer,
+																											SgVariableDeclaration* unionVariableDeclaration);
+SgExpression* buildMemberVariableReferenceExpression(SgVariableDeclaration* unionVariableDeclaration,
+																										 SgVariableDeclaration* memberVariableDeclaration);
 /** \} */
 
 /** \name Build try-statements */
@@ -79,7 +93,6 @@ SgExpression* buildNullPointer(void);
 SgBasicBlock* buildBlock(SgStatement* content = 0);
 
 SgVariableDeclaration* buildTemporaryVariable(SgScopeStatement* scope, SgReturnStmt* returnStatement);
-
 }
 }
 

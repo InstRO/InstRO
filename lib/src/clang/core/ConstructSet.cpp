@@ -14,20 +14,21 @@ void InstRO::Clang::print(std::ostream &outStream, InstRO::Clang::ClangConstruct
 	outStream << std::endl;
 }
 
-void InstRO::Clang::print(std::ostream &outStream, InstRO::Clang::ClangConstructSet *cs, clang::ASTContext *astContext) {
+void InstRO::Clang::print(std::ostream &outStream, InstRO::Clang::ClangConstructSet *cs,
+													clang::ASTContext *astContext) {
 	outStream << "Printing ConstructSet " << cs << "\n";
 	for (auto &c : cs->getConstructSet()) {
 		clang::Decl *decl = getAsDecl(c);
-		if(decl != nullptr){
+		if (decl != nullptr) {
 			clang::NamedDecl *nDecl = llvm::dyn_cast<clang::NamedDecl>(decl);
-			if(nDecl){
+			if (nDecl) {
 				auto mc = astContext->createMangleContext();
 				std::string str;
 				llvm::raw_string_ostream s(str);
 				mc->mangleName(nDecl, s);
 				outStream << nDecl->getNameAsString() << " :: " << s.str() << "\n";
 			}
-		} else if(getAsStmt(c) != nullptr){
+		} else if (getAsStmt(c) != nullptr) {
 			clang::Stmt *stmt = getAsStmt(c);
 			std::string str;
 			llvm::raw_string_ostream s(str);
@@ -38,7 +39,6 @@ void InstRO::Clang::print(std::ostream &outStream, InstRO::Clang::ClangConstruct
 	}
 	outStream << std::endl;
 }
-
 
 void InstRO::Clang::ClangConstructSet::put(clang::Decl *decl) {
 	InstRO::Clang::ClangConstruct c;
@@ -52,4 +52,3 @@ void InstRO::Clang::ClangConstructSet::put(clang::Stmt *stmt) {
 }
 
 std::vector<InstRO::Clang::ClangConstruct> InstRO::Clang::ClangConstructSet::getConstructSet() { return constructs; }
-

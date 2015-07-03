@@ -1,6 +1,7 @@
 #include "instro/clang/selector/FunctionDefinitionSelector.h"
 
-InstRO::Clang::FunctionDefinitionSelector::FunctionDefinitionSelector() {}
+InstRO::Clang::FunctionDefinitionSelector::FunctionDefinitionSelector()
+		: ClangPassImplementation(InstRO::Core::ChannelConfiguration()) {}
 
 bool InstRO::Clang::FunctionDefinitionSelector::VisitFunctionDecl(clang::FunctionDecl *fDecl) {
 	if (fDecl->hasBody()) {
@@ -15,4 +16,3 @@ InstRO::Clang::ClangConstructSet *InstRO::Clang::FunctionDefinitionSelector::get
 	std::cout << "Retrieving function defintion selector output set." << std::endl;
 	return &cs;
 }
-

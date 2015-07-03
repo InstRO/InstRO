@@ -58,8 +58,8 @@ CXXFLAGS+=-O0 -g -Wall $(INCLUDE_FLAGS)
 PLUGIN_CXXFLAGS= -fpic
 
 
-#TOP_LEVEL=/home/j_lehr/all_repos/instro-v5/repo
-TOP_LEVEL=/home/jan/Documents/repos/instro-v5/repo
+TOP_LEVEL=/home/j_lehr/all_repos/instro-v5/repo
+#TOP_LEVEL=/home/jan/Documents/repos/instro-v5/repo
 INSTROLLVMINCLUDE=$(TOP_LEVEL)/lib/include/instro/llvm
 INSTROCLANGINCLUDE=$(TOP_LEVEL)/lib/include/instro/clang
 
@@ -81,6 +81,7 @@ INSTRO_INCLUDES+= \
 LLVM_SOURCES= \
 	$(TOP_LEVEL)/lib/src/llvm/selector/CashesSelector.cpp \
 	$(TOP_LEVEL)/lib/src/llvm/selector/ClangFrontendSelector.cpp \
+	$(TOP_LEVEL)/lib/src/llvm/selector/FunctionDefinitionSelector.cpp \
 	$(TOP_LEVEL)/lib/src/llvm/adapter/CygProfileAdapter.cpp \
 	$(TOP_LEVEL)/lib/src/llvm/Register.cpp
 
@@ -88,6 +89,11 @@ CLANG_SOURCES= \
 	$(TOP_LEVEL)/lib/src/core/SimplePassManager.cpp \
 	$(TOP_LEVEL)/lib/src/core/Pass.cpp \
 	$(TOP_LEVEL)/lib/src/core/ConstructSetManagement.cpp \
+	$(TOP_LEVEL)/lib/src/core/ConstructSet.cpp \
+	$(TOP_LEVEL)/lib/src/core/PassImplemention.cpp \
+	$(TOP_LEVEL)/lib/src/core/Singleton.cpp \
+	$(TOP_LEVEL)/lib/src/tooling/NamedConstructAccess.cpp \
+	$(TOP_LEVEL)/lib/src/tooling/AnalysisInterface.cpp \
 	$(TOP_LEVEL)/lib/src/clang/selector/FunctionDefinitionSelector.cpp \
 	$(TOP_LEVEL)/lib/src/clang/selector/BlackWhitelistSelector.cpp \
 	$(TOP_LEVEL)/lib/src/clang/selector/BooleanCompoundSelector.cpp \
@@ -100,8 +106,8 @@ CLANG_SOURCES= \
 	$(TOP_LEVEL)/lib/src/clang/ClangInstrumentor.cpp \
 	$(TOP_LEVEL)/lib/src/clang/support/InstROASTConsumer.cpp \
 	$(TOP_LEVEL)/lib/src/clang/support/ClangConsumerFactory.cpp \
-	$(TOP_LEVEL)/lib/src/support/BWLFileReader.cpp \
-	$(TOP_LEVEL)/lib/src/clang/Instrumentor.cpp
+	$(TOP_LEVEL)/lib/src/clang/Instrumentor.cpp \
+	$(TOP_LEVEL)/lib/src/support/BWLFileReader.cpp 
 
 LLVM_OBJECTS=$(LLVM_SOURCES:.cpp=.o)
 CLANG_OBJECTS=$(CLANG_SOURCES:.cpp=.o)
