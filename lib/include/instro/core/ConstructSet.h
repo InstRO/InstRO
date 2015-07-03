@@ -92,14 +92,13 @@ class ConstructSet {
 	/*
 	virtual void add(ConstructSet * setB) = NULL;
 	virtual void add(ConstructSet & set) = NULL;*/
-	// virtual ConstructSet intersect(ConstructSet b) = NULL;
-
- protected:	// this will be in the protected developer interface
+ protected:
 	virtual void put(const std::shared_ptr<Construct>& construct);
 	virtual void erase(const std::shared_ptr<Construct>& construct);
 	virtual void put(ConstructSet cs);
 	virtual void erase(ConstructSet cs);
 	bool contains(const std::shared_ptr<Construct>& construct) const;
+
 	ConstructSet(const std::shared_ptr<Construct>& construct) { constructs.insert(construct); };
 
 	std::set<std::shared_ptr<Construct> >::iterator begin();
