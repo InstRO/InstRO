@@ -1,12 +1,12 @@
 #include <memory>
 #include <set>
-
-#include "instro/test/CallPathSelector.h"
-#include "instro/abstractlayer/analysisInterface.h"
+#include "instro/core/Singleton.h"
+#include "instro/example/CallPathSelector.h"
+#include "instro/tooling/AnalysisInterface.h"
 
 namespace InstRO
 {
-namespace Test
+namespace Example
 {
 namespace Selectors
 {
@@ -17,13 +17,13 @@ namespace Selectors
 	void CallPathSelector::execute() 
 {
 	// InstRO::Core::ConstructSet * fromCS, *toCS;
-	/*
-	auto fromCS = std::make_shared<InstRO::Core::ConstructSet> (this->getInput(fromPass));
-	auto toCS = std::make_shared<InstRO::Core::ConstructSet>(this->getInput(toPass)); */
+	
+	//auto fromCS = std::make_shared<InstRO::Core::ConstructSet> (this->getInput(fromPass));
+	//auto toCS = std::make_shared<InstRO::Core::ConstructSet>(this->getInput(toPass)); 
 	auto fromCS = this->getInput(fromPass);
-	auto toCS = this->getInput(toPass);
+ 	auto toCS = this->getInput(toPass);
 	// toCS = this->getInput(toPass);
-	InstRO::AnalysisLayer::ExtendedCallGraph::ExtendedCallGraph *ecg =InstRO::AnalysisLayer::analysisManager->getECG();
+	InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph *ecg = getInstrumentorInstance()->getAnalysisManager()->getECG();
 	auto fromNodes=ecg->findNodes(fromCS);
 	auto toNodes = ecg->findNodes(toCS);
 
@@ -49,11 +49,11 @@ void CallPathSelector::finalize()
 	
 };
 void CallPathSelector::releaseOutput()  { 
-	output.clear(); 
+//	output.clear(); 
 };
 Core::ConstructSet * CallPathSelector::getOutput()  
 {
-	return &output;
+	return NULL;
 };
 
 

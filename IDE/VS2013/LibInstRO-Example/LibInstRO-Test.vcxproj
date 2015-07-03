@@ -53,11 +53,15 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\ci24amun\Documents\Development\rose\git-rose\include;../../../lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -79,12 +83,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\abstractlayer\analysisInterface.h" />
     <ClInclude Include="..\..\..\lib\include\instro\agnosticSupport.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructElevator.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructLevelManagrment.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSetManagement.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Factory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Instrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Pass.h" />
@@ -93,26 +93,30 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\PassImplementation.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\PassManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\SimplePassManager.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingManager.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\misc\VisualizingPassManager.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\Singleton.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\CallPathSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleAnalysisInterface.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructSet.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleInstrumentor.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePass.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePassFactory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\support\BWLFileReader.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\test\CallPathSelector.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\test\TestInstrumentor.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\test\TestPass.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\test\TestPassFactory.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\AnalysisInterface.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\TransformationInterface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp" />
-    <ClCompile Include="..\..\..\lib\src\core\ConstructSetManagement.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Pass.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp" />
+    <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp" />
+    <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\main.cxx" />
     <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp" />
-    <ClCompile Include="..\..\..\lib\src\test\CallPathSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

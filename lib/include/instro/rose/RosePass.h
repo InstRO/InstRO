@@ -6,10 +6,15 @@
 namespace InstRO
 {
 	namespace Rose{
-		class RosePass: public PassImplementation
+		class RosePass: public InstRO::Core::PassImplementation
 		{
 		public:
+			RosePass(InstRO::Core::ChannelConfiguration ccfg) :PassImplementation(ccfg){}
 		};
+
+		class RoseLegcyPass:public RosePass{
+		};
+
 		namespace Adapters{
 		class Adapter:public RosePass
 		{

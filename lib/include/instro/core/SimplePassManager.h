@@ -15,9 +15,7 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 	 void registerPass(Pass *currentPass) override ;
 	 
 	// TODO: FIX
-	void addDependency(Pass *input, Core::ConstructLevelType inputLevel,
-										 Pass *currentPass,
-										 Core::ConstructLevelType requiredInputLevel) {
+	void addDependency(Pass *input,  Pass *currentPass) {
 		// TODO(CI): implement storing of construct level graph
 		getEnvelope(currentPass)->predecessors.push_back(input);
 		getEnvelope(input)->existingOuputDependency = true;

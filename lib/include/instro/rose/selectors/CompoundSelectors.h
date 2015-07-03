@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 #include "instro/rose/RosePass.h"
+#include "instro/core/Pass.h" // Pass
+#include "instro/core/PassImplementation.h" // ChannelConfiguration
 
 namespace InstRO
 {
@@ -11,16 +13,18 @@ namespace Rose
 namespace Selectors
 {
 
-class CompoundSelector:public Selector{
+class CompoundSelector:public InstRO::Rose::RosePass{
 public:
-	CompoundSelector(RosePass * inputA,RosePass * inputB)
+	CompoundSelector(Pass * inputA, Pass * inputB,int Operation):RosePass(InstRO::Core::ChannelConfiguration(inputA,inputB))
 	{		
 	};
 	void init(){};
 	void execute(){};
 	void finalize(){};
 	void releaseOutput(){};
-	ConstructSet*getOuput(){return new ConstructSet();}
+	InstRO::Core::ConstructSet * getOutput() override {
+		return new InstRO::Core::ConstructSet(); 
+	}
 };
 }// End namespace Selectors
 }// End namespace Rose
