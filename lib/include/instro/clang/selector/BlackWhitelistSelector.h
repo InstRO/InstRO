@@ -4,7 +4,7 @@
 #include "clang/AST/RecursiveASTVisitor.h"
 
 #include "instro/clang/core/ConstructSet.h"
-#include "instro/support/BWLFileReader.h"
+#include "instro/utility/BWLFileReader.h"
 #include "instro/clang/core/ClangAdapterPass.h"
 
 namespace InstRO {

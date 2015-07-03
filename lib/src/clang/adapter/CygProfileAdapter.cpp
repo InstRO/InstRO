@@ -1,8 +1,8 @@
 #include "instro/clang/adapter/CygProfileAdapter.h"
 
-InstRO::Clang::CygProfileAdapter::CygProfileAdapter(InstRO::Pass *selector, clang::tooling::Replacements &reps,
+InstRO::Clang::CygProfileAdapter::CygProfileAdapter(InstRO::Core::ChannelConfiguration cfg, clang::tooling::Replacements &reps,
 																										clang::SourceManager *sm)
-		: decidingSelector(selector), sm(sm), replacements(reps), labelCount(0), cygProfFuncPtrName("__instro_func_ptr") {}
+		: ClangPassImplementation(cfg), sm(sm), replacements(reps), labelCount(0), cygProfFuncPtrName("__instro_func_ptr") {}
 
 void InstRO::Clang::CygProfileAdapter::init() {}
 

@@ -1,7 +1,7 @@
 #include "instro/clang/adapter/LLVMInputAdapter.h"
 
-InstRO::Clang::LLVMInputAdapter::LLVMInputAdapter(InstRO::Pass *inputPass)
-		: decidingSelector(inputPass), outfileName("instro-temp-file") {}
+InstRO::Clang::LLVMInputAdapter::LLVMInputAdapter(InstRO::Core::ChannelConfiguration cfg)
+		: InstRO::Clang::Core::ClangPassImplementation(cfg), outfileName("instro-temp-file") {}
 
 
 bool InstRO::Clang::LLVMInputAdapter::VisitFunctionDecl(clang::FunctionDecl *fDecl){}
