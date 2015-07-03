@@ -9,7 +9,7 @@
 #include <hash_map>
 
 
-#include "instro/core.h"
+#include "instro/core/Pass.h"
 
 namespace InstRO{
 	/* PassFactory: Interface for the mandatory InstRO Passes. */

@@ -6,7 +6,7 @@ namespace InstRO
 {
 namespace Core
 {
-	class ConstructLevelManagrment
+	class ConstructLevelManagement
 	{
 	public:
 	};

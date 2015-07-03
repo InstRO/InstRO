@@ -1,4 +1,4 @@
-#include <instro/instrumentor.h>
+#include <instro/rose/instrumentor.h>
 
 using namespace InstRO;
 
