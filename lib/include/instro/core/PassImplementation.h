@@ -6,7 +6,9 @@
 #include "instro/core/ConstructSet.h"
 
 namespace InstRO {
+	// We need a forward declaration of Pass, since Pass and PassImplementation are circular
 	class Pass;
+
 	namespace Core {
 		namespace Support {
 			/*
@@ -57,7 +59,7 @@ namespace InstRO {
 		InstRO::Core::ContstructLevelEnum getMaxConstructLevel(Pass* inputPass){ return inputChannelMax[inputPass];}
 		std::vector<InstRO::Pass*> const getPasses(){ return inputChannelPasses; };
 	};
-	}
+
 	/*
 	 * This class is the user-interface to create his own pass.
 	 * One needs to inherit from this class and implement a compiler dependent pass.
@@ -65,7 +67,8 @@ namespace InstRO {
 	 * predecessors.
 	 */
 
-	namespace Core{
+	
+
 		class PassImplementation {
 		private:
 			Core::ChannelConfiguration cfg;
@@ -90,20 +93,21 @@ namespace InstRO {
 			virtual void releaseOutput() = 0;
 			virtual Core::ConstructSet *getOutput() = 0;
 
-			void setInputAggregation(InstRO::Core::Support::InputAggregation ia) {
+		/*	void setInputAggregation(InstRO::Core::Support::InputAggregation ia) {
 				this->ia = ia;
-			}
+			}*/
 
+			InstRO::Core::ConstructSet * getInput(Pass * pId);
 		protected:
-			InstRO::Core::ConstructSet * getInput(InstRO::Pass *pId){
-				return ia.getConstructSet(pId);
-			}
+			
 
 		private:
-			InstRO::Core::Support::InputAggregation ia;
+		// Testing where this is used	InstRO::Core::Support::InputAggregation ia;
 		};
 
 
 	}
 }
 #endif
+
+#include "instro/core/Pass.h"

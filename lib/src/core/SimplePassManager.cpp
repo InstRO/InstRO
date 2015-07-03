@@ -81,7 +81,7 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 
 		// After this we can enable the input, and pass impls can query for the
 		// result of pass p
-		passEnvelope->pass->getPassImplementation()->setInputAggregation(ia);
+		// passEnvelope->pass->getPassImplementation()->setInputAggregation(ia);
 
 		// 1rst enable the input for the current pass. Since this is the basic
 		// pass manager, the sequence is linear with no intelligence. Hence, all
