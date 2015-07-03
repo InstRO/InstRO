@@ -44,10 +44,9 @@ class PassFactory : public InstRO::PassFactory {
 	/**
 	 * Introduced in the base class. So I had to provide some implementation..
 	 */
-	virtual InstRO::Pass* createStringBasedSelector(std::vector<std::string> matchList) override {return nullptr;};
 	virtual InstRO::Pass* createFunctionSelector() override {return nullptr;};
 	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input) override {return nullptr;};
-
+	virtual InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) override { return nullptr;}; 
  private:
 	clang::tooling::Replacements& replacements;
 	InstRO::Clang::PassManagement::VisitingClangPassExecuter* vExecuter;

@@ -2,7 +2,7 @@
 
 InstRO::Clang::BlackWhitelistSelector::BlackWhitelistSelector(std::vector<std::string> blacklist,
 																															std::vector<std::string> whitelist)
-		: blacklist(blacklist), whitelist(whitelist) {
+		: ClangPassImplementation(InstRO::Core::ChannelConfiguration()), blacklist(blacklist), whitelist(whitelist) {
 	std::cout << "Creating BW Selector with blacklist(-) and whitelist (+):\n";
 	for (auto &s : blacklist) {
 		std::cout << "- " << s << "\n";
@@ -34,7 +34,7 @@ bool InstRO::Clang::BlackWhitelistSelector::VisitFunctionDecl(clang::FunctionDec
 }
 
 void InstRO::Clang::BlackWhitelistSelector::readFilterFile(std::string filename) {
-	util::BWLFileReader reader(filename);
+	Utility::BWLFileReader reader(filename);
 	auto lists = reader.getBWList();
 	blacklist = lists.first;
 	whitelist = lists.second;

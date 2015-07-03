@@ -93,7 +93,9 @@ namespace InstRO
 				virtual std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByUserTextStringMatch(Matcher &) = 0;
 				// c) raw source code. First all symbols, then the upward expressions, then the upward statement are matched. Last is the whole function matched.
 				virtual std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByCodeMatch(Matcher &) {
+#ifdef __EXCEPTIONS
 					throw std::string("Not Implemented");
+#endif
 				}
 			};
 

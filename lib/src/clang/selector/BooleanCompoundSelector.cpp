@@ -2,7 +2,7 @@
 
 InstRO::Clang::BooleanCompoundSelector::BooleanCompoundSelector(InstRO::Pass *inA, InstRO::Pass *inB,
 																																InstRO::Clang::BooleanCompoundSelector::op_t operation)
-		: inA(inA), inB(inB), operation(operation) {}
+		: Core::ClangPassImplementation(InstRO::Core::ChannelConfiguration()), inA(inA), inB(inB), operation(operation) {}
 
 void InstRO::Clang::BooleanCompoundSelector::init() {}
 void InstRO::Clang::BooleanCompoundSelector::execute() {

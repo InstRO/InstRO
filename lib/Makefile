@@ -89,6 +89,11 @@ CLANG_SOURCES= \
 	$(TOP_LEVEL)/lib/src/core/SimplePassManager.cpp \
 	$(TOP_LEVEL)/lib/src/core/Pass.cpp \
 	$(TOP_LEVEL)/lib/src/core/ConstructSetManagement.cpp \
+	$(TOP_LEVEL)/lib/src/core/ConstructSet.cpp \
+	$(TOP_LEVEL)/lib/src/core/PassImplemention.cpp \
+	$(TOP_LEVEL)/lib/src/core/Singleton.cpp \
+	$(TOP_LEVEL)/lib/src/tooling/NamedConstructAccess.cpp \
+	$(TOP_LEVEL)/lib/src/tooling/AnalysisInterface.cpp \
 	$(TOP_LEVEL)/lib/src/clang/selector/FunctionDefinitionSelector.cpp \
 	$(TOP_LEVEL)/lib/src/clang/selector/BlackWhitelistSelector.cpp \
 	$(TOP_LEVEL)/lib/src/clang/selector/BooleanCompoundSelector.cpp \
@@ -101,8 +106,8 @@ CLANG_SOURCES= \
 	$(TOP_LEVEL)/lib/src/clang/ClangInstrumentor.cpp \
 	$(TOP_LEVEL)/lib/src/clang/support/InstROASTConsumer.cpp \
 	$(TOP_LEVEL)/lib/src/clang/support/ClangConsumerFactory.cpp \
-	$(TOP_LEVEL)/lib/src/support/BWLFileReader.cpp \
-	$(TOP_LEVEL)/lib/src/clang/Instrumentor.cpp
+	$(TOP_LEVEL)/lib/src/clang/Instrumentor.cpp \
+	$(TOP_LEVEL)/lib/src/support/BWLFileReader.cpp 
 
 LLVM_OBJECTS=$(LLVM_SOURCES:.cpp=.o)
 CLANG_OBJECTS=$(CLANG_SOURCES:.cpp=.o)
