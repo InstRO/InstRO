@@ -75,10 +75,12 @@ class PassImplementation {
  public:
 	Core::ChannelConfiguration channelCFG() { return cfg; }
 
+	PassImplementation(Core::ChannelConfiguration cfg) : cfg(cfg) {}
 	PassImplementation() = delete;
 
-	PassImplementation(Core::ChannelConfiguration cfg) : cfg(cfg) {}
-
+	/*	void setInputAggregation(InstRO::Core::Support::InputAggregation ia) {
+			this->ia = ia;
+		}*/
 	virtual void init() = 0;
 	virtual void execute() = 0;
 	virtual void finalize() = 0;
@@ -98,3 +100,5 @@ class PassImplementation {
 }
 }
 #endif
+
+#include "instro/core/Pass.h"

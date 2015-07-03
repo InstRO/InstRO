@@ -1,15 +1,13 @@
 #ifndef INSTRO_CORE_INSTRUMENTOR_H
 #define INSTRO_CORE_INSTRUMENTOR_H
 
-
-
 #include <map>
 #include <string>
 #include <iostream>
 #include <vector>
 
-//CI: deprecated | #include "instro/core/ConstructLevelManagrment.h"
-//CI: deprecated | #include "instro/core/ConstructSetManagement.h"
+// CI: deprecated | #include "instro/core/ConstructLevelManagrment.h"
+// CI: deprecated | #include "instro/core/ConstructSetManagement.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/core/PassManager.h"
 #include "instro/core/SimplePassManager.h"
@@ -41,9 +39,7 @@ class Instrumentor {
 		setPassManager(new InstRO::PassManagement::SimplePassManager());
 	}
 	virtual InstRO::PassFactory* getFactory(CompilationPhase phase = frontend) = 0;
-	virtual InstRO::PassManagement::PassManager* getPassManager() { 
-		return passManager; 
-	}
+	virtual InstRO::PassManagement::PassManager* getPassManager() { return passManager; }
 
 	void setPassManager(InstRO::PassManagement::PassManager* manager) {
 		if (passManagerLocked)
@@ -57,34 +53,33 @@ class Instrumentor {
 		CROPCONSTRUCTS = 1,
 		ELEVATECONSTRUCTS = 2
 	}ConstructElevationPolicy;*/
-protected:
+ protected:
 	bool constructRaisingPolicyElevate, constructLoweringPolicyElevate;
-public:
-	void setConstructRaisingPolicyCrop(){ constructRaisingPolicyElevate = false; };
-	void setConstructRaisingPolicyElevate(){ constructRaisingPolicyElevate = true; }
-	void setConstructLoweringPolicyCrop(){ constructLoweringPolicyElevate = false; }
-	void setConstructLoweringPolicyElevate(){ constructLoweringPolicyElevate = true; }
 
-	bool getConstructRaisingPolicyCrop(){ return constructRaisingPolicyElevate; }
-	bool getConstructRaisingPolicyElevate(){ return constructRaisingPolicyElevate; }
-	bool getConstructLoweringPolicyCrop(){ return constructLoweringPolicyElevate; }
-	bool getConstructLoweringPolicyElevate(){ return constructLoweringPolicyElevate; }
+ public:
+	void setConstructRaisingPolicyCrop() { constructRaisingPolicyElevate = false; };
+	void setConstructRaisingPolicyElevate() { constructRaisingPolicyElevate = true; }
+	void setConstructLoweringPolicyCrop() { constructLoweringPolicyElevate = false; }
+	void setConstructLoweringPolicyElevate() { constructLoweringPolicyElevate = true; }
+
+	bool getConstructRaisingPolicyCrop() { return constructRaisingPolicyElevate; }
+	bool getConstructRaisingPolicyElevate() { return constructRaisingPolicyElevate; }
+	bool getConstructLoweringPolicyCrop() { return constructLoweringPolicyElevate; }
+	bool getConstructLoweringPolicyElevate() { return constructLoweringPolicyElevate; }
 
 	// Interface to access the implementation specific Analysis Layer Container
-	virtual Tooling::AnalysisManager * getAnalysisManager() = 0;
-	//AbstractLayer::
+	virtual Tooling::AnalysisManager* getAnalysisManager() = 0;
+	// AbstractLayer::
  protected:
 	bool passManagerLocked;
 	InstRO::PassManagement::PassManager* passManager;
-	InstRO::Tooling::AnalysisManager * analysisManager;
+	InstRO::Tooling::AnalysisManager* analysisManager;
 
  public:
 	virtual void init() = 0;
 	virtual void apply() = 0;
 	virtual void finalize() = 0;
 };
-
-
 }
 
 #endif
