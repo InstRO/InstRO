@@ -10,13 +10,13 @@ namespace InstRO {
  * \brief This selector only selects functions that have more floating point operations than a given threshold
  * \author Roman Neß
  */
-class FlopCountSelector : public OutOfOrderSelector{
-public:
+class FlopCountSelector : public OutOfOrderSelector {
+ public:
 	FlopCountSelector(int threshold);
 	/* visits every node (therefore all function definitions) */
 	void visit(SgNode* start);
 
-private:
+ private:
 	int threshold;
 	/* stores information of flops of every method for later recursive/transitive counting */
 	boost::unordered_map<SgFunctionDefinition*, int> flopsByFunc;
@@ -26,7 +26,6 @@ private:
 
 	void selectionEnd(SgProject* project);
 };
-
 }
 
-#endif // FLOPCOUNTSELECTOR_H
+#endif	// FLOPCOUNTSELECTOR_H

@@ -12,10 +12,10 @@ namespace InstRO {
  * \author Roman
  */
 class ASTHelper {
-// XXX 2013-10-08 JP: Is this class necessary? \
+	// XXX 2013-10-08 JP: Is this class necessary? \
 // XXX 2013-12 RN: How else to hide private methods, without a class?
-// XXX 2014-03 JP: I don't know if they need to be private, maybe use to some kind of utility namespace?
-public:
+	// XXX 2014-03 JP: I don't know if they need to be private, maybe use to some kind of utility namespace?
+ public:
 	/* Return the defining declaration for a given declaration */
 	static SgFunctionDeclaration* getDefiningDeclaration(SgFunctionDeclaration* oldDecl);
 	/* Return the first non-defining declaration for a given declaration */
@@ -37,7 +37,7 @@ public:
 
 	static std::string getFunctionSignature(SgFunctionDefinition* funcDef);
 
-private:
+ private:
 	/* no other class can now derive from this class */
 	virtual ~ASTHelper() = 0;
 
@@ -45,7 +45,6 @@ private:
 	SgScopeStatement* getEnclosingLoop(SgLocatedNode* n);
 	bool isLoop(SgScopeStatement* scope);
 };
-
 }
 
-#endif // ASTHELPER_H
+#endif	// ASTHELPER_H

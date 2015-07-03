@@ -16,4 +16,3 @@ InstRO::Clang::ClangConstructSet *InstRO::Clang::FunctionDefinitionSelector::get
 	std::cout << "Retrieving function defintion selector output set." << std::endl;
 	return &cs;
 }
-

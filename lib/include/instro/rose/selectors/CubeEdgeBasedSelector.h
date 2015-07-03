@@ -13,13 +13,11 @@ namespace InstRO {
  * \author Roman Neß
  */
 class CubeEdgeBasedSelector : public OutOfOrderSelector {
-public:
+ public:
 	CubeEdgeBasedSelector(SgProject* project, std::string cubePath);
 
-	void visit(SgNode *n);
-
+	void visit(SgNode* n);
 };
-
 }
 
 #endif

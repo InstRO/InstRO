@@ -20,8 +20,7 @@ namespace InstRO {
  * \author Jan-Patrick Lehr
  */
 class FunctionIdentificationTable {
-public:
-
+ public:
 	FunctionIdentificationTable();
 	// We only need to get the current label
 	unsigned long getLabel();
@@ -30,11 +29,12 @@ public:
 	/** write the function identification table as an nmfile to disk*/
 	void writeNamefile();
 
-private:
-	unsigned long uniqueLabel; // holds our pseudo function label
+ private:
+	unsigned long uniqueLabel;	// holds our pseudo function label
 
-	std::map<unsigned long, std::string> labelToFunctionName; // Holds a mapping from pseudo function ids to function names
-	bool writeCalled; // internally used marker
+	std::map<unsigned long, std::string>
+			labelToFunctionName;	// Holds a mapping from pseudo function ids to function names
+	bool writeCalled;					// internally used marker
 
 	void incrementUniqueLabel();
 	std::string generateNamefileEntryName(SgFunctionDefinition* functionDefinition);

@@ -23,8 +23,7 @@ namespace Core {
 class ClangPassImplementation : public InstRO::Core::PassImplementation,
 																public clang::RecursiveASTVisitor<ClangPassImplementation> {
  public:
-
-	 ClangPassImplementation(InstRO::Core::ChannelConfiguration cc) : InstRO::Core::PassImplementation(cc){};
+	ClangPassImplementation(InstRO::Core::ChannelConfiguration cc) : InstRO::Core::PassImplementation(cc){};
 
 	void setASTContext(clang::ASTContext *context) {
 		std::cout << "Setting ASTContext" << std::endl;

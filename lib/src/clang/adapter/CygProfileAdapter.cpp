@@ -1,8 +1,12 @@
 #include "instro/clang/adapter/CygProfileAdapter.h"
 
-InstRO::Clang::CygProfileAdapter::CygProfileAdapter(InstRO::Core::ChannelConfiguration cfg, clang::tooling::Replacements &reps,
-																										clang::SourceManager *sm)
-		: ClangPassImplementation(cfg), sm(sm), replacements(reps), labelCount(0), cygProfFuncPtrName("__instro_func_ptr") {}
+InstRO::Clang::CygProfileAdapter::CygProfileAdapter(InstRO::Core::ChannelConfiguration cfg,
+																										clang::tooling::Replacements &reps, clang::SourceManager *sm)
+		: ClangPassImplementation(cfg),
+			sm(sm),
+			replacements(reps),
+			labelCount(0),
+			cygProfFuncPtrName("__instro_func_ptr") {}
 
 void InstRO::Clang::CygProfileAdapter::init() {}
 
@@ -19,7 +23,7 @@ bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *de
 	// since we are in a Clang Adapter, we cast. I KNOW THIS IS UGLY
 	InstRO::Core::ConstructSet *c = getInput(decidingSelector);
 	cs = *(reinterpret_cast<InstRO::Clang::ClangConstructSet *>(c));
-	
+
 	for (auto &construct : cs.getConstructSet()) {
 		if (InstRO::Clang::getAsDecl(construct) == decl) {
 			// the function declaration we are visitting has actually been selected

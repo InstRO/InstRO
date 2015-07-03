@@ -69,4 +69,3 @@ void InstRO::Clang::BooleanCompoundSelector::doAnd(InstRO::Clang::ClangConstruct
 void InstRO::Clang::BooleanCompoundSelector::finalize() {}
 void InstRO::Clang::BooleanCompoundSelector::releaseOutput() {}
 InstRO::Clang::ClangConstructSet *InstRO::Clang::BooleanCompoundSelector::getOutput() { return &cs; }
-

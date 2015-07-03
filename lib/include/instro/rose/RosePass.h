@@ -3,38 +3,29 @@
 
 #include "instro/core/PassImplementation.h"
 
-namespace InstRO
-{
-	namespace Rose{
-		class RosePass: public InstRO::Core::PassImplementation
-		{
-		public:
-			RosePass(InstRO::Core::ChannelConfiguration ccfg) :PassImplementation(ccfg){}
-		};
+namespace InstRO {
+namespace Rose {
+class RosePass : public InstRO::Core::PassImplementation {
+ public:
+	RosePass(InstRO::Core::ChannelConfiguration ccfg) : PassImplementation(ccfg) {}
+};
 
-		class RoseLegcyPass:public RosePass{
-		};
+class RoseLegcyPass : public RosePass {};
 
-		namespace Adapters{
-		class Adapter:public RosePass
-		{
-		};
-		}
-		namespace Selectors
-		{
+namespace Adapters {
+class Adapter : public RosePass {};
+}
+namespace Selectors {
 
-		class Selector:public RosePass
-		{
-		public:
-		};
-		}
-		namespace Transformer
-		{
-		class Transformer: public RosePass
-		{
-			public:
-		};
-		}
-	}
+class Selector : public RosePass {
+ public:
+};
+}
+namespace Transformer {
+class Transformer : public RosePass {
+ public:
+};
+}
+}
 };
 #endif

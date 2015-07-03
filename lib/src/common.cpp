@@ -8,9 +8,7 @@ using namespace InstRO;
  *  Initialize Member Variables to sane values */
 #include <iostream>
 
-BasicInstrumentor::BasicInstrumentor() :
-		project(0) {
-}
+BasicInstrumentor::BasicInstrumentor() : project(0) {}
 
 void BasicInstrumentor::select() {
 	if (project == 0) {
@@ -37,13 +35,9 @@ void BasicInstrumentor::instrument() {
 	return;
 }
 
-void BasicInstrumentor::setProject(SgProject* project) {
-	this->project = project;
-}
+void BasicInstrumentor::setProject(SgProject* project) { this->project = project; }
 
-SgProject* BasicInstrumentor::getProject() {
-	return this->project;
-}
+SgProject* BasicInstrumentor::getProject() { return this->project; }
 
 void BasicInstrumentor::addSelector(Selector* sel) {
 	// Check if the selector is already registered
@@ -89,13 +83,14 @@ bool BasicInstrumentor::hasSelector(Selector* sel) {
 }
 
 void BasicInstrumentor::addAdapterBuilder(AdapterBuilder* adapterBuilder) {
-	assert(project != NULL); // TODO 2013-10-22 JP: Use exceptions here?
+	assert(project != NULL);	// TODO 2013-10-22 JP: Use exceptions here?
 	this->adapterBuilderList.push_back(adapterBuilder);
 	adapterBuilder->setProject(this->project);
 }
 
 void BasicInstrumentor::removeAdapterBuilder(AdapterBuilder* adapterBuilder) {
-	for (std::list<AdapterBuilder*>::iterator iter = adapterBuilderList.begin(); iter != adapterBuilderList.end(); ++iter) {
+	for (std::list<AdapterBuilder*>::iterator iter = adapterBuilderList.begin(); iter != adapterBuilderList.end();
+			 ++iter) {
 		if ((*iter) == adapterBuilder) {
 			adapterBuilderList.remove(*iter);
 		}
@@ -103,7 +98,7 @@ void BasicInstrumentor::removeAdapterBuilder(AdapterBuilder* adapterBuilder) {
 }
 
 void BasicInstrumentor::addTransformer(Transformer* transformer) {
-	assert(project != NULL); // TODO 2013-10-22 JP: Use exceptions here?
+	assert(project != NULL);	// TODO 2013-10-22 JP: Use exceptions here?
 	this->transformerList.push_back(transformer);
 	transformer->setProject(this->project);
 }
@@ -122,14 +117,15 @@ AttributeSelector::AttributeSelector(std::string attribName) {
 	this->attribName = attribName;
 }
 
-void AttributeSelector::traverseAST(SgNode *start) {
+void AttributeSelector::traverseAST(SgNode* start) {
 	// starts the processing of nodes.
 	startNodeProcessing(start);
 }
 
-void AttributeSelector::startNodeProcessing(SgNode *startNode) {
+void AttributeSelector::startNodeProcessing(SgNode* startNode) {
 	// have this in a private method?
-	MasterFunctionalSelector<AstAttributeFunctional> mfs = MasterFunctionalSelector<AstAttributeFunctional>(startNode, AstAttributeFunctional(this->attribName));
+	MasterFunctionalSelector<AstAttributeFunctional> mfs =
+			MasterFunctionalSelector<AstAttributeFunctional>(startNode, AstAttributeFunctional(this->attribName));
 	// generate node-list
 	this->nodesList = mfs.retrieveNodesWithAttribute(startNode);
 
@@ -140,7 +136,7 @@ void AttributeSelector::startNodeProcessing(SgNode *startNode) {
 	}
 }
 
-void AttributeSelector::processNode(SgNode *n) {
+void AttributeSelector::processNode(SgNode* n) {
 	// what exactly is done here?
 	select(n);
 }
@@ -152,17 +148,13 @@ void PrePostOrderSelector::traverseAST(SgNode* start) {
 	this->selectionEnd(SageInterface::getEnclosingNode<SgProject>(start, true));
 }
 
-void PrePostOrderSelector::selectionBegin(SgProject* project) {
-}
+void PrePostOrderSelector::selectionBegin(SgProject* project) {}
 
-void PrePostOrderSelector::selectionEnd(SgProject* project) {
-}
+void PrePostOrderSelector::selectionEnd(SgProject* project) {}
 
-void PrePostOrderSelector::preOrderVisit(SgNode* node) {
-}
+void PrePostOrderSelector::preOrderVisit(SgNode* node) {}
 
-void PrePostOrderSelector::postOrderVisit(SgNode* node) {
-}
+void PrePostOrderSelector::postOrderVisit(SgNode* node) {}
 
 /* OutOfOrderSelector */
 void OutOfOrderSelector::traverseAST(SgNode* start) {
@@ -171,13 +163,9 @@ void OutOfOrderSelector::traverseAST(SgNode* start) {
 	this->selectionEnd(SageInterface::getEnclosingNode<SgProject>(start, true));
 }
 
-void OutOfOrderSelector::selectionBegin(SgProject* project) {
-}
+void OutOfOrderSelector::selectionBegin(SgProject* project) {}
 
-void OutOfOrderSelector::selectionEnd(SgProject* project) {
-}
-
-
+void OutOfOrderSelector::selectionEnd(SgProject* project) {}
 
 bool ASTReWriterImpl::isNodeSelected(SgNode* node) {
 	if (ASTAttributeContainer::hasASTAttributeContainer(node)) {
@@ -191,42 +179,33 @@ bool ASTReWriterImpl::isNodeSelected(SgNode* node) {
 	return false;
 }
 
-ASTReWriterImpl::ASTReWriterImpl(Selector* selectorToRespect) :
-		decidingSelector(selectorToRespect), project(NULL) {
-}
+ASTReWriterImpl::ASTReWriterImpl(Selector* selectorToRespect) : decidingSelector(selectorToRespect), project(NULL) {}
 
 void ASTReWriterImpl::validateInternalState() {
 	if (decidingSelector == NULL || project == NULL)
 		throw InstroException("Validate internal state in ASTReWriterImpl encountered an error.");
 }
 
-void ASTReWriterImpl::setProject(SgProject* proj){
-	this->project = proj;
-}
+void ASTReWriterImpl::setProject(SgProject* proj) { this->project = proj; }
 
 std::vector<SgNode*> ASTReWriterImpl::generateSelectedNodeSet() {
 	assert(project != NULL);
 
-	MasterFunctionalSelector<MarkerAttributeFunctional> cas = MasterFunctionalSelector<MarkerAttributeFunctional>(project, MarkerAttributeFunctional(decidingSelector->getId()));
+	MasterFunctionalSelector<MarkerAttributeFunctional> cas = MasterFunctionalSelector<MarkerAttributeFunctional>(
+			project, MarkerAttributeFunctional(decidingSelector->getId()));
 
 	return cas.retrieveNodesWithAttribute();
 }
 
-const Selector* ASTReWriterImpl::getSelector() {
-	return this->decidingSelector;
-}
+const Selector* ASTReWriterImpl::getSelector() { return this->decidingSelector; }
 
-
-
-
-void AdapterBuilder::startModificationPass(){
+void AdapterBuilder::startModificationPass() {
 	std::vector<SgNode*> nodes = generateSelectedNodeSet();
 
 	std::vector<SgNode*>::iterator nodesIter;
-	for(nodesIter = nodes.begin(); nodesIter != nodes.end(); nodesIter++){
+	for (nodesIter = nodes.begin(); nodesIter != nodes.end(); nodesIter++) {
 		buildForNode((*nodesIter));
 	}
 
 	modificationEnd();
 }
-

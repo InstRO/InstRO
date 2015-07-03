@@ -18,7 +18,7 @@
 #include <vector>
 
 #include "instro/core/Pass.h"
-//  CI: There is a reference to the ClangPassExecuturer in the InstRO Core Layer. 
+//  CI: There is a reference to the ClangPassExecuturer in the InstRO Core Layer.
 // TODO-JP:  Please put this somewhere more suitable, e.g. in the clang section
 //  #include "instro/clang/core/ClangPassExecuter.h"
 
@@ -28,7 +28,6 @@ namespace PassManagement {
 class PassManager;
 }
 
-
 /* PassFactory: Interface for the mandatory InstRO Passes. */
 class PassFactory {
  public:
@@ -36,9 +35,9 @@ class PassFactory {
 	PassFactory(PassManagement::PassManager* manager) : passManager(manager){};
 	virtual InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) = 0;
 
-	virtual InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA,InstRO::Pass* inputB) = 0;
+	virtual InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) = 0;
 
-	// Convenience 
+	// Convenience
 	virtual InstRO::Pass* createProgramEntrySelector() = 0;
 	virtual InstRO::Pass* createFunctionSelector() = 0;
 	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input) = 0;

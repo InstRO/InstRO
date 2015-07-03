@@ -55,9 +55,8 @@ llvm::RegisterPass<InstRO::LLVM::CashesSelector> CGBSelector("cgb-sel", "Callgra
 
 llvm::RegisterPass<InstRO::LLVM::ClangFrontendSelector> CFESelector("cfe-sel", "CLang Frontend Selector");
 
-InstRORegisterPass<InstantiationHelper<InstRO::LLVM::CygProfileAdapterT, InstRO::LLVM::CashesSelector> >
-		CGBInstRO("cgb-instro", "Callgraph analysis based function instrumentation");
+InstRORegisterPass<InstantiationHelper<InstRO::LLVM::CygProfileAdapterT, InstRO::LLVM::CashesSelector> > CGBInstRO(
+		"cgb-instro", "Callgraph analysis based function instrumentation");
 
 InstRORegisterPass<InstantiationHelper<InstRO::LLVM::CygProfileAdapterT, InstRO::LLVM::FunctionDefinitionSelector> >
 		FDEFInstRO("fdef-instro", "Simple function definition instrumentation");
-
