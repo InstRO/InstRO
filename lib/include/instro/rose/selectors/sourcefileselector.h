@@ -12,13 +12,12 @@ namespace InstRO {
  * \author Roman Neß
  */
 class SourceFileSelector : public OutOfOrderSelector {
-public:
+ public:
 	SourceFileSelector(SgProject* project, std::string paths);
 	/* is called on every node, especially on every function definition */
 	void visit(SgNode* node);
 
-
-private:
+ private:
 	/* absolute file paths of whitelisted files */
 	boost::unordered_set<std::string> pathWhitelist;
 	/* absolute file paths of all sources used in the current project */
@@ -30,9 +29,7 @@ private:
 	void addToWhitelist(std::string path);
 	/* determine if a path is whitelisted */
 	bool isWhitelisted(std::string path);
-
 };
-
 }
 
-#endif // SOURCEFILESELECTOR_H
+#endif	// SOURCEFILESELECTOR_H

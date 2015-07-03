@@ -2,7 +2,6 @@
 #ifndef CALLSITEADAPTERBUILDER_H_
 #define CALLSITEADAPTERBUILDER_H_
 
-
 #include "instro/common.h"
 #include "instro/utility/instrobuilder.h"
 #include "instro/utility/asthelper.h"
@@ -15,20 +14,20 @@
  * \author roman
  */
 class CallSiteAdapterBuilder : public AdapterBuilder {
-public:
+ public:
 	CallSiteAdapterBuilder(Selector* decidingSelector);
 	~CallSiteAdapterBuilder() {}
 
-private:
+ private:
 	static const std::string FUNCTION_NAME_ENTER;
 	static const std::string FUNCTION_NAME_EXIT;
 
-protected:
+ protected:
 	void buildForNode(SgNode* node);
 
 	void modificationEnd();
 
-private:
+ private:
 	bool instrumentationDeclared;
 	std::set<SgFunctionCallExp*> callExprsToInstrument;
 
@@ -38,7 +37,8 @@ private:
 	void doTransformation(SgFunctionCallExp* callExp);
 
 	SgExprStatement* createInstrumentationFunction(SgStatement* statement, std::string funcName,
-			SgFunctionDefinition* calleeFuncDef, SgFunctionDefinition* callSiteFuncDef);
+																								 SgFunctionDefinition* calleeFuncDef,
+																								 SgFunctionDefinition* callSiteFuncDef);
 
 	SgExpression* buildInstrumentationArgument(SgFunctionDefinition* funcDef);
 

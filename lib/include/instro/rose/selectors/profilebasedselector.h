@@ -20,14 +20,13 @@ struct Profile {
  * \author Roman Neß
  */
 class ProfileBasedSelector : public OutOfOrderSelector {
-public:
+ public:
 	ProfileBasedSelector(SgProject* project, std::string path, float thresholdMillies);
 
 	/** is called on every node, especially on every function definition */
 	void visit(SgNode* node);
 
-
-private:
+ private:
 	/** The threshold in milliseconds from which on methods will be selected */
 	float thresholdMillies;
 	/** scale of profile's runtime information to millies */
@@ -37,13 +36,12 @@ private:
 
 	boost::unordered_map<std::string, Profile> profileInformation;
 
-//	/** exclusive runtime (in milli seconds) per call for all known functions */
-//	boost::unordered_map<std::string, float> exclRuntimesPerCall;
-//	/** inclusive runtime (in milli seconds) per call for all known functions */
-//	boost::unordered_map<std::string, float> inclRuntimesPerCall;
-//	/** number of calls to all known functions */
-//	boost::unordered_map<std::string, float> numberOfCalls;
-
+	//	/** exclusive runtime (in milli seconds) per call for all known functions */
+	//	boost::unordered_map<std::string, float> exclRuntimesPerCall;
+	//	/** inclusive runtime (in milli seconds) per call for all known functions */
+	//	boost::unordered_map<std::string, float> inclRuntimesPerCall;
+	//	/** number of calls to all known functions */
+	//	boost::unordered_map<std::string, float> numberOfCalls;
 
 	/** parse given file paths into the whitelist */
 	void parseProfileFromFile(std::string paths);
@@ -56,7 +54,6 @@ private:
 	/** dump the 3 hashmaps with profile information in a meaningful way */
 	void dumpProfileInformation();
 };
-
 }
 
-#endif // PROFILEBASEDSELECTOR_H
+#endif	// PROFILEBASEDSELECTOR_H

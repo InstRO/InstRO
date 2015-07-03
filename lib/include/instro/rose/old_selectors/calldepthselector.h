@@ -12,17 +12,15 @@ namespace InstRO {
  * \brief This selector marks call graph children of the starting node
  * \author Roman Neß
  */
-class CallDepthSelector : public SelectorBasedSelector  {
-public:
-	CallDepthSelector(SgProject* project, SgStatement* start, int maxDepth, bool precisionMode=false);
+class CallDepthSelector : public SelectorBasedSelector {
+ public:
+	CallDepthSelector(SgProject* project, SgStatement* start, int maxDepth, bool precisionMode = false);
 
-	CallDepthSelector(SgProject* project, Selector* subSelector, int maxDepth, bool precisionMode=false);
+	CallDepthSelector(SgProject* project, Selector* subSelector, int maxDepth, bool precisionMode = false);
 
-	~CallDepthSelector() {
-		delete cgManager;
-	}
+	~CallDepthSelector() { delete cgManager; }
 
-private:
+ private:
 	/* turn on/off precision mode */
 	bool precisionMode;
 	/** call graph descendants up to this depth are selected */
@@ -48,7 +46,6 @@ private:
 	/* gets the declarations of all function calls in a subtree */
 	void getDeclarationsOfFunctionCallExpressions(SgStatement* start);
 };
-
 }
 
-#endif // CALLDEPTHSELECTOR_H
+#endif	// CALLDEPTHSELECTOR_H
