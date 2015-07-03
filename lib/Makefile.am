@@ -32,7 +32,12 @@ CLANG_SFILES= \
 ./src/clang/support/InstROASTConsumer.cpp
 
 EXAMPLE_SFILES= \
-./src/example/CallPathSelector.cpp
+./src/example/CallPathSelector.cpp \
+./src/example/ExampleConstructPrinter.cpp \
+./src/example/ExampleConstructSet.cpp \
+./src/example/ExampleInstrumentor.cpp \
+./src/example/ExampleNamedConstructAccess.cpp \
+./src/example/NameBasedSelector.cpp 
 
 #./src/clang/Instrumentor.cpp 
 
@@ -47,7 +52,16 @@ CORE_HFILES= \
 ./include/instro/core/PassImplementation.h \
 ./include/instro/core/Singleton.h \
 ./include/instro/tooling/AnalysisInterface.h \
-./include/instro/tooling/TransformationInterface.h
+./include/instro/tooling/NamedConstructAccess.h \
+./include/instro/tooling/TransformationInterface.h 
+
+CORE_SFILES= \
+./src/core/ConstructSet.cpp \
+./src/core/Pass.cpp \
+./src/core/PassImplemention.cpp \
+./src/core/SimplePassManager.cpp \
+./src/core/Singleton.cpp \
+./src/tooling/NamedConstructAccess.cpp 
 
 # ./include/instro/core/ConstructSetManagement.h \
 #./include/instro/core/ConstructLevelManagrment.h \
@@ -101,7 +115,10 @@ EXAMPLE_HFILES= \
 ./include/instro/example/ExamplePassFactory.h \
 ./include/instro/example/ExamplePass.h \
 ./include/instro/example/ExampleAnalysisInterface.h \
-./include/instro/example/CallPathSelector.h
+./include/instro/example/CallPathSelector.h \
+./include/instro/example/ExampleConstructPrinter.h  \
+./include/instro/example/ExampleNamedConstructAccess.h \
+./include/instro/example/NameBasedSelector.h
 
 
 
