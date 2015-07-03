@@ -29,6 +29,10 @@ int main(int argc,char ** argv)
 		auto compound = aFactory->createBooleanOrSelector(aPass, bPass);
 		
 		auto adapter = aFactory->createGPIAdapter(compound);
+		aFactory->createConstructPrinter(aPass);
+		instro->init();
+		instro->apply();
+		instro->finalize();
 
 		// CI - Reseting Classic Implementation   passManager->outputConfiguration("InstRO-CFG.dot");
 		

@@ -1,5 +1,6 @@
 #include "instro/tooling/AnalysisInterface.h"
 #include "instro/tooling/NamedConstructAccess.h"
+#include "instro/example/ExampleNamedConstructAccess.h"
 #include "instro/example/ExampleConstructSet.h"
 
 
@@ -10,7 +11,7 @@ namespace InstRO
 		namespace Tooling
 		{
 
-
+			/*
 			namespace NamedConstructAccess
 			{
 				class ExampleNamedConstructAccess :public InstRO::Tooling :: NamedConstructAccess::NamedConstructAccess{
@@ -18,7 +19,7 @@ namespace InstRO
 					// b) contents of strings
 					InstRO::Core::ConstructSet getConstructsByUserTextStringMatch(InstRO::Tooling::NamedConstructAccess::Matcher &){ return InstRO::Core::ConstructSet(); };
 				};
-			}
+			}*/
 		
 				class ExampleControlFlowGraph :public InstRO::Tooling::ControlFlowGraph::ControlFlowGraph
 				{
@@ -32,17 +33,20 @@ namespace InstRO
 
 
 					// This is the implicit way, that the PassManager will allways apply
-					virtual InstRO::Core::ConstructSet raise(InstRO::Core::ConstructSet & input, InstRO::Core::ConstructLevelType cl) override {
-						return InstRO::Core::ConstructSet();
+					virtual std::unique_ptr<InstRO::Core::ConstructSet> raise(InstRO::Core::ConstructSet * input, InstRO::Core::ConstructLevelType cl) override {
+						throw std::string("Not Implemented");
+						return std::make_unique<InstRO::Core::ConstructSet>(*input);
 					}
 					// This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
-					virtual InstRO::Core::ConstructSet lower(InstRO::Core::ConstructSet & input, InstRO::Core::ConstructLevelType cl) {
-						return InstRO::Core::ConstructSet();
+					virtual std::unique_ptr<InstRO::Core::ConstructSet> lower(InstRO::Core::ConstructSet * input, InstRO::Core::ConstructLevelType cl) {
+						throw std::string("Not Implemented");
+						return std::make_unique<InstRO::Core::ConstructSet>(*input);
 					}
 
-					virtual InstRO::Core::ConstructSet crop(InstRO::Core::ConstructSet & input, InstRO::Core::ConstructLevelType min, InstRO::Core::ConstructLevelType max)
+					virtual std::unique_ptr<InstRO::Core::ConstructSet> crop(InstRO::Core::ConstructSet * input, InstRO::Core::ConstructLevelType min, InstRO::Core::ConstructLevelType max)
 					{
-						return InstRO::Core::ConstructSet();
+						throw std::string("Not Implemented");
+						return std::make_unique<InstRO::Core::ConstructSet>(*input);
 					}
 				};
 
@@ -51,12 +55,14 @@ namespace InstRO
 				{
 					//class ConstructSetToGrammarTypeMapper
 					virtual std::list<InstRO::Tooling::GrammarInterface::GrammarTypesType> getGrammerTypes(const InstRO::Core::ConstructSet & cs){
+						throw std::string("Not Implemented");
 						return std::list<InstRO::Tooling::GrammarInterface::GrammarTypesType>();
 					}
-
+					
 					//class RequestCSByGrammarTypeInterface
-					virtual InstRO::Core::ConstructSet getConstructsByType(const InstRO::Tooling::GrammarInterface::GrammarTypesType & types) override {
-						return InstRO::Core::ConstructSet();
+					virtual std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByType(const InstRO::Tooling::GrammarInterface::GrammarTypesType & types) override {
+						throw std::string("Not Implemented");
+						return std::make_unique<InstRO::Core::ConstructSet>(InstRO::Core::ConstructSet());
 					};
 
 				};
@@ -77,8 +83,9 @@ namespace InstRO
 				ExampleExtendedCallGraph * ecg;
 				ExampleConstructElevator * ce;
 				ExampleControlFlowGraph * cfg;
+				NamedConstructAccess::ExampleNamedConstructAccess * nca;
 			public:
-				ExampleAnalysisManager() :ecg(NULL), ce(NULL), cfg(NULL){
+				ExampleAnalysisManager() :ecg(NULL), ce(NULL), cfg(NULL), nca(NULL){
 				};
 
 				ExampleExtendedCallGraph * getECG(){
@@ -94,8 +101,9 @@ namespace InstRO
 					return new ExampleGrammarInterface();
 				}
 				InstRO::Tooling::NamedConstructAccess::NamedConstructAccess * getNamedConstructAccessFacility(){
-					throw std::string("Not Implemented");
-					return NULL;
+					if (nca == NULL)
+						nca = new NamedConstructAccess::ExampleNamedConstructAccess();
+					return nca;
 				};
 			};
 

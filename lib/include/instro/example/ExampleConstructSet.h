@@ -1,4 +1,7 @@
+#ifndef EXAMPLE_CORE_CONSTRUCTSET
+#define EXAMPLE_CORE_CONSTRUCTSET 0.1
 #include <set>
+#include <memory>
 #include <vector>
 #include "instro/core/ConstructSet.h"
 
@@ -9,7 +12,44 @@ namespace InstRO
 		namespace Core
 		{
 			class ExampleConstruct: public InstRO::Core::Construct
-			{};
+			{
+			public:
+				ExampleConstruct(InstRO::Core::ConstructLevelType level, std::string nname) :Construct(level), name(nname){};
+				std::string toString(){ return name; };
+			protected:
+				std::string name;
+				int type;
+			};
+			namespace InfracstructureInterface{/*
+
+				class ExampleConstructSet :public InstRO::Core::ConstructSet {
+				public:
+					ExampleConstructSet(InstRO::Core::ConstructSet & cs){
+						constructs = cs.constructs;
+				
+					};
+					ExampleConstructSet(){};
+					virtual void put(const std::shared_ptr<InstRO::Core::Construct>& construct){
+						InstRO::Core::ConstructSet::put(construct);
+					}
+					virtual void erase(const std::shared_ptr<InstRO::Core::Construct>& construct){
+						InstRO::Core::ConstructSet::erase(construct);
+					};
+			//		virtual void put(ConstructSet cs);
+			//		virtual void erase(ConstructSet cs);
+			//		bool contains(const std::shared_ptr<InstRO::Core::Construct>& construct) const;
+					std::set<std::shared_ptr<InstRO::Core::Construct> >::iterator begin()
+					{
+						return InstRO::Core::ConstructSet::begin();
+					}
+					std::set<std::shared_ptr<InstRO::Core::Construct> >::iterator end(){
+						return InstRO::Core::ConstructSet::end();
+					}
+					std::set<std::shared_ptr<InstRO::Core::Construct> >::const_iterator  cbegin()const;
+					std::set<std::shared_ptr<InstRO::Core::Construct> >::const_iterator  cend()const;
+				};*/
+			}
+
 #ifdef DEPRECATEDCS
 class ExampleConstructSet :public InstRO::Core::ConstructSet
 {
@@ -73,3 +113,4 @@ class ExampleConstructSet :public InstRO::Core::ConstructSet
 		}
 	}
 }
+#endif 

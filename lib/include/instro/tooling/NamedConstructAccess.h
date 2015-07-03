@@ -86,23 +86,15 @@ namespace InstRO
 
 				// After fooling around with the implementation and testing some potential scenarious I consider the top-down, bottom up schematic 
 				// flawed. In principle, a single selection is sufficient.
-				typedef enum {
-					mpMax,
-					mpMin,
-					mpAll,
-				} MatchPreferenceType;
 
 				// a) any userdefined symbols, e.g. variable names, function / method names, labels
-				virtual Core::ConstructSet getConstructsByIdentifyerName(Matcher &) = 0;
+				virtual std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByIdentifyerName(Matcher &) = 0;
 				// b) contents of strings
-				virtual Core::ConstructSet getConstructsByUserTextStringMatch(Matcher &) = 0;
+				virtual std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByUserTextStringMatch(Matcher &) = 0;
 				// c) raw source code. First all symbols, then the upward expressions, then the upward statement are matched. Last is the whole function matched.
-				virtual Core::ConstructSet getConstructsByCodeMatch(Matcher &) {
+				virtual std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByCodeMatch(Matcher &) {
 					throw std::string("Not Implemented");
 				}
-
-			//	virtual Core::ConstructSet getConstructsByName(Matcher &) = 0;
-			//	virtual Core::ConstructSet getConstructsByName(Matcher *) = 0;
 			};
 
 		}

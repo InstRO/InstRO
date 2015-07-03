@@ -10,8 +10,8 @@ namespace InstRO
 {
 namespace Tooling
 {
-	namespace NamedConstructAccess {
-		
+	namespace NamedConstructAccess { 
+		// CI: The specification and interfaces for the NamedConstructAccess methods are found in "instro/tooling/NamedConstructAccess.h"
 
 	}
 	
@@ -19,7 +19,9 @@ namespace Tooling
 	{
 		class ControlFlowGraphNode
 		{
-
+		public:
+			// CI: Explicit RAW Pointer. We do not release control of this CS
+			virtual Core::ConstructSet * getAssociatedConstructSet() = 0;
 		};
 		class ControlFlowGraph
 		{
@@ -33,12 +35,12 @@ namespace Tooling
 		{
 		public:
 
-			// This is the implicit way, that the PassManager will allways apply
-			virtual Core::ConstructSet raise(Core::ConstructSet & input, Core::ConstructLevelType cl) = 0;
+			// This is the implicit way that the PassManager will allways apply
+			virtual std::unique_ptr<Core::ConstructSet> raise(Core::ConstructSet * input, Core::ConstructLevelType cl) = 0;
 			// This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
-			virtual Core::ConstructSet lower(Core::ConstructSet & input, Core::ConstructLevelType cl) = 0;
+			virtual std::unique_ptr<Core::ConstructSet> lower(Core::ConstructSet * input, Core::ConstructLevelType cl) = 0;
 			// Crop Construct up to, or down to a level
-			virtual Core::ConstructSet crop(Core::ConstructSet & input, Core::ConstructLevelType min, Core::ConstructLevelType max) = 0;
+			virtual std::unique_ptr<Core::ConstructSet> crop(Core::ConstructSet * input, Core::ConstructLevelType min, Core::ConstructLevelType max) = 0;
 		};
 	}
 	namespace GrammarInterface
@@ -58,14 +60,15 @@ namespace Tooling
 			virtual std::list<GrammarTypesType> getGrammerTypes(const Core::ConstructSet & cs) = 0;
 		
 		//class RequestCSByGrammarTypeInterface
-			virtual Core::ConstructSet getConstructsByType(const GrammarTypesType & types) = 0;
+			virtual std::unique_ptr<Core::ConstructSet> getConstructsByType(const GrammarTypesType & types) = 0;
 
 		};
 	}
 	namespace ExtendedCallGraph{
 		class ExtendedCallGraphNode
 		{
-			virtual Core::ConstructSet * getCS() = 0;
+			// Explicit RAW Pointer. We do not release control of this CS
+			virtual Core::ConstructSet * getAssociatedConstructSet() = 0;
 
 		};
 		class ExtendedCallGraph
@@ -79,14 +82,19 @@ namespace Tooling
 	class AnalysisManager
 	{
 	public:
+		// CI: Explicit RawPointer to the Class. We do not release ownership
 		virtual ExtendedCallGraph::ExtendedCallGraph * getECG() = 0;
+		// CI:  Explicit RawPointer to the Class. We do not release ownership
 		virtual ControlFlowGraph::ControlFlowGraph * getCFG() = 0;
+		// CI:  Explicit RawPointer to the Class. We do not release ownership
 		virtual ConstructElevator::ConstructElevator * getCSElevator() = 0;
+		// CI:  Explicit RawPointer to the Class. We do not release ownership
 		virtual GrammarInterface::GrammarInterface *getGrammarInterface() = 0;
+		// CI:  Explicit RawPointer to the Class. We do not release ownership
 		virtual NamedConstructAccess::NamedConstructAccess * getNamedConstructAccessFacility() = 0;
 	};
 
-	extern std::shared_ptr<AnalysisManager> analysisManager;
+	//  extern std::shared_ptr<AnalysisManager> analysisManager;
 
 }
 }
