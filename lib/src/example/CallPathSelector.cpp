@@ -1,6 +1,6 @@
 #include <memory>
 #include <set>
-
+#include "instro/core/Singleton.h"
 #include "instro/example/CallPathSelector.h"
 #include "instro/tooling/AnalysisInterface.h"
 
@@ -23,7 +23,7 @@ namespace Selectors
 	auto fromCS = this->getInput(fromPass);
  	auto toCS = this->getInput(toPass);
 	// toCS = this->getInput(toPass);
-	InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph *ecg = Tooling::analysisManager->getECG();
+	InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph *ecg = getInstrumentorInstance()->getAnalysisManager()->getECG();
 	auto fromNodes=ecg->findNodes(fromCS);
 	auto toNodes = ecg->findNodes(toCS);
 

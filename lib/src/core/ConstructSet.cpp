@@ -51,7 +51,7 @@ std::string operator+(const std::string &lhs,const ConstructLevelType &type)
 ::std::vector<ConstructLevelType> ConstructSet::getConstructLevels(){
 	std::vector<int> levels;
 	for (int i = ConstructLevelType::CLMin; i < ConstructLevelType::CLMax; i++)
-		levels[i] = 0;
+		levels.push_back(0);
 	for (auto construct : this->constructs)
 	{
 		levels[(*construct).getLevel()]++;
@@ -172,4 +172,53 @@ ConstructSet ConstructSet::symmerticDifference(const ConstructSet & other) const
 
 
 } // namespace Core
+
+
+
+namespace InfracstructureInterface{
+ConstructSetCompilerInterface::ConstructSetCompilerInterface(Core::ConstructSet *pcs) :csPtr(pcs){};
+
+void ConstructSetCompilerInterface::put(const std::shared_ptr<Core::Construct>& construct){
+			csPtr->put(construct);
+		};
+void ConstructSetCompilerInterface::erase(const std::shared_ptr<Core::Construct>& construct){
+			csPtr->erase(construct);
+		};
+void ConstructSetCompilerInterface::put(Core::ConstructSet cs){
+			csPtr->put(cs);
+		};
+void ConstructSetCompilerInterface::erase(Core::ConstructSet cs){
+			csPtr->erase(cs);
+		};
+bool ConstructSetCompilerInterface::contains(const std::shared_ptr<Core::Construct>& construct){
+			return csPtr->contains(construct);
+		};
+
+std::set<std::shared_ptr<Core::Construct> >::iterator ConstructSetCompilerInterface::begin(){
+			return csPtr->begin();
+		};
+std::set<std::shared_ptr<Core::Construct> >::iterator ConstructSetCompilerInterface::end(){
+			return csPtr->end();
+		};
+std::set<std::shared_ptr<Core::Construct> >::const_iterator  ConstructSetCompilerInterface::cbegin()const{
+			return csPtr->cbegin();
+		};
+std::set<std::shared_ptr<Core::Construct> >::const_iterator  ConstructSetCompilerInterface::cend()const{
+			return csPtr->cend();
+		};
+
+void ConstructSetCompilerInterface::clear(){
+	csPtr->clear();
+}
+bool ConstructSetCompilerInterface::empty(){
+	return csPtr->empty();
+}
+size_t ConstructSetCompilerInterface::size(){
+	return csPtr->size();
+
+}
+}
+
+
+
 } // End namespace InstRO

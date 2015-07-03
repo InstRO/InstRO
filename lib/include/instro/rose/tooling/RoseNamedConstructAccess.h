@@ -54,20 +54,20 @@ namespace NamedConstructAccess {
 					};
 					void setMatchAll(){ continueDescend = true; preOrderMatch = true; postOrderMatch = false; };
 
-					Core::ConstructSet matchUserIdentifyer(::InstRO::Tooling::NamedConstructAccess::Matcher * matcher, SgProject * proj){
+					std::unique_ptr<Core::ConstructSet> matchUserIdentifyer(::InstRO::Tooling::NamedConstructAccess::Matcher * matcher, SgProject * proj){
 						matchingObject = matcher;
 						traverseAST(proj);
-						return cs;
+						return std::make_unique<Core::ConstructSet>(cs);
 					}
-					Core::ConstructSet matchUserTextString(::InstRO::Tooling::NamedConstructAccess::Matcher * matcher, SgProject * proj){
+					std::unique_ptr<Core::ConstructSet> matchUserTextString(::InstRO::Tooling::NamedConstructAccess::Matcher * matcher, SgProject * proj){
 						matchingObject = matcher;
 						traverseAST(proj);
-						return cs;
+						return std::make_unique<Core::ConstructSet>(cs);
 					}
-					Core::ConstructSet matchCode(::InstRO::Tooling::NamedConstructAccess::Matcher * matcher, SgProject * proj){
+					std::unique_ptr<Core::ConstructSet> matchCode(::InstRO::Tooling::NamedConstructAccess::Matcher * matcher, SgProject * proj){
 						matchingObject = matcher;
 						traverseAST(proj);
-						return cs;
+						return std::make_unique<Core::ConstructSet>(cs);
 					}
 
 					virtual void selectionBegin(SgProject* project);		/**< \brief Gets called before the selection process starts. Might be used for initialization */
@@ -117,12 +117,12 @@ namespace NamedConstructAccess {
 					SgProject* project;
 				public:
 					RoseNamedConstructAccess(SgProject * proj) :project(proj){};
-					Core::ConstructSet getConstructsByIdentifyerName(::InstRO::Tooling::NamedConstructAccess::Matcher & matcher) override{
+					std::unique_ptr<Core::ConstructSet> getConstructsByIdentifyerName(::InstRO::Tooling::NamedConstructAccess::Matcher & matcher) override{
 						traversal.reset();
 						traversal.setMatchMin();
 						return traversal.matchUserIdentifyer(&matcher, project);
 					};
-					Core::ConstructSet getConstructsByUserTextStringMatch(::InstRO::Tooling::NamedConstructAccess::Matcher & matcher) override{
+					std::unique_ptr<Core::ConstructSet> getConstructsByUserTextStringMatch(::InstRO::Tooling::NamedConstructAccess::Matcher & matcher) override{
 						traversal.reset();
 						traversal.setMatchMin();
 						return traversal.matchUserTextString(&matcher, project);

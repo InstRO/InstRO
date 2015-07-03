@@ -9,7 +9,34 @@
 #include <set>
 
 namespace InstRO {
+	namespace Core {
+		class Construct;
+		class ConstructSet;
+	}
+	namespace InfracstructureInterface{
+		
+		class ConstructSetCompilerInterface{
+		protected:
+			Core::ConstructSet * csPtr;
+		public:
+			ConstructSetCompilerInterface() = delete;
+			ConstructSetCompilerInterface(Core::ConstructSet *pcs);
 
+			void put(const std::shared_ptr<Core::Construct>& construct);
+			void erase(const std::shared_ptr<Core::Construct>& construct);
+			void put(Core::ConstructSet cs);
+			void erase(Core::ConstructSet cs);
+			bool contains(const std::shared_ptr<Core::Construct>& construct);
+
+			std::set<std::shared_ptr<Core::Construct> >::iterator begin();
+			std::set<std::shared_ptr<Core::Construct> >::iterator end();
+			std::set<std::shared_ptr<Core::Construct> >::const_iterator  cbegin()const;
+			std::set<std::shared_ptr<Core::Construct> >::const_iterator  cend()const;
+			void clear();
+			bool empty();
+			size_t size();
+		};
+	}
 namespace Core {
 
 typedef enum ContstructLevelEnum {
@@ -59,6 +86,7 @@ protected:
  * are contained. 
  */
 class ConstructSet {
+	friend class InstRO::InfracstructureInterface::ConstructSetCompilerInterface;
  public:
 	ConstructSet(){};
 
@@ -100,11 +128,12 @@ public:
 	virtual ::std::vector<ConstructSet> split() const;
 	// CI: I would like to have s.th. like a begin() and end() returning an iterator of constructset containing individual constructs
 
-private:
+protected:
 
 	std::set<std::shared_ptr<Construct> > constructs;
 };
 
 } // End Namespace Core
+
 } // End namespace InstRO
 #endif

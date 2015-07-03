@@ -64,7 +64,7 @@ class Pass{
 	/*-------------------------------------------------------------*/
 	/* management of passes: enumerate inputs, query output, etc   */
 	/*-------------------------------------------------------------*/
-	std::unordered_map<Pass*, Core::ConstructSet*> inputOverride;
+	std::unordered_map<Pass*, std::shared_ptr<Core::ConstructSet> > inputOverride;
 	
 	// Query the proxy pass for its output
 	Core::ConstructSet* getOutput() {
@@ -76,11 +76,13 @@ class Pass{
 		if (inputOverride.find(from) == inputOverride.end())
 			return from->getOutput();
 		else
-			return inputOverride.find(from)->second;
+			return inputOverride.find(from)->second.get();
 	}
 
-	void overrideInput(Pass* from,	Core::ConstructSet* overrideSet){
-		inputOverride[from] = overrideSet;
+	void overrideInput(Pass* from,	std::unique_ptr<Core::ConstructSet> overrideSet){
+		std::unique_ptr<Core::ConstructSet> ovrdSet = std::move(overrideSet);
+		std::shared_ptr<Core::ConstructSet> sharedSet = std::move(ovrdSet);
+		inputOverride[from] = sharedSet;
 	}
 
 	

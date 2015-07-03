@@ -6,6 +6,8 @@
 
 #include "instro/example/ExamplePass.h"
 #include "instro/example/CallPathSelector.h"
+#include "instro/example/NameBasedSelector.h"
+#include "instro/example/ExampleConstructPrinter.h"
 // #include "instro/test/selectors/BlackAndWhiteListSelector.h"
 
 namespace InstRO
@@ -17,12 +19,26 @@ namespace InstRO
 	public:	
 		ExamplePassFactory(PassManagement::PassManager * refManager) :PassFactory(refManager){};
 
-		InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) override { return NULL; };
+		InstRO::Pass * createConstructPrinter(InstRO::Pass * input){
+			InstRO::Pass * newPass = new Pass(new ExampleConstructPrinter(input));
+			newPass->setPassName("InstRO::Example::ExampleConstructPrinter");
+			passManager->registerPass(newPass);
+			return newPass;
+		};
+		InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) override { 
+			InstRO::Pass * newPass = new InstRO::Pass(new Selectors::NameBasedSelector(matchList));
+			passManager->registerPass(newPass);
+			newPass->setPassName("InstRO::Example::NameBasedSelector");
+			return newPass;
+		};
 		InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) override { return NULL; };
 
 		InstRO::Pass* createCallPathSelector(InstRO::Pass * from, InstRO::Pass * to)
 		{
-			return new InstRO::Pass(new Selectors::CallPathSelector(from, to));
+			InstRO::Pass * newPass= new InstRO::Pass(new Selectors::CallPathSelector(from, to));
+			newPass->setPassName("InstRO::Example::CallPathSelector");
+			passManager->registerPass(newPass);
+			return newPass;
 		}
 
 		// Convenience 
