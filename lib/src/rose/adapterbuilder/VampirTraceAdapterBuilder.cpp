@@ -3,7 +3,7 @@
 using namespace InstRO;
 
 #ifdef DEBUG
-#define DEBUGENTRY std::cout <<"InstRO Debug: Enter VampirTraceAdapterBuilder::"<< __FUNCTION__ << std::endl;
+#define DEBUGENTRY std::cout << "InstRO Debug: Enter VampirTraceAdapterBuilder::" << __FUNCTION__ << std::endl;
 #define DEBUGEXIT std::cout << "InstRO Debug: Exit VampirTraceAdapterBuilder::" << __FUNCTION__ << std::endl;
 #define VERBOSE 0
 #else
@@ -11,8 +11,8 @@ using namespace InstRO;
 #define DEBUGEXIT
 #endif
 
-VampirTraceAdapterBuilder::VampirTraceAdapterBuilder(Selector * decidingSelector) :
-		GenericFunctionAdapterBuilder(decidingSelector) {
+VampirTraceAdapterBuilder::VampirTraceAdapterBuilder(Selector* decidingSelector)
+		: GenericFunctionAdapterBuilder(decidingSelector) {
 	writeCalled = false;
 }
 
@@ -23,11 +23,9 @@ VampirTraceAdapterBuilder::~VampirTraceAdapterBuilder() {
 	}
 }
 
-void VampirTraceAdapterBuilder::writeNamefile() {
-	identifierTable.writeNamefile();
-}
+void VampirTraceAdapterBuilder::writeNamefile() { identifierTable.writeNamefile(); }
 
-SgExprStatement* VampirTraceAdapterBuilder::createEntryFunctionExpressionStatement(SgScopeStatement* scope){
+SgExprStatement* VampirTraceAdapterBuilder::createEntryFunctionExpressionStatement(SgScopeStatement* scope) {
 #ifdef DEBUG
 	DEBUGENTRY
 #endif
@@ -40,30 +38,29 @@ SgExprStatement* VampirTraceAdapterBuilder::createEntryFunctionExpressionStateme
 
 	firstArgument = SageBuilder::buildCastExp(intExpression, SageBuilder::buildPointerType(voidType));
 
-	SgExprStatement *functionCallEnter = InstROBuilder::buildFunctionCallEnter (scope, firstArgument, secondArgument);
+	SgExprStatement* functionCallEnter = InstROBuilder::buildFunctionCallEnter(scope, firstArgument, secondArgument);
 	declareEntryFunction(SageInterface::getGlobalScope(scope));
 #ifdef DEBUG
 	DEBUGEXIT
 #endif
 	return functionCallEnter;
-
 }
-SgExprStatement* VampirTraceAdapterBuilder::createExitFunctionExpressionStatement(SgScopeStatement* scope){
+SgExprStatement* VampirTraceAdapterBuilder::createExitFunctionExpressionStatement(SgScopeStatement* scope) {
 #ifdef DEBUG
 	DEBUGENTRY
 #endif
 	SgExpression* firstArgument = 0;
 	SgExpression* secondArgument = 0;
 
-//	secondArgument = builder->buildNullPointer();
+	//	secondArgument = builder->buildNullPointer();
 	secondArgument = InstROBuilder::buildNullPointer();
 	SgExpression* intExpression = SageBuilder::buildIntVal(identifierTable.getLabel());
 	SgType* voidType = SageBuilder::buildVoidType();
 
 	firstArgument = SageBuilder::buildCastExp(intExpression, SageBuilder::buildPointerType(voidType));
 
-//	SgExprStatement *functionCallExit = builder->buildFunctionCallExit (scope, firstArgument, secondArgument);
-	SgExprStatement *functionCallExit = InstROBuilder::buildFunctionCallExit (scope, firstArgument, secondArgument);
+	//	SgExprStatement *functionCallExit = builder->buildFunctionCallExit (scope, firstArgument, secondArgument);
+	SgExprStatement* functionCallExit = InstROBuilder::buildFunctionCallExit(scope, firstArgument, secondArgument);
 	declareExitFunction(SageInterface::getGlobalScope(scope));
 #ifdef DEBUG
 	DEBUGEXIT
@@ -71,6 +68,6 @@ SgExprStatement* VampirTraceAdapterBuilder::createExitFunctionExpressionStatemen
 	return functionCallExit;
 }
 
-void VampirTraceAdapterBuilder::setUpFunctionDefinitionInstrumentationEnvironment(SgFunctionDefinition* funcDef){
+void VampirTraceAdapterBuilder::setUpFunctionDefinitionInstrumentationEnvironment(SgFunctionDefinition* funcDef) {
 	identifierTable.insertIdentifier(funcDef);
 }

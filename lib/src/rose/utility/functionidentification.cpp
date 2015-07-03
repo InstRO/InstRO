@@ -2,11 +2,11 @@
 
 using namespace InstRO;
 
-FunctionIdentificationTable::FunctionIdentificationTable(){
+FunctionIdentificationTable::FunctionIdentificationTable() {
 	uniqueLabel = 1;
 	fileCorrupt = false;
-	if(checkIfNMFileExists())
-			uniqueLabel = getFirstFreeIdentifier();
+	if (checkIfNMFileExists())
+		uniqueLabel = getFirstFreeIdentifier();
 
 #ifdef DEBUG
 	std::cout << "uniqueLabel initialized to: " << uniqueLabel << std::endl;
@@ -15,18 +15,18 @@ FunctionIdentificationTable::FunctionIdentificationTable(){
 	writeCalled = false;
 }
 
-unsigned long FunctionIdentificationTable::insertIdentifier(SgFunctionDefinition* funcDef){
-	uniqueLabel+=8;
+unsigned long FunctionIdentificationTable::insertIdentifier(SgFunctionDefinition* funcDef) {
+	uniqueLabel += 8;
 	labelToFunctionName.insert(std::pair<unsigned long, std::string>(uniqueLabel, generateNamefileEntryName(funcDef)));
 }
 
 void FunctionIdentificationTable::writeNamefile() {
 	std::ofstream out;
-	if(!fileCorrupt){
+	if (!fileCorrupt) {
 		out.open("InstRO_nmfile", std::ios_base::app);
 	} else {
 		out.open("InstRO_nmfile", std::ios_base::out);
-//	out.setf(std::ios_base::showbase);
+		//	out.setf(std::ios_base::showbase);
 	}
 
 	std::map<unsigned long, std::string>::iterator i;
@@ -40,9 +40,7 @@ void FunctionIdentificationTable::writeNamefile() {
 	out.close();
 }
 
-unsigned long FunctionIdentificationTable::getLabel(){
-	return uniqueLabel;
-}
+unsigned long FunctionIdentificationTable::getLabel() { return uniqueLabel; }
 
 std::string FunctionIdentificationTable::generateNamefileEntryName(SgFunctionDefinition* functionDefinition) {
 	SgFunctionType* functionType = functionDefinition->get_declaration()->get_type();
@@ -54,7 +52,7 @@ std::string FunctionIdentificationTable::generateNamefileEntryName(SgFunctionDef
 	std::string fName = functionDefinition->get_declaration()->get_qualified_name();
 	size_t pos;
 
-//	std::cout << fName << std::endl;
+	//	std::cout << fName << std::endl;
 	while ((pos = fName.find('"')) != std::string::npos) {
 		fName.replace(pos, 1, " ");
 	}
@@ -73,34 +71,32 @@ std::string FunctionIdentificationTable::generateNamefileEntryName(SgFunctionDef
 	return ss.str();
 }
 
-inline void FunctionIdentificationTable::incrementUniqueLabel() {
-	this->uniqueLabel += 8;
-}
-bool FunctionIdentificationTable::checkIfNMFileExists(){
+inline void FunctionIdentificationTable::incrementUniqueLabel() { this->uniqueLabel += 8; }
+bool FunctionIdentificationTable::checkIfNMFileExists() {
 	std::ifstream inFile("InstRO_nmfile");
-	if(inFile.is_open())
+	if (inFile.is_open())
 		return true;
 	else
 		return false;
 }
 
-unsigned long FunctionIdentificationTable::getFirstFreeIdentifier(){
+unsigned long FunctionIdentificationTable::getFirstFreeIdentifier() {
 	// Open the file
 	std::ifstream inFile("InstRO_nmfile");
 
 	// Check for an empty/invalid file
 	inFile.seekg(0, inFile.end);
-	if(inFile.tellg() <= 13){
+	if (inFile.tellg() <= 13) {
 		inFile.close();
 		fileCorrupt = true;
 		return 1;
 	}
 
-	inFile.seekg(-2, inFile.end); // assumes a non-empty file
+	inFile.seekg(-2, inFile.end);	// assumes a non-empty file
 	char peekChar = inFile.peek();
 	std::cout << "Peekchar before loop: " << peekChar << std::endl;
-	while(true){
-		if(peekChar == '\n' || inFile.tellg() == 0)
+	while (true) {
+		if (peekChar == '\n' || inFile.tellg() == 0)
 			break;
 
 		inFile.seekg(-1, inFile.cur);
@@ -109,7 +105,7 @@ unsigned long FunctionIdentificationTable::getFirstFreeIdentifier(){
 		std::cout << "Peekchar: " << peekChar << std::endl;
 #endif
 	}
-	if(inFile.tellg() > 0)
+	if (inFile.tellg() > 0)
 		inFile.seekg(1, inFile.cur);
 	unsigned long extractedNumber;
 	inFile >> std::hex >> extractedNumber;

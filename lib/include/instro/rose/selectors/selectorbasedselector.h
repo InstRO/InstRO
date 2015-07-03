@@ -10,7 +10,7 @@ namespace InstRO {
  * \author Roman Neß
  */
 class SelectorBasedSelector : public OutOfOrderSelector {
-public:
+ public:
 	SelectorBasedSelector(SgProject* project, Selector* otherSelector);
 	~SelectorBasedSelector() {}
 	/** gather starting points with visitor pattern */
@@ -21,8 +21,7 @@ public:
 	/** fills the list with sub-selectors */
 	void getSubSelectors(std::list<Selector*>& subSelectors);
 
-private:
-
+ private:
 	/** gather starting nodes */
 	virtual void findStartingNodes() = 0;
 	/** gather nodes that shall be selected later */
@@ -30,7 +29,7 @@ private:
 	/** select the nodes */
 	virtual void selectFoundNodes() = 0;
 
-protected:
+ protected:
 	/** the selector used as Input */
 	Selector* subSelector;
 	/** holds starting points for inheriting classes */
@@ -39,7 +38,6 @@ protected:
 	/** get enclosing function declarations of all starting statements */
 	std::set<SgFunctionDeclaration*> getEnclosingDeclarations();
 };
-
 }
 
 #endif /* SELECTORBASEDSELECTOR_H_ */

@@ -59,13 +59,15 @@ std::string operator+(const std::string& lhs, const ConstructLevelType& type) {
 // CI: return a vector (ordered) with all construct levels from the set
 std::vector<ConstructLevelType> ConstructSet::getConstructLevels() {
 	std::vector<int> levels;
-	for (int i = ConstructLevelType::CLMin; i < ConstructLevelType::CLMax; i++) levels.push_back(0);
+	for (int i = ConstructLevelType::CLMin; i < ConstructLevelType::CLMax; i++)
+		levels.push_back(0);
 	for (auto construct : this->constructs) {
 		levels[(*construct).getLevel()]++;
 	}
 	std::vector<ConstructLevelType> returnVector;
 	for (int i = ConstructLevelType::CLMin; i < ConstructLevelType::CLMax; i++) {
-		if (levels[i]) returnVector.push_back(ConstructLevelType(i));
+		if (levels[i])
+			returnVector.push_back(ConstructLevelType(i));
 	}
 	return returnVector;
 }
@@ -91,7 +93,8 @@ std::set<std::shared_ptr<Construct> >::iterator ConstructSet::end() { return con
 std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::cbegin() const { return constructs.cbegin(); }
 std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::cend() const { return constructs.cend(); }
 bool ConstructSet::contains(const std::shared_ptr<Construct>& construct) const {
-	if (constructs.find(construct) == constructs.end()) return false;
+	if (constructs.find(construct) == constructs.end())
+		return false;
 	return true;
 }
 
@@ -107,7 +110,8 @@ ConstructSet ConstructSet::intersect(const ConstructSet& other) const {
 	ConstructSet retSet;
 	for (std::set<std::shared_ptr<Construct> >::const_iterator constructB = other.cbegin(); constructB != other.cend();
 			 constructB++) {
-		if (constructs.find(*constructB) == constructs.end()) retSet.put(*constructB);
+		if (constructs.find(*constructB) == constructs.end())
+			retSet.put(*constructB);
 	}
 	return retSet;
 }
@@ -115,7 +119,8 @@ ConstructSet ConstructSet::relativecomplement(const ConstructSet& other) const {
 	ConstructSet retSet;
 	/* there may be a more efficient way of doing this, but it works*/
 	for (auto constructA : constructs) {
-		if (!other.contains(constructA)) retSet.put(constructA);
+		if (!other.contains(constructA))
+			retSet.put(constructA);
 	}
 	return retSet;
 }
@@ -123,7 +128,8 @@ ConstructSet ConstructSet::symmerticDifference(const ConstructSet& other) const 
 	ConstructSet retSet;
 	for (std::set<std::shared_ptr<Construct> >::const_iterator constructB = other.cbegin(); constructB != other.cend();
 			 constructB++) {
-		if (constructs.find(*constructB) != constructs.end()) retSet.put(*constructB);
+		if (constructs.find(*constructB) != constructs.end())
+			retSet.put(*constructB);
 	}
 	return retSet;
 }

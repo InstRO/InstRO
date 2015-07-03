@@ -27,4 +27,3 @@ class Pass : public ::InstRO::Pass {
 }
 }
 #endif
-

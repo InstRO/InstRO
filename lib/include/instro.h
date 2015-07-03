@@ -29,23 +29,22 @@
 // #define USING_LLVM
 // #endif
 
-namespace InstRO{
-	namespace Core{}; // Here we define the core interfaces and classes of instro
-	namespace Tooling{}; // Here we define the interface for the classes of the tooling layer. Implementations may reside within a tools namespace
-	namespace Extra{};		// This namespace is used for extensions associated with InstRO, such as the visual pass manager
-	namespace Utility{};		// Contains util functions, such as reg-expression, file readers, etc.
-	namespace Rose{};		// Contains the implementation for ROSE
-	namespace LLVM{};		// Contains the implementation for LLVM
-	namespace CLANG{};		// Contains the implementation for CLANG
-	namespace Example{};	// An example implementation and usage of the InstRO interface without actual functionality. This serves to demonstrate what must be implemented, to obtain a minimal functional InstRo
+namespace InstRO {
+namespace Core {};		 // Here we define the core interfaces and classes of instro
+namespace Tooling {};	// Here we define the interface for the classes of the tooling layer. Implementations may reside
+											 // within a tools namespace
+namespace Extra {};		 // This namespace is used for extensions associated with InstRO, such as the visual pass manager
+namespace Utility {};	// Contains util functions, such as reg-expression, file readers, etc.
+namespace Rose {};		 // Contains the implementation for ROSE
+namespace LLVM {};		 // Contains the implementation for LLVM
+namespace CLANG {};		 // Contains the implementation for CLANG
+namespace Example {};	// An example implementation and usage of the InstRO interface without actual functionality. This
+											 // serves to demonstrate what must be implemented, to obtain a minimal functional InstRo
 }
 
 #include "instro/core/Pass.h"
 #include "instro/core/PassFactory.h"
 #include "instro/core/Instrumentor.h"
-
-
-
 
 //#include "instro/core/Pass.h"
 //#include "instro/core/PassFactory.h"
@@ -54,7 +53,6 @@ namespace InstRO{
 //#include "instro/core/Instrumentor.h"
 
 //#include "instro/core/PassManager.h"
-
 
 #ifdef USING_ROSE
 #include "instro/rose/RosePass.h"
@@ -67,7 +65,6 @@ namespace InstRO{
 #ifdef USING_LLVM
 #include "instro/llvmInstRO.h"
 #endif
-
 
 #ifdef USING_EXAMPLE
 #include "instro/example/ExampleInstrumentor.h"

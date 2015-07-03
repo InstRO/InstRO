@@ -1,9 +1,9 @@
 //#include "CygProfileAdapterT.h"
 
-template<typename T>
+template <typename T>
 char InstRO::LLVM::CygProfileAdapterT<T>::ID = 0;
 
-template<typename T>
+template <typename T>
 InstRO::LLVM::CygProfileAdapterT<T>::CygProfileAdapterT()
 		: llvm::FunctionPass(ID),
 			pn("CygProfileAdapterT"),
@@ -13,7 +13,7 @@ InstRO::LLVM::CygProfileAdapterT<T>::CygProfileAdapterT()
 	llvm::errs() << "Running construction " << inputSelector << "\n";
 }
 
-template<typename T>
+template <typename T>
 InstRO::LLVM::CygProfileAdapterT<T>::CygProfileAdapterT(T *inputSel)
 		: llvm::FunctionPass(ID),
 			pn("CygProfileAdapterT"),
@@ -23,13 +23,12 @@ InstRO::LLVM::CygProfileAdapterT<T>::CygProfileAdapterT(T *inputSel)
 	llvm::errs() << "Running construction " << inputSelector << "\n";
 }
 
-template<typename T>
+template <typename T>
 void InstRO::LLVM::CygProfileAdapterT<T>::getAnalysisUsage(llvm::AnalysisUsage &info) const {
 	info.addRequired<TemplT>();
 }
 
-
-template<typename T>
+template <typename T>
 bool InstRO::LLVM::CygProfileAdapterT<T>::doInitialization(llvm::Module &m) {
 	llvm::errs() << "Running initialization\n";
 	mod = &m;
@@ -39,18 +38,18 @@ bool InstRO::LLVM::CygProfileAdapterT<T>::doInitialization(llvm::Module &m) {
 	mod->getOrInsertFunction(entryName, func->getFunctionType());
 }
 
-template<typename T>
+template <typename T>
 bool InstRO::LLVM::CygProfileAdapterT<T>::runOnFunction(llvm::Function &f) {
 	// This method is implemented in InstRO::LLVM::Pass to be able
 	// to abstract away a map, which is used by the pass manager to maybe
 	// fool the pass requesting the construct set.
-//	auto cs = inputSelector->getConstructSet();
+	//	auto cs = inputSelector->getConstructSet();
 	auto cs = getAnalysis<TemplT>().getConstructSet();
 	auto constructs = cs->getConstructSet();
 	std::cout << constructs.size() << std::endl;
-//	for(auto &c : constructs){
-//		std::cout << c << " == " << &f << std::endl;
-//	}
+	//	for(auto &c : constructs){
+	//		std::cout << c << " == " << &f << std::endl;
+	//	}
 	// If the function was marked for adaption
 	auto res = std::find(std::begin(constructs), std::end(constructs), &f);
 	// we build the instrumentation
@@ -75,17 +74,17 @@ bool InstRO::LLVM::CygProfileAdapterT<T>::runOnFunction(llvm::Function &f) {
 	}
 }
 
-template<typename T>
+template <typename T>
 llvm::CallInst *InstRO::LLVM::CygProfileAdapterT<T>::buildExitCall(llvm::Function &f, llvm::ReturnInst *ri) {
 	return buildTCall(f, llvm::Twine(exitName), ri);
 }
 
-template<typename T>
+template <typename T>
 llvm::CallInst *InstRO::LLVM::CygProfileAdapterT<T>::buildEntryCall(llvm::Function &f) {
 	return buildTCall(f, llvm::Twine(entryName), nullptr);
 }
 
-template<typename T>
+template <typename T>
 llvm::Function *InstRO::LLVM::CygProfileAdapterT<T>::buildFunction(std::string name) {
 	llvm::PointerType *voidPtr = llvm::PointerType::getUnqual(llvm::Type::getInt8Ty(mod->getContext()));
 	std::vector<llvm::Type *> argTypes(2, voidPtr);
@@ -100,9 +99,9 @@ llvm::Function *InstRO::LLVM::CygProfileAdapterT<T>::buildFunction(std::string n
 	return func;
 }
 
-template<typename T>
+template <typename T>
 llvm::CallInst *InstRO::LLVM::CygProfileAdapterT<T>::buildTCall(llvm::Function &f, llvm::Twine &&name,
-																														llvm::Instruction *insertBefore) {
+																																llvm::Instruction *insertBefore) {
 	// constructs a ptr to void type in the general address space
 	llvm::PointerType *voidPtr = llvm::PointerType::getUnqual(llvm::Type::getInt8Ty(mod->getContext()));
 	std::vector<llvm::Type *> argTypes(2, voidPtr);
@@ -124,4 +123,3 @@ llvm::CallInst *InstRO::LLVM::CygProfileAdapterT<T>::buildTCall(llvm::Function &
 	llvm::CallInst *callInst = llvm::CallInst::Create(func, args, n, insertBefore);
 	return callInst;
 }
-

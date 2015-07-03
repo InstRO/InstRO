@@ -37,7 +37,7 @@ class ClangInstrumentor : public InstRO::Instrumentor {
 	/** Returns the factory used to create the passes a user builds the
 	 * instrumentor with */
 	InstRO::Clang::PassFactory* getFactory(CompilationPhase phase = frontend);
-	virtual Tooling::AnalysisManager * getAnalysisManager()override{return nullptr;};
+	virtual Tooling::AnalysisManager* getAnalysisManager() override { return nullptr; };
 
 	void init();
 	void apply();
