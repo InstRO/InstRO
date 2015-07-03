@@ -17,11 +17,11 @@ namespace Selectors
 	void CallPathSelector::execute() 
 {
 	// InstRO::Core::ConstructSet * fromCS, *toCS;
-	/*
-	auto fromCS = std::make_shared<InstRO::Core::ConstructSet> (this->getInput(fromPass));
-	auto toCS = std::make_shared<InstRO::Core::ConstructSet>(this->getInput(toPass)); */
+	
+	//auto fromCS = std::make_shared<InstRO::Core::ConstructSet> (this->getInput(fromPass));
+	//auto toCS = std::make_shared<InstRO::Core::ConstructSet>(this->getInput(toPass)); 
 	auto fromCS = this->getInput(fromPass);
-	auto toCS = this->getInput(toPass);
+ 	auto toCS = this->getInput(toPass);
 	// toCS = this->getInput(toPass);
 	InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph *ecg = Tooling::analysisManager->getECG();
 	auto fromNodes=ecg->findNodes(fromCS);

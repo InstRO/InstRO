@@ -17,7 +17,7 @@ namespace InstRO
 	protected:
 		Example::Tooling::ExampleAnalysisManager * analysis_manager;
 	public: 
-		ExampleInstrumentor() :analysis_manager(new Example::Tooling::ExampleAnalysisManager){};
+		ExampleInstrumentor() :analysis_manager(new Example::Tooling::ExampleAnalysisManager()){};
 
 		Example::ExamplePassFactory * getFactory(Instrumentor::CompilationPhase phase){ return new Example::ExamplePassFactory(passManager); }
 		// TestPassFactory * getFactory(Instrumentor::CompilationPhase phase){return dynamic_cast<PassFactory*>(new Test::TestPassFactory(passManager));}

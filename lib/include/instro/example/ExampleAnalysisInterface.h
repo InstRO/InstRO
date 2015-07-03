@@ -1,5 +1,7 @@
 #include "instro/tooling/AnalysisInterface.h"
+#include "instro/tooling/NamedConstructAccess.h"
 #include "instro/example/ExampleConstructSet.h"
+
 
 namespace InstRO
 {
@@ -9,7 +11,14 @@ namespace InstRO
 		{
 
 
-
+			namespace NamedConstructAccess
+			{
+				class ExampleNamedConstructAccess :public InstRO::Tooling :: NamedConstructAccess::NamedConstructAccess{
+					InstRO::Core::ConstructSet getConstructsByIdentifyerName(InstRO::Tooling::NamedConstructAccess::Matcher &){ return InstRO::Core::ConstructSet(); }
+					// b) contents of strings
+					InstRO::Core::ConstructSet getConstructsByUserTextStringMatch(InstRO::Tooling::NamedConstructAccess::Matcher &){ return InstRO::Core::ConstructSet(); };
+				};
+			}
 		
 				class ExampleControlFlowGraph :public InstRO::Tooling::ControlFlowGraph::ControlFlowGraph
 				{
@@ -84,6 +93,10 @@ namespace InstRO
 				ExampleGrammarInterface *getGrammarInterface(){
 					return new ExampleGrammarInterface();
 				}
+				InstRO::Tooling::NamedConstructAccess::NamedConstructAccess * getNamedConstructAccessFacility(){
+					throw std::string("Not Implemented");
+					return NULL;
+				};
 			};
 
 		}

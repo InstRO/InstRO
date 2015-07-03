@@ -8,9 +8,9 @@
 
 
 namespace InstRO{
-	namespace Rose{
-		namespace Tooling{
-			namespace NamedConstructAccess {
+namespace Rose{
+namespace Tooling{
+namespace NamedConstructAccess {
 				/**
 				* The enum represents to which node the NamedMatcher should traverse upwards if it encounters
 				* a match. Immediate say do not traverse upwards at all (XXX If we match SgName nodes, this doesn't
@@ -120,12 +120,12 @@ namespace InstRO{
 					Core::ConstructSet getConstructsByIdentifyerName(::InstRO::Tooling::NamedConstructAccess::Matcher & matcher) override{
 						traversal.reset();
 						traversal.setMatchMin();
-						return traversal.matchUserSymbols(&matcher, project);
+						return traversal.matchUserIdentifyer(&matcher, project);
 					};
 					Core::ConstructSet getConstructsByUserTextStringMatch(::InstRO::Tooling::NamedConstructAccess::Matcher & matcher) override{
 						traversal.reset();
 						traversal.setMatchMin();
-						return traversal.matchUserText(&matcher, project);
+						return traversal.matchUserTextString(&matcher, project);
 					}; 
 					/* Not implemented in current instro
 					Core::ConstructSet getConstructsByCodeMatch(::InstRO::Tooling::NamedConstructAccess::Matcher & matcher) override{
@@ -133,8 +133,8 @@ namespace InstRO{
 						traversal.setMatchMin();
 						return traversal.matchCode(&matcher, project);
 					};*/
-				};
-			}
-		}
-	}
+};
+}
+}
+}
 }

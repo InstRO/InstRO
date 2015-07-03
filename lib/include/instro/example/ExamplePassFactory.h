@@ -17,7 +17,7 @@ namespace InstRO
 	public:	
 		ExamplePassFactory(PassManagement::PassManager * refManager) :PassFactory(refManager){};
 
-		InstRO::Pass* createStringBasedSelector(std::vector<std::string> matchList) override { return NULL; };
+		InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) override { return NULL; };
 		InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) override { return NULL; };
 
 		InstRO::Pass* createCallPathSelector(InstRO::Pass * from, InstRO::Pass * to)
