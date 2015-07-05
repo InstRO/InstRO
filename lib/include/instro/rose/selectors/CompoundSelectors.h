@@ -2,6 +2,7 @@
 #define ROSE_COMPOUNDSELECTORS_H
 #include <vector>
 #include <string>
+#include <memory>
 #include "instro/rose/RosePass.h"
 #include "instro/core/Pass.h"								 // Pass
 #include "instro/core/PassImplementation.h"	// ChannelConfiguration
@@ -11,14 +12,23 @@ namespace Rose {
 namespace Selectors {
 
 class CompoundSelector : public InstRO::Rose::RosePass {
+protected:
+	std::unique_ptr<InstRO::Core::ConstructSet> passOutput;
  public:
-	CompoundSelector(Pass* inputA, Pass* inputB, int Operation)
+	 typedef enum {
+		 CO_Or,
+		 CO_And,
+		 CO_XOr
+	 } CompoundOperationType;
+	 CompoundSelector(Pass* inputA, Pass* inputB, CompoundOperationType Operation)
 			: RosePass(InstRO::Core::ChannelConfiguration(inputA, inputB)){};
-	void init(){};
-	void execute(){};
-	void finalize(){};
-	void releaseOutput(){};
-	InstRO::Core::ConstructSet* getOutput() override { return new InstRO::Core::ConstructSet(); }
+	CompoundSelector(Pass* inputA, bool invertPassA, Pass* inputB, bool invertPassB, CompoundOperationType Operation)
+		: RosePass(InstRO::Core::ChannelConfiguration(inputA, inputB)){};
+	void init() override {};
+	void execute() override;
+	void finalize() override{};
+	void releaseOutput(){ passOutput->clear(); };
+	InstRO::Core::ConstructSet* getOutput() override { return passOutput.get(); }
 };
 }	// End namespace Selectors
 }	// End namespace Rose
