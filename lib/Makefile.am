@@ -180,7 +180,7 @@ libInstRO_core_la_CPPFLAGS=-I$(srcdir)/include -I@CLANG_INCLUDE_PATH@ -I@LLVM_IN
 else
 # STATIC LIBRARY FOR LIBINSTRO
 #lib_LIBRARIES=libInstRO.a
-lib_LIBRARIES= libInstRO_core.a libInstRO_example.a libInstRO_rose.a
+lib_LIBRARIES= libInstRO_core.a libInstRO_example.a libInstRO_rose.a libInstRO_clang.a
 #libInstRO_clang.a
 
 bin_PROGRAMS=ClangInstrumentor ExampleInstrumentor RoseInstrumentor
@@ -196,7 +196,7 @@ RoseInstrumentor_SOURCES = \
 	./src/rose_main.cpp
 
 RoseInstrumentor_LDADD= libInstRO_core.a libInstRO_rose.a
-RoseInstrumentor_LDFLAGS= @ROSE_LIB_DIR@ @ROSE_LIBS_LIST@ -lrose
+RoseInstrumentor_LDFLAGS= -std=c++11 -L@ROSE_LIBDIR@ @ROSE_LIBS_LIST@ -lrose
 RoseInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 
 
@@ -224,11 +224,17 @@ libInstRO_rose_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUD
 
 libInstRO_core_a_SOURCES= \
 	$(CORE_SFILES) \
+	$(CORE_HFILES) 
+
+libInstRO_clang_a_SOURCES= \
+	$(CORE_SFILES) \
 	$(CORE_HFILES) \
 	$(CLANG_SFILES) \
 	$(CLANG_HFILES)
 
-libInstRO_core_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include @LLVM_INCLUDE_FLAGS@ -I@CLANG_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+libInstRO_clang_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include @LLVM_INCLUDE_FLAGS@ -I@CLANG_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+
+libInstRO_core_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
 
 
 #libInstRO_clang_a_SOURCES= 
