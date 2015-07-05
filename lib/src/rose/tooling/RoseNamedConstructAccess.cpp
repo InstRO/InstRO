@@ -3,6 +3,7 @@
 #include <memory>	// We need shared pointers
 #include <list>		 // We use List in the GrammarInterface
 #include <string>
+#include <iostream> // The development version uses cout for debugging...
 #include "instro/core/ConstructSet.h"
 #include "instro/rose/tooling/RoseNamedConstructAccess.h"
 namespace InstRO {

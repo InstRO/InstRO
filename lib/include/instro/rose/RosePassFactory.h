@@ -7,7 +7,7 @@
 #include "instro/rose/RosePass.h"
 // #include "instro/rose/selectors/BlackAndWhiteListSelector.h"
 #include "instro/rose/selectors/NameBasedSelector.h"
-#include "instro/rose/selectors/CompoundSelectors.h"
+#include "instro/rose/selectors/CompoundSelector.h"
 #include "instro/rose/adapters/GenericAdapter.h"
 #include "instro/rose/adapters/CygProfileAdapter.h"
 
@@ -47,10 +47,22 @@ class RosePassFactory : public InstRO::PassFactory {
 	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) : PassFactory(refManager), project(proj){};
 
 	Pass* createBlackAndWhiteListSelector(std::vector<std::string> rules) {
-		Pass* bwlPass = new Pass(new Selectors::BlackAndWhiteListSelector(rules));
-		bwlPass->setPassName("InstRO::Rose::BlackAndWhiteList");
-		passManager->registerPass(bwlPass);
-		return bwlPass;
+		std::vector<std::string> wlrules;
+		std::vector<std::string> blrules;
+		// get a matcher pass for the white list
+		Pass* wlPass = new Pass(new Selectors::NameBasedSelector(wlrules));
+		wlPass->setPassName("InstRO::Rose::BlackAndWhiteList-WhiteList");
+		passManager->registerPass(wlPass);
+
+		Pass* blPass = new Pass(new Selectors::NameBasedSelector(blrules));
+		blPass->setPassName("InstRO::Rose::BlackAndWhiteList-BlackList");
+		passManager->registerPass(blPass);
+
+		Pass * compountPass = new Pass(new Selectors::CompoundSelector(wlPass, blPass, Selectors::CompoundSelector::CO_Or));
+		compountPass->setPassName("InstRO::Rose:BlackAndWhiteList-Compound");
+		passManager->registerPass(compountPass);
+
+		return compountPass;
 	}
 
 	Pass* createBlackNWhiteSelector(std::string string) {
@@ -60,7 +72,7 @@ class RosePassFactory : public InstRO::PassFactory {
 	};
 
 	Pass* createBooleanOrSelector(Pass* inputA, Pass* inputB) override {
-		Pass* newPass = new InstRO::Pass(new Rose::Selectors::CompoundSelector(inputA, inputB, 0));
+		Pass* newPass = new InstRO::Pass(new Rose::Selectors::CompoundSelector(inputA, inputB, Selectors::CompoundSelector::CO_Or));
 		newPass->setPassName("InstRO::Rose::BooleanOrSelector");
 		passManager->registerPass(newPass);
 		/*		Pass * compoundPass=new Pass(new Selectors::CompoundSelector(getPass(inputA),getPass(inputB)));

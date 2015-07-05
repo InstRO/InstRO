@@ -20,7 +20,7 @@ class RoseInstrumentor : public Instrumentor {
  public:
 	RoseInstrumentor(int* argc, char*** argv) {
 		// TODO: Initialize Rose here
-		project = frontend(argc, argv);
+		project = ::frontend(argc, argv);
 	};
 	~RoseInstrumentor() { delete (project); }
 	InstRO::PassFactory* getFactory(Instrumentor::CompilationPhase phase) {

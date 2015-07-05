@@ -155,9 +155,6 @@
     <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp">
       <Filter>source\lib\tooling</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAcces.cpp">
-      <Filter>source\lib\tooling</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp">
       <Filter>include\instro\core</Filter>
     </ClCompile>
@@ -175,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\example_main.cpp">
       <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAccess.cpp">
+      <Filter>source\lib\tooling</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
