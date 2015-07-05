@@ -6,6 +6,8 @@ namespace InstRO {
 
 			void CompoundSelector::execute()
 			{
+				// This will heavily rely on construct elevation ...
+
 
 			}
 		}
