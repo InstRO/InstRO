@@ -18,7 +18,7 @@ class RoseInstrumentor : public Instrumentor {
 	SgProject* project;
 
  public:
-	RoseInstrumentor(int* argc, char*** argv) {
+	RoseInstrumentor(int argc, char** argv) {
 		// TODO: Initialize Rose here
 		project = ::frontend(argc, argv);
 	};
