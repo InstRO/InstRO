@@ -6,6 +6,7 @@
 
 #include "instro/example/ExamplePass.h"
 #include "instro/example/CallPathSelector.h"
+#include "instro/example/CompoundSelector.h"
 #include "instro/example/NameBasedSelector.h"
 #include "instro/example/ExampleConstructPrinter.h"
 // #include "instro/test/selectors/BlackAndWhiteListSelector.h"
@@ -29,7 +30,12 @@ class ExamplePassFactory : public PassFactory {
 		newPass->setPassName("InstRO::Example::NameBasedSelector");
 		return newPass;
 	};
-	InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) override { return NULL; };
+	InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) override {
+		InstRO::Pass* newPass = new InstRO::Pass(new Selectors::CompoundSelector(inputA,inputB,Selectors::CompoundSelector::CO_Or));
+		passManager->registerPass(newPass);
+		newPass->setPassName("InstRO::Example::BooleanOrSelector");
+		return newPass;
+	};
 
 	InstRO::Pass* createCallPathSelector(InstRO::Pass* from, InstRO::Pass* to) {
 		InstRO::Pass* newPass = new InstRO::Pass(new Selectors::CallPathSelector(from, to));

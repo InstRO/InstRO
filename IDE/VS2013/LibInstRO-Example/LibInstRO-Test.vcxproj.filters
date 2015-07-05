@@ -132,6 +132,9 @@
     <ClInclude Include="..\..\..\lib\include\instro\agnosticSupport.h">
       <Filter>source\lib</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\CompoundSelector.h">
+      <Filter>include\instro\example</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp">
@@ -175,6 +178,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAccess.cpp">
       <Filter>source\lib\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\example\CompoundSelector.cpp">
+      <Filter>include\instro\example</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

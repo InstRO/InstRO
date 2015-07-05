@@ -96,6 +96,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\SimplePassManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Singleton.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\CallPathSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\CompoundSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleAnalysisInterface.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructPrinter.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructSet.h" />
@@ -119,6 +120,7 @@
     <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\example\CompoundSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\ExampleConstructPrinter.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\ExampleConstructSet.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\ExampleInstrumentor.cpp" />
