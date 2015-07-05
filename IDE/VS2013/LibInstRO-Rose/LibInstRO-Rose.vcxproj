@@ -41,10 +41,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\ci24amun\Documents\Visual Studio 2012\Boost\1_57_0\include;C:\Users\ci24amun\Documents\Visual Studio 2012\ROSE\git-rose\include;$(IncludePath)</IncludePath>
+    <IncludePath>d:\Daten\Christian\Arbeit\Rose\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>d:\Daten\Christian\Arbeit\Rose\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -83,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\Rose\include\rose.h" />
     <ClInclude Include="..\..\..\lib\include\instro.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Factory.h" />
@@ -106,6 +108,8 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\CompoundSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\CompoundSelectors.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\NameBasedSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseAnalysisInterface.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseNamedConstructAccess.h" />
@@ -121,12 +125,13 @@
     <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\core\RoseConstructSet.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\selectors\CompoundSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\selectors\NameBasedSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose_main.cpp" />
     <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp" />
-    <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAcces.cpp" />
+    <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAccess.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

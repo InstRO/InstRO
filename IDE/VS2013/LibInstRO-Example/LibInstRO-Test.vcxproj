@@ -126,7 +126,7 @@
     <ClCompile Include="..\..\..\lib\src\example\NameBasedSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\example_main.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp" />
-    <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAcces.cpp" />
+    <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAccess.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

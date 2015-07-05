@@ -162,6 +162,13 @@
     <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h">
       <Filter>include\instro\rose</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\Rose\include\rose.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\CompoundSelectors.h">
+      <Filter>include\instro\rose\selector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\CompoundSelector.h">
+      <Filter>include\instro\rose\selector</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp">
@@ -194,10 +201,13 @@
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp">
       <Filter>include\instro\rose\tooling</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAcces.cpp">
+    <ClCompile Include="..\..\..\lib\src\rose\selectors\NameBasedSelector.cpp">
+      <Filter>include\instro\rose\selector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAccess.cpp">
       <Filter>include\instro\tooling</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\rose\selectors\NameBasedSelector.cpp">
+    <ClCompile Include="..\..\..\lib\src\rose\selectors\CompoundSelector.cpp">
       <Filter>include\instro\rose\selector</Filter>
     </ClCompile>
   </ItemGroup>

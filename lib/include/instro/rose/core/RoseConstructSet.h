@@ -7,26 +7,8 @@
 #include "instro/core/ConstructSet.h"
 #include <map>
 
-#ifdef WINDOWS_ROSE
 #include "rose.h"
-#else
-class SgNode {
- public:
-	std::string unparseToString() { return std::string(); }
-};
-class SgFunctionDefinition : public SgNode {};
-class SgIfStmt : public SgNode {};
-class SgSwitchStatement : public SgNode {};
-class SgForStatement : public SgNode {};
-class SgScopeStatement : public SgNode {};
-class SgDeclarationStatement : public SgNode {};
-class SgWhileStmt : public SgNode {};
-class SgDoWhileStmt : public SgNode {};
-class SgBasicBlock : public SgNode {};
-class SgStatement : public SgNode {};
-class SgExpression : public SgNode {};
-class ROSE_VisitorPatternDefaultBase {};
-#endif
+
 
 namespace InstRO {
 namespace Rose {
@@ -129,7 +111,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 class RoseConstruct : public InstRO::Core::Construct {
  public:
-	RoseConstruct(::SgNode* sgnode) : Construct(InstRO::Core::ConstructLevelType::CLNotALevel), node(sgnode) {
+	RoseConstruct(SgNode* sgnode) : Construct(InstRO::Core::ConstructLevelType::CLNotALevel), node(sgnode) {
 		ConstructGenerator gen;
 		gen.visit(node);
 		/*
