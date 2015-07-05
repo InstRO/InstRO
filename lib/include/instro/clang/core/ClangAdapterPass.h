@@ -20,9 +20,11 @@ namespace Core {
  * This is to have a common base class for all passes which require information
  * from the ASTContext
  */
-class ClangPassImplementation : public InstRO::PassImplementation,
+class ClangPassImplementation : public InstRO::Core::PassImplementation,
 																public clang::RecursiveASTVisitor<ClangPassImplementation> {
  public:
+	ClangPassImplementation(InstRO::Core::ChannelConfiguration cc) : InstRO::Core::PassImplementation(cc){};
+
 	void setASTContext(clang::ASTContext *context) {
 		std::cout << "Setting ASTContext" << std::endl;
 		this->context = context;

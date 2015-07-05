@@ -3,14 +3,9 @@
 #define VERBOSE 5
 
 /* FO_Selector */
-FileOriginSelector::FileOriginSelector(SgProject* project) :
-		project(project) {
-	this->markingSwitch = false;
-}
+FileOriginSelector::FileOriginSelector(SgProject* project) : project(project) { this->markingSwitch = false; }
 
-void FileOriginSelector::markComesFromCommandLine(bool markingSwitch) {
-	this->markingSwitch = markingSwitch;
-}
+void FileOriginSelector::markComesFromCommandLine(bool markingSwitch) { this->markingSwitch = markingSwitch; }
 
 void FileOriginSelector::visit(SgNode* node) {
 	// Immediately return if we do not have a located node. Only these have a file to be located in.
@@ -21,24 +16,30 @@ void FileOriginSelector::visit(SgNode* node) {
 	SgLocatedNode* localNode = isSgLocatedNode(node);
 	// 2013-07-05 JPL: Since instantiated templates are marked as compiler generated and therefore do not include
 	//                          any file name, we have to get the template declaration it was generated from.
-	// XXX: If the template specialization is given in a file and is not compiler generated get_templateDeclaration seg faults.
+	// XXX: If the template specialization is given in a file and is not compiler generated get_templateDeclaration seg
+	// faults.
 	//          in this case the file_info object is directly attached to the template instantiation.
 	if (isSgFunctionDefinition(node))
 		localNode = isSgLocatedNode(node->get_parent());
 
 	if (isSgTemplateInstantiationFunctionDecl(localNode)) {
 #if VERBOSE > 4
-		std::cout << "FileOriginSelector::" << __FUNCTION__ << "  node: " << localNode << " : " << isSgTemplateInstantiationFunctionDecl(localNode)->get_name() << "\n" << localNode->class_name() << "\nisCompilerGenerated:" << localNode->get_file_info()->isCompilerGenerated() << std::endl;
+		std::cout << "FileOriginSelector::" << __FUNCTION__ << "  node: " << localNode << " : "
+							<< isSgTemplateInstantiationFunctionDecl(localNode)->get_name() << "\n" << localNode->class_name()
+							<< "\nisCompilerGenerated:" << localNode->get_file_info()->isCompilerGenerated() << std::endl;
 #endif
 		if (localNode->get_file_info()->isCompilerGenerated())
 			localNode = isSgTemplateInstantiationFunctionDecl(localNode)->get_templateDeclaration();
 #if VERBOSE > 4
-	std::cout << "FileOriginSelector::"<< __FUNCTION__ << "  LocalNode's File Info: \n" << localNode->get_file_info()->get_filenameString() << std::endl;
+		std::cout << "FileOriginSelector::" << __FUNCTION__ << "  LocalNode's File Info: \n"
+							<< localNode->get_file_info()->get_filenameString() << std::endl;
 #endif
 	} else if (isSgTemplateInstantiationMemberFunctionDecl(localNode)) {
 #if VERBOSE > 4
-	std::cout << "FileOriginSelector::"<< __FUNCTION__ << "  node: " << localNode << " : " << isSgTemplateInstantiationMemberFunctionDecl(localNode)->get_name() << "\n"<< localNode->class_name() << " isCompilerGenerated:" << localNode->get_file_info()->isCompilerGenerated() << std::endl;
-	std::cout << localNode->unparseToString() << std::endl;
+		std::cout << "FileOriginSelector::" << __FUNCTION__ << "  node: " << localNode << " : "
+							<< isSgTemplateInstantiationMemberFunctionDecl(localNode)->get_name() << "\n" << localNode->class_name()
+							<< " isCompilerGenerated:" << localNode->get_file_info()->isCompilerGenerated() << std::endl;
+		std::cout << localNode->unparseToString() << std::endl;
 #endif
 		if (localNode->get_file_info()->isCompilerGenerated()) {
 			localNode = isSgTemplateInstantiationMemberFunctionDecl(localNode)->get_templateDeclaration();
@@ -53,10 +54,10 @@ void FileOriginSelector::visit(SgNode* node) {
 				else
 					localNode = isSgLocatedNode(localNode->get_parent());
 		}
-//      std::cout << "LocalNode's File Info: \n" << localNode->get_file_info()->get_filenameString() << std::endl;
+		//      std::cout << "LocalNode's File Info: \n" << localNode->get_file_info()->get_filenameString() << std::endl;
 	}
 	// Appearently we do have a located node - so we need to check if the file it is from is to be instrumented
-//    std::string currentFilename = isSgLocatedNode(node)->get_file_info()->get_filenameString();
+	//    std::string currentFilename = isSgLocatedNode(node)->get_file_info()->get_filenameString();
 	// 2013-07-05 JPL: Changed this to account for the template things.
 	std::string currentFilename = isSgLocatedNode(localNode)->get_file_info()->get_filenameString();
 
@@ -64,8 +65,8 @@ void FileOriginSelector::visit(SgNode* node) {
 	if (markingSwitch && comesFromCommandLine(node)) {
 		this->select(node);
 #if VERBOSE > 2
-		std::cout << "Marking node " << node  << " because of coming from command line." << std::endl;
-		if(isSgFunctionDeclaration(node))
+		std::cout << "Marking node " << node << " because of coming from command line." << std::endl;
+		if (isSgFunctionDeclaration(node))
 			std::cout << "Function name: " << isSgFunctionDeclaration(node)->get_name() << std::endl;
 #endif
 		return;
@@ -74,24 +75,28 @@ void FileOriginSelector::visit(SgNode* node) {
 	// Check if the given file is on the folder-whitelist
 	for (std::list<std::string>::iterator i = folderList.begin(); i != folderList.end(); i++) {
 		// Check for each entry on the folderwhitelist, if the current folder is shorter than the one of the given node
-		if ((*i).length() < currentFilename.length() && (*i).compare(0, (*i).length(), currentFilename, 0, (*i).length()) == 0) {
+		if ((*i).length() < currentFilename.length() &&
+				(*i).compare(0, (*i).length(), currentFilename, 0, (*i).length()) == 0) {
 			// The folder the file is in is specified on the whitelist - so we may instrument it and return
 			this->select(node);
 #if VERBOSE > 2
 			std::cout << "Marking node " << node << " because of file origin matching." << std::endl;
-			if(isSgFunctionDeclaration(node))
-				std::cout << "Function name: " << isSgFunctionDeclaration(node)->get_name() << " in file: " << isSgLocatedNode(node)->get_file_info()->get_filenameString() << std::endl;
+			if (isSgFunctionDeclaration(node))
+				std::cout << "Function name: " << isSgFunctionDeclaration(node)->get_name()
+									<< " in file: " << isSgLocatedNode(node)->get_file_info()->get_filenameString() << std::endl;
 #endif
 			return;
 		}
 	}
 	// XXX 2013-07-05 JP: This hack enables the FO Selector to mark nodes which are Compiler generated and
-	//                                  use the NULL_FILE p_fileflag to indicate. ROSE doesn't seem to consistently handle its beahvior here.
+	//                                  use the NULL_FILE p_fileflag to indicate. ROSE doesn't seem to consistently handle
+	//                                  its beahvior here.
 	if (currentFilename.compare("NULL_FILE") == 0) {
 		this->select(node);
 #if VERBOSE > 2
-		std::cout << "Marking node " << node << "of node->class_name(): " << node->class_name() << " because of NULL_FILE tag." << std::endl;
-		if(isSgFunctionDeclaration(node))
+		std::cout << "Marking node " << node << "of node->class_name(): " << node->class_name()
+							<< " because of NULL_FILE tag." << std::endl;
+		if (isSgFunctionDeclaration(node))
 			std::cout << "Function name: " << isSgFunctionDeclaration(node)->get_name() << std::endl;
 #endif
 		return;
@@ -101,7 +106,7 @@ void FileOriginSelector::visit(SgNode* node) {
 
 	// H-AW (22/03/2011): Outdated, since we changed the storage of the whitelist to SgFile* instead of std::string
 	// First we have to find the filename, assuming / as delimiter
-	//currentFilename.erase(0, currentFilename.find_last_of('/')+1);
+	// currentFilename.erase(0, currentFilename.find_last_of('/')+1);
 
 	for (std::list<SgFile*>::iterator i = fileList.begin(); i != fileList.end(); i++) {
 		if ((*i)->get_file_info()->isSameFile(node->get_file_info())) {
@@ -109,30 +114,35 @@ void FileOriginSelector::visit(SgNode* node) {
 			this->select(node);
 #if VERBOSE > 2
 			std::cout << "Marking node because of same file" << std::endl;
-			if(isSgFunctionDeclaration(node))
+			if (isSgFunctionDeclaration(node))
 				std::cout << "Function name: " << isSgFunctionDeclaration(node)->get_name() << std::endl;
 #endif
 			return;
 		}
 	}
 
-	// Since we have not found the node on any whitelist we may not instrument it
-	// H-AW: Possible, but would clutter up the ast if there are huge headers being included
-	// this->unselect(node);
+// Since we have not found the node on any whitelist we may not instrument it
+// H-AW: Possible, but would clutter up the ast if there are huge headers being included
+// this->unselect(node);
 #if VERBOSE > 2
-	if(isSgTemplateInstantiationFunctionDecl(localNode)) {
+	if (isSgTemplateInstantiationFunctionDecl(localNode)) {
 		std::cout << "in File: " << currentFilename << std::endl;
-		std::cout << "node: " << localNode << " isCompilerGenerated:" << localNode->get_file_info()->isCompilerGenerated() << std::endl;
-		if(localNode->get_file_info()->isCompilerGenerated()) {
+		std::cout << "node: " << localNode << " isCompilerGenerated:" << localNode->get_file_info()->isCompilerGenerated()
+							<< std::endl;
+		if (localNode->get_file_info()->isCompilerGenerated()) {
 			std::cout << isSgTemplateInstantiationFunctionDecl(localNode)->get_templateDeclaration()->get_name() << std::endl;
-			std::cout << isSgTemplateInstantiationFunctionDecl(localNode)->get_templateDeclaration()->class_name() << std::endl;
+			std::cout << isSgTemplateInstantiationFunctionDecl(localNode)->get_templateDeclaration()->class_name()
+								<< std::endl;
 		}
-	} else if(isSgTemplateInstantiationMemberFunctionDecl(localNode)) {
+	} else if (isSgTemplateInstantiationMemberFunctionDecl(localNode)) {
 		std::cout << "in File: " << currentFilename << std::endl;
-		std::cout << "node: " << localNode << " isCompilerGenerated:" << localNode->get_file_info()->isCompilerGenerated() << std::endl;
-		if(localNode->get_file_info()->isCompilerGenerated()) {
-			std::cout << isSgTemplateInstantiationMemberFunctionDecl(localNode)->get_templateDeclaration()->get_name() << std::endl;
-			std::cout << isSgTemplateInstantiationMemberFunctionDecl(localNode)->get_templateDeclaration()->class_name() << std::endl;
+		std::cout << "node: " << localNode << " isCompilerGenerated:" << localNode->get_file_info()->isCompilerGenerated()
+							<< std::endl;
+		if (localNode->get_file_info()->isCompilerGenerated()) {
+			std::cout << isSgTemplateInstantiationMemberFunctionDecl(localNode)->get_templateDeclaration()->get_name()
+								<< std::endl;
+			std::cout << isSgTemplateInstantiationMemberFunctionDecl(localNode)->get_templateDeclaration()->class_name()
+								<< std::endl;
 		}
 	}
 #endif
@@ -171,16 +181,12 @@ bool FileOriginSelector::comesFromFile(SgNode* codeToLocate, SgFile* candidateFi
 	return false;
 }
 
-void FileOriginSelector::addFileToList(SgFile* file) {
-	fileList.push_back(file);
-}
+void FileOriginSelector::addFileToList(SgFile* file) { fileList.push_back(file); }
 
 void FileOriginSelector::addFileToList(std::string file) {
 	std::cerr << "This Function is not supported for the moment." << std::endl;
-	SgFile * f = SageBuilder::buildFile(file, file, NULL);
+	SgFile* f = SageBuilder::buildFile(file, file, NULL);
 	fileList.push_back(f);
 }
 
-void FileOriginSelector::addFolderToList(std::string path) {
-	folderList.push_back(path);
-}
+void FileOriginSelector::addFolderToList(std::string path) { folderList.push_back(path); }

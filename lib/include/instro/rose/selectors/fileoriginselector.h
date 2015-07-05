@@ -17,27 +17,27 @@ namespace InstRO {
  * \ingroup Selector
  * \author InstRO
  */
-class FileOriginSelector : public OutOfOrderSelector{
-public:
-    /* Using the constructor files originating from the commandline are excluded from selection process */
-    FileOriginSelector(SgProject* project);
-    /** If markingSwitch is set to false, files which are specified as arguments on the command line are not selected */
-    void markComesFromCommandLine(bool markingSwitch);
-    void visit(SgNode* node);
+class FileOriginSelector : public OutOfOrderSelector {
+ public:
+	/* Using the constructor files originating from the commandline are excluded from selection process */
+	FileOriginSelector(SgProject* project);
+	/** If markingSwitch is set to false, files which are specified as arguments on the command line are not selected */
+	void markComesFromCommandLine(bool markingSwitch);
+	void visit(SgNode* node);
 
-    void addFolderToList(std::string);
-    void addFileToList(std::string);
-    void addFileToList(SgFile*);
+	void addFolderToList(std::string);
+	void addFileToList(std::string);
+	void addFileToList(SgFile*);
 
-private:
-    std::list<std::string> folderList;
-    std::list<SgFile*> fileList;
-    bool markingSwitch;
+ private:
+	std::list<std::string> folderList;
+	std::list<SgFile*> fileList;
+	bool markingSwitch;
 
-    SgProject* project;
+	SgProject* project;
 
-    bool comesFromCommandLine(SgNode* codeToLocate);
-    bool comesFromFile(SgNode* codeToLocate, SgFile* candidateFile);
+	bool comesFromCommandLine(SgNode* codeToLocate);
+	bool comesFromFile(SgNode* codeToLocate, SgFile* candidateFile);
 };
 }
 

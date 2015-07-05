@@ -95,4 +95,3 @@ llvm::CallInst *InstRO::LLVM::CygProfileAdapter::buildTCall(llvm::Function &f, l
 	llvm::CallInst *callInst = llvm::CallInst::Create(func, args, n, insertBefore);
 	return callInst;
 }
-

@@ -2,15 +2,12 @@
 
 using namespace InstRO;
 
-NameMatchingSelector::NameMatchingSelector() :
-		verbose(false), isInitialized(false) {
-}
+NameMatchingSelector::NameMatchingSelector() : verbose(false), isInitialized(false) {}
 
-NameMatchingSelector::NameMatchingSelector(bool verbose) :
-		verbose(verbose), isInitialized(false) {
-}
+NameMatchingSelector::NameMatchingSelector(bool verbose) : verbose(verbose), isInitialized(false) {}
 
-void NameMatchingSelector::init(IN_enum nodetypeToMark, Matcher* matcherToUse, std::list<std::string>* listToMatchAgainst) {
+void NameMatchingSelector::init(IN_enum nodetypeToMark, Matcher* matcherToUse,
+																std::list<std::string>* listToMatchAgainst) {
 	this->nodetypeToMark = nodetypeToMark;
 	this->matchingObject = matcherToUse;
 	this->listToMatchAgainst = listToMatchAgainst;
@@ -31,7 +28,9 @@ void NameMatchingSelector::init(IN_enum nodetypeToMark, Matcher* matcherToUse, s
 void NameMatchingSelector::preOrderVisit(SgNode* n) {
 	if (isInitialized) {
 		if (this->matchingObject == NULL || this->listToMatchAgainst == NULL) {
-			std::cerr << "Matching object and/or listToMatchAgainst are NULL. Please use init(...) before invoking the traversal." << std::endl;
+			std::cerr
+					<< "Matching object and/or listToMatchAgainst are NULL. Please use init(...) before invoking the traversal."
+					<< std::endl;
 			throw InstroException("NameMatchingSelector was not initialized before starting traversal.");
 		}
 		// implements what to do at a node
@@ -44,11 +43,9 @@ void NameMatchingSelector::preOrderVisit(SgNode* n) {
 			*/
 
 			if (this->matchingObject->bMatch(generatedName, *listToMatchAgainst)) {
-
 				if (verbose) {
-					std::cout << "Matcher tried to match: " << generatedName << " and returned "
-							<< true << ". Leading to node selection." << std::endl;
-
+					std::cout << "Matcher tried to match: " << generatedName << " and returned " << true
+										<< ". Leading to node selection." << std::endl;
 				}
 
 				// XXX RN 2014-10: this dirty hack is necessary because for MPI methods we only find the SgFunctionRefExp
@@ -77,7 +74,8 @@ std::vector<std::string> NameMatchingSelector::retrieveMatches(SgNode* n) {
 	ASTAttributeContainer* container = ASTAttributeContainer::getASTAttributeContainer(n);
 	if (!container->hasSelAttrib(this->getId())) {
 		// XXX 2013-10-08 JP: Maybe this output is unnecessary (depends on which node type was marked?)
-		std::cerr << "Error: NameMatchingSelector::retrieveMatches called on node where no NameMatchingSelector with Id: " << this->getId() << " attribute was stored" << std::endl;
+		std::cerr << "Error: NameMatchingSelector::retrieveMatches called on node where no NameMatchingSelector with Id: "
+							<< this->getId() << " attribute was stored" << std::endl;
 	} else {
 		ASTAttributeContainer::SharedAttributePointerType ap = container->getSelAttrib(this->getId());
 		SelectionASTMarker* p = ap.get();
@@ -116,7 +114,6 @@ std::string NameMatchingSelector::toString(SgNode* n) {
 	 */
 	// If we reach this statement we know, that this node is not supported.
 	return std::string("INSTRUMENTOR_NOT_SUPPORTED_ATM");
-
 }
 
 SelectionASTMarker* NameMatchingSelector::createSelectionMarker() {

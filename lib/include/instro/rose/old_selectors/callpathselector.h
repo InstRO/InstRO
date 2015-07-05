@@ -14,15 +14,14 @@ namespace InstRO {
  * \author Roman Ness
  */
 class CallPathSelector : public SelectorBasedSelector {
-
-public:
+ public:
 	CallPathSelector(SgProject* project, SgStatement* start, int maxDepth);
 
 	CallPathSelector(SgProject* project, Selector* subSelector, int maxDepth);
 
 	~CallPathSelector() {}
 
-private:
+ private:
 	/** call graph ancestors up to this depth are selected */
 	int maxDepth;
 	/** manages (interaction with) the call graph */
@@ -33,7 +32,6 @@ private:
 	/** holds the nodes that shall be selected */
 	std::set<SgGraphNode*> nodesToSelect;
 
-
 	/** initialize members */
 	void init(SgProject* project, int maxDepth);
 
@@ -43,9 +41,7 @@ private:
 	void findNodesToSelect();
 	/** select the nodes that have been added to nodesToMark */
 	void selectFoundNodes();
-
 };
-
 }
 
-#endif // CALLDEPHSELECTOR_H
+#endif	// CALLDEPHSELECTOR_H

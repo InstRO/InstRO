@@ -15,10 +15,9 @@ typedef boost::unordered_map<SgFunctionDeclaration*, CallerMap> CalleeToCallerMa
  * \brief This class manages interaction with a call graph
  * \author Roman
  */
-class CallGraphManager
-{
-public:
-	CallGraphManager(SgProject* project, CalleeToCallerMap* callsByCaller=NULL);
+class CallGraphManager {
+ public:
+	CallGraphManager(SgProject* project, CalleeToCallerMap* callsByCaller = NULL);
 
 	/* Get the corresponding SgGraphNode for a Function Declaration */
 	SgGraphNode* getCallGraphNode(SgFunctionDeclaration* funcDecl);
@@ -36,16 +35,15 @@ public:
 	std::set<SgGraphNode*> getParentSet(SgGraphNode* child);
 
 	/* Dump the current function declaration -> call graph node mapping */
-	void dumpCallGraphMapping(bool keysOnly=true);
+	void dumpCallGraphMapping(bool keysOnly = true);
 
 	/* XXX needs better name; Calculates the #calls for a method, including all callers */
 	long long approximateNumberOfCalls(SgFunctionDeclaration* callee);
 
-
 	int getNumberOfIncomingEdges(SgGraphNode* node);
 	int getNumberOfOutgoingEdges(SgGraphNode* node);
 
-private:
+ private:
 	/* the callGraph corresponding to an AST */
 	SgIncidenceDirectedGraph* callGraph;
 	/* a mapping from _first nondefining_ FunctionDeclarations to GraphNodes of the callGraph */
@@ -63,4 +61,4 @@ private:
 	boost::unordered_map<SgFunctionDeclaration*, long long> nodeMultiplier;
 };
 }
-#endif // CALLGRAPHMANAGER_H
+#endif	// CALLGRAPHMANAGER_H

@@ -6,7 +6,6 @@
 #include "instro/utility/asthelper.h"
 #include "instro/utility/callgraphmanager.h"
 
-
 namespace InstRO {
 
 /**
@@ -15,17 +14,16 @@ namespace InstRO {
  * \author Roman
  */
 class CallFrequencyHeuristicSelector : public OutOfOrderSelector {
-public:
-	CallFrequencyHeuristicSelector(SgProject* project, long defaultCount=23L, long threashold=100L);
+ public:
+	CallFrequencyHeuristicSelector(SgProject* project, long defaultCount = 23L, long threashold = 100L);
 
 	void selectionBegin(SgProject* project);
 	void selectionEnd(SgProject* project);
 
 	/* visit all nodes */
-	void visit(SgNode *n);
+	void visit(SgNode* n);
 
-
-private:
+ private:
 	/* stores all registered function call expressions */
 	boost::unordered_set<SgFunctionCallExp*> callExps;
 	/* stores all registered function definitions */
@@ -34,10 +32,11 @@ private:
 	/* stores how often each loop is processed approximately */
 	boost::unordered_map<SgScopeStatement*, long> loopCounts;
 	// 2014-03 JP XXX I changed the visibility here to protected due some testing.
-protected:
+ protected:
 	/* stores how often a method is called in total */
 	boost::unordered_map<SgFunctionDefinition*, long long> callsByFuncDef;
-private:
+
+ private:
 	/*
 	 * stores how often a method/callee is called by which caller
 	 * callee -> (caller -> #calls)
@@ -74,7 +73,6 @@ private:
 	/* print how often which method is called (and also which method is the caller) */
 	void dumpCallsByCaller();
 };
-
 }
 
-#endif // CALLFREQUENCYHEURISTICSELECTOR_H
+#endif	// CALLFREQUENCYHEURISTICSELECTOR_H

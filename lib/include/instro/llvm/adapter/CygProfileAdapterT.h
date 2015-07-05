@@ -20,12 +20,11 @@ namespace LLVM {
  * Implements the cyg profile function adapter.
  * This version relies on the cashes selector.
  */
-template<typename T>
-class CygProfileAdapterT : public InstRO::LLVM::Core::ConstructSetPassing,
-													public llvm::FunctionPass {
+template <typename T>
+class CygProfileAdapterT : public InstRO::LLVM::Core::ConstructSetPassing, public llvm::FunctionPass {
  public:
-	CygProfileAdapterT ();
-	CygProfileAdapterT (T *inputSel);
+	CygProfileAdapterT();
+	CygProfileAdapterT(T *inputSel);
 
 	const char *getPassName() const { return pn.c_str(); }
 
@@ -43,7 +42,7 @@ class CygProfileAdapterT : public InstRO::LLVM::Core::ConstructSetPassing,
 	const std::string exitName;
 	const std::string entryName;
 
-	T  *inputSelector;
+	T *inputSelector;
 
 	llvm::CallInst *entryFunc;
 	llvm::CallInst *exitFunc;
@@ -51,8 +50,7 @@ class CygProfileAdapterT : public InstRO::LLVM::Core::ConstructSetPassing,
 	llvm::CallInst *buildEntryCall(llvm::Function &f);
 	llvm::CallInst *buildExitCall(llvm::Function &f, llvm::ReturnInst *ri);
 	// XXX Why does that need to be a llvm::Twine&& ?
-	llvm::CallInst *buildTCall(llvm::Function &f, llvm::Twine &&name,
-														 llvm::Instruction *insertBefore);
+	llvm::CallInst *buildTCall(llvm::Function &f, llvm::Twine &&name, llvm::Instruction *insertBefore);
 
 	llvm::Function *buildFunction(std::string fName);
 };

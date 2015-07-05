@@ -1,16 +1,10 @@
 #include "instro/core/ConstructSetManagement.h"
-namespace InstRO
-{
-namespace Core
-{
-ConstructSet * PassConstructSetManagement::getInput(PassConstructSetManagement * from)
-{
-	if (inputOverride.find(from)==inputOverride.end())
-	{
+namespace InstRO {
+namespace Core {
+ConstructSet* PassConstructSetManagement::getInput(PassConstructSetManagement* from) {
+	if (inputOverride.find(from) == inputOverride.end()) {
 		return from->getOutput();
-	}
-	else
-	{
+	} else {
 		return inputOverride[from];
 	}
 #ifdef __EXCEPTIONS
@@ -20,9 +14,8 @@ ConstructSet * PassConstructSetManagement::getInput(PassConstructSetManagement *
 #endif
 }
 
-void PassConstructSetManagement::overrideInput(PassConstructSetManagement * from, ConstructSet* overrideSet)
-{
-	inputOverride[from]=overrideSet;
+void PassConstructSetManagement::overrideInput(PassConstructSetManagement* from, ConstructSet* overrideSet) {
+	inputOverride[from] = overrideSet;
 }
 }
 }

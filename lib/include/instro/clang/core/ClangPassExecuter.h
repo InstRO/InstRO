@@ -20,7 +20,7 @@ class ClangPassExecuter : public InstRO::PassManagement::PassExecuter {
 	ClangPassExecuter(clang::ASTContext *context);
 	void setASTContext(clang::ASTContext *context);
 
-	virtual void execute(InstRO::PassImplementation *pass) = 0;
+	virtual void execute(InstRO::Core::PassImplementation *pass) = 0;
 
  protected:
 	clang::ASTContext *context;
@@ -43,7 +43,7 @@ class VisitingClangPassExecuter : public InstRO::Clang::PassManagement::ClangPas
 	 * type information fot that from the factory all the way to the executer
 	 * without templatizing everything I am very interested in the ideas.
 	 */
-	void execute(InstRO::PassImplementation *pass) override;
+	void execute(InstRO::Core::PassImplementation *pass) override;
 
  private:
 	int counter;
@@ -52,7 +52,7 @@ class VisitingClangPassExecuter : public InstRO::Clang::PassManagement::ClangPas
 class NonVisitingClangPassExecuter : public InstRO::Clang::PassManagement::ClangPassExecuter {
  public:
 	NonVisitingClangPassExecuter(clang::ASTContext *context);
-	void execute(InstRO::PassImplementation *pass) override;
+	void execute(InstRO::Core::PassImplementation *pass) override;
 };
 
 }	// PassManagement

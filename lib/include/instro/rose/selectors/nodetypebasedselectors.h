@@ -3,26 +3,24 @@
 
 #include "../common.h"
 
-namespace InstRO{
-
-
+namespace InstRO {
 
 /**
  *	\brief Select all Nodes of the specified Rose - AST - Type
  *  \ingroup Selector
  *	\author Roman Ness
  */
-class GrammarTraitSelector: public OutOfOrderSelector {
-public:
+class GrammarTraitSelector : public OutOfOrderSelector {
+ public:
 	GrammarTraitSelector(SgProject* project, VariantT variant);
 
 	/** selection is done here by node query */
 	void selectionBegin(SgProject* project);
 
 	/** visitor does nothing */
-	void visit(SgNode* node) {
-	}
-protected:
+	void visit(SgNode* node) {}
+
+ protected:
 	const VariantT variant;
 };
 
@@ -32,11 +30,9 @@ protected:
  * \ingroup Selector
  * \author Roman Ness
  */
-class FunctionDefinitionSelector: public GrammarTraitSelector {
-public:
-	FunctionDefinitionSelector(SgProject* project) :
-		GrammarTraitSelector(project, V_SgFunctionDefinition) {
-	}
+class FunctionDefinitionSelector : public GrammarTraitSelector {
+ public:
+	FunctionDefinitionSelector(SgProject* project) : GrammarTraitSelector(project, V_SgFunctionDefinition) {}
 };
 
 /**
@@ -45,14 +41,10 @@ public:
  * \ingroup Selector
  * \author Roman Ness
  */
-class GlobalScopeSelector: public GrammarTraitSelector {
-public:
-	GlobalScopeSelector(SgProject* project) :
-		GrammarTraitSelector(project, V_SgGlobal) {
-	}
+class GlobalScopeSelector : public GrammarTraitSelector {
+ public:
+	GlobalScopeSelector(SgProject* project) : GrammarTraitSelector(project, V_SgGlobal) {}
 };
-
-
 }
 
 #endif
