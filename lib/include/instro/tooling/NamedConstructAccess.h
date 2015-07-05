@@ -102,6 +102,7 @@ class NamedConstructAccess {
 #ifdef __EXCEPTIONS
 		throw std::string("Not Implemented");
 #endif
+		return std::unique_ptr<InstRO::Core::ConstructSet>(nullptr);
 	}
 };
 }
