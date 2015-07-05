@@ -11,7 +11,7 @@
 
 int main(int argc, char** argv) {
 	try {
-		InstRO::Instrumentor* instro = new InstRO::RoseInstrumentor(&argc, &argv);
+		InstRO::Instrumentor* instro = new InstRO::RoseInstrumentor(argc, argv);
 		// CI - Reseting Classic Implementation  InstRO::Ext::VisualizingPassManager * passManager=new
 		// InstRO::Ext::VisualizingPassManager();
 		// CI - Reseting Classic Implementation  instro->setPassManager(passManager);

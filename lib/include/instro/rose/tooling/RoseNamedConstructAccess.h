@@ -2,6 +2,8 @@
 #include <list>		 // We use List in the GrammarInterface
 #include <stack>
 
+#include "instro/core/Helper.h"
+
 #include "instro/core/ConstructSet.h"
 #include "instro/tooling/NamedConstructAccess.h"
 
