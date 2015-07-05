@@ -42,8 +42,11 @@ namespace InstRO {
 						if (isStrict())
 							passOutput = CompoundSelectorHelper::strictCompareAnd(firstArg->getOutput(), secondArg->getOutput());
 						if (isParentChild())
-							passOutput = CompoundSelectorHelper::parentChildCompareAnd(firstArg->getOutput(), secondArg->getOutput());
+							passOutput = CompoundSelectorHelper::parentChildCompareAnd(firstArg->getOutput(), secondArg->getOutput(),true,false);
 						break;
+					case CompoundOperationType::CO_XOr:
+						break;
+
 				default:
 					
 				}
