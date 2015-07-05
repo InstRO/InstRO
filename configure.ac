@@ -136,11 +136,13 @@ else
     ROSE_NEW_INCLUDEDIR=/usr/include/rose
     ROSE_LIBDIR=/usr/lib
 fi
+    ROSE_LIBS_LIST="-lrose"
 
 ## set @ROSE_INCLUDEDIR@ and @ROSE_LIBDIR@ variables
 AC_SUBST(ROSE_INCLUDEDIR)
 AC_SUBST(ROSE_NEW_INCLUDEDIR)
 AC_SUBST(ROSE_LIBDIR)
+AC_SUBST(ROSE_LIBS_LIST)
 
 # ---------------------------
 # 2.2) Add Clang flag

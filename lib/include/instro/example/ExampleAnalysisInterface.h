@@ -1,4 +1,5 @@
 #include <memory> 
+#include "instro/core/Helper.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/tooling/AnalysisInterface.h"
 #include "instro/tooling/NamedConstructAccess.h"
