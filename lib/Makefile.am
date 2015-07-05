@@ -56,6 +56,7 @@ CORE_HFILES= \
 ./include/instro/tooling/TransformationInterface.h 
 
 CORE_SFILES= \
+./src/core/Helper.cpp \
 ./src/core/ConstructSet.cpp \
 ./src/core/Pass.cpp \
 ./src/core/PassImplemention.cpp \
@@ -125,8 +126,21 @@ EXAMPLE_HFILES= \
 if USELIBTOOL
 # LIBTOOL RULE FOR LIBINSTRO
 #lib_LTLIBRARIES= libInstRO_core.la libInstRO_clang.la libInstRO.la
-lib_LTLIBRARIES= libInstRO_core.la libInstRO_example.la libInstRO_rose.la
+lib_LTLIBRARIES= libInstRO_core.la libInstRO_example.la
+#lib_LTLIBRARIES= libInstRO_core.la libInstRO_example.la libInstRO_rose.la
 bin_PROGRAMS=ExampleInstrumentor RoseInstrumentor
+#bin_PROGRAMS=ExampleInstrumentor RoseInstrumentor
+
+if USECLANG
+lib_LTLIBRARIES += libInstRO_clang.la
+bin_PROGRAMS += ClangInstrumentor
+endif
+
+if USECLANG
+lib_LTLIBRARIES += libInstRO_rose.la
+bin_PROGRAMS += RoseInstrumentor
+endif
+
 
 libInstRO_core_la_SOURCES= \
 	$(CORE_SFILES) \
@@ -150,6 +164,7 @@ libInstRO_rose_la_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLU
 
 RoseInstrumentor_SOURCES = \
 	./src/rose_main.cpp
+RoseInstrumentor_LDADD= libInstRO_rose.a @ROSE_LINK_LIBRARIES@
 
 ExampleInstrumentor_SOURCES = \
 	./src/example_main.cpp
@@ -180,10 +195,24 @@ libInstRO_core_la_CPPFLAGS=-I$(srcdir)/include -I@CLANG_INCLUDE_PATH@ -I@LLVM_IN
 else
 # STATIC LIBRARY FOR LIBINSTRO
 #lib_LIBRARIES=libInstRO.a
-lib_LIBRARIES= libInstRO_core.a libInstRO_example.a libInstRO_rose.a libInstRO_clang.a
+lib_LIBRARIES= libInstRO_core.a libInstRO_example.a
+#lib_LIBRARIES= libInstRO_core.a libInstRO_example.a libInstRO_rose.a libInstRO_clang.a
 #libInstRO_clang.a
 
-bin_PROGRAMS=ClangInstrumentor ExampleInstrumentor RoseInstrumentor
+# bin_PROGRAMS=ClangInstrumentor ExampleInstrumentor RoseInstrumentor
+bin_PROGRAMS=ExampleInstrumentor 
+
+if USECLANG
+lib_LIBRARIES += libInstRO_clang.a
+bin_PROGRAMS += ClangInstrumentor
+endif
+
+if USEROSE
+lib_LIBRARIES += libInstRO_rose.a
+bin_PROGRAMS += RoseInstrumentor
+
+endif
+
 
 ClangInstrumentor_SOURCES = \
 	./src/clang/Instrumentor.cpp
@@ -196,7 +225,7 @@ RoseInstrumentor_SOURCES = \
 	./src/rose_main.cpp
 
 RoseInstrumentor_LDADD= libInstRO_core.a libInstRO_rose.a
-RoseInstrumentor_LDFLAGS= -std=c++11 -L@ROSE_LIBDIR@ @ROSE_LIBS_LIST@ -lrose
+RoseInstrumentor_LDFLAGS= -std=c++11 -L@ROSE_LIBDIR@ @ROSE_LIBS_LIST@ -lrose @ROSE_LINK_LIBRARIES@
 RoseInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 
 
