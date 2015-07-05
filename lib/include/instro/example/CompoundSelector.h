@@ -14,6 +14,7 @@ namespace InstRO {
 			class CompoundSelector : public InstRO::Example::ExamplePass {
 			protected:
 				std::unique_ptr<InstRO::Core::ConstructSet> passOutput;
+				int compareMode();
 			public:
 				typedef enum {
 					CO_Or,
