@@ -1,12 +1,11 @@
 #ifndef INSTRUMENTOR_NAMEMATCHING_DEFINE
 #define INSTRUMENTOR_NAMEMATCHING_DEFINE
 
-
 #include "../common.h"
 #include "../utility/matcher.h"
 #include "../utility/marker.h"
 
-namespace InstRO{
+namespace InstRO {
 
 /**
  * The enum represents to which node the NamedMatcher should traverse upwards if it encounters
@@ -20,8 +19,7 @@ namespace InstRO{
  * match this criterion, too.
  * \attention Please note that at the moment only IN_Immediate is supported
  */
-enum IN_enum{IN_Immediate, IN_NextOuterExpression, IN_NextOuterFunctionDefinition, IN_NextOuterStatement, IN_Parent};
-
+enum IN_enum { IN_Immediate, IN_NextOuterExpression, IN_NextOuterFunctionDefinition, IN_NextOuterStatement, IN_Parent };
 
 /**
  * \brief This class matches named entities of the AST against a list of specified strings.
@@ -39,40 +37,39 @@ enum IN_enum{IN_Immediate, IN_NextOuterExpression, IN_NextOuterFunctionDefinitio
  * \ingroup Selector
  * \author Jan-Patrick Lehr
  */
-class NameMatchingSelector : public PrePostOrderSelector{
-public:
-    /** Standard constructor. Object needs to be initiated using the init() method */
-    NameMatchingSelector();
-    /** Standard constructor with possibilty to set verbosity. Object needs to be initiated using the init() method */
-    NameMatchingSelector(bool verbose);
-    /** Initializes the instance with the node-type which should be marked and which matching object should be used */
-    void init(IN_enum nodetypeToMark, Matcher* matcherToUse, std::list<std::string>* listToMatchAgainst);
+class NameMatchingSelector : public PrePostOrderSelector {
+ public:
+	/** Standard constructor. Object needs to be initiated using the init() method */
+	NameMatchingSelector();
+	/** Standard constructor with possibilty to set verbosity. Object needs to be initiated using the init() method */
+	NameMatchingSelector(bool verbose);
+	/** Initializes the instance with the node-type which should be marked and which matching object should be used */
+	void init(IN_enum nodetypeToMark, Matcher* matcherToUse, std::list<std::string>* listToMatchAgainst);
 
-    /** Gets called before visiting the child nodes. Therefore this selector uses pre order traversal. */
-    void preOrderVisit(SgNode* n);
+	/** Gets called before visiting the child nodes. Therefore this selector uses pre order traversal. */
+	void preOrderVisit(SgNode* n);
 
+	/** Retrieval of which strings matched a certain name will be implemented using an AST query */
+	std::vector<std::string> retrieveMatches(SgNode* n);
 
-    /** Retrieval of which strings matched a certain name will be implemented using an AST query */
-    std::vector<std::string> retrieveMatches(SgNode* n);
+	/** This method can be used to generate Strings from SgNodes.
+	 * At the moment it will use only those SgNodes which are mentioned in the class documentation
+	 * \todo move to some utility namespace / entity
+	 */
+	std::string toString(SgNode* n);
 
-    /** This method can be used to generate Strings from SgNodes.
-     * At the moment it will use only those SgNodes which are mentioned in the class documentation
-     * \todo move to some utility namespace / entity
-     */
-    std::string toString(SgNode* n);
+ private:
+	IN_enum nodetypeToMark;											 // Where to save the ASTMarker
+	Matcher* matchingObject;										 // Which matcher object should be used
+	std::list<std::string>* listToMatchAgainst;	// List of strings to check against
+	std::vector<int> lastMatchIds;							 // The list ids of the last matching
+	bool verbose;																 // Is this object verbose?
+	bool isInitialized;													 // for checking if the user called init method.
 
-private:
-    IN_enum nodetypeToMark; // Where to save the ASTMarker
-    Matcher* matchingObject; // Which matcher object should be used
-    std::list<std::string>* listToMatchAgainst; // List of strings to check against
-    std::vector<int> lastMatchIds; // The list ids of the last matching
-    bool verbose; // Is this object verbose?
-    bool isInitialized; // for checking if the user called init method.
-
-    // Fixme 2013-10-08 JP: which node gets selection attribute? How could this NOW be implemented?
-    // Immediate, nextOuterExpression, nextOuterStatement, nextOuterFuncDef, parent, userdef (which is still missing atm)
-    // 2013-10-08 JP: At the moment the immediate node is used.
-    SelectionASTMarker* createSelectionMarker();
+	// Fixme 2013-10-08 JP: which node gets selection attribute? How could this NOW be implemented?
+	// Immediate, nextOuterExpression, nextOuterStatement, nextOuterFuncDef, parent, userdef (which is still missing atm)
+	// 2013-10-08 JP: At the moment the immediate node is used.
+	SelectionASTMarker* createSelectionMarker();
 };
 }
-#endif // INSTRUMENTOR_NAMEMATCHING_DEFINE
+#endif	// INSTRUMENTOR_NAMEMATCHING_DEFINE

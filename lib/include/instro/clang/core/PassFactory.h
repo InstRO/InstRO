@@ -27,19 +27,26 @@ namespace Clang {
  * but still
  * reference the Passes internally by raw pointers
  */
-class PassFactory : public InstRO::Core::PassFactory {
+class PassFactory : public InstRO::PassFactory {
  public:
 	PassFactory(InstRO::PassManagement::PassManager* manager, clang::tooling::Replacements& reps,
 							InstRO::Clang::PassManagement::VisitingClangPassExecuter* vExecuter,
 							InstRO::Clang::PassManagement::NonVisitingClangPassExecuter* nvExecuter)
-			: InstRO::Core::PassFactory(manager), replacements(reps), vExecuter(vExecuter), nvExecuter(nvExecuter){};
+			: InstRO::PassFactory(manager), replacements(reps), vExecuter(vExecuter), nvExecuter(nvExecuter){};
+
 	Pass* createBlackAndWhiteListSelector(std::vector<std::string> blacklist, std::vector<std::string> whitelist);
 	Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
 	Pass* createFunctionDefinitionSelector();
 	Pass* createProgramEntrySelector(){};
 	Pass* createCygProfileAdapter(InstRO::Pass* input);
+	Pass* createLLVMInputAdapter(InstRO::Pass* input);
 
-	Pass* createLLVMInputAdapter(InstRO::Pass *input);
+	/**
+	 * Introduced in the base class. So I had to provide some implementation..
+	 */
+	virtual InstRO::Pass* createFunctionSelector() override { return nullptr; };
+	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input) override { return nullptr; };
+	virtual InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) override { return nullptr; };
 
  private:
 	clang::tooling::Replacements& replacements;

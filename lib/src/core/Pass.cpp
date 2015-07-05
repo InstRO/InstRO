@@ -1,11 +1,10 @@
 #include "instro/core/Pass.h"
 
 void InstRO::Pass::initPass() {
-	if (!passInitialized && !passFinalized){
+	if (!passInitialized && !passFinalized) {
 		passImplementation->init();
 		passInitialized = true;
-	}
-	else
+	} else
 #ifdef __EXCEPTIONS
 		throw std::string("Pass Initialized after Finalize! Not Supported!");
 #else
@@ -39,8 +38,7 @@ void InstRO::Pass::execute(InstRO::PassManagement::PassExecuter *executer) {
 #endif
 	passExecuted = true;
 }
-#endif 
-
+#endif
 
 void InstRO::Pass::finalizePass() {
 	if (passInitialized && passExecuted)
@@ -54,4 +52,3 @@ void InstRO::Pass::finalizePass() {
 	passFinalized = true;
 	passInitialized = false;
 }
-

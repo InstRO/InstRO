@@ -2,7 +2,7 @@
 
 char InstRO::LLVM::CashesSelector::ID = 0;
 
-InstRO::LLVM::CashesSelector::CashesSelector() : ModulePass(ID) {
+InstRO::LLVM::CashesSelector::CashesSelector() : ModulePass(ID), pn("Cashes Selector") {
 	std::cout << "Constructing Cashes Selector;" << std::endl;
 }
 

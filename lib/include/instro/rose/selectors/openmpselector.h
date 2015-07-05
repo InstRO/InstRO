@@ -3,18 +3,19 @@
 
 #include "../common.h"
 
-namespace InstRO{
+namespace InstRO {
 /**
  * Selects all openmp-statements and -directives.
- * Only works if there actually are open-mp-directives in the ast. So they have to be lowered by adding -rose:openmp:ast_only when executing the translator
+ * Only works if there actually are open-mp-directives in the ast. So they have to be lowered by adding
+ * -rose:openmp:ast_only when executing the translator
  * \ingroup Selector
  * \author InstRO
  */
-class OpenMPSelector : public OutOfOrderSelector{
-	public:
-		void visit(SgNode* node);
+class OpenMPSelector : public OutOfOrderSelector {
+ public:
+	void visit(SgNode* node);
 
-		// May be used for fine-grained selection of specific omp-statements and -directives
+// May be used for fine-grained selection of specific omp-statements and -directives
 #if 0
 		void selectParallel();		/**< \brief Select parallel statements when passing over the AST */
 		void unselectParallel();	/**< \brief Do no select parallel statements when passing over the AST */
@@ -69,7 +70,5 @@ class OpenMPSelector : public OutOfOrderSelector{
 		bool getSelectFlush();		/**< \brief Return selectionstatus of flush statements */
 #endif
 };
-
 }
-#endif // INSTRUMENTOR_OPENMP_H__
-
+#endif	// INSTRUMENTOR_OPENMP_H__

@@ -41,6 +41,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Users\ci24amun\Documents\Visual Studio 2012\Boost\1_57_0\include;C:\Users\ci24amun\Documents\Visual Studio 2012\ROSE\git-rose\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -96,27 +97,36 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\Singleton.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\CallPathSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleAnalysisInterface.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructPrinter.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleInstrumentor.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleNamedConstructAccess.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePassFactory.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\NameBasedSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\support\BWLFileReader.h" />
     <ClInclude Include="..\..\..\lib\include\instro\tooling\AnalysisInterface.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\NamedConstructAccess.h" />
     <ClInclude Include="..\..\..\lib\include\instro\tooling\TransformationInterface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Pass.cpp" />
+    <ClCompile Include="..\..\..\lib\src\core\PassImplemention.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp" />
-    <ClCompile Include="..\..\..\lib\src\main.cxx" />
-    <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp" />
+    <ClCompile Include="..\..\..\lib\src\example\ExampleConstructPrinter.cpp" />
+    <ClCompile Include="..\..\..\lib\src\example\ExampleConstructSet.cpp" />
+    <ClCompile Include="..\..\..\lib\src\example\ExampleInstrumentor.cpp" />
+    <ClCompile Include="..\..\..\lib\src\example\ExampleNamedConstructAccess.cpp" />
+    <ClCompile Include="..\..\..\lib\src\example\NameBasedSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\example_main.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp" />
+    <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAccess.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

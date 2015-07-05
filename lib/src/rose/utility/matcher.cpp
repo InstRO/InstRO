@@ -11,7 +11,6 @@ using namespace InstRO;
  * therefore f#o would match foo as well as fooooo or fasdfo.
  */
 std::vector<int> WildcardedStringMatcher::match(std::string str, std::list<std::string> list) {
-
 	/* At the beginning we clear the matching list */
 	this->matchingList.clear();
 	this->matchingStringList.clear();
@@ -25,7 +24,7 @@ std::vector<int> WildcardedStringMatcher::match(std::string str, std::list<std::
 		for (iter = list.begin(); iter != list.end(); iter++) {
 			std::cout << *iter << ", ";
 		}
-		//std::cout << "\n===Matcher verbose end===" << std::endl;
+		// std::cout << "\n===Matcher verbose end===" << std::endl;
 	}
 
 	std::vector<int> matches = std::vector<int>(0);
@@ -35,29 +34,29 @@ std::vector<int> WildcardedStringMatcher::match(std::string str, std::list<std::
 	for (listIter = list.begin(); listIter != list.end(); listIter++) {
 		std::string listItem = *listIter;
 
-		int i = 0; // index in the wild carded string
-		int j = 0; // index in the string
-		int lastWild = -1; // index of last found wild card
+		int i = 0;					// index in the wild carded string
+		int j = 0;					// index in the string
+		int lastWild = -1;	// index of last found wild card
 		bool partialMatch = false;
 		/* This one holds the index where the search for a match should be restarted after a wildcard was found
 		 * but it could not succeed with a match until the end of the string.
 		 */
 		int lastAfterWild = 0;
 		//		int iterationCounter = 0;
-		while (i < listItem.length() && j < str.length()/* && iterationCounter < 10*/) {
+		while (i < listItem.length() && j < str.length() /* && iterationCounter < 10*/) {
 			//			std::cout << "i: " << i << "\tj: " << j << std::endl; iterationCounter++;
-			if (listItem[i] == WILDCARDCHAR) { // if wildcard
-				lastWild = i; // save index
-				lastAfterWild = j; // save initial position to search in string
-				i++; // increment to next char in wild-string
+			if (listItem[i] == WILDCARDCHAR) {	// if wildcard
+				lastWild = i;											// save index
+				lastAfterWild = j;								// save initial position to search in string
+				i++;															// increment to next char in wild-string
 				partialMatch = true;
-			} else if (listItem[i] == str[j]) { // if two chars match
-				i++; // increment in wild-string
-				j++; // increment in string
+			} else if (listItem[i] == str[j]) {	// if two chars match
+				i++;															 // increment in wild-string
+				j++;															 // increment in string
 				partialMatch = true;
-			} else if (lastWild >= 0 && listItem[lastWild] == WILDCARDCHAR) { // if wild-string really contains wildcard
-				j = lastAfterWild + 1; // restart search at the saved position in string
-				i = lastWild; // restart at the last wildcard character
+			} else if (lastWild >= 0 && listItem[lastWild] == WILDCARDCHAR) {	// if wild-string really contains wildcard
+				j = lastAfterWild + 1;	// restart search at the saved position in string
+				i = lastWild;						// restart at the last wildcard character
 				partialMatch = false;
 			} else {
 				// If none of these cases matched, break as there is no match
@@ -65,7 +64,6 @@ std::vector<int> WildcardedStringMatcher::match(std::string str, std::list<std::
 				partialMatch = false;
 				break;
 			}
-
 		}
 #if 0
 		std::cout << "i: " << i << "\tj: " << j << std::endl;
@@ -78,7 +76,8 @@ std::vector<int> WildcardedStringMatcher::match(std::string str, std::list<std::
 			// at the end of the wild-carded string and last char is a wild-card
 			if (this->verbose) {
 				std::cout << "\nFirst case matches: " << std::endl;
-				std::cout << "Matcher verbose: " << listItem << " matches: " << str << "\nPartial Match: " << partialMatch << std::endl;
+				std::cout << "Matcher verbose: " << listItem << " matches: " << str << "\nPartial Match: " << partialMatch
+									<< std::endl;
 			}
 			//			this->matchingList.push_back(listItem);
 			//			this->matchingList.push_back(position); // XXX could be a map
@@ -88,7 +87,8 @@ std::vector<int> WildcardedStringMatcher::match(std::string str, std::list<std::
 			// why exactly is that a match?
 			if (this->verbose) {
 				std::cout << "\nSecond Case matches: " << listItem << " matches: " << str << std::endl;
-				std::cout << "Matcher verbose: " << listItem << " matches: " << str << "\nPartial Match: " << partialMatch << std::endl;
+				std::cout << "Matcher verbose: " << listItem << " matches: " << str << "\nPartial Match: " << partialMatch
+									<< std::endl;
 			}
 			//			this->matchingList.push_back(listItem);
 			//			this->matchingList.push_back(position);
@@ -98,7 +98,8 @@ std::vector<int> WildcardedStringMatcher::match(std::string str, std::list<std::
 			// exact match
 			if (this->verbose) {
 				std::cout << "\nThird case matches: " << std::endl;
-				std::cout << "Matcher verbose: " << listItem << " matches: " << str << "\nPartial Match: " << partialMatch << std::endl;
+				std::cout << "Matcher verbose: " << listItem << " matches: " << str << "\nPartial Match: " << partialMatch
+									<< std::endl;
 			}
 			//			this->matchingList.push_back(listItem);
 			//			this->matchingList.push_back(position);
@@ -107,18 +108,19 @@ std::vector<int> WildcardedStringMatcher::match(std::string str, std::list<std::
 		} else {
 			// No Match
 			if (this->verbose) {
-				std::cout << "No matching." << "\nPartial Match: " << partialMatch << std::endl;
+				std::cout << "No matching."
+									<< "\nPartial Match: " << partialMatch << std::endl;
 			}
 		}
 		position++;
 		// end of loop
 	}
-	//	std::cout << "right before return matchingList has size: " << matchingList.size() << std::endl;
-	/*	if(matchingList.size() > 0){
-	 std::cout << "Matching item: " << matchingList.front() << " with value: " << list.front() << std::endl;
-	 }
-	 */
-#if 0 // --- 2013-10-08 JP: I guess this code can be erased
+//	std::cout << "right before return matchingList has size: " << matchingList.size() << std::endl;
+/*	if(matchingList.size() > 0){
+ std::cout << "Matching item: " << matchingList.front() << " with value: " << list.front() << std::endl;
+ }
+ */
+#if 0		// --- 2013-10-08 JP: I guess this code can be erased
 	// copy the locally created content
 	matchingList.assign(matches.begin(), matches.end());
 
@@ -134,11 +136,11 @@ std::vector<int> WildcardedStringMatcher::match(std::string str, std::list<std::
 		}
 		matchingStringList.push_back((*lIter));
 	}
-#endif // --- until here
+#endif	// --- until here
 #ifdef DEBUG
 	std::vector<std::string>::iterator iter;
 	std::cout << "Matcher going to print matching patterns." << std::endl;
-	for(iter = matchingStringList.begin(); iter != matchingStringList.end(); iter++) {
+	for (iter = matchingStringList.begin(); iter != matchingStringList.end(); iter++) {
 		std::cout << *iter << std::endl;
 	}
 #endif
@@ -146,14 +148,13 @@ std::vector<int> WildcardedStringMatcher::match(std::string str, std::list<std::
 	// return the new copies
 	return matchingList;
 
-#if 0 // -- 2013-10-08 JP: I don't know why this is here
+#if 0	// -- 2013-10-08 JP: I don't know why this is here
 	// if this goes wrong, simply use this statement instead of the two lines above
 	//return matches;
 #endif
 }
 
 bool WildcardedStringMatcher::bMatch(std::string str, std::list<std::string> list) {
-
 	/* At the beginning we clear the matching list */
 	this->matchingList.clear();
 	this->matchingStringList.clear();
@@ -167,7 +168,7 @@ bool WildcardedStringMatcher::bMatch(std::string str, std::list<std::string> lis
 		for (iter = list.begin(); iter != list.end(); iter++) {
 			std::cout << *iter << ", ";
 		}
-		//std::cout << "\n===Matcher verbose end===" << std::endl;
+		// std::cout << "\n===Matcher verbose end===" << std::endl;
 	}
 
 	std::vector<int> matches = std::vector<int>(0);
@@ -177,29 +178,29 @@ bool WildcardedStringMatcher::bMatch(std::string str, std::list<std::string> lis
 	for (listIter = list.begin(); listIter != list.end(); listIter++) {
 		std::string listItem = *listIter;
 
-		int i = 0; // index in the wild carded string
-		int j = 0; // index in the string
-		int lastWild = -1; // index of last found wild card
+		int i = 0;					// index in the wild carded string
+		int j = 0;					// index in the string
+		int lastWild = -1;	// index of last found wild card
 		bool partialMatch = false;
 		/* This one holds the index where the search for a match should be restarted after a wildcard was found
 		 * but it could not succeed with a match until the end of the string.
 		 */
 		int lastAfterWild = 0;
 		//		int iterationCounter = 0;
-		while (i < listItem.length() && j < str.length()/* && iterationCounter < 10*/) {
+		while (i < listItem.length() && j < str.length() /* && iterationCounter < 10*/) {
 			//			std::cout << "i: " << i << "\tj: " << j << std::endl; iterationCounter++;
-			if (listItem[i] == WILDCARDCHAR) { // if wildcard
-				lastWild = i; // save index
-				lastAfterWild = j; // save initial position to search in string
-				i++; // increment to next char in wild-string
+			if (listItem[i] == WILDCARDCHAR) {	// if wildcard
+				lastWild = i;											// save index
+				lastAfterWild = j;								// save initial position to search in string
+				i++;															// increment to next char in wild-string
 				partialMatch = true;
-			} else if (listItem[i] == str[j]) { // if two chars match
-				i++; // increment in wild-string
-				j++; // increment in string
+			} else if (listItem[i] == str[j]) {	// if two chars match
+				i++;															 // increment in wild-string
+				j++;															 // increment in string
 				partialMatch = true;
-			} else if (lastWild >= 0 && listItem[lastWild] == WILDCARDCHAR) { // if wild-string really contains wildcard
-				j = lastAfterWild + 1; // restart search at the saved position in string
-				i = lastWild; // restart at the last wildcard character
+			} else if (lastWild >= 0 && listItem[lastWild] == WILDCARDCHAR) {	// if wild-string really contains wildcard
+				j = lastAfterWild + 1;	// restart search at the saved position in string
+				i = lastWild;						// restart at the last wildcard character
 				partialMatch = false;
 			} else {
 				// If none of these cases matched, break as there is no match
@@ -207,7 +208,6 @@ bool WildcardedStringMatcher::bMatch(std::string str, std::list<std::string> lis
 				partialMatch = false;
 				break;
 			}
-
 		}
 		// TODO 2013-10-08 JP: Check if the whole matching can be reduced by using bool partialMatch.
 		// TODO 2013-10-08 JP: Have a bunch of tests to proof correctness.
@@ -215,7 +215,8 @@ bool WildcardedStringMatcher::bMatch(std::string str, std::list<std::string> lis
 			// at the end of the wild-carded string and last char is a wild-card
 			if (this->verbose) {
 				std::cout << "\nFirst case matches: " << std::endl;
-				std::cout << "Matcher verbose: " << listItem << " matches: " << str << "\nPartial Match: " << partialMatch << std::endl;
+				std::cout << "Matcher verbose: " << listItem << " matches: " << str << "\nPartial Match: " << partialMatch
+									<< std::endl;
 			}
 			//			this->matchingList.push_back(listItem);
 			//			this->matchingList.push_back(position); // XXX could be a map
@@ -225,7 +226,8 @@ bool WildcardedStringMatcher::bMatch(std::string str, std::list<std::string> lis
 			// why exactly is that a match?
 			if (this->verbose) {
 				std::cout << "\nSecond Case matches: " << listItem << " matches: " << str << std::endl;
-				std::cout << "Matcher verbose: " << listItem << " matches: " << str << "\nPartial Match: " << partialMatch << std::endl;
+				std::cout << "Matcher verbose: " << listItem << " matches: " << str << "\nPartial Match: " << partialMatch
+									<< std::endl;
 			}
 			//			this->matchingList.push_back(listItem);
 			//			this->matchingList.push_back(position);
@@ -235,7 +237,8 @@ bool WildcardedStringMatcher::bMatch(std::string str, std::list<std::string> lis
 			// exact match
 			if (this->verbose) {
 				std::cout << "\nThird case matches: " << std::endl;
-				std::cout << "Matcher verbose: " << listItem << " matches: " << str << "\nPartial Match: " << partialMatch << std::endl;
+				std::cout << "Matcher verbose: " << listItem << " matches: " << str << "\nPartial Match: " << partialMatch
+									<< std::endl;
 			}
 			//			this->matchingList.push_back(listItem);
 			//			this->matchingList.push_back(position);
@@ -244,7 +247,8 @@ bool WildcardedStringMatcher::bMatch(std::string str, std::list<std::string> lis
 		} else {
 			// No Match
 			if (this->verbose) {
-				std::cout << "No matching." << "\nPartial Match: " << partialMatch << std::endl;
+				std::cout << "No matching."
+									<< "\nPartial Match: " << partialMatch << std::endl;
 			}
 		}
 		position++;
@@ -255,7 +259,8 @@ bool WildcardedStringMatcher::bMatch(std::string str, std::list<std::string> lis
 	return (matchingStringList.size() > 0) ? true : false;
 }
 
-std::vector<std::vector<int> > WildcardedStringMatcher::match(std::vector<std::string> strList, std::list<std::string> list) {
+std::vector<std::vector<int> > WildcardedStringMatcher::match(std::vector<std::string> strList,
+																															std::list<std::string> list) {
 	// XXX 2013-10-08 JP: Change this to a more sophisticated implementation
 	std::vector<std::vector<int> > returnVec;
 	std::vector<int> localVec;
@@ -267,14 +272,8 @@ std::vector<std::vector<int> > WildcardedStringMatcher::match(std::vector<std::s
 	return returnVec;
 }
 
-std::vector<int> WildcardedStringMatcher::getMatchIds() {
-	return matchingList;
-}
+std::vector<int> WildcardedStringMatcher::getMatchIds() { return matchingList; }
 
-void WildcardedStringMatcher::setVerbose(bool verbose) {
-	this->verbose = verbose;
-}
+void WildcardedStringMatcher::setVerbose(bool verbose) { this->verbose = verbose; }
 
-std::vector<std::string> WildcardedStringMatcher::getMatchingStringList() {
-	return this->matchingStringList;
-}
+std::vector<std::string> WildcardedStringMatcher::getMatchingStringList() { return this->matchingStringList; }

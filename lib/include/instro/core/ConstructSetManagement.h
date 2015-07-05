@@ -14,8 +14,7 @@ class PassConstructSetManagement {
 	void setOutput(ConstructSet* output);
 	ConstructSet* getOutput() { return output; };
 	ConstructSet* getInput(PassConstructSetManagement* from);
-	void overrideInput(PassConstructSetManagement* from,
-										 ConstructSet* overrideSet);
+	void overrideInput(PassConstructSetManagement* from, ConstructSet* overrideSet);
 
  private:
 	std::unordered_map<PassConstructSetManagement*, ConstructSet*> inputOverride;

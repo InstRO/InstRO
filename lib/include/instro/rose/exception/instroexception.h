@@ -4,7 +4,7 @@
 #include <exception>
 #include <string>
 
-namespace InstRO{
+namespace InstRO {
 
 /**
  * \brief Base class for exceptions thrown by InstRO-Framework
@@ -14,18 +14,15 @@ namespace InstRO{
  * \author Jan-Patrick Lehr
  */
 class InstroException : public std::exception {
-
-public:
-
-	InstroException(std::string message="Something has gone wrong");
+ public:
+	InstroException(std::string message = "Something has gone wrong");
 	~InstroException() throw();
 
 	const char* what();
 
-private:
+ private:
 	std::string exceptionMessage;
 };
-
 }
 
 #endif
