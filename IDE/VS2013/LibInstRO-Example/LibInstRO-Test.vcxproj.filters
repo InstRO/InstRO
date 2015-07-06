@@ -46,6 +46,9 @@
     <Filter Include="source\lib\support">
       <UniqueIdentifier>{8b9876e8-07c6-4813-8046-45194d90456a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\instro\tooling">
+      <UniqueIdentifier>{b1cec1e3-58c6-4054-b243-da1e360539dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h">

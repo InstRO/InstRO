@@ -112,13 +112,19 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\CompoundSelectors.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\NameBasedSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseAnalysisInterface.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseConstructElevator.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseNamedConstructAccess.h" />
     <ClInclude Include="..\..\..\lib\include\instro\support\BWLFileReader.h" />
     <ClInclude Include="..\..\..\lib\include\instro\tooling\AnalysisInterface.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\ConstructElevator.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\ControlFlowGraph.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\ExtendedCallGraph.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\GrammarInterface.h" />
     <ClInclude Include="..\..\..\lib\include\instro\tooling\NamedConstructAccess.h" />
     <ClInclude Include="..\..\..\lib\include\instro\tooling\TransformationInterface.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\lib\include\instro\rose\tooling\RoseConstructElevator.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Pass.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp" />
@@ -127,10 +133,12 @@
     <ClCompile Include="..\..\..\lib\src\rose\core\RoseConstructSet.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\selectors\CompoundSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\selectors\NameBasedSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseConstructElevator.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose_main.cpp" />
     <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp" />
+    <ClCompile Include="..\..\..\lib\src\tooling\ConstructElevator.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAccess.cpp" />
   </ItemGroup>
   <ItemGroup>

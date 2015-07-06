@@ -169,6 +169,21 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\CompoundSelector.h">
       <Filter>include\instro\rose\selector</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseConstructElevator.h">
+      <Filter>include\instro\rose\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\ConstructElevator.h">
+      <Filter>include\instro\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\ControlFlowGraph.h">
+      <Filter>include\instro\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\ExtendedCallGraph.h">
+      <Filter>include\instro\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\GrammarInterface.h">
+      <Filter>include\instro\tooling</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp">
@@ -209,6 +224,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\rose\selectors\CompoundSelector.cpp">
       <Filter>include\instro\rose\selector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\include\instro\rose\tooling\RoseConstructElevator.cpp">
+      <Filter>source\lib\rose\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\tooling\ConstructElevator.cpp">
+      <Filter>source\lib\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseConstructElevator.cpp">
+      <Filter>include\instro\rose\tooling</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
