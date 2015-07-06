@@ -3,6 +3,8 @@
 
 #include "instro/core/Instrumentor.h"
 #include "instro/rose/RosePassFactory.h"
+#include "instro/rose/tooling/RoseAnalysisInterface.h"
+#include "instro/core/Singleton.h"
 
 #include "rose.h"
 
@@ -16,11 +18,14 @@ class RoseInstrumentor : public Instrumentor {
  protected:
 	// Store the Project. It is required for all passes later on ..
 	SgProject* project;
+	InstRO::Rose::Tooling::RoseAnalysisManager * ram;
 
  public:
 	RoseInstrumentor(int argc, char** argv) {
 		// TODO: Initialize Rose here
 		project = ::frontend(argc, argv);
+		ram = new InstRO::Rose::Tooling::RoseAnalysisManager(project);
+		InstRO::setInstrumentorInstance(this);
 	};
 	~RoseInstrumentor() { delete (project); }
 	InstRO::PassFactory* getFactory(Instrumentor::CompilationPhase phase) {
@@ -31,15 +36,14 @@ class RoseInstrumentor : public Instrumentor {
 	void init(){
 
 	};
-	void apply(){};
+	void apply(){ passManager->execute(); };
 	void finalize() {
 		// unparse instrumented source
 		project->unparse();
 	};
 
 	virtual Tooling::AnalysisManager* getAnalysisManager() {
-		throw std::string("Not Implemented");
-		return NULL;
+		return ram;
 	}
 };
 };

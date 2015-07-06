@@ -22,6 +22,10 @@ int main(int argc, char** argv) {
 		auto nbs = aFactory->createNameBasedSelector(filterRules);
 		auto adapter = aFactory->createConstructPrinter(nbs);
 
+		instro->init();
+		instro->apply();
+		instro->finalize();
+
 		// CI - Reseting Classic Implementation   passManager->outputConfiguration("InstRO-CFG.dot");
 
 	} catch (std::string stringBasedException) {

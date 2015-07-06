@@ -71,8 +71,14 @@ std::vector<ConstructLevelType> ConstructSet::getConstructLevels() {
 	}
 	return returnVector;
 }
-ConstructLevelType ConstructSet::getMaxConstructLevel() { return ConstructSet::getConstructLevels().back(); }
-ConstructLevelType ConstructSet::getMinConstructLevel() { return ConstructSet::getConstructLevels().front(); }
+ConstructLevelType ConstructSet::getMaxConstructLevel() { 
+	return ContstructLevelEnum::CLMax;
+	return ConstructSet::getConstructLevels().back(); 
+}
+ConstructLevelType ConstructSet::getMinConstructLevel() { 
+	return ContstructLevelEnum::CLMin;
+	return ConstructSet::getConstructLevels().front(); 
+}
 void ConstructSet::clear() { constructs.clear(); }
 bool ConstructSet::empty() { return constructs.empty(); }
 size_t ConstructSet::size() { return constructs.size(); }

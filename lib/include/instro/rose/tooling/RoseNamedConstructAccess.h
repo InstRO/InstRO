@@ -44,7 +44,12 @@ enum IN_enum { IN_Immediate, IN_NextOuterExpression, IN_NextOuterFunctionDefinit
 * \author Jan-Patrick Lehr, Christian Iwainsky
 */
 class NameMatchingASTTraversal : public AstPrePostProcessing {
+protected:
+	InstRO::Core::ConstructSet cs;
+
  public:
+	NameMatchingASTTraversal():csci(&cs){}
+	bool relevantNode(SgNode* node);
 	// NameMatchingASTTraversal(InstRO::Tooling::NamedConstructAccess::Matcher & m):matchingObject(&m){}
 	void reset() {
 		preOrderMatch = false;
@@ -66,31 +71,27 @@ class NameMatchingASTTraversal : public AstPrePostProcessing {
 		postOrderMatch = false;
 	};
 
-	std::unique_ptr<Core::ConstructSet> matchUserIdentifyer(::InstRO::Tooling::NamedConstructAccess::Matcher* matcher,
+	std::unique_ptr<InstRO::Core::ConstructSet> matchUserIdentifyer(::InstRO::Tooling::NamedConstructAccess::Matcher* matcher,
 																													SgProject* proj) {
 		matchingObject = matcher;
 		traverseAST(proj);
-		return std::make_unique<Core::ConstructSet>(cs);
+		return std::make_unique<InstRO::Core::ConstructSet>(cs);
 	}
-	std::unique_ptr<Core::ConstructSet> matchUserTextString(::InstRO::Tooling::NamedConstructAccess::Matcher* matcher,
+	std::unique_ptr<InstRO::Core::ConstructSet> matchUserTextString(::InstRO::Tooling::NamedConstructAccess::Matcher* matcher,
 																													SgProject* proj) {
 		matchingObject = matcher;
 		traverseAST(proj);
-		return std::make_unique<Core::ConstructSet>(cs);
+		return std::make_unique<InstRO::Core::ConstructSet>(cs);
 	}
-	std::unique_ptr<Core::ConstructSet> matchCode(::InstRO::Tooling::NamedConstructAccess::Matcher* matcher,
+	std::unique_ptr<InstRO::Core::ConstructSet> matchCode(::InstRO::Tooling::NamedConstructAccess::Matcher* matcher,
 																								SgProject* proj) {
 		matchingObject = matcher;
 		traverseAST(proj);
-		return std::make_unique<Core::ConstructSet>(cs);
+		return std::make_unique<InstRO::Core::ConstructSet>(cs);
 	}
 
-	virtual void selectionBegin(
-			SgProject*
-					project); /**< \brief Gets called before the selection process starts. Might be used for initialization */
-	virtual void selectionEnd(
-			SgProject*
-					project); /**< \brief Gets called after the selection process has finished. Might be used for cleaning up */
+//	virtual void selectionBegin( 			SgProject*					project); /**< \brief Gets called before the selection process starts. Might be used for initialization */
+//	virtual void selectionEnd(			SgProject*					project); /**< \brief Gets called after the selection process has finished. Might be used for cleaning up */
 	/** \brief Gets called before visiting the children of a node. Either this or postOrderVisit should be implemented.
 	 * Otherwise the selector is useless */
 	virtual void preOrderVisit(SgNode* n);
@@ -99,9 +100,9 @@ class NameMatchingASTTraversal : public AstPrePostProcessing {
 	virtual void postOrderVisit(SgNode* n);
 
 	void traverseAST(SgNode* start) { /**< \brief Starts the traversal of the AST. */
-		this->selectionBegin(SageInterface::getEnclosingNode<SgProject>(start, true));
+//		this->selectionBegin(SageInterface::getEnclosingNode<SgProject>(start, true));
 		traverse(start);
-		this->selectionEnd(SageInterface::getEnclosingNode<SgProject>(start, true));
+//		this->selectionEnd(SageInterface::getEnclosingNode<SgProject>(start, true));
 	}
 	::InstRO::Core::ConstructSet getConstructs() { return cs; }
 
@@ -116,14 +117,14 @@ class NameMatchingASTTraversal : public AstPrePostProcessing {
 	bool preOrderMatch,	// match first, if unsuccessfull decend afterwards
 			postOrderMatch,	// descend first, match afterwards
 			continueDescend;
-	Core::ConstructSet cs;
-	IN_enum nodetypeToMark;																						 // Where to save the ASTMarker
+	InstRO::InfracstructureInterface::ConstructSetCompilerInterface csci;
+//	IN_enum nodetypeToMark;																						 // Where to save the ASTMarker
 	::InstRO::Tooling::NamedConstructAccess::Matcher* matchingObject;	// Which matcher object should be used
 	// std::list<std::string>* listToMatchAgainst; // List of strings to check against
 	//	std::vector<int> lastMatchIds; // The list ids of the last matching
 	bool verbose;				 // Is this object verbose?
 	bool isInitialized;	// for checking if the user called init method.
-	void select(SgNode* node) {}
+	void select(SgNode* node);
 
 	// Fixme 2013-10-08 JP: which node gets selection attribute? How could this NOW be implemented?
 	// Immediate, nextOuterExpression, nextOuterStatement, nextOuterFuncDef, parent, userdef (which is still missing atm)
@@ -137,14 +138,15 @@ class RoseNamedConstructAccess : public ::InstRO::Tooling::NamedConstructAccess:
 	SgProject* project;
 
  public:
-	RoseNamedConstructAccess(SgProject* proj) : project(proj){};
-	std::unique_ptr<Core::ConstructSet> getConstructsByIdentifyerName(
+	RoseNamedConstructAccess(SgProject* proj) : project(proj){std::cout << "Constructing RoseNamedConstructAccess" << std::endl;};
+	std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByIdentifyerName(
 			::InstRO::Tooling::NamedConstructAccess::Matcher& matcher) override {
+		std::cout <<"Searching the ROSE AST for suitable strings\n" << std::endl;
 		traversal.reset();
 		traversal.setMatchMin();
 		return traversal.matchUserIdentifyer(&matcher, project);
 	};
-	std::unique_ptr<Core::ConstructSet> getConstructsByUserTextStringMatch(
+	std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByUserTextStringMatch(
 			::InstRO::Tooling::NamedConstructAccess::Matcher& matcher) override {
 		traversal.reset();
 		traversal.setMatchMin();
