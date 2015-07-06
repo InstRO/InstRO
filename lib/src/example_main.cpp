@@ -10,7 +10,7 @@
 // using namespace InstRO;
 
 int main(int argc, char** argv) {
-	try {
+	//		try {
 		InstRO::Instrumentor* instro = new InstRO::ExampleInstrumentor();
 		// CI - Reseting Classic Implementation  InstRO::Ext::VisualizingPassManager * passManager=new
 		// InstRO::Ext::VisualizingPassManager();
@@ -32,10 +32,10 @@ int main(int argc, char** argv) {
 
 		// CI - Reseting Classic Implementation   passManager->outputConfiguration("InstRO-CFG.dot");
 
-	} catch (std::string stringBasedException) {
-		std::cout << stringBasedException << std::endl;
-		std::cout.flush();
-	}
+	//	} catch (std::string stringBasedException) {
+	//		std::cout << stringBasedException << std::endl;
+	//		std::cout.flush();
+	//	}
 
 	/*
 	InstRO::Instrumentor * instro=new InstRO::RoseInstrumentor();

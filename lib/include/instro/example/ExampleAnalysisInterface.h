@@ -30,36 +30,31 @@ class ExampleConstructElevator : public InstRO::Tooling::ConstructElevator::Cons
 	// This is the implicit way, that the PassManager will allways apply
 	virtual std::unique_ptr<InstRO::Core::ConstructSet> raise(InstRO::Core::ConstructSet *input,
 																														InstRO::Core::ConstructLevelType cl) override {
-		throw std::string("Not Implemented");
+		throw std::string("ExampleConstructElevator::raise : Not Implemented");
 		return std::make_unique<InstRO::Core::ConstructSet>(*input);
 	}
 	// This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
 	virtual std::unique_ptr<InstRO::Core::ConstructSet> lower(InstRO::Core::ConstructSet *input,
 																														InstRO::Core::ConstructLevelType cl) {
-		throw std::string("Not Implemented");
+		throw std::string("ExampleConstructElevator::lower : Not Implemented");
 		return std::make_unique<InstRO::Core::ConstructSet>(*input);
 	}
 
-	virtual std::unique_ptr<InstRO::Core::ConstructSet> crop(InstRO::Core::ConstructSet *input,
-																													 InstRO::Core::ConstructLevelType min,
-																													 InstRO::Core::ConstructLevelType max) {
-		throw std::string("Not Implemented");
-		return std::make_unique<InstRO::Core::ConstructSet>(*input);
-	}
+
 };
 
 class ExampleGrammarInterface : public InstRO::Tooling::GrammarInterface::GrammarInterface {
 	// class ConstructSetToGrammarTypeMapper
 	virtual std::list<InstRO::Tooling::GrammarInterface::GrammarTypesType> getGrammerTypes(
 			const InstRO::Core::ConstructSet &cs) {
-		throw std::string("Not Implemented");
+		throw std::string("ExampleGrammarInterface::getGrammerTypes : Not Implemented");
 		return std::list<InstRO::Tooling::GrammarInterface::GrammarTypesType>();
 	}
 
 	// class RequestCSByGrammarTypeInterface
 	virtual std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByType(
 			const InstRO::Tooling::GrammarInterface::GrammarTypesType &types) override {
-		throw std::string("Not Implemented");
+		throw std::string("ExampleGrammarInterface::getConstructsByType : Not Implemented");
 		return std::make_unique<InstRO::Core::ConstructSet>(InstRO::Core::ConstructSet());
 	};
 };
