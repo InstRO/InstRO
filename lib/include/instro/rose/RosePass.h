@@ -5,24 +5,24 @@
 
 namespace InstRO {
 namespace Rose {
-class RosePass : public InstRO::Core::PassImplementation {
+class RosePassImplementation : public InstRO::Core::PassImplementation {
  public:
-	RosePass(InstRO::Core::ChannelConfiguration ccfg) : PassImplementation(ccfg) {}
+	RosePassImplementation(InstRO::Core::ChannelConfiguration ccfg) : PassImplementation(ccfg) {}
 };
 
-class RoseLegcyPass : public RosePass {};
+class RoseLegcyPass : public RosePassImplementation {};
 
 namespace Adapters {
-class Adapter : public RosePass {};
+	class Adapter : public RosePassImplementation {};
 }
 namespace Selectors {
 
-class Selector : public RosePass {
+	class Selector : public RosePassImplementation {
  public:
 };
 }
 namespace Transformer {
-class Transformer : public RosePass {
+	class Transformer : public RosePassImplementation {
  public:
 };
 }
