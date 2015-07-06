@@ -1,5 +1,6 @@
 #include <memory>	// Shared_ptr
 
+#include "instro/core/Helper.h"
 
 #include "instro/core/ConstructSet.h"
 #include "instro/tooling/ConstructElevator.h"

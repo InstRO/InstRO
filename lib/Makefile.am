@@ -45,6 +45,10 @@ CORE_HFILES= \
 ./include/instro/core/PassImplementation.h \
 ./include/instro/core/Singleton.h \
 ./include/instro/tooling/AnalysisInterface.h \
+./include/instro/tooling/ConstructElevator.h \
+./include/instro/tooling/ControlFlowGraph.h \
+./include/instro/tooling/ExtendedCallGraph.h \
+./include/instro/tooling/GrammarInterface.h \
 ./include/instro/tooling/NamedConstructAccess.h \
 ./include/instro/tooling/TransformationInterface.h 
 
@@ -55,9 +59,10 @@ CORE_SFILES= \
 ./src/core/PassImplemention.cpp \
 ./src/core/SimplePassManager.cpp \
 ./src/core/Singleton.cpp \
+./src/tooling/AnalysisInterface.cpp \
+./src/tooling/ConstructElevator.cpp \
 ./src/tooling/NamedConstructAccess.cpp 
 # ./src/support/BWLFileReader.cpp \
-./src/tooling/AnalysisInterface.cpp
 # ./src/core/ConstructSetManagement.cpp 
 
 # ./include/instro/core/ConstructSetManagement.h \
@@ -98,11 +103,13 @@ ROSE_HFILES= \
 ./include/instro/rose/RosePass.h  \
 ./include/instro/rose/core/RoseConstructSet.h  \
 ./include/instro/rose/tooling/RoseAnalysisInterface.h  \
+./include/instro/rose/tooling/RoseConstructElevator.h \
 ./include/instro/rose/tooling/RoseNamedConstructAccess.h  \
 ./include/instro/rose/selectorsNameBasedSelector.h 
 
 ROSE_SFILES= \
 ./src/rose/core/RoseConstructSet.cpp   \
+./src/rose/tooling/RoseConstructElevator.cpp \
 ./src/rose/tooling/RoseNamedConstructAccess.cpp   \
 ./src/rose/selectors/NameBasedSelector.cpp  \
 ./src/rose/selectors/CompoundSelector.cpp  
