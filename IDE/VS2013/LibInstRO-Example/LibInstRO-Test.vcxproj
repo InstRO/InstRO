@@ -87,6 +87,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\agnosticSupport.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Factory.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\Helper.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Instrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Pass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\PassExecuter.h" />
@@ -115,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp" />
+    <ClCompile Include="..\..\..\lib\src\core\Helper.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Pass.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\PassImplemention.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp" />

@@ -46,8 +46,8 @@ namespace InstRO {
 						break;
 					case CompoundOperationType::CO_XOr:
 						break;
-
-				default:
+					default:
+						break;
 					
 				}
 
