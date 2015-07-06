@@ -191,6 +191,9 @@
     <ClCompile Include="..\..\..\lib\src\core\Helper.cpp">
       <Filter>include\instro\core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\tooling\ConstructElevator.cpp">
+      <Filter>source\lib\tooling</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

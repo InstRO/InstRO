@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 #include <memory>
-#include "instro/rose/RosePass.h"
+#include "instro/rose/core/RosePassImplementation.h"
 #include "instro/core/Pass.h"								 // Pass
 #include "instro/core/PassImplementation.h"	// ChannelConfiguration
 
@@ -11,7 +11,7 @@ namespace InstRO {
 namespace Rose {
 namespace Selectors {
 
-class CompoundSelector : public InstRO::Rose::RosePass {
+	class CompoundSelector : public InstRO::Rose::RosePassImplementation {
 protected:
 	std::unique_ptr<InstRO::Core::ConstructSet> passOutput;
  public:
@@ -21,9 +21,9 @@ protected:
 		 CO_XOr
 	 } CompoundOperationType;
 	 CompoundSelector(Pass* inputA, Pass* inputB, CompoundOperationType Operation)
-			: RosePass(InstRO::Core::ChannelConfiguration(inputA, inputB)){};
+		 : RosePassImplementation(InstRO::Core::ChannelConfiguration(inputA, inputB)){};
 	CompoundSelector(Pass* inputA, bool invertPassA, Pass* inputB, bool invertPassB, CompoundOperationType Operation)
-		: RosePass(InstRO::Core::ChannelConfiguration(inputA, inputB)){};
+		: RosePassImplementation(InstRO::Core::ChannelConfiguration(inputA, inputB)){};
 	void init() override {};
 	void execute() override;
 	void finalize() override{};

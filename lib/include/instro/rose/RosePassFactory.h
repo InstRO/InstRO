@@ -4,12 +4,13 @@
 #include "instro/core/PassFactory.h"
 #include "instro/core/PassManager.h"
 
-#include "instro/rose/RosePass.h"
+#include "instro/rose/core/RosePassImplementation.h"
 // #include "instro/rose/selectors/BlackAndWhiteListSelector.h"
-#include "instro/rose/selectors/NameBasedSelector.h"
-#include "instro/rose/selectors/CompoundSelector.h"
-#include "instro/rose/adapters/GenericAdapter.h"
-#include "instro/rose/adapters/CygProfileAdapter.h"
+#include "instro/rose/passes/selectors/NameBasedSelector.h"
+#include "instro/rose/passes/selectors/CompoundSelector.h"
+#include "instro/rose/passes/adapters/GenericAdapter.h"
+#include "instro/rose/passes/adapters/CygProfileAdapter.h"
+#include "instro/rose/passes/adapter/ConstructPrinter.h"
 
 #include "rose.h"
 
@@ -18,10 +19,10 @@ namespace Rose {
 
 class RosePassFactory : public InstRO::PassFactory {
  protected:
-	RosePass* getPass(Pass* pass) {
+	 RosePassImplementation* getPass(Pass* pass) {
 		if (pass == NULL)
 			return NULL;
-		RosePass* rosePass = dynamic_cast<RosePass*>(pass->getPassImplementation());
+		RosePassImplementation* rosePass = dynamic_cast<RosePassImplementation*>(pass->getPassImplementation());
 		if (pass->getPassImplementation() != NULL && rosePass == NULL)
 			throw std::string("Oh my god, what is going on");
 		return rosePass;
@@ -46,6 +47,10 @@ class RosePassFactory : public InstRO::PassFactory {
  public:
 	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) : PassFactory(refManager), project(proj){};
 
+	Pass * createConstructPrinter(){
+		
+	}
+	
 	Pass* createBlackAndWhiteListSelector(std::vector<std::string> rules) {
 		std::vector<std::string> wlrules;
 		std::vector<std::string> blrules;
