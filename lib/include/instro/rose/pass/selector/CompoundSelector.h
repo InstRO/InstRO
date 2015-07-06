@@ -9,7 +9,7 @@
 
 namespace InstRO {
 namespace Rose {
-namespace Selectors {
+namespace Selector {
 
 	class CompoundSelector : public InstRO::Rose::RosePassImplementation {
 protected:

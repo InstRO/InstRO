@@ -2,6 +2,10 @@
 
 #include "instro/tooling/AnalysisInterface.h"
 #include "instro/rose/tooling/RoseNamedConstructAccess.h"
+#include "instro/rose/tooling/RoseControlFlowGraph.h"
+#include "instro/rose/tooling/RoseExtendedCallGraph.h"
+#include "instro/rose/tooling/RoseGrammarInterface.h"
+#include "instro/rose/tooling/RoseConstructElevator.h"
 
 namespace InstRO {
 namespace Rose {
@@ -11,10 +15,18 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 	SgProject *project;
 	RoseAnalysisManager() = delete;
 	InstRO::Rose::Tooling::NamedConstructAccess::RoseNamedConstructAccess *nca;
+	InstRO::Rose::Tooling::ConstructElevator::ConstructElevator * ce;
 
  public:
 	RoseAnalysisManager(SgProject *proj)
-			: project(proj), nca(new InstRO::Rose::Tooling::NamedConstructAccess::RoseNamedConstructAccess(proj)){};
+			: project(proj), 
+			  nca(new InstRO::Rose::Tooling::NamedConstructAccess::RoseNamedConstructAccess(proj)),
+			  ce(new InstRO::Rose::Tooling::ConstructElevator::ConstructElevator())
+	{};
+	~RoseAnalysisManager(){
+		delete nca;
+		delete ce;
+	}
 	virtual InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph *getECG() override {
 		throw std::string("Not IMplemented");
 		return NULL;
@@ -24,8 +36,7 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 		return NULL;
 	};
 	virtual virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override {
-		throw std::string("Not IMplemented");
-		return NULL;
+		return ce;
 	};
 	virtual virtual InstRO::Tooling::GrammarInterface::GrammarInterface *getGrammarInterface() override {
 		throw std::string("Not IMplemented");

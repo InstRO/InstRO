@@ -2,7 +2,7 @@
 
 namespace InstRO {
 namespace Rose {
-namespace Selectors {
+namespace Selector {
 
 	class NameBasedSelector : public InstRO::Rose::RosePassImplementation {
  protected:
