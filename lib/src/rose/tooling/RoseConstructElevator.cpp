@@ -14,7 +14,7 @@ namespace InstRO {
 			namespace ConstructElevator {
 				namespace ConstructElevatorHelper{
 
-					struct CLExpressionPraedicate{
+					struct CLExpressionPredicate{
 						bool operator()(SgNode * n) const
 						{
 							if (isSgExpression(n) != nullptr) return true;
@@ -22,7 +22,7 @@ namespace InstRO {
 						}
 					};
 
-					struct CLStatementPraedicate{
+					struct CLStatementPredicate{
 					
 						bool operator()(SgNode * n) const
 						{
@@ -31,7 +31,7 @@ namespace InstRO {
 						}
 					};
 
-					struct CLLoopPraedicate{
+					struct CLLoopPredicate{
 						bool operator()(SgNode * n) const
 						{
 							if (isSgDoWhileStmt(n) != nullptr) return true;
@@ -41,7 +41,7 @@ namespace InstRO {
 						}
 					};
 
-					struct CLConditionalPraedicate{
+					struct CLConditionalPredicate{
 						bool operator()(SgNode * n) const
 						{
 							if (isSgIfStmt(n) != nullptr) return true;
@@ -50,7 +50,7 @@ namespace InstRO {
 						}
 					};
 
-					struct CLScopePraedicate{
+					struct CLScopePredicate{
 						bool operator()(SgNode * n) const
 						{
 							if (isSgBasicBlock(n) != nullptr) return true;
@@ -58,20 +58,8 @@ namespace InstRO {
 						}
 					};
 
-					struct CLSimplePraedicate{
-						bool operator()(SgNode * n) const
-						{
-							if (!CLStatementPraedicate()(n)) return false;
-							if (CLFunctionPraedicate()(n)) return false;
-							if (CLScopePraedicate()(n)) return false;
-							if (CLConditionalPraedicate()(n)) return false;
-							if (CLLoopPraedicate()(n)) return false;
-							if (CLFileScopePraedicate()(n)) return false;
-							return true;
-						}
-					};
 
-					struct CLFunctionPraedicate{
+					struct CLFunctionPredicate{
 						bool operator()(SgNode * n) const
 						{
 							if (isSgFunctionDefinition(n) != nullptr) return true;
@@ -79,7 +67,7 @@ namespace InstRO {
 						}
 					};
 
-					struct CLFileScopePraedicate{
+					struct CLFileScopePredicate{
 						bool operator()(SgNode * n) const
 						{
 							if (isSgFile(n) != nullptr) return true;
@@ -87,18 +75,31 @@ namespace InstRO {
 						}
 					};
 
-					struct CLGlobalScopePraedicate{
+					struct CLGlobalScopePredicate{
 						bool operator()(SgNode * n) const
 						{
 							if (isSgGlobal(n) != nullptr) return true;
 							return false;
 						}
 					};
+					
+					struct CLSimplePredicate{
+						bool operator()(SgNode * n) const
+						{
+							if (!CLStatementPredicate()(n)) return false;
+							if (CLFunctionPredicate()(n)) return false;
+							if (CLScopePredicate()(n)) return false;
+							if (CLConditionalPredicate()(n)) return false;
+							if (CLLoopPredicate()(n)) return false;
+							if (CLFileScopePredicate()(n)) return false;
+							return true;
+						}
+					};
 
 
 
-						template <class Predicate> 
-						std::shared_ptr<InstRO::Rose:Core::RoseConstruct> raiseConstruct(InstRO::Rose::Core::RoseConstruct * src, Predicate pred){
+template <class Predicate> 
+std::shared_ptr<InstRO::Rose::Core::RoseConstruct> raiseConstruct(InstRO::Rose::Core::RoseConstruct * src, Predicate pred){
 							SgNode *current=src->getNode();
 							// CI Walk the AST upwards, until the current node is either NULL or it is the desired construct type
 							while (current != nullptr && !pred(current))
@@ -110,11 +111,11 @@ namespace InstRO {
 						}
 
 						template <class Predicate>
-						std::set<std::shared_ptr<InstRO::Rose:Core::RoseConstruct> > lowerConstruct(InstRO::Rose::Core::RoseConstruct * src, Predicate pred){
-							std::set<std::shared_ptr<InstRO::Rose:Core::RoseConstruct> > retSet;
+						std::set<std::shared_ptr<InstRO::Rose::Core::RoseConstruct> > lowerConstruct(InstRO::Rose::Core::RoseConstruct * src, Predicate pred){
+							std::set<std::shared_ptr<InstRO::Rose::Core::RoseConstruct> > retSet;
 							SgNode *current = src->getNode();
 							// rose-query sub-tree with the right selectors
-							Rose_STL_Container<SgNode*> nodes = SageInterface::querySubTree<SgBinaryOp>(funcDef, V_SgNode);
+							Rose_STL_Container<SgNode*> nodes = SageInterface::querySubTree<SgNode>(current, V_SgNode);
 							for (auto node:nodes)
 							{
 								// check if the node is of the desired type ... and add it to the outputset
@@ -140,31 +141,31 @@ namespace InstRO {
 							throw std::string("A non InstRO::Rose::Core::RoseConstruct in the ROSE interace. Either multiple compiler interfaces are used, or programming error");
 						switch (cl){
 						case InstRO::Core::ConstructLevelType::CLExpression:
-							newConstruct = raiseConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstruct = raiseConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						case InstRO::Core::ConstructLevelType::CLStatement:
-							newConstruct = raiseConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstruct = raiseConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						case InstRO::Core::ConstructLevelType::CLLoop:
-							newConstruct = raiseConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstruct = raiseConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						case InstRO::Core::ConstructLevelType::CLConditional:
-							newConstruct = raiseConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstruct = raiseConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						case InstRO::Core::ConstructLevelType::CLScope:
-							newConstruct = raiseConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstruct = raiseConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						case InstRO::Core::ConstructLevelType::CLSimple:
-							newConstruct = raiseConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstruct = raiseConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						case InstRO::Core::ConstructLevelType::CLFunction:
-							newConstruct = raiseConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstruct = raiseConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						case InstRO::Core::ConstructLevelType::CLFileScope:
-							newConstruct = raiseConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstruct = raiseConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						case InstRO::Core::ConstructLevelType::CLGlobalScope:
-							newConstruct = raiseConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstruct = raiseConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						}
 						output.put(newConstruct);
@@ -190,31 +191,31 @@ namespace InstRO {
 						// Usea different target predicate, depending on the input level
 						switch (cl){
 						case InstRO::Core::ConstructLevelType::CLExpression:
-							newConstructs = lowerConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstructs = lowerConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						case InstRO::Core::ConstructLevelType::CLStatement:
-							newConstructs = lowerConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstructs = lowerConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						case InstRO::Core::ConstructLevelType::CLLoop:
-							newConstructs = lowerConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstructs = lowerConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						case InstRO::Core::ConstructLevelType::CLConditional:
-							newConstructs = lowerConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstructs = lowerConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						case InstRO::Core::ConstructLevelType::CLScope:
-							newConstructs = lowerConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstructs = lowerConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						case InstRO::Core::ConstructLevelType::CLSimple:
-							newConstructs = lowerConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstructs = lowerConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						case InstRO::Core::ConstructLevelType::CLFunction:
-							newConstructs = lowerConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstructs = lowerConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						case InstRO::Core::ConstructLevelType::CLFileScope:
-							newConstructs = lowerConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstructs = lowerConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						case InstRO::Core::ConstructLevelType::CLGlobalScope:
-							newConstructs = lowerConstruct(roseConstruct, CLFunctionPraedicate());
+							newConstructs = lowerConstruct(roseConstruct, CLFunctionPredicate());
 							break;
 						}
 						for (auto newConstruct: newConstructs)
