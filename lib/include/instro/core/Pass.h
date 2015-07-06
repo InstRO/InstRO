@@ -36,7 +36,7 @@ class Pass {
 	Core::PassImplementation *getPassImplementation() { return passImplementation; };
 	~Pass() {
 		delete (passImplementation);
-		passImplementation = NULL;
+		passImplementation = nullptr;
 	}
 	// CI: Tell the pass, that is is allowed to initialize itself
 	void initPass();
