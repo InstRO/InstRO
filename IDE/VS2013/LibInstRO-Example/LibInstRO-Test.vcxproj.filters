@@ -108,9 +108,6 @@
     <ClInclude Include="..\..\..\lib\include\instro\tooling\TransformationInterface.h">
       <Filter>source\lib\tooling</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructPrinter.h">
-      <Filter>include\instro\example</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\tooling\NamedConstructAccess.h">
       <Filter>source\lib\tooling</Filter>
     </ClInclude>
@@ -141,12 +138,12 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\Helper.h">
       <Filter>include\instro\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructPrinter.h">
+      <Filter>include\instro\example\passes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp">
-      <Filter>include\instro\example</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\example\ExampleConstructPrinter.cpp">
       <Filter>include\instro\example</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\example\ExampleConstructSet.cpp">
@@ -193,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\tooling\ConstructElevator.cpp">
       <Filter>source\lib\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\example\ExampleConstructPrinter.cpp">
+      <Filter>include\instro\example\passes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

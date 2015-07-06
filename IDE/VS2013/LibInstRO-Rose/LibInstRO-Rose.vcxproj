@@ -102,11 +102,10 @@
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePassFactory.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\core\RoseConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\core\RoseLegacySelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseConstructPrinter.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\CompoundSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\CompoundSelectors.h" />
@@ -131,6 +130,7 @@
     <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\core\RoseConstructSet.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseConstructPrinter.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\selectors\CompoundSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\selectors\NameBasedSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseConstructElevator.cpp" />
