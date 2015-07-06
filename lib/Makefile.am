@@ -3,10 +3,10 @@ AM_CPPFLAGS=-I$(top_srcdir)/lib/include
 
 if DEBUG
 AM_CFLAGS = -g3 -O0
-AM_CPPFLAGS += -g3 -O0 -std=gnu++0x
+AM_CPPFLAGS += -g3 -O0 -std=c++11 -DPROVIDE_MAKE_UNIQUE
 else
 AM_CFLAGS = -O2
-AM_CPPFLAGS += -O2 -std=gnu++0x
+AM_CPPFLAGS += -O2 -std=c++11 -DPROVIDE_MAKE_UNIQUE
 endif
 
 CORE_SFILES= \

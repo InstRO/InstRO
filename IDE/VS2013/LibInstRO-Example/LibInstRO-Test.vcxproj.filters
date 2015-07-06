@@ -135,6 +135,9 @@
     <ClInclude Include="..\..\..\lib\include\instro\example\CompoundSelector.h">
       <Filter>include\instro\example</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\Helper.h">
+      <Filter>include\instro\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp">
@@ -181,6 +184,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\example\CompoundSelector.cpp">
       <Filter>include\instro\example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\Helper.cpp">
+      <Filter>include\instro\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
