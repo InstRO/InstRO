@@ -104,7 +104,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	InstRO::Core::ConstructLevelType cl;
 
 	void generateError(SgNode* node) {
-		std::cout << "# Encountered error case in ConstructGenerator."
+		std::cout << "# Encountered error case in ConstructGenerator. " << node->class_name()
 							<< "\t" << node->unparseToString() << std::endl;
 	}
 };
@@ -113,7 +113,7 @@ class RoseConstruct : public InstRO::Core::Construct {
  public:
 	RoseConstruct(SgNode* sgnode) : Construct(InstRO::Core::ConstructLevelType::CLNotALevel), node(sgnode) {
 		ConstructGenerator gen;
-		gen.visit(node);
+		node->accept(gen);
 		/*
 		level = gen.getLevel();
 		flavor = gen.getFlavor();*/

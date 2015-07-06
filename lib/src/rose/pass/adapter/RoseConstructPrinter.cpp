@@ -1,4 +1,5 @@
 #include "instro/core/Pass.h"
+#include "instro/core/ConstructSet.h"
 #include "instro/rose/core/RoseConstructSet.h"
 #include "instro/rose/pass/adapter/RoseConstructPrinter.h"
 
@@ -17,7 +18,14 @@ void RoseConstructPrinter::execute(){
 		InstRO::Core::Construct* pc = construct.get();
 		InstRO::Rose::Core::RoseConstruct* ec =
 			dynamic_cast<InstRO::Rose::Core::RoseConstruct *>(construct.get());
-		std::cout << count << ":\t Level " << ec->getLevel() << "\t:" << ec->getNode()->unparseToString() << std::endl;
+		switch (ec->getLevel())
+{
+		case InstRO::Core::ConstructLevelType::CLFunction:
+			std::cout << count << ":\t Level " << ec->getLevel() << "(CLFunction)\t:" << isSgFunctionDefinition(ec->getNode())->get_declaration ()->get_qualified_name ().getString() << std::endl;
+			break;
+		default:
+			std::cout << count << ":\t Level " << ec->getLevel() << "\t:" << ec->getNode()->unparseToString() << std::endl;
+}
 		count++;
 	}
 }

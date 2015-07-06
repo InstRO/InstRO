@@ -31,14 +31,14 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 		throw std::string("Not IMplemented");
 		return NULL;
 	};
-	virtual virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraph *getCFG() override {
+	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraph *getCFG() override {
 		throw std::string("Not IMplemented");
 		return NULL;
 	};
-	virtual virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override {
+	virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override {
 		return ce;
 	};
-	virtual virtual InstRO::Tooling::GrammarInterface::GrammarInterface *getGrammarInterface() override {
+	virtual InstRO::Tooling::GrammarInterface::GrammarInterface *getGrammarInterface() override {
 		throw std::string("Not IMplemented");
 		return NULL;
 	};

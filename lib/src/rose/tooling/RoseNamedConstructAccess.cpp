@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream> // The development version uses cout for debugging...
 #include "instro/core/ConstructSet.h"
+#include "instro/rose/core/RoseConstructSet.h"
 #include "instro/rose/tooling/RoseNamedConstructAccess.h"
 namespace InstRO {
 namespace Rose {
@@ -14,48 +15,77 @@ namespace NamedConstructAccess {
 /*CI: The intend here is to match the smallest possible fragment that still qualifies.
 	If a user wants to have a "higher" construct, he can use construct elevation to get the next higher element
 */
-
-void NameMatchingASTTraversal::preOrderVisit(SgNode* n) {
-	if (preOrderMatch) {
-		/*
-	if (this->matchingObject == NULL || this->listToMatchAgainst == NULL) {
-	std::cerr << "Matching object and/or listToMatchAgainst are NULL. Please use init(...) before invoking the traversal."
-	<< std::endl;
-	throw std::string("NameMatchingSelector was not initialized before starting traversal.");
+bool NameMatchingASTTraversal::relevantNode(SgNode* n)
+{
+	return false;
+}
+void NameMatchingASTTraversal::select(SgNode * n)
+{
+	// get the closes representative for n as a construct and leave
+	if (isSgFunctionDefinition(n))
+        {
+		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(n));
 	}
-	*/
-
-		// generate a string from the rose AST node ...
+	else if (isSgVarRefExp(n))
+	{
+	}	
+}
+void NameMatchingASTTraversal::preOrderVisit(SgNode* n) {
+	/*
+	   if (this->matchingObject == NULL || this->listToMatchAgainst == NULL) {
+	   std::cerr << "Matching object and/or listToMatchAgainst are NULL. Please use init(...) before invoking the traversal."
+	   << std::endl;
+	   throw std::string("NameMatchingSelector was not initialized before starting traversal.");
+	   }
+	 */
+	std::string stringToMatch;
+	bool performMatch=false;
+	if (isSgFunctionDefinition(n))
+	{
+		stringToMatch=isSgFunctionDefinition(n)->get_declaration()->get_name();
+		performMatch=true;
+	}
+	else if (isSgVarRefExp(n))
+	{	
+		stringToMatch=isSgVarRefExp(n)->get_symbol()->get_name();
+		performMatch=true;
+	}
+	if (false)
+	{
 		std::string generatedName = toString(n);
 		if (generatedName.compare("INSTRUMENTOR_NOT_SUPPORTED_ATM") != 0) {
-			// Check the generated name against the stored list
-			/* 2013-10-15 JP: This was based on a previous implementation in the matcher.
-			lastMatchIds = this->matchingObject->match(generatedName, *listToMatchAgainst);
-			if (lastMatchIds.size() > 0) {
-			*/
-
-			if (this->matchingObject->isMatch(generatedName)) {
-				if (verbose) {
-					std::cout << "Matcher tried to match: " << generatedName << " and returned " << true
-										<< ". Leading to node selection." << std::endl;
-				}
-
-				// XXX RN 2014-10: this dirty hack is necessary because for MPI methods we only find the SgFunctionRefExp
-				// XXX RN is this a common behavior for handling SgFunctionRefExp?
-				SgFunctionRefExp* fRefExp = isSgFunctionRefExp(n);
-				if (fRefExp) {
-					SgFunctionDeclaration* fDecl = fRefExp->getAssociatedFunctionDeclaration();
-					if (!fDecl) {
-						std::cout << "NMSelector: Declaration of a SgFunctionRefExp was null." << std::endl;
-					}
-					select(fDecl);
-					return;
-				}	//
-				select(n);
-			}
 		}
-	} else if (postOrderMatch) {
 	}
+	if (performMatch){
+		std::cout << "Found an Identifyer ... matching" << std::endl;
+		// generate a string from the rose AST node ...
+		// Check the generated name against the stored list
+		/* 2013-10-15 JP: This was based on a previous implementation in the matcher.
+		   lastMatchIds = this->matchingObject->match(generatedName, *listToMatchAgainst);
+		   if (lastMatchIds.size() > 0) {
+		 */
+
+		if (this->matchingObject->isMatch(stringToMatch)) {
+			//			if (verbose) {
+			std::cout << "Matcher tried to match: " << stringToMatch << " and returned " << true
+				<< ". Leading to node selection." << std::endl;
+			//			}
+
+			// XXX RN 2014-10: this dirty hack is necessary because for MPI methods we only find the SgFunctionRefExp
+			// XXX RN is this a common behavior for handling SgFunctionRefExp?
+			/*			SgFunctionRefExp* fRefExp = isSgFunctionRefExp(n);
+						if (fRefExp) {
+						SgFunctionDeclaration* fDecl = fRefExp->getAssociatedFunctionDeclaration();
+						if (!fDecl) {
+						std::cout << "NMSelector: Declaration of a SgFunctionRefExp was null." << std::endl;
+						}
+						select(fDecl);
+						return;*/
+			//			}	
+			this->select(n);
+		}
+	}
+	
 }
 void NameMatchingASTTraversal::postOrderVisit(SgNode* n) {
 	if (preOrderMatch) {
