@@ -1,4 +1,5 @@
 #include <memory>
+#include "instro/core/Helper.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/example/CompoundSelector.h"
 
@@ -12,7 +13,8 @@ namespace InstRO {
 				std::unique_ptr<InstRO::Core::ConstructSet> strictCompareOr(InstRO::Core::ConstructSet * a, InstRO::Core::ConstructSet * b)
 				{
 				//	std::unique_ptr<InstRO::Core::ConstructSet> retSet = std::make_unique<InstRO::Core::ConstructSet>();
-					std::unique_ptr<InstRO::Core::ConstructSet> retSet = std::make_unique<InstRO::Core::ConstructSet>(b->combine(*a));
+					InstRO::Core::ConstructSet cs=b->combine(*a);
+					std::unique_ptr<InstRO::Core::ConstructSet> retSet = std::make_unique<InstRO::Core::ConstructSet>(cs);
 					return retSet;
 				}
 				std::unique_ptr<InstRO::Core::ConstructSet> strictCompareAnd(InstRO::Core::ConstructSet * a, InstRO::Core::ConstructSet * b)
