@@ -27,6 +27,7 @@ class ExampleControlFlowGraph : public InstRO::Tooling::ControlFlowGraph::Contro
 /* CI: The ConstructSet class is intended to be specialized for each compiler interface. It provides the basic
  * mechanisms to specify what construct level are contained. */
 class ExampleConstructElevator : public InstRO::Tooling::ConstructElevator::ConstructElevator {
+public:
 	// This is the implicit way, that the PassManager will allways apply
 	virtual std::unique_ptr<InstRO::Core::ConstructSet> raise(InstRO::Core::ConstructSet *input,
 																														InstRO::Core::ConstructLevelType cl) override {
@@ -44,6 +45,7 @@ class ExampleConstructElevator : public InstRO::Tooling::ConstructElevator::Cons
 };
 
 class ExampleGrammarInterface : public InstRO::Tooling::GrammarInterface::GrammarInterface {
+public:
 	// class ConstructSetToGrammarTypeMapper
 	virtual std::list<InstRO::Tooling::GrammarInterface::GrammarTypesType> getGrammerTypes(
 			const InstRO::Core::ConstructSet &cs) {
