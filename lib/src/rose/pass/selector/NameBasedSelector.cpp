@@ -1,13 +1,13 @@
 #include "rose.h"
 
 #include "instro/tooling/NamedConstructAccess.h"
-#include "instro/rose/selectors/NameBasedSelector.h"
+#include "instro/rose/pass/selector/NameBasedSelector.h"
 #include "instro/tooling/AnalysisInterface.h"
 #include "instro/core/Singleton.h"
 
 namespace InstRO {
 namespace Rose {
-namespace Selectors {
+namespace Selector {
 
 void NameBasedSelector::init() {
 	// CI: Nothing to do here.

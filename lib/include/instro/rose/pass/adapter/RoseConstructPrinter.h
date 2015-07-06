@@ -4,13 +4,13 @@
 namespace InstRO {
 namespace Rose {
 namespace Adapter {
-class ExampleConstructPrinter : public RosePassImplementation {
+class RoseConstructPrinter : public RosePassImplementation {
 protected:
 	InstRO::Pass *inputPass;
 	InstRO::Core::ConstructSet outputCS;
 
 public:
-	ExampleConstructPrinter(InstRO::Pass *pass)
+	RoseConstructPrinter(InstRO::Pass *pass)
 		: RosePassImplementation(InstRO::Core::ChannelConfiguration(pass)), inputPass(pass) {}
 	virtual void init(){};
 	virtual void execute() override;

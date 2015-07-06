@@ -6,11 +6,11 @@
 
 #include "instro/rose/core/RosePassImplementation.h"
 // #include "instro/rose/selectors/BlackAndWhiteListSelector.h"
-#include "instro/rose/passes/selectors/NameBasedSelector.h"
-#include "instro/rose/passes/selectors/CompoundSelector.h"
-#include "instro/rose/passes/adapters/GenericAdapter.h"
-#include "instro/rose/passes/adapters/CygProfileAdapter.h"
-#include "instro/rose/passes/adapter/ConstructPrinter.h"
+#include "instro/rose/pass/selector/NameBasedSelector.h"
+#include "instro/rose/pass/selector/CompoundSelector.h"
+// #include "instro/rose/pass/adapter/GenericAdapter.h"
+// #include "instro/rose/pass/adapter/CygProfileAdapter.h"
+#include "instro/rose/pass/adapter/RoseConstructPrinter.h"
 
 #include "rose.h"
 
@@ -47,23 +47,26 @@ class RosePassFactory : public InstRO::PassFactory {
  public:
 	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) : PassFactory(refManager), project(proj){};
 
-	Pass * createConstructPrinter(){
-		
+	Pass * createConstructPrinter(InstRO::Pass *pass){
+		Pass * newPass = new Pass(InstRO::Rose::Adapter::RoseConstructPrinter(pass));
+		newPass->setPassName("InstRO::Rose::Adapter::RoseConstructPrinter");
+		passManager->registerPass(newPass);
+		return newPass;
 	}
 	
 	Pass* createBlackAndWhiteListSelector(std::vector<std::string> rules) {
 		std::vector<std::string> wlrules;
 		std::vector<std::string> blrules;
 		// get a matcher pass for the white list
-		Pass* wlPass = new Pass(new Selectors::NameBasedSelector(wlrules));
+		Pass* wlPass = new Pass(new Selector::NameBasedSelector(wlrules));
 		wlPass->setPassName("InstRO::Rose::BlackAndWhiteList-WhiteList");
 		passManager->registerPass(wlPass);
 
-		Pass* blPass = new Pass(new Selectors::NameBasedSelector(blrules));
+		Pass* blPass = new Pass(new Selector::NameBasedSelector(blrules));
 		blPass->setPassName("InstRO::Rose::BlackAndWhiteList-BlackList");
 		passManager->registerPass(blPass);
 
-		Pass * compountPass = new Pass(new Selectors::CompoundSelector(wlPass, blPass, Selectors::CompoundSelector::CO_Or));
+		Pass * compountPass = new Pass(new Selector::CompoundSelector(wlPass, blPass, Selector::CompoundSelector::CO_Or));
 		compountPass->setPassName("InstRO::Rose:BlackAndWhiteList-Compound");
 		passManager->registerPass(compountPass);
 
@@ -77,7 +80,7 @@ class RosePassFactory : public InstRO::PassFactory {
 	};
 
 	Pass* createBooleanOrSelector(Pass* inputA, Pass* inputB) override {
-		Pass* newPass = new InstRO::Pass(new Rose::Selectors::CompoundSelector(inputA, inputB, Selectors::CompoundSelector::CO_Or));
+		Pass* newPass = new InstRO::Pass(new Rose::Selector::CompoundSelector(inputA, inputB, Selector::CompoundSelector::CO_Or));
 		newPass->setPassName("InstRO::Rose::BooleanOrSelector");
 		passManager->registerPass(newPass);
 		/*		Pass * compoundPass=new Pass(new Selectors::CompoundSelector(getPass(inputA),getPass(inputB)));
@@ -95,21 +98,21 @@ class RosePassFactory : public InstRO::PassFactory {
 	Pass* createProgramEntrySelector() override { return NULL; };
 
 	Pass* createCygProfileAdapter(Pass* input) {
-		Pass* newPass = new Pass(new Adapters::CygProfileAdapter(input));
+	/*	Pass* newPass = new Pass(new Adapter::CygProfileAdapter(input));
 		newPass->setPassName("InstRO::Rose::CygProfileAdapter");
-		passManager->registerPass(newPass);
-		return newPass;
+		passManager->registerPass(newPass);*/
+		return nullptr;
 	};
 
 	Pass* createGenericAdapter(Pass* functionSelection, Pass* loopSelection, Pass* branchingSelection) {
 		// RosePass * roseFunctionSelectionPass,* roseLoopSelectionPass,*roseBranchingSelectionPass;
-
+		/**/
 		Adapters::GenericAdapter* roseAdapter =
 				new Adapters::GenericAdapter(functionSelection, loopSelection, branchingSelection);
 		Pass* newPass = new Pass(roseAdapter);
 		newPass->setPassName("InstRO::Rose::GenericAdapter");
-		passManager->registerPass(newPass);
-		return newPass;
+		passManager->registerPass(newPass);*/
+		return nullptr;
 	};
 
 	Pass* createGenericAdapter(GenericAdapterConfiguration gac) {
@@ -117,14 +120,14 @@ class RosePassFactory : public InstRO::PassFactory {
 	};
 
 	InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) override {
-		Pass* newPass = new Pass(new Selectors::NameBasedSelector(matchList));
+		Pass* newPass = new Pass(new Selector::NameBasedSelector(matchList));
 		newPass->setPassName("InstRO::Rose::NameBasedSelector");
 		passManager->registerPass(newPass);
 		return newPass;
 	};
 
 	InstRO::Pass* createNameBasedFilter(std::vector<std::string> matchList, Pass* filterInput) {
-		Pass* newPass = new Pass(new Selectors::NameBasedSelector(matchList, filterInput));
+		Pass* newPass = new Pass(new Selector::NameBasedSelector(matchList, filterInput));
 		newPass->setPassName("InstRO::Rose::NameBasedFilter");
 		passManager->registerPass(newPass);
 		return newPass;
