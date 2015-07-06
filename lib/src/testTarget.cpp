@@ -1,3 +1,4 @@
+extern "C" int printf(char * string);
 int myFoo();
 int myRecursion(int depth);
 int myFooBar();
@@ -20,4 +21,6 @@ int myFoo()
 }
 
 int myFooBar(){
+	return 100;
 }
+

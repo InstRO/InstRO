@@ -53,21 +53,16 @@ CORE_HFILES= \
 ./include/instro/tooling/TransformationInterface.h 
 
 CORE_SFILES= \
-./src/core/Helper.cpp \
 ./src/core/ConstructSet.cpp \
+./src/core/ConstructSetManagement.cpp \
 ./src/core/Pass.cpp \
 ./src/core/PassImplemention.cpp \
 ./src/core/SimplePassManager.cpp \
 ./src/core/Singleton.cpp \
+./src/core/Helper.cpp \
 ./src/tooling/AnalysisInterface.cpp \
-./src/tooling/ConstructElevator.cpp \
-./src/tooling/NamedConstructAccess.cpp 
-# ./src/support/BWLFileReader.cpp \
-# ./src/core/ConstructSetManagement.cpp 
-
-# ./include/instro/core/ConstructSetManagement.h \
-#./include/instro/core/ConstructLevelManagrment.h \
-#./include/instro/core/ConstructElevator.h 
+./src/tooling/NamedConstructAccess.cpp \
+./src/tooling/ConstructElevator.cpp
 
 CLANG_HFILES= \
 ./include/instro/clang/adapter/CygProfileAdapter.h \
@@ -100,19 +95,27 @@ CLANG_HFILES= \
 ROSE_HFILES= \
 ./include/instro/rose/RoseInstrumentor.h  \
 ./include/instro/rose/RosePassFactory.h  \
-./include/instro/rose/RosePass.h  \
 ./include/instro/rose/core/RoseConstructSet.h  \
+./include/instro/rose/core/RosePass.h  \
+./include/instro/rose/core/RoseLegacySelector.h \
+./include/instro/rose/pass/adapter/RoseConstructPrinter.h \
+./include/instro/rose/pass/selector/NameBasedSelector.h \
+./include/instro/rose/pass/selector/CompoundSelector.h \
 ./include/instro/rose/tooling/RoseAnalysisInterface.h  \
 ./include/instro/rose/tooling/RoseConstructElevator.h \
-./include/instro/rose/tooling/RoseNamedConstructAccess.h  \
-./include/instro/rose/selectorsNameBasedSelector.h 
+./include/instro/rose/tooling/RoseControlFlowGraph.h \
+./include/instro/rose/tooling/RoseExtendedCallGraph.h \
+./include/instro/rose/tooling/RoseGrammarInterface.h \
+./include/instro/rose/tooling/RoseNamedConstructAccess.h \
+./include/instro/rose/tooling/RoseTransformationInterface.h
 
 ROSE_SFILES= \
 ./src/rose/core/RoseConstructSet.cpp   \
+./src/rose/pass/adapter/RoseConstructPrinter.cpp \
+./src/rose/pass/selector/CompoundSelector.cpp  \
+./src/rose/pass/selector/NameBasedSelector.cpp  \
 ./src/rose/tooling/RoseConstructElevator.cpp \
-./src/rose/tooling/RoseNamedConstructAccess.cpp   \
-./src/rose/selectors/NameBasedSelector.cpp  \
-./src/rose/selectors/CompoundSelector.cpp  
+./src/rose/tooling/RoseNamedConstructAccess.cpp 
 
 EXAMPLE_HFILES= \
 ./include/instro/example/ExampleConstructSet.h \
