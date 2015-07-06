@@ -48,7 +48,7 @@ class RosePassFactory : public InstRO::PassFactory {
 	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) : PassFactory(refManager), project(proj){};
 
 	Pass * createConstructPrinter(InstRO::Pass *pass){
-		Pass * newPass = new Pass(InstRO::Rose::Adapter::RoseConstructPrinter(pass));
+		Pass * newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructPrinter(pass));
 		newPass->setPassName("InstRO::Rose::Adapter::RoseConstructPrinter");
 		passManager->registerPass(newPass);
 		return newPass;
@@ -106,8 +106,8 @@ class RosePassFactory : public InstRO::PassFactory {
 
 	Pass* createGenericAdapter(Pass* functionSelection, Pass* loopSelection, Pass* branchingSelection) {
 		// RosePass * roseFunctionSelectionPass,* roseLoopSelectionPass,*roseBranchingSelectionPass;
-		/**/
-		Adapters::GenericAdapter* roseAdapter =
+		/*
+		Adapter::GenericAdapter* roseAdapter =
 				new Adapters::GenericAdapter(functionSelection, loopSelection, branchingSelection);
 		Pass* newPass = new Pass(roseAdapter);
 		newPass->setPassName("InstRO::Rose::GenericAdapter");

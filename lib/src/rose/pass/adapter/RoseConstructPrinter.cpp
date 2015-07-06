@@ -6,7 +6,7 @@ namespace InstRO {
 namespace Rose {
 namespace Adapter {
 
-void ExampleConstructPrinter::execute(){
+void RoseConstructPrinter::execute(){
 	InstRO::InfracstructureInterface::ConstructSetCompilerInterface cs(inputPass->getOutput());
 	/*InstRO::Example::Core::InfracstructureInterface::ExampleConstructSet * pecs =
 	dynamic_cast<InstRO::Example::Core::InfracstructureInterface::ExampleConstructSet *>(ocs);

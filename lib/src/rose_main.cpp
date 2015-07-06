@@ -15,15 +15,12 @@ int main(int argc, char** argv) {
 		// CI - Reseting Classic Implementation  InstRO::Ext::VisualizingPassManager * passManager=new
 		// InstRO::Ext::VisualizingPassManager();
 		// CI - Reseting Classic Implementation  instro->setPassManager(passManager);
-		auto aFactory = instro->getFactory();
+		auto aFactory = dynamic_cast<InstRO::Rose::RosePassFactory*>(instro->getFactory());
 
 		std::vector<std::string> filterRules;
 		filterRules.push_back("main");
-		auto aPass = aFactory->createNameBasedSelector(filterRules);
-		auto bPass = aFactory->createNameBasedSelector(filterRules);
-		auto compound = aFactory->createBooleanOrSelector(aPass, bPass);
-
-		auto adapter = aFactory->createGPIAdapter(compound);
+		auto nbs = aFactory->createNameBasedSelector(filterRules);
+		auto adapter = aFactory->createConstructPrinter(nbs);
 
 		// CI - Reseting Classic Implementation   passManager->outputConfiguration("InstRO-CFG.dot");
 
