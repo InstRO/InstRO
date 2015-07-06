@@ -9,14 +9,6 @@ AM_CFLAGS = -O2
 AM_CPPFLAGS += -O2 -std=c++11 -DPROVIDE_MAKE_UNIQUE
 endif
 
-CORE_SFILES= \
-./src/core/ConstructSet.cpp \
-./src/core/SimplePassManager.cpp \
-./src/core/Singleton.cpp \
-./src/core/Pass.cpp \
-./src/support/BWLFileReader.cpp \
-./src/tooling/AnalysisInterface.cpp
-# ./src/core/ConstructSetManagement.cpp 
 
 
 
@@ -37,7 +29,8 @@ EXAMPLE_SFILES= \
 ./src/example/ExampleConstructSet.cpp \
 ./src/example/ExampleInstrumentor.cpp \
 ./src/example/ExampleNamedConstructAccess.cpp \
-./src/example/NameBasedSelector.cpp 
+./src/example/NameBasedSelector.cpp \
+./src/example/CompoundSelector.cpp
 
 #./src/clang/Instrumentor.cpp 
 
@@ -63,6 +56,9 @@ CORE_SFILES= \
 ./src/core/SimplePassManager.cpp \
 ./src/core/Singleton.cpp \
 ./src/tooling/NamedConstructAccess.cpp 
+# ./src/support/BWLFileReader.cpp \
+./src/tooling/AnalysisInterface.cpp
+# ./src/core/ConstructSetManagement.cpp 
 
 # ./include/instro/core/ConstructSetManagement.h \
 #./include/instro/core/ConstructLevelManagrment.h \
@@ -159,9 +155,9 @@ libInstRO_example_la_SOURCES= \
 	$(ROSE_SFILES) \
 	$(ROSE_HFILES) 
 
-libInstRO_example_la_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+libInstRO_example_la_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
-libInstRO_rose_la_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+libInstRO_rose_la_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
 RoseInstrumentor_SOURCES = \
 	./src/rose_main.cpp
@@ -172,7 +168,7 @@ ExampleInstrumentor_SOURCES = \
 
 ExampleInstrumentor_LDADD= libInstRO_example.a
 # ExampleInstrumentor_LDFLAGS=
-ExampleInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+ExampleInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
 #libInstRO_clang_la_SOURCES= \
 #	$(CLANG_SFILES) \
@@ -186,7 +182,7 @@ ExampleInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_IN
 ## libInstRO_la_DEPENDENCIES = @ROSE@
 # Add Rose as an dependency
 ## libInstRO_la_LIBADD= @ROSE@
-libInstRO_core_la_CPPFLAGS=-I$(srcdir)/include -I@CLANG_INCLUDE_PATH@ -I@LLVM_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+libInstRO_core_la_CPPFLAGS=-I$(srcdir)/include -I@CLANG_INCLUDE_PATH@ -I@LLVM_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 ## libInstRO_la_CFLAGS=-I@ROSE_INCLUDEDIR@
 ## libInstRO_la_CXXFLAGS=-I@ROSE_INCLUDEDIR@
 #libInstRO_la_LDFLAGS=-L@ROSE_LIBDIR@
@@ -227,7 +223,7 @@ RoseInstrumentor_SOURCES = \
 
 RoseInstrumentor_LDADD= libInstRO_core.a libInstRO_rose.a
 RoseInstrumentor_LDFLAGS= -std=c++11 -L@ROSE_LIBDIR@ @ROSE_LIBS_LIST@ -lrose @ROSE_LINK_LIBRARIES@
-RoseInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+RoseInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
 
 
@@ -236,21 +232,21 @@ ExampleInstrumentor_SOURCES = \
 
 ExampleInstrumentor_LDADD= libInstRO_example.a
 # ExampleInstrumentor_LDFLAGS=
-ExampleInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+ExampleInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
 libInstRO_example_a_SOURCES= \
 	$(CORE_SFILES) \
 	$(CORE_HFILES) \
 	$(EXAMPLE_SFILES) \
 	$(EXAMPLE_HFILES) 
-libInstRO_example_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+libInstRO_example_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
 libInstRO_rose_a_SOURCES= \
 	$(CORE_SFILES) \
 	$(CORE_HFILES) \
 	$(ROSE_SFILES) \
 	$(ROSE_HFILES) 
-libInstRO_rose_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@
+libInstRO_rose_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
 libInstRO_core_a_SOURCES= \
 	$(CORE_SFILES) \
@@ -264,7 +260,7 @@ libInstRO_clang_a_SOURCES= \
 
 libInstRO_clang_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include @LLVM_INCLUDE_FLAGS@ -I@CLANG_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 
-libInstRO_core_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+libInstRO_core_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
 
 #libInstRO_clang_a_SOURCES= 
