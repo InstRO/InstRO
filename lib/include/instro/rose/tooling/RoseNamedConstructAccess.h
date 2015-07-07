@@ -74,18 +74,21 @@ protected:
 	std::unique_ptr<InstRO::Core::ConstructSet> matchUserIdentifyer(::InstRO::Tooling::NamedConstructAccess::Matcher* matcher, 
 																													SgProject* proj) {
 		matchingObject = matcher;
+		cs.clear();
 		traverseAST(proj);
 		return std::make_unique<InstRO::Core::ConstructSet>(cs);
 	}
 	std::unique_ptr<InstRO::Core::ConstructSet> matchUserTextString(::InstRO::Tooling::NamedConstructAccess::Matcher* matcher,
 																													SgProject* proj) {
 		matchingObject = matcher;
+		cs.clear();
 		traverseAST(proj);
 		return std::make_unique<InstRO::Core::ConstructSet>(cs);
 	}
 	std::unique_ptr<InstRO::Core::ConstructSet> matchCode(::InstRO::Tooling::NamedConstructAccess::Matcher* matcher,
 																								SgProject* proj) {
 		matchingObject = matcher;
+		cs.clear();
 		traverseAST(proj);
 		return std::make_unique<InstRO::Core::ConstructSet>(cs);
 	}

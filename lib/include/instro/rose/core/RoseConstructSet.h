@@ -14,6 +14,10 @@ namespace InstRO {
 namespace Rose {
 namespace Core {
 
+struct InstrumentableConstructPredicate{
+        bool operator()(SgNode * n) const;
+};
+
 class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
  public:
 	enum ConstructLevel {
@@ -92,6 +96,15 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 		level = ConstructLevel::EXPRESSION;
 		cl = InstRO::Core::ConstructLevelType::CLExpression;
 	}
+	// CI: an initialized variable declaration is OK, 
+	void visit(SgVariableDeclaration *n){
+		if (n->get_definition()){
+			level = ConstructLevel::STATEMENT;
+                flavor = StatementFlavor::SIMPLE_STATEMENT;
+                cl = InstRO::Core::ConstructLevelType::CLSimple;
+}
+	else generateError(n); }
+	
 
 	// this should be an error
 	void visit(SgScopeStatement* node) { generateError(node); }
@@ -112,12 +125,18 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 class RoseConstruct : public InstRO::Core::Construct {
  public:
 	RoseConstruct(SgNode* sgnode) : Construct(InstRO::Core::ConstructLevelType::CLNotALevel), node(sgnode) {
+		if (sgnode==nullptr)
+		{
+			setLevel(InstRO::Core::ConstructLevelType::CLNotALevel);
+		}
+		else {
 		ConstructGenerator gen;
 		node->accept(gen);
 		/*
 		level = gen.getLevel();
 		flavor = gen.getFlavor();*/
 		this->setLevel(gen.getCLT());
+		}
 	}
 
 	::SgNode* getNode() const { return node; }

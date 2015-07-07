@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <vector>
 #include <unordered_map>
 #include "instro/core/ConstructSet.h"
@@ -64,6 +65,9 @@ std::vector<ConstructLevelType> ConstructSet::getConstructLevels() {
 		levels.push_back(0);
 	// for each construct, determine its level and increment the corresponding bucket
 	for (auto construct : constructs) {
+		assert(construct->getLevel()>ContstructLevelEnum::CLMin);
+		assert(construct->getLevel()<ContstructLevelEnum::CLMax);
+
 		levels[construct->getLevel()]++;
 	}
 	std::vector<ConstructLevelType> returnVector;
