@@ -28,7 +28,10 @@ void NameMatchingASTTraversal::select(SgNode * n)
 	}
 	else if (isSgVarRefExp(n))
 	{
-	}	
+	} if (isSgFunctionRefExp(n))
+	{
+		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(n));
+	}		
 }
 void NameMatchingASTTraversal::preOrderVisit(SgNode* n) {
 	/*
@@ -48,6 +51,11 @@ void NameMatchingASTTraversal::preOrderVisit(SgNode* n) {
 	else if (isSgVarRefExp(n))
 	{	
 		stringToMatch=isSgVarRefExp(n)->get_symbol()->get_name();
+		performMatch=true;
+	}
+	else if (isSgFunctionRefExp(n))
+	{
+		stringToMatch=isSgFunctionRefExp(n)->get_symbol ()->get_declaration ()->get_name();
 		performMatch=true;
 	}
 	if (false)

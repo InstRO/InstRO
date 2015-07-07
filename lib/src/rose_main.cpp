@@ -19,6 +19,9 @@ int main(int argc, char** argv) {
 
 		std::vector<std::string> filterRules;
 		filterRules.push_back("main");
+		filterRules.push_back("#Foo#");
+		filterRules.push_back("#Foo");
+		filterRules.push_back("myFoo");
 		auto nbs = aFactory->createNameBasedSelector(filterRules);
 		auto adapter = aFactory->createConstructPrinter(nbs);
 
