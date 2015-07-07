@@ -8,6 +8,7 @@
 // #include "instro/rose/selectors/BlackAndWhiteListSelector.h"
 #include "instro/rose/pass/selector/NameBasedSelector.h"
 #include "instro/rose/pass/selector/CompoundSelector.h"
+#include "instro/rose/pass/selector/ElevatorSelector.h"
 // #include "instro/rose/pass/adapter/GenericAdapter.h"
 // #include "instro/rose/pass/adapter/CygProfileAdapter.h"
 #include "instro/rose/pass/adapter/RoseConstructPrinter.h"
@@ -46,6 +47,20 @@ class RosePassFactory : public InstRO::PassFactory {
 
  public:
 	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) : PassFactory(refManager), project(proj){};
+
+	Pass * createConstructLoweringElevator(InstRO::Pass * pass,InstRO::Core::ConstructLevelType level){
+		Pass * newPass = new Pass(new InstRO::Rose::Selector::ConstructLoweringElevator(pass, level));
+		newPass->setPassName("InstRO::Rose::Selector::ConstructLoweringElevator");
+		passManager->registerPass(newPass);
+		return newPass;
+	}
+	Pass * createConstructRaisingElevator(InstRO::Pass * pass, InstRO::Core::ConstructLevelType level){
+		Pass * newPass = new Pass(new InstRO::Rose::Selector::ConstructRaisingElevator(pass, level));
+		newPass->setPassName("InstRO::Rose::Selector::ConstructRaisingElevator");
+		passManager->registerPass(newPass);
+		return newPass;
+	}
+
 
 	Pass * createConstructPrinter(InstRO::Pass *pass){
 		Pass * newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructPrinter(pass));

@@ -4,6 +4,7 @@
 #include "instro/core/Instrumentor.h"
 #include "instro/rose/RosePassFactory.h"
 #include "instro/rose/tooling/RoseAnalysisInterface.h"
+
 #include "instro/core/Singleton.h"
 
 #include "rose.h"

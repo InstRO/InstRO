@@ -71,7 +71,7 @@ protected:
 		postOrderMatch = false;
 	};
 
-	std::unique_ptr<InstRO::Core::ConstructSet> matchUserIdentifyer(::InstRO::Tooling::NamedConstructAccess::Matcher* matcher,
+	std::unique_ptr<InstRO::Core::ConstructSet> matchUserIdentifyer(::InstRO::Tooling::NamedConstructAccess::Matcher* matcher, 
 																													SgProject* proj) {
 		matchingObject = matcher;
 		traverseAST(proj);

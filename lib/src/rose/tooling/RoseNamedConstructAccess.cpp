@@ -21,17 +21,11 @@ bool NameMatchingASTTraversal::relevantNode(SgNode* n)
 }
 void NameMatchingASTTraversal::select(SgNode * n)
 {
-	// get the closes representative for n as a construct and leave
-	if (isSgFunctionDefinition(n))
-        {
+	// if the node is directly an instrumentable node ...
+	if (isSgFunctionDefinition(n) || isSgVarRefExp(n) || isSgFunctionRefExp(n) || isSgMemberFunctionRefExp(n)){
+		// get the corresponding constructset (roseProvider) and put it to the building output construct set
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(n));
-	}
-	else if (isSgVarRefExp(n))
-	{
-	} if (isSgFunctionRefExp(n))
-	{
-		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(n));
-	}		
+	}	
 }
 void NameMatchingASTTraversal::preOrderVisit(SgNode* n) {
 	/*
@@ -57,15 +51,23 @@ void NameMatchingASTTraversal::preOrderVisit(SgNode* n) {
 	{
 		stringToMatch=isSgFunctionRefExp(n)->get_symbol ()->get_declaration ()->get_name();
 		performMatch=true;
+	} 
+	else  if (isSgMemberFunctionRefExp(n) != NULL) {
+		// This is a member function reference node which has a name
+		// stringToMatch= isSgMemberFunctionRefExp(n)->getAssociatedMemberFunctionDeclaration()->get_qualified_name().getString();
+		stringToMatch = isSgMemberFunctionRefExp(n)->getAssociatedMemberFunctionDeclaration()->get_name();
+		performMatch = true;
 	}
+
 	if (false)
 	{
 		std::string generatedName = toString(n);
 		if (generatedName.compare("INSTRUMENTOR_NOT_SUPPORTED_ATM") != 0) {
 		}
 	}
-	if (performMatch){
-		std::cout << "Found an Identifyer ... matching" << std::endl;
+	// If we found a node with the right text, and the text is not zero
+	if (performMatch && stringToMatch.length()>0){
+		std::cout << "NameMatchingASTTraversal::preOrderVisit:\t >" << stringToMatch << "<" << std::endl;
 		// generate a string from the rose AST node ...
 		// Check the generated name against the stored list
 		/* 2013-10-15 JP: This was based on a previous implementation in the matcher.
@@ -74,22 +76,7 @@ void NameMatchingASTTraversal::preOrderVisit(SgNode* n) {
 		 */
 
 		if (this->matchingObject->isMatch(stringToMatch)) {
-			//			if (verbose) {
-			std::cout << "Matcher tried to match: " << stringToMatch << " and returned " << true
-				<< ". Leading to node selection." << std::endl;
-			//			}
-
-			// XXX RN 2014-10: this dirty hack is necessary because for MPI methods we only find the SgFunctionRefExp
-			// XXX RN is this a common behavior for handling SgFunctionRefExp?
-			/*			SgFunctionRefExp* fRefExp = isSgFunctionRefExp(n);
-						if (fRefExp) {
-						SgFunctionDeclaration* fDecl = fRefExp->getAssociatedFunctionDeclaration();
-						if (!fDecl) {
-						std::cout << "NMSelector: Declaration of a SgFunctionRefExp was null." << std::endl;
-						}
-						select(fDecl);
-						return;*/
-			//			}	
+			std::cout << "NameMatchingASTTraversal::preOrderVisit:\t found match" << std::endl;
 			this->select(n);
 		}
 	}

@@ -21,7 +21,13 @@ void RoseConstructPrinter::execute(){
 		switch (ec->getLevel())
 {
 		case InstRO::Core::ConstructLevelType::CLFunction:
-			std::cout << count << ":\t Level " << ec->getLevel() << "(CLFunction)\t:" << isSgFunctionDefinition(ec->getNode())->get_declaration ()->get_qualified_name ().getString() << std::endl;
+			std::cout << count << ":\t Level " << ec->getLevel() << "(CLFunction):\t" << isSgFunctionDefinition(ec->getNode())->get_declaration ()->get_qualified_name ().getString() << std::endl;
+			break;
+		case InstRO::Core::ConstructLevelType::CLExpression:
+			std::cout << count << ":\t Level " << ec->getLevel() << "(CLExpression):\t" << ec->getNode()->unparseToString() << std::endl;
+			break;
+		case InstRO::Core::ConstructLevelType::CLStatement:
+			std::cout << count << ":\t Level " << ec->getLevel() << "(CLStatement):\t" << ec->getNode()->unparseToString() << std::endl;
 			break;
 		default:
 			std::cout << count << ":\t Level " << ec->getLevel() << "\t:" << ec->getNode()->unparseToString() << std::endl;
