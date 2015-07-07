@@ -277,7 +277,21 @@ std::vector<std::vector<int> > WildcardedStringMatcher::match(std::vector<std::s
 	}
 	return returnVec;
 }
-bool WildcardedStringMatcher::isMatch(std::string input) { return bMatch(input, wildcardStrings); }
+bool WildcardedStringMatcher::isMatch(std::string input) {
+	// 1rst arg is the wild-card list, 2nd arg is the list of strings to match against
+	std::list<std::string> aList;
+	aList.push_front(input);
+	bool haveMatch=false;
+	for (auto expr: wildcardStrings)
+	{
+		bool tmp=bMatch(expr,aList);
+		std::cout << "Matching with expr: " << expr << " to " << input <<" result " << tmp << std::endl;
+		if (tmp) return true;
+//		haveMatch|= bMatch(expr,aList);
+	}
+	return haveMatch;
+	 return bMatch(input, wildcardStrings); 
+}
 
 std::vector<int> WildcardedStringMatcher::getMatchIds() { return matchingList; }
 

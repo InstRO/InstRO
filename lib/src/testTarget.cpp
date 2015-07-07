@@ -5,6 +5,7 @@ int myFooBar();
 
 int main(int argc,char ** argv){
 	printf("Hello World\n");
+	myFoo();
 	return myRecursion(10);
 }
 
