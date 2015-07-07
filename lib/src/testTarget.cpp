@@ -8,6 +8,8 @@ int main(int argc,char ** argv){
 	myRecursion(myFoo());
 	int variableDeclaration;
 	int variableDeclarationAndInitialization;
+	for (int i=0;i<100;i++)
+		myFoo();
 	return myRecursion(10);
 }
 

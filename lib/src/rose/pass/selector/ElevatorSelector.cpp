@@ -8,8 +8,6 @@ namespace InstRO {
 	namespace Rose {
 		namespace Selector {
 
-			void ConstructRaisingElevator::execute() {
-			};
 			void ConstructRaisingElevator::init(){
 			};
 			void ConstructRaisingElevator::execute(){
@@ -25,8 +23,6 @@ namespace InstRO {
 				return output.get();
 			};
 
-			void ConstructLoweringElevator::execute() {
-			};
 			void ConstructLoweringElevator::init(){
 			};
 			void ConstructLoweringElevator::execute(){

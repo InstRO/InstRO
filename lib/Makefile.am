@@ -99,6 +99,7 @@ ROSE_HFILES= \
 ./include/instro/rose/core/RosePass.h  \
 ./include/instro/rose/core/RoseLegacySelector.h \
 ./include/instro/rose/pass/adapter/RoseConstructPrinter.h \
+./include/instro/rose/pass/selector/ElevatorSelector.h \
 ./include/instro/rose/pass/selector/NameBasedSelector.h \
 ./include/instro/rose/pass/selector/CompoundSelector.h \
 ./include/instro/rose/tooling/RoseAnalysisInterface.h  \
@@ -114,6 +115,7 @@ ROSE_SFILES= \
 ./src/rose/pass/adapter/RoseConstructPrinter.cpp \
 ./src/rose/pass/selector/CompoundSelector.cpp  \
 ./src/rose/pass/selector/NameBasedSelector.cpp  \
+./src/rose/pass/selector/ElevatorSelector.cpp \
 ./src/rose/tooling/RoseConstructElevator.cpp \
 ./src/rose/tooling/RoseNamedConstructAccess.cpp 
 
