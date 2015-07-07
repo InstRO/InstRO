@@ -30,7 +30,7 @@ namespace Rose {
 					if (isSgFunctionDefinition(n) || isSgFunctionDeclaration(n)) return false;
 					// out basic block of the function. it is equivalent to the function
 					if (isSgBasicBlock(n) && isSgFunctionDefinition(n->get_parent())) return false;
-					if (isSgVariableDeclaration(n) && isSgVariableDeclaration(n)->get_definition() != NULL) return false;
+					if (isSgVariableDeclaration(n) && isSgVariableDeclaration(n)->get_definition() != NULL) return true;
 					if (isSgStatement(n) != nullptr) return true;
 					return false;
 				}
@@ -97,7 +97,6 @@ namespace Rose {
 					if (CLScopePredicate()(n)) return false;
 					if (CLConditionalPredicate()(n)) return false;
 					if (CLLoopPredicate()(n)) return false;
-					if (CLFileScopePredicate()(n)) return false;
 					return true;
 				}
 			};
