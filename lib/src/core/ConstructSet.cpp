@@ -59,10 +59,12 @@ std::string operator+(const std::string& lhs, const ConstructLevelType& type) {
 // CI: return a vector (ordered) with all construct levels from the set
 std::vector<ConstructLevelType> ConstructSet::getConstructLevels() {
 	std::vector<int> levels;
+	// set the counter for all available levels to 0
 	for (int i = ConstructLevelType::CLMin; i < ConstructLevelType::CLMax; i++)
 		levels.push_back(0);
-	for (auto construct : this->constructs) {
-		levels[(*construct).getLevel()]++;
+	// for each construct, determine its level and increment the corresponding bucket
+	for (auto construct : constructs) {
+		levels[construct->getLevel()]++;
 	}
 	std::vector<ConstructLevelType> returnVector;
 	for (int i = ConstructLevelType::CLMin; i < ConstructLevelType::CLMax; i++) {
@@ -72,11 +74,15 @@ std::vector<ConstructLevelType> ConstructSet::getConstructLevels() {
 	return returnVector;
 }
 ConstructLevelType ConstructSet::getMaxConstructLevel() { 
-	return ContstructLevelEnum::CLMax;
-	return ConstructSet::getConstructLevels().back(); 
+	std::vector<ConstructLevelType> levels = ConstructSet::getConstructLevels();
+	if (levels.empty()) return ContstructLevelEnum::CLMax;
+	else return levels.back();
+	
 }
 ConstructLevelType ConstructSet::getMinConstructLevel() { 
-	return ContstructLevelEnum::CLMin;
+	std::vector<ConstructLevelType> levels = ConstructSet::getConstructLevels();
+	if (levels.empty())	return ContstructLevelEnum::CLMin;
+	else return levels.front();
 	return ConstructSet::getConstructLevels().front(); 
 }
 void ConstructSet::clear() { constructs.clear(); }
