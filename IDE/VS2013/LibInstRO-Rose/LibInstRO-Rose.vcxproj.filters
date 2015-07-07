@@ -196,9 +196,6 @@
     <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp">
       <Filter>instro\example</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\include\instro\rose\tooling\RoseConstructElevator.cpp">
-      <Filter>instro\rose\tooling</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp">
       <Filter>instro\tooling</Filter>
     </ClCompile>
