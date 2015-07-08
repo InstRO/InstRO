@@ -1,3 +1,5 @@
+#ifndef INSTRO_TOOLING_GRAMMARINTERFACE_H
+#define INSTRO_TOOLING_GRAMMARINTERFACE_H
 #include <memory>	// We need shared pointers
 #include <list>		 // We use List in the GrammarInterface
 #include "instro/core/ConstructSet.h"
@@ -25,3 +27,4 @@ class GrammarInterface {
 }	// GrammarInterface
 }	// Tooling
 }	// InstRO
+#endif
