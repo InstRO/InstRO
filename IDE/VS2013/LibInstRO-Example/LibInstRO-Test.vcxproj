@@ -96,7 +96,6 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\PassManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\SimplePassManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Singleton.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\example\CallPathSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\CompoundSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleAnalysisInterface.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructPrinter.h" />
@@ -106,6 +105,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePassFactory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\NameBasedSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\CallPathSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h" />
@@ -121,7 +121,6 @@
     <ClCompile Include="..\..\..\lib\src\core\PassImplemention.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp" />
-    <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\CompoundSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\ExampleConstructPrinter.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\ExampleConstructSet.cpp" />
@@ -129,6 +128,7 @@
     <ClCompile Include="..\..\..\lib\src\example\ExampleNamedConstructAccess.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\NameBasedSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\example_main.cpp" />
+    <ClCompile Include="..\..\..\lib\src\pass\selector\CallPathSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\ConstructElevator.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAccess.cpp" />

@@ -102,6 +102,10 @@
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePassFactory.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\CallPathSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\IdentifyerSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\ProgramEntrySelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\TextStringSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\core\RoseConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\core\RoseLegacySelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\core\RosePassImplementation.h" />
@@ -134,6 +138,10 @@
     <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\pass\selector\CallPathSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\pass\selector\IdentifyerSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\pass\selector\ProgramEntrySelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\pass\selector\TextStringSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\core\RosePassFactory.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\GNUProfilingInterfaceAdapter.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseConstructPrinter.cpp" />
