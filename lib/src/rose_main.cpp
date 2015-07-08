@@ -22,18 +22,18 @@ int main(int argc, char** argv) {
 		filterRules1.push_back("#Foo#");
 		filterRules1.push_back("#Foo");
 		filterRules1.push_back("myFoo");
-		auto nbs1 = aFactory->createNameBasedSelector(filterRules1);
+		auto nbs1 = aFactory->createIdentifyerSelector(filterRules1);
 		auto adapter1 = aFactory->createConstructPrinter(nbs1);
 
 		std::vector<std::string> filterRules2;
 		filterRules2.push_back("myFoo");
-		auto nbs2 = aFactory->createNameBasedSelector(filterRules2);
+		auto nbs2 = aFactory->createIdentifyerSelector(filterRules2);
 		auto celev2 = aFactory->createConstructRaisingElevator(nbs2, InstRO::Core::ConstructLevelType::CLFunction);
 		auto adapter2 = aFactory->createConstructPrinter(celev2);
 
 		std::vector<std::string> filterRules3;
 		filterRules3.push_back("main");
-		auto nbs3 = aFactory->createNameBasedSelector(filterRules3);
+		auto nbs3 = aFactory->createIdentifyerSelector(filterRules3);
 		aFactory->createConstructPrinter(nbs3);
 		//		auto celev3 = aFactory->createConstructRaisingElevator(nbs3,InstRO::Core::ConstructLevelType::CLExpression);
 		auto expressions = aFactory->createConstructLoweringElevator(nbs3, InstRO::Core::ConstructLevelType::CLExpression);
