@@ -1,17 +1,16 @@
 #include "instro/core/PassImplementation.h"
-#include "instro/example/ExamplePass.h"
+
 
 namespace InstRO {
-namespace Example {
 namespace Selectors {
-class CallPathSelector : public ExamplePass {
+	class CallPathSelector : public InstRO::Core::PassImplementation {
  protected:
 	Pass *fromPass, *toPass;
 	CallPathSelector() = delete;
 
  public:
 	CallPathSelector(Pass *from, Pass *to)
-			: ExamplePass(Core::ChannelConfiguration(from, to)), fromPass(from), toPass(to){};
+		: InstRO::Core::PassImplementation(Core::ChannelConfiguration(from, to)), fromPass(from), toPass(to){};
 	virtual void init() override;
 	virtual void execute() override;
 	virtual void finalize() override;
@@ -23,5 +22,4 @@ class CallPathSelector : public ExamplePass {
 };
 
 }	// namespace Selectors
-}	// namespace Example
 }	// namespace InstRO
