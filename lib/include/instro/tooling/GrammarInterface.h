@@ -8,15 +8,18 @@ namespace InstRO {
 namespace Tooling {
 namespace GrammarInterface {
 typedef enum {
-	For,
-	OpenMP,
-	DoWhile,
-	Expression,
-	Return,
-	Operator,
+	GTFor,
+	GTOpenMP,
+	GTDoWhile,
+	GTExpression,
+	GTReturn,
+	GTOperator,
+	GTFunction,
+	GTMemberFunction
 } GrammarTypesType;
 
 class GrammarInterface {
+public:
 	// class ConstructSetToGrammarTypeMapper
 	virtual std::list<GrammarTypesType> getGrammerTypes(const Core::ConstructSet &cs) = 0;
 
