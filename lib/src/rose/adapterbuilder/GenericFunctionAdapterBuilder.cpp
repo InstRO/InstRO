@@ -103,7 +103,7 @@ void GenericFunctionAdapterBuilder::declareTemplateInstantiation(SgTemplateInsta
 		//		}
 		futureScope = SageInterface::getFirstGlobalScope(SageInterface::getProject());
 		//		SgTemplateInstantiationFunctionDecl *forwardDeclaration = builder->buildForwardDeclaration(funcDecl,
-		//futureScope);
+		// futureScope);
 		SgTemplateInstantiationFunctionDecl *forwardDeclaration =
 				InstROBuilder::buildForwardDeclaration(funcDecl, futureScope);
 

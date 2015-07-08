@@ -9,14 +9,16 @@ namespace Rose {
 namespace Adapter {
 
 class GNUProfilingInterfaceAdapter : public RosePassImplementation {
-protected:
+ protected:
 	::InstRO::Pass *inputPass;
 	::InstRO::Core::ConstructSet outputCS;
 
-public:
+ public:
 	// This Pass only accepts functions
 	GNUProfilingInterfaceAdapter(::InstRO::Pass *pass)
-		: RosePassImplementation(::InstRO::Core::ChannelConfiguration({ pass, ::InstRO::Core::ConstructLevelType::CLFunction, ::InstRO::Core::ConstructLevelType::CLFunction })), inputPass(pass) {}
+			: RosePassImplementation(::InstRO::Core::ChannelConfiguration(
+						{pass, ::InstRO::Core::ConstructLevelType::CLFunction, ::InstRO::Core::ConstructLevelType::CLFunction})),
+				inputPass(pass) {}
 	virtual void init(){};
 	virtual void execute() override;
 	virtual void finalize(){};

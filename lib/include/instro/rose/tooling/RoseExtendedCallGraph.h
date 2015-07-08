@@ -3,11 +3,9 @@
 #include "instro/core/ConstructSet.h"
 
 namespace InstRO {
-	namespace Rose{
-	namespace Tooling {
-		namespace ExtendedCallGraph {
-
-		}
-	}
+namespace Rose {
+namespace Tooling {
+namespace ExtendedCallGraph {}
+}
 }
 }

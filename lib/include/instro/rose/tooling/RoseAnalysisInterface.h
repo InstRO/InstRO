@@ -24,9 +24,10 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 			  ce(new InstRO::Rose::Tooling::ConstructElevator::ConstructElevator()),
 			  gi(new InstRO::Rose::Tooling::GrammarInterface::RoseGrammarInterface(proj))
 	{};
-	~RoseAnalysisManager(){
+	~RoseAnalysisManager() {
 		delete nca;
 		delete ce;
+		delete gi;
 	}
 	virtual InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph *getECG() override {
 		throw std::string("Not IMplemented");
@@ -36,9 +37,7 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 		throw std::string("Not IMplemented");
 		return NULL;
 	};
-	virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override {
-		return ce;
-	};
+	virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override { return ce; };
 	virtual InstRO::Tooling::GrammarInterface::GrammarInterface *getGrammarInterface() override {
 		return gi;
 	};
