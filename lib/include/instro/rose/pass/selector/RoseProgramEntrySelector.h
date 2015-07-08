@@ -1,3 +1,4 @@
+#include "instro/core/Singleton.h"
 #include "instro/rose/core/RosePassImplementation.h"
 
 namespace InstRO {
