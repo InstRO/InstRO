@@ -20,16 +20,19 @@ std::string constructLevelToString(ConstructLevelType type) {
 		case CLStatement:
 			return std::string("CL-Statement");
 			break;
-		case CLLoop:
+		case CLWrappableStatement:
+			return std::string("CL-WrappableStatement");
+			break;
+		case CLLoopStatement:
 			return std::string("CL-LoopStatement");
 			break;
-		case CLConditional:
+		case CLConditionalStatement:
 			return std::string("CL-ConditionalStatement");
 			break;
-		case CLScope:
+		case CLScopeStatement:
 			return std::string("CL-ScopeStatement");
 			break;
-		case CLSimple:
+		case CLSimpleStatement:
 			return std::string("CL-SimpleStatement");
 			break;
 		case CLFunction:
