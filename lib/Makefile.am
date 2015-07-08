@@ -24,7 +24,6 @@ CLANG_SFILES= \
 ./src/clang/support/InstROASTConsumer.cpp
 
 EXAMPLE_SFILES= \
-./src/example/CallPathSelector.cpp \
 ./src/example/ExampleConstructPrinter.cpp \
 ./src/example/ExampleConstructSet.cpp \
 ./src/example/ExampleInstrumentor.cpp \
@@ -51,7 +50,10 @@ CORE_HFILES= \
 ./include/instro/tooling/GrammarInterface.h \
 ./include/instro/tooling/NamedConstructAccess.h \
 ./include/instro/tooling/TransformationInterface.h \
-./include/instro/pass/selector/ProgramEntrySelector.h
+./include/instro/pass/selector/ProgramEntrySelector.h \
+./include/instro/pass/selector/TextStringSelector.h \
+./include/instro/pass/selector/IdentifyerSelector.h \
+./include/instro/pass/selector/CallPathSelector.h
 
 CORE_SFILES= \
 ./src/core/ConstructSet.cpp \
@@ -64,7 +66,10 @@ CORE_SFILES= \
 ./src/tooling/AnalysisInterface.cpp \
 ./src/tooling/NamedConstructAccess.cpp \
 ./src/tooling/ConstructElevator.cpp \
-./src/pass/selector/ProgramEntrySelector.cpp
+./src/pass/selector/ProgramEntrySelector.cpp \
+./src/pass/selector/IdentifyerSelector.cpp \
+./src/pass/selector/TextStringSelector.cpp \
+./src/pass/selector/CallPathSelector.cpp 
 
 CLANG_HFILES= \
 ./include/instro/clang/adapter/CygProfileAdapter.h \
@@ -131,7 +136,6 @@ EXAMPLE_HFILES= \
 ./include/instro/example/ExamplePassFactory.h \
 ./include/instro/example/ExamplePass.h \
 ./include/instro/example/ExampleAnalysisInterface.h \
-./include/instro/example/CallPathSelector.h \
 ./include/instro/example/ExampleConstructPrinter.h  \
 ./include/instro/example/ExampleNamedConstructAccess.h \
 ./include/instro/example/NameBasedSelector.h

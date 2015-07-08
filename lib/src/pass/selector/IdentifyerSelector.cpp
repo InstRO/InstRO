@@ -1,5 +1,3 @@
-#include "rose.h"
-
 #include "instro/tooling/NamedConstructAccess.h"
 #include "instro/pass/selector/IdentifyerSelector.h"
 #include "instro/tooling/AnalysisInterface.h"
