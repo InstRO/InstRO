@@ -59,7 +59,7 @@ class ChannelConfiguration {
 	template <class... PassList>
 	ChannelConfiguration(std::initializer_list<PassMinMaxSequenceHelper> passes) {
 		for (auto tripel : passes){
-			inputChannelPasses.insert(tripel.pass);
+			inputChannelPasses.push_back(tripel.pass);
 			inputChannelMin[tripel.pass] = tripel.min;
 			inputChannelMax[tripel.pass] = tripel.max;
 		}
