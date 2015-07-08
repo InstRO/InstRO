@@ -120,6 +120,15 @@ return NULL;
 InstRO::Pass* RosePassFactory::createFunctionSelector() { return NULL; }
 
 InstRO::Pass* RosePassFactory::createGPIAdapter(InstRO::Pass* input) { return NULL; }
+InstRO::Pass* RosePassFactory::createIdentifyerFilter(std::vector<std::string> matchList, Pass* filterInput){ return NULL; }
+InstRO::Pass* RosePassFactory::createStringSelector(std::vector<std::string> matchList){ return NULL; }
+InstRO::Pass* RosePassFactory::createFunctionBlackAndWhiteListFilter(std::vector<std::string> matchList, InstRO::Pass* inputB) { return NULL; }
+InstRO::Pass* RosePassFactory::createBooleanAndSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) { return NULL; }
+InstRO::Pass* RosePassFactory::createCallPathSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) { return NULL; }
+InstRO::Pass* RosePassFactory::createOpenMPSelector() { return NULL; }
+InstRO::Pass* RosePassFactory::createOpenMPFilter(InstRO::Pass* input) { return NULL; }
+InstRO::Pass* RosePassFactory::createOpenMPOpariCannonizer(InstRO::Pass* input) { return NULL; }
+InstRO::Pass* RosePassFactory::createOPARIAdapter(InstRO::Pass* input) { return NULL; }
 
 }	// Rose
 }	// InstRO

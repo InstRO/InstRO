@@ -75,9 +75,6 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h">
       <Filter>instro\rose</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h">
-      <Filter>instro\rose</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\support\BWLFileReader.h">
       <Filter>instro\support</Filter>
     </ClInclude>
@@ -170,6 +167,9 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\GNUProfilingInterfaceAdapter.h">
       <Filter>instro\rose\pass\adapter</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h">
+      <Filter>instro\rose\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp">
@@ -222,6 +222,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\GNUProfilingInterfaceAdapter.cpp">
       <Filter>instro\rose\pass\adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\core\RosePassFactory.cpp">
+      <Filter>instro\rose\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
