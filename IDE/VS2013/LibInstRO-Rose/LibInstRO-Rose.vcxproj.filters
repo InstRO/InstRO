@@ -167,6 +167,9 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\selector\ElevatorSelector.h">
       <Filter>instro\rose\pass\selector</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\GNUProfilingInterfaceAdapter.h">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp">
@@ -216,6 +219,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\rose\pass\selector\ElevatorSelector.cpp">
       <Filter>instro\rose\pass\selector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\GNUProfilingInterfaceAdapter.cpp">
+      <Filter>instro\rose\pass\adapter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
