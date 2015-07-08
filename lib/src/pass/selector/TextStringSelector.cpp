@@ -6,10 +6,10 @@
 namespace InstRO {
 namespace Selector {
 
-	void TextStringSelector::init() {
+void TextStringSelector::init() {
 	// CI: Nothing to do here.
 }
-	void TextStringSelector::execute() {
+void TextStringSelector::execute() {
 	Tooling::NamedConstructAccess::NamedConstructAccess *nca =
 			getInstrumentorInstance()->getAnalysisManager()->getNamedConstructAccessFacility();
 	std::list<std::string> matchingRules(rules.begin(), rules.end());
@@ -18,11 +18,10 @@ namespace Selector {
 	output = nca->getConstructsByUserTextStringMatch(*stringMatcher);
 }
 
-	void TextStringSelector::finalize() {}
+void TextStringSelector::finalize() {}
 
-	void TextStringSelector::releaseOutput() { output->clear(); }
+void TextStringSelector::releaseOutput() { output->clear(); }
 
-	Core::ConstructSet *TextStringSelector::getOutput() { return output.get(); }
+Core::ConstructSet *TextStringSelector::getOutput() { return output.get(); }
 }
-
 }

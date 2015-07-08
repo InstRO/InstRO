@@ -16,7 +16,7 @@ std::unique_ptr<InstRO::Core::ConstructSet> RoseGrammarInterface::getConstructsB
 
 	std::vector<SgNode *> nodes;
 	switch (types) {
-	case InstRO::Tooling::GrammarInterface::GrammarTypesType::GTFor:
+		case InstRO::Tooling::GrammarInterface::GrammarTypesType::GTFor:
 			nodes = NodeQuery::querySubTree(proj, V_SgForStatement);
 			break;
 		default:

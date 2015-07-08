@@ -49,21 +49,20 @@ class RosePassFactory : public InstRO::PassFactory {
 	};
 
  public:
-
 	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) : PassFactory(refManager), project(proj){};
 
 	virtual InstRO::Pass* createProgramEntrySelector();
 	virtual InstRO::Pass* createFunctionSelector();
 	// Text Based Selection in Various Flavors
-	virtual InstRO::Pass* createIdentifyerSelector(std::vector<std::string> matchList);// * Match Identifyers against the matchList
+	virtual InstRO::Pass* createIdentifyerSelector(
+			std::vector<std::string> matchList);	// * Match Identifyers against the matchList
 	virtual InstRO::Pass* createIdentifyerFilter(std::vector<std::string> matchList, Pass* filterInput);
-	virtual InstRO::Pass* createTextStringSelector(std::vector<std::string> matchList); // Search within user strings "myText"
+	virtual InstRO::Pass* createTextStringSelector(
+			std::vector<std::string> matchList);	// Search within user strings "myText"
 
 	virtual InstRO::Pass* createFunctionBlackAndWhiteListSelector(std::vector<std::string> rules);
-	virtual InstRO::Pass* createFunctionBlackAndWhiteListFilter(std::vector<std::string> rules,Pass * inputPasses);
-//	virtual InstRO::Pass* createFunctionBlackNWhiteSelector(std::string string);
-	
-
+	virtual InstRO::Pass* createFunctionBlackAndWhiteListFilter(std::vector<std::string> rules, Pass* inputPasses);
+	//	virtual InstRO::Pass* createFunctionBlackNWhiteSelector(std::string string);
 
 	virtual InstRO::Pass* createBooleanAndSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
 	virtual InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
@@ -74,15 +73,14 @@ class RosePassFactory : public InstRO::PassFactory {
 	virtual InstRO::Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructLevelType level);
 	// OpenMP Stuff
 	virtual InstRO::Pass* createOpenMPSelector();
-	virtual InstRO::Pass* createOpenMPFilter(Pass * input);
-	virtual InstRO::Pass* createOpenMPOpariCannonizer(Pass * input);
-	virtual InstRO::Pass* createOPARIAdapter(Pass * input);
+	virtual InstRO::Pass* createOpenMPFilter(Pass* input);
+	virtual InstRO::Pass* createOpenMPOpariCannonizer(Pass* input);
+	virtual InstRO::Pass* createOPARIAdapter(Pass* input);
 	// Adapter
 	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input);
 	virtual InstRO::Pass* createConstructPrinter(InstRO::Pass* pass);
 	virtual InstRO::Pass* createGenericAdapter(GenericAdapterConfiguration gac);
 	virtual InstRO::Pass* createGenericAdapter(Pass* functionSelection, Pass* loopSelection, Pass* branchingSelection);
-
 };
 }
 }
