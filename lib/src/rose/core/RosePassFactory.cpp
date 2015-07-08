@@ -120,7 +120,7 @@ return NULL;
 InstRO::Pass* RosePassFactory::createFunctionSelector() { return NULL; }
 
 InstRO::Pass* RosePassFactory::createGPIAdapter(InstRO::Pass* input) { return NULL; }
-InstRO::Pass* RosePassFactory::createIdentifyerFilter(std::vector<std::string> matchList, Pass* filterInput){ return NULL; }
+// InstRO::Pass* RosePassFactory::createIdentifyerFilter(std::vector<std::string> matchList, Pass* filterInput){ return NULL; }
 InstRO::Pass* RosePassFactory::createStringSelector(std::vector<std::string> matchList){ return NULL; }
 InstRO::Pass* RosePassFactory::createFunctionBlackAndWhiteListFilter(std::vector<std::string> matchList, InstRO::Pass* inputB) { return NULL; }
 InstRO::Pass* RosePassFactory::createBooleanAndSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) { return NULL; }
