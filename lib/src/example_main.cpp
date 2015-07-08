@@ -22,8 +22,8 @@ int main(int argc, char** argv) {
 
 	std::vector<std::string> filterRules;
 	filterRules.push_back("main");
-	auto aPass = aFactory->createNameBasedSelector(filterRules);
-	auto bPass = aFactory->createNameBasedSelector(filterRules);
+	auto aPass = aFactory->createIdentifyerSelector(filterRules);
+	auto bPass = aFactory->createIdentifyerSelector(filterRules);
 	auto compound = aFactory->createBooleanOrSelector(aPass, bPass);
 
 	auto adapter = aFactory->createGPIAdapter(compound);

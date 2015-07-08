@@ -24,7 +24,7 @@ class ExamplePassFactory : public InstRO::PassFactory {
 		passManager->registerPass(newPass);
 		return newPass;
 	};
-	InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) {
+	InstRO::Pass* createIdentifyerSelector(std::vector<std::string> matchList) {
 		InstRO::Pass* newPass = new InstRO::Pass(new Selectors::NameBasedSelector(matchList));
 		passManager->registerPass(newPass);
 		newPass->setPassName("InstRO::Example::NameBasedSelector");
