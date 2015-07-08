@@ -57,7 +57,7 @@ class RosePassFactory : public InstRO::PassFactory {
 	// Text Based Selection in Various Flavors
 	virtual InstRO::Pass* createIdentifyerSelector(std::vector<std::string> matchList);// * Match Identifyers against the matchList
 	virtual InstRO::Pass* createIdentifyerFilter(std::vector<std::string> matchList, Pass* filterInput);
-	virtual InstRO::Pass* createStringSelector(std::vector<std::string> matchList); // Search within user strings "myText"
+	virtual InstRO::Pass* createTextStringSelector(std::vector<std::string> matchList); // Search within user strings "myText"
 
 	virtual InstRO::Pass* createFunctionBlackAndWhiteListSelector(std::vector<std::string> rules);
 	virtual InstRO::Pass* createFunctionBlackAndWhiteListFilter(std::vector<std::string> rules,Pass * inputPasses);

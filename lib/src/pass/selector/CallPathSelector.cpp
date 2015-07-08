@@ -1,12 +1,11 @@
 #include <memory>
 #include <set>
 #include "instro/core/Singleton.h"
-#include "instro/example/CallPathSelector.h"
+#include "instro/pass/selector/CallPathSelector.h"
 #include "instro/tooling/AnalysisInterface.h"
 
 namespace InstRO {
-namespace Example {
-namespace Selectors {
+	namespace Selectors {
 
 void CallPathSelector::init() {}
 void CallPathSelector::execute() {
@@ -26,6 +25,7 @@ void CallPathSelector::execute() {
 	// to the output CS
 	for (auto startNode = fromNodes.begin(); startNode != fromNodes.end(); startNode++) {
 		for (auto toNode = toNodes.begin(); toNode != toNodes.end(); toNode++) {
+			throw std::string("Not (Yet) Implemented");
 			/*		// search for a path
 					std::set< decltype(* toNode) > visitedNodes;
 					// do the magic
@@ -44,6 +44,6 @@ void CallPathSelector::releaseOutput(){
 		//	output.clear();
 };
 Core::ConstructSet *CallPathSelector::getOutput() { return NULL; };
-}
-}
-}
+
+}	// Selector
+}	// InstRO

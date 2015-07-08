@@ -5,7 +5,7 @@
 #include "instro/core/PassManager.h"
 
 #include "instro/example/ExamplePass.h"
-#include "instro/example/CallPathSelector.h"
+#include "instro/pass/selector/CallPathSelector.h"
 #include "instro/example/CompoundSelector.h"
 #include "instro/example/NameBasedSelector.h"
 #include "instro/example/ExampleConstructPrinter.h"
@@ -39,7 +39,7 @@ class ExamplePassFactory : public InstRO::PassFactory {
 	};
 
 	InstRO::Pass* createCallPathSelector(InstRO::Pass* from, InstRO::Pass* to) {
-		InstRO::Pass* newPass = new InstRO::Pass(new Selectors::CallPathSelector(from, to));
+		InstRO::Pass* newPass = new InstRO::Pass(new InstRO::Selectors::CallPathSelector(from, to));
 		newPass->setPassName("InstRO::Example::CallPathSelector");
 		passManager->registerPass(newPass);
 		return newPass;
