@@ -2,7 +2,8 @@
 #define INSTRO_CORE_PASSIMPLEMENTATION_H
 #include <initializer_list>
 #include <unordered_map>
-// Pass.h is included at the End of this file. We use forward declarations to break the circle Pass - PassImplementation - Pass
+// Pass.h is included at the End of this file. We use forward declarations to break the circle Pass - PassImplementation
+// - Pass
 // #include "instro/core/Pass.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/core/Helper.h"
@@ -17,16 +18,16 @@ namespace Support {
  * Support class to hand the inputs from the pass manager to the
  * PassImplementation
  */
-	/*
+/*
 class InputAggregation {
- public:
-	InputAggregation(){};
-	InputAggregation(std::unordered_map<InstRO::Pass *, ConstructSet *> m) : pToCMap(m) {}
-	ConstructSet *getConstructSet(InstRO::Pass *p) { return pToCMap[p]; }
+public:
+InputAggregation(){};
+InputAggregation(std::unordered_map<InstRO::Pass *, ConstructSet *> m) : pToCMap(m) {}
+ConstructSet *getConstructSet(InstRO::Pass *p) { return pToCMap[p]; }
 
- private:
-	// CI: Us the Pass as a AccessHandle to the RespectiveConstruct set
-	std::unordered_map<InstRO::Pass *, InstRO::Core::ConstructSet *> pToCMap;
+private:
+// CI: Us the Pass as a AccessHandle to the RespectiveConstruct set
+std::unordered_map<InstRO::Pass *, InstRO::Core::ConstructSet *> pToCMap;
 };*/
 }
 
@@ -51,15 +52,15 @@ class ChannelConfiguration {
 		inputChannelPasses.insert(inputChannelPasses.begin(), {p1, passes...});
 	}
 
-	struct PassMinMaxSequenceHelper{
-		::InstRO::Pass* pass;
+	struct PassMinMaxSequenceHelper {
+		::InstRO::Pass *pass;
 		::InstRO::Core::ConstructLevelType min;
 		::InstRO::Core::ConstructLevelType max;
 	};
 
 	template <class... PassList>
 	ChannelConfiguration(std::initializer_list<PassMinMaxSequenceHelper> passes) {
-		for (auto tripel : passes){
+		for (auto tripel : passes) {
 			inputChannelPasses.push_back(tripel.pass);
 			inputChannelMin[tripel.pass] = tripel.min;
 			inputChannelMax[tripel.pass] = tripel.max;
@@ -92,10 +93,12 @@ class PassImplementation {
 
 	// This set is used to track alterations to the AST and notify which nodes have been invaldated
 	std::unique_ptr<InstRO::Core::ConstructSet> collisionSet;
+
  public:
 	Core::ChannelConfiguration channelCFG() { return cfg; }
 
-	PassImplementation(Core::ChannelConfiguration cfg) : cfg(cfg), collisionSet(std::make_unique<InstRO::Core::ConstructSet>()){}
+	PassImplementation(Core::ChannelConfiguration cfg)
+			: cfg(cfg), collisionSet(std::make_unique<InstRO::Core::ConstructSet>()) {}
 	PassImplementation() = delete;
 
 	/*	void setInputAggregation(InstRO::Core::Support::InputAggregation ia) {
@@ -112,12 +115,10 @@ class PassImplementation {
 		}*/
 
 	InstRO::Core::ConstructSet *getInput(Pass *pId);
-		
 
+ public:
+	InstRO::Core::ConstructSet *getCollisionSet(){};
 
-
-public:
-	InstRO::Core::ConstructSet * getCollisionSet(){};
  private:
 	// Testing where this is used	InstRO::Core::Support::InputAggregation ia;
 };

@@ -68,8 +68,8 @@ std::vector<ConstructLevelType> ConstructSet::getConstructLevels() {
 		levels.push_back(0);
 	// for each construct, determine its level and increment the corresponding bucket
 	for (auto construct : constructs) {
-		assert(construct->getLevel()>ContstructLevelEnum::CLMin);
-		assert(construct->getLevel()<ContstructLevelEnum::CLMax);
+		assert(construct->getLevel() > ContstructLevelEnum::CLMin);
+		assert(construct->getLevel() < ContstructLevelEnum::CLMax);
 
 		levels[construct->getLevel()]++;
 	}
@@ -80,17 +80,20 @@ std::vector<ConstructLevelType> ConstructSet::getConstructLevels() {
 	}
 	return returnVector;
 }
-ConstructLevelType ConstructSet::getMaxConstructLevel() { 
+ConstructLevelType ConstructSet::getMaxConstructLevel() {
 	std::vector<ConstructLevelType> levels = ConstructSet::getConstructLevels();
-	if (levels.empty()) return ContstructLevelEnum::CLMax;
-	else return levels.back();
-	
+	if (levels.empty())
+		return ContstructLevelEnum::CLMax;
+	else
+		return levels.back();
 }
-ConstructLevelType ConstructSet::getMinConstructLevel() { 
+ConstructLevelType ConstructSet::getMinConstructLevel() {
 	std::vector<ConstructLevelType> levels = ConstructSet::getConstructLevels();
-	if (levels.empty())	return ContstructLevelEnum::CLMin;
-	else return levels.front();
-	return ConstructSet::getConstructLevels().front(); 
+	if (levels.empty())
+		return ContstructLevelEnum::CLMin;
+	else
+		return levels.front();
+	return ConstructSet::getConstructLevels().front();
 }
 void ConstructSet::clear() { constructs.clear(); }
 bool ConstructSet::empty() { return constructs.empty(); }

@@ -49,11 +49,11 @@
       <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\ConstructElevator.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="InstRO::Core::ConstructLevelManagrment" Collapsed="true">
+  <Class Name="InstRO::Core::ConstructLevelManagement" Collapsed="true">
     <Position X="34.5" Y="7.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\ConstructLevelManagrment.h</FileName>
+      <FileName>C:\Users\ci24amun\Documents\Repositories\InstRO-V5\lib\include\instro\core\ConstructLevelManagement.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="InstRO::Core::ConstructSet" Collapsed="true">

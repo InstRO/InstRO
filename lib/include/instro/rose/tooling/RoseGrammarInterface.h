@@ -8,6 +8,7 @@
 namespace InstRO {
 namespace Rose {
 namespace Tooling {
+
 namespace GrammarInterface {
 
 class RoseGrammarInterface : public InstRO::Tooling::GrammarInterface::GrammarInterface

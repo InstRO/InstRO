@@ -207,7 +207,7 @@ SelectionASTMarker* BooleanCompoundSelector::createSelectionMarker() {
  */
 bool BooleanCompoundSelector::evalLogicalAnd(ASTAttributeContainer* selCon) {
 	//	std::cout << "The Id used to retrieve Attribute in evalBinIntersect: " << this->selectorsToUse.at(0)->getId() <<
-	//std::endl;
+	// std::endl;
 	// Get first Argument
 	bool a = selCon->hasSelAttrib(this->subSelectors.at(0)->getId());
 	//	std::cout << (a? "a: true" : "a: false") << std::endl;
