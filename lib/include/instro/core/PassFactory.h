@@ -35,6 +35,7 @@ class PassFactory {
 	PassFactory(PassManagement::PassManager* manager) : passManager(manager){};
 	// Currently we need to force the class to be virtual
 	virtual void someFunction(){};
+
  protected:
 	PassManagement::PassManager* passManager;
 };

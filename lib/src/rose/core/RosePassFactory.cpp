@@ -11,15 +11,16 @@
 namespace InstRO {
 namespace Rose {
 
-//CI: beta 
-InstRO::Pass* RosePassFactory::createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructLevelType level) {
+// CI: beta
+InstRO::Pass* RosePassFactory::createConstructLoweringElevator(InstRO::Pass* pass,
+																															 InstRO::Core::ConstructLevelType level) {
 	Pass* newPass = new Pass(new InstRO::Rose::Selector::ConstructLoweringElevator(pass, level));
 	newPass->setPassName("InstRO::Rose::Selector::ConstructLoweringElevator");
 	passManager->registerPass(newPass);
 	return newPass;
 }
 
-//CI: beta
+// CI: beta
 Pass* RosePassFactory::createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructLevelType level) {
 	Pass* newPass = new Pass(new InstRO::Rose::Selector::ConstructRaisingElevator(pass, level));
 	newPass->setPassName("InstRO::Rose::Selector::ConstructRaisingElevator");
@@ -27,14 +28,13 @@ Pass* RosePassFactory::createConstructRaisingElevator(InstRO::Pass* pass, InstRO
 	return newPass;
 }
 
-//CI: beta
+// CI: beta
 Pass* RosePassFactory::createConstructPrinter(InstRO::Pass* pass) {
 	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructPrinter(pass));
 	newPass->setPassName("InstRO::Rose::Adapter::RoseConstructPrinter");
 	passManager->registerPass(newPass);
 	return newPass;
 }
-
 
 Pass* RosePassFactory::createFunctionBlackAndWhiteListSelector(std::vector<std::string> rules) {
 	std::vector<std::string> wlrules;
@@ -61,10 +61,10 @@ Pass* RosePassFactory::createBlackNWhiteSelector(std::string string) {
 	return createBlackAndWhiteListSelector(filters);
 };*/
 
-//CI: Todo 
+// CI: Todo
 Pass* RosePassFactory::createBooleanOrSelector(Pass* inputA, Pass* inputB) {
 	Pass* newPass =
-		new InstRO::Pass(new Rose::Selector::CompoundSelector(inputA, inputB, Selector::CompoundSelector::CO_Or));
+			new InstRO::Pass(new Rose::Selector::CompoundSelector(inputA, inputB, Selector::CompoundSelector::CO_Or));
 	newPass->setPassName("InstRO::Rose::BooleanOrSelector");
 	passManager->registerPass(newPass);
 	/*		Pass * compoundPass=new Pass(new Selectors::CompoundSelector(getPass(inputA),getPass(inputB)));
@@ -85,13 +85,12 @@ InstRO::Pass* RosePassFactory::createBooleanAndSelector(InstRO::Pass* inputA, In
 	return NULL;
 }
 
-Pass* RosePassFactory::createProgramEntrySelector() { 
+Pass* RosePassFactory::createProgramEntrySelector() {
 	Pass* newPass = new Pass(new InstRO::Selector::ProgramEntrySelector());
 	newPass->setPassName("InstRO::Selector::ProgramEntrySelector");
 	passManager->registerPass(newPass);
 	return newPass;
 };
-
 
 Pass* RosePassFactory::createGenericAdapter(Pass* functionSelection, Pass* loopSelection, Pass* branchingSelection) {
 	// RosePass * roseFunctionSelectionPass,* roseLoopSelectionPass,*roseBranchingSelectionPass;
@@ -116,13 +115,12 @@ InstRO::Pass* RosePassFactory::createIdentifyerSelector(std::vector<std::string>
 	return newPass;
 };
 
-
 InstRO::Pass* RosePassFactory::createIdentifyerFilter(std::vector<std::string> matchList, InstRO::Pass* filterInput) {
 	Pass* newPass = new Pass(new InstRO::Selector::IdentifyerSelector(matchList, filterInput));
 	newPass->setPassName("InstRO::Rose::IdentifyerFilter");
 	passManager->registerPass(newPass);
 	return newPass;
-}; 
+};
 
 InstRO::Pass* RosePassFactory::createTextStringSelector(std::vector<std::string> matchList) {
 	Pass* newPass = new Pass(new InstRO::Selector::TextStringSelector(matchList));
@@ -142,9 +140,9 @@ InstRO::Pass* createProgramEntrySelector() override {
 return NULL;
 }*/
 
-InstRO::Pass* RosePassFactory::createFunctionSelector() { 
+InstRO::Pass* RosePassFactory::createFunctionSelector() {
 	throw std::string("Not yet Implemented");
-	return NULL; 
+	return NULL;
 }
 
 InstRO::Pass* RosePassFactory::createGPIAdapter(InstRO::Pass* input) {
@@ -152,7 +150,8 @@ InstRO::Pass* RosePassFactory::createGPIAdapter(InstRO::Pass* input) {
 	return NULL;
 }
 
-InstRO::Pass* RosePassFactory::createFunctionBlackAndWhiteListFilter(std::vector<std::string> matchList, InstRO::Pass* inputB) {
+InstRO::Pass* RosePassFactory::createFunctionBlackAndWhiteListFilter(std::vector<std::string> matchList,
+																																		 InstRO::Pass* inputB) {
 	throw std::string("Not yet Implemented");
 	return NULL;
 }

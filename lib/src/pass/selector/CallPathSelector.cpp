@@ -5,7 +5,7 @@
 #include "instro/tooling/AnalysisInterface.h"
 
 namespace InstRO {
-	namespace Selectors {
+namespace Selectors {
 
 void CallPathSelector::init() {}
 void CallPathSelector::execute() {

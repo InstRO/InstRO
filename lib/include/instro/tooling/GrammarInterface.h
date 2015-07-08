@@ -19,7 +19,7 @@ typedef enum {
 } GrammarTypesType;
 
 class GrammarInterface {
-public:
+ public:
 	// class ConstructSetToGrammarTypeMapper
 	virtual std::list<GrammarTypesType> getGrammerTypes(const Core::ConstructSet &cs) = 0;
 

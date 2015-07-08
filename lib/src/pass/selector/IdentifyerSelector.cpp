@@ -6,10 +6,10 @@
 namespace InstRO {
 namespace Selector {
 
-	void IdentifyerSelector::init() {
+void IdentifyerSelector::init() {
 	// CI: Nothing to do here.
 }
-	void IdentifyerSelector::execute() {
+void IdentifyerSelector::execute() {
 	Tooling::NamedConstructAccess::NamedConstructAccess *nca =
 			getInstrumentorInstance()->getAnalysisManager()->getNamedConstructAccessFacility();
 	std::list<std::string> matchingRules(rules.begin(), rules.end());
@@ -18,11 +18,10 @@ namespace Selector {
 	output = nca->getConstructsByIdentifyerName(*stringMatcher);
 }
 
-	void IdentifyerSelector::finalize() {}
+void IdentifyerSelector::finalize() {}
 
-	void IdentifyerSelector::releaseOutput() { output->clear(); }
+void IdentifyerSelector::releaseOutput() { output->clear(); }
 
-	Core::ConstructSet *IdentifyerSelector::getOutput() { return output.get(); }
+Core::ConstructSet *IdentifyerSelector::getOutput() { return output.get(); }
 }
-
 }
