@@ -107,7 +107,9 @@ class Pass {
 	};
 	// Deprecated| void setInputLevelRequirement(Pass *pass, Core::ConstructLevelType level) { inputRequiredLevels[pass] =
 	// level; }
-
+protected:
+	// alternate name getInvalidationSet()
+	Core::ConstructSet * getCollisionSet(){ passImplementation->getCollisionSet(); }
  private:
 	// These flags are solely used to ensure proper sequences of initialization, execution and finalization
 	bool passInitialized, passExecuted, passFinalized;
