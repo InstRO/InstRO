@@ -117,7 +117,8 @@ ROSE_SFILES= \
 ./src/rose/pass/selector/NameBasedSelector.cpp  \
 ./src/rose/pass/selector/ElevatorSelector.cpp \
 ./src/rose/tooling/RoseConstructElevator.cpp \
-./src/rose/tooling/RoseNamedConstructAccess.cpp 
+./src/rose/tooling/RoseNamedConstructAccess.cpp \
+./src/rose/tooling/RoseGrammarInterface.cpp
 
 EXAMPLE_HFILES= \
 ./include/instro/example/ExampleConstructSet.h \
