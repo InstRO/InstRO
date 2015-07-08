@@ -5,6 +5,7 @@
 // Pass.h is included at the End of this file. We use forward declarations to break the circle Pass - PassImplementation - Pass
 // #include "instro/core/Pass.h"
 #include "instro/core/ConstructSet.h"
+#include "instro/core/Helper.h"
 
 namespace InstRO {
 // We need a forward declaration of Pass, since Pass and PassImplementation are circular
