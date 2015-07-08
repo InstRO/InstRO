@@ -1,8 +1,9 @@
 #ifndef INSTRO_CORE_PASSIMPLEMENTATION_H
 #define INSTRO_CORE_PASSIMPLEMENTATION_H
-
+#include <initializer_list>
 #include <unordered_map>
-
+// Pass.h is included at the End of this file. We use forward declarations to break the circle Pass - PassImplementation - Pass
+// #include "instro/core/Pass.h"
 #include "instro/core/ConstructSet.h"
 
 namespace InstRO {
@@ -15,6 +16,7 @@ namespace Support {
  * Support class to hand the inputs from the pass manager to the
  * PassImplementation
  */
+	/*
 class InputAggregation {
  public:
 	InputAggregation(){};
@@ -24,14 +26,14 @@ class InputAggregation {
  private:
 	// CI: Us the Pass as a AccessHandle to the RespectiveConstruct set
 	std::unordered_map<InstRO::Pass *, InstRO::Core::ConstructSet *> pToCMap;
-};
+};*/
 }
 
 class ChannelConfiguration {
  protected:
-	std::vector<InstRO::Pass *> inputChannelPasses;
-	std::unordered_map<Pass *, InstRO::Core::ContstructLevelEnum> inputChannelMin;
-	std::unordered_map<Pass *, InstRO::Core::ContstructLevelEnum> inputChannelMax;
+	std::vector<Pass *> inputChannelPasses;
+	std::unordered_map<Pass *, Core::ContstructLevelEnum> inputChannelMin;
+	std::unordered_map<Pass *, Core::ContstructLevelEnum> inputChannelMax;
 
  public:
 	// CI: Empty Configuration - No Input Passes used
@@ -39,8 +41,8 @@ class ChannelConfiguration {
 
 	ChannelConfiguration(Pass *p1) {
 		inputChannelPasses.push_back(p1);
-		inputChannelMin[p1] = InstRO::Core::ContstructLevelEnum::CLMin;
-		inputChannelMax[p1] = InstRO::Core::ContstructLevelEnum::CLMax;
+		inputChannelMin[p1] = ::InstRO::Core::ContstructLevelEnum::CLMin;
+		inputChannelMax[p1] = ::InstRO::Core::ContstructLevelEnum::CLMax;
 	}
 
 	template <class... PassList>
@@ -48,14 +50,29 @@ class ChannelConfiguration {
 		inputChannelPasses.insert(inputChannelPasses.begin(), {p1, passes...});
 	}
 
-	void setConstructLevel(Pass *inputPass, InstRO::Core::ContstructLevelEnum minLevel,
-												 InstRO::Core::ContstructLevelEnum maxLevel) {
+	struct PassMinMaxSequenceHelper{
+		::InstRO::Pass* pass;
+		::InstRO::Core::ConstructLevelType min;
+		::InstRO::Core::ConstructLevelType max;
+	};
+
+	template <class... PassList>
+	ChannelConfiguration(std::initializer_list<PassMinMaxSequenceHelper> passes) {
+		for (auto tripel : passes){
+			inputChannelPasses.insert(tripel.pass);
+			inputChannelMin[tripel.pass] = tripel.min;
+			inputChannelMax[tripel.pass] = tripel.max;
+		}
+	}
+
+	void setConstructLevel(Pass *inputPass, ::InstRO::Core::ContstructLevelEnum minLevel,
+												 ::InstRO::Core::ContstructLevelEnum maxLevel) {
 		inputChannelMin[inputPass] = minLevel;
 		inputChannelMax[inputPass] = maxLevel;
 	}
-	InstRO::Core::ContstructLevelEnum getMinConstructLevel(Pass *inputPass) { return inputChannelMin[inputPass]; }
-	InstRO::Core::ContstructLevelEnum getMaxConstructLevel(Pass *inputPass) { return inputChannelMax[inputPass]; }
-	std::vector<InstRO::Pass *> const getPasses() { return inputChannelPasses; };
+	::InstRO::Core::ContstructLevelEnum getMinConstructLevel(Pass *inputPass) { return inputChannelMin[inputPass]; }
+	::InstRO::Core::ContstructLevelEnum getMaxConstructLevel(Pass *inputPass) { return inputChannelMax[inputPass]; }
+	std::vector<::InstRO::Pass *> const getPasses() { return inputChannelPasses; };
 };
 
 /*

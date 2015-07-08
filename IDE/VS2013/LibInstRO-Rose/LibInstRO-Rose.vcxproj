@@ -105,6 +105,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\core\RoseConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\core\RoseLegacySelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\core\RosePassImplementation.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\GNUProfilingInterfaceAdapter.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseConstructPrinter.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\selector\CompoundSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\selector\ElevatorSelector.h" />
@@ -133,6 +134,7 @@
     <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\GNUProfilingInterfaceAdapter.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseConstructPrinter.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\selector\CompoundSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\selector\ElevatorSelector.cpp" />
