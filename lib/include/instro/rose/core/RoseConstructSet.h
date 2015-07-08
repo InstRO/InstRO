@@ -155,36 +155,36 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	void visit(SgIfStmt* node) {
 		level = ConstructLevel::STATEMENT;
 		flavor = StatementFlavor::CONDITIONAL;
-		cl = InstRO::Core::ConstructLevelType::CLConditional;
+		cl = InstRO::Core::ConstructLevelType::CLConditionalStatement;
 	}
 	void visit(SgSwitchStatement* node) {
 		level = ConstructLevel::STATEMENT;
 		flavor = StatementFlavor::CONDITIONAL;
-		cl = InstRO::Core::ConstructLevelType::CLConditional;
+		cl = InstRO::Core::ConstructLevelType::CLConditionalStatement;
 	}
 
 	// loops
 	void visit(SgForStatement* node) {
 		level = ConstructLevel::STATEMENT;
 		flavor = StatementFlavor::LOOP;
-		cl = InstRO::Core::ConstructLevelType::CLLoop;
+		cl = InstRO::Core::ConstructLevelType::CLLoopStatement;
 	}
 	void visit(SgWhileStmt* node) {
 		level = ConstructLevel::STATEMENT;
 		flavor = StatementFlavor::LOOP;
-		cl = InstRO::Core::ConstructLevelType::CLLoop;
+		cl = InstRO::Core::ConstructLevelType::CLLoopStatement;
 	}
 	void visit(SgDoWhileStmt* node) {
 		level = ConstructLevel::STATEMENT;
 		flavor = StatementFlavor::LOOP;
-		cl = InstRO::Core::ConstructLevelType::CLLoop;
+		cl = InstRO::Core::ConstructLevelType::CLLoopStatement;
 	}
 
 	// scopes
 	void visit(SgBasicBlock* node) {
 		level = ConstructLevel::STATEMENT;
 		flavor = StatementFlavor::SCOPE;
-		cl = InstRO::Core::ConstructLevelType::CLScope;
+		cl = InstRO::Core::ConstructLevelType::CLScopeStatement;
 	}
 
 	// statements
@@ -192,7 +192,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	void visit(SgStatement* node) {
 		level = ConstructLevel::STATEMENT;
 		flavor = StatementFlavor::SIMPLE_STATEMENT;
-		cl = InstRO::Core::ConstructLevelType::CLSimple;
+		cl = InstRO::Core::ConstructLevelType::CLSimpleStatement;
 	}
 
 	// expressions
@@ -205,7 +205,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 		if (n->get_definition()){
 			level = ConstructLevel::STATEMENT;
                 flavor = StatementFlavor::SIMPLE_STATEMENT;
-                cl = InstRO::Core::ConstructLevelType::CLSimple;
+                cl = InstRO::Core::ConstructLevelType::CLSimpleStatement;
 }
 	else generateError(n); }
 	
