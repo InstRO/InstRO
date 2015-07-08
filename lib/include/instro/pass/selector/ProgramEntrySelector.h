@@ -5,11 +5,10 @@ namespace Selector {
 
 class ProgramEntrySelector : public InstRO::Core::PassImplementation {
 protected:
-	ProgramEntrySelector() = delete;
 	std::unique_ptr<Core::ConstructSet> output;
 public:
 	ProgramEntrySelector()
-		: RosePassImplementation(Core::ChannelConfiguration()){};
+		: PassImplementation(Core::ChannelConfiguration()){};
 	virtual void init() override;
 	virtual void execute() override;
 	virtual void finalize() override;

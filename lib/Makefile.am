@@ -50,7 +50,8 @@ CORE_HFILES= \
 ./include/instro/tooling/ExtendedCallGraph.h \
 ./include/instro/tooling/GrammarInterface.h \
 ./include/instro/tooling/NamedConstructAccess.h \
-./include/instro/tooling/TransformationInterface.h 
+./include/instro/tooling/TransformationInterface.h \
+./include/instro/pass/selector/ProgramEntrySelector.h
 
 CORE_SFILES= \
 ./src/core/ConstructSet.cpp \
@@ -62,7 +63,8 @@ CORE_SFILES= \
 ./src/core/Helper.cpp \
 ./src/tooling/AnalysisInterface.cpp \
 ./src/tooling/NamedConstructAccess.cpp \
-./src/tooling/ConstructElevator.cpp
+./src/tooling/ConstructElevator.cpp \
+./src/pass/selector/ProgramEntrySelector.cpp
 
 CLANG_HFILES= \
 ./include/instro/clang/adapter/CygProfileAdapter.h \
@@ -102,6 +104,7 @@ ROSE_HFILES= \
 ./include/instro/rose/pass/selector/ElevatorSelector.h \
 ./include/instro/rose/pass/selector/NameBasedSelector.h \
 ./include/instro/rose/pass/selector/CompoundSelector.h \
+./include/instro/rose/pass/selector/RoseProgramEntrySelector.h \
 ./include/instro/rose/tooling/RoseAnalysisInterface.h  \
 ./include/instro/rose/tooling/RoseConstructElevator.h \
 ./include/instro/rose/tooling/RoseControlFlowGraph.h \
@@ -112,13 +115,15 @@ ROSE_HFILES= \
 
 ROSE_SFILES= \
 ./src/rose/core/RoseConstructSet.cpp   \
+./src/rose/core/RosePassFactory.cpp \
 ./src/rose/pass/adapter/RoseConstructPrinter.cpp \
 ./src/rose/pass/selector/CompoundSelector.cpp  \
 ./src/rose/pass/selector/NameBasedSelector.cpp  \
 ./src/rose/pass/selector/ElevatorSelector.cpp \
 ./src/rose/tooling/RoseConstructElevator.cpp \
 ./src/rose/tooling/RoseNamedConstructAccess.cpp \
-./src/rose/tooling/RoseGrammarInterface.cpp
+./src/rose/tooling/RoseGrammarInterface.cpp \
+./src/rose/pass/selector/RoseProgramEntrySelector.cpp
 
 EXAMPLE_HFILES= \
 ./include/instro/example/ExampleConstructSet.h \

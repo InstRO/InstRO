@@ -90,20 +90,22 @@ Pass* RosePassFactory::createGenericAdapter(Pass* functionSelection, Pass* loopS
 InstRO::Pass* RosePassFactory::createGenericAdapter(GenericAdapterConfiguration gac) {
 	return createGenericAdapter(gac.getFunctionSelector(), gac.getLoopConstructSelector(), gac.getLoopBodySelector());
 };
-
+/*
 InstRO::Pass* RosePassFactory::createNameBasedSelector(std::vector<std::string> matchList) {
 	Pass* newPass = new Pass(new Selector::NameBasedSelector(matchList));
 	newPass->setPassName("InstRO::Rose::NameBasedSelector");
 	passManager->registerPass(newPass);
 	return newPass;
 };
-
+*/
+/*
 InstRO::Pass* RosePassFactory::createNameBasedFilter(std::vector<std::string> matchList, InstRO::Pass* filterInput) {
 	Pass* newPass = new Pass(new Selector::NameBasedSelector(matchList, filterInput));
 	newPass->setPassName("InstRO::Rose::NameBasedFilter");
 	passManager->registerPass(newPass);
 	return newPass;
-};
+};*/ 
+
 /*
 InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA,InstRO::Pass* inputB) override {
 return NULL;

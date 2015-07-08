@@ -24,13 +24,13 @@ class ExamplePassFactory : public PassFactory {
 		passManager->registerPass(newPass);
 		return newPass;
 	};
-	InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) override {
+	InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) {
 		InstRO::Pass* newPass = new InstRO::Pass(new Selectors::NameBasedSelector(matchList));
 		passManager->registerPass(newPass);
 		newPass->setPassName("InstRO::Example::NameBasedSelector");
 		return newPass;
 	};
-	InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) override {
+	InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) {
 		InstRO::Pass* newPass =
 				new InstRO::Pass(new Selectors::CompoundSelector(inputA, inputB, Selectors::CompoundSelector::CO_Or));
 		passManager->registerPass(newPass);
@@ -46,9 +46,9 @@ class ExamplePassFactory : public PassFactory {
 	}
 
 	// Convenience
-	InstRO::Pass* createProgramEntrySelector() override { return NULL; };
-	InstRO::Pass* createFunctionSelector() override { return NULL; };
-	InstRO::Pass* createGPIAdapter(InstRO::Pass* input) override { return NULL; };
+	InstRO::Pass* createProgramEntrySelector() { return NULL; };
+	InstRO::Pass* createFunctionSelector() { return NULL; };
+	InstRO::Pass* createGPIAdapter(InstRO::Pass* input) { return NULL; };
 };
 }
 }

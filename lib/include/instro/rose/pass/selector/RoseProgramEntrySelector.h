@@ -7,7 +7,6 @@ namespace Selector {
 
 class ProgramEntrySelector : public InstRO::Rose::RosePassImplementation {
 protected:
-	ProgramEntrySelector() = delete;
 	std::unique_ptr<Core::ConstructSet> output;
 public:
 	ProgramEntrySelector()
