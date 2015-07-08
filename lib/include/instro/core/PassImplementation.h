@@ -89,10 +89,12 @@ class PassImplementation {
  protected:
 	Core::ChannelConfiguration &getChannelCFG() { return cfg; }
 
+	// This set is used to track alterations to the AST and notify which nodes have been invaldated
+	std::unique_ptr<InstRO::Core::ConstructSet> collisionSet;
  public:
 	Core::ChannelConfiguration channelCFG() { return cfg; }
 
-	PassImplementation(Core::ChannelConfiguration cfg) : cfg(cfg) {}
+	PassImplementation(Core::ChannelConfiguration cfg) : cfg(cfg), collisionSet(std::make_unique<InstRO::Core::ConstructSet>()){}
 	PassImplementation() = delete;
 
 	/*	void setInputAggregation(InstRO::Core::Support::InputAggregation ia) {
@@ -109,8 +111,12 @@ class PassImplementation {
 		}*/
 
 	InstRO::Core::ConstructSet *getInput(Pass *pId);
+		
 
- protected:
+
+
+public:
+	InstRO::Core::ConstructSet * getCollisionSet(){};
  private:
 	// Testing where this is used	InstRO::Core::Support::InputAggregation ia;
 };
