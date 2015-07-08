@@ -33,13 +33,7 @@ class PassFactory {
  public:
 	/* CI: A PassFactory must be initialized with the PassManager. */
 	PassFactory(PassManagement::PassManager* manager) : passManager(manager){};
-
-
  protected:
-	/*	void registerPass(Pass * pass)
-		{
-			refToGobalPassManager->registerPass(pass);
-		}*/
 	PassManagement::PassManager* passManager;
 };
 

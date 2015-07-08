@@ -60,7 +60,7 @@ class RosePassFactory : public InstRO::PassFactory {
 	virtual InstRO::Pass* createStringSelector(std::vector<std::string> matchList); // Search within user strings "myText"
 
 	virtual InstRO::Pass* createFunctionBlackAndWhiteListSelector(std::vector<std::string> rules);
-	virtual InstRO::Pass* createFunctionBlackAndWhiteListFilter(std::vector<std::string> rules);
+	virtual InstRO::Pass* createFunctionBlackAndWhiteListFilter(std::vector<std::string> rules,Pass * inputPasses);
 //	virtual InstRO::Pass* createFunctionBlackNWhiteSelector(std::string string);
 	
 
