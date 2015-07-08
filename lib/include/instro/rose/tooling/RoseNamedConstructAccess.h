@@ -94,9 +94,9 @@ class NameMatchingASTTraversal : public AstPrePostProcessing {
 	}
 
 	//	virtual void selectionBegin( 			SgProject*					project); /**< \brief Gets called before the selection
-	//process starts. Might be used for initialization */
+	// process starts. Might be used for initialization */
 	//	virtual void selectionEnd(			SgProject*					project); /**< \brief Gets called after the selection process
-	//has finished. Might be used for cleaning up */
+	// has finished. Might be used for cleaning up */
 	/** \brief Gets called before visiting the children of a node. Either this or postOrderVisit should be implemented.
 	 * Otherwise the selector is useless */
 	virtual void preOrderVisit(SgNode* n);

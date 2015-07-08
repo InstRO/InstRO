@@ -1,31 +1,28 @@
-extern "C" int printf(char * string);
+extern "C" int printf(char* string);
 int myFoo();
 int myRecursion(int depth);
 int myFooBar();
 
-int main(int argc,char ** argv){
+int main(int argc, char** argv) {
 	printf("Hello World\n");
 	myRecursion(myFoo());
 	int variableDeclaration;
 	int variableDeclarationAndInitialization;
-	for (int i=0;i<100;i++)
+	for (int i = 0; i < 100; i++)
 		myFoo();
 	return myRecursion(10);
 }
 
-int myRecursion(int depth){
-	if (depth>0) return myRecursion(depth-1)*depth;
+int myRecursion(int depth) {
+	if (depth > 0)
+		return myRecursion(depth - 1) * depth;
 	myFoo();
 	return 1;
 }
 
-int myFoo()
-{
+int myFoo() {
 	printf("This is s.th. else\n");
 	return 10;
 }
 
-int myFooBar(){
-	return 100;
-}
-
+int myFooBar() { return 100; }

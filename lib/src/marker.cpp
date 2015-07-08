@@ -68,10 +68,10 @@ void ASTAttributeContainer::setSelAttrib(size_t selId, SharedAttributePointerTyp
  }
 */	// No element to this key exists, so its simply inserted
 	//	std::cout << "Inserting pair with key: " << selId << "and attrib with ref count: " << attrib.use_count() <<
-	//std::endl;
+	// std::endl;
 	this->selectorMarkerMap.insert(std::pair<size_t, SharedAttributePointerType>(selId, attrib));
 	//	std::cout << "In attribute set the count for Id " << selId << " with attrib is: " << attrib.use_count() <<
-	//std::endl;
+	// std::endl;
 }
 
 /*
