@@ -70,7 +70,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructElevator.h">
       <Filter>include\instro\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructLevelManagrment.h">
+    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructLevelManagement.h">
       <Filter>include\instro\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h">

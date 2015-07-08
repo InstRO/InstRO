@@ -6,7 +6,7 @@
 #include <iostream>
 #include <vector>
 
-// CI: deprecated | #include "instro/core/ConstructLevelManagrment.h"
+// CI: deprecated | #include "instro/core/ConstructLevelManagement.h"
 // CI: deprecated | #include "instro/core/ConstructSetManagement.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/core/PassManager.h"

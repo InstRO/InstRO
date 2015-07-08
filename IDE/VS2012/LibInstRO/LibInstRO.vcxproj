@@ -18,7 +18,7 @@
     <ClInclude Include="..\..\..\lib\include\instro.h" />
     <ClInclude Include="..\..\..\lib\include\instro\agnosticSupport.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructElevator.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructLevelManagrment.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructLevelManagement.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSetManagement.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Factory.h" />

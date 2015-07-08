@@ -1,5 +1,5 @@
-#ifndef ROSE_CORE_ConstructLevelManagrment_H
-#define ROSE_CORE_ConstructLevelManagrment_H
+#ifndef ROSE_CORE_ConstructLevelManagement_H
+#define ROSE_CORE_ConstructLevelManagement_H
 #include "instro/core/ConstructSet.h"
 
 namespace InstRO {
