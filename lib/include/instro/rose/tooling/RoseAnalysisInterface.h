@@ -15,15 +15,14 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 	SgProject *project;
 	RoseAnalysisManager() = delete;
 	InstRO::Rose::Tooling::NamedConstructAccess::RoseNamedConstructAccess *nca;
-	InstRO::Rose::Tooling::ConstructElevator::ConstructElevator * ce;
+	InstRO::Rose::Tooling::ConstructElevator::ConstructElevator *ce;
 
  public:
 	RoseAnalysisManager(SgProject *proj)
-			: project(proj), 
-			  nca(new InstRO::Rose::Tooling::NamedConstructAccess::RoseNamedConstructAccess(proj)),
-			  ce(new InstRO::Rose::Tooling::ConstructElevator::ConstructElevator())
-	{};
-	~RoseAnalysisManager(){
+			: project(proj),
+				nca(new InstRO::Rose::Tooling::NamedConstructAccess::RoseNamedConstructAccess(proj)),
+				ce(new InstRO::Rose::Tooling::ConstructElevator::ConstructElevator()){};
+	~RoseAnalysisManager() {
 		delete nca;
 		delete ce;
 	}
@@ -35,9 +34,7 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 		throw std::string("Not IMplemented");
 		return NULL;
 	};
-	virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override {
-		return ce;
-	};
+	virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override { return ce; };
 	virtual InstRO::Tooling::GrammarInterface::GrammarInterface *getGrammarInterface() override {
 		throw std::string("Not IMplemented");
 		return NULL;

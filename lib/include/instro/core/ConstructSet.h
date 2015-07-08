@@ -40,18 +40,18 @@ namespace Core {
 
 typedef enum ContstructLevelEnum {
 	CLMin = 0,
-// Please do not use fragments. They may become deprecated
+	// Please do not use fragments. They may become deprecated
 	CLFragment = 1,
-// Any expression with observable haviour
+	// Any expression with observable haviour
 	CLExpression = 2,
-// separate Loop, Conditional, Scope and Simple Statments
+	// separate Loop, Conditional, Scope and Simple Statments
 	CLLoopStatement,
 	CLConditionalStatement,
 	CLScopeStatement,
 	CLSimpleStatement,
-// a statement with observable behavior. No "pure" declarations, namespaces, classes, etc.
+	// a statement with observable behavior. No "pure" declarations, namespaces, classes, etc.
 	CLStatement,
-// Wrappable statements
+	// Wrappable statements
 	CLWrappableStatement,
 	CLFunction,
 	CLFileScope,

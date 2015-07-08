@@ -36,7 +36,7 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 	int passCount = 1;
 
 	for (PassEnvelope *passEnvelope : passList) {
-		std::cout << "\texecuting pass (" << passCount<<"):\t" << passEnvelope->pass->passName() << std::endl;
+		std::cout << "\texecuting pass (" << passCount << "):\t" << passEnvelope->pass->passName() << std::endl;
 
 		//	std::vector<std::unique_ptr<InstRO::Core::ConstructSet> > tempConstructSets;
 
@@ -46,7 +46,7 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 			// CI: do we have to perform some form of elevation
 			if (i->getOutput()->getMinConstructLevel() < passEnvelope->pass->getMinInputLevelRequirement(i) ||
 					i->getOutput()->getMaxConstructLevel() > passEnvelope->pass->getMaxInputLevelRequirement(i)) {
-				std::cout << "\t construct level missmatch "<< std::endl;
+				std::cout << "\t construct level missmatch " << std::endl;
 				// We need to cast the construct set
 				// Any of the various elevators or crop functions returns a new unique_ptr. As result the copies will be cleaned
 				Core::ConstructSet *originalConstructSet = i->getOutput();

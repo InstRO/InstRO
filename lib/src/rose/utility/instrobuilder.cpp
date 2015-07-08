@@ -228,8 +228,8 @@ SgTemplateInstantiationFunctionDecl* InstROBuilder::buildForwardDeclaration(
 }
 
 //		static SgTemplateInstantiationMemberFunctionDecl*
-//buildForwardDeclaration(SgTemplateInstantiationMemberFunctionDecl* originalDeclaration, SgScopeStatement*
-//futureScope);
+// buildForwardDeclaration(SgTemplateInstantiationMemberFunctionDecl* originalDeclaration, SgScopeStatement*
+// futureScope);
 /** \} */
 
 /** \name Build unions */
@@ -404,7 +404,7 @@ SgVariableDeclaration* InstROBuilder::buildTemporaryVariable(SgScopeStatement* s
 	SgType* returnType = isSgFunctionDefinition(current)->get_declaration()->get_orig_return_type();
 	assert(returnType != NULL);
 	//	std::cout << "DEBUG: ReturnType during returnStatement transformation: " << returnType->unparseToString() <<
-	//std::endl;
+	// std::endl;
 	/* Furthermore we want to declare a new variable and assign a value to it, so we build a initializer for it */
 	SgAssignInitializer* initializer = SageBuilder::buildAssignInitializer(returnExpression, returnType);
 	//    std::cout << "/*\n" << "initializer @ " << initializer << "\n*/" << std::endl;
