@@ -71,16 +71,16 @@ std::unique_ptr<InstRO::Core::ConstructSet> ConstructElevator::raise(InstRO::Cor
 			case InstRO::Core::ConstructLevelType::CLStatement:
 				newConstruct = raiseConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLStatementPredicate());
 				break;
-			case InstRO::Core::ConstructLevelType::CLLoop:
+			case InstRO::Core::ConstructLevelType::CLLoopStatement:
 				newConstruct = raiseConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLLoopPredicate());
 				break;
-			case InstRO::Core::ConstructLevelType::CLConditional:
+			case InstRO::Core::ConstructLevelType::CLConditionalStatement:
 				newConstruct = raiseConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLConditionalPredicate());
 				break;
-			case InstRO::Core::ConstructLevelType::CLScope:
+			case InstRO::Core::ConstructLevelType::CLScopeStatement:
 				newConstruct = raiseConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLScopePredicate());
 				break;
-			case InstRO::Core::ConstructLevelType::CLSimple:
+			case InstRO::Core::ConstructLevelType::CLSimpleStatement:
 				newConstruct = raiseConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLSimplePredicate());
 				break;
 			case InstRO::Core::ConstructLevelType::CLFunction:
@@ -123,16 +123,16 @@ for (auto construct : input){
 	case InstRO::Core::ConstructLevelType::CLStatement:
 		newConstructs = lowerConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLStatementPredicate());
 		break;
-	case InstRO::Core::ConstructLevelType::CLLoop:
+	case InstRO::Core::ConstructLevelType::CLLoopStatement:
 		newConstructs = lowerConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLLoopPredicate());
 		break;
-	case InstRO::Core::ConstructLevelType::CLConditional:
+	case InstRO::Core::ConstructLevelType::CLConditionalStatement:
 		newConstructs = lowerConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLConditionalPredicate());
 		break;
-	case InstRO::Core::ConstructLevelType::CLScope:
+	case InstRO::Core::ConstructLevelType::CLScopeStatement:
 		newConstructs = lowerConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLScopePredicate());
 		break;
-	case InstRO::Core::ConstructLevelType::CLSimple:
+	case InstRO::Core::ConstructLevelType::CLSimpleStatement:
 		newConstructs = lowerConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLSimplePredicate());
 		break;
 	case InstRO::Core::ConstructLevelType::CLFunction:

@@ -34,7 +34,7 @@ void RoseConstructPrinter::execute(){
 }
 		count++;
 	}
-	outputCS=inputPass->getOutput();
+	outputCS=*(inputPass->getOutput());
 }
 
 }
