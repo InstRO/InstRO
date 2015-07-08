@@ -12,6 +12,6 @@ void GNUProfilingInterfaceAdapter::execute(){
 	outputCS=inputPass->getOutput();
 }
 
-}
-}
-}
+}	// InstRO
+}	// Rose
+}	// InstRO
