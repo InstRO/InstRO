@@ -111,8 +111,8 @@ std::unique_ptr<InstRO::Core::ConstructSet> ConstructElevator::raise(InstRO::Cor
 };
 
 // This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
-std::unique_ptr<InstRO::Core::ConstructSet> ConstructElevator::lower(InstRO::Core::ConstructSet *inputCS, 
-																	 InstRO::Core::ConstructLevelType cl) {
+std::unique_ptr<InstRO::Core::ConstructSet> ConstructElevator::lower(InstRO::Core::ConstructSet *inputCS,
+																																		 InstRO::Core::ConstructLevelType cl) {
 	InstRO::Rose::Core::RoseConstruct *roseConstruct;
 	InstRO::InfracstructureInterface::ConstructSetCompilerInterface input(inputCS);
 	std::unique_ptr<InstRO::Core::ConstructSet> newConstructSet = std::make_unique<InstRO::Core::ConstructSet>();

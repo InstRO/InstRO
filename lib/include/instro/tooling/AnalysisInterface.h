@@ -14,18 +14,14 @@
 namespace InstRO {
 namespace Tooling {
 
-
-
 // CI: The specification and interfaces for the NamedConstructAccess methods are found in
 // "instro/tooling/NamedConstructAccess.h"
 
-namespace ExtendedCallGraph{};
-namespace ControlFlowGraph{};
+namespace ExtendedCallGraph {};
+namespace ControlFlowGraph {};
 namespace ConstructElevator {};
-namespace GrammarInterface{};
+namespace GrammarInterface {};
 namespace NamedConstructAccess {};
-
-
 
 class AnalysisManager {
  public:

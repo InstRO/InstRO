@@ -15,15 +15,15 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 	SgProject *project;
 	RoseAnalysisManager() = delete;
 	InstRO::Rose::Tooling::NamedConstructAccess::RoseNamedConstructAccess *nca;
-	InstRO::Rose::Tooling::ConstructElevator::ConstructElevator * ce;
-	InstRO::Rose::Tooling::GrammarInterface::RoseGrammarInterface * gi;
+	InstRO::Rose::Tooling::ConstructElevator::ConstructElevator *ce;
+	InstRO::Rose::Tooling::GrammarInterface::RoseGrammarInterface *gi;
+
  public:
 	RoseAnalysisManager(SgProject *proj)
-			: project(proj), 
-			  nca(new InstRO::Rose::Tooling::NamedConstructAccess::RoseNamedConstructAccess(proj)),
-			  ce(new InstRO::Rose::Tooling::ConstructElevator::ConstructElevator()),
-			  gi(new InstRO::Rose::Tooling::GrammarInterface::RoseGrammarInterface(proj))
-	{};
+			: project(proj),
+				nca(new InstRO::Rose::Tooling::NamedConstructAccess::RoseNamedConstructAccess(proj)),
+				ce(new InstRO::Rose::Tooling::ConstructElevator::ConstructElevator()),
+				gi(new InstRO::Rose::Tooling::GrammarInterface::RoseGrammarInterface(proj)){};
 	~RoseAnalysisManager() {
 		delete nca;
 		delete ce;
@@ -38,9 +38,7 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 		return NULL;
 	};
 	virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override { return ce; };
-	virtual InstRO::Tooling::GrammarInterface::GrammarInterface *getGrammarInterface() override {
-		return gi;
-	};
+	virtual InstRO::Tooling::GrammarInterface::GrammarInterface *getGrammarInterface() override { return gi; };
 	virtual InstRO::Tooling::NamedConstructAccess::NamedConstructAccess *getNamedConstructAccessFacility() override {
 		return nca;
 	}

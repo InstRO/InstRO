@@ -31,7 +31,8 @@ class ExamplePassFactory : public PassFactory {
 		return newPass;
 	};
 	InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) override {
-		InstRO::Pass* newPass = new InstRO::Pass(new Selectors::CompoundSelector(inputA,inputB,Selectors::CompoundSelector::CO_Or));
+		InstRO::Pass* newPass =
+				new InstRO::Pass(new Selectors::CompoundSelector(inputA, inputB, Selectors::CompoundSelector::CO_Or));
 		passManager->registerPass(newPass);
 		newPass->setPassName("InstRO::Example::BooleanOrSelector");
 		return newPass;

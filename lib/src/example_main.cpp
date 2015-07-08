@@ -11,26 +11,26 @@
 
 int main(int argc, char** argv) {
 	//		try {
-		InstRO::Instrumentor* instro = new InstRO::ExampleInstrumentor();
-		// CI - Reseting Classic Implementation  InstRO::Ext::VisualizingPassManager * passManager=new
-		// InstRO::Ext::VisualizingPassManager();
-		// CI - Reseting Classic Implementation  instro->setPassManager(passManager);
+	InstRO::Instrumentor* instro = new InstRO::ExampleInstrumentor();
+	// CI - Reseting Classic Implementation  InstRO::Ext::VisualizingPassManager * passManager=new
+	// InstRO::Ext::VisualizingPassManager();
+	// CI - Reseting Classic Implementation  instro->setPassManager(passManager);
 
-		auto aFactory = dynamic_cast<InstRO::Example::ExamplePassFactory*>(instro->getFactory());
+	auto aFactory = dynamic_cast<InstRO::Example::ExamplePassFactory*>(instro->getFactory());
 
-		std::vector<std::string> filterRules;
-		filterRules.push_back("main");
-		auto aPass = aFactory->createNameBasedSelector(filterRules);
-		auto bPass = aFactory->createNameBasedSelector(filterRules);
-		auto compound = aFactory->createBooleanOrSelector(aPass, bPass);
+	std::vector<std::string> filterRules;
+	filterRules.push_back("main");
+	auto aPass = aFactory->createNameBasedSelector(filterRules);
+	auto bPass = aFactory->createNameBasedSelector(filterRules);
+	auto compound = aFactory->createBooleanOrSelector(aPass, bPass);
 
-		auto adapter = aFactory->createGPIAdapter(compound);
-		aFactory->createConstructPrinter(aPass);
-		instro->init();
-		instro->apply();
-		instro->finalize();
+	auto adapter = aFactory->createGPIAdapter(compound);
+	aFactory->createConstructPrinter(aPass);
+	instro->init();
+	instro->apply();
+	instro->finalize();
 
-		// CI - Reseting Classic Implementation   passManager->outputConfiguration("InstRO-CFG.dot");
+	// CI - Reseting Classic Implementation   passManager->outputConfiguration("InstRO-CFG.dot");
 
 	//	} catch (std::string stringBasedException) {
 	//		std::cout << stringBasedException << std::endl;
