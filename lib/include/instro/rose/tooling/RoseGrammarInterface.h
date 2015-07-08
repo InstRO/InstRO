@@ -3,10 +3,9 @@
 #include "instro/core/ConstructSet.h"
 
 namespace InstRO {
-	namespace Rose {
-	namespace Tooling {
-		namespace GrammarInterface {
-			
-		}
-	}
-}}
+namespace Rose {
+namespace Tooling {
+namespace GrammarInterface {}
+}
+}
+}

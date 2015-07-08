@@ -48,8 +48,8 @@ SgTemplateInstantiationFunctionDecl* buildForwardDeclaration(SgTemplateInstantia
 																														 SgScopeStatement* futureScope);
 
 //		static SgTemplateInstantiationMemberFunctionDecl*
-//buildForwardDeclaration(SgTemplateInstantiationMemberFunctionDecl* originalDeclaration, SgScopeStatement*
-//futureScope);
+// buildForwardDeclaration(SgTemplateInstantiationMemberFunctionDecl* originalDeclaration, SgScopeStatement*
+// futureScope);
 /** \} */
 
 /** \name Build unions */

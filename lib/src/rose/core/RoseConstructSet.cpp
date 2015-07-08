@@ -9,16 +9,12 @@
 #else
 #endif
 
-
-struct InstrumentableConstructPredicate{
-        bool operator()(SgNode * n) const
-        {
-                if (isSgDoWhileStmt(n) ||
-                    isSgBasicBlock(n) ||
-                    isSgFunctionDefinition(n)
-                        )
-                        return true;
-                if (isSgExpression(n) != nullptr) return true;
-                return false;
-        }
+struct InstrumentableConstructPredicate {
+	bool operator()(SgNode* n) const {
+		if (isSgDoWhileStmt(n) || isSgBasicBlock(n) || isSgFunctionDefinition(n))
+			return true;
+		if (isSgExpression(n) != nullptr)
+			return true;
+		return false;
+	}
 };

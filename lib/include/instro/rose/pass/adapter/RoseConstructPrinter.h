@@ -8,13 +8,13 @@ namespace Rose {
 namespace Adapter {
 
 class RoseConstructPrinter : public RosePassImplementation {
-protected:
+ protected:
 	InstRO::Pass *inputPass;
 	InstRO::Core::ConstructSet outputCS;
 
-public:
+ public:
 	RoseConstructPrinter(InstRO::Pass *pass)
-		: RosePassImplementation(InstRO::Core::ChannelConfiguration(pass)), inputPass(pass) {}
+			: RosePassImplementation(InstRO::Core::ChannelConfiguration(pass)), inputPass(pass) {}
 	virtual void init(){};
 	virtual void execute() override;
 	virtual void finalize(){};

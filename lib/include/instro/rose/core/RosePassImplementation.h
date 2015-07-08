@@ -12,13 +12,9 @@ class RosePassImplementation : public InstRO::Core::PassImplementation {
 
 class RoseLegcyPass : public RosePassImplementation {};
 
-namespace Adapter {
-}
-namespace Selector{
-}
-namespace Transformer {
-}
-
+namespace Adapter {}
+namespace Selector {}
+namespace Transformer {}
 }
 };
 #endif

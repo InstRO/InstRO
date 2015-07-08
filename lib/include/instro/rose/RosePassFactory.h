@@ -20,7 +20,7 @@ namespace Rose {
 
 class RosePassFactory : public InstRO::PassFactory {
  protected:
-	 RosePassImplementation* getPass(Pass* pass) {
+	RosePassImplementation* getPass(Pass* pass) {
 		if (pass == NULL)
 			return NULL;
 		RosePassImplementation* rosePass = dynamic_cast<RosePassImplementation*>(pass->getPassImplementation());
@@ -48,27 +48,26 @@ class RosePassFactory : public InstRO::PassFactory {
  public:
 	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) : PassFactory(refManager), project(proj){};
 
-	Pass * createConstructLoweringElevator(InstRO::Pass * pass,InstRO::Core::ConstructLevelType level){
-		Pass * newPass = new Pass(new InstRO::Rose::Selector::ConstructLoweringElevator(pass, level));
+	Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructLevelType level) {
+		Pass* newPass = new Pass(new InstRO::Rose::Selector::ConstructLoweringElevator(pass, level));
 		newPass->setPassName("InstRO::Rose::Selector::ConstructLoweringElevator");
 		passManager->registerPass(newPass);
 		return newPass;
 	}
-	Pass * createConstructRaisingElevator(InstRO::Pass * pass, InstRO::Core::ConstructLevelType level){
-		Pass * newPass = new Pass(new InstRO::Rose::Selector::ConstructRaisingElevator(pass, level));
+	Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructLevelType level) {
+		Pass* newPass = new Pass(new InstRO::Rose::Selector::ConstructRaisingElevator(pass, level));
 		newPass->setPassName("InstRO::Rose::Selector::ConstructRaisingElevator");
 		passManager->registerPass(newPass);
 		return newPass;
 	}
 
-
-	Pass * createConstructPrinter(InstRO::Pass *pass){
-		Pass * newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructPrinter(pass));
+	Pass* createConstructPrinter(InstRO::Pass* pass) {
+		Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructPrinter(pass));
 		newPass->setPassName("InstRO::Rose::Adapter::RoseConstructPrinter");
 		passManager->registerPass(newPass);
 		return newPass;
 	}
-	
+
 	Pass* createBlackAndWhiteListSelector(std::vector<std::string> rules) {
 		std::vector<std::string> wlrules;
 		std::vector<std::string> blrules;
@@ -81,7 +80,7 @@ class RosePassFactory : public InstRO::PassFactory {
 		blPass->setPassName("InstRO::Rose::BlackAndWhiteList-BlackList");
 		passManager->registerPass(blPass);
 
-		Pass * compountPass = new Pass(new Selector::CompoundSelector(wlPass, blPass, Selector::CompoundSelector::CO_Or));
+		Pass* compountPass = new Pass(new Selector::CompoundSelector(wlPass, blPass, Selector::CompoundSelector::CO_Or));
 		compountPass->setPassName("InstRO::Rose:BlackAndWhiteList-Compound");
 		passManager->registerPass(compountPass);
 
@@ -95,7 +94,8 @@ class RosePassFactory : public InstRO::PassFactory {
 	};
 
 	Pass* createBooleanOrSelector(Pass* inputA, Pass* inputB) override {
-		Pass* newPass = new InstRO::Pass(new Rose::Selector::CompoundSelector(inputA, inputB, Selector::CompoundSelector::CO_Or));
+		Pass* newPass =
+				new InstRO::Pass(new Rose::Selector::CompoundSelector(inputA, inputB, Selector::CompoundSelector::CO_Or));
 		newPass->setPassName("InstRO::Rose::BooleanOrSelector");
 		passManager->registerPass(newPass);
 		/*		Pass * compoundPass=new Pass(new Selectors::CompoundSelector(getPass(inputA),getPass(inputB)));
@@ -113,9 +113,9 @@ class RosePassFactory : public InstRO::PassFactory {
 	Pass* createProgramEntrySelector() override { return NULL; };
 
 	Pass* createCygProfileAdapter(Pass* input) {
-	/*	Pass* newPass = new Pass(new Adapter::CygProfileAdapter(input));
-		newPass->setPassName("InstRO::Rose::CygProfileAdapter");
-		passManager->registerPass(newPass);*/
+		/*	Pass* newPass = new Pass(new Adapter::CygProfileAdapter(input));
+			newPass->setPassName("InstRO::Rose::CygProfileAdapter");
+			passManager->registerPass(newPass);*/
 		return nullptr;
 	};
 
