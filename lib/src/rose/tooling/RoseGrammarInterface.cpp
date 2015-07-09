@@ -18,13 +18,20 @@ std::unique_ptr<InstRO::Core::ConstructSet> RoseGrammarInterface::getConstructsB
 	std::unique_ptr<InstRO::Core::ConstructSet> retSet = std::make_unique<InstRO::Core::ConstructSet>();
 	InstRO::InfracstructureInterface::ConstructSetCompilerInterface csci(retSet.get());
 
-	std::vector<SgNode *> nodes;
+	std::vector<SgNode *> nodes,tmp;
 	switch (type) {
 		case InstRO::Tooling::GrammarInterface::GrammarTypesType::GTFor:
 			nodes = NodeQuery::querySubTree(proj, V_SgForStatement);
 			break;
+		case InstRO::Tooling::GrammarInterface::GrammarTypesType::GTFunction:
+			nodes = NodeQuery::querySubTree(proj, V_SgFunctionDefinition);
+			tmp= NodeQuery::querySubTree(proj, V_SgTemplateFunctionDefinition);
+			nodes.insert(nodes.end(),tmp.begin(),tmp.end());
+			tmp.clear();
+			break;
+
 		default:
-			throw std::string("RoseGrammarInterface::getConstructsByType for type (enum):") + std::to_string((int)(type)) + std::string("not implemented\t") + std::string(__FILE__) + std::string(", line ") + std::to_string(__LINE__);
+			throw std::string("RoseGrammarInterface::getConstructsByType for type (enum):") + std::to_string((int)(type)) + std::string(" not implemented\t") + std::string(__FILE__) + std::string(", line ") + std::to_string(__LINE__);
 			break;
 	}
 	for (auto node : nodes) {	// std::vector<SgNode*>::iterator it = nodes.begin(); it != nodes.end(); it++){
@@ -41,7 +48,7 @@ InstRO::Tooling::GrammarInterface::GrammarTypesType astNodeToGrammarType(SgNode 
 		return InstRO::Tooling::GrammarInterface::GrammarTypesType::GTFunction;
 	else if (isSgFunctionDefinition(n) != nullptr) 
 		return InstRO::Tooling::GrammarInterface::GrammarTypesType::GTFunction;
-	throw std::string("RoseGrammarInterface::astNodeToGrammarType node (SgNode):") + n->class_name() + std::string("not implemented \t") + std::string(__FILE__) + std::string(", line ") + std::to_string(__LINE__);
+	throw std::string("RoseGrammarInterface::astNodeToGrammarType node (SgNode):") + n->class_name() + std::string(" not implemented \t") + std::string(__FILE__) + std::string(", line ") + std::to_string(__LINE__);
 	return InstRO::Tooling::GrammarInterface::GrammarTypesType::GTInvalid;
 }
 
