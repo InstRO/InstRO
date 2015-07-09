@@ -48,7 +48,7 @@ class NameMatchingASTTraversal : public AstPrePostProcessing {
 	InstRO::Core::ConstructSet cs;
 
  public:
-	NameMatchingASTTraversal() : csci(&cs),verbose(false) {}
+	NameMatchingASTTraversal() : csci(&cs), verbose(false) {}
 	bool relevantNode(SgNode* node);
 	// NameMatchingASTTraversal(InstRO::Tooling::NamedConstructAccess::Matcher & m):matchingObject(&m){}
 	void reset() {

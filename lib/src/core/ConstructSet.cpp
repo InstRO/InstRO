@@ -132,7 +132,7 @@ ConstructSet ConstructSet::intersect(const ConstructSet& other) const {
 	ConstructSet retSet;
 	for (std::set<std::shared_ptr<Construct> >::const_iterator constructB = other.cbegin(); constructB != other.cend();
 			 constructB++) {
-//		std::cout << "\tconstructSet::intersect: comparing " << 
+		//		std::cout << "\tconstructSet::intersect: comparing " <<
 		if (constructs.find(*constructB) != constructs.end())
 			retSet.put(*constructB);
 	}
