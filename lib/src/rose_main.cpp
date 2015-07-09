@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
 		// CI - Reseting Classic Implementation   passManager->outputConfiguration("InstRO-CFG.dot");
 
 	} catch (std::string stringBasedException) {
-		std::err << "Caught Exception:" std::endl;
+		std::cerr << "Caught Exception:" << std::endl;
 		std::cerr << stringBasedException << std::endl;
 		std::cerr.flush();
 	}
