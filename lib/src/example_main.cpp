@@ -12,16 +12,19 @@
 int main(int argc, char** argv) {
 	//		try {
 	InstRO::Instrumentor* instro = new InstRO::ExampleInstrumentor();
+	auto defaultFactory = instro->getFactory();
+
 	// CI - Reseting Classic Implementation  InstRO::Ext::VisualizingPassManager * passManager=new
 	// InstRO::Ext::VisualizingPassManager();
 	// CI - Reseting Classic Implementation  instro->setPassManager(passManager);
 
-	auto aFactory = dynamic_cast<InstRO::Example::ExamplePassFactory*>(instro->getFactory());
+	InstRO::Example::ExamplePassFactory* aFactory =
+			dynamic_cast<InstRO::Example::ExamplePassFactory*>(instro->getFactory());
 
 	std::vector<std::string> filterRules;
 	filterRules.push_back("main");
-	auto aPass = aFactory->createNameBasedSelector(filterRules);
-	auto bPass = aFactory->createNameBasedSelector(filterRules);
+	auto aPass = aFactory->createIdentifyerSelector(filterRules);
+	auto bPass = aFactory->createIdentifyerSelector(filterRules);
 	auto compound = aFactory->createBooleanOrSelector(aPass, bPass);
 
 	auto adapter = aFactory->createGPIAdapter(compound);

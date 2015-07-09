@@ -22,7 +22,7 @@ class ExampleInstrumentor : public Instrumentor {
 		InstRO::setInstrumentorInstance(this);
 	};
 
-	Example::ExamplePassFactory* getFactory(Instrumentor::CompilationPhase phase) {
+	InstRO::Example::ExamplePassFactory* getFactory(InstRO::Instrumentor::CompilationPhase phase = frontend) {
 		return new Example::ExamplePassFactory(passManager);
 	}
 	// TestPassFactory * getFactory(Instrumentor::CompilationPhase phase){return dynamic_cast<PassFactory*>(new
