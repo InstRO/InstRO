@@ -43,6 +43,12 @@
     <Filter Include="instro\rose\pass\selector">
       <UniqueIdentifier>{4af22494-0362-4f30-a387-b7b53cacc301}</UniqueIdentifier>
     </Filter>
+    <Filter Include="instro\pass">
+      <UniqueIdentifier>{f60174be-717e-4c11-a2ed-99d2299e735f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\pass\selector">
+      <UniqueIdentifier>{efab79fb-0cc1-4a17-a98c-cc872f9ee37c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h">
@@ -73,9 +79,6 @@
       <Filter>instro\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h">
-      <Filter>instro\rose</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h">
       <Filter>instro\rose</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\support\BWLFileReader.h">
@@ -170,6 +173,21 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\GNUProfilingInterfaceAdapter.h">
       <Filter>instro\rose\pass\adapter</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h">
+      <Filter>instro\rose\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\ProgramEntrySelector.h">
+      <Filter>instro\pass\selector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\IdentifyerSelector.h">
+      <Filter>instro\pass\selector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\TextStringSelector.h">
+      <Filter>instro\pass\selector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\CallPathSelector.h">
+      <Filter>instro\pass\selector</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp">
@@ -222,6 +240,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\GNUProfilingInterfaceAdapter.cpp">
       <Filter>instro\rose\pass\adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\core\RosePassFactory.cpp">
+      <Filter>instro\rose\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\pass\selector\ProgramEntrySelector.cpp">
+      <Filter>instro\pass\selector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\pass\selector\IdentifyerSelector.cpp">
+      <Filter>instro\pass\selector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\pass\selector\TextStringSelector.cpp">
+      <Filter>instro\pass\selector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\pass\selector\CallPathSelector.cpp">
+      <Filter>instro\pass\selector</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
