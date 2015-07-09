@@ -22,6 +22,7 @@ std::unique_ptr<InstRO::Core::ConstructSet> RoseGrammarInterface::getConstructsB
 	switch (type) {
 		case InstRO::Tooling::GrammarInterface::GrammarTypesType::GTFor:
 			nodes = NodeQuery::querySubTree(proj, V_SgForStatement);
+			nodes.insert(nodes);
 			break;
 		default:
 			throw std::string("RoseGrammarInterface::getConstructsByType for type (enum):") + std::to_string((int)(type)) + std::string("not implemented\t") + std::string(__FILE__) + std::string(", line ") + std::to_string(__LINE__);

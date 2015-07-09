@@ -149,6 +149,7 @@
     <ClCompile Include="..\..\..\lib\src\rose\pass\selector\ElevatorSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\selector\NameBasedSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseConstructElevator.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseGrammarInterface.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose_main.cpp" />
     <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp" />

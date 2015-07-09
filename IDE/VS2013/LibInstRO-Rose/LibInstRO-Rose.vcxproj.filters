@@ -256,6 +256,9 @@
     <ClCompile Include="..\..\..\lib\src\pass\selector\CallPathSelector.cpp">
       <Filter>instro\pass\selector</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseGrammarInterface.cpp">
+      <Filter>instro\rose\tooling</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
