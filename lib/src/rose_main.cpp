@@ -47,8 +47,7 @@ int main(int argc, char** argv) {
 		//		auto adapter3 = aFactory->createConstructPrinter(celev3);
 
 		auto programEntry = aFactory->createProgramEntrySelector();
-		 aFactory->createConstructPrinter(programEntry);
-
+		aFactory->createConstructPrinter(programEntry);
 
 		instro->init();
 		instro->apply();
