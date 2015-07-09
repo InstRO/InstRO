@@ -46,6 +46,10 @@ int main(int argc, char** argv) {
 
 		//		auto adapter3 = aFactory->createConstructPrinter(celev3);
 
+		auto programEntry = aFactory->createProgramEntrySelector();
+		 aFactory->createConstructPrinter(programEntry);
+
+
 		instro->init();
 		instro->apply();
 		instro->finalize();
@@ -53,8 +57,9 @@ int main(int argc, char** argv) {
 		// CI - Reseting Classic Implementation   passManager->outputConfiguration("InstRO-CFG.dot");
 
 	} catch (std::string stringBasedException) {
-		std::cout << stringBasedException << std::endl;
-		std::cout.flush();
+		std::err << "Caught Exception:" std::endl;
+		std::cerr << stringBasedException << std::endl;
+		std::cerr.flush();
 	}
 
 	return 0;
