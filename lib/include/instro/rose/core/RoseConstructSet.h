@@ -259,9 +259,12 @@ class RoseConstructProvider {
 	}
 
 	std::shared_ptr<RoseConstruct> getConstruct(SgNode* node) {
+		std::cout << "getConstruct(" << node << ")" << std::endl;
 		if (mapping.find(node) != mapping.end()) {
+			std::cout << "\tfound existing Construct" << std::endl;
 			return mapping[node];
 		}
+		std::cout << "\tcreating new construct" << std::endl;
 		std::shared_ptr<RoseConstruct> construct = std::shared_ptr<RoseConstruct>(new RoseConstruct(node));
 		mapping[node] = construct;
 		return construct;
