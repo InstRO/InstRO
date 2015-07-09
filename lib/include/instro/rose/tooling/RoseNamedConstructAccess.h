@@ -46,9 +46,10 @@ enum IN_enum { IN_Immediate, IN_NextOuterExpression, IN_NextOuterFunctionDefinit
 class NameMatchingASTTraversal : public AstPrePostProcessing {
  protected:
 	InstRO::Core::ConstructSet cs;
+	bool verbose;
 
  public:
-	NameMatchingASTTraversal() : csci(&cs) {}
+	NameMatchingASTTraversal() : csci(&cs),verbose(false) {}
 	bool relevantNode(SgNode* node);
 	// NameMatchingASTTraversal(InstRO::Tooling::NamedConstructAccess::Matcher & m):matchingObject(&m){}
 	void reset() {
