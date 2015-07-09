@@ -8,7 +8,6 @@ namespace Core {
 
 std::string constructLevelToString(ConstructLevelType type) {
 	switch (type) {
-		// case 1: return std::string("LiteralConstructLevel");break;
 
 		// case InstRO::Core::ContstructLevelEnum::CLMin:
 		case InstRO::Core::ContstructLevelEnum::CLFragment:
@@ -53,11 +52,6 @@ std::string constructLevelToString(ConstructLevelType type) {
 }
 std::string operator+(const std::string& lhs, const ConstructLevelType& type) {
 	return std::string(lhs).append(constructLevelToString(type));
-	/*switch(type)
-	{
-	case 1: return std::string(lhs).append(std::string("LiteralConstructLevel"));break;
-	default: return std::string(lhs).append(std::string("UnknownConstructLevel"));break;
-	}*/
 }
 
 // CI: return a vector (ordered) with all construct levels from the set

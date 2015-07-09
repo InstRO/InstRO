@@ -12,138 +12,104 @@
 namespace InstRO {
 namespace Rose {
 namespace Core {
-namespace RoseConstructLevelPredicates {
 
+namespace RoseConstructLevelPredicates {
 struct CLExpressionPredicate {
-	bool operator()(SgNode* n) const {
-		if (isSgExpression(n) != nullptr)
+	bool operator()(SgNode * n) const {
+		return isSgExpression(n) != nullptr;
+	}
+};
+
+struct CLLoopPredicate {
+	bool operator()(SgNode * n) const {
+		if (isSgDoWhileStmt(n) || isSgWhileStmt(n) || isSgForStatement(n)) {
 			return true;
+		}
+		return false;
+	}
+};
+
+struct CLConditionalPredicate {
+	bool operator()(SgNode * n) const {
+		if (isSgIfStmt(n) || isSgSwitchStatement(n)) {
+			return true;
+		}
+		return false;
+	}
+};
+
+struct CLScopeStatementPredicate {
+	bool operator()(SgNode* n) const {
+		// ignore function scopes
+		if (isSgBasicBlock(n) && !isSgFunctionDefinition(n->get_parent())) {
+			return true;
+		}
 		return false;
 	}
 };
 
 struct CLStatementPredicate {
 	bool operator()(SgNode* n) const {
-		if (isSgFunctionDefinition(n) || isSgFunctionDeclaration(n))
+		if (isSgDeclarationStatement(n)) {
+			if (isSgVariableDeclaration(n) && (isSgVariableDeclaration(n)->get_definition() != nullptr)) {
+				return true;	// only variable declarations with initializer
+			}
 			return false;
-		// out basic block of the function. it is equivalent to the function
-		if (isSgBasicBlock(n) && isSgFunctionDefinition(n->get_parent()))
+		}
+
+		if (isSgScopeStatement(n)) {
+			if (CLScopeStatementPredicate()(n)) {
+				return true;	// only scope statements
+			}
 			return false;
-		if (isSgVariableDeclaration(n) && isSgVariableDeclaration(n)->get_definition() != NULL)
-			return true;
-		if (isSgStatement(n) != nullptr)
-			return true;
-		return false;
-	}
-};
+		}
 
-struct CLLoopPredicate {
-	bool operator()(SgNode* n) const {
-		if (isSgDoWhileStmt(n) != nullptr)
+		if (isSgStatement(n)) {
 			return true;
-		if (isSgWhileStmt(n) != nullptr)
-			return true;
-		if (isSgForStatement(n) != nullptr)
-			return true;
-		return false;
-	}
-};
-
-struct CLConditionalPredicate {
-	bool operator()(SgNode* n) const {
-		if (isSgIfStmt(n) != nullptr)
-			return true;
-		if (isSgSwitchStatement(n) != nullptr)
-			return true;
-		return false;
-	}
-};
-
-struct CLScopePredicate {
-	bool operator()(SgNode* n) const {
-		if (isSgBasicBlock(n) != nullptr)
-			return true;
+		}
 		return false;
 	}
 };
 
 struct CLFunctionPredicate {
-	bool operator()(SgNode* n) const {
-		if (isSgFunctionDefinition(n) != nullptr)
-			return true;
-		return false;
+	bool operator()(SgNode * n) const {
+		return isSgFunctionDefinition(n) != nullptr;
 	}
 };
 
 struct CLFileScopePredicate {
-	bool operator()(SgNode* n) const {
-		if (isSgFile(n) != nullptr)
-			return true;
-		return false;
+	bool operator()(SgNode * n) const {
+		return isSgFile(n) != nullptr;
 	}
 };
 
 struct CLGlobalScopePredicate {
-	bool operator()(SgNode* n) const {
-		if (isSgGlobal(n) != nullptr)
-			return true;
-		return false;
+	bool operator()(SgNode * n) const {
+		return isSgProject(n) != nullptr;
 	}
 };
 
-struct CLSimplePredicate {
+struct CLSimpleStatementPredicate {
 	bool operator()(SgNode* n) const {
-		if (!CLStatementPredicate()(n))
-			return false;
-		if (CLFunctionPredicate()(n))
-			return false;
-		if (CLScopePredicate()(n))
-			return false;
-		if (CLConditionalPredicate()(n))
-			return false;
-		if (CLLoopPredicate()(n))
-			return false;
-		return true;
+		if (CLStatementPredicate()(n)) {
+			if (CLScopeStatementPredicate()(n) || CLConditionalPredicate()(n) || CLLoopPredicate()(n)) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return false;
 	}
 };
 
 struct InstrumentableConstructPredicate {
 	bool operator()(SgNode* n) const;
 };
-/*
-struct InstrumentableConstructPredicate{
-bool operator()(SgNode * n) const
-{
-if (isSgDoWhileStmt(n) ||
-isSgBasicBlock(n) ||
-isSgFunctionDefinition(n)
-)
-return true;
-if (isSgExpression(n) != nullptr) return true;
-return false;
-}
-};
-*/
-}
+}	// namespace RoseConstructLevelPredicates
 
 class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
  public:
-	enum ConstructLevel {
-		EVERYTHING = 0,
-		GLOBAL_SCOPE = 1,
-		FILE_SCOPE = 2,
-		FUNCTION = 3,
-		STATEMENT = 4,
-		EXPRESSION = 5,
-		FRAGMENT = 6
-	};
-
-	enum StatementFlavor { NO_STATEMENT = 10, SIMPLE_STATEMENT = 11, LOOP = 12, CONDITIONAL = 13, SCOPE = 14 };
-
-	ConstructGenerator() : level(ConstructLevel::EVERYTHING), flavor(StatementFlavor::NO_STATEMENT){};
-
-	ConstructLevel getLevel() { return level; }
-	StatementFlavor getFlavor() { return flavor; }
+	ConstructGenerator() {};
 	InstRO::Core::ConstructLevelType getCLT() { return cl; }
 
 	// TODO global scope
@@ -151,64 +117,46 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// function
 	void visit(SgFunctionDefinition* node) {
-		level = ConstructLevel::FUNCTION;
 		cl = InstRO::Core::ConstructLevelType::CLFunction;
 	}
 
 	// conditionals
 	void visit(SgIfStmt* node) {
-		level = ConstructLevel::STATEMENT;
-		flavor = StatementFlavor::CONDITIONAL;
 		cl = InstRO::Core::ConstructLevelType::CLConditionalStatement;
 	}
 	void visit(SgSwitchStatement* node) {
-		level = ConstructLevel::STATEMENT;
-		flavor = StatementFlavor::CONDITIONAL;
 		cl = InstRO::Core::ConstructLevelType::CLConditionalStatement;
 	}
 
 	// loops
 	void visit(SgForStatement* node) {
-		level = ConstructLevel::STATEMENT;
-		flavor = StatementFlavor::LOOP;
 		cl = InstRO::Core::ConstructLevelType::CLLoopStatement;
 	}
 	void visit(SgWhileStmt* node) {
-		level = ConstructLevel::STATEMENT;
-		flavor = StatementFlavor::LOOP;
 		cl = InstRO::Core::ConstructLevelType::CLLoopStatement;
 	}
 	void visit(SgDoWhileStmt* node) {
-		level = ConstructLevel::STATEMENT;
-		flavor = StatementFlavor::LOOP;
 		cl = InstRO::Core::ConstructLevelType::CLLoopStatement;
 	}
 
 	// scopes
 	void visit(SgBasicBlock* node) {
-		level = ConstructLevel::STATEMENT;
-		flavor = StatementFlavor::SCOPE;
 		cl = InstRO::Core::ConstructLevelType::CLScopeStatement;
 	}
 
 	// statements
 	// TODO: any other statements that are not simple?
 	void visit(SgStatement* node) {
-		level = ConstructLevel::STATEMENT;
-		flavor = StatementFlavor::SIMPLE_STATEMENT;
 		cl = InstRO::Core::ConstructLevelType::CLSimpleStatement;
 	}
 
 	// expressions
 	void visit(SgExpression* node) {
-		level = ConstructLevel::EXPRESSION;
 		cl = InstRO::Core::ConstructLevelType::CLExpression;
 	}
 	// CI: an initialized variable declaration is OK,
 	void visit(SgVariableDeclaration* n) {
 		if (n->get_definition()) {
-			level = ConstructLevel::STATEMENT;
-			flavor = StatementFlavor::SIMPLE_STATEMENT;
 			cl = InstRO::Core::ConstructLevelType::CLSimpleStatement;
 		} else
 			generateError(n);
@@ -220,8 +168,6 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	void visit(SgNode* node) { generateError(node); }
 
  private:
-	ConstructLevel level;
-	StatementFlavor flavor;
 	InstRO::Core::ConstructLevelType cl;
 
 	void generateError(SgNode* node) {
@@ -234,14 +180,11 @@ class RoseConstruct : public InstRO::Core::Construct {
  public:
 	RoseConstruct(SgNode* sgnode) : Construct(InstRO::Core::ConstructLevelType::CLNotALevel), node(sgnode) {
 		if (sgnode == nullptr) {
-			setLevel(InstRO::Core::ConstructLevelType::CLNotALevel);
+			construct_level = InstRO::Core::ConstructLevelType::CLNotALevel;
 		} else {
 			ConstructGenerator gen;
 			node->accept(gen);
-			/*
-			level = gen.getLevel();
-			flavor = gen.getFlavor();*/
-			this->setLevel(gen.getCLT());
+			construct_level = gen.getCLT();
 		}
 	}
 

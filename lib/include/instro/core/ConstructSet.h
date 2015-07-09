@@ -63,7 +63,7 @@ typedef enum ContstructLevelEnum {
 std::string contstructLevelToString(ConstructLevelType type);
 std::string operator+(const std::string& lhs, const ConstructLevelType& type);
 
-/* CI: Construct Set implementation. Contribution by Roman Neﬂ */
+/* CI: Construct Set implementation. Contribution by Roman Ness */
 class Construct {
  public:
 	virtual bool operator<(const Construct& b) { return false; }

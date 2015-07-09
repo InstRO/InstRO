@@ -9,13 +9,9 @@ namespace Adapter {
 
 void RoseConstructPrinter::execute() {
 	InstRO::InfracstructureInterface::ConstructSetCompilerInterface cs(inputPass->getOutput());
-	/*InstRO::Example::Core::InfracstructureInterface::ExampleConstructSet * pecs =
-	dynamic_cast<InstRO::Example::Core::InfracstructureInterface::ExampleConstructSet *>(ocs);
-	InstRO::Example::Core::InfracstructureInterface::ExampleConstructSet cs = *(pecs);*/
 	std::cout << "ConstructSet contains " << cs.size() << " constructs:" << std::endl;
 	unsigned long count = 0;
 	for (auto construct : cs) {
-		InstRO::Core::Construct* pc = construct.get();
 		InstRO::Rose::Core::RoseConstruct* ec = dynamic_cast<InstRO::Rose::Core::RoseConstruct*>(construct.get());
 		switch (ec->getLevel()) {
 			case InstRO::Core::ConstructLevelType::CLFunction:
