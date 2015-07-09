@@ -367,7 +367,7 @@ void GeimerAdapterBuilder::extractConstructsFromMarker(std::tr1::shared_ptr<Geim
 			std::string pType = pName.substr(pos + 1);
 
 			{	// --- DEBUG
-				 //                std::cout << "Type of Pragma: " << pType << std::endl;
+				//                std::cout << "Type of Pragma: " << pType << std::endl;
 			}	// ---
 
 			// get the successing nodes until the next pragma declaration
