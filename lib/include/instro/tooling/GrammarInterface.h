@@ -8,8 +8,8 @@ namespace InstRO {
 namespace Tooling {
 namespace GrammarInterface {
 typedef enum {
-	GT_MIN_TYPE_NUMBER=0,
-	GTFor=0,
+	GT_MIN_TYPE_NUMBER = 0,
+	GTFor = 0,
 	GTDoWhile,
 	GTExpression,
 	GTReturn,
