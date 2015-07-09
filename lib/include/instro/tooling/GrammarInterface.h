@@ -8,14 +8,21 @@ namespace InstRO {
 namespace Tooling {
 namespace GrammarInterface {
 typedef enum {
-	GTFor,
-	GTOpenMP,
+	GT_MIN_TYPE_NUMBER=0,
+	GTFor=0,
 	GTDoWhile,
 	GTExpression,
 	GTReturn,
 	GTOperator,
 	GTFunction,
-	GTMemberFunction
+	GTMemberFunction,
+	// OpenMP Now
+	GTOMPParallel,
+	GTOMPParallelFor,
+	GTOMPTask,
+	GTOMPSection,
+	GT_MAX_TYPE_NUMBER,
+	GTInvalid
 } GrammarTypesType;
 
 class GrammarInterface {
