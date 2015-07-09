@@ -128,11 +128,12 @@ ConstructSet ConstructSet::combine(const ConstructSet& rhs) const {
 	retSet.put(rhs);
 	return retSet;
 }
+
 ConstructSet ConstructSet::intersect(const ConstructSet& other) const {
 	ConstructSet retSet;
 	for (std::set<std::shared_ptr<Construct> >::const_iterator constructB = other.cbegin(); constructB != other.cend();
 			 constructB++) {
-		//		std::cout << "\tconstructSet::intersect: comparing " <<
+		// if there is a match between both sets, add it to the output set
 		if (constructs.find(*constructB) != constructs.end())
 			retSet.put(*constructB);
 	}
