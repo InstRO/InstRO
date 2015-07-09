@@ -53,12 +53,14 @@ void NameMatchingASTTraversal::preOrderVisit(SgNode* n) {
 
 	if (false) {
 		std::string generatedName = toString(n);
-		if (generatedName.compare("INSTRUMENTOR_NOT_SUPPORTED_ATM") != 0) {
-		}
+		if (this->verbose)
+			if (generatedName.compare("INSTRUMENTOR_NOT_SUPPORTED_ATM") != 0) {
+			}
 	}
 	// If we found a node with the right text, and the text is not zero
 	if (performMatch && stringToMatch.length() > 0) {
-		std::cout << "NameMatchingASTTraversal::preOrderVisit:\t >" << stringToMatch << "<" << std::endl;
+		if (this->verbose)
+			std::cout << "NameMatchingASTTraversal::preOrderVisit:\t >" << stringToMatch << "<" << std::endl;
 		// generate a string from the rose AST node ...
 		// Check the generated name against the stored list
 		/* 2013-10-15 JP: This was based on a previous implementation in the matcher.
@@ -67,7 +69,8 @@ void NameMatchingASTTraversal::preOrderVisit(SgNode* n) {
 		 */
 
 		if (this->matchingObject->isMatch(stringToMatch)) {
-			std::cout << "NameMatchingASTTraversal::preOrderVisit:\t found match" << std::endl;
+			if (this->verbose)
+				std::cout << "NameMatchingASTTraversal::preOrderVisit:\t found match" << std::endl;
 			this->select(n);
 		}
 	}
