@@ -284,7 +284,7 @@ bool WildcardedStringMatcher::isMatch(std::string input) {
 	bool haveMatch = false;
 	for (auto expr : wildcardStrings) {
 		bool tmp = bMatch(expr, aList);
-		std::cout << "Matching with expr: " << expr << " to " << input << " result " << tmp << std::endl;
+		if (this->verbose)	std::cout << "Matching with expr: " << expr << " to " << input << " result " << tmp << std::endl;
 		if (tmp)
 			return true;
 		//		haveMatch|= bMatch(expr,aList);
