@@ -71,6 +71,8 @@ class Construct {
 	Construct(ConstructLevelType level) : construct_level(level){};
 	ConstructLevelType getLevel() { return construct_level; }
 
+	virtual ~Construct() {}
+
  protected:
 	void setLevel(ConstructLevelType level) { construct_level = level; };
 	ConstructLevelType construct_level;

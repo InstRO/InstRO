@@ -11,7 +11,7 @@
 
 int main(int argc, char** argv) {
 	try {
-		InstRO::Instrumentor* instro = new InstRO::RoseInstrumentor(argc, argv);
+		auto instro = new InstRO::RoseInstrumentor(argc, argv);
 		// CI - Reseting Classic Implementation  InstRO::Ext::VisualizingPassManager * passManager=new
 		// InstRO::Ext::VisualizingPassManager();
 		// CI - Reseting Classic Implementation  instro->setPassManager(passManager);
@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
 
 		// CI - Reseting Classic Implementation   passManager->outputConfiguration("InstRO-CFG.dot");
 
-	} catch (std::string stringBasedException) {
+	} catch (std::string& stringBasedException) {
 		std::cerr << "Caught Exception:" << std::endl;
 		std::cerr << stringBasedException << std::endl;
 		std::cerr.flush();

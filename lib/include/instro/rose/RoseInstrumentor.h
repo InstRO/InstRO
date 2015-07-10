@@ -28,8 +28,10 @@ class RoseInstrumentor : public Instrumentor {
 		ram = new InstRO::Rose::Tooling::RoseAnalysisManager(project);
 		InstRO::setInstrumentorInstance(this);
 	};
+
 	~RoseInstrumentor() { delete (project); }
-	InstRO::PassFactory* getFactory(Instrumentor::CompilationPhase phase) {
+
+	virtual Rose::RosePassFactory* getFactory(Instrumentor::CompilationPhase phase = Instrumentor::CompilationPhase::frontend) override {
 		//		lockPassManager();
 		return new Rose::RosePassFactory(passManager, project);
 	}

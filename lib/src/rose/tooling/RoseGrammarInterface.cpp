@@ -21,7 +21,6 @@ std::unique_ptr<InstRO::Core::ConstructSet> RoseGrammarInterface::getConstructsB
 	switch (type) {
 		case InstRO::Tooling::GrammarInterface::GrammarTypesType::GTFor:
 			nodes = NodeQuery::querySubTree(proj, V_SgForStatement);
-			nodes.insert(nodes);
 			break;
 		case InstRO::Tooling::GrammarInterface::GrammarTypesType::GTFunction:
 			nodes = NodeQuery::querySubTree(proj, V_SgFunctionDefinition);
