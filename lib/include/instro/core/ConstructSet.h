@@ -2,9 +2,12 @@
 #define INSTRO_CORE_CONSTRUCTSET_H 0.1
 
 #include <string>
+#include <sstream>
 #include <memory>	// Shared pointers
 #include <vector>
 #include <set>
+
+#include <bitset>
 
 namespace InstRO {
 
@@ -40,56 +43,93 @@ class ConstructSetCompilerInterface {
 
 namespace Core {
 
-class ConstructTrait {
-public:
-	bool is(ConstructTraitType type) {
-		return ct & type;
-	}
-	void add(ConstructTraitType type) {
-		ct |= type;
-	}
-private:
-	int ct;
-};
-
 typedef enum ContstructTraitEnum {
-	CTMin                 = 0,
+	CTNotALevel           = 0,	// TODO this should no longer be necessary?
+	CTMin                 = 1,
 	// Please do not use fragments. They may become deprecated
-	CTFragment            = 1,
-	// Any expression with observable haviour
-	CTExpression          = 1<<1,
-	// separate Loop, Conditional, Scope and Simple Statments
-	CTLoopStatement       = 1<<2,
-	CTConditionalStatement= 1<<3,
-	CTScopeStatement      = 1<<4,
-	CTSimpleStatement     = 1<<5,
+	CTFragment            = 2,
+	// Any expression with observable behavior
+	CTExpression          = 3,
+	// separate Loop, Conditional, Scope and Simple Statements
+	CTLoopStatement       = 4,
+	CTConditionalStatement= 5,
+	CTScopeStatement      = 6,
+	CTSimpleStatement     = 7,
 	// a statement with observable behavior. No "pure" declarations, namespaces, classes, etc.
-	CTStatement           = 1<<10,
+	CTStatement           = 8,
 	// Wrappable statements
-	CTWrappableStatement  = 1<<11,
-	CTFunction            = 1<<12,
-	CTFileScope           = 1<<13,
-	CTGlobalScope         = 1<<14,
-	CTMax                 = 1<<15,
-	CTNotALevel           = 1<<16
+	CTWrappableStatement  = 9,
+	CTFunction            = 10,
+	CTFileScope           = 11,
+	CTGlobalScope         = 12,
+	CTMax                 = 13
 } ConstructTraitType;
 
 std::string constructLevelToString(ConstructTraitType type);
 std::string operator+(const std::string& lhs, const ConstructTraitType& type);
 
+class ConstructTrait {
+public:
+	ConstructTrait() {
+	}
+
+	ConstructTrait(ConstructTraitType type) {
+		add(type);
+	}
+
+	bool is(ConstructTraitType type) {
+		if (cts.empty()) {
+			return type==CTNotALevel;
+		}
+		return cts.find(type) != cts.end();
+	}
+	void add(ConstructTraitType type) {
+		cts.insert(type);
+	}
+	ConstructTraitType max() {
+		return *cts.crbegin();
+	}
+	ConstructTraitType min() {
+		return *cts.cbegin();
+	}
+	const std::set<ConstructTraitType>& getTraitsAsSet() {
+		return cts;
+	}
+
+	std::string toString() {
+		if (cts.empty()) {
+			return InstRO::Core::constructLevelToString(CTNotALevel);
+		}
+
+		std::stringstream ss;
+		ss << "[";
+		for (auto ct : cts) {
+			ss << InstRO::Core::constructLevelToString(ct) << ",";
+		}
+		ss << "]";
+		return ss.str();
+	}
+
+private:
+	std::set<ConstructTraitType> cts;
+};
+
+
+
 /* CI: Construct Set implementation. Contribution by Roman Ness */
 class Construct {
  public:
 	virtual bool operator<(const Construct& b) { return false; }
-	Construct() = delete;
-	Construct(ConstructTraitType level) : traits(level){};
-	ConstructTraitType getLevel() { return traits; }
+	Construct() {};
+	ConstructTrait getTraits() { return constructTraits; }
+	const std::set<ConstructTraitType>& getTraitsAsSet() {
+		return constructTraits.getTraitsAsSet();
+	}
 
 	virtual ~Construct() {}
 
  protected:
-	void setLevel(ConstructTraitType level) { traits = level; };
-	ConstructTraitType traits;
+	ConstructTrait constructTraits;
 };
 
 /* CI: The ConstructSet class is intended to be specialized for each compiler
@@ -104,8 +144,6 @@ class ConstructSet {
 	void setCurrentMinLevel(ConstructTraitType minLevel){};
 	void setCurrentMaxLevel(ConstructTraitType maxLevel){};
 
-	// CI: return a vector (ordered) with all construct levels from the set
-	virtual std::vector<ConstructTraitType> getConstructLevels();
 	virtual ConstructTraitType getMaxConstructLevel();
 	virtual ConstructTraitType getMinConstructLevel();
 	virtual void clear();

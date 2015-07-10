@@ -16,7 +16,7 @@ std::unique_ptr<InstRO::Core::ConstructSet> ConstructElevator::crop(InstRO::Core
 	InstRO::InfracstructureInterface::ConstructSetCompilerInterface output(outputCS.get());
 
 	for (auto construct : input) {
-		if (construct->getLevel() > max || construct->getLevel() < min)
+		if (construct->getTraits().min() > max || construct->getTraits().max() < min)
 			continue;
 		else
 			output.put(construct);

@@ -104,7 +104,7 @@ std::unique_ptr<InstRO::Core::ConstructSet> ConstructElevator::raise(InstRO::Cor
 						raiseConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLGlobalScopePredicate());
 				break;
 		}
-		if (newConstruct->getLevel() != InstRO::Core::ConstructTraitType::CTNotALevel && newConstruct->getNode() != nullptr)
+		if (!newConstruct->getTraits().is(InstRO::Core::ConstructTraitType::CTNotALevel) && newConstruct->getNode() != nullptr)
 			output.put(newConstruct);
 	}
 	std::cout << "ConstructElevator::raise:\t ConstructSet contains " << newConstructSet->size() << " elements "

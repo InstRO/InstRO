@@ -52,40 +52,25 @@ std::string operator+(const std::string& lhs, const ConstructTraitType& type) {
 	return std::string(lhs).append(constructLevelToString(type));
 }
 
-// CI: return a vector (ordered) with all construct levels from the set
-std::vector<ConstructTraitType> ConstructSet::getConstructLevels() {
-	std::vector<int> levels;
-	// set the counter for all available levels to 0
-	for (int i = ConstructTraitType::CTMin; i < ConstructTraitType::CTMax; i++)
-		levels.push_back(0);
-	// for each construct, determine its level and increment the corresponding bucket
-	for (auto construct : constructs) {
-		assert(construct->getLevel() > ContstructTraitEnum::CTMin);
-		assert(construct->getLevel() < ContstructTraitEnum::CTMax);
-
-		levels[construct->getLevel()]++;
-	}
-	std::vector<ConstructTraitType> returnVector;
-	for (int i = ConstructTraitType::CTMin; i < ConstructTraitType::CTMax; i++) {
-		if (levels[i])
-			returnVector.push_back(ConstructTraitType(i));
-	}
-	return returnVector;
-}
 ConstructTraitType ConstructSet::getMaxConstructLevel() {
-	std::vector<ConstructTraitType> levels = ConstructSet::getConstructLevels();
-	if (levels.empty())
-		return ContstructTraitEnum::CTMax;
-	else
-		return levels.back();
+	ConstructTraitType max = CTMin;
+	for (auto construct : constructs) {
+		auto curr = construct->getTraits().max();
+		if (curr > max) {
+			max = curr;
+		}
+	}
+	return max;
 }
 ConstructTraitType ConstructSet::getMinConstructLevel() {
-	std::vector<ConstructTraitType> levels = ConstructSet::getConstructLevels();
-	if (levels.empty())
-		return ContstructTraitEnum::CTMin;
-	else
-		return levels.front();
-	return ConstructSet::getConstructLevels().front();
+	ConstructTraitType min = CTMax;
+	for (auto construct : constructs) {
+		auto curr = construct->getTraits().min();
+		if (curr < min) {
+			min = curr;
+		}
+	}
+	return min;
 }
 void ConstructSet::clear() { constructs.clear(); }
 bool ConstructSet::empty() { return constructs.empty(); }

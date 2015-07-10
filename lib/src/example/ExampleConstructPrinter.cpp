@@ -18,7 +18,7 @@ void ExampleConstructPrinter::execute() {
 		InstRO::Core::Construct* pc = construct.get();
 		InstRO::Example::Core::ExampleConstruct* ec =
 				dynamic_cast<InstRO::Example::Core::ExampleConstruct*>(construct.get());
-		std::cout << count << ":\t Level " << ec->getLevel() << "\t:" << ec->toString() << std::endl;
+		std::cout << count << ":\t Level " << ec->getTraits().toString() << "\t:" << ec->toString() << std::endl;
 		count++;
 	}
 	outputCS = *(inputPass->getOutput());
