@@ -150,7 +150,6 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	}
 
 	// statements
-	// TODO: any other statements that are not simple?
 	void visit(SgStatement* node) {
 		if (RoseConstructLevelPredicates::CLSimpleStatementPredicate()(node)) {
 			cl = InstRO::Core::ConstructLevelType::CLSimpleStatement;
@@ -161,12 +160,13 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// expressions
 	void visit(SgExpression* node) { cl = InstRO::Core::ConstructLevelType::CLExpression; }
-	// CI: an initialized variable declaration is OK,
-	void visit(SgVariableDeclaration* n) {
-		if (n->get_definition()) {
+	void visit(SgVariableDeclaration* node) {
+		// CI: an initialized variable declaration is OK,
+		if (node->get_definition()) {
 			cl = InstRO::Core::ConstructLevelType::CLSimpleStatement;
-		} else
-			generateError(n);
+		} else {
+			generateError(node);
+		}
 	}
 
 	// this should be an error
@@ -186,9 +186,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 class RoseConstruct : public InstRO::Core::Construct {
  public:
 	RoseConstruct(SgNode* sgnode) : Construct(InstRO::Core::ConstructLevelType::CLNotALevel), node(sgnode) {
-		if (sgnode == nullptr) {
-			construct_level = InstRO::Core::ConstructLevelType::CLNotALevel;	// XXX necessary?
-		} else {
+		if (sgnode != nullptr) {
 			ConstructGenerator gen;
 			node->accept(gen);
 			construct_level = gen.getCLT();
