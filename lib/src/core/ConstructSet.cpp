@@ -6,86 +6,83 @@
 namespace InstRO {
 namespace Core {
 
-using InstRO::Core::ContstructLevelEnum;
-
-std::string constructLevelToString(ConstructLevelType type) {
+std::string constructLevelToString(ConstructTraitType type) {
 	switch (type) {
-		// case InstRO::Core::ContstructLevelEnum::CLMin:
-		case CLFragment:
-			return std::string("CL-Fragment");
+		case CTFragment:
+			return std::string("Fragment");
 			break;
-		case CLExpression:
-			return std::string("CL-Expression");
+		case CTExpression:
+			return std::string("Expression");
 			break;
-		case CLStatement:
-			return std::string("CL-Statement");
+		case CTStatement:
+			return std::string("Statement");
 			break;
-		case CLWrappableStatement:
-			return std::string("CL-WrappableStatement");
+		case CTWrappableStatement:
+			return std::string("WrappableStatement");
 			break;
-		case CLLoopStatement:
-			return std::string("CL-LoopStatement");
+		case CTLoopStatement:
+			return std::string("LoopStatement");
 			break;
-		case CLConditionalStatement:
-			return std::string("CL-ConditionalStatement");
+		case CTConditionalStatement:
+			return std::string("ConditionalStatement");
 			break;
-		case CLScopeStatement:
-			return std::string("CL-ScopeStatement");
+		case CTScopeStatement:
+			return std::string("ScopeStatement");
 			break;
-		case CLSimpleStatement:
-			return std::string("CL-SimpleStatement");
+		case CTSimpleStatement:
+			return std::string("SimpleStatement");
 			break;
-		case CLFunction:
-			return std::string("CL-FunctionStatement");
+		case CTFunction:
+			return std::string("Function");
 			break;
-		case CLFileScope:
-			return std::string("CL-FileScope");
+		case CTFileScope:
+			return std::string("FileScope");
 			break;
-		// case CLMax:
-		case CLGlobalScope:
-			return std::string("CL-GlobalScope");
+		case CTGlobalScope:
+			return std::string("GlobalScope");
 			break;
 
 		default:
-			return std::string("UnknownConstructLevel");
+			return std::string("Invalid ConstructTrait");
 			break;
 	}
 }
-std::string operator+(const std::string& lhs, const ConstructLevelType& type) {
+
+std::string operator+(const std::string& lhs, const ConstructTraitType& type) {
 	return std::string(lhs).append(constructLevelToString(type));
 }
 
 // CI: return a vector (ordered) with all construct levels from the set
-std::vector<ConstructLevelType> ConstructSet::getConstructLevels() {
+std::vector<ConstructTraitType> ConstructSet::getConstructLevels() {
 	std::vector<int> levels;
 	// set the counter for all available levels to 0
-	for (int i = ConstructLevelType::CLMin; i < ConstructLevelType::CLMax; i++)
+	for (int i = ConstructTraitType::CTMin; i < ConstructTraitType::CTMax; i++)
 		levels.push_back(0);
 	// for each construct, determine its level and increment the corresponding bucket
 	for (auto construct : constructs) {
-		assert(construct->getLevel() > ContstructLevelEnum::CLMin);
-		assert(construct->getLevel() < ContstructLevelEnum::CLMax);
+		assert(construct->getLevel() > ContstructTraitEnum::CTMin);
+		assert(construct->getLevel() < ContstructTraitEnum::CTMax);
 
 		levels[construct->getLevel()]++;
 	}
-	std::vector<ConstructLevelType> returnVector;
-	for (int i = ConstructLevelType::CLMin; i < ConstructLevelType::CLMax; i++) {
+	std::vector<ConstructTraitType> returnVector;
+	for (int i = ConstructTraitType::CTMin; i < ConstructTraitType::CTMax; i++) {
 		if (levels[i])
-			returnVector.push_back(ConstructLevelType(i));
+			returnVector.push_back(ConstructTraitType(i));
 	}
 	return returnVector;
 }
-ConstructLevelType ConstructSet::getMaxConstructLevel() {
-	std::vector<ConstructLevelType> levels = ConstructSet::getConstructLevels();
+ConstructTraitType ConstructSet::getMaxConstructLevel() {
+	std::vector<ConstructTraitType> levels = ConstructSet::getConstructLevels();
 	if (levels.empty())
-		return ContstructLevelEnum::CLMax;
+		return ContstructTraitEnum::CTMax;
 	else
 		return levels.back();
 }
-ConstructLevelType ConstructSet::getMinConstructLevel() {
-	std::vector<ConstructLevelType> levels = ConstructSet::getConstructLevels();
+ConstructTraitType ConstructSet::getMinConstructLevel() {
+	std::vector<ConstructTraitType> levels = ConstructSet::getConstructLevels();
 	if (levels.empty())
-		return ContstructLevelEnum::CLMin;
+		return ContstructTraitEnum::CTMin;
 	else
 		return levels.front();
 	return ConstructSet::getConstructLevels().front();

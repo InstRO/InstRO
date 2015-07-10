@@ -17,7 +17,7 @@ class GNUProfilingInterfaceAdapter : public RosePassImplementation {
 	// This Pass only accepts functions
 	GNUProfilingInterfaceAdapter(::InstRO::Pass *pass)
 			: RosePassImplementation(::InstRO::Core::ChannelConfiguration(
-						{pass, ::InstRO::Core::ConstructLevelType::CLFunction, ::InstRO::Core::ConstructLevelType::CLFunction})),
+						{pass, ::InstRO::Core::ConstructTraitType::CTFunction, ::InstRO::Core::ConstructTraitType::CTFunction})),
 				inputPass(pass) {}
 	virtual void init(){};
 	virtual void execute() override;

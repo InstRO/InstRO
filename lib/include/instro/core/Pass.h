@@ -99,10 +99,10 @@ class Pass {
 	// setInputLevelRequirement(pass, level);	}
 
 	std::vector<Pass *> const getInputPasses() { return passImplementation->channelCFG().getPasses(); };
-	Core::ConstructLevelType getMinInputLevelRequirement(Pass *pass) {
+	Core::ConstructTraitType getMinInputLevelRequirement(Pass *pass) {
 		return passImplementation->channelCFG().getMinConstructLevel(pass);
 	};
-	Core::ConstructLevelType getMaxInputLevelRequirement(Pass *pass) {
+	Core::ConstructTraitType getMaxInputLevelRequirement(Pass *pass) {
 		return passImplementation->channelCFG().getMaxConstructLevel(pass);
 	};
 	// Deprecated| void setInputLevelRequirement(Pass *pass, Core::ConstructLevelType level) { inputRequiredLevels[pass] =

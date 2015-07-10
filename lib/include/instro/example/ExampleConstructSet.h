@@ -10,7 +10,7 @@ namespace Example {
 namespace Core {
 class ExampleConstruct : public InstRO::Core::Construct {
  public:
-	ExampleConstruct(InstRO::Core::ConstructLevelType level, std::string nname) : Construct(level), name(nname){};
+	ExampleConstruct(InstRO::Core::ConstructTraitType level, std::string nname) : Construct(level), name(nname){};
 	std::string toString() { return name; };
 
  protected:
@@ -57,14 +57,14 @@ class ExampleConstructSet : public InstRO::Core::ConstructSet {
 
  public:
 	ExampleConstructSet(){};
-	virtual ::std::vector<InstRO::Core::ConstructLevelType> getConstructLevels() override {
+	virtual ::std::vector<InstRO::Core::ConstructTraitType> getConstructLevels() override {
 		// InstRO::Core::ConstructTypesType type;
-		return std::vector<InstRO::Core::ConstructLevelType>();
+		return std::vector<InstRO::Core::ConstructTraitType>();
 	}
-	virtual InstRO::Core::ConstructLevelType getMaxConstructLevel() override {
+	virtual InstRO::Core::ConstructTraitType getMaxConstructLevel() override {
 		return InstRO::Core::ContstructLevelEnum::CLLoop;
 	}
-	virtual InstRO::Core::ConstructLevelType getMinConstructLevel() override {
+	virtual InstRO::Core::ConstructTraitType getMinConstructLevel() override {
 		return InstRO::Core::ContstructLevelEnum::CLMin;
 	}
 	virtual void clear() override { constructs.clear(); }

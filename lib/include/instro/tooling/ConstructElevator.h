@@ -13,14 +13,14 @@ namespace ConstructElevator {
 class ConstructElevator {
  public:
 	// This is the implicit way that the PassManager will allways apply
-	virtual std::unique_ptr<Core::ConstructSet> raise(Core::ConstructSet *input, Core::ConstructLevelType cl) = 0;
+	virtual std::unique_ptr<Core::ConstructSet> raise(Core::ConstructSet *input, Core::ConstructTraitType cl) = 0;
 	// This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
-	virtual std::unique_ptr<Core::ConstructSet> lower(Core::ConstructSet *input, Core::ConstructLevelType cl) = 0;
+	virtual std::unique_ptr<Core::ConstructSet> lower(Core::ConstructSet *input, Core::ConstructTraitType cl) = 0;
 
 	// Crop Construct up to, or down to a level. This can be implemented compiler independend, as it does not require AST
 	// access
-	virtual std::unique_ptr<Core::ConstructSet> crop(Core::ConstructSet *input, Core::ConstructLevelType min,
-																									 Core::ConstructLevelType max);
+	virtual std::unique_ptr<Core::ConstructSet> crop(Core::ConstructSet *input, Core::ConstructTraitType min,
+																									 Core::ConstructTraitType max);
 };
 }
 }

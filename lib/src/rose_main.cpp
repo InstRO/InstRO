@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
 		std::vector<std::string> filterRules2;
 		filterRules2.push_back("myFoo");
 		auto nbs2 = aFactory->createIdentifyerSelector(filterRules2);
-		auto celev2 = aFactory->createConstructRaisingElevator(nbs2, InstRO::Core::ConstructLevelType::CLFunction);
+		auto celev2 = aFactory->createConstructRaisingElevator(nbs2, InstRO::Core::ConstructTraitType::CTFunction);
 		auto adapter2 = aFactory->createConstructPrinter(celev2);
 
 		std::vector<std::string> filterRules3;
@@ -36,12 +36,12 @@ int main(int argc, char** argv) {
 		auto nbs3 = aFactory->createIdentifyerSelector(filterRules3);
 		aFactory->createConstructPrinter(nbs3);
 		//		auto celev3 = aFactory->createConstructRaisingElevator(nbs3,InstRO::Core::ConstructLevelType::CLExpression);
-		auto expressions = aFactory->createConstructLoweringElevator(nbs3, InstRO::Core::ConstructLevelType::CLExpression);
+		auto expressions = aFactory->createConstructLoweringElevator(nbs3, InstRO::Core::ConstructTraitType::CTExpression);
 		aFactory->createConstructPrinter(expressions);
 		auto simpleStatements =
-				aFactory->createConstructLoweringElevator(nbs3, InstRO::Core::ConstructLevelType::CLSimpleStatement);
+				aFactory->createConstructLoweringElevator(nbs3, InstRO::Core::ConstructTraitType::CTSimpleStatement);
 		aFactory->createConstructPrinter(simpleStatements);
-		auto statements = aFactory->createConstructLoweringElevator(nbs3, InstRO::Core::ConstructLevelType::CLStatement);
+		auto statements = aFactory->createConstructLoweringElevator(nbs3, InstRO::Core::ConstructTraitType::CTStatement);
 		aFactory->createConstructPrinter(statements);
 
 		//		auto adapter3 = aFactory->createConstructPrinter(celev3);

@@ -9,8 +9,8 @@ namespace Tooling {
 namespace ConstructElevator {
 
 std::unique_ptr<InstRO::Core::ConstructSet> ConstructElevator::crop(InstRO::Core::ConstructSet *inputCS,
-																																		InstRO::Core::ConstructLevelType min,
-																																		InstRO::Core::ConstructLevelType max) {
+																																		InstRO::Core::ConstructTraitType min,
+																																		InstRO::Core::ConstructTraitType max) {
 	InstRO::InfracstructureInterface::ConstructSetCompilerInterface input(inputCS);
 	auto outputCS = std::make_unique<InstRO::Core::ConstructSet>();
 	InstRO::InfracstructureInterface::ConstructSetCompilerInterface output(outputCS.get());
