@@ -13,7 +13,7 @@ namespace Rose {
 
 // CI: beta
 InstRO::Pass* RosePassFactory::createConstructLoweringElevator(InstRO::Pass* pass,
-																															 InstRO::Core::ConstructLevelType level) {
+																															 InstRO::Core::ConstructTraitType level) {
 	Pass* newPass = new Pass(new InstRO::Rose::Selector::ConstructLoweringElevator(pass, level));
 	newPass->setPassName("InstRO::Rose::Selector::ConstructLoweringElevator");
 	passManager->registerPass(newPass);
@@ -21,7 +21,7 @@ InstRO::Pass* RosePassFactory::createConstructLoweringElevator(InstRO::Pass* pas
 }
 
 // CI: beta
-Pass* RosePassFactory::createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructLevelType level) {
+Pass* RosePassFactory::createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) {
 	Pass* newPass = new Pass(new InstRO::Rose::Selector::ConstructRaisingElevator(pass, level));
 	newPass->setPassName("InstRO::Rose::Selector::ConstructRaisingElevator");
 	passManager->registerPass(newPass);

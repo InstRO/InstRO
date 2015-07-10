@@ -10,10 +10,10 @@ class ConstructRaisingElevator : public InstRO::Rose::RosePassImplementation {
 	Pass *input;
 	ConstructRaisingElevator() = delete;
 	std::unique_ptr<Core::ConstructSet> output;
-	InstRO::Core::ConstructLevelType minLevel;
+	InstRO::Core::ConstructTraitType minLevel;
 
  public:
-	ConstructRaisingElevator(Pass *inputArg, InstRO::Core::ConstructLevelType clArg)
+	ConstructRaisingElevator(Pass *inputArg, InstRO::Core::ConstructTraitType clArg)
 			: RosePassImplementation(Core::ChannelConfiguration(inputArg)), input(inputArg), minLevel(clArg){};
 	virtual void init() override;
 	virtual void execute() override;
@@ -29,10 +29,10 @@ class ConstructLoweringElevator : public InstRO::Rose::RosePassImplementation {
 	Pass *input;
 	ConstructLoweringElevator() = delete;
 	std::unique_ptr<Core::ConstructSet> output;
-	InstRO::Core::ConstructLevelType maxLevel;
+	InstRO::Core::ConstructTraitType maxLevel;
 
  public:
-	ConstructLoweringElevator(Pass *inputArg, InstRO::Core::ConstructLevelType clArg)
+	ConstructLoweringElevator(Pass *inputArg, InstRO::Core::ConstructTraitType clArg)
 			: RosePassImplementation(Core::ChannelConfiguration(inputArg)), input(inputArg), maxLevel(clArg){};
 	virtual void init() override;
 	virtual void execute() override;

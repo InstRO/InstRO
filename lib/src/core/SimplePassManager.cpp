@@ -13,7 +13,7 @@ void InstRO::PassManagement::SimplePassManager::registerPass(Pass *currentPass) 
 	for (auto &i : inputs) {
 		if (i == NULL)
 			continue;
-		Core::ConstructLevelType maxInputLevel = currentPass->getMaxInputLevelRequirement(i);
+		Core::ConstructTraitType maxInputLevel = currentPass->getMaxInputLevelRequirement(i);
 		//	Core::ConstructLevelType minOutputLevelProvided = i->getOutputLevel();
 
 		addDependency(i, currentPass);
@@ -50,8 +50,8 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 				// We need to cast the construct set
 				// Any of the various elevators or crop functions returns a new unique_ptr. As result the copies will be cleaned
 				Core::ConstructSet *originalConstructSet = i->getOutput();
-				Core::ConstructLevelType cropMin = Core::ContstructLevelEnum::CLMin;
-				Core::ConstructLevelType cropMax = Core::ContstructLevelEnum::CLMax;
+				Core::ConstructTraitType cropMin = Core::ContstructTraitEnum::CTMin;
+				Core::ConstructTraitType cropMax = Core::ContstructTraitEnum::CTMax;
 
 				if (InstRO::getInstrumentorInstance()->getConstructLoweringPolicyCrop())
 					cropMax = passEnvelope->pass->getMaxInputLevelRequirement(i);

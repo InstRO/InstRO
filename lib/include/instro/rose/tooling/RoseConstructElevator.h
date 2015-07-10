@@ -17,10 +17,10 @@ class ConstructElevator : public InstRO::Tooling::ConstructElevator::ConstructEl
  public:
 	// This is the implicit way that the PassManager will allways apply
 	virtual std::unique_ptr<InstRO::Core::ConstructSet> raise(InstRO::Core::ConstructSet *input,
-																														InstRO::Core::ConstructLevelType cl) override;
+																														InstRO::Core::ConstructTraitType cl) override;
 	// This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
 	virtual std::unique_ptr<InstRO::Core::ConstructSet> lower(InstRO::Core::ConstructSet *input,
-																														InstRO::Core::ConstructLevelType cl) override;
+																														InstRO::Core::ConstructTraitType cl) override;
 };
 }
 }

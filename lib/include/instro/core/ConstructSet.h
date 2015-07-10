@@ -7,12 +7,13 @@
 #include <set>
 
 namespace InstRO {
+
 namespace Core {
 class Construct;
 class ConstructSet;
 }
-namespace InfracstructureInterface {
 
+namespace InfracstructureInterface {
 class ConstructSetCompilerInterface {
  protected:
 	Core::ConstructSet* csPtr;
@@ -35,47 +36,60 @@ class ConstructSetCompilerInterface {
 	bool empty();
 	size_t size();
 };
-}
+}	// namespace InfracstructureInterface
+
 namespace Core {
 
-typedef enum ContstructLevelEnum {
-	CLMin                 = 0,
-	// Please do not use fragments. They may become deprecated
-	CLFragment            = 1,
-	// Any expression with observable haviour
-	CLExpression          = 1<<1,
-	// separate Loop, Conditional, Scope and Simple Statments
-	CLLoopStatement       = 1<<2,
-	CLConditionalStatement= 1<<3,
-	CLScopeStatement      = 1<<4,
-	CLSimpleStatement     = 1<<5,
-	// a statement with observable behavior. No "pure" declarations, namespaces, classes, etc.
-	CLStatement           = 1<<10,
-	// Wrappable statements
-	CLWrappableStatement  = 1<<11,
-	CLFunction            = 1<<12,
-	CLFileScope           = 1<<13,
-	CLGlobalScope         = 1<<14,
-	CLMax                 = 1<<15,
-	CLNotALevel           = 1<<16
-} ConstructLevelType;
+class ConstructTrait {
+public:
+	bool is(ConstructTraitType type) {
+		return ct & type;
+	}
+	void add(ConstructTraitType type) {
+		ct |= type;
+	}
+private:
+	int ct;
+};
 
-std::string contstructLevelToString(ConstructLevelType type);
-std::string operator+(const std::string& lhs, const ConstructLevelType& type);
+typedef enum ContstructTraitEnum {
+	CTMin                 = 0,
+	// Please do not use fragments. They may become deprecated
+	CTFragment            = 1,
+	// Any expression with observable haviour
+	CTExpression          = 1<<1,
+	// separate Loop, Conditional, Scope and Simple Statments
+	CTLoopStatement       = 1<<2,
+	CTConditionalStatement= 1<<3,
+	CTScopeStatement      = 1<<4,
+	CTSimpleStatement     = 1<<5,
+	// a statement with observable behavior. No "pure" declarations, namespaces, classes, etc.
+	CTStatement           = 1<<10,
+	// Wrappable statements
+	CTWrappableStatement  = 1<<11,
+	CTFunction            = 1<<12,
+	CTFileScope           = 1<<13,
+	CTGlobalScope         = 1<<14,
+	CTMax                 = 1<<15,
+	CTNotALevel           = 1<<16
+} ConstructTraitType;
+
+std::string constructLevelToString(ConstructTraitType type);
+std::string operator+(const std::string& lhs, const ConstructTraitType& type);
 
 /* CI: Construct Set implementation. Contribution by Roman Ness */
 class Construct {
  public:
 	virtual bool operator<(const Construct& b) { return false; }
 	Construct() = delete;
-	Construct(ConstructLevelType level) : construct_level(level){};
-	ConstructLevelType getLevel() { return construct_level; }
+	Construct(ConstructTraitType level) : traits(level){};
+	ConstructTraitType getLevel() { return traits; }
 
 	virtual ~Construct() {}
 
  protected:
-	void setLevel(ConstructLevelType level) { construct_level = level; };
-	ConstructLevelType construct_level;
+	void setLevel(ConstructTraitType level) { traits = level; };
+	ConstructTraitType traits;
 };
 
 /* CI: The ConstructSet class is intended to be specialized for each compiler
@@ -87,13 +101,13 @@ class ConstructSet {
 
  public:
 	ConstructSet(){};
-	void setCurrentMinLevel(ConstructLevelType minLevel){};
-	void setCurrentMaxLevel(ConstructLevelType maxLevel){};
+	void setCurrentMinLevel(ConstructTraitType minLevel){};
+	void setCurrentMaxLevel(ConstructTraitType maxLevel){};
 
 	// CI: return a vector (ordered) with all construct levels from the set
-	virtual std::vector<ConstructLevelType> getConstructLevels();
-	virtual ConstructLevelType getMaxConstructLevel();
-	virtual ConstructLevelType getMinConstructLevel();
+	virtual std::vector<ConstructTraitType> getConstructLevels();
+	virtual ConstructTraitType getMaxConstructLevel();
+	virtual ConstructTraitType getMinConstructLevel();
 	virtual void clear();
 	virtual bool empty();
 	virtual size_t size();
