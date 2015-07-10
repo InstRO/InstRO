@@ -8,7 +8,6 @@ namespace Core {
 
 std::string constructLevelToString(ConstructLevelType type) {
 	switch (type) {
-
 		// case InstRO::Core::ContstructLevelEnum::CLMin:
 		case InstRO::Core::ContstructLevelEnum::CLFragment:
 			return std::string("CL-Fragment");

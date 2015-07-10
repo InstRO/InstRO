@@ -26,26 +26,22 @@ int main(int argc, char** argv) {
 	auto aPass = aFactory->createIdentifyerSelector(filterRules);
 	auto bPass = aFactory->createIdentifyerSelector(filterRules);
 
-
-	
 	auto compound = aFactory->createBooleanOrSelector(aPass, bPass);
 
 	auto adapter = aFactory->createGPIAdapter(compound);
 
-/*	aFactory->createConstructPrinter(aPass);
-	aPass->initPass();
-	aPass->executePass();
-	bPass->initPass();
-	bPass->executePass();
-	
-	auto intersectionInputA = aPass->getOutput();
-	auto intersectionInputB = bPass->getOutput();
-	auto intersection = intersectionInputA->intersect(*intersectionInputB);*/
+	/*	aFactory->createConstructPrinter(aPass);
+		aPass->initPass();
+		aPass->executePass();
+		bPass->initPass();
+		bPass->executePass();
+
+		auto intersectionInputA = aPass->getOutput();
+		auto intersectionInputB = bPass->getOutput();
+		auto intersection = intersectionInputA->intersect(*intersectionInputB);*/
 
 	instro->init();
 	instro->apply();
-
-
 
 	instro->finalize();
 
