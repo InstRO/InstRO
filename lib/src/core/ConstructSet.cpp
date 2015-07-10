@@ -6,10 +6,12 @@
 namespace InstRO {
 namespace Core {
 
+using InstRO::Core::ContstructLevelEnum;
+
 std::string constructLevelToString(ConstructLevelType type) {
 	switch (type) {
 		// case InstRO::Core::ContstructLevelEnum::CLMin:
-		case InstRO::Core::ContstructLevelEnum::CLFragment:
+		case CLFragment:
 			return std::string("CL-Fragment");
 			break;
 		case CLExpression:

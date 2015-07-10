@@ -23,10 +23,11 @@ std::shared_ptr<InstRO::Rose::Core::RoseConstruct> raiseConstruct(InstRO::Rose::
 		std::cout << "raiseConstruct:\t" << current->class_name() << std::endl;
 		current = current->get_parent();
 	}
-	if (current == nullptr)
+	if (current == nullptr) {
 		std::cout << "raiseConstruct:\t terminated at NULL" << std::endl;
-	else
+	} else {
 		std::cout << "raiseConstruct: raising ended with " << current->class_name() << std::endl;
+	}
 	// geth the corresponding construct from the RoseConstructProvider
 	return InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(current);
 }
@@ -106,7 +107,7 @@ std::unique_ptr<InstRO::Core::ConstructSet> ConstructElevator::raise(InstRO::Cor
 		if (newConstruct->getLevel() != InstRO::Core::ConstructLevelType::CLNotALevel && newConstruct->getNode() != nullptr)
 			output.put(newConstruct);
 	}
-	std::cout << "ConstructElevator::raise:\t ConstructSet contains " << newConstructSet->size() << "elements "
+	std::cout << "ConstructElevator::raise:\t ConstructSet contains " << newConstructSet->size() << " elements "
 						<< std::endl;
 	return newConstructSet;
 };

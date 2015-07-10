@@ -39,25 +39,25 @@ class ConstructSetCompilerInterface {
 namespace Core {
 
 typedef enum ContstructLevelEnum {
-	CLMin = 0,
+	CLMin                 = 0,
 	// Please do not use fragments. They may become deprecated
-	CLFragment = 1,
+	CLFragment            = 1,
 	// Any expression with observable haviour
-	CLExpression = 2,
+	CLExpression          = 1<<1,
 	// separate Loop, Conditional, Scope and Simple Statments
-	CLLoopStatement,
-	CLConditionalStatement,
-	CLScopeStatement,
-	CLSimpleStatement,
+	CLLoopStatement       = 1<<2,
+	CLConditionalStatement= 1<<3,
+	CLScopeStatement      = 1<<4,
+	CLSimpleStatement     = 1<<5,
 	// a statement with observable behavior. No "pure" declarations, namespaces, classes, etc.
-	CLStatement,
+	CLStatement           = 1<<10,
 	// Wrappable statements
-	CLWrappableStatement,
-	CLFunction,
-	CLFileScope,
-	CLGlobalScope,
-	CLMax,
-	CLNotALevel
+	CLWrappableStatement  = 1<<11,
+	CLFunction            = 1<<12,
+	CLFileScope           = 1<<13,
+	CLGlobalScope         = 1<<14,
+	CLMax                 = 1<<15,
+	CLNotALevel           = 1<<16
 } ConstructLevelType;
 
 std::string contstructLevelToString(ConstructLevelType type);
