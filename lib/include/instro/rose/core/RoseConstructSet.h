@@ -94,18 +94,39 @@ struct CLSimpleStatementPredicate {
 	}
 };
 
+struct WrappableConstructPredicate {
+	bool operator()(SgNode* n) const {
+		return isSgBasicBlock(n->get_parent());
+	}
+};
+
 struct InstrumentableConstructPredicate {
+	// TODO: how exactly is this defined?
 	bool operator()(SgNode* n) const;
+};
+
+struct ConstructPredicate {
+	bool operator()(SgNode* n) const {
+		return CLGlobalScopePredicate()(n) || CLFileScopePredicate()(n) || CLFunctionPredicate()(n)
+				|| CLStatementPredicate()(n) || CLExpressionPredicate()(n);
+	}
 };
 }	// namespace RoseConstructLevelPredicates
 
 class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
  public:
-	ConstructGenerator(){};
+	ConstructGenerator() : cl(InstRO::Core::ConstructLevelType::CLNotALevel) {};
 	InstRO::Core::ConstructLevelType getCLT() { return cl; }
 
-	// TODO global scope
-	// TODO file scope
+	// global scope
+	void visit(SgProject* node) {
+		cl = InstRO::Core::ConstructLevelType::CLGlobalScope;
+	}
+
+	// file scope
+	void visit(SgSourceFile* node) {
+		cl = InstRO::Core::ConstructLevelType::CLFileScope;
+	}
 
 	// function
 	void visit(SgFunctionDefinition* node) { cl = InstRO::Core::ConstructLevelType::CLFunction; }
@@ -120,11 +141,23 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	void visit(SgDoWhileStmt* node) { cl = InstRO::Core::ConstructLevelType::CLLoopStatement; }
 
 	// scopes
-	void visit(SgBasicBlock* node) { cl = InstRO::Core::ConstructLevelType::CLScopeStatement; }
+	void visit(SgBasicBlock* node) {
+		if (RoseConstructLevelPredicates::CLConditionalPredicate()(node)) {
+			cl = InstRO::Core::ConstructLevelType::CLScopeStatement;
+		} else {
+			generateError(node);
+		}
+	}
 
 	// statements
 	// TODO: any other statements that are not simple?
-	void visit(SgStatement* node) { cl = InstRO::Core::ConstructLevelType::CLSimpleStatement; }
+	void visit(SgStatement* node) {
+		if (RoseConstructLevelPredicates::CLSimpleStatementPredicate()(node)) {
+			cl = InstRO::Core::ConstructLevelType::CLSimpleStatement;
+		} else {
+			generateError(node);
+		}
+	}
 
 	// expressions
 	void visit(SgExpression* node) { cl = InstRO::Core::ConstructLevelType::CLExpression; }
@@ -154,13 +187,15 @@ class RoseConstruct : public InstRO::Core::Construct {
  public:
 	RoseConstruct(SgNode* sgnode) : Construct(InstRO::Core::ConstructLevelType::CLNotALevel), node(sgnode) {
 		if (sgnode == nullptr) {
-			construct_level = InstRO::Core::ConstructLevelType::CLNotALevel;
+			construct_level = InstRO::Core::ConstructLevelType::CLNotALevel;	// XXX necessary?
 		} else {
 			ConstructGenerator gen;
 			node->accept(gen);
 			construct_level = gen.getCLT();
 		}
 	}
+
+	virtual ~RoseConstruct() {}
 
 	::SgNode* getNode() const { return node; }
 
