@@ -25,12 +25,12 @@ class Instrumentor {
 	typedef enum CompilationPhase {
 		firstPhase = 1,
 		defaultPhase = 1,
-		frontend=1,
-//CI: This may be possible at a later point, e.g. in CLANG, but it currently does not apply
-//		afterOptimization,
-//		afterAssebling,
-//		afterLinking,
-//		lastPhase
+		frontend = 1,
+		// CI: This may be possible at a later point, e.g. in CLANG, but it currently does not apply
+		//		afterOptimization,
+		//		afterAssebling,
+		//		afterLinking,
+		//		lastPhase
 	} CompilationPhase;
 
  public:
@@ -70,7 +70,6 @@ class Instrumentor {
 
 	// Interface to access the implementation specific Analysis Layer Container
 	virtual Tooling::AnalysisManager* getAnalysisManager() = 0;
-	
 
  protected:
 	bool passManagerLocked;

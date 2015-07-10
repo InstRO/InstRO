@@ -15,13 +15,11 @@ namespace Core {
 
 namespace RoseConstructLevelPredicates {
 struct CLExpressionPredicate {
-	bool operator()(SgNode * n) const {
-		return isSgExpression(n) != nullptr;
-	}
+	bool operator()(SgNode* n) const { return isSgExpression(n) != nullptr; }
 };
 
 struct CLLoopPredicate {
-	bool operator()(SgNode * n) const {
+	bool operator()(SgNode* n) const {
 		if (isSgDoWhileStmt(n) || isSgWhileStmt(n) || isSgForStatement(n)) {
 			return true;
 		}
@@ -30,7 +28,7 @@ struct CLLoopPredicate {
 };
 
 struct CLConditionalPredicate {
-	bool operator()(SgNode * n) const {
+	bool operator()(SgNode* n) const {
 		if (isSgIfStmt(n) || isSgSwitchStatement(n)) {
 			return true;
 		}
@@ -72,21 +70,15 @@ struct CLStatementPredicate {
 };
 
 struct CLFunctionPredicate {
-	bool operator()(SgNode * n) const {
-		return isSgFunctionDefinition(n) != nullptr;
-	}
+	bool operator()(SgNode* n) const { return isSgFunctionDefinition(n) != nullptr; }
 };
 
 struct CLFileScopePredicate {
-	bool operator()(SgNode * n) const {
-		return isSgFile(n) != nullptr;
-	}
+	bool operator()(SgNode* n) const { return isSgFile(n) != nullptr; }
 };
 
 struct CLGlobalScopePredicate {
-	bool operator()(SgNode * n) const {
-		return isSgProject(n) != nullptr;
-	}
+	bool operator()(SgNode* n) const { return isSgProject(n) != nullptr; }
 };
 
 struct CLSimpleStatementPredicate {
@@ -109,51 +101,33 @@ struct InstrumentableConstructPredicate {
 
 class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
  public:
-	ConstructGenerator() {};
+	ConstructGenerator(){};
 	InstRO::Core::ConstructLevelType getCLT() { return cl; }
 
 	// TODO global scope
 	// TODO file scope
 
 	// function
-	void visit(SgFunctionDefinition* node) {
-		cl = InstRO::Core::ConstructLevelType::CLFunction;
-	}
+	void visit(SgFunctionDefinition* node) { cl = InstRO::Core::ConstructLevelType::CLFunction; }
 
 	// conditionals
-	void visit(SgIfStmt* node) {
-		cl = InstRO::Core::ConstructLevelType::CLConditionalStatement;
-	}
-	void visit(SgSwitchStatement* node) {
-		cl = InstRO::Core::ConstructLevelType::CLConditionalStatement;
-	}
+	void visit(SgIfStmt* node) { cl = InstRO::Core::ConstructLevelType::CLConditionalStatement; }
+	void visit(SgSwitchStatement* node) { cl = InstRO::Core::ConstructLevelType::CLConditionalStatement; }
 
 	// loops
-	void visit(SgForStatement* node) {
-		cl = InstRO::Core::ConstructLevelType::CLLoopStatement;
-	}
-	void visit(SgWhileStmt* node) {
-		cl = InstRO::Core::ConstructLevelType::CLLoopStatement;
-	}
-	void visit(SgDoWhileStmt* node) {
-		cl = InstRO::Core::ConstructLevelType::CLLoopStatement;
-	}
+	void visit(SgForStatement* node) { cl = InstRO::Core::ConstructLevelType::CLLoopStatement; }
+	void visit(SgWhileStmt* node) { cl = InstRO::Core::ConstructLevelType::CLLoopStatement; }
+	void visit(SgDoWhileStmt* node) { cl = InstRO::Core::ConstructLevelType::CLLoopStatement; }
 
 	// scopes
-	void visit(SgBasicBlock* node) {
-		cl = InstRO::Core::ConstructLevelType::CLScopeStatement;
-	}
+	void visit(SgBasicBlock* node) { cl = InstRO::Core::ConstructLevelType::CLScopeStatement; }
 
 	// statements
 	// TODO: any other statements that are not simple?
-	void visit(SgStatement* node) {
-		cl = InstRO::Core::ConstructLevelType::CLSimpleStatement;
-	}
+	void visit(SgStatement* node) { cl = InstRO::Core::ConstructLevelType::CLSimpleStatement; }
 
 	// expressions
-	void visit(SgExpression* node) {
-		cl = InstRO::Core::ConstructLevelType::CLExpression;
-	}
+	void visit(SgExpression* node) { cl = InstRO::Core::ConstructLevelType::CLExpression; }
 	// CI: an initialized variable declaration is OK,
 	void visit(SgVariableDeclaration* n) {
 		if (n->get_definition()) {
