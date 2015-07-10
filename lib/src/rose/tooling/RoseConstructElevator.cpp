@@ -40,8 +40,9 @@ std::set<std::shared_ptr<InstRO::Rose::Core::RoseConstruct> > lowerConstruct(Ins
 	Rose_STL_Container<SgNode *> nodes = SageInterface::querySubTree<SgNode>(current, V_SgNode);
 	for (auto node : nodes) {
 		// check if the node is of the desired type ... and add it to the outputset
-		if (pred(node))
+		if (pred(node)) {
 			retSet.insert(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
+		}
 	}
 
 	return retSet;
@@ -83,11 +84,11 @@ std::unique_ptr<InstRO::Core::ConstructSet> ConstructElevator::raise(InstRO::Cor
 				break;
 			case InstRO::Core::ConstructLevelType::CLScopeStatement:
 				newConstruct =
-						raiseConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLScopePredicate());
+						raiseConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLScopeStatementPredicate());
 				break;
 			case InstRO::Core::ConstructLevelType::CLSimpleStatement:
 				newConstruct =
-						raiseConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLSimplePredicate());
+						raiseConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLSimpleStatementPredicate());
 				break;
 			case InstRO::Core::ConstructLevelType::CLFunction:
 				newConstruct =
@@ -113,16 +114,15 @@ std::unique_ptr<InstRO::Core::ConstructSet> ConstructElevator::raise(InstRO::Cor
 // This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
 std::unique_ptr<InstRO::Core::ConstructSet> ConstructElevator::lower(InstRO::Core::ConstructSet *inputCS,
 																																		 InstRO::Core::ConstructLevelType cl) {
-	InstRO::Rose::Core::RoseConstruct *roseConstruct;
 	InstRO::InfracstructureInterface::ConstructSetCompilerInterface input(inputCS);
 	std::unique_ptr<InstRO::Core::ConstructSet> newConstructSet = std::make_unique<InstRO::Core::ConstructSet>();
 	InstRO::InfracstructureInterface::ConstructSetCompilerInterface output(newConstructSet.get());
 
-	// CI: check each input construct seperately
+	// CI: check each input construct separately
 	for (auto construct : input) {
 		std::set<std::shared_ptr<InstRO::Rose::Core::RoseConstruct> > newConstructs;
 		// CI: make sure it is a ROSE construct
-		roseConstruct = dynamic_cast<InstRO::Rose::Core::RoseConstruct *>(construct.get());
+		InstRO::Rose::Core::RoseConstruct *roseConstruct = dynamic_cast<InstRO::Rose::Core::RoseConstruct *>(construct.get());
 		if (roseConstruct == nullptr)
 			throw std::string(
 					"A non InstRO::Rose::Core::RoseConstruct in the ROSE interace. Either multiple compiler interfaces are used, "
@@ -147,11 +147,11 @@ std::unique_ptr<InstRO::Core::ConstructSet> ConstructElevator::lower(InstRO::Cor
 				break;
 			case InstRO::Core::ConstructLevelType::CLScopeStatement:
 				newConstructs =
-						lowerConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLScopePredicate());
+						lowerConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLScopeStatementPredicate());
 				break;
 			case InstRO::Core::ConstructLevelType::CLSimpleStatement:
 				newConstructs =
-						lowerConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLSimplePredicate());
+						lowerConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLSimpleStatementPredicate());
 				break;
 			case InstRO::Core::ConstructLevelType::CLFunction:
 				newConstructs =
@@ -166,8 +166,9 @@ std::unique_ptr<InstRO::Core::ConstructSet> ConstructElevator::lower(InstRO::Cor
 						lowerConstruct(roseConstruct, InstRO::Rose::Core::RoseConstructLevelPredicates::CLGlobalScopePredicate());
 				break;
 		}
-		for (auto newConstruct : newConstructs)
+		for (auto newConstruct : newConstructs) {
 			output.put(newConstruct);
+		}
 	}
 	return newConstructSet;
 }
