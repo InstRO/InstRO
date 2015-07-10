@@ -10,12 +10,13 @@ namespace Example {
 namespace Core {
 class ExampleConstruct : public InstRO::Core::Construct {
  public:
-	ExampleConstruct(InstRO::Core::ConstructTraitType level, std::string nname) : Construct(level), name(nname){};
+	ExampleConstruct(InstRO::Core::ConstructTraitType level, std::string nname): name(nname) {
+		 constructTraits = InstRO::Core::ConstructTrait(level);
+	};
 	std::string toString() { return name; };
 
  protected:
 	std::string name;
-	int type;
 };
 namespace InfracstructureInterface {/*
 

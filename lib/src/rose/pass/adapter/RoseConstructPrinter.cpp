@@ -16,17 +16,13 @@ void RoseConstructPrinter::execute() {
 		InstRO::Rose::Core::RoseConstruct* ec = dynamic_cast<InstRO::Rose::Core::RoseConstruct*>(construct.get());
 
 		std::stringstream ss;
-		ss << count << ":\t " << InstRO::Core::constructLevelToString(ec->getLevel()) << ":\t";
+		ss << count << ":\t " << ec->getTraits().toString() << ":\t";
 
-		switch (ec->getLevel()) {
-			case InstRO::Core::ConstructTraitType::CTFunction:
+		if (ec->getTraits().is(InstRO::Core::ConstructTraitType::CTFunction)){
 				std::cout << ss.str()
 									<< isSgFunctionDefinition(ec->getNode())->get_declaration()->get_qualified_name().getString()
 									<< std::endl;
-				break;
-			case InstRO::Core::ConstructTraitType::CTExpression:
-			case InstRO::Core::ConstructTraitType::CTStatement:
-			default:
+		} else {
 				std::cout << ss.str() << ec->getNode()->unparseToString() << std::endl;
 		}
 		count++;

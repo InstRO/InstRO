@@ -94,7 +94,7 @@ struct CLSimpleStatementPredicate {
 	}
 };
 
-struct WrappableConstructPredicate {
+struct CTWrappableStatementPredicate {
 	bool operator()(SgNode* n) const {
 		return isSgBasicBlock(n->get_parent());
 	}
@@ -115,35 +115,51 @@ struct ConstructPredicate {
 
 class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
  public:
-	ConstructGenerator() : cl(InstRO::Core::ConstructTraitType::CTNotALevel) {};
-	InstRO::Core::ConstructTraitType getCLT() { return cl; }
+	ConstructGenerator() : ct() {};
+	InstRO::Core::ConstructTrait getConstructTraits() { return ct; }
 
 	// global scope
 	void visit(SgProject* node) {
-		cl = InstRO::Core::ConstructTraitType::CTGlobalScope;
+		ct.add(InstRO::Core::ConstructTraitType::CTGlobalScope);
 	}
 
 	// file scope
 	void visit(SgSourceFile* node) {
-		cl = InstRO::Core::ConstructTraitType::CTFileScope;
+		ct.add(InstRO::Core::ConstructTraitType::CTFileScope);
 	}
 
 	// function
-	void visit(SgFunctionDefinition* node) { cl = InstRO::Core::ConstructTraitType::CTFunction; }
+	void visit(SgFunctionDefinition* node) { ct.add(InstRO::Core::ConstructTraitType::CTFunction); }
 
 	// conditionals
-	void visit(SgIfStmt* node) { cl = InstRO::Core::ConstructTraitType::CTConditionalStatement; }
-	void visit(SgSwitchStatement* node) { cl = InstRO::Core::ConstructTraitType::CTConditionalStatement; }
+	void visit(SgIfStmt* node) {
+		ct.add(InstRO::Core::ConstructTraitType::CTConditionalStatement);
+		handleWrappableCheck(node);
+	}
+	void visit(SgSwitchStatement* node) {
+		ct = InstRO::Core::ConstructTraitType::CTConditionalStatement;
+		handleWrappableCheck(node);
+	}
 
 	// loops
-	void visit(SgForStatement* node) { cl = InstRO::Core::ConstructTraitType::CTLoopStatement; }
-	void visit(SgWhileStmt* node) { cl = InstRO::Core::ConstructTraitType::CTLoopStatement; }
-	void visit(SgDoWhileStmt* node) { cl = InstRO::Core::ConstructTraitType::CTLoopStatement; }
+	void visit(SgForStatement* node) {
+		ct = InstRO::Core::ConstructTraitType::CTLoopStatement;
+		handleWrappableCheck(node);
+	}
+	void visit(SgWhileStmt* node) {
+		ct = InstRO::Core::ConstructTraitType::CTLoopStatement;
+		handleWrappableCheck(node);
+	}
+	void visit(SgDoWhileStmt* node) {
+		ct = InstRO::Core::ConstructTraitType::CTLoopStatement;
+		handleWrappableCheck(node);
+	}
 
 	// scopes
 	void visit(SgBasicBlock* node) {
 		if (RoseConstructLevelPredicates::CLConditionalPredicate()(node)) {
-			cl = InstRO::Core::ConstructTraitType::CTScopeStatement;
+			ct = InstRO::Core::ConstructTraitType::CTScopeStatement;
+			handleWrappableCheck(node);
 		} else {
 			generateError(node);
 		}
@@ -152,18 +168,20 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	// statements
 	void visit(SgStatement* node) {
 		if (RoseConstructLevelPredicates::CLSimpleStatementPredicate()(node)) {
-			cl = InstRO::Core::ConstructTraitType::CTSimpleStatement;
+			ct = InstRO::Core::ConstructTraitType::CTSimpleStatement;
+			handleWrappableCheck(node);
 		} else {
 			generateError(node);
 		}
 	}
 
 	// expressions
-	void visit(SgExpression* node) { cl = InstRO::Core::ConstructTraitType::CTExpression; }
+	void visit(SgExpression* node) { ct = InstRO::Core::ConstructTraitType::CTExpression; }
 	void visit(SgVariableDeclaration* node) {
 		// CI: an initialized variable declaration is OK,
 		if (node->get_definition()) {
-			cl = InstRO::Core::ConstructTraitType::CTSimpleStatement;
+			ct = InstRO::Core::ConstructTraitType::CTSimpleStatement;
+			handleWrappableCheck(node);
 		} else {
 			generateError(node);
 		}
@@ -175,7 +193,14 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	void visit(SgNode* node) { generateError(node); }
 
  private:
-	InstRO::Core::ConstructTraitType cl;
+	InstRO::Core::ConstructTrait ct;
+
+	void handleWrappableCheck(SgNode* node) {
+		ct.add(InstRO::Core::ConstructTraitType::CTStatement);
+		if (RoseConstructLevelPredicates::CTWrappableStatementPredicate()(node)) {
+			ct.add(InstRO::Core::ConstructTraitType::CTWrappableStatement);
+		}
+	}
 
 	void generateError(SgNode* node) {
 		std::cout << "# Encountered error case in ConstructGenerator. " << node->class_name() << "\t"
@@ -185,11 +210,11 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 class RoseConstruct : public InstRO::Core::Construct {
  public:
-	RoseConstruct(SgNode* sgnode) : Construct(InstRO::Core::ConstructTraitType::CTNotALevel), node(sgnode) {
+	RoseConstruct(SgNode* sgnode) : node(sgnode) {
 		if (sgnode != nullptr) {
 			ConstructGenerator gen;
 			node->accept(gen);
-			traits = gen.getCLT();
+			constructTraits = gen.getConstructTraits();
 		}
 	}
 
