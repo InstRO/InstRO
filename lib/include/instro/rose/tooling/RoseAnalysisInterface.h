@@ -11,37 +11,43 @@ namespace InstRO {
 namespace Rose {
 namespace Tooling {
 class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
- protected:
-	SgProject *project;
-	RoseAnalysisManager() = delete;
-	InstRO::Rose::Tooling::NamedConstructAccess::RoseNamedConstructAccess *nca;
-	InstRO::Rose::Tooling::ConstructElevator::ConstructElevator *ce;
-	InstRO::Rose::Tooling::GrammarInterface::RoseGrammarInterface *gi;
-
  public:
-	RoseAnalysisManager(SgProject *proj)
-			: project(proj),
-				nca(new InstRO::Rose::Tooling::NamedConstructAccess::RoseNamedConstructAccess(proj)),
-				ce(new InstRO::Rose::Tooling::ConstructElevator::ConstructElevator()),
-				gi(new InstRO::Rose::Tooling::GrammarInterface::RoseGrammarInterface(proj)){};
+	RoseAnalysisManager(SgProject *proj) :
+			project(proj),
+			nca(new NamedConstructAccess::RoseNamedConstructAccess(proj)),
+			ce(new ConstructElevator::ConstructElevator()),
+			gi(new GrammarInterface::RoseGrammarInterface(proj)) {}
+
+	RoseAnalysisManager() = delete;
 	~RoseAnalysisManager() {
 		delete nca;
 		delete ce;
 		delete gi;
 	}
+
 	virtual InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph *getECG() override {
-		throw std::string("Not IMplemented");
+		throw std::string("Not Implemented");
 		return NULL;
-	};
+	}
 	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraph *getCFG() override {
-		throw std::string("Not IMplemented");
+		throw std::string("Not Implemented");
 		return NULL;
-	};
-	virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override { return ce; };
-	virtual InstRO::Tooling::GrammarInterface::GrammarInterface *getGrammarInterface() override { return gi; };
+	}
+	virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override {
+		return ce;
+	}
+	virtual InstRO::Tooling::GrammarInterface::GrammarInterface *getGrammarInterface() override {
+		return gi;
+	}
 	virtual InstRO::Tooling::NamedConstructAccess::NamedConstructAccess *getNamedConstructAccessFacility() override {
 		return nca;
 	}
+
+ protected:
+	SgProject *project;
+	NamedConstructAccess::RoseNamedConstructAccess *nca;
+	ConstructElevator::ConstructElevator *ce;
+	GrammarInterface::RoseGrammarInterface *gi;
 };
 
 }	// Tooling

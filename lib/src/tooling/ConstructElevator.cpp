@@ -11,18 +11,21 @@ namespace ConstructElevator {
 std::unique_ptr<InstRO::Core::ConstructSet> ConstructElevator::crop(InstRO::Core::ConstructSet *inputCS,
 																																		InstRO::Core::ConstructTraitType min,
 																																		InstRO::Core::ConstructTraitType max) {
+
 	InstRO::InfracstructureInterface::ConstructSetCompilerInterface input(inputCS);
 	auto outputCS = std::make_unique<InstRO::Core::ConstructSet>();
 	InstRO::InfracstructureInterface::ConstructSetCompilerInterface output(outputCS.get());
 
 	for (auto construct : input) {
-		if (construct->getTraits().min() > max || construct->getTraits().max() < min)
+		if (construct->getTraits().min() > max || construct->getTraits().max() < min) {
 			continue;
-		else
+		} else {
 			output.put(construct);
+		}
 	}
 	return outputCS;
 }
-}
-}
-}
+
+}	// namespace ConstructElevator
+}	// namespace Tooling
+}	// namespace InstRO

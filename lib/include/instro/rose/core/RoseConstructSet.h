@@ -14,11 +14,21 @@ namespace Rose {
 namespace Core {
 
 namespace RoseConstructLevelPredicates {
-struct CLExpressionPredicate {
-	bool operator()(SgNode* n) const { return isSgExpression(n) != nullptr; }
+struct CTPredicate {
+	virtual bool operator()(SgNode* n) const {
+		// RN: TODO will this actually work with a base implementation?
+		return false;
+	}
+	virtual ~CTPredicate() {}
 };
 
-struct CLLoopPredicate {
+struct CLExpressionPredicate : public CTPredicate {
+	bool operator()(SgNode* n) const {
+		return isSgExpression(n) != nullptr;
+	}
+};
+
+struct CLLoopPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		if (isSgDoWhileStmt(n) || isSgWhileStmt(n) || isSgForStatement(n)) {
 			return true;
@@ -27,7 +37,7 @@ struct CLLoopPredicate {
 	}
 };
 
-struct CLConditionalPredicate {
+struct CLConditionalPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		if (isSgIfStmt(n) || isSgSwitchStatement(n)) {
 			return true;
@@ -36,7 +46,7 @@ struct CLConditionalPredicate {
 	}
 };
 
-struct CLScopeStatementPredicate {
+struct CLScopeStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		// ignore function scopes
 		if (isSgBasicBlock(n) && !isSgFunctionDefinition(n->get_parent())) {
@@ -46,7 +56,7 @@ struct CLScopeStatementPredicate {
 	}
 };
 
-struct CLStatementPredicate {
+struct CLStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		if (isSgDeclarationStatement(n)) {
 			if (isSgVariableDeclaration(n) && (isSgVariableDeclaration(n)->get_definition() != nullptr)) {
@@ -69,19 +79,19 @@ struct CLStatementPredicate {
 	}
 };
 
-struct CLFunctionPredicate {
+struct CLFunctionPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const { return isSgFunctionDefinition(n) != nullptr; }
 };
 
-struct CLFileScopePredicate {
+struct CLFileScopePredicate : public CTPredicate {
 	bool operator()(SgNode* n) const { return isSgFile(n) != nullptr; }
 };
 
-struct CLGlobalScopePredicate {
+struct CLGlobalScopePredicate : public CTPredicate {
 	bool operator()(SgNode* n) const { return isSgProject(n) != nullptr; }
 };
 
-struct CLSimpleStatementPredicate {
+struct CLSimpleStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		if (CLStatementPredicate()(n)) {
 			if (CLScopeStatementPredicate()(n) || CLConditionalPredicate()(n) || CLLoopPredicate()(n)) {
@@ -94,23 +104,27 @@ struct CLSimpleStatementPredicate {
 	}
 };
 
-struct CTWrappableStatementPredicate {
+struct CTWrappableStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		return isSgBasicBlock(n->get_parent());
 	}
 };
 
-struct InstrumentableConstructPredicate {
+struct InstrumentableConstructPredicate : public CTPredicate {
 	// TODO: how exactly is this defined?
 	bool operator()(SgNode* n) const;
 };
 
-struct ConstructPredicate {
+struct ConstructPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		return CLGlobalScopePredicate()(n) || CLFileScopePredicate()(n) || CLFunctionPredicate()(n)
 				|| CLStatementPredicate()(n) || CLExpressionPredicate()(n);
 	}
 };
+
+//// TODO actually use that mechanism
+CTPredicate getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType);
+
 }	// namespace RoseConstructLevelPredicates
 
 class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
@@ -129,7 +143,9 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	}
 
 	// function
-	void visit(SgFunctionDefinition* node) { ct.add(InstRO::Core::ConstructTraitType::CTFunction); }
+	void visit(SgFunctionDefinition* node) {
+		ct.add(InstRO::Core::ConstructTraitType::CTFunction);
+	}
 
 	// conditionals
 	void visit(SgIfStmt* node) {

@@ -44,7 +44,7 @@ class ConstructSetCompilerInterface {
 namespace Core {
 
 typedef enum ContstructTraitEnum {
-	CTNotALevel           = 0,	// TODO this should no longer be necessary?
+	CTNoTraits           = 0,	// TODO this should no longer be necessary?
 	CTMin                 = 1,
 	// Please do not use fragments. They may become deprecated
 	CTFragment            = 2,
@@ -79,7 +79,7 @@ public:
 
 	bool is(ConstructTraitType type) {
 		if (cts.empty()) {
-			return type==CTNotALevel;
+			return type==CTNoTraits;
 		}
 		return cts.find(type) != cts.end();
 	}
@@ -98,13 +98,13 @@ public:
 
 	std::string toString() {
 		if (cts.empty()) {
-			return InstRO::Core::constructLevelToString(CTNotALevel);
+			return InstRO::Core::constructLevelToString(CTNoTraits);
 		}
 
 		std::stringstream ss;
 		ss << "[";
 		for (auto ct : cts) {
-			ss << InstRO::Core::constructLevelToString(ct) << ",";
+			ss << InstRO::Core::constructLevelToString(ct) << " ";
 		}
 		ss << "]";
 		return ss.str();
@@ -149,17 +149,15 @@ class ConstructSet {
 	virtual void clear();
 	virtual bool empty();
 	virtual size_t size();
-	/*
-	virtual void add(ConstructSet * setB) = NULL;
-	virtual void add(ConstructSet & set) = NULL;*/
+
  protected:
+	ConstructSet(const std::shared_ptr<Construct>& construct) { constructs.insert(construct); };
+
 	virtual void put(const std::shared_ptr<Construct>& construct);
 	virtual void erase(const std::shared_ptr<Construct>& construct);
 	virtual void put(ConstructSet cs);
 	virtual void erase(ConstructSet cs);
 	bool contains(const std::shared_ptr<Construct>& construct) const;
-
-	ConstructSet(const std::shared_ptr<Construct>& construct) { constructs.insert(construct); };
 
 	std::set<std::shared_ptr<Construct> >::iterator begin();
 	std::set<std::shared_ptr<Construct> >::iterator end();
@@ -168,12 +166,11 @@ class ConstructSet {
 
  public:
 	// https://en.wikipedia.org/wiki/Set_(mathematics)
-	// virtual unique_ptr<ConstructSet*> combine()
 	virtual ConstructSet combine(const ConstructSet&) const;
 	virtual ConstructSet intersect(const ConstructSet&) const;
 	virtual ConstructSet relativecomplement(const ConstructSet&) const;
 	virtual ConstructSet symmerticDifference(const ConstructSet&) const;
-	// virtual ConstructSet copy(){ return  };
+
 	virtual std::vector<ConstructSet> split() const;
 	// CI: I would like to have s.th. like a begin() and end() returning an iterator of constructset containing individual
 	// constructs

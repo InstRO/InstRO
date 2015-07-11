@@ -83,47 +83,39 @@ class ChannelConfiguration {
  * Using the getInput(passId) one can retrieve the ConstructSet of one of the
  * predecessors.
  */
-
 class PassImplementation {
- private:
-	Core::ChannelConfiguration cfg;
-
- protected:
-	Core::ChannelConfiguration &getChannelCFG() { return cfg; }
-
-	// This set is used to track alterations to the AST and notify which nodes have been invaldated
-	std::unique_ptr<InstRO::Core::ConstructSet> collisionSet;
-
  public:
-	Core::ChannelConfiguration channelCFG() { return cfg; }
-
-	PassImplementation(Core::ChannelConfiguration cfg)
-			: cfg(cfg), collisionSet(std::make_unique<InstRO::Core::ConstructSet>()) {}
+	PassImplementation(ChannelConfiguration channelConfig)
+			: channelConfig(channelConfig), collisionSet(std::make_unique<ConstructSet>()) {}
 	PassImplementation() = delete;
+	virtual ~PassImplementation() {}
 
-	/*	void setInputAggregation(InstRO::Core::Support::InputAggregation ia) {
-			this->ia = ia;
-		}*/
 	virtual void init() = 0;
 	virtual void execute() = 0;
 	virtual void finalize() = 0;
 	virtual void releaseOutput() = 0;
-	virtual Core::ConstructSet *getOutput() = 0;
 
-	/*	void setInputAggregation(InstRO::Core::Support::InputAggregation ia) {
-			this->ia = ia;
-		}*/
+	ChannelConfiguration getChannelConfig() { return channelConfig; }
+	virtual ConstructSet *getOutput() = 0;
+	ConstructSet *getInput(Pass *pId);
 
-	InstRO::Core::ConstructSet *getInput(Pass *pId);
-
- public:
-	InstRO::Core::ConstructSet *getCollisionSet(){};
+	ConstructSet *getCollisionSet(){
+		return collisionSet.get();
+	};
 
  private:
-	// Testing where this is used	InstRO::Core::Support::InputAggregation ia;
+	ChannelConfiguration channelConfig;
+
+ protected:
+	ChannelConfiguration &getChannelCFG() { return channelConfig; }
+
+	// This set is used to track alterations to the AST and notify which nodes have been invalidated
+	std::unique_ptr<ConstructSet> collisionSet;
 };
-}
-}
+
+}	// namespace Core
+}	// namespace InstRO
+
 #endif
 
 #include "instro/core/Pass.h"

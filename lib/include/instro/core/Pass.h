@@ -34,7 +34,7 @@ class Pass {
 			: passInitialized(false), passExecuted(false), passFinalized(false), passImplementation(pImpl){};
 
 	Core::PassImplementation *getPassImplementation() { return passImplementation; };
-	~Pass() {
+	virtual ~Pass() {
 		delete (passImplementation);
 		passImplementation = nullptr;
 	}
@@ -98,18 +98,18 @@ class Pass {
 	// Deprecated|void registerInputPass(Pass *pass, Core::ConstructLevelType level) {		inputPasses.push_back(pass);
 	// setInputLevelRequirement(pass, level);	}
 
-	std::vector<Pass *> const getInputPasses() { return passImplementation->channelCFG().getPasses(); };
+	std::vector<Pass *> const getInputPasses() { return passImplementation->getChannelConfig().getPasses(); };
 	Core::ConstructTraitType getMinInputLevelRequirement(Pass *pass) {
-		return passImplementation->channelCFG().getMinConstructLevel(pass);
+		return passImplementation->getChannelConfig().getMinConstructLevel(pass);
 	};
 	Core::ConstructTraitType getMaxInputLevelRequirement(Pass *pass) {
-		return passImplementation->channelCFG().getMaxConstructLevel(pass);
+		return passImplementation->getChannelConfig().getMaxConstructLevel(pass);
 	};
 	// Deprecated| void setInputLevelRequirement(Pass *pass, Core::ConstructLevelType level) { inputRequiredLevels[pass] =
 	// level; }
  protected:
 	// alternate name getInvalidationSet()
-	Core::ConstructSet *getCollisionSet() { passImplementation->getCollisionSet(); }
+	Core::ConstructSet *getCollisionSet() { return passImplementation->getCollisionSet(); }
 
  private:
 	// These flags are solely used to ensure proper sequences of initialization, execution and finalization
