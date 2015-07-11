@@ -54,6 +54,12 @@ Pass* RosePassFactory::createFunctionBlackAndWhiteListSelector(std::vector<std::
 
 	return compountPass;
 }
+
+InstRO::Pass* createFunctionBlackAndWhiteListFilter(std::vector<std::string> rules, Pass* inputPasses) {
+	throw std::string("Not yet Implemented");
+	return nullptr;
+}
+
 /*
 Pass* RosePassFactory::createBlackNWhiteSelector(std::string string) {
 	std::vector<std::string> filters;

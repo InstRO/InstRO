@@ -24,7 +24,10 @@ namespace GrammarInterface {};
 namespace NamedConstructAccess {};
 
 class AnalysisManager {
+
  public:
+	virtual ~AnalysisManager() {}
+
 	// CI: Explicit RawPointer to the Class. We do not release ownership
 	virtual ExtendedCallGraph::ExtendedCallGraph *getECG() = 0;
 	// CI:  Explicit RawPointer to the Class. We do not release ownership

@@ -36,8 +36,10 @@ class Instrumentor {
  public:
 	Instrumentor() {
 		passManagerLocked = false;
-		new InstRO::PassManagement::SimplePassManager();
 		setPassManager(new InstRO::PassManagement::SimplePassManager());
+	}
+	virtual ~Instrumentor() {
+		delete passManager;
 	}
 
 	// Get a instance of the PassFactory. The PassFactory is internally managed and deconstructed.

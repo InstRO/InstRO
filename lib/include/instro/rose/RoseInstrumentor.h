@@ -16,11 +16,6 @@ class RosePassFactory;
 }
 
 class RoseInstrumentor : public Instrumentor {
- protected:
-	// Store the Project. It is required for all passes later on ..
-	SgProject* project;
-	InstRO::Rose::Tooling::RoseAnalysisManager* ram;
-
  public:
 	RoseInstrumentor(int argc, char** argv) {
 		// TODO: Initialize Rose here
@@ -35,10 +30,7 @@ class RoseInstrumentor : public Instrumentor {
 		//		lockPassManager();
 		return new Rose::RosePassFactory(passManager, project);
 	}
-	//		PassFactory * getFactory(In
-	void init(){
-
-	};
+	void init() {}
 	void apply() { passManager->execute(); };
 	void finalize() {
 		// unparse instrumented source
@@ -46,6 +38,12 @@ class RoseInstrumentor : public Instrumentor {
 	};
 
 	virtual Tooling::AnalysisManager* getAnalysisManager() { return ram; }
+
+ protected:
+	// Store the Project. It is required for all passes later on ..
+	SgProject* project;
+	InstRO::Rose::Tooling::RoseAnalysisManager* ram;
+
 };
 };
 #endif

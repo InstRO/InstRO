@@ -134,18 +134,15 @@ ConstructSet ConstructSet::symmerticDifference(const ConstructSet& other) const 
 	}
 	return retSet;
 }
-// virtual ConstructSet copy(){ return  };
-::std::vector<ConstructSet> ConstructSet::split() const {
-	std::vector<ConstructSet> retSet;
-	retSet.reserve(constructs.size());
-	//	retSet.insert(constructs.begin(), constructs.end());
+
+std::vector<ConstructSet> ConstructSet::split() const {
+	std::vector<ConstructSet> retVec;
+	retVec.reserve(constructs.size());
 	for (auto construct : constructs) {
-		retSet.push_back(ConstructSet(construct));
+		retVec.push_back(ConstructSet(construct));
 	}
-	return retSet;
+	return retVec;
 }
-// CI: I would like to have s.th. like a begin() and end() returning an iterator of constructset containing individual
-// constructs
 
 }	// namespace Core
 

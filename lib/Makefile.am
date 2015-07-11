@@ -82,21 +82,6 @@ CLANG_HFILES= \
 ./include/instro/clang/selector/BlackWhitelistSelector.h \
 ./include/instro/clang/selector/FunctionDefinitionSelector.h \
 ./include/instro/clang/support/InstROASTConsumer.h
-#./include/instro/agnosticSupport.h \
-#./include/instro/misc/VisualizingManager.h \
-#./include/instro/misc/VisualizingPassManager.h \
-#./include/instro/rose/RoseInstrumentor.h \
-#./include/instro/rose/RosePass.h \
-#./include/instro/rose/RosePassFactory.h \
-#./include/instro/rose/contrib/geimeradapter.h \
-#./include/instro/rose/contrib/geimerparser.h \
-#./include/instro/rose/contrib/geimerselector.h \
-#./include/instro/rose/selectors/BlackAndWhiteListSelector.h \
-#./include/instro/rose/selectors/CompoundSelectors.h \
-#./include/instro/rose/adapters/CygProfileAdapter.h \
-#./include/instro/rose/adapters/GenericAdapter.h \
-#./include/instro/roseInstRO.h \
-#./include/instro/llvmInstRO.h
 
 ROSE_HFILES= \
 ./include/instro/rose/RoseInstrumentor.h  \

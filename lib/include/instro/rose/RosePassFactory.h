@@ -19,7 +19,13 @@ namespace InstRO {
 namespace Rose {
 
 class RosePassFactory : public InstRO::PassFactory {
- protected:
+public:
+	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) :
+			PassFactory(refManager), project(proj) {
+	}
+	virtual ~RosePassFactory() {}
+
+protected:
 	RosePassImplementation* getPass(Pass* pass) {
 		if (pass == NULL)
 			return NULL;
@@ -49,8 +55,6 @@ class RosePassFactory : public InstRO::PassFactory {
 	};
 
  public:
-	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) : PassFactory(refManager), project(proj){};
-
 	virtual InstRO::Pass* createProgramEntrySelector();
 	virtual InstRO::Pass* createFunctionSelector();
 	// Text Based Selection in Various Flavors

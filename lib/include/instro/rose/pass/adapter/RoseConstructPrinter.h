@@ -21,6 +21,7 @@ class RoseConstructPrinter : public RosePassImplementation {
 	void releaseOutput() { outputCS.clear(); };
 	InstRO::Core::ConstructSet *getOutput() { return &outputCS; }
 };
+
 }
 }
 }
