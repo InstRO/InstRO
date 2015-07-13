@@ -65,6 +65,8 @@ CORE_SFILES= \
 ./src/tooling/AnalysisInterface.cpp \
 ./src/tooling/NamedConstructAccess.cpp \
 ./src/tooling/ConstructElevator.cpp \
+./src/tooling/ExtendedCallGraph.cpp \
+./src/tooling/ControlFlowGraph.cpp \
 ./src/pass/selector/ProgramEntrySelector.cpp \
 ./src/pass/selector/IdentifyerSelector.cpp \
 ./src/pass/selector/TextStringSelector.cpp \
