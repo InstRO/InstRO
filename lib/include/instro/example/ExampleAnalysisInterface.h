@@ -3,6 +3,7 @@
 #include "instro/core/ConstructSet.h"
 #include "instro/tooling/AnalysisInterface.h"
 #include "instro/tooling/NamedConstructAccess.h"
+#include "instro/tooling/ControlFlowGraph.h"
 #include "instro/example/ExampleNamedConstructAccess.h"
 #include "instro/example/ExampleConstructSet.h"
 
@@ -22,7 +23,63 @@ return InstRO::Core::ConstructSet(); };
 	};
 }*/
 
-class ExampleControlFlowGraph : public InstRO::Tooling::ControlFlowGraph::ControlFlowGraph {};
+class ExampleControlFlowGraph : public InstRO::Tooling::ControlFlowGraph::ControlFlowGraph {
+protected:
+
+	InstRO::Core::ConstructSet * cs;
+public:
+	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(std::string name, bool useFullQualification) {
+		throw std::string("ExampleControlFlowGraph: Not Implemented");
+		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs);		
+	};
+
+        virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExitNode (std::string name, bool useFullQualification) {
+		throw std::string("ExampleControlFlowGraph: Not Implemented");
+		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs);		
+	};
+
+        
+	// helpers for Constru
+        virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode){
+		throw std::string("ExampleControlFlowGraph: Not Implemented");
+		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs);		
+	};
+
+        virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExitNode (InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode){
+		throw std::string("ExampleControlFlowGraph: Not Implemented");
+		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs);		
+	};
+
+        // This function can only be called from the raw interface of the compiler, as the tooling interface only provides construct sets ...
+        virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(InstRO::Core::Construct) {
+		throw std::string("ExampleControlFlowGraph: Not Implemented");
+		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs);		
+	};
+
+        virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExityNode(InstRO::Core::Construct) {
+		throw std::string("ExampleControlFlowGraph: Not Implemented");
+		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs);		
+	};
+
+
+        // Get a set of entry/exit nodes for the functions represented by the cs-nodes.
+        // If a construct in the CS is File or Global-Class no entries are returned for those respecitve constucts
+        virtual std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode> getCFGEntrySet(InstRO::Core::ConstructSet cs){
+		throw std::string("ExampleControlFlowGraph: Not Implemented");
+		return std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode>();		
+	};
+
+        virtual std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode> getCFGExitSet(InstRO::Core::ConstructSet cs){
+		throw std::string("ExampleControlFlowGraph: Not Implemented");
+		return std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode>();		
+	};
+
+        // Find, if possible, the corresponding CFG nodes. Since the CS is a set of nodes, we return a set of nodes ...
+	virtual std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode> getCFGNodeSet(InstRO::Core::ConstructSet cs){
+		throw std::string("ExampleControlFlowGraph: Not Implemented");
+		return std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode>();		
+	};
+};
 
 /* CI: The ConstructSet class is intended to be specialized for each compiler interface. It provides the basic
  * mechanisms to specify what construct level are contained. */
@@ -61,9 +118,9 @@ class ExampleGrammarInterface : public InstRO::Tooling::GrammarInterface::Gramma
 
 class ExampleExtendedCallGraph : public InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph {
  public:
-	std::vector<InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *> findNodes(
+	std::set<InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *> getECGNodes(
 			InstRO::Core::ConstructSet *cs) override {
-		return std::vector<InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *>();
+		return std::set<InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *>();
 	};
 	// std::vector<ExtendedCallGraphNode*> findNodes(GrammarInterface::GrammerTypes type);
 };
