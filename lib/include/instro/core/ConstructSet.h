@@ -70,7 +70,15 @@ std::string operator+(const std::string& lhs, const ConstructTraitType& type);
 
 class ConstructTrait {
 public:
-	ConstructTrait() {
+	ConstructTrait() = delete;
+
+/*	template <class... TraitList>
+	ChannelConfiguration(Pass *p1, PassList... passes) {
+		inputChannelPasses.insert(inputChannelPasses.begin(), { p1, passes... });
+	}*/
+
+	template <class... TraitList> ConstructTrait(TraitList... traits){
+		cts.insert({ traits... });
 	}
 
 	ConstructTrait(ConstructTraitType type) {
@@ -120,7 +128,7 @@ private:
 class Construct {
  public:
 	virtual bool operator<(const Construct& b) { return false; }
-	Construct() {};
+	Construct(ConstructTrait traits):constructTraits(traits){};
 	ConstructTrait getTraits() { return constructTraits; }
 	const std::set<ConstructTraitType>& getTraitsAsSet() {
 		return constructTraits.getTraitsAsSet();

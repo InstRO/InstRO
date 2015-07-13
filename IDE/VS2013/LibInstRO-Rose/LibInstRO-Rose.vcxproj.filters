@@ -188,6 +188,9 @@
     <ClInclude Include="..\..\..\lib\include\instro\pass\selector\CallPathSelector.h">
       <Filter>instro\pass\selector</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructProvider.h">
+      <Filter>instro\example</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp">
@@ -258,6 +261,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseGrammarInterface.cpp">
       <Filter>instro\rose\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\tooling\ControlFlowGraph.cpp">
+      <Filter>instro\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\tooling\ExtendedCallGraph.cpp">
+      <Filter>instro\tooling</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

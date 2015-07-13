@@ -98,6 +98,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\Singleton.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\CallPathSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleAnalysisInterface.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructProvider.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePass.h" />
@@ -155,6 +156,8 @@
     <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\ConstructElevator.cpp" />
+    <ClCompile Include="..\..\..\lib\src\tooling\ControlFlowGraph.cpp" />
+    <ClCompile Include="..\..\..\lib\src\tooling\ExtendedCallGraph.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAccess.cpp" />
   </ItemGroup>
   <ItemGroup>

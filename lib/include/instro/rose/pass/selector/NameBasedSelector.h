@@ -24,6 +24,7 @@ class NameBasedSelector : public InstRO::Rose::RosePassImplementation {
 
  protected:
 };
-}
-}
-}
+
+}	// Selector
+}	// Rose
+}	// InstRO

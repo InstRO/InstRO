@@ -86,10 +86,20 @@ public:
 class ExampleConstructElevator : public InstRO::Tooling::ConstructElevator::ConstructElevator {
  public:
 	// This is the implicit way, that the PassManager will allways apply
-	virtual std::unique_ptr<InstRO::Core::ConstructSet> raise(InstRO::Core::ConstructSet *input,
-																														InstRO::Core::ConstructTraitType cl) override {
-		throw std::string("ExampleConstructElevator::raise : Not Implemented");
-		return std::make_unique<InstRO::Core::ConstructSet>(*input);
+	virtual std::unique_ptr<InstRO::Core::ConstructSet> raise(InstRO::Core::ConstructSet *input, InstRO::Core::ConstructTraitType cl) override {
+		InstRO::InfracstructureInterface::ConstructSetCompilerInterface inputCSCI(input);
+		auto outputCS=std::make_unique<InstRO::Core::ConstructSet>();
+		InstRO::InfracstructureInterface::ConstructSetCompilerInterface outputCSCI(outputCS.get());
+		for (auto construct : inputCSCI)	{
+			auto traits=construct->getTraits();
+			if (!traits.is(cl))	{
+
+
+			}
+
+		}
+	//	throw std::string("ExampleConstructElevator::raise : Not Implemented");
+		return outputCS;
 	}
 	// This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
 	virtual std::unique_ptr<InstRO::Core::ConstructSet> lower(InstRO::Core::ConstructSet *input,
