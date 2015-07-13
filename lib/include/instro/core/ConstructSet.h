@@ -44,7 +44,7 @@ class ConstructSetCompilerInterface {
 namespace Core {
 
 typedef enum ContstructTraitEnum {
-	CTNoTraits           = 0,	// TODO this should no longer be necessary?
+	CTNoTraits			  =	 0,	// TODO this should no longer be necessary?
 	CTMin                 = 1,
 	// Please do not use fragments. They may become deprecated
 	CTFragment            = 2,
@@ -180,6 +180,6 @@ class ConstructSet {
 };
 
 }	// End Namespace Core
-
 }	// End namespace InstRO
+
 #endif
