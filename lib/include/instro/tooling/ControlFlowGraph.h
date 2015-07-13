@@ -1,3 +1,5 @@
+#ifndef INSTRO_TOOLING_ControlFlowGraphNode
+#define INSTRO_TOOLING_ControlFlowGraphNode
 #include <memory>	// We need shared pointers
 #include <list>		 // We use List in the GrammarInterface
 #include "instro/core/ConstructSet.h"
@@ -6,20 +8,23 @@ namespace InstRO {
 namespace Tooling {
 namespace ControlFlowGraph {
 class ControlFlowGraphNode {
- public:
+protected:
+	Core::ConstructSet * cs;
+public:
+	ControlFlowGraphNode(Core::ConstructSet * inputCS):cs(inputCS){}
 	// CI: Explicit RAW Pointer. We do not release control of this CS
-	virtual Core::ConstructSet *getAssociatedConstructSet() = 0;
+	virtual Core::ConstructSet *getAssociatedConstructSet() { return cs;};
 };
 class ControlFlowGraph {
 public:
 	// Get Entry (FUNCTION NODE)
 	// Get Exit (Function Node)
 
-	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(std::string name,bool useFullQualification) = 0;
 	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(std::string name, bool useFullQualification) = 0;
+	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExitNode (std::string name, bool useFullQualification) = 0;
 	// helpers for Constru
 	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode) = 0;
-	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExitNode(InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode) = 0;
+	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExitNode (InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode) = 0;
 	// This function can only be called from the raw interface of the compiler, as the tooling interface only provides construct sets ...
 	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(InstRO::Core::Construct) = 0;
 	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExityNode(InstRO::Core::Construct) = 0;
@@ -35,3 +40,4 @@ public:
 }
 }
 }
+#endif

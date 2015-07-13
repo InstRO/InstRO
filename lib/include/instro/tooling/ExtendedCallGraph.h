@@ -18,7 +18,7 @@ class ExtendedCallGraph {
 
 
 	// Get ECG nodes for the constructs in the 
-	virtual std::set<ExtendedCallGraphNode *> getEXGNodes(Core::ConstructSet *cs) = 0;
+	virtual std::set<ExtendedCallGraphNode *> getECGNodes(Core::ConstructSet *cs) = 0;
 };
 
 }	// ExtendedCallGraph
