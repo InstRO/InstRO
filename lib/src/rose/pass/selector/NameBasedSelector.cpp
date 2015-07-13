@@ -26,6 +26,7 @@ void NameBasedSelector::finalize() {}
 void NameBasedSelector::releaseOutput() { output->clear(); }
 
 Core::ConstructSet *NameBasedSelector::getOutput() { return output.get(); }
+
 }
 }
 }

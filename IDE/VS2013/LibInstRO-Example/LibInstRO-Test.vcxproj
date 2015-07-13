@@ -99,6 +99,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\example\CompoundSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleAnalysisInterface.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructPrinter.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructProvider.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleNamedConstructAccess.h" />

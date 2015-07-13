@@ -22,6 +22,7 @@ class ExampleNamedConstructAccess : public ::InstRO::Tooling::NamedConstructAcce
 		namedConstructs.insert("myGoo");
 		userTextStrings.insert("Hello World\n");
 	};
+
 	std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByIdentifyerName(
 			::InstRO::Tooling::NamedConstructAccess::Matcher &matcher) override {
 		InstRO::Core::ConstructSet *cs = new InstRO::Core::ConstructSet();

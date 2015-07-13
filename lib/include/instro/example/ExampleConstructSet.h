@@ -10,15 +10,20 @@ namespace Example {
 namespace Core {
 class ExampleConstruct : public InstRO::Core::Construct {
  public:
-	ExampleConstruct(InstRO::Core::ConstructTraitType level, std::string nname): name(nname) {
+	 ExampleConstruct(InstRO::Core::ConstructTrait level, std::string nname) :Construct(level), name(nname), hierarchyPartent(nullptr){
 		 constructTraits = InstRO::Core::ConstructTrait(level);
+	};
+	ExampleConstruct(InstRO::Core::ConstructTrait level, std::string nname, ExampleConstruct * parent) :Construct(level), name(nname), hierarchyPartent(parent){
+		constructTraits = InstRO::Core::ConstructTrait(level);
 	};
 	std::string toString() { return name; };
 
  protected:
 	std::string name;
+	ExampleConstruct * hierarchyPartent;
 };
-namespace InfracstructureInterface {/*
+namespace InfracstructureInterface {
+	/*
 
 	 class ExampleConstructSet :public InstRO::Core::ConstructSet {
 	 public:
@@ -47,6 +52,8 @@ namespace InfracstructureInterface {/*
 		 std::set<std::shared_ptr<InstRO::Core::Construct> >::const_iterator  cend()const;
 	 };*/
 }
+
+
 
 #ifdef DEPRECATEDCS
 class ExampleConstructSet : public InstRO::Core::ConstructSet {
