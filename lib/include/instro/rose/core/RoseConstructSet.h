@@ -129,12 +129,12 @@ CTPredicate getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType)
 
 class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
  public:
-	ConstructGenerator() : ct() {};
+	ConstructGenerator() : ct(InstRO::Core::ConstructTraitType::CTNoTraits) {};
 	InstRO::Core::ConstructTrait getConstructTraits() { return ct; }
 
 	// global scope
 	void visit(SgProject* node) {
-		ct.add(InstRO::Core::ConstructTraitType::CTGlobalScope);
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTGlobalScope);
 	}
 
 	// file scope
@@ -224,14 +224,12 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	}
 };
 
+
+
 class RoseConstruct : public InstRO::Core::Construct {
  public:
-	RoseConstruct(SgNode* sgnode) : node(sgnode) {
-		if (sgnode != nullptr) {
-			ConstructGenerator gen;
-			node->accept(gen);
-			constructTraits = gen.getConstructTraits();
-		}
+	RoseConstruct(SgNode* sgnode, InstRO::Core::ConstructTrait traits) :
+			InstRO::Core::Construct(traits), node(sgnode) {
 	}
 
 	virtual ~RoseConstruct() {}
@@ -250,15 +248,20 @@ class RoseConstructProvider {
 	}
 
 	std::shared_ptr<RoseConstruct> getConstruct(SgNode* node) {
+
 		std::cout << "getConstruct(" << node << ")" << std::endl;
-		if (mapping.find(node) != mapping.end()) {
-			std::cout << "\tfound existing Construct" << std::endl;
-			return mapping[node];
+		if (node == nullptr) {
+			throw std::string("RoseConstructProvider: attempted to getConstruct for nullptr");
 		}
-		std::cout << "\tcreating new construct" << std::endl;
-		std::shared_ptr<RoseConstruct> construct = std::shared_ptr<RoseConstruct>(new RoseConstruct(node));
-		mapping[node] = construct;
-		return construct;
+
+		if (mapping.find(node) == mapping.end()) {
+			std::cout << "\tcreating new construct" << std::endl;
+
+			ConstructGenerator gen;
+			node->accept(gen);
+			mapping[node] = std::shared_ptr<RoseConstruct>(new RoseConstruct(node, gen.getConstructTraits()));
+		}
+		return mapping[node];
 	}
 
  private:

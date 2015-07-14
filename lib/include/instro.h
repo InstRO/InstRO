@@ -66,7 +66,7 @@ namespace Example {};	// An example implementation and usage of the InstRO inter
 #endif
 
 #ifdef USING_EXAMPLE
-#include "instro/example/ExampleConstructProvider.h"
+//#include "instro/example/ExampleConstructProvider.h"
 #include "instro/example/ExampleInstrumentor.h"
 #include "instro/example/ExamplePass.h"
 #include "instro/example/ExamplePassFactory.h"

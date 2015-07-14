@@ -128,8 +128,11 @@ private:
 class Construct {
  public:
 	virtual bool operator<(const Construct& b) { return false; }
+
 	Construct(ConstructTrait traits):constructTraits(traits){};
+
 	ConstructTrait getTraits() { return constructTraits; }
+
 	const std::set<ConstructTraitType>& getTraitsAsSet() {
 		return constructTraits.getTraitsAsSet();
 	}
