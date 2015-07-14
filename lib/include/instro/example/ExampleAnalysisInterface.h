@@ -30,35 +30,35 @@ protected:
 public:
 	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(std::string name, bool useFullQualification) {
 		throw std::string("ExampleControlFlowGraph: Not Implemented");
-		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs);		
+		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_ENTRY);
 	};
 
         virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExitNode (std::string name, bool useFullQualification) {
 		throw std::string("ExampleControlFlowGraph: Not Implemented");
-		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs);		
+		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_EXIT);
 	};
 
         
 	// helpers for Constru
         virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode){
 		throw std::string("ExampleControlFlowGraph: Not Implemented");
-		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs);		
+		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_ENTRY);
 	};
 
         virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExitNode (InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode){
 		throw std::string("ExampleControlFlowGraph: Not Implemented");
-		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs);		
+		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_EXIT);
 	};
 
         // This function can only be called from the raw interface of the compiler, as the tooling interface only provides construct sets ...
         virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(InstRO::Core::Construct) {
 		throw std::string("ExampleControlFlowGraph: Not Implemented");
-		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs);		
+		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_ENTRY);
 	};
 
         virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExityNode(InstRO::Core::Construct) {
 		throw std::string("ExampleControlFlowGraph: Not Implemented");
-		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs);		
+		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_EXIT);
 	};
 
 
