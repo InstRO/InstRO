@@ -1,6 +1,7 @@
 #ifndef ROSE_CONTROL_FLOW_GRAPH_H
 #define ROSE_CONTROL_FLOW_GRAPH_H
 
+#include <set>
 #include <rose.h>
 
 #include "instro/rose/core/RoseConstructSet.h"
@@ -150,74 +151,30 @@ private:
 	}
 };
 
-}
-}
-}
-}
-
-//// XXX BGL
-
-#if 0
-
-#include <iostream>
-#include <map>
-#include <set>
-
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/labeled_graph.hpp>
-
-using namespace boost;
-
-typedef labeled_graph<adjacency_list<vecS, vecS, directedS, ACFGNode>, ConstructSet> Graph;
-
-// may not contain the same ConstructSet twice
-class BoostACFG {
+class RoseCFGGenerator {
 public:
-	BoostACFG() {
+	RoseCFGGenerator(SgProject* project) {
+		for (auto funcDef : SageInterface::querySubTree<SgFunctionDefinition>(project, V_SgFunctionDefinition)) {
+			generate(funcDef);
+		}
 	}
 
-	void addNode(ConstructSet cs, ACFGNodeType type) {
-		graph.add_vertex(cs);
-		auto& graphNode = graph[cs];
-		graphNode = ACFGNode(cs, type);
+
+
+	InstRO::Tooling::ControlFlowGraph::ControlFlowGraph* getGraph() {
+		return new InstRO::Tooling::ControlFlowGraph::ControlFlowGraph();
 	}
 
-	void addEdge(ConstructSet from, ConstructSet to) {
-		add_edge_by_label(from, to, graph);
-	}
+private:
+	std::map<std::shared_ptr<InstRO::Core::Construct>, BoostCFG> cfgs;
 
-	std::vector<ACFGNode> findNodes(const ConstructSet& constructSet) {
-		std::vector<ACFGNode> foundNodes;
-
-		// TODO
-
-		return foundNodes;
-	}
-
-public:	//
-	Graph graph;
-};
-
-
-void foo(int i) {}
-
-int main(int argc, char** argv) {
-
-	SgProject* project = frontend(argc, argv);
-
-	for (auto funcDef : SageInterface::querySubTree<SgFunctionDefinition>(project, V_SgFunctionDefinition)) {
-
-		BoostACFG g;
-
-		VirtualCFG::interestingCfgToDot(funcDef, funcDef->get_declaration()->get_name().getString()+".dot");
-		VirtualCFG::cfgToDot(funcDef, funcDef->get_declaration()->get_name().getString()+"-all.dot");
-
-
+	void generate(SgFunctionDefinition* funcDef) {
 		CFGNode startNode = VirtualCFG::cfgBeginningOfConstruct(funcDef);
 		std::queue<CFGNode> workList;
 		workList.push(startNode);
 		std::set<CFGNode> visitedNodes;
 
+		BoostCFG cfg;
 		CFGConstructSetGenerator gen;
 
 		while (!workList.empty()) {
@@ -229,17 +186,17 @@ int main(int argc, char** argv) {
 				visitedNodes.insert(node);
 
 				if (node.isInteresting() || isSgBasicBlock(node.getNode())) {
-					std::cout << std::endl <<  "visit: " << node.getNode()->class_name() << std::endl
+					std::cout << std::endl << "visit: " << node.getNode()->class_name() << std::endl
 							<< node.toString() << std::endl;
 
 					gen.reset(node.getIndex());
 					node.getNode()->accept(gen);
-					ConstructSet* cs = gen.getConstructSet();
-					ACFGNodeType nodeType = gen.getNodeType();
+					InstRO::Core::ConstructSet* cs = gen.getConstructSet();
+					CFGNodeType nodeType = gen.getNodeType();
 
 					if (cs != nullptr) {
 						std::cout << "----> valid node." << std::endl;
-						g.addNode(*cs, nodeType);
+						cfg.addNode(*cs, nodeType);
 					}
 				}
 
@@ -249,21 +206,26 @@ int main(int argc, char** argv) {
 			}
 		}
 
-		std::cout << std::endl << std::endl;
+		auto startConstruct = InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(funcDef);
+		cfgs[startConstruct] = cfg;
 
+		///XXX Print that stuff
+		std::cout << std::endl;
 		Graph::vertex_iterator vertexIter, vertexEnd;
-		for (tie(vertexIter, vertexEnd) = vertices(g.graph); vertexIter != vertexEnd; vertexIter++)
+		for (tie(vertexIter, vertexEnd) = boost::vertices(cfg.graph); vertexIter != vertexEnd; vertexIter++)
 		{
-			ACFGNode node = g.graph.graph()[*vertexIter];
+			ControlFlowGraphNode node = cfg.graph.graph()[*vertexIter];
 			std::cout << node << std::endl;
 		}
+		std::cout << boost::num_vertices(cfg.graph) << " vertices" << std::endl;
 
-		std::cout << num_vertices(g.graph) << " vertices" << std::endl;
 	}
 
+};
+
 }
-
-#endif
-
+}
+}
+}
 
 #endif // ROSE_CONTROL_FLOW_GRAPH_H

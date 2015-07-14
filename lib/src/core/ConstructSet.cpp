@@ -73,8 +73,8 @@ ConstructTraitType ConstructSet::getMinConstructLevel() {
 	return min;
 }
 void ConstructSet::clear() { constructs.clear(); }
-bool ConstructSet::empty() { return constructs.empty(); }
-size_t ConstructSet::size() { return constructs.size(); }
+bool ConstructSet::empty() const { return constructs.empty(); }
+size_t ConstructSet::size() const { return constructs.size(); }
 /*
 virtual void add(ConstructSet * setB) = NULL;
 virtual void add(ConstructSet & set) = NULL;*/
