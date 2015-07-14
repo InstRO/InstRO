@@ -158,8 +158,8 @@ class ConstructSet {
 	virtual ConstructTraitType getMaxConstructLevel();
 	virtual ConstructTraitType getMinConstructLevel();
 	virtual void clear();
-	virtual bool empty();
-	virtual size_t size();
+	bool empty() const;
+	size_t size() const;
 
  protected:
 	ConstructSet(const std::shared_ptr<Construct>& construct) { constructs.insert(construct); };
@@ -188,6 +188,10 @@ class ConstructSet {
 
  protected:
 	std::set<std::shared_ptr<Construct> > constructs;
+
+	friend bool operator<(const ConstructSet& c1, const ConstructSet& c2) {
+		return c1.constructs < c2.constructs;
+	}
 };
 
 }	// End Namespace Core
