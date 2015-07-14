@@ -12,6 +12,8 @@ namespace ConstructElevator {
 * mechanisms to specify what construct level are contained. */
 class ConstructElevator {
  public:
+	virtual ~ConstructElevator() {}
+
 	// This is the implicit way that the PassManager will allways apply
 	virtual std::unique_ptr<Core::ConstructSet> raise(Core::ConstructSet *input, Core::ConstructTraitType cl) = 0;
 	// This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)

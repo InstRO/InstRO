@@ -231,13 +231,33 @@ class RoseConstruct : public InstRO::Core::Construct {
 	RoseConstruct(SgNode* sgnode, InstRO::Core::ConstructTrait traits) :
 			InstRO::Core::Construct(traits), node(sgnode) {
 	}
-
 	virtual ~RoseConstruct() {}
 
 	::SgNode* getNode() const { return node; }
 
  private:
 	::SgNode* node;
+};
+
+class RoseFragment : public InstRO::Core::Construct {
+public:
+	RoseFragment(Sg_File_Info* info) :
+			InstRO::Core::Construct(InstRO::Core::ConstructTrait(InstRO::Core::ContstructTraitEnum::CTFragment)), info(info) {
+	}
+	~RoseFragment() {}
+
+	Sg_File_Info* getFileInfo() {
+		return info;
+	}
+
+	std::string toString() {
+		std::stringstream ss;
+		ss << "RoseFragment line:" << info->get_line() << " col:" << info->get_col();
+		return ss.str();
+	}
+
+private:
+	Sg_File_Info* info;
 };
 
 class RoseConstructProvider {
