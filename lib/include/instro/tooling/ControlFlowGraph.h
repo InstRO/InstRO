@@ -49,7 +49,7 @@ public:
 	CFGNodeType nodeType;
 
 	friend std::ostream& operator<<(std::ostream& out, const ControlFlowGraphNode& node) {
-		out << ACFGNodeTypeNames[node.nodeType] << node.cs;
+		out << ACFGNodeTypeNames[node.nodeType] << *(node.cs);
 		return out;
 	}
 };
@@ -87,12 +87,10 @@ public:	//
 
 class ControlFlowGraph {
 public:
-	ControlFlowGraph() {}
+
 	virtual ~ControlFlowGraph() {}
 
-
 	// TODO implement all of these
-
 //	virtual ControlFlowGraphNode getCFGEntryNode(std::string name, bool useFullQualification) = 0;
 //	virtual ControlFlowGraphNode getCFGExitNode (std::string name, bool useFullQualification) = 0;
 //	// helpers for Constru
@@ -110,9 +108,33 @@ public:
 //	// Find, if possible, the corresponding CFG nodes. Since the CS is a set of nodes, we return a set of nodes ...
 //	virtual std::set<ControlFlowGraphNode> getCFGNodeSet(InstRO::Core::ConstructSet cs) = 0;
 
-protected:
 
-	std::map<std::shared_ptr<InstRO::Core::Construct>, BoostCFG> cfgs;
+};
+
+class AbstractControlFlowGraph : public ControlFlowGraph {
+ public:
+	AbstractControlFlowGraph(std::map<std::shared_ptr<InstRO::Core::Construct>, BoostCFG> graphs) : cfgs(graphs) {}
+
+	// TODO implement all of these
+//	virtual ControlFlowGraphNode getCFGEntryNode(std::string name, bool useFullQualification) = 0;
+//	virtual ControlFlowGraphNode getCFGExitNode (std::string name, bool useFullQualification) = 0;
+//	// helpers for Constru
+//	virtual ControlFlowGraphNode getCFGEntryNode(ControlFlowGraphNode) = 0;
+//	virtual ControlFlowGraphNode getCFGExitNode (ControlFlowGraphNode) = 0;
+//	// This function can only be called from the raw interface of the compiler, as the tooling interface only provides construct sets ...
+//	virtual ControlFlowGraphNode getCFGEntryNode(InstRO::Core::Construct) = 0;
+//	virtual ControlFlowGraphNode getCFGExityNode(InstRO::Core::Construct) = 0;
+//
+//	// Get a set of entry/exit nodes for the functions represented by the cs-nodes.
+//	// If a construct in the CS is File or Global-Class no entries are returned for those respecitve constucts
+//	virtual std::set<ControlFlowGraphNode> getCFGEntrySet(InstRO::Core::ConstructSet cs)=0;
+//	virtual std::set<ControlFlowGraphNode> getCFGExitSet(InstRO::Core::ConstructSet cs)=0;
+//
+//	// Find, if possible, the corresponding CFG nodes. Since the CS is a set of nodes, we return a set of nodes ...
+//	virtual std::set<ControlFlowGraphNode> getCFGNodeSet(InstRO::Core::ConstructSet cs) = 0;
+
+ private:
+ 	std::map<std::shared_ptr<InstRO::Core::Construct>, BoostCFG> cfgs;
 };
 
 }

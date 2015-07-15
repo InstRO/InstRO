@@ -127,9 +127,8 @@ private:
 /* CI: Construct Set implementation. Contribution by Roman Ness */
 class Construct {
  public:
-	virtual bool operator<(const Construct& b) { return false; }
-
-	Construct(ConstructTrait traits):constructTraits(traits){};
+	Construct(ConstructTrait traits) : constructTraits(traits) {}
+	virtual ~Construct() {}
 
 	ConstructTrait getTraits() { return constructTraits; }
 
@@ -137,7 +136,11 @@ class Construct {
 		return constructTraits.getTraitsAsSet();
 	}
 
-	virtual ~Construct() {}
+	virtual bool operator<(const Construct& b) { return false; }
+
+	virtual std::string toString() {
+		return std::string("Construct(abstract)");
+	}
 
  protected:
 	ConstructTrait constructTraits;
@@ -192,6 +195,15 @@ class ConstructSet {
 	friend bool operator<(const ConstructSet& c1, const ConstructSet& c2) {
 		return c1.constructs < c2.constructs;
 	}
+
+  friend std::ostream& operator<< (std::ostream& out, ConstructSet& cs) {
+      out << " CS size:" << cs.size() << std::endl;
+      InfracstructureInterface::ConstructSetCompilerInterface csci(&cs);
+      for (auto const& constructPtr : cs) {
+          out << "\t" << constructPtr->toString() << std::endl;
+      }
+      return out;
+  }
 };
 
 }	// End Namespace Core

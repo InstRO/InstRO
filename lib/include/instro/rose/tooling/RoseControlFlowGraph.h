@@ -159,10 +159,8 @@ public:
 		}
 	}
 
-
-
 	InstRO::Tooling::ControlFlowGraph::ControlFlowGraph* getGraph() {
-		return new InstRO::Tooling::ControlFlowGraph::ControlFlowGraph();
+		return new InstRO::Tooling::ControlFlowGraph::AbstractControlFlowGraph(cfgs);
 	}
 
 private:
@@ -200,6 +198,8 @@ private:
 					}
 				}
 
+				// TODO add the edges to the graph
+
 				for (auto outEdge : node.outEdges()) {
 					workList.push(outEdge.target());
 				}
@@ -210,13 +210,13 @@ private:
 		cfgs[startConstruct] = cfg;
 
 		///XXX Print that stuff
-		std::cout << std::endl;
-		Graph::vertex_iterator vertexIter, vertexEnd;
-		for (tie(vertexIter, vertexEnd) = boost::vertices(cfg.graph); vertexIter != vertexEnd; vertexIter++)
-		{
-			ControlFlowGraphNode node = cfg.graph.graph()[*vertexIter];
-			std::cout << node << std::endl;
-		}
+//		std::cout << std::endl;
+//		Graph::vertex_iterator vertexIter, vertexEnd;
+//		for (tie(vertexIter, vertexEnd) = boost::vertices(cfg.graph); vertexIter != vertexEnd; vertexIter++)
+//		{
+//			ControlFlowGraphNode node = cfg.graph.graph()[*vertexIter];
+//			std::cout << node << std::endl;
+//		}
 		std::cout << boost::num_vertices(cfg.graph) << " vertices" << std::endl;
 
 	}
