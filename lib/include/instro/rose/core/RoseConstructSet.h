@@ -233,10 +233,14 @@ class RoseConstruct : public InstRO::Core::Construct {
 	}
 	virtual ~RoseConstruct() {}
 
-	::SgNode* getNode() const { return node; }
+	SgNode* getNode() const { return node; }
+
+	std::string toString() override {
+		return "RoseConstruct: " + node->class_name() + ": " + node->unparseToString();
+	}
 
  private:
-	::SgNode* node;
+	SgNode* node;
 };
 
 class RoseFragment : public InstRO::Core::Construct {
@@ -250,7 +254,7 @@ public:
 		return info;
 	}
 
-	std::string toString() {
+	std::string toString() override {
 		std::stringstream ss;
 		ss << "RoseFragment line:" << info->get_line() << " col:" << info->get_col();
 		return ss.str();
