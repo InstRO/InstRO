@@ -49,7 +49,7 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 				std::cout << "\t construct level missmatch " << std::endl;
 				// We need to cast the construct set
 				// Any of the various elevators or crop functions returns a new unique_ptr. As result the copies will be cleaned
-				Core::ConstructSet *originalConstructSet = i->getOutput();
+				Core::ConstructSet originalConstructSet = *(i->getOutput());
 				Core::ConstructTraitType cropMin = Core::ConstructTraitType::CTMin;
 				Core::ConstructTraitType cropMax = Core::ConstructTraitType::CTMax;
 
@@ -57,19 +57,19 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 					cropMax = passEnvelope->pass->getMaxInputLevelRequirement(i);
 				if (InstRO::getInstrumentorInstance()->getConstructRaisingPolicyCrop())
 					cropMin = passEnvelope->pass->getMinInputLevelRequirement(i);
-				std::unique_ptr<Core::ConstructSet> copy =
+				auto copy =
 						InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->crop(originalConstructSet,
 																																													 cropMin, cropMax);
 
 				if (InstRO::getInstrumentorInstance()->getConstructRaisingPolicyElevate())
 					copy = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->raise(
-							copy.get(), passEnvelope->pass->getMinInputLevelRequirement(i));
+							copy, passEnvelope->pass->getMinInputLevelRequirement(i));
 
 				if (InstRO::getInstrumentorInstance()->getConstructLoweringPolicyElevate())
 					copy = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->lower(
-							copy.get(), passEnvelope->pass->getMinInputLevelRequirement(i));
-
-				passEnvelope->pass->overrideInput(i, std::move(copy));
+							copy, passEnvelope->pass->getMinInputLevelRequirement(i));
+				auto newCS=std::make_unique<Core::ConstructSet>(copy);
+				passEnvelope->pass->overrideInput(i, std::move(newCS));
 				//				tempConstructSets.push_back(copy);
 			}
 
