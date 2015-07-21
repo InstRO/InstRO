@@ -45,26 +45,7 @@ namespace Core {
 
 
 	/*
-	typedef enum ContstructTraitEnum {
-	CTNoTraits			  =	 0,	// TODO this should no longer be necessary?
-	CTMin                 = 1,
-	// Please do not use fragments. They may become deprecated
-	CTFragment            = 2,
-	// Any expression with observable behavior
-	CTExpression          = 3,
-	// separate Loop, Conditional, Scope and Simple Statements
-	CTLoopStatement       = 4,
-	CTConditionalStatement= 5,
-	CTScopeStatement      = 6,
-	CTSimpleStatement     = 7,
-	// a statement with observable behavior. No "pure" declarations, namespaces, classes, etc.
-	CTStatement           = 8,
-	// Wrappable statements
-	CTWrappableStatement  = 9,
-	CTFunction            = 10,
-	CTFileScope           = 11,
-	CTGlobalScope         = 12,
-	CTMax                 = 13
+	typedef enum ContstructTraitEnum {...
 	} ConstructTraitType;
 	*/
 
@@ -110,36 +91,33 @@ namespace ConstructLevelHelper{
 			raiseEnum<E, next, tail...>(v);
 	}
 
-	template<typename E, E max, E first> void lowerEnum(E& v){
+	template<typename E, E first> void lowerEnum(E& v){
 		// if the current construct level is the max level, lowing it means to go to the last element in the list
-		if (v == max)
-			v = first;
 	}
 
-	template<typename E, E max, E head, E next, E... tail> void lowerEnum(E& v){
+	template<typename E, E head, E next, E... tail> void lowerEnum(E& v){
 		if (v == next)
 			v = head;
 		else
-			lowerEnum<E, max, next, tail...>(v);
+			lowerEnum<E, next, tail...>(v);
 	}
 
-	template<typename E, E min, E max, E first, E second, E... values> struct ConstructTraitHierarchyTraverser {
+	template<typename E, E min, E first, E second, E... values> struct ConstructTraitHierarchyTraverser {
 		static void raise(E& v)
 		{
 			if (v == min)
 				v = first;
-			raiseEnum<E, first, second, values...>(v);
+			raiseEnum<E, min,first, second, values...>(v);
 		}
 		static void lower(E& v)
 		{
-			lowerEnum<E, max, first, second, values...>(v);
+			lowerEnum<E, min, first, second, values...>(v);
 		}
 	};
 	
 	/// Scalable way, C++11-ish
 typedef ConstructTraitHierarchyTraverser < ConstructTraitType,
-	ConstructTraitType::CTMin,
-	ConstructTraitType::CTMax,
+	ConstructTraitType::CTMin,	
 	ConstructTraitType::CTFragment,
 	ConstructTraitType::CTExpression,
 	ConstructTraitType::CTLoopStatement,
@@ -152,7 +130,8 @@ typedef ConstructTraitHierarchyTraverser < ConstructTraitType,
 	ConstructTraitType::CTWrappableStatement,
 	ConstructTraitType::CTFunction,
 	ConstructTraitType::CTFileScope,
-	ConstructTraitType::CTGlobalScope	> ConstructLevelHierarchy;
+	ConstructTraitType::CTGlobalScope,
+	ConstructTraitType::CTMax> ConstructLevelHierarchy;
 }
 
 
