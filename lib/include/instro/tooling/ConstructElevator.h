@@ -18,13 +18,13 @@ class ConstructElevator {
 	virtual Core::ConstructSet raise(const Core::ConstructSet *input, Core::ConstructTraitType cl) = 0;
 	virtual Core::ConstructSet raise(const Core::ConstructSet & input, Core::ConstructTraitType cl) = 0;
 	// This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
-	virtual Core::ConstructSet lower(const Core::ConstructSet *input, Core::ConstructTraitType cl) = 0;
+	virtual Core::ConstructSet lower(const Core::ConstructSet *input, Core::ConstructTraitType cl);
 	virtual Core::ConstructSet lower(const Core::ConstructSet &input, Core::ConstructTraitType cl) = 0;
 
 	// Crop Construct up to, or down to a level. This can be implemented compiler independend, as it does not require AST
 	// access
-	virtual Core::ConstructSet crop(Core::ConstructSet *input, Core::ConstructTraitType min,
-																									 Core::ConstructTraitType max);
+	virtual Core::ConstructSet crop(const Core::ConstructSet *input, Core::ConstructTraitType min,
+			Core::ConstructTraitType max);
 	virtual Core::ConstructSet crop(const Core::ConstructSet & input, Core::ConstructTraitType min,
 		Core::ConstructTraitType max);
 };
