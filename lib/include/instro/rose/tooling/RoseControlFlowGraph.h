@@ -2,6 +2,7 @@
 #define ROSE_CONTROL_FLOW_GRAPH_H
 
 #include <set>
+#include <queue>
 #include <rose.h>
 
 #include "instro/rose/core/RoseConstructSet.h"

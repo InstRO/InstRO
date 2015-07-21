@@ -1,5 +1,5 @@
 #ifndef INSTRO_ROSE_RoseConstructHierarchyASTDotGenerator
-#define INSTRO_ROSE_RoseConstructPrinter
+#define INSTRO_ROSE_RoseConstructHierarchyASTDotGenerator
 
 #include <fstream>
 
