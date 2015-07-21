@@ -39,6 +39,22 @@ class ConstructSetCompilerInterface {
 	bool empty();
 	size_t size();
 };
+
+class ReadOnlyConstructSetCompilerInterface {
+protected:
+	const Core::ConstructSet* csPtr;
+
+public:
+	ReadOnlyConstructSetCompilerInterface() = delete;
+	ReadOnlyConstructSetCompilerInterface(const Core::ConstructSet * pcs);
+
+	bool contains(const std::shared_ptr<Core::Construct>& construct) const;
+
+	std::set<std::shared_ptr<Core::Construct> >::const_iterator cbegin() const;
+	std::set<std::shared_ptr<Core::Construct> >::const_iterator cend() const;
+	bool empty() const;
+	size_t size() const;
+};
 }	// namespace InfracstructureInterface
 
 namespace Core {
@@ -233,7 +249,7 @@ class Construct {
  */
 class ConstructSet {
 	friend class InstRO::InfracstructureInterface::ConstructSetCompilerInterface;
-
+	friend class InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface;
  public:
 	ConstructSet(){};
 	void setCurrentMinLevel(ConstructTraitType minLevel){};

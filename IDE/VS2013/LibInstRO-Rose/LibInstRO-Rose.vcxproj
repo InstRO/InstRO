@@ -110,6 +110,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\core\RoseConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\core\RoseLegacySelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\core\RosePassImplementation.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\ConstructHierarchyASTDotGenerator.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\GNUProfilingInterfaceAdapter.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseConstructPrinter.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\selector\CompoundSelector.h" />
@@ -159,9 +160,6 @@
     <ClCompile Include="..\..\..\lib\src\tooling\ControlFlowGraph.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\ExtendedCallGraph.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAccess.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
