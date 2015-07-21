@@ -174,3 +174,55 @@ size_t ConstructSetCompilerInterface::size() { return csPtr->size(); }
 }
 
 }	// End namespace InstRO
+
+
+
+
+
+InstRO::Core::ConstructTraitType& operator++(InstRO::Core::ConstructTraitType& f)
+{
+	InstRO::Core::ConstructLevelHelper::ConstructLevelHierarchy::raise(f);
+	return f;
+}
+
+InstRO::Core::ConstructTraitType& operator--(InstRO::Core::ConstructTraitType& f)
+{
+	InstRO::Core::ConstructLevelHelper::ConstructLevelHierarchy::lower(f);
+	return f;
+}
+
+InstRO::Core::ConstructTraitType& operator++(InstRO::Core::ConstructTraitType& f, int f2)
+{
+	InstRO::Core::ConstructLevelHelper::ConstructLevelHierarchy::raise(f);
+	return f;
+}
+
+InstRO::Core::ConstructTraitType& operator--(InstRO::Core::ConstructTraitType& f, int f2)
+{
+	InstRO::Core::ConstructLevelHelper::ConstructLevelHierarchy::lower(f);
+	return f;
+}
+
+
+std::ostream& operator<<(std::ostream& os, InstRO::Core::ConstructTraitType f)
+{
+	switch (f)
+	{
+	case InstRO::Core::ConstructTraitType::CTNoTraits: os << "ConstructTraitType::CTNoTraits"; return os;
+	case InstRO::Core::ConstructTraitType::CTMin: os << "ConstructTraitType::CTMin"; return os;
+	case InstRO::Core::ConstructTraitType::CTFragment: os << "ConstructTraitType::CTFragment"; return os;
+	case InstRO::Core::ConstructTraitType::CTExpression: os << "ConstructTraitType::CTExpression"; return os;
+	case InstRO::Core::ConstructTraitType::CTLoopStatement: os << "ConstructTraitType::CTLoopStatement"; return os;
+	case InstRO::Core::ConstructTraitType::CTConditionalStatement: os << "ConstructTraitType::CTConditionalStatement"; return os;
+	case InstRO::Core::ConstructTraitType::CTScopeStatement: os << "ConstructTraitType::CTScopeStatement"; return os;
+	case InstRO::Core::ConstructTraitType::CTSimpleStatement: os << "ConstructTraitType::CTSimpleStatement"; return os;
+	case InstRO::Core::ConstructTraitType::CTStatement: os << "ConstructTraitType::CTStatement"; return os;
+
+	case InstRO::Core::ConstructTraitType::CTWrappableStatement: os << "ConstructTraitType::CTWrappableStatement"; return os;
+	case InstRO::Core::ConstructTraitType::CTFunction: os << "ConstructTraitType::CTFunction"; return os;
+	case InstRO::Core::ConstructTraitType::CTFileScope: os << "ConstructTraitType::CTFileScope"; return os;
+	case InstRO::Core::ConstructTraitType::CTGlobalScope: os << "ConstructTraitType::CTGlobalScope"; return os;
+	case InstRO::Core::ConstructTraitType::CTMax: os << "ConstructTraitType::CTMax"; return os;
+	}
+	return os;
+}
