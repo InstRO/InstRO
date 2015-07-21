@@ -35,7 +35,9 @@ class ChannelConfiguration {
  protected:
 	std::vector<Pass *> inputChannelPasses;
 	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMin;
+	// std::unordered_map<Pass *, ContstructTraitType> inputChannelMin;
 	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMax;
+
 
  public:
 	// CI: Empty Configuration - No Input Passes used
@@ -43,8 +45,8 @@ class ChannelConfiguration {
 
 	ChannelConfiguration(Pass *p1) {
 		inputChannelPasses.push_back(p1);
-		inputChannelMin[p1] = ::InstRO::Core::ContstructTraitEnum::CTMin;
-		inputChannelMax[p1] = ::InstRO::Core::ContstructTraitEnum::CTMax;
+		inputChannelMin[p1] = ::InstRO::Core::ConstructTraitType::CTMin;
+		inputChannelMax[p1] = ::InstRO::Core::ConstructTraitType::CTMax;
 	}
 
 	template <class... PassList>
@@ -67,13 +69,13 @@ class ChannelConfiguration {
 		}
 	}
 
-	void setConstructLevel(Pass *inputPass, ::InstRO::Core::ContstructTraitEnum minLevel,
-												 ::InstRO::Core::ContstructTraitEnum maxLevel) {
+	void setConstructLevel(Pass *inputPass, ::InstRO::Core::ConstructTraitType minLevel,
+												 ::InstRO::Core::ConstructTraitType maxLevel) {
 		inputChannelMin[inputPass] = minLevel;
 		inputChannelMax[inputPass] = maxLevel;
 	}
-	::InstRO::Core::ContstructTraitEnum getMinConstructLevel(Pass *inputPass) { return inputChannelMin[inputPass]; }
-	::InstRO::Core::ContstructTraitEnum getMaxConstructLevel(Pass *inputPass) { return inputChannelMax[inputPass]; }
+	::InstRO::Core::ConstructTraitType getMinConstructLevel(Pass *inputPass) { return inputChannelMin[inputPass]; }
+	::InstRO::Core::ConstructTraitType getMaxConstructLevel(Pass *inputPass) { return inputChannelMax[inputPass]; }
 	std::vector<::InstRO::Pass *> const getPasses() { return inputChannelPasses; };
 };
 

@@ -50,8 +50,8 @@ public:
 		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_EXIT);
 	};
 
-        // This function can only be called from the raw interface of the compiler, as the tooling interface only provides construct sets ...
-        virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(InstRO::Core::Construct) {
+   /*     // This function can only be called from the raw interface of the compiler, as the tooling interface only provides construct sets ...
+        virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(InstRO::Core::Construct &) {
 		throw std::string("ExampleControlFlowGraph: Not Implemented");
 		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_ENTRY);
 	};
@@ -59,7 +59,7 @@ public:
         virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExityNode(InstRO::Core::Construct) {
 		throw std::string("ExampleControlFlowGraph: Not Implemented");
 		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_EXIT);
-	};
+	};*/
 
 
         // Get a set of entry/exit nodes for the functions represented by the cs-nodes.

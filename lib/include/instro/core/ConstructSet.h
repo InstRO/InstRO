@@ -168,7 +168,7 @@ public:
 
 	bool is(ConstructTraitType type) {
 		if (cts.empty()) {
-			return type == ConstructTraitType::CTNoTraits;
+			return type==ConstructTraitType::CTNoTraits;
 		}
 		return cts.find(type) != cts.end();
 	}
