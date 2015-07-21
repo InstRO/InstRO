@@ -34,8 +34,9 @@ std::unordered_map<InstRO::Pass *, InstRO::Core::ConstructSet *> pToCMap;
 class ChannelConfiguration {
  protected:
 	std::vector<Pass *> inputChannelPasses;
-	std::unordered_map<Pass *, Core::ContstructTraitEnum> inputChannelMin;
-	std::unordered_map<Pass *, Core::ContstructTraitEnum> inputChannelMax;
+	std::unordered_map<Pass *, ::InstRO::Core::ContstructTraitType> inputChannelMin;
+	// std::unordered_map<Pass *, ContstructTraitType> inputChannelMin;
+	std::unordered_map<Pass *, ::InstRO::Core::ContstructTraitType> inputChannelMax;
 
  public:
 	// CI: Empty Configuration - No Input Passes used
@@ -43,8 +44,8 @@ class ChannelConfiguration {
 
 	ChannelConfiguration(Pass *p1) {
 		inputChannelPasses.push_back(p1);
-		inputChannelMin[p1] = ::InstRO::Core::ContstructTraitEnum::CTMin;
-		inputChannelMax[p1] = ::InstRO::Core::ContstructTraitEnum::CTMax;
+		inputChannelMin[p1] = ::InstRO::Core::ContstructTraitType::CTMin;
+		inputChannelMax[p1] = ::InstRO::Core::ContstructTraitType::CTMax;
 	}
 
 	template <class... PassList>
@@ -67,13 +68,13 @@ class ChannelConfiguration {
 		}
 	}
 
-	void setConstructLevel(Pass *inputPass, ::InstRO::Core::ContstructTraitEnum minLevel,
-												 ::InstRO::Core::ContstructTraitEnum maxLevel) {
+	void setConstructLevel(Pass *inputPass, ::InstRO::Core::ContstructTraitType minLevel,
+												 ::InstRO::Core::ContstructTraitType maxLevel) {
 		inputChannelMin[inputPass] = minLevel;
 		inputChannelMax[inputPass] = maxLevel;
 	}
-	::InstRO::Core::ContstructTraitEnum getMinConstructLevel(Pass *inputPass) { return inputChannelMin[inputPass]; }
-	::InstRO::Core::ContstructTraitEnum getMaxConstructLevel(Pass *inputPass) { return inputChannelMax[inputPass]; }
+	::InstRO::Core::ContstructTraitType getMinConstructLevel(Pass *inputPass) { return inputChannelMin[inputPass]; }
+	::InstRO::Core::ContstructTraitType getMaxConstructLevel(Pass *inputPass) { return inputChannelMax[inputPass]; }
 	std::vector<::InstRO::Pass *> const getPasses() { return inputChannelPasses; };
 };
 
