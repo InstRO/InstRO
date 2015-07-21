@@ -4,10 +4,13 @@
 	 The RoseConstructProvider produces constructs based on the AST.
 */
 
-#include "instro/core/ConstructSet.h"
+
+#include <iostream>
 #include <map>
 
 #include "rose.h"
+
+#include "instro/core/ConstructSet.h"
 
 namespace InstRO {
 namespace Rose {
@@ -106,7 +109,7 @@ struct CLSimpleStatementPredicate : public CTPredicate {
 
 struct CTWrappableStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
-		return isSgBasicBlock(n->get_parent());
+		return (isSgBasicBlock(n->get_parent())!=nullptr);
 	}
 };
 

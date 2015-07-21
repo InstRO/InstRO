@@ -56,7 +56,7 @@ protected:
 	};
 
  public:
-	virtual InstRO::Pass* createConstructHierarchyASTDotGenerator();
+	virtual InstRO::Pass* createConstructHierarchyASTDotGenerator(InstRO::Pass* pass, std::string fileName);
 	virtual InstRO::Pass* createProgramEntrySelector();
 	virtual InstRO::Pass* createFunctionSelector();
 	// Text Based Selection in Various Flavors

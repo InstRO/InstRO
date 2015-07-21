@@ -120,7 +120,6 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseNamedConstructAccess.h">
       <Filter>instro\rose\tooling</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Rose\include\rose.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseConstructElevator.h">
       <Filter>instro\rose\tooling</Filter>
     </ClInclude>
@@ -194,6 +193,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\ConstructHierarchyASTDotGenerator.h">
       <Filter>instro\rose\pass\adapter</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\rose.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp">
@@ -219,9 +219,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp">
       <Filter>instro\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp">
-      <Filter>instro\example</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp">
       <Filter>instro\tooling</Filter>
