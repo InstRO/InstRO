@@ -8,37 +8,37 @@ namespace Core {
 
 std::string constructLevelToString(ConstructTraitType type) {
 	switch (type) {
-		case CTFragment:
+		case ConstructTraitType::CTFragment:
 			return std::string("Fragment");
 			break;
-		case CTExpression:
+		case ConstructTraitType::CTExpression:
 			return std::string("Expression");
 			break;
-		case CTStatement:
+		case ConstructTraitType::CTStatement:
 			return std::string("Statement");
 			break;
-		case CTWrappableStatement:
+		case ConstructTraitType::CTWrappableStatement:
 			return std::string("WrappableStatement");
 			break;
-		case CTLoopStatement:
+		case ConstructTraitType::CTLoopStatement:
 			return std::string("LoopStatement");
 			break;
-		case CTConditionalStatement:
+		case ConstructTraitType::CTConditionalStatement:
 			return std::string("ConditionalStatement");
 			break;
-		case CTScopeStatement:
+		case ConstructTraitType::CTScopeStatement:
 			return std::string("ScopeStatement");
 			break;
-		case CTSimpleStatement:
+		case ConstructTraitType::CTSimpleStatement:
 			return std::string("SimpleStatement");
 			break;
-		case CTFunction:
+		case ConstructTraitType::CTFunction:
 			return std::string("Function");
 			break;
-		case CTFileScope:
+		case ConstructTraitType::CTFileScope:
 			return std::string("FileScope");
 			break;
-		case CTGlobalScope:
+		case ConstructTraitType::CTGlobalScope:
 			return std::string("GlobalScope");
 			break;
 
@@ -53,7 +53,7 @@ std::string operator+(const std::string& lhs, const ConstructTraitType& type) {
 }
 
 ConstructTraitType ConstructSet::getMaxConstructLevel() {
-	ConstructTraitType max = CTMin;
+	ConstructTraitType max = ConstructTraitType::CTMin;
 	for (auto construct : constructs) {
 		auto curr = construct->getTraits().max();
 		if (curr > max) {
@@ -63,7 +63,7 @@ ConstructTraitType ConstructSet::getMaxConstructLevel() {
 	return max;
 }
 ConstructTraitType ConstructSet::getMinConstructLevel() {
-	ConstructTraitType min = CTMax;
+	ConstructTraitType min = ConstructTraitType::CTMax;
 	for (auto construct : constructs) {
 		auto curr = construct->getTraits().min();
 		if (curr < min) {
