@@ -63,7 +63,7 @@ InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::Construc
 						<< std::endl;
 		for (auto construct = input.cbegin(); construct != input.cend();construct++) {
 		std::shared_ptr<InstRO::Rose::Core::RoseConstruct> newConstruct;
-		InstRO::Rose::Core::RoseConstruct *roseConstruct = dynamic_cast<InstRO::Rose::Core::RoseConstruct *>(construct.get());
+		InstRO::Rose::Core::RoseConstruct *roseConstruct = dynamic_cast<InstRO::Rose::Core::RoseConstruct *>(construct->get());
 		if (roseConstruct == nullptr) {
 			throw std::string(
 					"A non InstRO::Rose::Core::RoseConstruct in the ROSE interace. Either multiple compiler interfaces are used, "
@@ -111,9 +111,17 @@ InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::Construc
 						<< std::endl;
 	return *newConstructSet;
 };
+InstRO::Core::ConstructSet ConstructElevator::lower(const InstRO::Core::ConstructSet *inputCS,
+		InstRO::Core::ConstructTraitType traitType) {
+	return lower(*inputCS,traitType);
+}
+InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::ConstructSet *inputCS,
+		InstRO::Core::ConstructTraitType traitType) {
+	return raise(*inputCS,traitType);
+}
 
 // This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
-InstRO::Core::ConstructSet ConstructElevator::lower(const InstRO::Core::ConstructSet inputCS,
+InstRO::Core::ConstructSet ConstructElevator::lower(const InstRO::Core::ConstructSet & inputCS,
 																																		 InstRO::Core::ConstructTraitType traitType) {
 
 	std::unique_ptr<InstRO::Core::ConstructSet> newConstructSet = std::make_unique<InstRO::Core::ConstructSet>();

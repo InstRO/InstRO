@@ -101,6 +101,12 @@ class ExampleConstructElevator : public InstRO::Tooling::ConstructElevator::Cons
 			//	throw std::string("ExampleConstructElevator::raise : Not Implemented");
 			return *outputCS;
 		}
+		virtual InstRO::Core::ConstructSet raise(const InstRO::Core::ConstructSet *input, InstRO::Core::ConstructTraitType cl){
+			return raise(*input,cl);
+}
+		virtual InstRO::Core::ConstructSet lower(const InstRO::Core::ConstructSet *input, InstRO::Core::ConstructTraitType cl){
+			return lower(*input,cl);
+}
 		// This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
 		virtual InstRO::Core::ConstructSet lower(const InstRO::Core::ConstructSet &input,
 				InstRO::Core::ConstructTraitType cl) {

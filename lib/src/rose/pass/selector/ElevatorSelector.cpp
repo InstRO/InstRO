@@ -14,8 +14,8 @@ void ConstructRaisingElevator::execute() {
 	output = constructElevator->raise(input->getOutput(), this->minLevel);
 };
 void ConstructRaisingElevator::finalize(){};
-void ConstructRaisingElevator::releaseOutput() { output->clear(); };
-Core::ConstructSet *ConstructRaisingElevator::getOutput() { return output.get(); };
+void ConstructRaisingElevator::releaseOutput() { output.clear(); };
+Core::ConstructSet *ConstructRaisingElevator::getOutput() { return & output; };
 
 void ConstructLoweringElevator::init(){};
 void ConstructLoweringElevator::execute() {
@@ -23,8 +23,8 @@ void ConstructLoweringElevator::execute() {
 	output = constructElevator->lower(input->getOutput(), this->maxLevel);
 };
 void ConstructLoweringElevator::finalize(){};
-void ConstructLoweringElevator::releaseOutput() { output->clear(); };
-Core::ConstructSet *ConstructLoweringElevator::getOutput() { return output.get(); };
+void ConstructLoweringElevator::releaseOutput() { output.clear(); };
+Core::ConstructSet *ConstructLoweringElevator::getOutput() { return &output; };
 }
 }
 }

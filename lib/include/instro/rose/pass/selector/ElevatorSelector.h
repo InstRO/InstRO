@@ -9,7 +9,7 @@ class ConstructRaisingElevator : public InstRO::Rose::RosePassImplementation {
  protected:
 	Pass *input;
 	ConstructRaisingElevator() = delete;
-	std::unique_ptr<Core::ConstructSet> output;
+	Core::ConstructSet output;
 	InstRO::Core::ConstructTraitType minLevel;
 
  public:
@@ -28,7 +28,7 @@ class ConstructLoweringElevator : public InstRO::Rose::RosePassImplementation {
  protected:
 	Pass *input;
 	ConstructLoweringElevator() = delete;
-	std::unique_ptr<Core::ConstructSet> output;
+	Core::ConstructSet output;
 	InstRO::Core::ConstructTraitType maxLevel;
 
  public:
