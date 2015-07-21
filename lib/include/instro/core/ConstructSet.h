@@ -39,31 +39,128 @@ class ConstructSetCompilerInterface {
 	bool empty();
 	size_t size();
 };
+
+class ReadOnlyConstructSetCompilerInterface {
+protected:
+	const Core::ConstructSet* csPtr;
+
+public:
+	ReadOnlyConstructSetCompilerInterface() = delete;
+	ReadOnlyConstructSetCompilerInterface(const Core::ConstructSet * pcs);
+
+	bool contains(const std::shared_ptr<Core::Construct>& construct) const;
+
+	std::set<std::shared_ptr<Core::Construct> >::const_iterator cbegin() const;
+	std::set<std::shared_ptr<Core::Construct> >::const_iterator cend() const;
+	bool empty() const;
+	size_t size() const;
+};
 }	// namespace InfracstructureInterface
 
 namespace Core {
 
-typedef enum ContstructTraitEnum {
-	CTNoTraits			  =	 0,	// TODO this should no longer be necessary?
-	CTMin                 = 1,
+
+	/*
+	typedef enum ContstructTraitEnum {...
+	} ConstructTraitType;
+	*/
+
+
+enum class ConstructTraitType
+{
+	CTNoTraits = 0,	// TODO this should no longer be necessary?
+	CTMin = 1,
 	// Please do not use fragments. They may become deprecated
-	CTFragment            = 2,
+	CTFragment = 2,
 	// Any expression with observable behavior
-	CTExpression          = 3,
+	CTExpression = 3,
 	// separate Loop, Conditional, Scope and Simple Statements
-	CTLoopStatement       = 4,
-	CTConditionalStatement= 5,
-	CTScopeStatement      = 6,
-	CTSimpleStatement     = 7,
+	CTLoopStatement = 4,
+	CTConditionalStatement = 5,
+	CTScopeStatement = 6,
+	CTSimpleStatement = 7,
 	// a statement with observable behavior. No "pure" declarations, namespaces, classes, etc.
-	CTStatement           = 8,
+	CTStatement = 8,
 	// Wrappable statements
-	CTWrappableStatement  = 9,
-	CTFunction            = 10,
-	CTFileScope           = 11,
-	CTGlobalScope         = 12,
-	CTMax                 = 13
-} ConstructTraitType;
+	CTWrappableStatement = 9,
+	CTFunction = 10,
+	CTFileScope = 11,
+	CTGlobalScope = 12,
+	CTMax = 13
+};
+
+
+
+
+// Derived from  "Advanced Enums  -  http://ideone.com/Htlg0G"
+namespace ConstructLevelHelper{
+	template<typename E, E first> void raiseEnum(E& v){
+		// If this is the last element in the construct level hierarchy, we can not raise anymore
+	}
+
+	template<typename E, E head, E next, E... tail> void raiseEnum(E& v){
+		// if the current head matches, elevate to the next construct level
+		if (v == head)
+			v = next;
+		else
+			// check the next element in the list
+			raiseEnum<E, next, tail...>(v);
+	}
+
+	template<typename E, E first> void lowerEnum(E& v){
+		// if the current construct level is the max level, lowing it means to go to the last element in the list
+	}
+
+	template<typename E, E head, E next, E... tail> void lowerEnum(E& v){
+		if (v == next)
+			v = head;
+		else
+			lowerEnum<E, next, tail...>(v);
+	}
+
+	template<typename E, E min, E first, E second, E... values> struct ConstructTraitHierarchyTraverser {
+		static void raise(E& v)
+		{
+			if (v == min)
+				v = first;
+			raiseEnum<E, min,first, second, values...>(v);
+		}
+		static void lower(E& v)
+		{
+			lowerEnum<E, min, first, second, values...>(v);
+		}
+	};
+	
+	/// Scalable way, C++11-ish
+typedef ConstructTraitHierarchyTraverser < ConstructTraitType,
+	ConstructTraitType::CTMin,	
+	ConstructTraitType::CTFragment,
+	ConstructTraitType::CTExpression,
+	ConstructTraitType::CTLoopStatement,
+	ConstructTraitType::CTConditionalStatement,
+	ConstructTraitType::CTScopeStatement,
+	ConstructTraitType::CTSimpleStatement,
+	// a statement with observable behavior. No "pure" declarations, namespaces, classes, etc.
+	ConstructTraitType::CTStatement,
+	// Wrappable statements
+	ConstructTraitType::CTWrappableStatement,
+	ConstructTraitType::CTFunction,
+	ConstructTraitType::CTFileScope,
+	ConstructTraitType::CTGlobalScope,
+	ConstructTraitType::CTMax> ConstructLevelHierarchy;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 std::string constructLevelToString(ConstructTraitType type);
 std::string operator+(const std::string& lhs, const ConstructTraitType& type);
@@ -87,7 +184,7 @@ public:
 
 	bool is(ConstructTraitType type) {
 		if (cts.empty()) {
-			return type==CTNoTraits;
+			return type==ConstructTraitType::CTNoTraits;
 		}
 		return cts.find(type) != cts.end();
 	}
@@ -106,7 +203,7 @@ public:
 
 	std::string toString() {
 		if (cts.empty()) {
-			return InstRO::Core::constructLevelToString(CTNoTraits);
+			return InstRO::Core::constructLevelToString(ConstructTraitType::CTNoTraits);
 		}
 
 		std::stringstream ss;
@@ -137,7 +234,7 @@ class Construct {
 	}
 
 	virtual bool operator<(const Construct& b) { return false; }
-
+	virtual size_t getID() = 0;
 	virtual std::string toString() {
 		return std::string("Construct(abstract)");
 	}
@@ -152,7 +249,7 @@ class Construct {
  */
 class ConstructSet {
 	friend class InstRO::InfracstructureInterface::ConstructSetCompilerInterface;
-
+	friend class InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface;
  public:
 	ConstructSet(){};
 	void setCurrentMinLevel(ConstructTraitType minLevel){};
@@ -164,9 +261,9 @@ class ConstructSet {
 	bool empty() const;
 	size_t size() const;
 
- protected:
-	ConstructSet(const std::shared_ptr<Construct>& construct) { constructs.insert(construct); };
 
+	ConstructSet(const std::shared_ptr<Construct>& construct) { constructs.insert(construct); };
+ protected:
 	virtual void put(const std::shared_ptr<Construct>& construct);
 	virtual void erase(const std::shared_ptr<Construct>& construct);
 	virtual void put(ConstructSet cs);
@@ -208,5 +305,14 @@ class ConstructSet {
 
 }	// End Namespace Core
 }	// End namespace InstRO
+
+
+InstRO::Core::ConstructTraitType& operator++(InstRO::Core::ConstructTraitType& f);
+InstRO::Core::ConstructTraitType& operator--(InstRO::Core::ConstructTraitType& f);
+InstRO::Core::ConstructTraitType& operator++(InstRO::Core::ConstructTraitType& f, int f2);
+InstRO::Core::ConstructTraitType& operator--(InstRO::Core::ConstructTraitType& f, int f2);
+std::ostream& operator<<(std::ostream& os, InstRO::Core::ConstructTraitType f);
+
+
 
 #endif

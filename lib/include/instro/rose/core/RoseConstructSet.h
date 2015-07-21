@@ -228,6 +228,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 class RoseConstruct : public InstRO::Core::Construct {
  public:
+	size_t getID(){return (size_t)node;}
 	RoseConstruct(SgNode* sgnode, InstRO::Core::ConstructTrait traits) :
 			InstRO::Core::Construct(traits), node(sgnode) {
 	}
@@ -235,7 +236,7 @@ class RoseConstruct : public InstRO::Core::Construct {
 
 	SgNode* getNode() const { return node; }
 
-	std::string toString() override {
+	virtual std::string toString() override {
 		return "RoseConstruct: " + node->class_name() + ": " + node->unparseToString();
 	}
 
@@ -243,11 +244,12 @@ class RoseConstruct : public InstRO::Core::Construct {
 	SgNode* node;
 };
 
-class RoseFragment : public InstRO::Core::Construct {
+class RoseFragment : public RoseConstruct {
 public:
-	RoseFragment(Sg_File_Info* info) :
-			InstRO::Core::Construct(InstRO::Core::ConstructTrait(InstRO::Core::ContstructTraitEnum::CTFragment)), info(info) {
+	RoseFragment(SgNode * associatedNode, Sg_File_Info* info) :
+		RoseConstruct(associatedNode,InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFragment)), info(info) {
 	}
+	size_t getID(){return (size_t)info;};
 	~RoseFragment() {}
 
 	Sg_File_Info* getFileInfo() {

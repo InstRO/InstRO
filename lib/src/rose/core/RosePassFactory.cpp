@@ -4,12 +4,19 @@
 #include "instro/pass/selector/TextStringSelector.h"
 #include "instro/pass/selector/ProgramEntrySelector.h"
 #include "instro/pass/selector/CallPathSelector.h"
+#include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
 #include "instro/rose/RosePassFactory.h"
 
 #include "rose.h"
 
 namespace InstRO {
 namespace Rose {
+InstRO::Pass* RosePassFactory::createConstructHierarchyASTDotGenerator(InstRO::Pass* pass,std::string fileName) {
+	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructHierarchyASTDotGenerator(pass, fileName));
+	newPass->setPassName("InstRO::Rose::Adapter::ConstructHierarchyASTDotGenerator.h");
+	passManager->registerPass(newPass);
+	return newPass;
+}
 
 // CI: beta
 InstRO::Pass* RosePassFactory::createConstructLoweringElevator(InstRO::Pass* pass,

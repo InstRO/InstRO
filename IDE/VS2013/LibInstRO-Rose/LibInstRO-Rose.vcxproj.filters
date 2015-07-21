@@ -191,6 +191,9 @@
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructProvider.h">
       <Filter>instro\example</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\ConstructHierarchyASTDotGenerator.h">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp">
@@ -232,9 +235,6 @@
     <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp">
       <Filter>instro\support</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\rose\pass\selector\CompoundSelector.cpp">
-      <Filter>instro\rose\pass\selector</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\lib\src\rose\pass\selector\NameBasedSelector.cpp">
       <Filter>instro\rose\pass\selector</Filter>
     </ClCompile>
@@ -268,8 +268,8 @@
     <ClCompile Include="..\..\..\lib\src\tooling\ExtendedCallGraph.cpp">
       <Filter>instro\tooling</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\selector\CompoundSelector.cpp">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
