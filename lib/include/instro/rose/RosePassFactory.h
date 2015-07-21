@@ -12,6 +12,7 @@
 // #include "instro/rose/pass/adapter/GenericAdapter.h"
 // #include "instro/rose/pass/adapter/CygProfileAdapter.h"
 #include "instro/rose/pass/adapter/RoseConstructPrinter.h"
+#include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
 
 #include "rose.h"
 
@@ -55,6 +56,7 @@ protected:
 	};
 
  public:
+	virtual InstRO::Pass* createConstructHierarchyASTDotGenerator();
 	virtual InstRO::Pass* createProgramEntrySelector();
 	virtual InstRO::Pass* createFunctionSelector();
 	// Text Based Selection in Various Flavors

@@ -41,11 +41,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>d:\Daten\Christian\Arbeit\Rose\include;$(IncludePath)</IncludePath>
+    <IncludePath>d:\Daten\Christian\Arbeit\Rose\include;../../../lib/include;$(IncludePath);C:\Users\ci24amun\Documents\Visual Studio 2012\Boost\1_57_0\include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>d:\Daten\Christian\Arbeit\Rose\include;$(IncludePath)</IncludePath>
+    <IncludePath>d:\Daten\Christian\Arbeit\Rose\include;../../../lib/include;$(IncludePath);C:\Users\ci24amun\Documents\Visual Studio 2012\Boost\1_57_0\include</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -56,6 +56,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\ci24amun\Documents\Development\rose\git-rose\include;../../../lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
+      <AdditionalOptions>/DUSE_ROSE_DUMMY %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -75,6 +76,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\ci24amun\Documents\Development\rose\git-rose\include;../../lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/DUSE_ROSE_DUMMY %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -110,6 +112,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\core\RoseConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\core\RoseLegacySelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\core\RosePassImplementation.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\ConstructHierarchyASTDotGenerator.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\GNUProfilingInterfaceAdapter.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseConstructPrinter.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\selector\CompoundSelector.h" />
@@ -159,9 +162,6 @@
     <ClCompile Include="..\..\..\lib\src\tooling\ControlFlowGraph.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\ExtendedCallGraph.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAccess.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
