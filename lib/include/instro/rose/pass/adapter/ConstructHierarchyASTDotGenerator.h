@@ -27,8 +27,8 @@ namespace Adapter {
 				}
 
 			public:
-				ConstructHierarchyASTDotGenerator(InstRO::Pass *pass)
-					: PassImplementation(InstRO::Core::ChannelConfiguration(pass)), inputPass(pass) {}
+				ConstructHierarchyASTDotGenerator(InstRO::Pass *pass,std::string filename)
+					: PassImplementation(InstRO::Core::ChannelConfiguration(pass)), inputPass(pass),fileName(filename) {}
 				virtual void init(){
 					outFile.open(fileName, std::ios_base::out);
 				};
@@ -82,16 +82,14 @@ namespace InstRO {
 
 			class RoseConstructHierarchyASTDotGenerator : public InstRO::Adapter::ConstructHierarchyASTDotGenerator {
 			protected:
-				InstRO::Pass *inputPass;
-				InstRO::Core::ConstructSet outputCS;
 				virtual std::string constructToString(InstRO::Core::Construct & construct)	{
 					// Since we are in a RoseInstRO it is safe to cast InstRO::Core::Construct to InstRO::Rose::Core::RoseConstruct
 					auto roseConstruct = dynamic_cast<InstRO::Rose::Core::RoseConstruct &>(construct);
 					return roseConstruct.getNode()->unparseToString();
 				}
 			public:
-				RoseConstructHierarchyASTDotGenerator(InstRO::Pass *pass)
-					: ConstructHierarchyASTDotGenerator(InstRO::Core::ChannelConfiguration(pass)), inputPass(pass) {}
+				RoseConstructHierarchyASTDotGenerator(InstRO::Pass *pass, std::string fn)
+					: ConstructHierarchyASTDotGenerator(pass,fn) {}
 				void execute() override;
 
 			};
