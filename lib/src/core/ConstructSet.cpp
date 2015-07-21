@@ -187,9 +187,8 @@ std::set<std::shared_ptr<Core::Construct> >::const_iterator ReadOnlyConstructSet
 	return csPtr->cend();
 };
 
-void ConstructSetCompilerInterface::clear() { csPtr->clear(); }
-bool ConstructSetCompilerInterface::empty() { return csPtr->empty(); }
-size_t ConstructSetCompilerInterface::size() { return csPtr->size(); }
+bool ReadOnlyConstructSetCompilerInterface::empty()const { return csPtr->empty(); }
+size_t ReadOnlyConstructSetCompilerInterface::size()const { return csPtr->size(); }
 
 
 
