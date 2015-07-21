@@ -50,8 +50,8 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 				// We need to cast the construct set
 				// Any of the various elevators or crop functions returns a new unique_ptr. As result the copies will be cleaned
 				Core::ConstructSet *originalConstructSet = i->getOutput();
-				Core::ConstructTraitType cropMin = Core::ContstructTraitEnum::CTMin;
-				Core::ConstructTraitType cropMax = Core::ContstructTraitEnum::CTMax;
+				Core::ConstructTraitType cropMin = Core::ConstructTraitType::CTMin;
+				Core::ConstructTraitType cropMax = Core::ConstructTraitType::CTMax;
 
 				if (InstRO::getInstrumentorInstance()->getConstructLoweringPolicyCrop())
 					cropMax = passEnvelope->pass->getMaxInputLevelRequirement(i);

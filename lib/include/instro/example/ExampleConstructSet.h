@@ -10,6 +10,7 @@ namespace Example {
 namespace Core {
 class ExampleConstruct : public InstRO::Core::Construct {
  public:
+	 size_t getID(){ return 0; }
 	 ExampleConstruct(InstRO::Core::ConstructTrait level, std::string nname) :Construct(level), name(nname), hierarchyPartent(nullptr){
 		 constructTraits = InstRO::Core::ConstructTrait(level);
 	};
