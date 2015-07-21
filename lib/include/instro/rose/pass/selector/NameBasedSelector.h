@@ -13,14 +13,14 @@ class NameBasedSelector : public InstRO::Rose::RosePassImplementation {
 
  public:
 	NameBasedSelector(std::vector<std::string> matchRules, Pass *filter)
-			: RosePassImplementation(Core::ChannelConfiguration(filter)), filterChannel(filter), rules(matchRules){};
+			: RosePassImplementation(InstRO::Core::ChannelConfiguration(filter)), filterChannel(filter), rules(matchRules){};
 	NameBasedSelector(std::vector<std::string> matchRules)
-			: RosePassImplementation(Core::ChannelConfiguration()), filterChannel(NULL), rules(matchRules){};
+			: RosePassImplementation(InstRO::Core::ChannelConfiguration()), filterChannel(NULL), rules(matchRules){};
 	virtual void init() override;
 	virtual void execute() override;
 	virtual void finalize() override;
 	virtual void releaseOutput() override;
-	virtual Core::ConstructSet *getOutput() override;
+	virtual InstRO::Core::ConstructSet *getOutput() override;
 
  protected:
 };
