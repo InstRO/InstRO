@@ -55,7 +55,8 @@ public:
 			std::cout << "CFGConstructSetGenerator: encountered Function with invalid index" << std::endl;
 			exit(1);
 		}
-		csci.put(std::make_shared<InstRO::Rose::Core::RoseFragment>(InstRO::Rose::Core::RoseFragment(fileInfo)));
+		// we allways have to have an associated node in order for the construct to work in the construct elevator	
+		csci.put(std::make_shared<InstRO::Rose::Core::RoseFragment>(InstRO::Rose::Core::RoseFragment(node,fileInfo)));
 
 	}
 
@@ -96,10 +97,10 @@ public:
 		if (magicIndexVariable == 0) {
 
 			nodeType = SCOPE_ENTRY;
-			csci.put(std::make_shared<InstRO::Rose::Core::RoseFragment>(InstRO::Rose::Core::RoseFragment(node->get_startOfConstruct())));
+			csci.put(std::make_shared<InstRO::Rose::Core::RoseFragment>(InstRO::Rose::Core::RoseFragment(node,node->get_startOfConstruct())));
 		} else if (magicIndexVariable == node->cfgIndexForEnd()) {
 			nodeType = SCOPE_EXIT;
-			csci.put(std::make_shared<InstRO::Rose::Core::RoseFragment>(InstRO::Rose::Core::RoseFragment(node->get_endOfConstruct())));
+			csci.put(std::make_shared<InstRO::Rose::Core::RoseFragment>(InstRO::Rose::Core::RoseFragment(node,node->get_endOfConstruct())));
 		} else {
 			invalidate(node);
 		}

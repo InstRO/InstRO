@@ -228,6 +228,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 class RoseConstruct : public InstRO::Core::Construct {
  public:
+	size_t getID(){return (size_t)node;}
 	RoseConstruct(SgNode* sgnode, InstRO::Core::ConstructTrait traits) :
 			InstRO::Core::Construct(traits), node(sgnode) {
 	}
@@ -248,6 +249,7 @@ public:
 	RoseFragment(SgNode * associatedNode, Sg_File_Info* info) :
 		RoseConstruct(associatedNode,InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFragment)), info(info) {
 	}
+	size_t getID(){return (size_t)info;};
 	~RoseFragment() {}
 
 	Sg_File_Info* getFileInfo() {
