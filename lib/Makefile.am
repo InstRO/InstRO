@@ -102,7 +102,8 @@ ROSE_HFILES= \
 ./include/instro/rose/tooling/RoseExtendedCallGraph.h \
 ./include/instro/rose/tooling/RoseGrammarInterface.h \
 ./include/instro/rose/tooling/RoseNamedConstructAccess.h \
-./include/instro/rose/tooling/RoseTransformationInterface.h
+./include/instro/rose/tooling/RoseTransformationInterface.h \
+./include/instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h
 
 ROSE_SFILES= \
 ./src/rose/core/RoseConstructSet.cpp   \
