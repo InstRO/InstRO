@@ -14,18 +14,18 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
  public:
 	RoseAnalysisManager(SgProject *proj) :
 			project(proj),
-			nca(new NamedConstructAccess::RoseNamedConstructAccess(proj)),
+			namedConstructAccessInstance(new NamedConstructAccess::RoseNamedConstructAccess(proj)),
 			ce(new ConstructElevator::ConstructElevator()),
 			gi(new GrammarInterface::RoseGrammarInterface(proj)),
-			cfg( (new ControlFlowGraph::RoseCFGGenerator(proj))->getGraph() ) {}
+			controlFlowGraph((new ControlFlowGraph::RoseCFGGenerator(proj))->getGraph()) {}
 
 
 	RoseAnalysisManager() = delete;
 	~RoseAnalysisManager() {
-		delete nca;
+		delete namedConstructAccessInstance;
 		delete ce;
 		delete gi;
-		delete cfg;
+		delete controlFlowGraph;
 	}
 
 	virtual InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph *getECG() override {
@@ -33,7 +33,7 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 		return NULL;
 	}
 	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraph *getCFG() override {
-		return cfg;
+		return controlFlowGraph;
 	}
 	virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override {
 		return ce;
@@ -42,15 +42,15 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 		return gi;
 	}
 	virtual InstRO::Tooling::NamedConstructAccess::NamedConstructAccess *getNamedConstructAccessFacility() override {
-		return nca;
+		return namedConstructAccessInstance;
 	}
 
  protected:
 	SgProject *project;
-	NamedConstructAccess::RoseNamedConstructAccess *nca;
+	NamedConstructAccess::RoseNamedConstructAccess *namedConstructAccessInstance;
 	ConstructElevator::ConstructElevator *ce;
 	GrammarInterface::RoseGrammarInterface *gi;
-	ControlFlowGraph::ControlFlowGraph *cfg;
+	ControlFlowGraph::ControlFlowGraph * controlFlowGraph;
 };
 
 }	// Tooling
