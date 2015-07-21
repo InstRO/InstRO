@@ -34,8 +34,8 @@ std::unordered_map<InstRO::Pass *, InstRO::Core::ConstructSet *> pToCMap;
 class ChannelConfiguration {
  protected:
 	std::vector<Pass *> inputChannelPasses;
-	std::unordered_map<Pass *, Core::ContstructTraitEnum> inputChannelMin;
-	std::unordered_map<Pass *, Core::ContstructTraitEnum> inputChannelMax;
+	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMin;
+	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMax;
 
  public:
 	// CI: Empty Configuration - No Input Passes used

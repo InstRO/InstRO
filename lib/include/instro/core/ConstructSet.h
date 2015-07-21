@@ -168,7 +168,7 @@ public:
 
 	bool is(ConstructTraitType type) {
 		if (cts.empty()) {
-			return type==CTNoTraits;
+			return type == ConstructTraitType::CTNoTraits;
 		}
 		return cts.find(type) != cts.end();
 	}
@@ -187,7 +187,7 @@ public:
 
 	std::string toString() {
 		if (cts.empty()) {
-			return InstRO::Core::constructLevelToString(CTNoTraits);
+			return InstRO::Core::constructLevelToString(ConstructTraitType::CTNoTraits);
 		}
 
 		std::stringstream ss;
