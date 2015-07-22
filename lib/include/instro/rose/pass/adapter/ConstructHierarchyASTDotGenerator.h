@@ -28,6 +28,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 			: PassImplementation(InstRO::Core::ChannelConfiguration(pass)), inputPass(pass), fileName(filename) {}
 	virtual void init() { outFile.open(fileName, std::ios_base::out); };
 	virtual void execute() {
+		outFile << "digraph InstROAST{" <<std::endl;
 		auto elevator = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator();
 		InstRO::Core::ConstructSet csAggregation;
 
@@ -59,6 +60,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 			/*			auto parent = elevator->raise(construct)
 						std::cout << "\t" << construct->getID() << " -> " << std::endl;*/
 		}
+		outFile << "}" << std::endl;
 	}
 	virtual void finalize() { outFile.close(); };
 	void releaseOutput() { outputCS.clear(); };
@@ -82,7 +84,6 @@ class RoseConstructHierarchyASTDotGenerator : public InstRO::Adapter::ConstructH
  public:
 	RoseConstructHierarchyASTDotGenerator(InstRO::Pass *pass, std::string fn)
 			: ConstructHierarchyASTDotGenerator(pass, fn) {}
-	void execute() override;
 };
 }
 }
