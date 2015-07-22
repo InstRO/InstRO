@@ -6,9 +6,6 @@
 
 namespace InstRO {
 namespace Tooling {
-namespace ExtendedCallGraph {
-
-
-}	// ExtendedCallGraph
+namespace ExtendedCallGraph {}	// ExtendedCallGraph
 }	// Tooling
 }	// InstRO

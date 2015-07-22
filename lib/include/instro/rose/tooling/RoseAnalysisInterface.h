@@ -12,13 +12,12 @@ namespace Rose {
 namespace Tooling {
 class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
  public:
-	RoseAnalysisManager(SgProject *proj) :
-			project(proj),
-			namedConstructAccessInstance(new NamedConstructAccess::RoseNamedConstructAccess(proj)),
-			ce(new ConstructElevator::ConstructElevator()),
-			gi(new GrammarInterface::RoseGrammarInterface(proj)),
-			controlFlowGraph((new ControlFlowGraph::RoseCFGGenerator(proj))->getGraph()) {}
-
+	RoseAnalysisManager(SgProject *proj)
+			: project(proj),
+				namedConstructAccessInstance(new NamedConstructAccess::RoseNamedConstructAccess(proj)),
+				ce(new ConstructElevator::ConstructElevator()),
+				gi(new GrammarInterface::RoseGrammarInterface(proj)),
+				controlFlowGraph((new ControlFlowGraph::RoseCFGGenerator(proj))->getGraph()) {}
 
 	RoseAnalysisManager() = delete;
 	~RoseAnalysisManager() {
@@ -32,15 +31,9 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 		throw std::string("Not Implemented");
 		return NULL;
 	}
-	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraph *getCFG() override {
-		return controlFlowGraph;
-	}
-	virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override {
-		return ce;
-	}
-	virtual InstRO::Tooling::GrammarInterface::GrammarInterface *getGrammarInterface() override {
-		return gi;
-	}
+	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraph *getCFG() override { return controlFlowGraph; }
+	virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override { return ce; }
+	virtual InstRO::Tooling::GrammarInterface::GrammarInterface *getGrammarInterface() override { return gi; }
 	virtual InstRO::Tooling::NamedConstructAccess::NamedConstructAccess *getNamedConstructAccessFacility() override {
 		return namedConstructAccessInstance;
 	}
@@ -50,7 +43,7 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 	NamedConstructAccess::RoseNamedConstructAccess *namedConstructAccessInstance;
 	ConstructElevator::ConstructElevator *ce;
 	GrammarInterface::RoseGrammarInterface *gi;
-	ControlFlowGraph::ControlFlowGraph * controlFlowGraph;
+	ControlFlowGraph::ControlFlowGraph *controlFlowGraph;
 };
 
 }	// Tooling

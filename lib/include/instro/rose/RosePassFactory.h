@@ -20,13 +20,11 @@ namespace InstRO {
 namespace Rose {
 
 class RosePassFactory : public InstRO::PassFactory {
-public:
-	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) :
-			PassFactory(refManager), project(proj) {
-	}
+ public:
+	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) : PassFactory(refManager), project(proj) {}
 	virtual ~RosePassFactory() {}
 
-protected:
+ protected:
 	RosePassImplementation* getPass(Pass* pass) {
 		if (pass == NULL)
 			return NULL;

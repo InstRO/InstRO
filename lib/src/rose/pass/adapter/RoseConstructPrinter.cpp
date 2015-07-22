@@ -18,12 +18,12 @@ void RoseConstructPrinter::execute() {
 		std::stringstream ss;
 		ss << count << ":\t " << ec->getTraits().toString() << ":\t";
 
-		if (ec->getTraits().is(InstRO::Core::ConstructTraitType::CTFunction)){
-				std::cout << ss.str()
-									<< isSgFunctionDefinition(ec->getNode())->get_declaration()->get_qualified_name().getString()
-									<< std::endl;
+		if (ec->getTraits().is(InstRO::Core::ConstructTraitType::CTFunction)) {
+			std::cout << ss.str()
+								<< isSgFunctionDefinition(ec->getNode())->get_declaration()->get_qualified_name().getString()
+								<< std::endl;
 		} else {
-				std::cout << ss.str() << ec->getNode()->unparseToString() << std::endl;
+			std::cout << ss.str() << ec->getNode()->unparseToString() << std::endl;
 		}
 		count++;
 	}

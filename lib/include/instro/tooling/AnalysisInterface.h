@@ -24,7 +24,6 @@ namespace GrammarInterface {};
 namespace NamedConstructAccess {};
 
 class AnalysisManager {
-
  public:
 	virtual ~AnalysisManager() {}
 

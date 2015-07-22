@@ -4,12 +4,9 @@
 	 The RoseConstructProvider produces constructs based on the AST.
 */
 
-
 #include <iostream>
 #include <map>
-
 #include "rose.h"
-
 #include "instro/core/ConstructSet.h"
 
 namespace InstRO {
@@ -26,9 +23,7 @@ struct CTPredicate {
 };
 
 struct CLExpressionPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const {
-		return isSgExpression(n) != nullptr;
-	}
+	bool operator()(SgNode* n) const { return isSgExpression(n) != nullptr; }
 };
 
 struct CLLoopPredicate : public CTPredicate {
@@ -108,9 +103,7 @@ struct CLSimpleStatementPredicate : public CTPredicate {
 };
 
 struct CTWrappableStatementPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const {
-		return (isSgBasicBlock(n->get_parent())!=nullptr);
-	}
+	bool operator()(SgNode* n) const { return (isSgBasicBlock(n->get_parent()) != nullptr); }
 };
 
 struct InstrumentableConstructPredicate : public CTPredicate {
@@ -120,8 +113,8 @@ struct InstrumentableConstructPredicate : public CTPredicate {
 
 struct ConstructPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
-		return CLGlobalScopePredicate()(n) || CLFileScopePredicate()(n) || CLFunctionPredicate()(n)
-				|| CLStatementPredicate()(n) || CLExpressionPredicate()(n);
+		return CLGlobalScopePredicate()(n) || CLFileScopePredicate()(n) || CLFunctionPredicate()(n) ||
+					 CLStatementPredicate()(n) || CLExpressionPredicate()(n);
 	}
 };
 
@@ -132,23 +125,17 @@ CTPredicate getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType)
 
 class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
  public:
-	ConstructGenerator() : ct(InstRO::Core::ConstructTraitType::CTNoTraits) {};
+	ConstructGenerator() : ct(InstRO::Core::ConstructTraitType::CTNoTraits){};
 	InstRO::Core::ConstructTrait getConstructTraits() { return ct; }
 
 	// global scope
-	void visit(SgProject* node) {
-		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTGlobalScope);
-	}
+	void visit(SgProject* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTGlobalScope); }
 
 	// file scope
-	void visit(SgSourceFile* node) {
-		ct.add(InstRO::Core::ConstructTraitType::CTFileScope);
-	}
+	void visit(SgSourceFile* node) { ct.add(InstRO::Core::ConstructTraitType::CTFileScope); }
 
 	// function
-	void visit(SgFunctionDefinition* node) {
-		ct.add(InstRO::Core::ConstructTraitType::CTFunction);
-	}
+	void visit(SgFunctionDefinition* node) { ct.add(InstRO::Core::ConstructTraitType::CTFunction); }
 
 	// conditionals
 	void visit(SgIfStmt* node) {
@@ -227,14 +214,10 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	}
 };
 
-
-
 class RoseConstruct : public InstRO::Core::Construct {
  public:
-	size_t getID(){return (size_t)node;}
-	RoseConstruct(SgNode* sgnode, InstRO::Core::ConstructTrait traits) :
-			InstRO::Core::Construct(traits), node(sgnode) {
-	}
+	size_t getID() { return (size_t)node; }
+	RoseConstruct(SgNode* sgnode, InstRO::Core::ConstructTrait traits) : InstRO::Core::Construct(traits), node(sgnode) {}
 	virtual ~RoseConstruct() {}
 
 	SgNode* getNode() const { return node; }
@@ -248,16 +231,14 @@ class RoseConstruct : public InstRO::Core::Construct {
 };
 
 class RoseFragment : public RoseConstruct {
-public:
-	RoseFragment(SgNode * associatedNode, Sg_File_Info* info) :
-		RoseConstruct(associatedNode,InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFragment)), info(info) {
-	}
-	size_t getID(){return (size_t)info;};
+ public:
+	RoseFragment(SgNode* associatedNode, Sg_File_Info* info)
+			: RoseConstruct(associatedNode, InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFragment)),
+				info(info) {}
+	size_t getID() { return (size_t)info; };
 	~RoseFragment() {}
 
-	Sg_File_Info* getFileInfo() {
-		return info;
-	}
+	Sg_File_Info* getFileInfo() { return info; }
 
 	std::string toString() override {
 		std::stringstream ss;
@@ -265,7 +246,7 @@ public:
 		return ss.str();
 	}
 
-private:
+ private:
 	Sg_File_Info* info;
 };
 
@@ -277,7 +258,6 @@ class RoseConstructProvider {
 	}
 
 	std::shared_ptr<RoseConstruct> getConstruct(SgNode* node) {
-
 		std::cout << "getConstruct(" << node << ")" << std::endl;
 		if (node == nullptr) {
 			throw std::string("RoseConstructProvider: attempted to getConstruct for nullptr");

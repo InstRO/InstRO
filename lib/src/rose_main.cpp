@@ -43,8 +43,8 @@ int main(int argc, char** argv) {
 		aFactory->createConstructPrinter(simpleStatements);
 		auto statements = aFactory->createConstructLoweringElevator(nbs3, InstRO::Core::ConstructTraitType::CTStatement);
 		aFactory->createConstructPrinter(statements);
-		
-		auto astPrinter = aFactory->createConstructHierarchyASTDotGenerator(expressions,"CSHierarchyAST.dot");
+
+		auto astPrinter = aFactory->createConstructHierarchyASTDotGenerator(expressions, "CSHierarchyAST.dot");
 
 		//		auto adapter3 = aFactory->createConstructPrinter(celev3);
 
