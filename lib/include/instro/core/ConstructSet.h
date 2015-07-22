@@ -128,8 +128,8 @@ struct ConstructTraitHierarchyTraverser {
 
 /// Scalable way, C++11-ish
 typedef ConstructTraitHierarchyTraverser<
-		ConstructTraitType, ConstructTraitType::CTMin, ConstructTraitType::CTFragment, ConstructTraitType::CTExpression,ConstructTraitType::CTStatement,
-		ConstructTraitType::CTLoopStatement, ConstructTraitType::CTConditionalStatement,
+		ConstructTraitType, ConstructTraitType::CTMin, ConstructTraitType::CTFragment, ConstructTraitType::CTExpression,
+		ConstructTraitType::CTStatement, ConstructTraitType::CTLoopStatement, ConstructTraitType::CTConditionalStatement,
 		ConstructTraitType::CTScopeStatement, ConstructTraitType::CTSimpleStatement,
 		// a statement with observable behavior. No "pure" declarations, namespaces, classes, etc.
 		// Wrappable statements
@@ -142,10 +142,11 @@ std::string operator+(const std::string& lhs, const ConstructTraitType& type);
 
 class ConstructTrait {
  public:
-	 bool operator==(const ConstructTraitType & comparator){
-		 if (cts.find(comparator) != cts.end()) return true;
-		 return false;
-	 }
+	bool operator==(const ConstructTraitType& comparator) {
+		if (cts.find(comparator) != cts.end())
+			return true;
+		return false;
+	}
 	ConstructTrait() = delete;
 
 	/*	template <class... TraitList>
