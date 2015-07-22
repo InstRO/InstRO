@@ -114,6 +114,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\tooling\AnalysisInterface.h" />
     <ClInclude Include="..\..\..\lib\include\instro\tooling\NamedConstructAccess.h" />
     <ClInclude Include="..\..\..\lib\include\instro\tooling\TransformationInterface.h" />
+    <ClInclude Include="..\LibInstRO-Rose\include\rose.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp" />

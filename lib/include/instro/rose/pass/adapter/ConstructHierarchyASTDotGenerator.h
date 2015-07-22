@@ -37,20 +37,28 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 			auto child = construct;
 			auto parent = child;
 			auto childCS = InstRO::Core::ConstructSet(construct);
+			// ad the current node to the bucket
+			csAggregation = csAggregation.combine(childCS);
 
 			// for each construct level, bottom to top, try raising the construct
 			for (auto constructTrait = InstRO::Core::ConstructTraitType::CTExpression;
 					 constructTrait != InstRO::Core::ConstructTraitType::CTMax; constructTrait++) {
-				csAggregation = csAggregation.combine(childCS);
+				
 				auto parentCS = elevator->raise(child, constructTrait);
+				// if the node is in the bucket, we already have plottet it, so we can skip it (and its chain)
+				if (!csAggregation.intersect(parentCS).empty())
+					continue;
+
 				InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface rocsciChild(&childCS);
 				InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface rocsciParent(&parentCS);
 				// if there is no partent continue
 				if (parentCS.empty())
 					continue;
-
+				csAggregation = csAggregation.combine(parentCS);
 				if (rocsciChild.size() != 1 || rocsciParent.size() != 1)
 					throw std::string("Problem in ConstructHierarchyASTDotGenerator");
+				
+
 				outFile << "\t" << rocsciChild.cbegin()->get()->getID() << " -> " << rocsciParent.cbegin()->get()->getID()
 								<< ";\n";
 
