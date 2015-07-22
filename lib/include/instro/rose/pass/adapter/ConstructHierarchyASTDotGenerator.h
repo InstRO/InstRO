@@ -2,7 +2,8 @@
 #define INSTRO_ROSE_RoseConstructHierarchyASTDotGenerator
 
 #include <fstream>
-
+#include <algorithm>
+#include <string>
 #include "instro/core/Singleton.h"
 #include "instro/core/Pass.h"
 #include "instro/core/ConstructSet.h"
@@ -51,6 +52,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 
 				if (rocsciChild.size() != 1 || rocsciParent.size() != 1)
 					throw std::string("Problem in ConstructHierarchyASTDotGenerator");
+				if (rocsciChild.cbegin()->get()->getID() == rocsciParent.cbegin()->get()->getID()) continue;
 				outFile << "\t" << rocsciChild.cbegin()->get()->getID() << " -> " << rocsciParent.cbegin()->get()->getID()
 								<< ";\n";
 
@@ -62,7 +64,9 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 		}
 		csci = InstRO::InfracstructureInterface::ConstructSetCompilerInterface(&csAggregation);
 		for (auto construct : csci) {
-			outFile << "\t" << construct->getID() << std::string("[label=\"") << constructToString(construct) << std::string("\"];") << std::endl; 
+			std::string csName=constructToString(construct);
+			std::replace(csName.begin(),csName.end(),'"',' ');
+			outFile << "\t" << construct->getID() << std::string("[label=\"") << csName << std::string("\"];") << std::endl; 
 			
 
 		}
@@ -85,16 +89,18 @@ class RoseConstructHierarchyASTDotGenerator : public InstRO::Adapter::ConstructH
 	 virtual std::string constructToString(std::shared_ptr<InstRO::Core::Construct> construct) {
 		// Since we are in a RoseInstRO it is safe to cast InstRO::Core::Construct to InstRO::Rose::Core::RoseConstruct
 	//	auto roseConstruct = dynamic_cast<InstRO::Rose::Core::RoseConstruct &>(construct);
-
+		std::string content, name;
 		auto roseConstruct = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
 		if (construct->getTraits() == InstRO::Core::ConstructTraitType::CTFunction)
-			return isSgFunctionDefinition(roseConstruct->getNode())->get_declaration()->get_name();
+			content= isSgFunctionDefinition(roseConstruct->getNode())->get_declaration()->get_name();
 		else if (construct->getTraits() == InstRO::Core::ConstructTraitType::CTFileScope)
-			return isSgFile(roseConstruct->getNode())->getFileName();
+			content=isSgFile(roseConstruct->getNode())->getFileName();
 		else if (construct->getTraits() == InstRO::Core::ConstructTraitType::CTGlobalScope)
-			return std::string("");
+			content=std::string("");
 		else
-			return roseConstruct->getNode()->unparseToString();
+			content=roseConstruct->getNode()->unparseToString();
+		name = roseConstruct->getNode()->class_name();
+		return name+std::string("\n")+content;
 	}
 
  public:
