@@ -83,6 +83,8 @@ class SgProject : public SgNode {
  public:
 	void unparse();
 };
+class SgExprListExp :public SgNode{};
+class SgFunctionRefExp :public SgNode{};
 
 SgProject* frontend(int argv, char** argc);
 
@@ -152,6 +154,8 @@ SgFile* isSgFile(SgNode*);
 SgProject* isSgProject(SgNode*);
 SgSourceFile* isSgSourceFile(SgNode*);
 
+SgExprListExp*isSgExprListExp(SgNode*);
+SgFunctionRefExp *isSgFunctionRefExp(SgNode*);
 class CFGNode;
 class CFGEdge {
  public:

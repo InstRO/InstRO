@@ -144,6 +144,7 @@
     <ClInclude Include="..\..\..\lib\include\instro.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\LibInstRO-Rose\include\rose.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\example\ExampleConstructSet.cpp">
