@@ -193,7 +193,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\ConstructHierarchyASTDotGenerator.h">
       <Filter>instro\rose\pass\adapter</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\rose.h" />
+    <ClInclude Include="include\rose.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp">
