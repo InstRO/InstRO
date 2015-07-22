@@ -51,7 +51,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 
 				if (rocsciChild.size() != 1 || rocsciParent.size() != 1)
 					throw std::string("Problem in ConstructHierarchyASTDotGenerator");
-				outFile << " " << rocsciChild.cbegin()->get()->getID() << " -> " << rocsciParent.cbegin()->get()->getID()
+				outFile << "\t" << rocsciChild.cbegin()->get()->getID() << " -> " << rocsciParent.cbegin()->get()->getID()
 								<< ";\n";
 
 				childCS = parentCS;
@@ -62,7 +62,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 		}
 		csci = InstRO::InfracstructureInterface::ConstructSetCompilerInterface(&csAggregation);
 		for (auto construct : csci) {
-			
+			outFile << "\t" << construct->getID() << std::string("[label=\"") << constructToString(construct) << std::string("\"];") << std::endl; 
 			
 
 		}
