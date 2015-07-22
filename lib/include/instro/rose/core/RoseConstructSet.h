@@ -23,13 +23,19 @@ struct CTPredicate {
 };
 
 struct CLExpressionPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const { 
-		if (isSgExprListExp(n) != nullptr) return false;
-		if (isSgFunctionRefExp(n) != nullptr) return false;
-		if (isSgFunctionCallExp(n) != nullptr) return true;
-		if (isSgIntVal(n) != nullptr || isSgStringVal(n) != nullptr) return true;
-		if (isSgCastExp(n) != nullptr) return false;
-		return isSgExpression(n) != nullptr; }
+	bool operator()(SgNode* n) const {
+		if (isSgExprListExp(n) != nullptr)
+			return false;
+		if (isSgFunctionRefExp(n) != nullptr)
+			return false;
+		if (isSgFunctionCallExp(n) != nullptr)
+			return true;
+		if (isSgIntVal(n) != nullptr || isSgStringVal(n) != nullptr)
+			return true;
+		if (isSgCastExp(n) != nullptr)
+			return false;
+		return isSgExpression(n) != nullptr;
+	}
 };
 
 struct CLLoopPredicate : public CTPredicate {
