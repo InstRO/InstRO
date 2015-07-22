@@ -143,6 +143,10 @@ std::string operator+(const std::string& lhs, const ConstructTraitType& type);
 
 class ConstructTrait {
  public:
+	 bool operator==(const ConstructTraitType & comparator){
+		 if (cts.find(comparator) != cts.end()) return true;
+		 return false;
+	 }
 	ConstructTrait() = delete;
 
 	/*	template <class... TraitList>

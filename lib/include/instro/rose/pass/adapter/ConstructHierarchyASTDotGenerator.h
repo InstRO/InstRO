@@ -21,7 +21,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 	std::fstream outFile;
 
  protected:
-	virtual std::string constructToString(InstRO::Core::Construct &construct) { return std::string(""); }
+	virtual std::string constructToString(std::shared_ptr<InstRO::Core::Construct> construct) { return std::string(""); }
 
  public:
 	ConstructHierarchyASTDotGenerator(InstRO::Pass *pass, std::string filename)
@@ -60,6 +60,13 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 			/*			auto parent = elevator->raise(construct)
 						std::cout << "\t" << construct->getID() << " -> " << std::endl;*/
 		}
+		csci = InstRO::InfracstructureInterface::ConstructSetCompilerInterface(&csAggregation);
+		for (auto construct : csci) {
+			
+			
+
+		}
+
 		outFile << "}" << std::endl;
 	}
 	virtual void finalize() { outFile.close(); };
@@ -75,10 +82,19 @@ namespace Adapter {
 
 class RoseConstructHierarchyASTDotGenerator : public InstRO::Adapter::ConstructHierarchyASTDotGenerator {
  protected:
-	virtual std::string constructToString(InstRO::Core::Construct &construct) {
+	 virtual std::string constructToString(std::shared_ptr<InstRO::Core::Construct> construct) {
 		// Since we are in a RoseInstRO it is safe to cast InstRO::Core::Construct to InstRO::Rose::Core::RoseConstruct
-		auto roseConstruct = dynamic_cast<InstRO::Rose::Core::RoseConstruct &>(construct);
-		return roseConstruct.getNode()->unparseToString();
+	//	auto roseConstruct = dynamic_cast<InstRO::Rose::Core::RoseConstruct &>(construct);
+
+		auto roseConstruct = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
+		if (construct->getTraits() == InstRO::Core::ConstructTraitType::CTFunction)
+			return isSgFunctionDefinition(roseConstruct->getNode())->get_declaration()->get_name();
+		else if (construct->getTraits() == InstRO::Core::ConstructTraitType::CTFileScope)
+			return isSgFile(roseConstruct->getNode())->getFileName();
+		else if (construct->getTraits() == InstRO::Core::ConstructTraitType::CTGlobalScope)
+			return std::string("");
+		else
+			return roseConstruct->getNode()->unparseToString();
 	}
 
  public:
