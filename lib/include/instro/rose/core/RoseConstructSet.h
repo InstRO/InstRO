@@ -125,46 +125,46 @@ CTPredicate getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType)
 
 class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
  public:
-	ConstructGenerator() : ct(InstRO::Core::ConstructTraitType::CTNoTraits){};
+	ConstructGenerator() : ct(InstRO::Core::ConstructTraitType::CTNoTraits) {};
 	InstRO::Core::ConstructTrait getConstructTraits() { return ct; }
 
 	// global scope
 	void visit(SgProject* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTGlobalScope); }
 
 	// file scope
-	void visit(SgSourceFile* node) { ct.add(InstRO::Core::ConstructTraitType::CTFileScope); }
+	void visit(SgSourceFile* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFileScope); }
 
 	// function
-	void visit(SgFunctionDefinition* node) { ct.add(InstRO::Core::ConstructTraitType::CTFunction); }
+	void visit(SgFunctionDefinition* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFunction); }
 
 	// conditionals
 	void visit(SgIfStmt* node) {
-		ct.add(InstRO::Core::ConstructTraitType::CTConditionalStatement);
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTConditionalStatement);
 		handleWrappableCheck(node);
 	}
 	void visit(SgSwitchStatement* node) {
-		ct = InstRO::Core::ConstructTraitType::CTConditionalStatement;
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTConditionalStatement);
 		handleWrappableCheck(node);
 	}
 
 	// loops
 	void visit(SgForStatement* node) {
-		ct = InstRO::Core::ConstructTraitType::CTLoopStatement;
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTLoopStatement);
 		handleWrappableCheck(node);
 	}
 	void visit(SgWhileStmt* node) {
-		ct = InstRO::Core::ConstructTraitType::CTLoopStatement;
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTLoopStatement);
 		handleWrappableCheck(node);
 	}
 	void visit(SgDoWhileStmt* node) {
-		ct = InstRO::Core::ConstructTraitType::CTLoopStatement;
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTLoopStatement);
 		handleWrappableCheck(node);
 	}
 
 	// scopes
 	void visit(SgBasicBlock* node) {
 		if (RoseConstructLevelPredicates::CLConditionalPredicate()(node)) {
-			ct = InstRO::Core::ConstructTraitType::CTScopeStatement;
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTScopeStatement);
 			handleWrappableCheck(node);
 		} else {
 			generateError(node);
@@ -174,7 +174,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	// statements
 	void visit(SgStatement* node) {
 		if (RoseConstructLevelPredicates::CLSimpleStatementPredicate()(node)) {
-			ct = InstRO::Core::ConstructTraitType::CTSimpleStatement;
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTSimpleStatement);
 			handleWrappableCheck(node);
 		} else {
 			generateError(node);
@@ -182,11 +182,11 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	}
 
 	// expressions
-	void visit(SgExpression* node) { ct = InstRO::Core::ConstructTraitType::CTExpression; }
+	void visit(SgExpression* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTExpression); }
 	void visit(SgVariableDeclaration* node) {
 		// CI: an initialized variable declaration is OK,
 		if (node->get_definition()) {
-			ct = InstRO::Core::ConstructTraitType::CTSimpleStatement;
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTSimpleStatement);
 			handleWrappableCheck(node);
 		} else {
 			generateError(node);
@@ -216,10 +216,10 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 class RoseConstruct : public InstRO::Core::Construct {
  public:
-	size_t getID() { return (size_t)node; }
 	RoseConstruct(SgNode* sgnode, InstRO::Core::ConstructTrait traits) : InstRO::Core::Construct(traits), node(sgnode) {}
 	virtual ~RoseConstruct() {}
 
+	size_t getID() const { return (size_t)node; }
 	SgNode* getNode() const { return node; }
 
 	virtual std::string toString() override {
@@ -235,9 +235,10 @@ class RoseFragment : public RoseConstruct {
 	RoseFragment(SgNode* associatedNode, Sg_File_Info* info)
 			: RoseConstruct(associatedNode, InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFragment)),
 				info(info) {}
-	size_t getID() { return (size_t)info; };
+
 	~RoseFragment() {}
 
+	size_t getID() const { return (size_t)info; };
 	Sg_File_Info* getFileInfo() { return info; }
 
 	std::string toString() override {
@@ -281,6 +282,7 @@ class RoseConstructProvider {
 	RoseConstructProvider(RoseConstructProvider&) = delete;
 	void operator=(RoseConstructProvider const&) = delete;
 };
+
 }
 }
 }	// Namespace InstRO
