@@ -14,7 +14,7 @@ class ConstructRaisingElevator : public InstRO::Rose::RosePassImplementation {
 
  public:
 	ConstructRaisingElevator(Pass *inputArg, InstRO::Core::ConstructTraitType clArg)
-		: RosePassImplementation(InstRO::Core::ChannelConfiguration(inputArg)), input(inputArg), minLevel(clArg){};
+			: RosePassImplementation(InstRO::Core::ChannelConfiguration(inputArg)), input(inputArg), minLevel(clArg){};
 	virtual void init() override;
 	virtual void execute() override;
 	virtual void finalize() override;

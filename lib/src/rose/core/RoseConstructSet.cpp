@@ -4,10 +4,7 @@
 #include "instro/core/ConstructSet.h"
 #include "instro/rose/core/RoseConstructSet.h"
 
-#ifdef HAVE_ROSE
 #include "rose.h"
-#else
-#endif
 
 namespace InstRO {
 namespace Rose {
@@ -46,8 +43,8 @@ CTPredicate getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType)
 }	// namespace Core
 }	// namespace Rose
 }	// namespace InstRO
-//
-//struct InstrumentableConstructPredicate {
+	 //
+// struct InstrumentableConstructPredicate {
 //	bool operator()(SgNode* n) const {
 //		if (isSgDoWhileStmt(n) || isSgBasicBlock(n) || isSgFunctionDefinition(n))
 //			return true;

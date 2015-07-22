@@ -38,7 +38,6 @@ class ChannelConfiguration {
 	// std::unordered_map<Pass *, ContstructTraitType> inputChannelMin;
 	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMax;
 
-
  public:
 	// CI: Empty Configuration - No Input Passes used
 	ChannelConfiguration(){};
@@ -101,9 +100,7 @@ class PassImplementation {
 	virtual ConstructSet *getOutput() = 0;
 	ConstructSet *getInput(Pass *pId);
 
-	ConstructSet *getCollisionSet(){
-		return collisionSet.get();
-	};
+	ConstructSet *getCollisionSet() { return collisionSet.get(); };
 
  private:
 	ChannelConfiguration channelConfig;

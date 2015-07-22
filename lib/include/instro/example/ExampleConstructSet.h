@@ -10,51 +10,51 @@ namespace Example {
 namespace Core {
 class ExampleConstruct : public InstRO::Core::Construct {
  public:
-	 size_t getID(){ return 0; }
-	 ExampleConstruct(InstRO::Core::ConstructTrait level, std::string nname) :Construct(level), name(nname), hierarchyPartent(nullptr){
-		 constructTraits = InstRO::Core::ConstructTrait(level);
+	size_t getID() { return 0; }
+	ExampleConstruct(InstRO::Core::ConstructTrait level, std::string nname)
+			: Construct(level), name(nname), hierarchyPartent(nullptr) {
+		constructTraits = InstRO::Core::ConstructTrait(level);
 	};
-	ExampleConstruct(InstRO::Core::ConstructTrait level, std::string nname, ExampleConstruct * parent) :Construct(level), name(nname), hierarchyPartent(parent){
+	ExampleConstruct(InstRO::Core::ConstructTrait level, std::string nname, ExampleConstruct *parent)
+			: Construct(level), name(nname), hierarchyPartent(parent) {
 		constructTraits = InstRO::Core::ConstructTrait(level);
 	};
 	std::string toString() { return name; };
 
  protected:
 	std::string name;
-	ExampleConstruct * hierarchyPartent;
+	ExampleConstruct *hierarchyPartent;
 };
 namespace InfracstructureInterface {
-	/*
+/*
 
-	 class ExampleConstructSet :public InstRO::Core::ConstructSet {
-	 public:
-		 ExampleConstructSet(InstRO::Core::ConstructSet & cs){
-			 constructs = cs.constructs;
+ class ExampleConstructSet :public InstRO::Core::ConstructSet {
+ public:
+	 ExampleConstructSet(InstRO::Core::ConstructSet & cs){
+		 constructs = cs.constructs;
 
-		 };
-		 ExampleConstructSet(){};
-		 virtual void put(const std::shared_ptr<InstRO::Core::Construct>& construct){
-			 InstRO::Core::ConstructSet::put(construct);
-		 }
-		 virtual void erase(const std::shared_ptr<InstRO::Core::Construct>& construct){
-			 InstRO::Core::ConstructSet::erase(construct);
-		 };
- //		virtual void put(ConstructSet cs);
- //		virtual void erase(ConstructSet cs);
- //		bool contains(const std::shared_ptr<InstRO::Core::Construct>& construct) const;
-		 std::set<std::shared_ptr<InstRO::Core::Construct> >::iterator begin()
-		 {
-			 return InstRO::Core::ConstructSet::begin();
-		 }
-		 std::set<std::shared_ptr<InstRO::Core::Construct> >::iterator end(){
-			 return InstRO::Core::ConstructSet::end();
-		 }
-		 std::set<std::shared_ptr<InstRO::Core::Construct> >::const_iterator  cbegin()const;
-		 std::set<std::shared_ptr<InstRO::Core::Construct> >::const_iterator  cend()const;
-	 };*/
+	 };
+	 ExampleConstructSet(){};
+	 virtual void put(const std::shared_ptr<InstRO::Core::Construct>& construct){
+		 InstRO::Core::ConstructSet::put(construct);
+	 }
+	 virtual void erase(const std::shared_ptr<InstRO::Core::Construct>& construct){
+		 InstRO::Core::ConstructSet::erase(construct);
+	 };
+//		virtual void put(ConstructSet cs);
+//		virtual void erase(ConstructSet cs);
+//		bool contains(const std::shared_ptr<InstRO::Core::Construct>& construct) const;
+	 std::set<std::shared_ptr<InstRO::Core::Construct> >::iterator begin()
+	 {
+		 return InstRO::Core::ConstructSet::begin();
+	 }
+	 std::set<std::shared_ptr<InstRO::Core::Construct> >::iterator end(){
+		 return InstRO::Core::ConstructSet::end();
+	 }
+	 std::set<std::shared_ptr<InstRO::Core::Construct> >::const_iterator  cbegin()const;
+	 std::set<std::shared_ptr<InstRO::Core::Construct> >::const_iterator  cend()const;
+ };*/
 }
-
-
 
 #ifdef DEPRECATEDCS
 class ExampleConstructSet : public InstRO::Core::ConstructSet {

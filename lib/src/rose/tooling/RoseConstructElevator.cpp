@@ -28,7 +28,7 @@ std::shared_ptr<InstRO::Rose::Core::RoseConstruct> raiseConstruct(InstRO::Rose::
 		return nullptr;
 	}
 
-		std::cout << "raiseConstruct: raising ended with " << current->class_name() << std::endl;
+	std::cout << "raiseConstruct: raising ended with " << current->class_name() << std::endl;
 	// geth the corresponding construct from the RoseConstructProvider
 	return InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(current);
 }
@@ -55,15 +55,15 @@ using namespace ConstructElevatorHelper;
 using namespace InstRO::Rose::Core::RoseConstructLevelPredicates;
 
 InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::ConstructSet &inputCS,
-																																		 InstRO::Core::ConstructTraitType traitType) {
+																										InstRO::Core::ConstructTraitType traitType) {
 	InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface input(&inputCS);
 	std::unique_ptr<InstRO::Core::ConstructSet> newConstructSet = std::make_unique<InstRO::Core::ConstructSet>();
 	InstRO::InfracstructureInterface::ConstructSetCompilerInterface output(newConstructSet.get());
-		std::cout << "ConstructElevator::raise:\t Input-ConstructSet contains " << inputCS.size() << "elements "
-						<< std::endl;
-		for (auto construct = input.cbegin(); construct != input.cend();construct++) {
+	std::cout << "ConstructElevator::raise:\t Input-ConstructSet contains " << inputCS.size() << "elements " << std::endl;
+	for (auto construct = input.cbegin(); construct != input.cend(); construct++) {
 		std::shared_ptr<InstRO::Rose::Core::RoseConstruct> newConstruct;
-		InstRO::Rose::Core::RoseConstruct *roseConstruct = dynamic_cast<InstRO::Rose::Core::RoseConstruct *>(construct->get());
+		InstRO::Rose::Core::RoseConstruct *roseConstruct =
+				dynamic_cast<InstRO::Rose::Core::RoseConstruct *>(construct->get());
 		if (roseConstruct == nullptr) {
 			throw std::string(
 					"A non InstRO::Rose::Core::RoseConstruct in the ROSE interace. Either multiple compiler interfaces are used, "
@@ -112,33 +112,31 @@ InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::Construc
 	return *newConstructSet;
 };
 InstRO::Core::ConstructSet ConstructElevator::lower(const InstRO::Core::ConstructSet *inputCS,
-		InstRO::Core::ConstructTraitType traitType) {
-	return lower(*inputCS,traitType);
+																										InstRO::Core::ConstructTraitType traitType) {
+	return lower(*inputCS, traitType);
 }
 InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::ConstructSet *inputCS,
-		InstRO::Core::ConstructTraitType traitType) {
-	return raise(*inputCS,traitType);
+																										InstRO::Core::ConstructTraitType traitType) {
+	return raise(*inputCS, traitType);
 }
 
 // This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
-InstRO::Core::ConstructSet ConstructElevator::lower(const InstRO::Core::ConstructSet & inputCS,
-																																		 InstRO::Core::ConstructTraitType traitType) {
-
+InstRO::Core::ConstructSet ConstructElevator::lower(const InstRO::Core::ConstructSet &inputCS,
+																										InstRO::Core::ConstructTraitType traitType) {
 	std::unique_ptr<InstRO::Core::ConstructSet> newConstructSet = std::make_unique<InstRO::Core::ConstructSet>();
 	InstRO::InfracstructureInterface::ConstructSetCompilerInterface output(newConstructSet.get());
 
 	// CI: check each input construct separately
 	InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface input(&inputCS);
-	for (auto construct = input.cbegin(); construct != input.cend();construct++) {
+	for (auto construct = input.cbegin(); construct != input.cend(); construct++) {
 		std::set<std::shared_ptr<InstRO::Rose::Core::RoseConstruct> > newConstructs;
 		// CI: make sure it is a ROSE construct
-		auto roseConstruct = dynamic_cast<InstRO::Rose::Core::RoseConstruct*>(construct->get());
+		auto roseConstruct = dynamic_cast<InstRO::Rose::Core::RoseConstruct *>(construct->get());
 		if (roseConstruct == nullptr) {
 			throw std::string(
 					"A non InstRO::Rose::Core::RoseConstruct in the ROSE interace. Either multiple compiler interfaces are used, "
 					"or programming error");
 		}
-
 
 		// Use different target predicate, depending on the input level
 		switch (traitType) {

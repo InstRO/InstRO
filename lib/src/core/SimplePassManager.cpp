@@ -57,9 +57,8 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 					cropMax = passEnvelope->pass->getMaxInputLevelRequirement(i);
 				if (InstRO::getInstrumentorInstance()->getConstructRaisingPolicyCrop())
 					cropMin = passEnvelope->pass->getMinInputLevelRequirement(i);
-				auto copy =
-						InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->crop(originalConstructSet,
-																																													 cropMin, cropMax);
+				auto copy = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->crop(originalConstructSet,
+																																																	 cropMin, cropMax);
 
 				if (InstRO::getInstrumentorInstance()->getConstructRaisingPolicyElevate())
 					copy = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->raise(
@@ -68,7 +67,7 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 				if (InstRO::getInstrumentorInstance()->getConstructLoweringPolicyElevate())
 					copy = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->lower(
 							copy, passEnvelope->pass->getMinInputLevelRequirement(i));
-				auto newCS=std::make_unique<Core::ConstructSet>(copy);
+				auto newCS = std::make_unique<Core::ConstructSet>(copy);
 				passEnvelope->pass->overrideInput(i, std::move(newCS));
 				//				tempConstructSets.push_back(copy);
 			}

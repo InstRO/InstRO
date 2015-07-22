@@ -24,102 +24,116 @@ return InstRO::Core::ConstructSet(); };
 }*/
 
 class ExampleControlFlowGraph : public InstRO::Tooling::ControlFlowGraph::ControlFlowGraph {
-protected:
+ protected:
+	InstRO::Core::ConstructSet *cs;
 
-	InstRO::Core::ConstructSet * cs;
-public:
-	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(std::string name, bool useFullQualification) {
+ public:
+	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(std::string name,
+																																									bool useFullQualification) {
 		throw std::string("ExampleControlFlowGraph: Not Implemented");
-		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_ENTRY);
+		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(
+				cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_ENTRY);
 	};
 
-        virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExitNode (std::string name, bool useFullQualification) {
+	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExitNode(std::string name,
+																																								 bool useFullQualification) {
 		throw std::string("ExampleControlFlowGraph: Not Implemented");
-		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_EXIT);
+		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(
+				cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_EXIT);
 	};
 
-        
 	// helpers for Constru
-        virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode){
+	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(
+			InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode) {
 		throw std::string("ExampleControlFlowGraph: Not Implemented");
-		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_ENTRY);
+		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(
+				cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_ENTRY);
 	};
 
-        virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExitNode (InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode){
+	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExitNode(
+			InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode) {
 		throw std::string("ExampleControlFlowGraph: Not Implemented");
-		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_EXIT);
+		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(
+				cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_EXIT);
 	};
 
-   /*     // This function can only be called from the raw interface of the compiler, as the tooling interface only provides construct sets ...
-        virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(InstRO::Core::Construct &) {
+	/*     // This function can only be called from the raw interface of the compiler, as the tooling interface only
+ provides construct sets ...
+			 virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGEntryNode(InstRO::Core::Construct &) {
+	 throw std::string("ExampleControlFlowGraph: Not Implemented");
+	 return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs,
+ InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_ENTRY);
+ };
+
+			 virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExityNode(InstRO::Core::Construct) {
+	 throw std::string("ExampleControlFlowGraph: Not Implemented");
+	 return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs,
+ InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_EXIT);
+ };*/
+
+	// Get a set of entry/exit nodes for the functions represented by the cs-nodes.
+	// If a construct in the CS is File or Global-Class no entries are returned for those respecitve constucts
+	virtual std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode> getCFGEntrySet(
+			InstRO::Core::ConstructSet cs) {
 		throw std::string("ExampleControlFlowGraph: Not Implemented");
-		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_ENTRY);
+		return std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode>();
 	};
 
-        virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode getCFGExityNode(InstRO::Core::Construct) {
+	virtual std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode> getCFGExitSet(
+			InstRO::Core::ConstructSet cs) {
 		throw std::string("ExampleControlFlowGraph: Not Implemented");
-		return InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode(cs, InstRO::Tooling::ControlFlowGraph::CFGNodeType::FUNC_EXIT);
-	};*/
-
-
-        // Get a set of entry/exit nodes for the functions represented by the cs-nodes.
-        // If a construct in the CS is File or Global-Class no entries are returned for those respecitve constucts
-        virtual std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode> getCFGEntrySet(InstRO::Core::ConstructSet cs){
-		throw std::string("ExampleControlFlowGraph: Not Implemented");
-		return std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode>();		
+		return std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode>();
 	};
 
-        virtual std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode> getCFGExitSet(InstRO::Core::ConstructSet cs){
+	// Find, if possible, the corresponding CFG nodes. Since the CS is a set of nodes, we return a set of nodes ...
+	virtual std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode> getCFGNodeSet(
+			InstRO::Core::ConstructSet cs) {
 		throw std::string("ExampleControlFlowGraph: Not Implemented");
-		return std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode>();		
-	};
-
-        // Find, if possible, the corresponding CFG nodes. Since the CS is a set of nodes, we return a set of nodes ...
-	virtual std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode> getCFGNodeSet(InstRO::Core::ConstructSet cs){
-		throw std::string("ExampleControlFlowGraph: Not Implemented");
-		return std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode>();		
+		return std::set<InstRO::Tooling::ControlFlowGraph::ControlFlowGraphNode>();
 	};
 };
 
 /* CI: The ConstructSet class is intended to be specialized for each compiler interface. It provides the basic
  * mechanisms to specify what construct level are contained. */
 class ExampleConstructElevator : public InstRO::Tooling::ConstructElevator::ConstructElevator {
-	public:
-		// This is the implicit way, that the PassManager will allways apply
-		virtual InstRO::Core::ConstructSet raise(const InstRO::Core::ConstructSet &input, InstRO::Core::ConstructTraitType cl) override {
-			InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface inputCSCI(&input);
-			auto outputCS=std::make_unique<InstRO::Core::ConstructSet>();
-			InstRO::InfracstructureInterface::ConstructSetCompilerInterface outputCSCI(outputCS.get());
-			//		for (auto construct : inputCSCI)	{
-			//			auto traits=construct->getTraits();
-			//			if (!traits.is(cl))	{
+ public:
+	// This is the implicit way, that the PassManager will allways apply
+	virtual InstRO::Core::ConstructSet raise(const InstRO::Core::ConstructSet &input,
+																					 InstRO::Core::ConstructTraitType cl) override {
+		InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface inputCSCI(&input);
+		auto outputCS = std::make_unique<InstRO::Core::ConstructSet>();
+		InstRO::InfracstructureInterface::ConstructSetCompilerInterface outputCSCI(outputCS.get());
+		//		for (auto construct : inputCSCI)	{
+		//			auto traits=construct->getTraits();
+		//			if (!traits.is(cl))	{
 
+		//			}
 
-			//			}
-
-			//		}
-			//	throw std::string("ExampleConstructElevator::raise : Not Implemented");
-			return *outputCS;
-		}
-		virtual InstRO::Core::ConstructSet raise(const InstRO::Core::ConstructSet *input, InstRO::Core::ConstructTraitType cl){
-			return raise(*input,cl);
-}
-		virtual InstRO::Core::ConstructSet lower(const InstRO::Core::ConstructSet *input, InstRO::Core::ConstructTraitType cl){
-			return lower(*input,cl);
-}
-		// This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
-		virtual InstRO::Core::ConstructSet lower(const InstRO::Core::ConstructSet &input,
-				InstRO::Core::ConstructTraitType cl) {
-			throw std::string("ExampleConstructElevator::lower : Not Implemented");
-			return input;
-		}
+		//		}
+		//	throw std::string("ExampleConstructElevator::raise : Not Implemented");
+		return *outputCS;
+	}
+	virtual InstRO::Core::ConstructSet raise(const InstRO::Core::ConstructSet *input,
+																					 InstRO::Core::ConstructTraitType cl) {
+		return raise(*input, cl);
+	}
+	virtual InstRO::Core::ConstructSet lower(const InstRO::Core::ConstructSet *input,
+																					 InstRO::Core::ConstructTraitType cl) {
+		return lower(*input, cl);
+	}
+	// This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
+	virtual InstRO::Core::ConstructSet lower(const InstRO::Core::ConstructSet &input,
+																					 InstRO::Core::ConstructTraitType cl) {
+		throw std::string("ExampleConstructElevator::lower : Not Implemented");
+		return input;
+	}
 };
 
 class ExampleGrammarInterface : public InstRO::Tooling::GrammarInterface::GrammarInterface {
-	public:
-		// class ConstructSetToGrammarTypeMapper
-		virtual std::list<InstRO::Tooling::GrammarInterface::GrammarTypesType> getGrammerTypes(
-				const InstRO::Core::ConstructSet &cs) {
+ public:
+	// class ConstructSetToGrammarTypeMapper
+	virtual std::list<InstRO::Tooling::GrammarInterface::GrammarTypesType> getGrammerTypes(
+			const InstRO::Core::ConstructSet &cs) {
 		throw std::string("ExampleGrammarInterface::getGrammerTypes : Not Implemented");
 		return std::list<InstRO::Tooling::GrammarInterface::GrammarTypesType>();
 	}

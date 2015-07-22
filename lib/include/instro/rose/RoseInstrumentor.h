@@ -26,7 +26,8 @@ class RoseInstrumentor : public Instrumentor {
 
 	~RoseInstrumentor() { delete (project); }
 
-	virtual Rose::RosePassFactory* getFactory(Instrumentor::CompilationPhase phase = Instrumentor::CompilationPhase::frontend) override {
+	virtual Rose::RosePassFactory* getFactory(
+			Instrumentor::CompilationPhase phase = Instrumentor::CompilationPhase::frontend) override {
 		//		lockPassManager();
 		return new Rose::RosePassFactory(passManager, project);
 	}
@@ -43,7 +44,6 @@ class RoseInstrumentor : public Instrumentor {
 	// Store the Project. It is required for all passes later on ..
 	SgProject* project;
 	InstRO::Rose::Tooling::RoseAnalysisManager* ram;
-
 };
 };
 #endif

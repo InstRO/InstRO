@@ -15,7 +15,7 @@ void ConstructRaisingElevator::execute() {
 };
 void ConstructRaisingElevator::finalize(){};
 void ConstructRaisingElevator::releaseOutput() { output.clear(); };
-Core::ConstructSet *ConstructRaisingElevator::getOutput() { return & output; };
+Core::ConstructSet *ConstructRaisingElevator::getOutput() { return &output; };
 
 void ConstructLoweringElevator::init(){};
 void ConstructLoweringElevator::execute() {

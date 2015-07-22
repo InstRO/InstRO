@@ -5,9 +5,6 @@
 
 namespace InstRO {
 namespace Tooling {
-namespace ControlFlowGraph {
-
-
-}	// ControlFlowGraph
+namespace ControlFlowGraph {}	// ControlFlowGraph
 }	// Tooling
 }	// InstRO
