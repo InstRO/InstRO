@@ -163,6 +163,7 @@ class ConstructTrait {
 		}
 		return cts.find(type) != cts.end();
 	}
+
 	void add(ConstructTraitType type) { cts.insert(type); }
 	ConstructTraitType max() { return *cts.crbegin(); }
 	ConstructTraitType min() { return *cts.cbegin(); }
@@ -196,8 +197,8 @@ class Construct {
 
 	const std::set<ConstructTraitType>& getTraitsAsSet() { return constructTraits.getTraitsAsSet(); }
 
-	virtual bool operator<(const Construct& b) { return false; }
-	virtual size_t getID() = 0;
+	bool operator<(const Construct& b) { return getID() < b.getID(); }
+	virtual size_t getID() const = 0;
 	virtual std::string toString() { return std::string("Construct(abstract)"); }
 
  protected:
