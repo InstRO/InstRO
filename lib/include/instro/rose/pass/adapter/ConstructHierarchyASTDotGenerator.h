@@ -39,23 +39,19 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 			auto parent = child;
 			auto childCS = InstRO::Core::ConstructSet(construct);
 			// ad the current node to the bucket
-			csAggregation = csAggregation.combine(childCS);
+//			csAggregation = csAggregation.combine(childCS);
 
 			// for each construct level, bottom to top, try raising the construct
 			for (auto constructTrait = InstRO::Core::ConstructTraitType::CTExpression;
 					 constructTrait != InstRO::Core::ConstructTraitType::CTMax; constructTrait++) {
 				
-				auto parentCS = elevator->raise(child, constructTrait);
-				// if the node is in the bucket, we already have plottet it, so we can skip it (and its chain)
-				if (!csAggregation.intersect(parentCS).empty())
-					continue;
+				auto parentCS = elevator->raise(childCS, constructTrait);
 
 				InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface rocsciChild(&childCS);
 				InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface rocsciParent(&parentCS);
 				// if there is no partent continue
 				if (parentCS.empty())
 					continue;
-				csAggregation = csAggregation.combine(parentCS);
 				if (rocsciChild.size() != 1 || rocsciParent.size() != 1)
 					throw std::string("Problem in ConstructHierarchyASTDotGenerator");
 				if (rocsciChild.cbegin()->get()->getID() == rocsciParent.cbegin()->get()->getID()) continue;
@@ -63,13 +59,20 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 
 				outFile << "\t" << rocsciChild.cbegin()->get()->getID() << " -> " << rocsciParent.cbegin()->get()->getID()
 								<< ";\n";
+				
+				// if the node is in the bucket, we already have plottet it, so we can skip it (and its chain)
+				if (!csAggregation.intersect(parentCS).empty())
+					break;
+				csAggregation = csAggregation.combine(parentCS);
 
-				childCS = parentCS;
+
+					childCS = parentCS;
 			}
 
 			/*			auto parent = elevator->raise(construct)
 						std::cout << "\t" << construct->getID() << " -> " << std::endl;*/
 		}
+		csAggregation=csAggregation.combine(*inputPass->getOutput());
 		csci = InstRO::InfracstructureInterface::ConstructSetCompilerInterface(&csAggregation);
 		for (auto construct : csci) {
 			std::string csName=constructToString(construct);

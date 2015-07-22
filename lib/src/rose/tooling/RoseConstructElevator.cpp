@@ -59,7 +59,7 @@ InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::Construc
 	InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface input(&inputCS);
 	std::unique_ptr<InstRO::Core::ConstructSet> newConstructSet = std::make_unique<InstRO::Core::ConstructSet>();
 	InstRO::InfracstructureInterface::ConstructSetCompilerInterface output(newConstructSet.get());
-	std::cout << "ConstructElevator::raise:\t Input-ConstructSet contains " << inputCS.size() << "elements " << std::endl;
+	std::cout << "ConstructElevator::raise to "<<traitType<<":\t Input-ConstructSet contains " << inputCS.size() << "elements " << std::endl;
 	for (auto construct = input.cbegin(); construct != input.cend(); construct++) {
 		std::shared_ptr<InstRO::Rose::Core::RoseConstruct> newConstruct;
 		InstRO::Rose::Core::RoseConstruct *roseConstruct =
