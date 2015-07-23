@@ -1,7 +1,7 @@
 #ifndef INSTRO_TOOLING_ControlFlowGraphNode
 #define INSTRO_TOOLING_ControlFlowGraphNode
 
-#include <map>
+#include <vector>
 
 #include "instro/core/ConstructSet.h"
 
@@ -25,6 +25,7 @@ class ControlFlowGraphNode {
 
 	// CI: Explicit RAW Pointer. We do not release control of this CS
 	InstRO::Core::ConstructSet* getAssociatedConstructSet() { return cs; }
+	CFGNodeType getType() { return nodeType; }
 
  protected:
 	InstRO::Core::ConstructSet* cs;
@@ -42,10 +43,11 @@ class BoostCFG {
  public:
 	BoostCFG() {}
 
-	void addNode(InstRO::Core::ConstructSet cs, CFGNodeType type) {
+	void addNode(ControlFlowGraphNode cfgNode) {
+		auto cs = *cfgNode.getAssociatedConstructSet();
 		graph.add_vertex(cs);
 		auto& graphNode = graph[cs];
-		graphNode = ControlFlowGraphNode(&cs, type);
+		graphNode = cfgNode;
 	}
 
 	void addEdge(InstRO::Core::ConstructSet from, InstRO::Core::ConstructSet to) { add_edge_by_label(from, to, graph); }
@@ -88,7 +90,7 @@ class ControlFlowGraph {
 
 class AbstractControlFlowGraph : public ControlFlowGraph {
  public:
-	AbstractControlFlowGraph(std::map<std::shared_ptr<InstRO::Core::Construct>, BoostCFG> graphs) : cfgs(graphs) {}
+	AbstractControlFlowGraph(std::vector<BoostCFG> graphs) : cfgs(graphs) {}
 
 	// TODO implement all of these
 	//	virtual ControlFlowGraphNode getCFGEntryNode(std::string name, bool useFullQualification) = 0;
@@ -110,7 +112,7 @@ class AbstractControlFlowGraph : public ControlFlowGraph {
 	//	virtual std::set<ControlFlowGraphNode> getCFGNodeSet(InstRO::Core::ConstructSet cs) = 0;
 
  private:
-	std::map<std::shared_ptr<InstRO::Core::Construct>, BoostCFG> cfgs;
+	std::vector<BoostCFG> cfgs;
 };
 }
 }

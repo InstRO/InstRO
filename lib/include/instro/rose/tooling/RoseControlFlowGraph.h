@@ -20,12 +20,9 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 	CFGConstructSetGenerator()
 			: cs(new InstRO::Core::ConstructSet()),
 				nodeType(EXPR),
-				magicIndexVariable(0),
-				functionScope(nullptr) {}	// XXX EXPR is a bad default
+				magicIndexVariable(0) {}	// XXX EXPR is a bad default
 
-	void reset(unsigned int index) {
-		cs = new InstRO::Core::ConstructSet();
-		nodeType = EXPR;
+	void calibrate(unsigned int index) {
 		magicIndexVariable = index;
 	}
 
@@ -40,7 +37,6 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 
 		Sg_File_Info* fileInfo;
 		if (magicIndexVariable == 0) {
-			functionScope = node->get_body();
 
 			nodeType = FUNC_ENTRY;
 			fileInfo = node->get_body()->get_startOfConstruct();
@@ -51,30 +47,33 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 			std::cout << "CFGConstructSetGenerator: encountered Function with invalid index" << std::endl;
 			exit(1);
 		}
-		// we allways have to have an associated node in order for the construct to work in the construct elevator
+		// we always have to have an associated node in order for the construct to work in the construct elevator
 		csci.put(std::make_shared<InstRO::Rose::Core::RoseFragment>(InstRO::Rose::Core::RoseFragment(node, fileInfo)));
 	}
 
 	// conditionals
 	void visit(SgIfStmt* node) {
-		SgStatement* condition = node->get_conditional();
-		InfracstructureInterface::ConstructSetCompilerInterface csci(cs);
-
-		auto construct = InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(condition);
-
-		csci.put(construct);
-		nodeType = STMT;
+		invalidate(node);
 	}
-	void visit(SgSwitchStatement* node) { nodeType = STMT; }
+	void visit(SgSwitchStatement* node) {
+		invalidate(node);
+	}
 
 	// loops
-	void visit(SgForStatement* node) { nodeType = STMT; }
-	void visit(SgWhileStmt* node) { nodeType = STMT; }
-	void visit(SgDoWhileStmt* node) { nodeType = STMT; }
+	void visit(SgForStatement* node) {
+		invalidate(node);
+	}
+	void visit(SgWhileStmt* node) {
+		invalidate(node);
+	}
+	void visit(SgDoWhileStmt* node) {
+		invalidate(node);
+	}
 
 	// scopes
 	void visit(SgBasicBlock* node) {
-		if (node == functionScope) {
+
+		if (!Core::RoseConstructLevelPredicates::CLScopeStatementPredicate()(node)) {
 			invalidate(node);
 			return;
 		}
@@ -124,16 +123,87 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 	CFGNodeType nodeType;
 
 	unsigned magicIndexVariable;	// this index variable hold info of the rose VirtualCFG::CFGNode
-	SgBasicBlock* functionScope;	// function definition is visited before the other nodes
 
 	void invalidate(SgNode* node) { cs = nullptr; }
+};
+
+class RoseSingleFunctionCFGGenerator {
+ public:
+	RoseSingleFunctionCFGGenerator(SgFunctionDefinition* startNode) {
+
+		//XXX generate whole virtualcfg
+		VirtualCFG::cfgToDot(startNode, "virtualcfg-"+startNode->get_declaration()->get_name().getString()+".dot");
+
+		generate(nullptr, startNode->cfgForBeginning());
+
+		std::cout << boost::num_vertices(cfg.graph) << " vertices" << std::endl;
+		std::cout << boost::num_edges(cfg.graph) << " edges" << std::endl;
+	}
+
+	BoostCFG getCFG() {
+		return cfg;
+	}
+
+ private:
+	BoostCFG cfg;
+
+	std::set<CFGNode> visitedCFGNodes;
+
+	void generate(InstRO::Core::ConstructSet* previousNode, CFGNode cfgNode) {
+
+		if (visitedCFGNodes.find(cfgNode) != visitedCFGNodes.end()) {
+			return;
+		} else {
+			visitedCFGNodes.insert(cfgNode);
+		}
+
+		InstRO::Core::ConstructSet* previous = previousNode;
+		if (cfgNode.isInteresting() || isSgBasicBlock(cfgNode.getNode())) {
+			auto newACFGNode = aquireControlFlowGraphNode(cfgNode);
+
+			if (newACFGNode.getAssociatedConstructSet() != nullptr) {
+
+				///XXX
+				std::cout << std::endl
+						<< "visit: " << cfgNode.getNode()->class_name() << std::endl
+						<< cfgNode.toString() << std::endl;
+
+				cfg.addNode(newACFGNode);
+				previous = newACFGNode.getAssociatedConstructSet();
+				if (previousNode != nullptr) {
+					cfg.addEdge(*previousNode, *newACFGNode.getAssociatedConstructSet());
+				}
+			}
+		}
+
+		for (auto outEdge : cfgNode.outEdges()) {
+			auto childCfgNode = outEdge.target();
+
+			// TODO only add non visited nodes
+
+			generate(previous, childCfgNode);
+		}
+
+	}
+
+	ControlFlowGraphNode aquireControlFlowGraphNode(CFGNode cfgNode) {
+		CFGConstructSetGenerator gen;
+
+		gen.calibrate(cfgNode.getIndex());
+		cfgNode.getNode()->accept(gen);
+		InstRO::Core::ConstructSet* cs = gen.getConstructSet();
+		CFGNodeType nodeType = gen.getNodeType();
+
+		return ControlFlowGraphNode(cs, nodeType);
+	}
 };
 
 class RoseCFGGenerator {
  public:
 	RoseCFGGenerator(SgProject* project) {
 		for (auto funcDef : SageInterface::querySubTree<SgFunctionDefinition>(project, V_SgFunctionDefinition)) {
-			generate(funcDef);
+			RoseSingleFunctionCFGGenerator singleFunctionGen(funcDef);
+			cfgs.push_back(singleFunctionGen.getCFG());
 		}
 	}
 
@@ -142,65 +212,12 @@ class RoseCFGGenerator {
 	}
 
  private:
-	std::map<std::shared_ptr<InstRO::Core::Construct>, BoostCFG> cfgs;
-
-	void generate(SgFunctionDefinition* funcDef) {
-		CFGNode startNode = VirtualCFG::cfgBeginningOfConstruct(funcDef);
-		std::queue<CFGNode> workList;
-		workList.push(startNode);
-		std::set<CFGNode> visitedNodes;
-
-		BoostCFG cfg;
-		CFGConstructSetGenerator gen;
-
-		while (!workList.empty()) {
-			auto node = workList.front();
-			workList.pop();
-
-			if (visitedNodes.find(node) == visitedNodes.end()) {
-				visitedNodes.insert(node);
-
-				if (node.isInteresting() || isSgBasicBlock(node.getNode())) {
-					std::cout << std::endl
-										<< "visit: " << node.getNode()->class_name() << std::endl
-										<< node.toString() << std::endl;
-
-					gen.reset(node.getIndex());
-					node.getNode()->accept(gen);
-					InstRO::Core::ConstructSet* cs = gen.getConstructSet();
-					CFGNodeType nodeType = gen.getNodeType();
-
-					if (cs != nullptr) {
-						std::cout << "----> valid node." << std::endl;
-						cfg.addNode(*cs, nodeType);
-					}
-				}
-
-				// TODO add the edges to the graph
-
-				for (auto outEdge : node.outEdges()) {
-					workList.push(outEdge.target());
-				}
-			}
-		}
-
-		auto startConstruct = InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(funcDef);
-		cfgs[startConstruct] = cfg;
-
-		/// XXX Print that stuff
-		//		std::cout << std::endl;
-		//		Graph::vertex_iterator vertexIter, vertexEnd;
-		//		for (tie(vertexIter, vertexEnd) = boost::vertices(cfg.graph); vertexIter != vertexEnd; vertexIter++)
-		//		{
-		//			ControlFlowGraphNode node = cfg.graph.graph()[*vertexIter];
-		//			std::cout << node << std::endl;
-		//		}
-		std::cout << boost::num_vertices(cfg.graph) << " vertices" << std::endl;
-	}
+	std::vector<BoostCFG> cfgs;
 };
-}
-}
-}
-}
+
+}	// namespace ControlFlowGraph
+}	// namespace Tooling
+}	// namespace Rose
+}	// namespace InstRO
 
 #endif	// ROSE_CONTROL_FLOW_GRAPH_H
