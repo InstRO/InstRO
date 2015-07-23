@@ -32,7 +32,10 @@ int main(int argc, char ** argv)
 
 	std::vector<SgNode*> sgNodes = NodeQuery::querySubTree(project, V_SgNode);
 	for (auto node : sgNodes){
+		if (node->get_file_info()==nullptr || node->get_file_info()->isCompilerGenerated ()) continue;
 		SgNode * parent = node->get_parent();
+		while (parent!=nullptr &&  (parent->get_file_info()==nullptr || node->get_file_info()->isCompilerGenerated ()))
+			parent=parent->get_parent();
 		// write the name of the node, and some syntactical represenation
 		std::string roseClassName=node->class_name();
 		
@@ -46,10 +49,13 @@ int main(int argc, char ** argv)
 			nodeFormatArgs = ",shape=box";
 		else
 			nodeFormatArgs = ",shape=circle";
-		outFile << "\t" << node << "[label=\"" << roseClassName << "\n" << instroConstructName << "\n" << nodeToString << "\"" << nodeFormatArgs << "];" << std::endl;
+		
+		std::replace(nodeFormatArgs.begin(), nodeFormatArgs.end(), '"', ' ');
+
+		outFile << "\tn" << node << " [label=\"" << roseClassName << "\\n" << instroConstructName << "\\n" << nodeToString << "\"" << nodeFormatArgs << "];" << std::endl;
 		if (parent != NULL)
 		{
-			outFile << "\t" << node << "->" << parent << std::endl;
+			outFile << "\tn" << node << " -> n" << parent <<";"<< std::endl;
 		}
 
 	}
