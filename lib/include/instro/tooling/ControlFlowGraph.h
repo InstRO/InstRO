@@ -73,7 +73,7 @@ class ControlFlowGraph {
 	//	virtual ControlFlowGraphNode getCFGEntryNode(ControlFlowGraphNode) = 0;
 	//	virtual ControlFlowGraphNode getCFGExitNode (ControlFlowGraphNode) = 0;
 	//	// This function can only be called from the raw interface of the compiler, as the tooling interface only provides
-	//construct sets ...
+	// construct sets ...
 	//	virtual ControlFlowGraphNode getCFGEntryNode(InstRO::Core::Construct) = 0;
 	//	virtual ControlFlowGraphNode getCFGExityNode(InstRO::Core::Construct) = 0;
 	//
@@ -97,7 +97,7 @@ class AbstractControlFlowGraph : public ControlFlowGraph {
 	//	virtual ControlFlowGraphNode getCFGEntryNode(ControlFlowGraphNode) = 0;
 	//	virtual ControlFlowGraphNode getCFGExitNode (ControlFlowGraphNode) = 0;
 	//	// This function can only be called from the raw interface of the compiler, as the tooling interface only provides
-	//construct sets ...
+	// construct sets ...
 	//	virtual ControlFlowGraphNode getCFGEntryNode(InstRO::Core::Construct) = 0;
 	//	virtual ControlFlowGraphNode getCFGExityNode(InstRO::Core::Construct) = 0;
 	//
