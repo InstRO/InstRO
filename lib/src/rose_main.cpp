@@ -17,39 +17,44 @@ int main(int argc, char** argv) {
 		// CI - Reseting Classic Implementation  instro->setPassManager(passManager);
 		auto aFactory = dynamic_cast<InstRO::Rose::RosePassFactory*>(instro->getFactory());
 
-		std::vector<std::string> filterRules1;
-		filterRules1.push_back("main");
-		filterRules1.push_back("#Foo#");
-		filterRules1.push_back("#Foo");
-		filterRules1.push_back("myFoo");
-		auto nbs1 = aFactory->createIdentifyerSelector(filterRules1);
-		auto adapter1 = aFactory->createConstructPrinter(nbs1);
+		//		std::vector<std::string> filterRules1;
+		//		filterRules1.push_back("main");
+		//		filterRules1.push_back("#Foo#");
+		//		filterRules1.push_back("#Foo");
+		//		filterRules1.push_back("myFoo");
+		//		auto nbs1 = aFactory->createIdentifyerSelector(filterRules1);
+		//		auto adapter1 = aFactory->createConstructPrinter(nbs1);
 
-		std::vector<std::string> filterRules2;
-		filterRules2.push_back("myFoo");
-		auto nbs2 = aFactory->createIdentifyerSelector(filterRules2);
-		auto celev2 = aFactory->createConstructRaisingElevator(nbs2, InstRO::Core::ConstructTraitType::CTFunction);
-		auto adapter2 = aFactory->createConstructPrinter(celev2);
+		//		std::vector<std::string> filterRules2;
+		//		filterRules2.push_back("myFoo");
+		//		auto nbs2 = aFactory->createIdentifyerSelector(filterRules2);
+		//		auto celev2 = aFactory->createConstructRaisingElevator(nbs2, InstRO::Core::ConstructTraitType::CTFunction);
+		//		auto adapter2 = aFactory->createConstructPrinter(celev2);
 
-		std::vector<std::string> filterRules3;
-		filterRules3.push_back("main");
-		auto nbs3 = aFactory->createIdentifyerSelector(filterRules3);
-		aFactory->createConstructPrinter(nbs3);
+		//		std::vector<std::string> filterRules3;
+		//		filterRules3.push_back("main");
+		//		auto nbs3 = aFactory->createIdentifyerSelector(filterRules3);
+		//		aFactory->createConstructPrinter(nbs3);
 		//		auto celev3 = aFactory->createConstructRaisingElevator(nbs3,InstRO::Core::ConstructLevelType::CLExpression);
-		auto expressions = aFactory->createConstructLoweringElevator(nbs3, InstRO::Core::ConstructTraitType::CTExpression);
-		aFactory->createConstructPrinter(expressions);
-		auto simpleStatements =
-				aFactory->createConstructLoweringElevator(nbs3, InstRO::Core::ConstructTraitType::CTSimpleStatement);
-		aFactory->createConstructPrinter(simpleStatements);
-		auto statements = aFactory->createConstructLoweringElevator(nbs3, InstRO::Core::ConstructTraitType::CTStatement);
-		aFactory->createConstructPrinter(statements);
+		//		auto expressions = aFactory->createConstructLoweringElevator(nbs3,
+		//InstRO::Core::ConstructTraitType::CTExpression);
+		//		aFactory->createConstructPrinter(expressions);
+		//		auto simpleStatements =
+		//				aFactory->createConstructLoweringElevator(nbs3, InstRO::Core::ConstructTraitType::CTSimpleStatement);
+		//		aFactory->createConstructPrinter(simpleStatements);
+		//		auto statements = aFactory->createConstructLoweringElevator(nbs3,
+		//InstRO::Core::ConstructTraitType::CTStatement);
+		//		aFactory->createConstructPrinter(statements);
 
+		auto getMain = aFactory->createProgramEntrySelector();
+		auto expressions =
+				aFactory->createConstructLoweringElevator(getMain, InstRO::Core::ConstructTraitType::CTExpression);
 		auto astPrinter = aFactory->createConstructHierarchyASTDotGenerator(expressions, "CSHierarchyAST.dot");
 
 		//		auto adapter3 = aFactory->createConstructPrinter(celev3);
 
-		auto programEntry = aFactory->createProgramEntrySelector();
-		aFactory->createConstructPrinter(programEntry);
+		//		auto programEntry = aFactory->createProgramEntrySelector();
+		//		aFactory->createConstructPrinter(programEntry);
 
 		instro->init();
 		instro->apply();
