@@ -138,6 +138,7 @@ typedef ConstructTraitHierarchyTraverser<
 }
 
 std::string constructLevelToString(ConstructTraitType type);
+std::string constructLevelToStringShort(ConstructTraitType type);
 std::string operator+(const std::string& lhs, const ConstructTraitType& type);
 
 class ConstructTrait {
@@ -181,6 +182,19 @@ class ConstructTrait {
 		ss << "[";
 		for (auto ct : cts) {
 			ss << InstRO::Core::constructLevelToString(ct) << " ";
+		}
+		ss << "]";
+		return ss.str();
+	}
+	std::string toStringShort() {
+		if (cts.empty()) {
+			return InstRO::Core::constructLevelToString(ConstructTraitType::CTNoTraits);
+		}
+
+		std::stringstream ss;
+		ss << "[";
+		for (auto ct : cts) {
+			ss << InstRO::Core::constructLevelToStringShort(ct) << " ";
 		}
 		ss << "]";
 		return ss.str();
