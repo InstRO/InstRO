@@ -36,13 +36,13 @@ int main(int argc, char ** argv)
 		// write the name of the node, and some syntactical represenation
 		std::string roseClassName=node->class_name();
 		
-		auto cg=InstRO::Rose::Core::ConstructGenerator::ConstructGenerator();
+		InstRO::Rose::Core::ConstructGenerator cg;
 		node->accept(cg);
 		std::string instroConstructName = cg.getConstructTraits().toString();
 		//(cg.getConstructTraits(node);
 		std::string nodeToString;
 		std::string nodeFormatArgs;
-		if (InstRO::Rose::Core::RoseConstructLevelPredicates::ConstructPredicate(node))
+		if (InstRO::Rose::Core::RoseConstructLevelPredicates::ConstructPredicate()(node))
 			nodeFormatArgs = ",shape=box";
 		else
 			nodeFormatArgs = ",shape=circle";
