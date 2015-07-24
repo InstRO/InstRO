@@ -253,6 +253,7 @@ class ConstructSet {
 	std::set<std::shared_ptr<Construct> > constructs;
 
 	friend bool operator<(const ConstructSet& c1, const ConstructSet& c2) { return c1.constructs < c2.constructs; }
+	friend bool operator==(const ConstructSet& c1, const ConstructSet& c2) { return c1.constructs == c2.constructs; }
 
 	friend std::ostream& operator<<(std::ostream& out, ConstructSet& cs) {
 		out << " CS size:" << cs.size() << std::endl;

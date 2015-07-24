@@ -7,6 +7,8 @@
 
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/labeled_graph.hpp>
+#include <boost/graph/graphviz.hpp>
+
 using namespace boost;
 
 namespace InstRO {
@@ -27,6 +29,10 @@ class ControlFlowGraphNode {
 	InstRO::Core::ConstructSet* getAssociatedConstructSet() { return cs; }
 	CFGNodeType getType() { return nodeType; }
 
+	std::string toDotString() {
+		return ACFGNodeTypeNames[nodeType];
+	}
+
  protected:
 	InstRO::Core::ConstructSet* cs;
 	CFGNodeType nodeType;
@@ -38,6 +44,7 @@ class ControlFlowGraphNode {
 };
 
 typedef labeled_graph<adjacency_list<vecS, vecS, directedS, ControlFlowGraphNode>, InstRO::Core::ConstructSet> Graph;
+
 
 class BoostCFG {
  public:
@@ -60,8 +67,29 @@ class BoostCFG {
 		return foundNodes;
 	}
 
- public:	//
+	void print(std::string name) {
+		///XXX
+		std::ofstream outputStream;
+		outputStream.open(name);
+		write_graphviz(outputStream, graph, NodeWriter(graph));
+		outputStream.close();
+	}
+
+ public:
 	Graph graph;
+
+	struct NodeWriter {
+		NodeWriter(Graph graph) : g(graph) {}
+
+		template<typename Descriptor>
+		void operator()(std::ostream& out, Descriptor key) const {
+			auto node = g.graph()[key];
+			out << " [label=\"" << node.toDotString() << "\"]";
+		}
+
+		Graph g;
+	};
+
 };
 
 class ControlFlowGraph {
