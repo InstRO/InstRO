@@ -95,6 +95,8 @@ struct CLStatementPredicate : public CTPredicate {
 			}
 			return false;
 		}
+		if (isSgIfStmt(n) || isSgSwitchStatement(n) || isSgDoWhileStmt(n) || isSgWhileStmt(n) || isSgForStatement(n))
+			return true;
 
 		if (isSgScopeStatement(n)) {
 			if (CLScopeStatementPredicate()(n)) {
