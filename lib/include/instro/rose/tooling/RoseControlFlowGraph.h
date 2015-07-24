@@ -132,69 +132,65 @@ class RoseSingleFunctionCFGGenerator {
 	RoseSingleFunctionCFGGenerator(SgFunctionDefinition* startNode) {
 
 		//XXX generate whole virtualcfg
-		VirtualCFG::cfgToDot(startNode, "virtualcfg-"+startNode->get_declaration()->get_name().getString()+".dot");
+		std::string name = startNode->get_declaration()->get_name().getString();
+		VirtualCFG::cfgToDot(startNode, "virtualcfg-"+name+".dot");
 
 		generate(nullptr, startNode->cfgForBeginning());
 
+		///XXX
+		cfg.print(name+".dot");
 		std::cout << boost::num_vertices(cfg.graph) << " vertices" << std::endl;
 		std::cout << boost::num_edges(cfg.graph) << " edges" << std::endl;
 	}
 
 	BoostCFG getCFG() {
-		return cfg;
+		return std::move(cfg);
 	}
 
  private:
 	BoostCFG cfg;
-
 	std::set<CFGNode> visitedCFGNodes;
 
-	void generate(InstRO::Core::ConstructSet* previousNode, CFGNode cfgNode) {
+	void generate(InstRO::Core::ConstructSet* previousNode, CFGNode vcfgNode) {
 
-		if (visitedCFGNodes.find(cfgNode) != visitedCFGNodes.end()) {
+		if (visitedCFGNodes.find(vcfgNode) != visitedCFGNodes.end()) {
 			return;
 		} else {
-			visitedCFGNodes.insert(cfgNode);
+			visitedCFGNodes.insert(vcfgNode);
 		}
 
-		InstRO::Core::ConstructSet* previous = previousNode;
-		if (cfgNode.isInteresting() || isSgBasicBlock(cfgNode.getNode())) {
-			auto newACFGNode = aquireControlFlowGraphNode(cfgNode);
+		InstRO::Core::ConstructSet* lastValidConstructSet = previousNode;
+		if (vcfgNode.isInteresting() || isSgBasicBlock(vcfgNode.getNode())) {
 
-			if (newACFGNode.getAssociatedConstructSet() != nullptr) {
+			auto currentNode = aquireControlFlowGraphNode(vcfgNode);
+			auto currentNodeCS = currentNode.getAssociatedConstructSet();
+			if (currentNodeCS != nullptr) {
+				lastValidConstructSet = currentNodeCS;
 
 				///XXX
-				std::cout << std::endl
-						<< "visit: " << cfgNode.getNode()->class_name() << std::endl
-						<< cfgNode.toString() << std::endl;
+				std::cout << std::endl << "visit: " << vcfgNode.getNode()->class_name() << std::endl
+						<< vcfgNode.toString() << std::endl;
 
-				cfg.addNode(newACFGNode);
-				previous = newACFGNode.getAssociatedConstructSet();
+				cfg.addNode(currentNode);
 				if (previousNode != nullptr) {
-					cfg.addEdge(*previousNode, *newACFGNode.getAssociatedConstructSet());
+					cfg.addEdge(*previousNode, *currentNodeCS);
 				}
 			}
 		}
 
-		for (auto outEdge : cfgNode.outEdges()) {
+		for (auto outEdge : vcfgNode.outEdges()) {
 			auto childCfgNode = outEdge.target();
-
-			// TODO only add non visited nodes
-
-			generate(previous, childCfgNode);
+			generate(lastValidConstructSet, childCfgNode);
 		}
 
 	}
 
 	ControlFlowGraphNode aquireControlFlowGraphNode(CFGNode cfgNode) {
 		CFGConstructSetGenerator gen;
-
 		gen.calibrate(cfgNode.getIndex());
-		cfgNode.getNode()->accept(gen);
-		InstRO::Core::ConstructSet* cs = gen.getConstructSet();
-		CFGNodeType nodeType = gen.getNodeType();
 
-		return ControlFlowGraphNode(cs, nodeType);
+		cfgNode.getNode()->accept(gen);
+		return ControlFlowGraphNode(gen.getConstructSet(), gen.getNodeType());
 	}
 };
 
@@ -208,7 +204,7 @@ class RoseCFGGenerator {
 	}
 
 	InstRO::Tooling::ControlFlowGraph::ControlFlowGraph* getGraph() {
-		return new InstRO::Tooling::ControlFlowGraph::AbstractControlFlowGraph(cfgs);
+		return new InstRO::Tooling::ControlFlowGraph::AbstractControlFlowGraph(std::move(cfgs));
 	}
 
  private:
