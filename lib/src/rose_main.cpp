@@ -37,13 +37,13 @@ int main(int argc, char** argv) {
 		//		aFactory->createConstructPrinter(nbs3);
 		//		auto celev3 = aFactory->createConstructRaisingElevator(nbs3,InstRO::Core::ConstructLevelType::CLExpression);
 		//		auto expressions = aFactory->createConstructLoweringElevator(nbs3,
-		//InstRO::Core::ConstructTraitType::CTExpression);
+		// InstRO::Core::ConstructTraitType::CTExpression);
 		//		aFactory->createConstructPrinter(expressions);
 		//		auto simpleStatements =
 		//				aFactory->createConstructLoweringElevator(nbs3, InstRO::Core::ConstructTraitType::CTSimpleStatement);
 		//		aFactory->createConstructPrinter(simpleStatements);
 		//		auto statements = aFactory->createConstructLoweringElevator(nbs3,
-		//InstRO::Core::ConstructTraitType::CTStatement);
+		// InstRO::Core::ConstructTraitType::CTStatement);
 		//		aFactory->createConstructPrinter(statements);
 
 		auto getMain = aFactory->createProgramEntrySelector();

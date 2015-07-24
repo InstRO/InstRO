@@ -43,7 +43,8 @@ std::string constructLevelToString(ConstructTraitType type) {
 			break;
 
 		default:
-			return std::string("Invalid ConstructTrait [")+std::to_string(static_cast<unsigned int>(type))+std::string("]");
+			return std::string("Invalid ConstructTrait [") + std::to_string(static_cast<unsigned int>(type)) +
+						 std::string("]");
 			break;
 	}
 }

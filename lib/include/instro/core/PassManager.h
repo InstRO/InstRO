@@ -12,7 +12,6 @@ class ConstructSet;
 
 namespace PassManagement {
 
-
 class PassEnvelope {
 	//	friend class PassManager;
 	friend class SimplePassManager;
@@ -33,11 +32,9 @@ class PassEnvelope {
 };
 
 class PassManager {
-  protected:
-	  // Since the PassManager is an Interface and its children will not be able to access the collisionSet, the following
-	  const InstRO::Core::ConstructSet * getCollisionSet(InstRO::Pass * pass){
-		  return pass->getCollisionSet();
-	  }
+ protected:
+	// Since the PassManager is an Interface and its children will not be able to access the collisionSet, the following
+	const InstRO::Core::ConstructSet *getCollisionSet(InstRO::Pass *pass) { return pass->getCollisionSet(); }
 
  public:
 	friend Pass;

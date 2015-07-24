@@ -24,8 +24,6 @@ namespace PassManagement {
 class PassManager;
 }	// PassManagement
 
-
-
 class Instrumentor {
  public:
 	typedef enum CompilationPhase {
@@ -40,7 +38,6 @@ class Instrumentor {
 	} CompilationPhase;
 
  public:
-
 	Instrumentor() {
 		passManagerLocked = false;
 		setPassManager(new InstRO::PassManagement::SimplePassManager());
@@ -55,12 +52,12 @@ class Instrumentor {
 	// Get a instance of the PassManager. The PassManager is internally managed and deconstructed.
 	virtual InstRO::PassManagement::PassManager* getPassManager() { return passManager; }
 
-protected:
+ protected:
 	bool passManagerLocked;
 
-public:
-	// We allow to replace the passmangager with a different version or implementation. 
-	// This can only be done before the first pass is created from the factory, as the manager tracks all 
+ public:
+	// We allow to replace the passmangager with a different version or implementation.
+	// This can only be done before the first pass is created from the factory, as the manager tracks all
 	// passes, dependencies and invoces the passes accordingly
 	void setPassManager(InstRO::PassManagement::PassManager* manager) {
 		if (passManagerLocked)
@@ -71,7 +68,6 @@ public:
 			passManager = manager;
 		}
 	}
-
 
  protected:
 	bool constructRaisingPolicyElevate, constructLoweringPolicyElevate;
@@ -90,7 +86,7 @@ public:
 	// Interface to access the implementation specific Analysis Layer Container
 	virtual Tooling::AnalysisManager* getAnalysisManager() = 0;
 
- protected:	
+ protected:
 	InstRO::PassManagement::PassManager* passManager;
 	InstRO::Tooling::AnalysisManager* analysisManager;
 
@@ -98,7 +94,6 @@ public:
 	virtual void init() = 0;
 	virtual void apply() = 0;
 	virtual void finalize() = 0;
-
 };
 }
 #endif
