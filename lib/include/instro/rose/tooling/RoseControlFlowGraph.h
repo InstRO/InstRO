@@ -2,6 +2,7 @@
 #define ROSE_CONTROL_FLOW_GRAPH_H
 
 #include <set>
+#include <map>
 #include <queue>
 #include <rose.h>
 
@@ -150,14 +151,10 @@ class RoseSingleFunctionCFGGenerator {
  private:
 	BoostCFG cfg;
 	std::set<CFGNode> visitedCFGNodes;
+	std::map<CFGNode, ControlFlowGraphNode> mapping;
 
 	void generate(InstRO::Core::ConstructSet* previousNode, CFGNode vcfgNode) {
 
-		if (visitedCFGNodes.find(vcfgNode) != visitedCFGNodes.end()) {
-			return;
-		} else {
-			visitedCFGNodes.insert(vcfgNode);
-		}
 
 		InstRO::Core::ConstructSet* lastValidConstructSet = previousNode;
 		if (vcfgNode.isInteresting() || isSgBasicBlock(vcfgNode.getNode())) {
@@ -175,6 +172,12 @@ class RoseSingleFunctionCFGGenerator {
 				if (previousNode != nullptr) {
 					cfg.addEdge(*previousNode, *currentNodeCS);
 				}
+
+				if (visitedCFGNodes.find(vcfgNode) != visitedCFGNodes.end()) {
+					return;
+				} else {
+					visitedCFGNodes.insert(vcfgNode);
+				}
 			}
 		}
 
@@ -182,15 +185,19 @@ class RoseSingleFunctionCFGGenerator {
 			auto childCfgNode = outEdge.target();
 			generate(lastValidConstructSet, childCfgNode);
 		}
-
 	}
 
 	ControlFlowGraphNode aquireControlFlowGraphNode(CFGNode cfgNode) {
-		CFGConstructSetGenerator gen;
-		gen.calibrate(cfgNode.getIndex());
 
-		cfgNode.getNode()->accept(gen);
-		return ControlFlowGraphNode(gen.getConstructSet(), gen.getNodeType());
+		if (mapping.find(cfgNode) == mapping.end()) {
+
+			CFGConstructSetGenerator gen;
+			gen.calibrate(cfgNode.getIndex());
+
+			cfgNode.getNode()->accept(gen);
+			mapping[cfgNode] = ControlFlowGraphNode(gen.getConstructSet(), gen.getNodeType());
+		}
+		return mapping[cfgNode];
 	}
 };
 
