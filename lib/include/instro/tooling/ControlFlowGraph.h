@@ -30,7 +30,7 @@ class ControlFlowGraphNode {
 	CFGNodeType getType() { return nodeType; }
 
 	std::string toDotString() {
-		return ACFGNodeTypeNames[nodeType];
+		return std::string(ACFGNodeTypeNames[nodeType]);
 	}
 
  protected:
@@ -82,8 +82,8 @@ class BoostCFG {
 		NodeWriter(Graph graph) : g(graph) {}
 
 		template<typename Descriptor>
-		void operator()(std::ostream& out, Descriptor key) const {
-			auto node = g.graph()[key];
+		void operator()(std::ostream& out, Descriptor nodeDescriptor) const {
+			auto node = g.graph()[nodeDescriptor];
 			out << " [label=\"" << node.toDotString() << "\"]";
 		}
 

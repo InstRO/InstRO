@@ -258,6 +258,18 @@ class RoseConstructProvider {
 		return instance;
 	}
 
+	std::shared_ptr<RoseConstruct> getFragment(SgNode* node, Sg_File_Info* fileInfo) {
+		if (node == nullptr || fileInfo == nullptr) {
+			throw std::string("RoseConstructProvider: attempted to getFragment for nullptr");
+		}
+
+		if (mapping.find(fileInfo) == mapping.end()) {
+			std::cout << "\tcreating new construct" << std::endl;
+			mapping[fileInfo] = std::make_shared<RoseFragment>(RoseFragment(node, fileInfo));
+		}
+		return mapping[fileInfo];
+	}
+
 	std::shared_ptr<RoseConstruct> getConstruct(SgNode* node) {
 		std::cout << "getConstruct(" << node << ")" << std::endl;
 		if (node == nullptr) {
@@ -269,7 +281,7 @@ class RoseConstructProvider {
 
 			ConstructGenerator gen;
 			node->accept(gen);
-			mapping[node] = std::shared_ptr<RoseConstruct>(new RoseConstruct(node, gen.getConstructTraits()));
+			mapping[node] = std::make_shared<RoseConstruct>(RoseConstruct(node, gen.getConstructTraits()));
 		}
 		return mapping[node];
 	}

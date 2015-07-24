@@ -48,7 +48,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 			exit(1);
 		}
 		// we always have to have an associated node in order for the construct to work in the construct elevator
-		csci.put(std::make_shared<InstRO::Rose::Core::RoseFragment>(InstRO::Rose::Core::RoseFragment(node, fileInfo)));
+		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getFragment(node, fileInfo));
 	}
 
 	// conditionals
@@ -81,12 +81,12 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 		InfracstructureInterface::ConstructSetCompilerInterface csci(cs);
 		if (magicIndexVariable == 0) {
 			nodeType = SCOPE_ENTRY;
-			csci.put(std::make_shared<InstRO::Rose::Core::RoseFragment>(
-					InstRO::Rose::Core::RoseFragment(node, node->get_startOfConstruct())));
+			csci.put(
+					InstRO::Rose::Core::RoseConstructProvider::getInstance().getFragment(node, node->get_startOfConstruct()));
 		} else if (magicIndexVariable == node->cfgIndexForEnd()) {
 			nodeType = SCOPE_EXIT;
-			csci.put(std::make_shared<InstRO::Rose::Core::RoseFragment>(
-					InstRO::Rose::Core::RoseFragment(node, node->get_endOfConstruct())));
+			csci.put(
+					InstRO::Rose::Core::RoseConstructProvider::getInstance().getFragment(node, node->get_endOfConstruct()));
 		} else {
 			invalidate(node);
 		}
