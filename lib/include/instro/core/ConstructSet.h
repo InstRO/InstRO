@@ -197,7 +197,9 @@ class Construct {
 
 	const std::set<ConstructTraitType>& getTraitsAsSet() { return constructTraits.getTraitsAsSet(); }
 
-	bool operator<(const Construct& b) { return getID() < b.getID(); }
+	bool operator<(const Construct& other) { return getID() < other.getID(); }
+	bool operator==(const Construct& other) { return getID() == other.getID(); }
+
 	virtual size_t getID() const = 0;
 	virtual std::string toString() { return std::string("Construct(abstract)"); }
 
@@ -215,6 +217,9 @@ class ConstructSet {
 
  public:
 	ConstructSet(){};
+	// XXX RN: in the long run there should be no child classes from ConstructSet
+	virtual ~ConstructSet() {};
+
 	void setCurrentMinLevel(ConstructTraitType minLevel){};
 	void setCurrentMaxLevel(ConstructTraitType maxLevel){};
 
