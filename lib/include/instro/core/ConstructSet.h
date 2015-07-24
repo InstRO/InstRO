@@ -168,6 +168,7 @@ class ConstructTrait {
 		}
 		return cts.find(type) != cts.end();
 	}
+
 	void add(ConstructTraitType type) { cts.insert(type); }
 	ConstructTraitType max() { return *cts.crbegin(); }
 	ConstructTraitType min() { return *cts.cbegin(); }
@@ -214,8 +215,10 @@ class Construct {
 
 	const std::set<ConstructTraitType>& getTraitsAsSet() { return constructTraits.getTraitsAsSet(); }
 
-	virtual bool operator<(const Construct& b) { return false; }
-	virtual size_t getID() = 0;
+	bool operator<(const Construct& other) { return getID() < other.getID(); }
+	bool operator==(const Construct& other) { return getID() == other.getID(); }
+
+	virtual size_t getID() const = 0;
 	virtual std::string toString() { return std::string("Construct(abstract)"); }
 
  protected:
@@ -232,6 +235,9 @@ class ConstructSet {
 
  public:
 	ConstructSet(){};
+	// XXX RN: in the long run there should be no child classes from ConstructSet
+	virtual ~ConstructSet() {};
+
 	void setCurrentMinLevel(ConstructTraitType minLevel){};
 	void setCurrentMaxLevel(ConstructTraitType maxLevel){};
 
@@ -270,6 +276,7 @@ class ConstructSet {
 	std::set<std::shared_ptr<Construct> > constructs;
 
 	friend bool operator<(const ConstructSet& c1, const ConstructSet& c2) { return c1.constructs < c2.constructs; }
+	friend bool operator==(const ConstructSet& c1, const ConstructSet& c2) { return c1.constructs == c2.constructs; }
 
 	friend std::ostream& operator<<(std::ostream& out, ConstructSet& cs) {
 		out << " CS size:" << cs.size() << std::endl;
