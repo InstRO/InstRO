@@ -29,9 +29,7 @@ class ControlFlowGraphNode {
 	InstRO::Core::ConstructSet* getAssociatedConstructSet() { return cs; }
 	CFGNodeType getType() { return nodeType; }
 
-	std::string toDotString() {
-		return std::string(ACFGNodeTypeNames[nodeType]);
-	}
+	std::string toDotString() { return std::string(ACFGNodeTypeNames[nodeType]); }
 
  protected:
 	InstRO::Core::ConstructSet* cs;
@@ -44,7 +42,6 @@ class ControlFlowGraphNode {
 };
 
 typedef labeled_graph<adjacency_list<vecS, vecS, directedS, ControlFlowGraphNode>, InstRO::Core::ConstructSet> Graph;
-
 
 class BoostCFG {
  public:
@@ -68,7 +65,7 @@ class BoostCFG {
 	}
 
 	void print(std::string name) {
-		///XXX
+		/// XXX
 		std::ofstream outputStream;
 		outputStream.open(name);
 		write_graphviz(outputStream, graph, NodeWriter(graph));
@@ -81,7 +78,7 @@ class BoostCFG {
 	struct NodeWriter {
 		NodeWriter(Graph graph) : g(graph) {}
 
-		template<typename Descriptor>
+		template <typename Descriptor>
 		void operator()(std::ostream& out, Descriptor nodeDescriptor) const {
 			auto node = g.graph()[nodeDescriptor];
 			out << " [label=\"" << node.toDotString() << "\"]";
@@ -89,7 +86,6 @@ class BoostCFG {
 
 		Graph g;
 	};
-
 };
 
 class ControlFlowGraph {

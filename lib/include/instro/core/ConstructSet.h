@@ -236,7 +236,7 @@ class ConstructSet {
  public:
 	ConstructSet(){};
 	// XXX RN: in the long run there should be no child classes from ConstructSet
-	virtual ~ConstructSet() {};
+	virtual ~ConstructSet(){};
 
 	void setCurrentMinLevel(ConstructTraitType minLevel){};
 	void setCurrentMaxLevel(ConstructTraitType maxLevel){};

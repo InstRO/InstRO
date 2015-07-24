@@ -19,13 +19,9 @@ using namespace InstRO::Tooling::ControlFlowGraph;
 class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
  public:
 	CFGConstructSetGenerator()
-			: cs(new InstRO::Core::ConstructSet()),
-				nodeType(EXPR),
-				magicIndexVariable(0) {}	// XXX EXPR is a bad default
+			: cs(new InstRO::Core::ConstructSet()), nodeType(EXPR), magicIndexVariable(0) {}	// XXX EXPR is a bad default
 
-	void calibrate(unsigned int index) {
-		magicIndexVariable = index;
-	}
+	void calibrate(unsigned int index) { magicIndexVariable = index; }
 
 	InstRO::Core::ConstructSet* getConstructSet() { return cs; }
 	CFGNodeType getNodeType() { return nodeType; }
@@ -38,7 +34,6 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 
 		Sg_File_Info* fileInfo;
 		if (magicIndexVariable == 0) {
-
 			nodeType = FUNC_ENTRY;
 			fileInfo = node->get_body()->get_startOfConstruct();
 		} else if (magicIndexVariable == 3) {
@@ -53,27 +48,16 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 	}
 
 	// conditionals
-	void visit(SgIfStmt* node) {
-		invalidate(node);
-	}
-	void visit(SgSwitchStatement* node) {
-		invalidate(node);
-	}
+	void visit(SgIfStmt* node) { invalidate(node); }
+	void visit(SgSwitchStatement* node) { invalidate(node); }
 
 	// loops
-	void visit(SgForStatement* node) {
-		invalidate(node);
-	}
-	void visit(SgWhileStmt* node) {
-		invalidate(node);
-	}
-	void visit(SgDoWhileStmt* node) {
-		invalidate(node);
-	}
+	void visit(SgForStatement* node) { invalidate(node); }
+	void visit(SgWhileStmt* node) { invalidate(node); }
+	void visit(SgDoWhileStmt* node) { invalidate(node); }
 
 	// scopes
 	void visit(SgBasicBlock* node) {
-
 		if (!Core::RoseConstructLevelPredicates::CLScopeStatementPredicate()(node)) {
 			invalidate(node);
 			return;
@@ -86,8 +70,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 					InstRO::Rose::Core::RoseConstructProvider::getInstance().getFragment(node, node->get_startOfConstruct()));
 		} else if (magicIndexVariable == node->cfgIndexForEnd()) {
 			nodeType = SCOPE_EXIT;
-			csci.put(
-					InstRO::Rose::Core::RoseConstructProvider::getInstance().getFragment(node, node->get_endOfConstruct()));
+			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getFragment(node, node->get_endOfConstruct()));
 		} else {
 			invalidate(node);
 		}
@@ -131,22 +114,19 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 class RoseSingleFunctionCFGGenerator {
  public:
 	RoseSingleFunctionCFGGenerator(SgFunctionDefinition* startNode) {
-
-		//XXX generate whole virtualcfg
+		// XXX generate whole virtualcfg
 		std::string name = startNode->get_declaration()->get_name().getString();
-		VirtualCFG::cfgToDot(startNode, "virtualcfg-"+name+".dot");
+		VirtualCFG::cfgToDot(startNode, "virtualcfg-" + name + ".dot");
 
 		generate(nullptr, startNode->cfgForBeginning());
 
-		///XXX
-		cfg.print(name+".dot");
+		/// XXX
+		cfg.print(name + ".dot");
 		std::cout << boost::num_vertices(cfg.graph) << " vertices" << std::endl;
 		std::cout << boost::num_edges(cfg.graph) << " edges" << std::endl;
 	}
 
-	BoostCFG getCFG() {
-		return std::move(cfg);
-	}
+	BoostCFG getCFG() { return std::move(cfg); }
 
  private:
 	BoostCFG cfg;
@@ -154,19 +134,17 @@ class RoseSingleFunctionCFGGenerator {
 	std::map<CFGNode, ControlFlowGraphNode> mapping;
 
 	void generate(InstRO::Core::ConstructSet* previousNode, CFGNode vcfgNode) {
-
-
 		InstRO::Core::ConstructSet* lastValidConstructSet = previousNode;
 		if (vcfgNode.isInteresting() || isSgBasicBlock(vcfgNode.getNode())) {
-
 			auto currentNode = aquireControlFlowGraphNode(vcfgNode);
 			auto currentNodeCS = currentNode.getAssociatedConstructSet();
 			if (currentNodeCS != nullptr) {
 				lastValidConstructSet = currentNodeCS;
 
-				///XXX
-				std::cout << std::endl << "visit: " << vcfgNode.getNode()->class_name() << std::endl
-						<< vcfgNode.toString() << std::endl;
+				/// XXX
+				std::cout << std::endl
+									<< "visit: " << vcfgNode.getNode()->class_name() << std::endl
+									<< vcfgNode.toString() << std::endl;
 
 				cfg.addNode(currentNode);
 				if (previousNode != nullptr) {
@@ -188,9 +166,7 @@ class RoseSingleFunctionCFGGenerator {
 	}
 
 	ControlFlowGraphNode aquireControlFlowGraphNode(CFGNode cfgNode) {
-
 		if (mapping.find(cfgNode) == mapping.end()) {
-
 			CFGConstructSetGenerator gen;
 			gen.calibrate(cfgNode.getIndex());
 
