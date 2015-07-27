@@ -201,7 +201,8 @@ class Construct {
 	bool operator==(const Construct& other) { return getID() == other.getID(); }
 
 	virtual size_t getID() const = 0;
-	virtual std::string toString() { return std::string("Construct(abstract)"); }
+	virtual std::string toString() const { return std::string("Construct(abstract)"); }
+	virtual std::string toDotString() const = 0;
 
  protected:
 	ConstructTrait constructTraits;
@@ -253,6 +254,15 @@ class ConstructSet {
 	virtual std::vector<ConstructSet> split() const;
 	// CI: I would like to have s.th. like a begin() and end() returning an iterator of constructset containing individual
 	// constructs
+
+	virtual std::string toDotString() const {
+		std::string dotString;
+		for (auto const& constructPtr : constructs) {
+			dotString += constructPtr->toDotString();
+			dotString += "\\n";
+		}
+		return dotString;
+	}
 
  protected:
 	std::set<std::shared_ptr<Construct> > constructs;

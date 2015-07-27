@@ -94,7 +94,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 	}
 
 	void visit(SgVariableDeclaration* node) {
-		if (node->get_definition() == nullptr) {
+		if (!InstRO::Rose::Core::RoseConstructLevelPredicates::DefinedVariableDeclarationPredicate()(node)) {
 			invalidate(node);
 			return;
 		}

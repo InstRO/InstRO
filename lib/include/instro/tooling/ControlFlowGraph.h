@@ -30,7 +30,10 @@ class ControlFlowGraphNode {
 	CFGNodeType getType() { return nodeType; }
 
 	std::string toDotString() {
-		return std::string(ACFGNodeTypeNames[nodeType]);
+		std::string dotString(ACFGNodeTypeNames[nodeType]);
+		dotString += "\\n";
+		dotString += cs->toDotString();
+		return dotString;
 	}
 
  protected:
