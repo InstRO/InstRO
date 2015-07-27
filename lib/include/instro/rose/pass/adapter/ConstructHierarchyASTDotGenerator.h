@@ -31,47 +31,58 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 	virtual void execute() {
 		outFile << "digraph InstROAST{" << std::endl;
 		auto elevator = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator();
-		InstRO::Core::ConstructSet csAggregation;
+		InstRO::Core::ConstructSet csAggregation, toDoList, workList;
+		workList = *(inputPass->getOutput());
 
-		InstRO::InfracstructureInterface::ConstructSetCompilerInterface csci(inputPass->getOutput());
-		for (auto construct : csci) {
-			auto child = construct;
-			auto parent = child;
-			auto childCS = InstRO::Core::ConstructSet(construct);
-			// ad the current node to the bucket
-			//			csAggregation = csAggregation.combine(childCS);
+		while (workList.size()){
+			InstRO::InfracstructureInterface::ConstructSetCompilerInterface csci(inputPass->getOutput());
+			for (auto construct : csci) {
+				auto child = construct;
+				auto parent = child;
+				auto childCS = InstRO::Core::ConstructSet(construct);
 
-			// for each construct level, bottom to top, try raising the construct
-			for (auto constructTrait = InstRO::Core::ConstructTraitType::CTExpression;
-					 constructTrait != InstRO::Core::ConstructTraitType::CTMax; constructTrait++) {
-				auto parentCS = elevator->raise(childCS, constructTrait);
+				std::vector<InstRO::Core::ConstructTraitType> traitList;
 
-				InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface rocsciChild(&childCS);
-				InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface rocsciParent(&parentCS);
-				// if there is no partent continue
-				if (parentCS.empty())
-					continue;
-				if (rocsciChild.size() != 1 || rocsciParent.size() != 1)
-					throw std::string("Problem in ConstructHierarchyASTDotGenerator");
-				if (rocsciChild.cbegin()->get()->getID() == rocsciParent.cbegin()->get()->getID())
-					continue;
+				if (child->getTraits() == InstRO::Core::ConstructTraitType::CTExpression){
+					// For Simple, Scope, Loop and Conditional elevate and add to process list
+					traitList.push_back(InstRO::Core::ConstructTraitType::CTLoopStatement);
+					traitList.push_back(InstRO::Core::ConstructTraitType::CTScopeStatement);
+					traitList.push_back(InstRO::Core::ConstructTraitType::CTConditionalStatement);
+					traitList.push_back(InstRO::Core::ConstructTraitType::CTSimpleStatement);
 
-				outFile << "\t" << rocsciChild.cbegin()->get()->getID() << " -> " << rocsciParent.cbegin()->get()->getID()
-								<< ";\n";
+				}
+				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTStatement)
+					traitList.push_back(InstRO::Core::ConstructTraitType::CTWrappableStatement);
+				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTWrappableStatement)
+					traitList.push_back(InstRO::Core::ConstructTraitType::CTFunction);
+				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTFunction)
+					traitList.push_back(InstRO::Core::ConstructTraitType::CTFileScope);
+				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTFileScope)
+					traitList.push_back(InstRO::Core::ConstructTraitType::CTGlobalScope);
+				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTGlobalScope) {}
 
-				// if the node is in the bucket, we already have plottet it, so we can skip it (and its chain)
-				if (!csAggregation.intersect(parentCS).empty())
-					break;
-				csAggregation = csAggregation.combine(parentCS);
 
-				childCS = parentCS;
+
+				for (auto constructTrait : traitList) {
+					auto parentCS = elevator->raise(childCS, constructTrait);
+					InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface rocsciChild(&childCS);
+					InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface rocsciParent(&parentCS);
+					// if there is no partent continue
+					if (parentCS.empty())
+						continue;
+					if (rocsciChild.size() != 1 || rocsciParent.size() != 1)
+						throw std::string("Problem in ConstructHierarchyASTDotGenerator");
+					outFile << "\t" << rocsciChild.cbegin()->get()->getID() << " -> " << rocsciParent.cbegin()->get()->getID()
+						<< ";\n";
+					// add the discoreved node to the processing list
+					csAggregation = csAggregation.combine(parentCS);
+					toDoList=toDoList.combine(parentCS);
+				}
 			}
-
-			/*			auto parent = elevator->raise(construct)
-						std::cout << "\t" << construct->getID() << " -> " << std::endl;*/
+			workList = toDoList;
 		}
 		csAggregation = csAggregation.combine(*inputPass->getOutput());
-		csci = InstRO::InfracstructureInterface::ConstructSetCompilerInterface(&csAggregation);
+		auto csci = InstRO::InfracstructureInterface::ConstructSetCompilerInterface(&csAggregation);
 		for (auto construct : csci) {
 			std::string csName = constructToString(construct);
 			std::replace(csName.begin(), csName.end(), '"', ' ');

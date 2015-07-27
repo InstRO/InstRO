@@ -33,7 +33,7 @@ struct CLExpressionPredicate : public CTPredicate {
 		// for variables and values, we only accept as instrumentable, if the expression itself has an observable effect,
 		// e.g. as conditional in an if or for
 		if (isSgIntVal(n) != nullptr || isSgStringVal(n) != nullptr || isSgVarRefExp(n) != nullptr) {
-			// In Rose this is if the parent of the stmt is an SgExprStatement and the parent(parent) is either the for loops
+			// In Rose this is TRUE !!if!! the parent of the stmt is an SgExprStatement and the parent(parent) is either the for loops
 			// conditional or the conditional of an if or while
 			SgNode* parent = n->get_parent();
 			if (parent == nullptr)
