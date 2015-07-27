@@ -35,12 +35,13 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 		workList = *(inputPass->getOutput());
 
 		while (workList.size()){
-			InstRO::InfracstructureInterface::ConstructSetCompilerInterface csci(inputPass->getOutput());
+			InstRO::InfracstructureInterface::ConstructSetCompilerInterface csci(&workList);
 			for (auto construct : csci) {
 				auto child = construct;
 				auto parent = child;
 				auto childCS = InstRO::Core::ConstructSet(construct);
-
+				if (!childCS.intersect(csAggregation).empty()) continue;
+				csAggregation = csAggregation.combine(childCS);
 				std::vector<InstRO::Core::ConstructTraitType> traitList;
 
 				if (child->getTraits() == InstRO::Core::ConstructTraitType::CTExpression){
@@ -49,12 +50,11 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTScopeStatement);
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTConditionalStatement);
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTSimpleStatement);
-
 				}
-				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTStatement)
-					traitList.push_back(InstRO::Core::ConstructTraitType::CTWrappableStatement);
 				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTWrappableStatement)
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTFunction);
+				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTStatement)
+					traitList.push_back(InstRO::Core::ConstructTraitType::CTWrappableStatement);
 				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTFunction)
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTFileScope);
 				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTFileScope)
@@ -72,14 +72,15 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 						continue;
 					if (rocsciChild.size() != 1 || rocsciParent.size() != 1)
 						throw std::string("Problem in ConstructHierarchyASTDotGenerator");
-					outFile << "\t" << rocsciChild.cbegin()->get()->getID() << " -> " << rocsciParent.cbegin()->get()->getID()
+					outFile << "\t" << rocsciChild.cbegin()->get()->getID() << " -> " << rocsciParent.cbegin()->get()->getID() << "[label=\""<< constructLevelToString(constructTrait) <<"\"]" 
 						<< ";\n";
 					// add the discoreved node to the processing list
-					csAggregation = csAggregation.combine(parentCS);
+					if (!parentCS.intersect(csAggregation).empty() &&  !parentCS.intersect(toDoList).empty()) continue;
 					toDoList=toDoList.combine(parentCS);
 				}
 			}
 			workList = toDoList;
+			toDoList.clear();
 		}
 		csAggregation = csAggregation.combine(*inputPass->getOutput());
 		auto csci = InstRO::InfracstructureInterface::ConstructSetCompilerInterface(&csAggregation);
