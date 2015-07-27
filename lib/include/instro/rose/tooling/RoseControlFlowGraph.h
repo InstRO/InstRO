@@ -104,6 +104,10 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
 	}
 
+	void visit(SgForInitStatement* node) {
+		invalidate(node);
+	}
+
 	// statements
 	// TODO: any other statements that are not simple?
 	void visit(SgStatement* node) {
