@@ -37,6 +37,8 @@ class ControlFlowGraphNode {
 	InstRO::Core::ConstructSet* cs;
 	CFGNodeType nodeType;
 
+	friend bool operator<(const ControlFlowGraphNode& node1, const ControlFlowGraphNode& node2) { return node1.cs < node2.cs; }
+
 	friend std::ostream& operator<<(std::ostream& out, const ControlFlowGraphNode& node) {
 		out << ACFGNodeTypeNames[node.nodeType] << *(node.cs);
 		return out;
@@ -49,6 +51,10 @@ typedef labeled_graph<adjacency_list<vecS, vecS, directedS, ControlFlowGraphNode
 class BoostCFG {
  public:
 	BoostCFG() {}
+
+	const Graph& getGraph() {
+		return graph;
+	}
 
 	void addNode(ControlFlowGraphNode cfgNode) {
 		auto cs = *cfgNode.getAssociatedConstructSet();
@@ -75,7 +81,7 @@ class BoostCFG {
 		outputStream.close();
 	}
 
- public:
+ private:
 	Graph graph;
 
 	struct NodeWriter {
@@ -94,7 +100,8 @@ class BoostCFG {
 
 class ControlFlowGraph {
  public:
-	virtual ~ControlFlowGraph() {}
+	virtual ~ControlFlowGraph() {
+	}
 
 	// TODO implement all of these
 	//	virtual ControlFlowGraphNode getCFGEntryNode(std::string name, bool useFullQualification) = 0;
@@ -111,9 +118,9 @@ class ControlFlowGraph {
 	//	// If a construct in the CS is File or Global-Class no entries are returned for those respecitve constucts
 	//	virtual std::set<ControlFlowGraphNode> getCFGEntrySet(InstRO::Core::ConstructSet cs)=0;
 	//	virtual std::set<ControlFlowGraphNode> getCFGExitSet(InstRO::Core::ConstructSet cs)=0;
-	//
-	//	// Find, if possible, the corresponding CFG nodes. Since the CS is a set of nodes, we return a set of nodes ...
-	//	virtual std::set<ControlFlowGraphNode> getCFGNodeSet(InstRO::Core::ConstructSet cs) = 0;
+
+	// Find, if possible, the corresponding CFG nodes. Since the CS is a set of nodes, we return a set of nodes ...
+	virtual std::set<ControlFlowGraphNode> getCFGNodeSet(InstRO::Core::ConstructSet cs) = 0;
 };
 
 class AbstractControlFlowGraph : public ControlFlowGraph {
@@ -135,9 +142,22 @@ class AbstractControlFlowGraph : public ControlFlowGraph {
 	//	// If a construct in the CS is File or Global-Class no entries are returned for those respecitve constucts
 	//	virtual std::set<ControlFlowGraphNode> getCFGEntrySet(InstRO::Core::ConstructSet cs)=0;
 	//	virtual std::set<ControlFlowGraphNode> getCFGExitSet(InstRO::Core::ConstructSet cs)=0;
-	//
-	//	// Find, if possible, the corresponding CFG nodes. Since the CS is a set of nodes, we return a set of nodes ...
-	//	virtual std::set<ControlFlowGraphNode> getCFGNodeSet(InstRO::Core::ConstructSet cs) = 0;
+
+	std::set<ControlFlowGraphNode> getCFGNodeSet(InstRO::Core::ConstructSet cs) {
+		std::set<ControlFlowGraphNode> returnSet;
+
+		for (auto& boostCFG : cfgs) {
+			Graph::vertex_iterator vertexIter, vertexEnd;
+			for (tie(vertexIter, vertexEnd) = vertices(boostCFG.getGraph()); vertexIter != vertexEnd; vertexIter++) {
+				ControlFlowGraphNode node = boostCFG.getGraph().graph()[*vertexIter];
+
+				if (!node.getAssociatedConstructSet()->intersect(cs).empty()) {
+					returnSet.insert(node);
+				}
+			}
+		}
+		return returnSet;
+	}
 
  private:
 	std::vector<BoostCFG> cfgs;

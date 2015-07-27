@@ -113,7 +113,17 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 	}
 
 	// expressions
-	void visit(SgExpression* node) { invalidate(node); }
+	void visit(SgExpression* node) {
+		auto parentNode = node->get_parent();
+		if (parentNode!=nullptr && Core::RoseConstructLevelPredicates::CLLoopPredicate()(parentNode)) {
+			nodeType = EXPR;
+			InfracstructureInterface::ConstructSetCompilerInterface csci(cs);
+			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
+		} else {
+			invalidate(node);
+		}
+	}
+
 	void visit(SgFunctionParameterList* node) { invalidate(node); }
 
 	void visit(SgScopeStatement* node) { invalidate(node); }
@@ -140,8 +150,8 @@ class RoseSingleFunctionCFGGenerator {
 
 		///XXX
 		cfg.print(name+".dot");
-		std::cout << boost::num_vertices(cfg.graph) << " vertices" << std::endl;
-		std::cout << boost::num_edges(cfg.graph) << " edges" << std::endl;
+		std::cout << boost::num_vertices(cfg.getGraph()) << " vertices" << std::endl;
+		std::cout << boost::num_edges(cfg.getGraph()) << " edges" << std::endl;
 	}
 
 	BoostCFG getCFG() {
