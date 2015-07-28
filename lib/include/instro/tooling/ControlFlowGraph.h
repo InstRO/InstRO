@@ -48,7 +48,7 @@ class ControlFlowGraphNode {
 	}
 };
 
-typedef labeled_graph<adjacency_list<vecS, vecS, directedS, ControlFlowGraphNode>, InstRO::Core::ConstructSet> Graph;
+typedef labeled_graph<adjacency_list<setS, vecS, directedS, ControlFlowGraphNode>, InstRO::Core::ConstructSet> Graph;
 
 
 class BoostCFG {
