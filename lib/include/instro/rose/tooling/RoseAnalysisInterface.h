@@ -1,3 +1,6 @@
+#ifndef INSTRO_ROSE_TOOLING_ROSE_ANALYSIS_INTERFACE
+#define INSTRO_ROSE_TOOLING_ROSE_ANALYSIS_INTERFACE
+
 #include "rose.h"
 
 #include "instro/tooling/AnalysisInterface.h"
@@ -49,3 +52,5 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 }	// Tooling
 }	// Rose
 }	// InstRO
+
+#endif // INSTRO_ROSE_TOOLING_ROSE_ANALYSIS_INTERFACE

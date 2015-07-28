@@ -14,6 +14,12 @@ namespace Rose {
 namespace Tooling {
 namespace ControlFlowGraph {
 
+/**
+ * TODO: RN 2015-07
+ * - handle empty scopes correctly
+ * - handle that return statements are never in a scope
+ */
+
 using namespace InstRO::Tooling::ControlFlowGraph;
 
 class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
@@ -144,13 +150,24 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 
 class RoseSingleFunctionCFGGenerator {
  public:
-	RoseSingleFunctionCFGGenerator(SgFunctionDefinition* startNode) {
+	RoseSingleFunctionCFGGenerator(SgFunctionDefinition* funcDef) {
 
 		//XXX generate whole virtualcfg
-		std::string name = startNode->get_declaration()->get_name().getString();
-		VirtualCFG::cfgToDot(startNode, "virtualcfg-"+name+".dot");
+		std::string name = funcDef->get_declaration()->get_name().getString();
+		VirtualCFG::cfgToDot(funcDef, "virtualcfg-"+name+".dot");
 
-		generate(nullptr, startNode->cfgForBeginning());
+		auto cfgStartNode = aquireControlFlowGraphNode(funcDef->cfgForBeginning());
+		cfg.setStartNode(cfgStartNode);
+		cfg.addNode(cfgStartNode);
+
+		auto cfgEndNode = aquireControlFlowGraphNode(funcDef->cfgForEnd());
+		cfg.setEndNode(cfgEndNode);
+		cfg.addNode(cfgEndNode);
+
+		for (auto outEdge : funcDef->cfgForBeginning().outEdges()) {
+			auto childCfgNode = outEdge.target();
+			generate(cfgStartNode.getAssociatedConstructSet(), childCfgNode);
+		}
 
 		///XXX
 		cfg.print(name+".dot");
@@ -183,9 +200,7 @@ class RoseSingleFunctionCFGGenerator {
 						<< vcfgNode.toString() << std::endl;
 
 				cfg.addNode(currentNode);
-				if (previousNode != nullptr) {
-					cfg.addEdge(*previousNode, *currentNodeCS);
-				}
+				cfg.addEdge(*previousNode, *currentNodeCS);
 
 				if (visitedCFGNodes.find(vcfgNode) != visitedCFGNodes.end()) {
 					return;
