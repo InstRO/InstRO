@@ -16,6 +16,7 @@
 #include "instro/tooling/AnalysisInterface.h"
 
 namespace InstRO {
+
 namespace PassManagement {
 class PassManager;
 }	// PassManagement

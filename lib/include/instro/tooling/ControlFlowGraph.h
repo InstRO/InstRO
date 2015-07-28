@@ -55,8 +55,29 @@ class BoostCFG {
  public:
 	BoostCFG() {}
 
-	const Graph& getGraph() {
+	const Graph& getGraph() const {
 		return graph;
+	}
+
+	bool contains(ControlFlowGraphNode cfgNode) {
+		auto graphNode = vertex_by_label(*cfgNode.getAssociatedConstructSet(), graph);
+		return graphNode != graph_traits<Graph>::null_vertex();
+	}
+
+	void setStartNode(ControlFlowGraphNode cfgNode) {
+		startNode = cfgNode;
+	}
+
+	ControlFlowGraphNode getStartNode() {
+		return startNode;
+	}
+
+	void setEndNode(ControlFlowGraphNode cfgNode) {
+		endNode = cfgNode;
+	}
+
+	ControlFlowGraphNode getEndNode() {
+		return endNode;
 	}
 
 	void addNode(ControlFlowGraphNode cfgNode) {
@@ -68,16 +89,7 @@ class BoostCFG {
 
 	void addEdge(InstRO::Core::ConstructSet from, InstRO::Core::ConstructSet to) { add_edge_by_label(from, to, graph); }
 
-	std::vector<ControlFlowGraphNode> findNodes(const InstRO::Core::ConstructSet& constructSet) {
-		std::vector<ControlFlowGraphNode> foundNodes;
-
-		// TODO
-
-		return foundNodes;
-	}
-
-	void print(std::string name) {
-		///XXX
+	void print(std::string name) const {
 		std::ofstream outputStream;
 		outputStream.open(name);
 		write_graphviz(outputStream, graph, NodeWriter(graph));
@@ -86,6 +98,7 @@ class BoostCFG {
 
  private:
 	Graph graph;
+	ControlFlowGraphNode startNode, endNode;
 
 	struct NodeWriter {
 		NodeWriter(Graph graph) : g(graph) {}
@@ -103,24 +116,22 @@ class BoostCFG {
 
 class ControlFlowGraph {
  public:
-	virtual ~ControlFlowGraph() {
-	}
+	virtual ~ControlFlowGraph() {}
+
+	virtual ControlFlowGraphNode getCFGEntryNode(ControlFlowGraphNode) = 0;
+	virtual ControlFlowGraphNode getCFGExitNode (ControlFlowGraphNode) = 0;
 
 	// TODO implement all of these
-	//	virtual ControlFlowGraphNode getCFGEntryNode(std::string name, bool useFullQualification) = 0;
-	//	virtual ControlFlowGraphNode getCFGExitNode (std::string name, bool useFullQualification) = 0;
-	//	// helpers for Constru
-	//	virtual ControlFlowGraphNode getCFGEntryNode(ControlFlowGraphNode) = 0;
-	//	virtual ControlFlowGraphNode getCFGExitNode (ControlFlowGraphNode) = 0;
-	//	// This function can only be called from the raw interface of the compiler, as the tooling interface only provides
-	//construct sets ...
+
+	//	// This function can only be called from the raw interface of the compiler
 	//	virtual ControlFlowGraphNode getCFGEntryNode(InstRO::Core::Construct) = 0;
 	//	virtual ControlFlowGraphNode getCFGExityNode(InstRO::Core::Construct) = 0;
 	//
 	//	// Get a set of entry/exit nodes for the functions represented by the cs-nodes.
 	//	// If a construct in the CS is File or Global-Class no entries are returned for those respecitve constucts
-	//	virtual std::set<ControlFlowGraphNode> getCFGEntrySet(InstRO::Core::ConstructSet cs)=0;
-	//	virtual std::set<ControlFlowGraphNode> getCFGExitSet(InstRO::Core::ConstructSet cs)=0;
+
+//	virtual std::set<ControlFlowGraphNode> getCFGEntrySet(InstRO::Core::ConstructSet cs)=0;
+//	virtual std::set<ControlFlowGraphNode> getCFGExitSet(InstRO::Core::ConstructSet cs)=0;
 
 	// Find, if possible, the corresponding CFG nodes. Since the CS is a set of nodes, we return a set of nodes ...
 	virtual std::set<ControlFlowGraphNode> getCFGNodeSet(InstRO::Core::ConstructSet cs) = 0;
@@ -130,26 +141,36 @@ class AbstractControlFlowGraph : public ControlFlowGraph {
  public:
 	AbstractControlFlowGraph(std::vector<BoostCFG> graphs) : cfgs(graphs) {}
 
+	ControlFlowGraphNode getCFGEntryNode(ControlFlowGraphNode cfgNode) override {
+		for (auto cfg : cfgs) {
+			if (cfg.contains(cfgNode)) {
+				return cfg.getStartNode();
+			}
+		}
+		throw std::string("ControlFlowGraph Error: found no corresponding CFG");
+	}
+	ControlFlowGraphNode getCFGExitNode(ControlFlowGraphNode cfgNode) override {
+		for (auto cfg : cfgs) {
+			if (cfg.contains(cfgNode)) {
+				return cfg.getEndNode();
+			}
+		}
+		throw std::string("ControlFlowGraph Error: found no corresponding CFG");
+	}
+
 	// TODO implement all of these
-	//	virtual ControlFlowGraphNode getCFGEntryNode(std::string name, bool useFullQualification) = 0;
-	//	virtual ControlFlowGraphNode getCFGExitNode (std::string name, bool useFullQualification) = 0;
-	//	// helpers for Constru
-	//	virtual ControlFlowGraphNode getCFGEntryNode(ControlFlowGraphNode) = 0;
-	//	virtual ControlFlowGraphNode getCFGExitNode (ControlFlowGraphNode) = 0;
 	//	// This function can only be called from the raw interface of the compiler, as the tooling interface only provides
 	//construct sets ...
 	//	virtual ControlFlowGraphNode getCFGEntryNode(InstRO::Core::Construct) = 0;
 	//	virtual ControlFlowGraphNode getCFGExityNode(InstRO::Core::Construct) = 0;
-	//
-	//	// Get a set of entry/exit nodes for the functions represented by the cs-nodes.
-	//	// If a construct in the CS is File or Global-Class no entries are returned for those respecitve constucts
-	//	virtual std::set<ControlFlowGraphNode> getCFGEntrySet(InstRO::Core::ConstructSet cs)=0;
-	//	virtual std::set<ControlFlowGraphNode> getCFGExitSet(InstRO::Core::ConstructSet cs)=0;
 
-	std::set<ControlFlowGraphNode> getCFGNodeSet(InstRO::Core::ConstructSet cs) {
+	//std::set<ControlFlowGraphNode> getCFGEntrySet(InstRO::Core::ConstructSet cs)=0;
+	//std::set<ControlFlowGraphNode> getCFGExitSet(InstRO::Core::ConstructSet cs)=0;
+
+	std::set<ControlFlowGraphNode> getCFGNodeSet(InstRO::Core::ConstructSet cs) override {
 		std::set<ControlFlowGraphNode> returnSet;
 
-		for (auto& boostCFG : cfgs) {
+		for (auto const& boostCFG : cfgs) {
 			Graph::vertex_iterator vertexIter, vertexEnd;
 			for (tie(vertexIter, vertexEnd) = vertices(boostCFG.getGraph()); vertexIter != vertexEnd; vertexIter++) {
 				ControlFlowGraphNode node = boostCFG.getGraph().graph()[*vertexIter];
@@ -165,8 +186,9 @@ class AbstractControlFlowGraph : public ControlFlowGraph {
  private:
 	std::vector<BoostCFG> cfgs;
 };
-}
-}
-}
+
+} // namespace ControlFlowGraph
+}	// namespace Tooling
+}	// namespace InstRO
 
 #endif
