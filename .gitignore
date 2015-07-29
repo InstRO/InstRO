@@ -27,5 +27,11 @@ stamp-h1
 Makefile
 Makefile.in
 
-# Rose tmp files
+# tmp files
 rose_*.*
+*.log
+*.dot
+
+# eclipse
+.project
+.cproject
