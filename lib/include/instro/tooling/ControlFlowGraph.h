@@ -15,9 +15,12 @@ namespace InstRO {
 namespace Tooling {
 namespace ControlFlowGraph {
 
-enum CFGNodeType { FUNC_ENTRY, FUNC_EXIT, SCOPE_ENTRY, SCOPE_EXIT, STMT, EXPR };
+enum CFGNodeType {
+	FUNC_ENTRY, FUNC_EXIT, SCOPE_ENTRY, SCOPE_EXIT, STMT, EXPR, NOT_SET
+};
 
-static const char* ACFGNodeTypeNames[] = {"FUNC_ENTRY", "FUNC_EXIT", "SCOPE_ENTRY", "SCOPE_EXIT", "STMT", "EXPR"};
+static const char* ACFGNodeTypeNames[] = { "FUNC_ENTRY", "FUNC_EXIT", "SCOPE_ENTRY", "SCOPE_EXIT", "STMT", "EXPR",
+		"NOT_SET" };
 
 class ControlFlowGraphNode {
  public:
