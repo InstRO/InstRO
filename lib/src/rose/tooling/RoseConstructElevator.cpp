@@ -66,7 +66,7 @@ InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::Construc
 				dynamic_cast<InstRO::Rose::Core::RoseConstruct *>(construct->get());
 		if (roseConstruct == nullptr) {
 			throw std::string(
-					"A non InstRO::Rose::Core::RoseConstruct in the ROSE interace. Either multiple compiler interfaces are used, "
+					"A non InstRO::Rose::Core::RoseConstruct in the ROSE interface. Either multiple compiler interfaces are used, "
 					"or programming error");
 		}
 
@@ -134,7 +134,7 @@ InstRO::Core::ConstructSet ConstructElevator::lower(const InstRO::Core::Construc
 		auto roseConstruct = dynamic_cast<InstRO::Rose::Core::RoseConstruct *>(construct->get());
 		if (roseConstruct == nullptr) {
 			throw std::string(
-					"A non InstRO::Rose::Core::RoseConstruct in the ROSE interace. Either multiple compiler interfaces are used, "
+					"A non InstRO::Rose::Core::RoseConstruct in the ROSE interface. Either multiple compiler interfaces are used, "
 					"or programming error");
 		}
 

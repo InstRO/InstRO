@@ -121,17 +121,8 @@ class ControlFlowGraph {
 	virtual ControlFlowGraphNode getCFGEntryNode(ControlFlowGraphNode) = 0;
 	virtual ControlFlowGraphNode getCFGExitNode (ControlFlowGraphNode) = 0;
 
-	// TODO implement all of these
-
-	//	// This function can only be called from the raw interface of the compiler
-	//	virtual ControlFlowGraphNode getCFGEntryNode(InstRO::Core::Construct) = 0;
-	//	virtual ControlFlowGraphNode getCFGExityNode(InstRO::Core::Construct) = 0;
-	//
-	//	// Get a set of entry/exit nodes for the functions represented by the cs-nodes.
-	//	// If a construct in the CS is File or Global-Class no entries are returned for those respecitve constucts
-
-//	virtual std::set<ControlFlowGraphNode> getCFGEntrySet(InstRO::Core::ConstructSet cs)=0;
-//	virtual std::set<ControlFlowGraphNode> getCFGExitSet(InstRO::Core::ConstructSet cs)=0;
+	virtual std::set<ControlFlowGraphNode> getCFGEntrySet(InstRO::Core::ConstructSet cs) = 0;
+	virtual std::set<ControlFlowGraphNode> getCFGExitSet(InstRO::Core::ConstructSet cs) = 0;
 
 	// Find, if possible, the corresponding CFG nodes. Since the CS is a set of nodes, we return a set of nodes ...
 	virtual std::set<ControlFlowGraphNode> getCFGNodeSet(InstRO::Core::ConstructSet cs) = 0;
@@ -158,14 +149,8 @@ class AbstractControlFlowGraph : public ControlFlowGraph {
 		throw std::string("ControlFlowGraph Error: found no corresponding CFG");
 	}
 
-	// TODO implement all of these
-	//	// This function can only be called from the raw interface of the compiler, as the tooling interface only provides
-	//construct sets ...
-	//	virtual ControlFlowGraphNode getCFGEntryNode(InstRO::Core::Construct) = 0;
-	//	virtual ControlFlowGraphNode getCFGExityNode(InstRO::Core::Construct) = 0;
-
-	//std::set<ControlFlowGraphNode> getCFGEntrySet(InstRO::Core::ConstructSet cs)=0;
-	//std::set<ControlFlowGraphNode> getCFGExitSet(InstRO::Core::ConstructSet cs)=0;
+	std::set<ControlFlowGraphNode> getCFGEntrySet(InstRO::Core::ConstructSet cs) override;
+	std::set<ControlFlowGraphNode> getCFGExitSet(InstRO::Core::ConstructSet cs) override;
 
 	std::set<ControlFlowGraphNode> getCFGNodeSet(InstRO::Core::ConstructSet cs) override {
 		std::set<ControlFlowGraphNode> returnSet;
@@ -175,7 +160,7 @@ class AbstractControlFlowGraph : public ControlFlowGraph {
 			for (tie(vertexIter, vertexEnd) = vertices(boostCFG.getGraph()); vertexIter != vertexEnd; vertexIter++) {
 				ControlFlowGraphNode node = boostCFG.getGraph().graph()[*vertexIter];
 
-				if (!node.getAssociatedConstructSet()->intersect(cs).empty()) {
+				if (node.getAssociatedConstructSet()->intersects(cs)) {
 					returnSet.insert(node);
 				}
 			}
