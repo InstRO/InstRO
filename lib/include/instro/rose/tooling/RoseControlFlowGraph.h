@@ -24,10 +24,8 @@ using namespace InstRO::Tooling::ControlFlowGraph;
 
 class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
  public:
-	CFGConstructSetGenerator()
-			: cs(new InstRO::Core::ConstructSet()), nodeType(EXPR), magicIndexVariable(0) {}	// XXX EXPR is a bad default
-
-	void calibrate(unsigned int index) { magicIndexVariable = index; }
+	CFGConstructSetGenerator(unsigned int index)
+			: cs(new InstRO::Core::ConstructSet()), nodeType(NOT_SET), magicIndexVariable(index) {}
 
 	InstRO::Core::ConstructSet* getConstructSet() { return cs; }
 	CFGNodeType getNodeType() { return nodeType; }
@@ -98,7 +96,6 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 	}
 
 	// statements
-	// TODO: any other statements that are not simple?
 	void visit(SgStatement* node) {
 		nodeType = STMT;
 		InfracstructureInterface::ConstructSetCompilerInterface csci(cs);
@@ -152,7 +149,7 @@ class RoseSingleFunctionCFGGenerator {
 			generate(cfgStartNode.getAssociatedConstructSet(), childCfgNode);
 		}
 
-		///XXX
+		///XXX dump cfg
 		cfg.print(name+".dot");
 		std::cout << boost::num_vertices(cfg.getGraph()) << " vertices" << std::endl;
 		std::cout << boost::num_edges(cfg.getGraph()) << " edges" << std::endl;
@@ -174,9 +171,9 @@ class RoseSingleFunctionCFGGenerator {
 				lastValidConstructSet = currentNodeCS;
 
 				/// XXX
-				std::cout << std::endl
-									<< "visit: " << vcfgNode.getNode()->class_name() << std::endl
-									<< vcfgNode.toString() << std::endl;
+//				std::cout << std::endl
+//									<< "visit: " << vcfgNode.getNode()->class_name() << std::endl
+//									<< vcfgNode.toString() << std::endl;
 
 				cfg.addNode(currentNode);
 				cfg.addEdge(*previousNode, *currentNodeCS);
@@ -197,8 +194,7 @@ class RoseSingleFunctionCFGGenerator {
 
 	ControlFlowGraphNode aquireControlFlowGraphNode(CFGNode cfgNode) {
 		if (mapping.find(cfgNode) == mapping.end()) {
-			CFGConstructSetGenerator gen;
-			gen.calibrate(cfgNode.getIndex());
+			CFGConstructSetGenerator gen(cfgNode.getIndex());
 
 			cfgNode.getNode()->accept(gen);
 			mapping[cfgNode] = ControlFlowGraphNode(gen.getConstructSet(), gen.getNodeType());
