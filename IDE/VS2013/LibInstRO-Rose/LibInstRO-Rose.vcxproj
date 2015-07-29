@@ -154,7 +154,7 @@
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseConstructElevator.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseGrammarInterface.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp" />
-    <ClCompile Include="..\..\..\lib\src\rose_main.cpp" />
+    <ClCompile Include="..\..\..\lib\src\roseInstrumentor.cpp" />
     <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\ConstructElevator.cpp" />
