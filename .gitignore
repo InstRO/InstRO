@@ -26,3 +26,6 @@ stamp-h1
 # generated Makefiles
 Makefile
 Makefile.in
+
+# Rose tmp files
+rose_*.*
