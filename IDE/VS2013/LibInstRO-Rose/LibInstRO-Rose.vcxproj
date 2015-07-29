@@ -41,11 +41,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>d:\Daten\Christian\Arbeit\Rose\include;../../../lib/include;$(IncludePath);C:\Users\ci24amun\Documents\Visual Studio 2012\Boost\1_57_0\include</IncludePath>
+    <IncludePath>d:\Daten\Christian\Arbeit\Rose\include;../../../lib/include;$(IncludePath);./include;C:\Users\ci24amun\Documents\Visual Studio 2012\Boost\1_57_0\include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>d:\Daten\Christian\Arbeit\Rose\include;../../../lib/include;$(IncludePath);C:\Users\ci24amun\Documents\Visual Studio 2012\Boost\1_57_0\include</IncludePath>
+    <IncludePath>d:\Daten\Christian\Arbeit\Rose\include;../../../lib/include;$(IncludePath);./include;C:\Users\ci24amun\Documents\Visual Studio 2012\Boost\1_57_0\include</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -134,7 +134,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\tooling\GrammarInterface.h" />
     <ClInclude Include="..\..\..\lib\include\instro\tooling\NamedConstructAccess.h" />
     <ClInclude Include="..\..\..\lib\include\instro\tooling\TransformationInterface.h" />
-    <ClInclude Include="..\..\..\lib\include\rose.h" />
+    <ClInclude Include="include\rose.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp" />

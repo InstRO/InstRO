@@ -10,7 +10,8 @@ AM_CPPFLAGS += -O2 -std=c++11 -DPROVIDE_MAKE_UNIQUE
 endif
 
 
-
+ROSEINSTROASTPRINTER_SFILES=\
+./src/rose/extra/main.cxx
 
 CLANG_SFILES= \
 ./src/clang/adapter/CygProfileAdapter.cpp \
@@ -134,7 +135,7 @@ if USELIBTOOL
 #lib_LTLIBRARIES= libInstRO_core.la libInstRO_clang.la libInstRO.la
 lib_LTLIBRARIES= libInstRO_core.la libInstRO_example.la
 #lib_LTLIBRARIES= libInstRO_core.la libInstRO_example.la libInstRO_rose.la
-bin_PROGRAMS=ExampleInstrumentor RoseInstrumentor
+bin_PROGRAMS=ExampleInstrumentor RoseInstrumentor ROSEInstROASTPrinter
 #bin_PROGRAMS=ExampleInstrumentor RoseInstrumentor
 
 if USECLANG
@@ -174,6 +175,10 @@ RoseInstrumentor_LDADD= libInstRO_rose.a @ROSE_LINK_LIBRARIES@
 
 ExampleInstrumentor_SOURCES = \
 	./src/example_main.cpp
+
+ROSEInstROASTPrinter_SOURCES = \ 
+	./src/rose/extra/instro_rose_astprinter/main.cxx
+ROSEInstROASTPrinter_LDADD= libInstRO_rose.a @ROSE_LINK_LIBRARIES@
 
 ExampleInstrumentor_LDADD= libInstRO_example.a
 # ExampleInstrumentor_LDFLAGS=
@@ -215,7 +220,7 @@ endif
 
 if USEROSE
 lib_LIBRARIES += libInstRO_rose.a
-bin_PROGRAMS += RoseInstrumentor
+bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter
 
 endif
 
@@ -233,6 +238,12 @@ RoseInstrumentor_SOURCES = \
 RoseInstrumentor_LDADD= libInstRO_core.a libInstRO_rose.a
 RoseInstrumentor_LDFLAGS= -std=c++11 -L@ROSE_LIBDIR@ @ROSE_LIBS_LIST@ -lrose @ROSE_LINK_LIBRARIES@
 RoseInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
+
+ROSEInstROASTPrinter_SOURCES = \ 
+	./src/rose/extra/instro_rose_astprinter/main.cxx
+ROSEInstROASTPrinter_LDADD=libInstRO_core.a libInstRO_rose.a
+ROSEInstROASTPrinter_LDFLAGS= -std=c++11 -L@ROSE_LIBDIR@ @ROSE_LIBS_LIST@ -lrose @ROSE_LINK_LIBRARIES@
+ROSEInstROASTPrinter_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
 
 

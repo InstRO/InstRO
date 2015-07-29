@@ -43,7 +43,7 @@ CTPredicate getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType)
 }	// namespace Core
 }	// namespace Rose
 }	// namespace InstRO
-	 //
+//
 // struct InstrumentableConstructPredicate {
 //	bool operator()(SgNode* n) const {
 //		if (isSgDoWhileStmt(n) || isSgBasicBlock(n) || isSgFunctionDefinition(n))
