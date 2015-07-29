@@ -71,13 +71,13 @@ enum class ConstructTraitType {
 	CTFragment = 2,
 	// Any expression with observable behavior
 	CTExpression = 3,
+	CTStatement = 4,
 	// separate Loop, Conditional, Scope and Simple Statements
-	CTLoopStatement = 4,
-	CTConditionalStatement = 5,
-	CTScopeStatement = 6,
-	CTSimpleStatement = 7,
+	CTLoopStatement = 5,
+	CTConditionalStatement = 6,
+	CTScopeStatement = 7,
+	CTSimpleStatement = 8,
 	// a statement with observable behavior. No "pure" declarations, namespaces, classes, etc.
-	CTStatement = 8,
 	// Wrappable statements
 	CTWrappableStatement = 9,
 	CTFunction = 10,
@@ -129,20 +129,25 @@ struct ConstructTraitHierarchyTraverser {
 /// Scalable way, C++11-ish
 typedef ConstructTraitHierarchyTraverser<
 		ConstructTraitType, ConstructTraitType::CTMin, ConstructTraitType::CTFragment, ConstructTraitType::CTExpression,
-		ConstructTraitType::CTLoopStatement, ConstructTraitType::CTConditionalStatement,
+		ConstructTraitType::CTStatement, ConstructTraitType::CTLoopStatement, ConstructTraitType::CTConditionalStatement,
 		ConstructTraitType::CTScopeStatement, ConstructTraitType::CTSimpleStatement,
 		// a statement with observable behavior. No "pure" declarations, namespaces, classes, etc.
-		ConstructTraitType::CTStatement,
 		// Wrappable statements
 		ConstructTraitType::CTWrappableStatement, ConstructTraitType::CTFunction, ConstructTraitType::CTFileScope,
 		ConstructTraitType::CTGlobalScope, ConstructTraitType::CTMax> ConstructLevelHierarchy;
 }
 
 std::string constructLevelToString(ConstructTraitType type);
+std::string constructLevelToStringShort(ConstructTraitType type);
 std::string operator+(const std::string& lhs, const ConstructTraitType& type);
 
 class ConstructTrait {
  public:
+	bool operator==(const ConstructTraitType& comparator) {
+		if (cts.find(comparator) != cts.end())
+			return true;
+		return false;
+	}
 	ConstructTrait() = delete;
 
 	/*	template <class... TraitList>
@@ -178,6 +183,19 @@ class ConstructTrait {
 		ss << "[";
 		for (auto ct : cts) {
 			ss << InstRO::Core::constructLevelToString(ct) << " ";
+		}
+		ss << "]";
+		return ss.str();
+	}
+	std::string toStringShort() {
+		if (cts.empty()) {
+			return InstRO::Core::constructLevelToString(ConstructTraitType::CTNoTraits);
+		}
+
+		std::stringstream ss;
+		ss << "[";
+		for (auto ct : cts) {
+			ss << InstRO::Core::constructLevelToStringShort(ct) << " ";
 		}
 		ss << "]";
 		return ss.str();
@@ -219,7 +237,7 @@ class ConstructSet {
  public:
 	ConstructSet(){};
 	// XXX RN: in the long run there should be no child classes from ConstructSet
-	virtual ~ConstructSet() {};
+	virtual ~ConstructSet(){};
 
 	void setCurrentMinLevel(ConstructTraitType minLevel){};
 	void setCurrentMaxLevel(ConstructTraitType maxLevel){};

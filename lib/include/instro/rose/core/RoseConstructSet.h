@@ -33,7 +33,41 @@ struct DefinedVariableDeclarationPredicate {
 };
 
 struct CLExpressionPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const { return isSgExpression(n) != nullptr; }
+	bool operator()(SgNode* n) const {
+		if (isSgExprListExp(n) != nullptr)
+			return false;
+		if (isSgFunctionRefExp(n) != nullptr)
+			return false;
+		if (isSgFunctionCallExp(n) != nullptr)
+			return true;
+		// for variables and values, we only accept as instrumentable, if the expression itself has an observable effect,
+		// e.g. as conditional in an if or for
+		if (isSgIntVal(n) != nullptr || isSgStringVal(n) != nullptr || isSgVarRefExp(n) != nullptr) {
+			// In Rose this is TRUE !!if!! the parent of the stmt is an SgExprStatement and the parent(parent) is either the for loops
+			// conditional or the conditional of an if or while
+			SgNode* parent = n->get_parent();
+			if (parent == nullptr)
+				return false;
+			if (isSgExprStatement(parent) == nullptr)
+				return false;
+			SgNode* grandParent = parent->get_parent();
+			if (grandParent == nullptr)
+				return false;
+			if (isSgIfStmt(grandParent) != nullptr && isSgIfStmt(grandParent)->get_conditional() == parent)
+				return true;
+			else if (isSgForStatement(grandParent) != nullptr && isSgForStatement(grandParent)->get_test() == parent)
+				return true;
+			else if (isSgDoWhileStmt(grandParent) && isSgDoWhileStmt(grandParent)->get_condition() == parent)
+				return true;
+			else if (isSgWhileStmt(grandParent) && isSgWhileStmt(grandParent)->get_condition() == parent)
+				return true;
+			else
+				return false;
+		}
+		if (isSgCastExp(n) != nullptr)
+			return false;
+		return isSgExpression(n) != nullptr;
+	}
 };
 
 struct CLLoopPredicate : public CTPredicate {
@@ -72,6 +106,8 @@ struct CLStatementPredicate : public CTPredicate {
 			}
 			return false;
 		}
+		if (isSgIfStmt(n) || isSgSwitchStatement(n) || isSgDoWhileStmt(n) || isSgWhileStmt(n) || isSgForStatement(n))
+			return true;
 
 		if (isSgScopeStatement(n)) {
 			if (CLScopeStatementPredicate()(n)) {
@@ -136,7 +172,7 @@ CTPredicate getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType)
 
 class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
  public:
-	ConstructGenerator() : ct(InstRO::Core::ConstructTraitType::CTNoTraits) {};
+	ConstructGenerator() : ct(InstRO::Core::ConstructTraitType::CTNoTraits){};
 	InstRO::Core::ConstructTrait getConstructTraits() { return ct; }
 
 	// global scope
@@ -146,7 +182,9 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	void visit(SgSourceFile* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFileScope); }
 
 	// function
-	void visit(SgFunctionDefinition* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFunction); }
+	void visit(SgFunctionDefinition* node) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFunction);
+	}
 
 	// conditionals
 	void visit(SgIfStmt* node) {
@@ -324,7 +362,6 @@ class RoseConstructProvider {
 	RoseConstructProvider(RoseConstructProvider&) = delete;
 	void operator=(RoseConstructProvider const&) = delete;
 };
-
 }
 }
 }	// Namespace InstRO

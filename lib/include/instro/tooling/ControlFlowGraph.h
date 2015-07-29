@@ -50,7 +50,6 @@ class ControlFlowGraphNode {
 
 typedef labeled_graph<adjacency_list<setS, vecS, directedS, ControlFlowGraphNode>, InstRO::Core::ConstructSet> Graph;
 
-
 class BoostCFG {
  public:
 	BoostCFG() {}
@@ -103,7 +102,7 @@ class BoostCFG {
 	struct NodeWriter {
 		NodeWriter(Graph graph) : g(graph) {}
 
-		template<typename Descriptor>
+		template <typename Descriptor>
 		void operator()(std::ostream& out, Descriptor nodeDescriptor) const {
 			auto node = g.graph()[nodeDescriptor];
 			out << " [label=\"" << node.toDotString() << "\"]";
@@ -111,7 +110,6 @@ class BoostCFG {
 
 		Graph g;
 	};
-
 };
 
 class ControlFlowGraph {

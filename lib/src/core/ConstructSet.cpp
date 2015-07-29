@@ -43,6 +43,48 @@ std::string constructLevelToString(ConstructTraitType type) {
 			break;
 
 		default:
+			return std::string("Invalid ConstructTrait [") + std::to_string(static_cast<unsigned int>(type)) +
+						 std::string("]");
+			break;
+	}
+}
+std::string constructLevelToStringShort(ConstructTraitType type) {
+	switch (type) {
+		case ConstructTraitType::CTFragment:
+			return std::string("Frag");
+			break;
+		case ConstructTraitType::CTExpression:
+			return std::string("Expr");
+			break;
+		case ConstructTraitType::CTStatement:
+			return std::string("Stmt");
+			break;
+		case ConstructTraitType::CTWrappableStatement:
+			return std::string("WSmt");
+			break;
+		case ConstructTraitType::CTLoopStatement:
+			return std::string("Loop");
+			break;
+		case ConstructTraitType::CTConditionalStatement:
+			return std::string("Cond");
+			break;
+		case ConstructTraitType::CTScopeStatement:
+			return std::string("ScopeStatement");
+			break;
+		case ConstructTraitType::CTSimpleStatement:
+			return std::string("SSmt");
+			break;
+		case ConstructTraitType::CTFunction:
+			return std::string("Func");
+			break;
+		case ConstructTraitType::CTFileScope:
+			return std::string("File");
+			break;
+		case ConstructTraitType::CTGlobalScope:
+			return std::string("Glob");
+			break;
+
+		default:
 			return std::string("Invalid ConstructTrait");
 			break;
 	}
