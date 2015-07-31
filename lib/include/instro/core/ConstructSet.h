@@ -6,6 +6,7 @@
 #include <memory>	// Shared pointers
 #include <vector>
 #include <set>
+#include <iostream> // XXX
 
 #include <bitset>
 

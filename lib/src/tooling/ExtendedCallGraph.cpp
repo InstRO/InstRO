@@ -1,11 +1,137 @@
-#include <memory>	// We need shared pointers
-#include <list>		 // We use List in the GrammarInterface
-#include <set>
-#include "instro/core/ConstructSet.h"
 #include "instro/tooling/ExtendedCallGraph.h"
+
+#include <cassert>
 
 namespace InstRO {
 namespace Tooling {
-namespace ExtendedCallGraph {}	// ExtendedCallGraph
+namespace ExtendedCallGraph {
+
+
+ExtendedCallGraph::ExtendedCallGraph() {
+	// TODO
+}
+
+ExtendedCallGraph::~ExtendedCallGraph() {
+	// TODO
+}
+
+void ExtendedCallGraph::addNode(ExtendedCallGraphNode* node) {
+	predecessors[node] = std::set<ExtendedCallGraphNode*>();
+	successors[node] = std::set<ExtendedCallGraphNode*>();
+}
+
+void ExtendedCallGraph::addEdge(ExtendedCallGraphNode* from, ExtendedCallGraphNode* to) {
+	if (predecessors.find(from) == predecessors.end()) {
+		addNode(from);
+	}
+
+	if (predecessors.find(to) == predecessors.end()) {
+		addNode(to);
+	}
+	predecessors[to].insert(from);
+	successors[from].insert(to);
+}
+
+void ExtendedCallGraph::removeNode(ExtendedCallGraphNode* node, bool redirectEdges) {
+
+	for (auto succ : getSuccessors(node)) {
+		predecessors[succ].erase(node);
+	}
+
+	for (auto pred : getPredecessors(node)) {
+		successors[pred].erase(node);
+
+		for (auto succ : getSuccessors(node)) {
+
+			if (redirectEdges) {
+				predecessors[succ].insert(pred);
+				successors[pred].insert(succ);
+			}
+		}
+	}
+
+	predecessors.erase(node);
+	successors.erase(node);
+}
+
+std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getNodeSet() {
+	std::set<ExtendedCallGraphNode*> nodes;
+	for (auto pair : predecessors) {
+		nodes.insert(pair.first);
+	}
+	return nodes;
+}
+
+std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getPredecessors(ExtendedCallGraphNode* start) {
+	return predecessors[start];
+}
+
+std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getSuccessors(ExtendedCallGraphNode* start) {
+	return successors[start];
+}
+
+int ExtendedCallGraph::getPredecessorCount(ExtendedCallGraphNode* start) {
+	return predecessors[start].size();
+}
+
+int ExtendedCallGraph::getSuccessorCount(ExtendedCallGraphNode* start) {
+	return successors[start].size();
+}
+
+//// XXX from ROSE EXTENDED CALLGRAPH
+
+
+ExtendedCallGraphNode* ExtendedCallGraph::addSgNode(InstRO::Core::ConstructSet cs, enum ECGNodeType nodeType) {
+
+	if (csToGraphNode.count(cs) > 0) {
+		// already in graph
+		return csToGraphNode[cs];
+	}
+
+	ExtendedCallGraphNode* graphNode = new ExtendedCallGraphNode(cs, nodeType);
+
+	csToGraphNode[cs] = graphNode;
+	graphNodeToCs[graphNode] = cs;
+	addNode(graphNode);
+
+	return graphNode;
+}
+
+void ExtendedCallGraph::swapSgNode(InstRO::Core::ConstructSet oldNode, InstRO::Core::ConstructSet newNode) {
+
+	if (csToGraphNode.find(oldNode) == csToGraphNode.end()) {
+		return; // not in graph yet -> nothing to swap
+	}
+
+	ExtendedCallGraphNode* graphNode = csToGraphNode[oldNode];
+
+	graphNodeToCs[graphNode] = newNode;
+
+	csToGraphNode.erase(oldNode);
+	csToGraphNode[newNode] = graphNode;
+
+}
+
+InstRO::Core::ConstructSet ExtendedCallGraph::getConstructSet(ExtendedCallGraphNode* graphNode) {
+	return graphNodeToCs[graphNode];
+}
+
+ExtendedCallGraphNode* ExtendedCallGraph::getGraphNode(InstRO::Core::ConstructSet sgNode) {
+	return csToGraphNode[sgNode];
+}
+
+void ExtendedCallGraph::dump() {
+
+	std::cout << "== Dumping Extended Callgraph ==" << std::endl;
+
+	for (ExtendedCallGraphNode* fromNode : getNodeSet()) {
+		std::cout << graphNodeToCs[fromNode] << " : " << getSuccessorCount(fromNode) << std::endl;
+		for (ExtendedCallGraphNode* toNode : getSuccessors(fromNode)) {
+			std::cout << "  -->\t" << graphNodeToCs[toNode] << std::endl;
+		}
+	}
+}
+
+}	// ExtendedCallGraph
 }	// Tooling
 }	// InstRO
