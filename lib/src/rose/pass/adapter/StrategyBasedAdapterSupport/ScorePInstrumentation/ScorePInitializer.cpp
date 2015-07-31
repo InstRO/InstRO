@@ -1,7 +1,9 @@
-#include "instro/adapterbuilder/ScorePInstrumentation/ScorePInitializer.h"
+#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePInitializer.h"
 
-using namespace InstRO;
-
+namespace InstRO {
+	namespace Rose {
+		namespace Adapter {
+			namespace StrategyBasedAdapterSupport{
 void ScorePInitializer::includeToolHeadersToFile(SgFile* file) {
 
 	if (isIncludedIn(file)) return;
@@ -11,3 +13,4 @@ void ScorePInitializer::includeToolHeadersToFile(SgFile* file) {
 	setIncludedIn(file);
 }
 
+}}}}

@@ -118,6 +118,12 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseScorePAdapter.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseStrategyBasedAdapter.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\GenericInstrumentationStrategy.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\instrobuilder.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePAdapterBuilder.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePFunctionScopeStrategy.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePInitializer.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePLoopIterationStrategy.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePStatementWrapperStrategy.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ToolInitializer.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\selector\CompoundSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\selector\ElevatorSelector.h" />
@@ -156,6 +162,14 @@
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseGPIAdapter.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseScorePAdapter.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseStrategyBasedAdapter.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\GenericInstrumentationStrategy.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\instrobuilder.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePAdapterBuilder.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePFunctionScopeStrategy.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePInitializer.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePLoopIterationStrategy.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePStatementWrapperStrategy.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ToolInitializer.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\selector\CompoundSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\selector\ElevatorSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\selector\NameBasedSelector.cpp" />

@@ -2,38 +2,44 @@
 #define SCOREP_ADAPTER_BUILDER_H
 
 
-#include "instro/adapterbuilder/GenericAdapterBuilder.h"
+#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/GenericAdapterBuilder.h"
 
-#include "ScorePStatementWrapperStrategy.h"
-#include "ScorePLoopIterationStrategy.h"
-#include "ScorePFunctionScopeStrategy.h"
+#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePStatementWrapperStrategy.h"
+#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePLoopIterationStrategy.h"
+#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePFunctionScopeStrategy.h"
 
-#include "ScorePInitializer.h"
+#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePInitializer.h"
 
 namespace InstRO {
+	namespace Rose {
+		namespace Adapter {
+			namespace StrategyBasedAdapterSupport{
 
-/**
- * \brief Composition for ScoreP instrumentation
- *
- * \ingroup Adapterbuilder
- *
- *\author Matthias Zoellner
- */
-class ScorePAdapterBuilder : public GenericAdapterBuilder {
+				/**
+				 * \brief Composition for ScoreP instrumentation
+				 *
+				 * \ingroup Adapterbuilder
+				 *
+				 *\author Matthias Zoellner
+				 */
+				class ScorePAdapterBuilder : public GenericAdapterBuilder {
 
-public:
-	ScorePAdapterBuilder(Selector* decidingSelector);
+				public:
+					ScorePAdapterBuilder(Selector* decidingSelector);
 
-	virtual ~ScorePAdapterBuilder();
+					virtual ~ScorePAdapterBuilder();
 
-private:
-	ScorePInitializer initializer;
+				private:
+					ScorePInitializer initializer;
 
-	ScorePStatementWrapperStrategy my_strategy;
-	ScorePLoopIterationStrategy my_strategy2;
-	ScorePFunctionScopeStrategy my_strategy3;
-};
+					ScorePStatementWrapperStrategy my_strategy;
+					ScorePLoopIterationStrategy my_strategy2;
+					ScorePFunctionScopeStrategy my_strategy3;
+				};
 
+			}
+		}
+	}
 }
 
 #endif
