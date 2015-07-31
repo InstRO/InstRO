@@ -24,8 +24,18 @@ namespace InstRO {
 				InstRO::Core::ConstructSet outputCS;
 
 			public:
-				RoseStrategyBasedAdapter(InstRO::Pass *inputFunctions)
-					: RosePassImplementation(InstRO::Core::ChannelConfiguration(inputFunctions)), input(inputFunctions) {}
+				template<class... stratList> RoseStrategyBasedAdapter(InstRO::Pass *inputFunctions, InstRO::Rose::Adapter::StrategyBasedAdapterSupport::GenericInstrumentationStrategy* strat1, stratList... strategyArgs)
+					: RosePassImplementation(InstRO::Core::ChannelConfiguration(inputFunctions)), input(inputFunctions)
+				{
+					strategies.insert(std::make_pair<1, strat1>);
+					int prio = 2;
+					std::vector<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::GenericInstrumentationStrategy*> strategyVec = { strategyArgs... };
+					for (auto strat : strategyVec)
+					{
+						strategies.insert(std::make_pair<prio, strat>);
+						//.insert(inputChannelPasses.begin(), { p1, passes... });
+					}
+				}
 				void init(){};
 				void execute() override;
 				void finalize(){};
