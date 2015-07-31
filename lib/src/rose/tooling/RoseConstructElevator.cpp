@@ -20,11 +20,11 @@ std::shared_ptr<InstRO::Rose::Core::RoseConstruct> raiseConstruct(InstRO::Rose::
 	SgNode *current = src->getNode();
 	// CI Walk the AST upwards, until the current node is either NULL or it is the desired construct type
 	while (current != nullptr && !pred(current)) {
-		std::cout << "raiseConstruct:\t" << current->class_name() << std::endl;
+		std::cout << " --> " << current->class_name();
 		current = current->get_parent();
 	}
 	if (current == nullptr) {
-		std::cout << "raiseConstruct:\t terminated at NULL" << std::endl;
+		std::cout << " --> NULL" << std::endl;
 		return nullptr;
 	}
 
@@ -67,7 +67,7 @@ InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::Construc
 				dynamic_cast<InstRO::Rose::Core::RoseConstruct *>(construct->get());
 		if (roseConstruct == nullptr) {
 			throw std::string(
-					"A non InstRO::Rose::Core::RoseConstruct in the ROSE interace. Either multiple compiler interfaces are used, "
+					"A non InstRO::Rose::Core::RoseConstruct in the ROSE interface. Either multiple compiler interfaces are used, "
 					"or programming error");
 		}
 
@@ -135,7 +135,7 @@ InstRO::Core::ConstructSet ConstructElevator::lower(const InstRO::Core::Construc
 		auto roseConstruct = dynamic_cast<InstRO::Rose::Core::RoseConstruct *>(construct->get());
 		if (roseConstruct == nullptr) {
 			throw std::string(
-					"A non InstRO::Rose::Core::RoseConstruct in the ROSE interace. Either multiple compiler interfaces are used, "
+					"A non InstRO::Rose::Core::RoseConstruct in the ROSE interface. Either multiple compiler interfaces are used, "
 					"or programming error");
 		}
 

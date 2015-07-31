@@ -14,14 +14,18 @@ namespace Rose {
 namespace Tooling {
 namespace ControlFlowGraph {
 
+/**
+ * TODO: RN 2015-07
+ * - handle empty scopes correctly
+ * - handle that return statements are never in a scope
+ */
+
 using namespace InstRO::Tooling::ControlFlowGraph;
 
 class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
  public:
-	CFGConstructSetGenerator()
-			: cs(new InstRO::Core::ConstructSet()), nodeType(EXPR), magicIndexVariable(0) {}	// XXX EXPR is a bad default
-
-	void calibrate(unsigned int index) { magicIndexVariable = index; }
+	CFGConstructSetGenerator(unsigned int index)
+			: cs(new InstRO::Core::ConstructSet()), nodeType(NOT_SET), magicIndexVariable(index) {}
 
 	InstRO::Core::ConstructSet* getConstructSet() { return cs; }
 	CFGNodeType getNodeType() { return nodeType; }
@@ -77,7 +81,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 	}
 
 	void visit(SgVariableDeclaration* node) {
-		if (node->get_definition() == nullptr) {
+		if (!InstRO::Rose::Core::RoseConstructLevelPredicates::DefinedVariableDeclarationPredicate()(node)) {
 			invalidate(node);
 			return;
 		}
@@ -87,8 +91,11 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
 	}
 
+	void visit(SgForInitStatement* node) {
+		invalidate(node);
+	}
+
 	// statements
-	// TODO: any other statements that are not simple?
 	void visit(SgStatement* node) {
 		nodeType = STMT;
 		InfracstructureInterface::ConstructSetCompilerInterface csci(cs);
@@ -96,7 +103,17 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 	}
 
 	// expressions
-	void visit(SgExpression* node) { invalidate(node); }
+	void visit(SgExpression* node) {
+		auto parentNode = node->get_parent();
+		if (parentNode!=nullptr && Core::RoseConstructLevelPredicates::CLLoopPredicate()(parentNode)) {
+			nodeType = EXPR;
+			InfracstructureInterface::ConstructSetCompilerInterface csci(cs);
+			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
+		} else {
+			invalidate(node);
+		}
+	}
+
 	void visit(SgFunctionParameterList* node) { invalidate(node); }
 
 	void visit(SgScopeStatement* node) { invalidate(node); }
@@ -113,17 +130,29 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 
 class RoseSingleFunctionCFGGenerator {
  public:
-	RoseSingleFunctionCFGGenerator(SgFunctionDefinition* startNode) {
-		// XXX generate whole virtualcfg
-		std::string name = startNode->get_declaration()->get_name().getString();
-		VirtualCFG::cfgToDot(startNode, "virtualcfg-" + name + ".dot");
+	RoseSingleFunctionCFGGenerator(SgFunctionDefinition* funcDef) {
 
-		generate(nullptr, startNode->cfgForBeginning());
+		//XXX generate whole virtualcfg
+		std::string name = funcDef->get_declaration()->get_name().getString();
+		VirtualCFG::cfgToDot(funcDef, "virtualcfg-"+name+".dot");
 
-		/// XXX
-		cfg.print(name + ".dot");
-		std::cout << boost::num_vertices(cfg.graph) << " vertices" << std::endl;
-		std::cout << boost::num_edges(cfg.graph) << " edges" << std::endl;
+		auto cfgStartNode = aquireControlFlowGraphNode(funcDef->cfgForBeginning());
+		cfg.setStartNode(cfgStartNode);
+		cfg.addNode(cfgStartNode);
+
+		auto cfgEndNode = aquireControlFlowGraphNode(funcDef->cfgForEnd());
+		cfg.setEndNode(cfgEndNode);
+		cfg.addNode(cfgEndNode);
+
+		for (auto outEdge : funcDef->cfgForBeginning().outEdges()) {
+			auto childCfgNode = outEdge.target();
+			generate(cfgStartNode.getAssociatedConstructSet(), childCfgNode);
+		}
+
+		///XXX dump cfg
+		cfg.print(name+".dot");
+		std::cout << boost::num_vertices(cfg.getGraph()) << " vertices" << std::endl;
+		std::cout << boost::num_edges(cfg.getGraph()) << " edges" << std::endl;
 	}
 
 	BoostCFG getCFG() { return std::move(cfg); }
@@ -142,14 +171,12 @@ class RoseSingleFunctionCFGGenerator {
 				lastValidConstructSet = currentNodeCS;
 
 				/// XXX
-				std::cout << std::endl
-									<< "visit: " << vcfgNode.getNode()->class_name() << std::endl
-									<< vcfgNode.toString() << std::endl;
+//				std::cout << std::endl
+//									<< "visit: " << vcfgNode.getNode()->class_name() << std::endl
+//									<< vcfgNode.toString() << std::endl;
 
 				cfg.addNode(currentNode);
-				if (previousNode != nullptr) {
-					cfg.addEdge(*previousNode, *currentNodeCS);
-				}
+				cfg.addEdge(*previousNode, *currentNodeCS);
 
 				if (visitedCFGNodes.find(vcfgNode) != visitedCFGNodes.end()) {
 					return;
@@ -167,8 +194,7 @@ class RoseSingleFunctionCFGGenerator {
 
 	ControlFlowGraphNode aquireControlFlowGraphNode(CFGNode cfgNode) {
 		if (mapping.find(cfgNode) == mapping.end()) {
-			CFGConstructSetGenerator gen;
-			gen.calibrate(cfgNode.getIndex());
+			CFGConstructSetGenerator gen(cfgNode.getIndex());
 
 			cfgNode.getNode()->accept(gen);
 			mapping[cfgNode] = ControlFlowGraphNode(gen.getConstructSet(), gen.getNodeType());

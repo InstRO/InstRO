@@ -177,6 +177,10 @@ ConstructSet ConstructSet::symmerticDifference(const ConstructSet& other) const 
 	return retSet;
 }
 
+bool ConstructSet::intersects(const ConstructSet& other) const {
+	return !(this->intersect(other).empty());
+}
+
 std::vector<ConstructSet> ConstructSet::split() const {
 	std::vector<ConstructSet> retVec;
 	retVec.reserve(constructs.size());

@@ -6,6 +6,8 @@
 
 #include <iostream>
 #include <map>
+#include <boost/algorithm/string.hpp>
+
 #include "rose.h"
 #include "instro/core/ConstructSet.h"
 
@@ -20,6 +22,14 @@ struct CTPredicate {
 		return false;
 	}
 	virtual ~CTPredicate() {}
+};
+
+struct DefinedVariableDeclarationPredicate {
+	///XXX that is so dumb, there has to be an easier way
+	bool operator()(SgNode* n) const {
+		auto initNames = isSgVariableDeclaration(n)->get_variables();
+		return initNames[0]->get_initptr() != nullptr;
+	}
 };
 
 struct CLExpressionPredicate : public CTPredicate {
@@ -91,7 +101,7 @@ struct CLScopeStatementPredicate : public CTPredicate {
 struct CLStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		if (isSgDeclarationStatement(n)) {
-			if (isSgVariableDeclaration(n) && (isSgVariableDeclaration(n)->get_definition() != nullptr)) {
+			if (isSgVariableDeclaration(n) && DefinedVariableDeclarationPredicate()(n)) {
 				return true;	// only variable declarations with initializer
 			}
 			return false;
@@ -153,6 +163,7 @@ struct ConstructPredicate : public CTPredicate {
 					 CLStatementPredicate()(n) || CLExpressionPredicate()(n);
 	}
 };
+
 
 //// TODO actually use that mechanism
 CTPredicate getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType);
@@ -219,17 +230,18 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 		}
 	}
 
-	// expressions
-	void visit(SgExpression* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTExpression); }
 	void visit(SgVariableDeclaration* node) {
 		// CI: an initialized variable declaration is OK,
-		if (node->get_definition()) {
+		if (RoseConstructLevelPredicates::DefinedVariableDeclarationPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTSimpleStatement);
 			handleWrappableCheck(node);
 		} else {
 			generateError(node);
 		}
 	}
+
+	// expressions
+	void visit(SgExpression* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTExpression); }
 
 	// this should be an error
 	void visit(SgScopeStatement* node) { generateError(node); }
@@ -260,8 +272,20 @@ class RoseConstruct : public InstRO::Core::Construct {
 	size_t getID() const { return (size_t)node; }
 	SgNode* getNode() const { return node; }
 
-	virtual std::string toString() override {
+	virtual std::string toString() const override {
 		return "RoseConstruct: " + node->class_name() + ": " + node->unparseToString();
+	}
+
+	virtual std::string toDotString() const override {
+		if (isSgFunctionDefinition(node)) {	// don't print whole function
+			return isSgFunctionDefinition(node)->get_declaration()->get_name().getString();
+		} else {
+			std::string dotString(node->unparseToString());
+			// escape " and \n (e.g. in string literals)
+			boost::replace_all(dotString, "\n", "\\n");
+			boost::replace_all(dotString, "\"", "\\\"");
+			return dotString;
+		}
 	}
 
  private:
@@ -279,9 +303,15 @@ class RoseFragment : public RoseConstruct {
 	size_t getID() const { return (size_t)info; };
 	Sg_File_Info* getFileInfo() { return info; }
 
-	std::string toString() override {
+	std::string toString() const override {
 		std::stringstream ss;
 		ss << "RoseFragment line:" << info->get_line() << " col:" << info->get_col();
+		return ss.str();
+	}
+
+	std::string toDotString() const override {
+		std::stringstream ss;
+		ss << "line:" << info->get_line() << " col:" << info->get_col();
 		return ss.str();
 	}
 
