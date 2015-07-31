@@ -1,4 +1,4 @@
-#include "instro/utility/CodeInsertionHelper.h"
+#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionHelper.h"
 
 
 using namespace InstRO;
