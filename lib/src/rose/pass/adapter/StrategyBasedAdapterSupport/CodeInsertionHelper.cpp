@@ -4,7 +4,7 @@
 namespace InstRO {
 	namespace Rose {
 		namespace Adapter {
-			namespace AdapterSupport{
+			namespace StrategyBasedAdapterSupport{
 
 
 				CodeInsertionHelper::CodeInsertionHelper() {
