@@ -49,6 +49,9 @@
     <Filter Include="instro\pass\selector">
       <UniqueIdentifier>{efab79fb-0cc1-4a17-a98c-cc872f9ee37c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="instro\rose\pass\adapter\StrategyBasedAdapterSupport">
+      <UniqueIdentifier>{0bc5ab33-5c7d-4a60-b05c-6130e463033e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h">
@@ -194,6 +197,21 @@
       <Filter>instro\rose\pass\adapter</Filter>
     </ClInclude>
     <ClInclude Include="include\rose.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseScorePAdapter.h">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseGPIAdapter.h">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseStrategyBasedAdapter.h">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\GenericInstrumentationStrategy.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ToolInitializer.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp">
@@ -266,6 +284,15 @@
       <Filter>instro\tooling</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\rose\pass\selector\CompoundSelector.cpp">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseScorePAdapter.cpp">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseGPIAdapter.cpp">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseStrategyBasedAdapter.cpp">
       <Filter>instro\rose\pass\adapter</Filter>
     </ClCompile>
   </ItemGroup>

@@ -85,9 +85,9 @@ class ChannelConfiguration {
  * predecessors.
  */
 class PassImplementation {
- public:
+public:
 	PassImplementation(ChannelConfiguration channelConfig)
-			: channelConfig(channelConfig), collisionSet(std::make_unique<ConstructSet>()) {}
+		: channelConfig(channelConfig), collisionSet(std::make_unique<ConstructSet>()) {}
 	PassImplementation() = delete;
 	virtual ~PassImplementation() {}
 
@@ -100,17 +100,23 @@ class PassImplementation {
 	virtual ConstructSet *getOutput() = 0;
 	ConstructSet *getInput(Pass *pId);
 
-	ConstructSet *getCollisionSet() { return collisionSet.get(); };
+	
 
- private:
+private:
 	ChannelConfiguration channelConfig;
 
- protected:
+protected:
+	
 	ChannelConfiguration &getChannelCFG() { return channelConfig; }
 
 	// This set is used to track alterations to the AST and notify which nodes have been invalidated
-	std::unique_ptr<ConstructSet> collisionSet;
+	ConstructSet collisionSet;
+	ConstructSet *getCollisionSet() { return &collisionSet; }
+public:
+	const ConstructSet *cgetCollisionSet() { return &collisionSet; };
+
 };
+
 
 }	// namespace Core
 }	// namespace InstRO
