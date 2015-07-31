@@ -1,6 +1,6 @@
-#include "instro/utility/CodeInsertionPointSelector.h"
+#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionPointSelector.h"
 
-#include "instro/utility/instrobuilder.h"
+#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/instrobuilder.h"
 
 #include <iostream>
 
