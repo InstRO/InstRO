@@ -9,7 +9,7 @@
 namespace InstRO {
 	namespace Rose {
 		namespace Adapter {
-			namespace AdapterSupport{
+			namespace StrategyBasedAdapterSupport{
 
 				namespace { // anonymous local namespace
 
@@ -452,7 +452,7 @@ namespace InstRO {
 				} // end anonymous namespace
 
 
-				CodeInsertionHelper InstRO::getMainGlobalDeclarationPoint(SgNode* node) {
+				CodeInsertionHelper getMainGlobalDeclarationPoint(SgNode* node) {
 
 					SgFunctionDeclaration* mainFn = SageInterface::findMain(SageInterface::getProject());
 
@@ -464,7 +464,7 @@ namespace InstRO {
 				}
 
 
-				CodeInsertionHelper InstRO::getMainSetupPoint(SgNode* node) {
+				CodeInsertionHelper getMainSetupPoint(SgNode* node) {
 
 					SgFunctionDeclaration* mainFn = SageInterface::findMain(SageInterface::getProject());
 
@@ -505,7 +505,7 @@ namespace InstRO {
 				}
 
 
-				CodeInsertionHelper InstRO::getMainInitializationPoint(SgNode* node) {
+				CodeInsertionHelper getMainInitializationPoint(SgNode* node) {
 
 					SgFunctionDeclaration* mainFn = SageInterface::findMain(SageInterface::getProject());
 
@@ -513,7 +513,7 @@ namespace InstRO {
 				}
 
 
-				CodeInsertionHelper InstRO::getNearestGlobalDeclarationPoint(SgNode* node) {
+				CodeInsertionHelper getNearestGlobalDeclarationPoint(SgNode* node) {
 
 					SgStatement* parent = SageInterface::getScope(node);
 					SgStatement* node2 = SageInterface::getEnclosingNode<SgStatement>(node, true);
@@ -533,7 +533,7 @@ namespace InstRO {
 				}
 
 
-				CodeInsertionHelper InstRO::getEarliestGlobalDeclarationPoint(SgNode* node) {
+				CodeInsertionHelper getEarliestGlobalDeclarationPoint(SgNode* node) {
 
 					SgGlobal* global = SageInterface::getGlobalScope(node);
 
@@ -545,7 +545,7 @@ namespace InstRO {
 				}
 
 
-				CodeInsertionHelper InstRO::getFunctionInitializationPoint(SgNode* node) {
+				CodeInsertionHelper getFunctionInitializationPoint(SgNode* node) {
 
 					SgFunctionDeclaration* fnDecl = SageInterface::getEnclosingFunctionDeclaration(node, true);
 
@@ -577,7 +577,7 @@ namespace InstRO {
 				}
 
 
-				CodeInsertionHelper InstRO::getStatementEntryPoint(SgStatement* node) {
+				CodeInsertionHelper getStatementEntryPoint(SgStatement* node) {
 
 					// TODO how to handle cases, where insert BEFORE function body is attempted and it somehow
 					// works out because a previous function already enclosed the body in a surrounding try-catch?
@@ -595,7 +595,7 @@ namespace InstRO {
 				}
 
 
-				CodeInsertionHelper InstRO::getStatementExitPoints(SgStatement* node) {
+				CodeInsertionHelper getStatementExitPoints(SgStatement* node) {
 
 					if (functionBodies.count(node) > 0) return CodeInsertionHelper(std::vector<SgDeclarationStatement*>());
 
@@ -624,7 +624,7 @@ namespace InstRO {
 
 
 
-				CodeInsertionHelper InstRO::getNthInnerScopeEntryPoint(SgStatement* node, size_t index) {
+				CodeInsertionHelper getNthInnerScopeEntryPoint(SgStatement* node, size_t index) {
 
 					std::vector<SgDeclarationStatement*> stmtList;
 
@@ -636,7 +636,7 @@ namespace InstRO {
 				}
 
 
-				CodeInsertionHelper InstRO::getNthInnerScopeExitPoints(SgStatement* node, size_t index) {
+				CodeInsertionHelper getNthInnerScopeExitPoints(SgStatement* node, size_t index) {
 
 					std::vector<std::pair<SgStatement*, CodeInsertionHelper::RelativePosition> > stmtList;
 
@@ -650,7 +650,7 @@ namespace InstRO {
 				}
 
 
-				CodeInsertionHelper InstRO::getMainShutdownPoints(SgNode* node) {
+				CodeInsertionHelper getMainShutdownPoints(SgNode* node) {
 
 					std::vector<SgDeclarationStatement*> stmtList;
 

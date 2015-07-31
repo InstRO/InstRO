@@ -3,7 +3,7 @@
 namespace InstRO {
 	namespace Rose {
 		namespace Adapter {
-			namespace AdapterSupport{
+			namespace StrategyBasedAdapterSupport{
 
 				/**
 				 * Creates the cyg_profile_func_enter with an empty function parameter list.

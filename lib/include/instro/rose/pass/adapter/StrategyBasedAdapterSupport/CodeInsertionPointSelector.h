@@ -14,7 +14,7 @@
 namespace InstRO {
 	namespace Rose {
 		namespace Adapter {
-			namespace AdapterSupport{
+			namespace StrategyBasedAdapterSupport{
 
 				/**
 				 * Returns a CodeInsertionHelper object for the global scope in front of the projects main function

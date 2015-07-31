@@ -8,7 +8,7 @@
 namespace InstRO {
 	namespace Rose {
 		namespace Adapter {
-			namespace AdapterSupport{
+			namespace StrategyBasedAdapterSupport{
 
 				/**
 				 * \brief Abstraction to insert code at a specific point
