@@ -19,7 +19,7 @@ namespace StrategyBasedAdapterSupport{
 	*/
 class GenericInstrumentationStrategy {
 public:
-	GenericInstrumentationStrategy(ToolInitializer* toolInitializerStrategy);
+	GenericInstrumentationStrategy(std::shared_ptr<ToolInitializer> toolInitializerStrategy);
 
 	/**
 		* override this function to specify, which node types are supported by the strategy
@@ -80,7 +80,7 @@ private:
 	// instrumentation strategies.
 	// To avoid redundant setup, a separate setup handler is injected into the
 	// instrumentation strategy object.
-	ToolInitializer* toolInitializer;
+	std::shared_ptr<ToolInitializer> toolInitializer;
 };
 
 }

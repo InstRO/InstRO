@@ -236,6 +236,9 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\CodeInsertionPointSelector.h">
       <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\GenericAdapterBuilder.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp">
@@ -347,6 +350,9 @@
       <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\CodeInsertionPointSelector.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\GenericAdapterBuilder.cpp">
       <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
     </ClCompile>
   </ItemGroup>

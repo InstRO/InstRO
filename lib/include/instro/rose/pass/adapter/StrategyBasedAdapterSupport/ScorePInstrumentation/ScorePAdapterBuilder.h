@@ -9,7 +9,7 @@
 #include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePFunctionScopeStrategy.h"
 
 #include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePInitializer.h"
-
+#if 0
 namespace InstRO {
 	namespace Rose {
 		namespace Adapter {
@@ -42,5 +42,6 @@ namespace InstRO {
 	}
 }
 
+#endif
 #endif
 
