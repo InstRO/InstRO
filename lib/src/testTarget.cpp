@@ -7,7 +7,7 @@ int main(int argc, char** argv) {
 	printf("Hello World\n");
 	myRecursion(myFoo());
 	int variableDeclaration;
-	int variableDeclarationAndInitialization;
+	int variableDeclarationAndInitialization = 0;
 	for (int i = 0; i < 100; i++)
 		myFoo();
 	return myRecursion(10);

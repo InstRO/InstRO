@@ -262,7 +262,7 @@
     <ClCompile Include="..\..\..\lib\src\tooling\ConstructElevator.cpp">
       <Filter>instro\tooling</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\rose_main.cpp">
+    <ClCompile Include="..\..\..\lib\src\roseInstrumentor.cpp">
       <Filter>instro</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp">
