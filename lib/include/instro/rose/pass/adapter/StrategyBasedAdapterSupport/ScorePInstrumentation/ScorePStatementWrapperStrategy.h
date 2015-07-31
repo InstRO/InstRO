@@ -3,7 +3,7 @@
 
 
 #include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/GenericInstrumentationStrategy.h"
-
+#include <memory>
 #include <string>
 #include <map>
 #include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePInitializer.h"
@@ -20,7 +20,7 @@ namespace InstRO {
 				 */
 				class ScorePStatementWrapperStrategy : public GenericInstrumentationStrategy {
 				public:
-					ScorePStatementWrapperStrategy(ScorePInitializer* toolInitializerStrategy);
+					ScorePStatementWrapperStrategy(std::shared_ptr<ToolInitializer> toolInitializerStrategy);
 
 					virtual bool isImplementedFor(SgNode* node);
 

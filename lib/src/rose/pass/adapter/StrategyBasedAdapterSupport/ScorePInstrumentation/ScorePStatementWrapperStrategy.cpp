@@ -1,7 +1,7 @@
 #include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePStatementWrapperStrategy.h"
 
 #include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionPointSelector.h"
-
+#include <memory>
 #include <rose.h>
 // not included via rose.h
 #include <AstRestructure.h>
@@ -13,7 +13,7 @@ namespace InstRO {
 			namespace StrategyBasedAdapterSupport{
 
 
-				ScorePStatementWrapperStrategy::ScorePStatementWrapperStrategy(ScorePInitializer* toolInitializerStrategy)
+				ScorePStatementWrapperStrategy::ScorePStatementWrapperStrategy(std::shared_ptr<ToolInitializer> toolInitializerStrategy)
 					: GenericInstrumentationStrategy(toolInitializerStrategy) {
 
 				}

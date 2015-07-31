@@ -4,7 +4,7 @@ namespace InstRO {
 namespace Rose {
 namespace Adapter {
 namespace StrategyBasedAdapterSupport{
-
+#if 0
 ScorePAdapterBuilder::ScorePAdapterBuilder(Selector* decidingSelector) :
 	GenericAdapterBuilder(decidingSelector), initializer(),
 	my_strategy(&initializer), my_strategy2(&initializer), my_strategy3(&initializer) {
@@ -19,7 +19,7 @@ ScorePAdapterBuilder::ScorePAdapterBuilder(Selector* decidingSelector) :
 ScorePAdapterBuilder::~ScorePAdapterBuilder() {
 
 }
-
+#endif
 }
 }
 }
