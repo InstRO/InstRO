@@ -33,6 +33,7 @@ namespace InstRO {
 					for (auto strat : strategyVec)
 					{
 						strategies.insert(std::make_pair<prio, strat>);
+						prio++;
 						//.insert(inputChannelPasses.begin(), { p1, passes... });
 					}
 				}
