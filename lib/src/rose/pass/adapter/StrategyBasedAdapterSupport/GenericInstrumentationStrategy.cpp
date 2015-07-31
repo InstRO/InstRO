@@ -13,7 +13,7 @@ namespace StrategyBasedAdapterSupport{
 
 // helpers in anonymous local namespace
 namespace {
-	typedef AdapterSupport::CodeInsertionHelper (*InsertionPointSelectorStmt) (SgStatement*);
+	typedef CodeInsertionHelper (*InsertionPointSelectorStmt) (SgStatement*);
 //	typedef CodeInsertionHelper(*InsertionPointSelectorNode) (SgNode*);
 //	typedef CodeInsertionHelper(*InsertionPointSelectorNthStmt) (SgStatement*, size_t);
 
@@ -32,7 +32,7 @@ namespace {
 	void applyNodesToCodeInsertionHelper(SgStatement* n, const std::vector<SgStatement*>& v, InsertionPointSelectorNthStmt sel, size_t scopeIndex) {
 
 		if (v.size()) {
-			AdapterSupport::CodeInsertionHelper h = sel(n, scopeIndex);
+			CodeInsertionHelper h = sel(n, scopeIndex);
 			for (auto i : v) {
 				h.pushStatement(i);
 			}
