@@ -1,58 +1,62 @@
-#include "instro/adapterbuilder/GenericInstrumentationStrategy.h"
-#include "instro/utility/instrobuilder.h"
+#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/GenericInstrumentationStrategy.h"
+#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/instrobuilder.h"
 
-#include "instro/utility/CodeInsertionPointSelector.h"
-#include "instro/utility/CodeInsertionHelper.h"
+#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionPointSelector.h"
+#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionHelper.h"
 
 
-using namespace InstRO;
+
+namespace InstRO {
+namespace Rose {
+namespace Adapter {
+namespace StrategyBasedAdapterSupport{
 
 // helpers in anonymous local namespace
 namespace {
-typedef CodeInsertionHelper (*InsertionPointSelectorStmt) (SgStatement*);
-typedef CodeInsertionHelper (*InsertionPointSelectorNode) (SgNode*);
-typedef CodeInsertionHelper (*InsertionPointSelectorNthStmt) (SgStatement*, size_t);
+	typedef CodeInsertionHelper(*InsertionPointSelectorStmt) (SgStatement*);
+	typedef CodeInsertionHelper(*InsertionPointSelectorNode) (SgNode*);
+	typedef CodeInsertionHelper(*InsertionPointSelectorNthStmt) (SgStatement*, size_t);
 
-template <typename _T1, typename _T2>
-void _applyNodesToCodeInsertionHelper(_T1* n, const std::vector<_T2*>& v, CodeInsertionHelper (*sel)(_T1*)) {
+	template <typename _T1, typename _T2>
+	void _applyNodesToCodeInsertionHelper(_T1* n, const std::vector<_T2*>& v, CodeInsertionHelper(*sel)(_T1*)) {
 
-	if (v.size()) {
-		CodeInsertionHelper h = sel(n);
-		for (auto i : v) {
-			h.pushStatement(i);
+		if (v.size()) {
+			CodeInsertionHelper h = sel(n);
+			for (auto i : v) {
+				h.pushStatement(i);
+			}
 		}
 	}
-}
 
-// additional index parameter
-void applyNodesToCodeInsertionHelper(SgStatement* n, const std::vector<SgStatement*>& v, InsertionPointSelectorNthStmt sel, size_t scopeIndex) {
+	// additional index parameter
+	void applyNodesToCodeInsertionHelper(SgStatement* n, const std::vector<SgStatement*>& v, InsertionPointSelectorNthStmt sel, size_t scopeIndex) {
 
-	if (v.size()) {
-		CodeInsertionHelper h = sel(n, scopeIndex);
-		for (auto i : v) {
-			h.pushStatement(i);
+		if (v.size()) {
+			CodeInsertionHelper h = sel(n, scopeIndex);
+			for (auto i : v) {
+				h.pushStatement(i);
+			}
 		}
 	}
-}
 
-void applyNodesToCodeInsertionHelper(SgNode* n, const std::vector<SgStatement*>& v, InsertionPointSelectorNode sel) {
-	_applyNodesToCodeInsertionHelper(n, v, sel);
-}
-void applyNodesToCodeInsertionHelper(SgStatement* n, const std::vector<SgStatement*>& v, InsertionPointSelectorStmt sel) {
-	_applyNodesToCodeInsertionHelper(n, v, sel);
-}
-void applyNodesToCodeInsertionHelper(SgNode* n, const std::vector<SgStatement*>& v, InsertionPointSelectorStmt sel) {
-	_applyNodesToCodeInsertionHelper(isSgStatement(n), v, sel);
-}
-void applyNodesToCodeInsertionHelper(SgNode* n, const std::vector<SgDeclarationStatement*>& v, InsertionPointSelectorNode sel) {
-	_applyNodesToCodeInsertionHelper(n, v, sel);
-}
-void applyNodesToCodeInsertionHelper(SgStatement* n, const std::vector<SgDeclarationStatement*>& v, InsertionPointSelectorStmt sel) {
-	_applyNodesToCodeInsertionHelper(n, v, sel);
-}
-void applyNodesToCodeInsertionHelper(SgNode* n, const std::vector<SgDeclarationStatement*>& v, InsertionPointSelectorStmt sel) {
-	_applyNodesToCodeInsertionHelper(isSgStatement(n), v, sel);
-}
+	void applyNodesToCodeInsertionHelper(SgNode* n, const std::vector<SgStatement*>& v, InsertionPointSelectorNode sel) {
+		_applyNodesToCodeInsertionHelper(n, v, sel);
+	}
+	void applyNodesToCodeInsertionHelper(SgStatement* n, const std::vector<SgStatement*>& v, InsertionPointSelectorStmt sel) {
+		_applyNodesToCodeInsertionHelper(n, v, sel);
+	}
+	void applyNodesToCodeInsertionHelper(SgNode* n, const std::vector<SgStatement*>& v, InsertionPointSelectorStmt sel) {
+		_applyNodesToCodeInsertionHelper(isSgStatement(n), v, sel);
+	}
+	void applyNodesToCodeInsertionHelper(SgNode* n, const std::vector<SgDeclarationStatement*>& v, InsertionPointSelectorNode sel) {
+		_applyNodesToCodeInsertionHelper(n, v, sel);
+	}
+	void applyNodesToCodeInsertionHelper(SgStatement* n, const std::vector<SgDeclarationStatement*>& v, InsertionPointSelectorStmt sel) {
+		_applyNodesToCodeInsertionHelper(n, v, sel);
+	}
+	void applyNodesToCodeInsertionHelper(SgNode* n, const std::vector<SgDeclarationStatement*>& v, InsertionPointSelectorStmt sel) {
+		_applyNodesToCodeInsertionHelper(isSgStatement(n), v, sel);
+	}
 
 } // end of anonymous namespace
 
@@ -116,14 +120,14 @@ void GenericInstrumentationStrategy::applyInstrumentationFor(SgNode* node) {
 		size_t innerScopeCount = 0;
 		// Support distinct instrumentation for if/else or case-1/case-2/.../default scopes
 		switch (scope->variantT()) {
-			case V_SgIfStmt:
-				innerScopeCount = 2;
-				break;
-			case V_SgSwitchStatement:
-				innerScopeCount = SageInterface::getSwitchCases(isSgSwitchStatement(scope)).size();
-			 	break;
-			default:
-				innerScopeCount = 1;
+		case V_SgIfStmt:
+			innerScopeCount = 2;
+			break;
+		case V_SgSwitchStatement:
+			innerScopeCount = SageInterface::getSwitchCases(isSgSwitchStatement(scope)).size();
+			break;
+		default:
+			innerScopeCount = 1;
 		}
 		for (size_t i = 0; i < innerScopeCount; ++i) {
 			applyNodesToCodeInsertionHelper(scope, constructExitInstrumentationInsideNthScopeFor(scope, i), &getNthInnerScopeExitPoints, i);
@@ -253,3 +257,7 @@ std::vector<SgStatement*> GenericInstrumentationStrategy::constructShutdownInMai
 }
 
 
+}
+}
+}
+}

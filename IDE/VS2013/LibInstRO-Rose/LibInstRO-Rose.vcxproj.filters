@@ -212,6 +212,24 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ToolInitializer.h">
       <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePLoopIterationStrategy.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePStatementWrapperStrategy.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePFunctionScopeStrategy.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePAdapterBuilder.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePInitializer.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\instrobuilder.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp">
@@ -294,6 +312,30 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseStrategyBasedAdapter.cpp">
       <Filter>instro\rose\pass\adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePStatementWrapperStrategy.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePLoopIterationStrategy.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePFunctionScopeStrategy.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePAdapterBuilder.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePInitializer.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ToolInitializer.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\GenericInstrumentationStrategy.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\instrobuilder.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
