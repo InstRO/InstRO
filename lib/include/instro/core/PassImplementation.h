@@ -87,7 +87,7 @@ class ChannelConfiguration {
 class PassImplementation {
 public:
 	PassImplementation(ChannelConfiguration channelConfig)
-		: channelConfig(channelConfig), collisionSet(std::make_unique<ConstructSet>()) {}
+		: channelConfig(channelConfig), collisionSet() {}
 	PassImplementation() = delete;
 	virtual ~PassImplementation() {}
 
