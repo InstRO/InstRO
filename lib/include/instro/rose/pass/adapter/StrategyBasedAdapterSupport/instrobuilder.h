@@ -6,7 +6,7 @@
 namespace InstRO {
 	namespace Rose {
 		namespace Adapter {
-			namespace AdapterSupport{
+			namespace StrategyBasedAdapterSupport{
 
 				/**
 				 * \brief Provides building functions for several AST constructs
