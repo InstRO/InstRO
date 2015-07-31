@@ -1,7 +1,7 @@
 #include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePFunctionScopeStrategy.h"
 
 #include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionPointSelector.h"
-
+#include <memory>
 #include <rose.h>
 
 
@@ -11,7 +11,7 @@ namespace InstRO {
 			namespace StrategyBasedAdapterSupport{
 
 
-				ScorePFunctionScopeStrategy::ScorePFunctionScopeStrategy(ScorePInitializer* initializer)
+				ScorePFunctionScopeStrategy::ScorePFunctionScopeStrategy(std::shared_ptr<ToolInitializer> initializer)
 					: GenericInstrumentationStrategy(initializer) {
 
 				}

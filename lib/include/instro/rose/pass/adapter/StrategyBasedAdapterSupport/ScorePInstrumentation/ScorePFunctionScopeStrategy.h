@@ -3,7 +3,7 @@
 
 
 #include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/GenericInstrumentationStrategy.h"
-
+#include <memory>
 #include <string>
 #include <map>
 
@@ -21,7 +21,7 @@ namespace InstRO {
 				 */
 				class ScorePFunctionScopeStrategy : public GenericInstrumentationStrategy {
 				public:
-					ScorePFunctionScopeStrategy(ScorePInitializer* initializer);
+					ScorePFunctionScopeStrategy(std::shared_ptr<ToolInitializer> initializer);
 
 					virtual bool isImplementedFor(SgNode* node);
 
