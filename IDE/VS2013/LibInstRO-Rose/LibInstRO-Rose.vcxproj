@@ -119,6 +119,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseStrategyBasedAdapter.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\CodeInsertionHelper.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\CodeInsertionPointSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\GenericAdapterBuilder.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\GenericInstrumentationStrategy.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\instrobuilder.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePAdapterBuilder.h" />
@@ -166,6 +167,7 @@
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseStrategyBasedAdapter.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\CodeInsertionHelper.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\CodeInsertionPointSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\GenericAdapterBuilder.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\GenericInstrumentationStrategy.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\instrobuilder.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePAdapterBuilder.cpp" />
