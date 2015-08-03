@@ -21,12 +21,16 @@ void ExtendedCallGraph::addNode(ExtendedCallGraphNode* node) {
 }
 
 void ExtendedCallGraph::addEdge(ExtendedCallGraphNode* from, ExtendedCallGraphNode* to) {
+
+	assert(from);
+	assert(to);
+
 	if (predecessors.find(from) == predecessors.end()) {
-		addNode(from);
+		addSgNode(from);
 	}
 
 	if (predecessors.find(to) == predecessors.end()) {
-		addNode(to);
+		addSgNode(to);
 	}
 	predecessors[to].insert(from);
 	successors[from].insert(to);
@@ -81,20 +85,18 @@ int ExtendedCallGraph::getSuccessorCount(ExtendedCallGraphNode* start) {
 //// XXX from ROSE EXTENDED CALLGRAPH
 
 
-ExtendedCallGraphNode* ExtendedCallGraph::addSgNode(InstRO::Core::ConstructSet cs, enum ECGNodeType nodeType) {
+void ExtendedCallGraph::addSgNode(ExtendedCallGraphNode* node) {
 
-	if (csToGraphNode.count(cs) > 0) {
+	if (graphNodeToCs.count(node) > 0) {
+
+		assert(graphNodeToCs[node] == node->getAssociatedConstructSet());
 		// already in graph
-		return csToGraphNode[cs];
+		return;
 	}
 
-	ExtendedCallGraphNode* graphNode = new ExtendedCallGraphNode(cs, nodeType);
-
-	csToGraphNode[cs] = graphNode;
-	graphNodeToCs[graphNode] = cs;
-	addNode(graphNode);
-
-	return graphNode;
+	csToGraphNode[node->getAssociatedConstructSet()] = node;
+	graphNodeToCs[node] = node->getAssociatedConstructSet();
+	addNode(node);
 }
 
 void ExtendedCallGraph::swapSgNode(InstRO::Core::ConstructSet oldNode, InstRO::Core::ConstructSet newNode) {

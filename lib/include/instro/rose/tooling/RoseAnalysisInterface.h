@@ -20,7 +20,8 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 				namedConstructAccessInstance(new NamedConstructAccess::RoseNamedConstructAccess(proj)),
 				ce(new ConstructElevator::ConstructElevator()),
 				gi(new GrammarInterface::RoseGrammarInterface(proj)),
-				controlFlowGraph((new ControlFlowGraph::RoseCFGGenerator(proj))->getGraph()) {}
+				controlFlowGraph((new ControlFlowGraph::RoseCFGGenerator(proj))->getGraph()),
+				extendedCallGraph((new ExtendedCallGraph::RoseECGGenerator())->build(proj)) {}
 
 	RoseAnalysisManager() = delete;
 	~RoseAnalysisManager() {
@@ -28,12 +29,10 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 		delete ce;
 		delete gi;
 		delete controlFlowGraph;
+		delete extendedCallGraph;
 	}
 
-	virtual InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph *getECG() override {
-		throw std::string("Not Implemented");
-		return NULL;
-	}
+	virtual InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph *getECG() override { return extendedCallGraph; }
 	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraph *getCFG() override { return controlFlowGraph; }
 	virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override { return ce; }
 	virtual InstRO::Tooling::GrammarInterface::GrammarInterface *getGrammarInterface() override { return gi; }
@@ -47,6 +46,7 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 	ConstructElevator::ConstructElevator *ce;
 	GrammarInterface::RoseGrammarInterface *gi;
 	ControlFlowGraph::ControlFlowGraph *controlFlowGraph;
+	ExtendedCallGraph::ExtendedCallGraph *extendedCallGraph;
 };
 
 }	// Tooling
