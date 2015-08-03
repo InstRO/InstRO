@@ -31,6 +31,11 @@ class ExtendedCallGraphNode {
 		return type;
 	}
 
+	friend std::ostream& operator<<(std::ostream& out, const ExtendedCallGraphNode& node) {
+		out << node.cs.toDotString();
+		return out;
+	}
+
  private:
 	InstRO::Core::ConstructSet cs;
 	enum ECGNodeType type;
@@ -70,7 +75,7 @@ class ExtendedCallGraph {
 	int getSuccessorCount(ExtendedCallGraphNode* start);
 
  public:
-	ExtendedCallGraphNode* addSgNode(InstRO::Core::ConstructSet sgNode, enum ECGNodeType nodeType);
+	void addSgNode(ExtendedCallGraphNode* node);
 	void swapSgNode(InstRO::Core::ConstructSet oldNode, InstRO::Core::ConstructSet newNode);
 
 	InstRO::Core::ConstructSet getConstructSet(ExtendedCallGraphNode* graphNode);
