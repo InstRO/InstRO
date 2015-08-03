@@ -28,6 +28,12 @@ public:
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
 		nodeType = ECGNodeType::FUNCTION;
 	}
+	void visit(SgFunctionDeclaration* node) {
+		assert(node);
+
+		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getFragment(node, node->get_startOfConstruct()));
+		nodeType = ECGNodeType::FUNCTION_CALL;
+	}
 	void visit(SgFunctionCallExp* node) {
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
 		nodeType = ECGNodeType::FUNCTION_CALL;
@@ -112,7 +118,8 @@ public:	// Visitor Interface
 		node->accept(genCS);
 
 		// enclosing node -> callExp
-		callgraph->addEdge(currentVisitNode.top(), genCS.getECGNode());
+		auto ecgNode = genCS.getECGNode();
+		callgraph->addEdge(currentVisitNode.top(), ecgNode);
 
 		// don't push current node
 		// funcCalls can't have children expect their corresponding funcDecl
@@ -122,10 +129,17 @@ public:	// Visitor Interface
 			return;	// FIXME MZ: calledDecl is not always available
 		}
 
-//		calledDecl = getUniqueDeclaration(tryGetDefiningDeclaration(calledDecl));
-//		// callExp -> call funcDecl
-//		// TODO handle this case!
-//		callgraph->addSgEdge(node, calledDecl);
+		SgFunctionDefinition* calledDef = tryGetDefiningDeclaration(calledDecl)->get_definition();
+		if (calledDef == nullptr) {
+			// no definition -> generate fragment
+			RoseECGConstructSetGenerator genCSCalled;
+			tryGetDefiningDeclaration(calledDecl)->accept(genCSCalled);
+			callgraph->addEdge(ecgNode, genCSCalled.getECGNode());
+		} else {
+			RoseECGConstructSetGenerator genCSCalled;
+			calledDef->accept(genCSCalled);
+			callgraph->addEdge(ecgNode, genCSCalled.getECGNode());
+		}
 	}
 	void preOrderVisit(SgIfStmt* node) {
 		RoseECGConstructSetGenerator genCS;
