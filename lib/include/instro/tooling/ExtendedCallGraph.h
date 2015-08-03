@@ -75,7 +75,7 @@ class ExtendedCallGraph {
 	int getSuccessorCount(ExtendedCallGraphNode* start);
 
  public:
-	void addSgNode(ExtendedCallGraphNode* node);
+	ExtendedCallGraphNode* addSgNode(ExtendedCallGraphNode* node);
 	void swapSgNode(InstRO::Core::ConstructSet oldNode, InstRO::Core::ConstructSet newNode);
 
 	InstRO::Core::ConstructSet getConstructSet(ExtendedCallGraphNode* graphNode);

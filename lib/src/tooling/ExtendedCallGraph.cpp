@@ -25,15 +25,11 @@ void ExtendedCallGraph::addEdge(ExtendedCallGraphNode* from, ExtendedCallGraphNo
 	assert(from);
 	assert(to);
 
-	if (predecessors.find(from) == predecessors.end()) {
-		addSgNode(from);
-	}
+	auto realFrom = addSgNode(from);
+	auto realTo = addSgNode(to);
 
-	if (predecessors.find(to) == predecessors.end()) {
-		addSgNode(to);
-	}
-	predecessors[to].insert(from);
-	successors[from].insert(to);
+	predecessors[realTo].insert(realFrom);
+	successors[realFrom].insert(realTo);
 }
 
 void ExtendedCallGraph::removeNode(ExtendedCallGraphNode* node, bool redirectEdges) {
@@ -85,18 +81,16 @@ int ExtendedCallGraph::getSuccessorCount(ExtendedCallGraphNode* start) {
 //// XXX from ROSE EXTENDED CALLGRAPH
 
 
-void ExtendedCallGraph::addSgNode(ExtendedCallGraphNode* node) {
+ExtendedCallGraphNode* ExtendedCallGraph::addSgNode(ExtendedCallGraphNode* node) {
 
-	if (graphNodeToCs.count(node) > 0) {
-
-		assert(graphNodeToCs[node] == node->getAssociatedConstructSet());
-		// already in graph
-		return;
-	}
+	if (csToGraphNode.count(node->getAssociatedConstructSet()) == 0) {
 
 	csToGraphNode[node->getAssociatedConstructSet()] = node;
 	graphNodeToCs[node] = node->getAssociatedConstructSet();
 	addNode(node);
+	}
+		return csToGraphNode[node->getAssociatedConstructSet()];
+
 }
 
 void ExtendedCallGraph::swapSgNode(InstRO::Core::ConstructSet oldNode, InstRO::Core::ConstructSet newNode) {
