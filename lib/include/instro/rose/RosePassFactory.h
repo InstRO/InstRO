@@ -76,6 +76,9 @@ class RosePassFactory : public InstRO::PassFactory {
 	virtual InstRO::Pass* createOpenMPFilter(Pass* input);
 	virtual InstRO::Pass* createOpenMPOpariCannonizer(Pass* input);
 	virtual InstRO::Pass* createOPARIAdapter(Pass* input);
+
+	virtual InstRO::Pass* createUniqueCallpathTransformer(Pass* input);
+
 	// Adapter
 	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input);
 	virtual InstRO::Pass* createConstructPrinter(InstRO::Pass* pass);
