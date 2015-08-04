@@ -15,9 +15,18 @@ ExtendedCallGraph::~ExtendedCallGraph() {
 	// TODO
 }
 
-void ExtendedCallGraph::addNode(ExtendedCallGraphNode* node) {
+ExtendedCallGraphNode* ExtendedCallGraph::addNode(ExtendedCallGraphNode* node) {
+
+	if (csToGraphNode.count(node->getAssociatedConstructSet()) == 0) {
+
+	csToGraphNode[node->getAssociatedConstructSet()] = node;
+	graphNodeToCs[node] = node->getAssociatedConstructSet();
+
 	predecessors[node] = std::set<ExtendedCallGraphNode*>();
 	successors[node] = std::set<ExtendedCallGraphNode*>();
+	}
+		return csToGraphNode[node->getAssociatedConstructSet()];
+
 }
 
 void ExtendedCallGraph::addEdge(ExtendedCallGraphNode* from, ExtendedCallGraphNode* to) {
@@ -25,8 +34,8 @@ void ExtendedCallGraph::addEdge(ExtendedCallGraphNode* from, ExtendedCallGraphNo
 	assert(from);
 	assert(to);
 
-	auto realFrom = addSgNode(from);
-	auto realTo = addSgNode(to);
+	auto realFrom = addNode(from);
+	auto realTo = addNode(to);
 
 	predecessors[realTo].insert(realFrom);
 	successors[realFrom].insert(realTo);
@@ -52,6 +61,16 @@ void ExtendedCallGraph::removeNode(ExtendedCallGraphNode* node, bool redirectEdg
 
 	predecessors.erase(node);
 	successors.erase(node);
+}
+
+std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getNodeSet(Core::ConstructSet *cs) {
+	std::set<ExtendedCallGraphNode*> returnSet;
+	for (auto node : getNodeSet()) {
+		if (node->getAssociatedConstructSet().intersects(*cs)) {
+			returnSet.insert(node);
+		}
+	}
+	return returnSet;
 }
 
 std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getNodeSet() {
@@ -81,30 +100,19 @@ int ExtendedCallGraph::getSuccessorCount(ExtendedCallGraphNode* start) {
 //// XXX from ROSE EXTENDED CALLGRAPH
 
 
-ExtendedCallGraphNode* ExtendedCallGraph::addSgNode(ExtendedCallGraphNode* node) {
 
-	if (csToGraphNode.count(node->getAssociatedConstructSet()) == 0) {
+void ExtendedCallGraph::swapConstructSet(InstRO::Core::ConstructSet oldCS, InstRO::Core::ConstructSet newCS) {
 
-	csToGraphNode[node->getAssociatedConstructSet()] = node;
-	graphNodeToCs[node] = node->getAssociatedConstructSet();
-	addNode(node);
-	}
-		return csToGraphNode[node->getAssociatedConstructSet()];
-
-}
-
-void ExtendedCallGraph::swapSgNode(InstRO::Core::ConstructSet oldNode, InstRO::Core::ConstructSet newNode) {
-
-	if (csToGraphNode.find(oldNode) == csToGraphNode.end()) {
+	if (csToGraphNode.find(oldCS) == csToGraphNode.end()) {
 		return; // not in graph yet -> nothing to swap
 	}
 
-	ExtendedCallGraphNode* graphNode = csToGraphNode[oldNode];
+	ExtendedCallGraphNode* graphNode = csToGraphNode[oldCS];
 
-	graphNodeToCs[graphNode] = newNode;
+	graphNodeToCs[graphNode] = newCS;
 
-	csToGraphNode.erase(oldNode);
-	csToGraphNode[newNode] = graphNode;
+	csToGraphNode.erase(oldCS);
+	csToGraphNode[newCS] = graphNode;
 
 }
 
@@ -112,8 +120,8 @@ InstRO::Core::ConstructSet ExtendedCallGraph::getConstructSet(ExtendedCallGraphN
 	return graphNodeToCs[graphNode];
 }
 
-ExtendedCallGraphNode* ExtendedCallGraph::getGraphNode(InstRO::Core::ConstructSet sgNode) {
-	return csToGraphNode[sgNode];
+ExtendedCallGraphNode* ExtendedCallGraph::getGraphNode(InstRO::Core::ConstructSet cs) {
+	return csToGraphNode[cs];
 }
 
 void ExtendedCallGraph::dump() {

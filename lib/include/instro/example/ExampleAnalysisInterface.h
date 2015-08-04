@@ -148,7 +148,7 @@ class ExampleGrammarInterface : public InstRO::Tooling::GrammarInterface::Gramma
 
 class ExampleExtendedCallGraph : public InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph {
  public:
-	std::set<InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *> getECGNodes(
+	std::set<InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *> getNodeSet(
 			InstRO::Core::ConstructSet *cs) override {
 		return std::set<InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *>();
 	};
