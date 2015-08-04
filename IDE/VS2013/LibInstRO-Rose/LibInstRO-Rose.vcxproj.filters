@@ -120,7 +120,6 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseNamedConstructAccess.h">
       <Filter>instro\rose\tooling</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Rose\include\rose.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseConstructElevator.h">
       <Filter>instro\rose\tooling</Filter>
     </ClInclude>
@@ -188,6 +187,13 @@
     <ClInclude Include="..\..\..\lib\include\instro\pass\selector\CallPathSelector.h">
       <Filter>instro\pass\selector</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructProvider.h">
+      <Filter>instro\example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\ConstructHierarchyASTDotGenerator.h">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rose.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp">
@@ -214,23 +220,17 @@
     <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp">
       <Filter>instro\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp">
-      <Filter>instro\example</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp">
       <Filter>instro\tooling</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\tooling\ConstructElevator.cpp">
       <Filter>instro\tooling</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\rose_main.cpp">
+    <ClCompile Include="..\..\..\lib\src\roseInstrumentor.cpp">
       <Filter>instro</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp">
       <Filter>instro\support</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\rose\pass\selector\CompoundSelector.cpp">
-      <Filter>instro\rose\pass\selector</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\rose\pass\selector\NameBasedSelector.cpp">
       <Filter>instro\rose\pass\selector</Filter>
@@ -259,8 +259,14 @@
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseGrammarInterface.cpp">
       <Filter>instro\rose\tooling</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClCompile Include="..\..\..\lib\src\tooling\ControlFlowGraph.cpp">
+      <Filter>instro\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\tooling\ExtendedCallGraph.cpp">
+      <Filter>instro\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\selector\CompoundSelector.cpp">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

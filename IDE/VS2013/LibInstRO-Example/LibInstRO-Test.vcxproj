@@ -99,6 +99,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\example\CompoundSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleAnalysisInterface.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructPrinter.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructProvider.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleNamedConstructAccess.h" />
@@ -113,6 +114,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\tooling\AnalysisInterface.h" />
     <ClInclude Include="..\..\..\lib\include\instro\tooling\NamedConstructAccess.h" />
     <ClInclude Include="..\..\..\lib\include\instro\tooling\TransformationInterface.h" />
+    <ClInclude Include="..\LibInstRO-Rose\include\rose.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp" />

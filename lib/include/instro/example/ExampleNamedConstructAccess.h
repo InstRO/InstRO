@@ -22,6 +22,7 @@ class ExampleNamedConstructAccess : public ::InstRO::Tooling::NamedConstructAcce
 		namedConstructs.insert("myGoo");
 		userTextStrings.insert("Hello World\n");
 	};
+
 	std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByIdentifyerName(
 			::InstRO::Tooling::NamedConstructAccess::Matcher &matcher) override {
 		InstRO::Core::ConstructSet *cs = new InstRO::Core::ConstructSet();
@@ -29,7 +30,7 @@ class ExampleNamedConstructAccess : public ::InstRO::Tooling::NamedConstructAcce
 		for (auto identifyer : namedConstructs) {
 			if (matcher.isMatch(identifyer))
 				csci.put(std::make_shared<InstRO::Example::Core::ExampleConstruct>(
-						InstRO::Example::Core::ExampleConstruct(InstRO::Core::ConstructLevelType::CLFunction, identifyer)));
+						InstRO::Example::Core::ExampleConstruct(InstRO::Core::ConstructTraitType::CTFunction, identifyer)));
 		}
 		return std::unique_ptr<InstRO::Core::ConstructSet>(cs);
 	};
@@ -40,7 +41,7 @@ class ExampleNamedConstructAccess : public ::InstRO::Tooling::NamedConstructAcce
 		for (auto identifyer : userTextStrings) {
 			if (matcher.isMatch(identifyer))
 				csci.put(std::make_shared<InstRO::Example::Core::ExampleConstruct>(
-						InstRO::Example::Core::ExampleConstruct(InstRO::Core::ConstructLevelType::CLExpression, identifyer)));
+						InstRO::Example::Core::ExampleConstruct(InstRO::Core::ConstructTraitType::CTExpression, identifyer)));
 		}
 		return std::unique_ptr<InstRO::Core::ConstructSet>(cs);
 	};

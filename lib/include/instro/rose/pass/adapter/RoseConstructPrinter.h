@@ -15,11 +15,11 @@ class RoseConstructPrinter : public RosePassImplementation {
  public:
 	RoseConstructPrinter(InstRO::Pass *pass)
 			: RosePassImplementation(InstRO::Core::ChannelConfiguration(pass)), inputPass(pass) {}
-	virtual void init(){};
-	virtual void execute() override;
-	virtual void finalize(){};
-	virtual void releaseOutput() { outputCS.clear(); };
-	virtual InstRO::Core::ConstructSet *getOutput() { return &outputCS; }
+	void init(){};
+	void execute() override;
+	void finalize(){};
+	void releaseOutput() { outputCS.clear(); };
+	InstRO::Core::ConstructSet *getOutput() { return &outputCS; }
 };
 }
 }

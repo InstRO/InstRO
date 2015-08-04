@@ -59,7 +59,7 @@ InstRO::Core::ChannelConfiguration UniqueCallpathTransformer::createChannelConfi
     if (active) {
         passes.push_back(active);
     }
-    return InstRO::Core::ChannelConfiguration(passes.begin(), passes.end(), InstRO::Core::CLFunction, InstRO::Core::CLFunction);
+    return InstRO::Core::ChannelConfiguration(passes.begin(), passes.end(), ::InstRO::Core::ConstructTraitType::CTFunction, ::InstRO::Core::ConstructTraitType::CTFunction);
 }
 
 UniqueCallpathTransformer::FunctionDeclarationSet UniqueCallpathTransformer::retrieveMarkedFunctions(InstRO::Pass *pass)
@@ -70,7 +70,6 @@ UniqueCallpathTransformer::FunctionDeclarationSet UniqueCallpathTransformer::ret
     for (auto construct : cs) {
         auto rc = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
         result.insert(isSgFunctionDeclaration(rc->getNode()));
-        std::cout << rc->getLevel() << std::endl;
     }
 
     return result;
@@ -116,7 +115,6 @@ void UniqueCallpathTransformer::execute() {
     markedNodes.reserve(inputCS.size());
     for (auto construct : inputCS) {
         auto rc = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
-        std::cout << rc->getLevel() << " " << SageInterface::get_name(rc->getNode()) << std::endl;
         if (SgFunctionDeclaration *markedDecl = isSgFunctionDeclaration(rc->getNode())) {
             markedNodes.insert(manager->getCallGraphNode(markedDecl));
         } else if (SgFunctionDefinition *markedDef = isSgFunctionDefinition(rc->getNode())) {
@@ -341,10 +339,10 @@ void  UniqueCallpathTransformer::duplicate(SgGraphNode *node, NodeFunctionDeclar
 
         InstRO::InfracstructureInterface::ConstructSetCompilerInterface output (&outputCS);
         // add the duplicate to the output of the transformer
-        output.put(std::make_shared<InstRO::Rose::Core::RoseConstruct>(clonedFunction->get_definition()));
-        // add the statements containing the redirected function calls to the output
+        output.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(clonedFunction->get_definition()));
+        // add the redirected function calls to the output
         for (SgFunctionCallExp *funCall : renamingProvider.getFoundFunctionCalls()) {
-            output.put(std::make_shared<InstRO::Rose::Core::RoseConstruct>(SageInterface::getEnclosingStatement(funCall)));
+            output.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(funCall));
         }
     }
 }

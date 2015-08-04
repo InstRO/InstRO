@@ -120,9 +120,6 @@
     <ClInclude Include="..\..\..\lib\include\instro\example\NameBasedSelector.h">
       <Filter>include\instro\example\passes</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro.h">
-      <Filter>source\lib</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h">
       <Filter>source\lib</Filter>
     </ClInclude>
@@ -141,6 +138,13 @@
     <ClInclude Include="..\..\..\lib\include\instro\pass\selector\CallPathSelector.h">
       <Filter>include\instro\example\passes</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructProvider.h">
+      <Filter>include\instro\example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibInstRO-Rose\include\rose.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\example\ExampleConstructSet.cpp">

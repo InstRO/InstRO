@@ -34,7 +34,7 @@ std::unique_ptr<InstRO::Core::ConstructSet> RoseGrammarInterface::getConstructsB
 					std::string(" not implemented\t") + std::string(__FILE__) + std::string(", line ") + std::to_string(__LINE__);
 			break;
 	}
-	for (auto node : nodes) {	// std::vector<SgNode*>::iterator it = nodes.begin(); it != nodes.end(); it++){
+	for (auto node : nodes) {
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
 	}
 	return retSet;
