@@ -105,11 +105,11 @@ public:
 public:	// Visitor Interface
 	void preOrderVisit(SgFunctionDefinition* node) {
 
-		// XXX: we have to use DEFINITIONS here
 		RoseECGConstructSetGenerator genCS;
 		node->accept(genCS);
 		auto ecgNode = genCS.getECGNode();
-		callgraph->addSgNode(ecgNode);
+		// add node so it is not missing, if it has no children
+		callgraph->addNode(ecgNode);
 
 		currentVisitNode.push(ecgNode);
 	}
@@ -142,39 +142,19 @@ public:	// Visitor Interface
 		}
 	}
 	void preOrderVisit(SgIfStmt* node) {
-		RoseECGConstructSetGenerator genCS;
-		node->accept(genCS);
-
-		callgraph->addEdge(currentVisitNode.top(), genCS.getECGNode());
-		currentVisitNode.push(callgraph->getGraphNode(genCS.getConstructSet()));
+		defaultPreOrderBehavior(node);
 	}
 	void preOrderVisit(SgSwitchStatement* node) {
-		RoseECGConstructSetGenerator genCS;
-		node->accept(genCS);
-
-		callgraph->addEdge(currentVisitNode.top(), genCS.getECGNode());
-		currentVisitNode.push(callgraph->getGraphNode(genCS.getConstructSet()));
+		defaultPreOrderBehavior(node);
 	}
 	void preOrderVisit(SgForStatement* node) {
-		RoseECGConstructSetGenerator genCS;
-		node->accept(genCS);
-
-		callgraph->addEdge(currentVisitNode.top(), genCS.getECGNode());
-		currentVisitNode.push(callgraph->getGraphNode(genCS.getConstructSet()));
+		defaultPreOrderBehavior(node);
 	}
 	void preOrderVisit(SgWhileStmt* node) {
-		RoseECGConstructSetGenerator genCS;
-		node->accept(genCS);
-
-		callgraph->addEdge(currentVisitNode.top(), genCS.getECGNode());
-		currentVisitNode.push(callgraph->getGraphNode(genCS.getConstructSet()));
+		defaultPreOrderBehavior(node);
 	}
 	void preOrderVisit(SgDoWhileStmt* node) {
-		RoseECGConstructSetGenerator genCS;
-		node->accept(genCS);
-
-		callgraph->addEdge(currentVisitNode.top(), genCS.getECGNode());
-		currentVisitNode.push(callgraph->getGraphNode(genCS.getConstructSet()));
+		defaultPreOrderBehavior(node);
 	}
 	void preOrderVisit(SgBasicBlock* node) {
 		// skip fileScope
@@ -212,9 +192,8 @@ public:	// Visitor Interface
 		currentVisitNode.pop();
 	}
 	void postOrderVisit(SgBasicBlock* node) {
-		// skip fileScope
 		if (!InstRO::Rose::Core::RoseConstructLevelPredicates::CLScopeStatementPredicate()(node)) {
-			return;
+			return;	// skip fileScope
 		}
 		currentVisitNode.pop();
 	}
@@ -264,22 +243,24 @@ public:	// Visitor Interface
 private:
 	ExtendedCallGraph* callgraph;
 
-	std::stack<SgNode*> currentVisit;	// currently visited path
 	std::stack<ExtendedCallGraphNode*>  currentVisitNode;
+
 	std::map<std::string, SgFunctionDeclaration*> uniqueDecls;	// unique function-declaration per function
+	std::map<std::string, ExtendedCallGraphNode*> uniqueNodes;	// unique graph node per mangled function name
 
 private:
-	InstRO::Core::ConstructSet generateConstructSet(SgNode* node) {
+	ExtendedCallGraphNode* defaultPreOrderBehavior(SgNode* node) {
 		RoseECGConstructSetGenerator genCS;
 		node->accept(genCS);
-		return genCS.getConstructSet();
+
+		callgraph->addEdge(currentVisitNode.top(), genCS.getECGNode());
+		currentVisitNode.push(callgraph->getGraphNode(genCS.getConstructSet()));
 	}
 
 	SgFunctionDeclaration* getDefiningDeclaration(SgFunctionDeclaration* oldDecl) {
 		SgDeclarationStatement* definingDecl = oldDecl->get_definingDeclaration();
 		return isSgFunctionDeclaration(definingDecl);
 	}
-
 
 	SgFunctionDeclaration* tryGetDefiningDeclaration(SgFunctionDeclaration* oldDecl) {
 		SgFunctionDeclaration* definingDecl = getDefiningDeclaration(oldDecl);
@@ -347,8 +328,8 @@ private:
 		return ss.str();
 	}
 
-//	SgFunctionDeclaration* getUniqueDeclaration(SgFunctionDeclaration* funcDecl) {
-//		funcDecl = tryGetDefiningDeclaration(funcDecl);
+//	SgFunctionDeclaration* getUniqueDeclaration(SgFunctionDeclaration* fDecl) {
+//		SgFunctionDeclaration* funcDecl = tryGetDefiningDeclaration(fDecl);
 //		std::string mangledName = funcDecl->get_mangled_name();
 //
 //		if (uniqueDecls.find(mangledName) != uniqueDecls.end()) {

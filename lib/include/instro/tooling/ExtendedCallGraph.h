@@ -51,27 +51,20 @@ class ExtendedCallGraph {
 	ExtendedCallGraph();
 	~ExtendedCallGraph();
 
-	virtual std::set<ExtendedCallGraphNode*> getECGNodes(Core::ConstructSet *cs) {
-		std::set<ExtendedCallGraphNode*> returnSet;
-		for (auto node : getNodeSet()) {
-			if (node->getAssociatedConstructSet().intersects(*cs)) {
-				returnSet.insert(node);
-			}
-		}
-		return returnSet;
-	}
+	virtual std::set<ExtendedCallGraphNode*> getNodeSet(Core::ConstructSet *cs);
 
-	void addNode(ExtendedCallGraphNode* node);
 	void addEdge(ExtendedCallGraphNode* from, ExtendedCallGraphNode* to);
+	ExtendedCallGraphNode* addNode(ExtendedCallGraphNode* node);
+	void swapConstructSet(InstRO::Core::ConstructSet oldCS, InstRO::Core::ConstructSet newCS);
 
 	/** redirect edges of pred and succ if true */
 	void removeNode(ExtendedCallGraphNode* node, bool redirectEdges);
 
-	std::set<ExtendedCallGraphNode*> getNodeSet();
 
 	/** predicate is a functional with parameters(ExtendedCallGraphNode*, ExtendedCallGraph*) */
 	template <typename T>
 	std::set<ExtendedCallGraphNode*> getNodeSet(T& predicate);
+	std::set<ExtendedCallGraphNode*> getNodeSet();
 
 
 	std::set<ExtendedCallGraphNode*> getPredecessors(ExtendedCallGraphNode* start);
@@ -79,12 +72,8 @@ class ExtendedCallGraph {
 	int getPredecessorCount(ExtendedCallGraphNode* start);
 	int getSuccessorCount(ExtendedCallGraphNode* start);
 
- public:
-	ExtendedCallGraphNode* addSgNode(ExtendedCallGraphNode* node);
-	void swapSgNode(InstRO::Core::ConstructSet oldNode, InstRO::Core::ConstructSet newNode);
-
 	InstRO::Core::ConstructSet getConstructSet(ExtendedCallGraphNode* graphNode);
-	ExtendedCallGraphNode* getGraphNode(InstRO::Core::ConstructSet sgNode);
+	ExtendedCallGraphNode* getGraphNode(InstRO::Core::ConstructSet cs);
 
 	void dump();
 
@@ -99,7 +88,6 @@ class ExtendedCallGraph {
 	std::map<ExtendedCallGraphNode*, std::set<ExtendedCallGraphNode*> > predecessors;
 	std::map<ExtendedCallGraphNode*, std::set<ExtendedCallGraphNode*> > successors;
 
-	///TODO rename
 	std::map<InstRO::Core::ConstructSet, ExtendedCallGraphNode*> csToGraphNode;
 	std::map<ExtendedCallGraphNode*, InstRO::Core::ConstructSet> graphNodeToCs;
 };
