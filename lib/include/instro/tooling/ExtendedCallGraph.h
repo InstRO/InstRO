@@ -51,9 +51,14 @@ class ExtendedCallGraph {
 	ExtendedCallGraph();
 	~ExtendedCallGraph();
 
-	// TODO implement
 	virtual std::set<ExtendedCallGraphNode*> getECGNodes(Core::ConstructSet *cs) {
-		return std::set<ExtendedCallGraphNode*>();
+		std::set<ExtendedCallGraphNode*> returnSet;
+		for (auto node : getNodeSet()) {
+			if (node->getAssociatedConstructSet().intersects(*cs)) {
+				returnSet.insert(node);
+			}
+		}
+		return returnSet;
 	}
 
 	void addNode(ExtendedCallGraphNode* node);
