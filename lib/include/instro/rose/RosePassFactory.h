@@ -12,6 +12,7 @@
 // #include "instro/rose/pass/adapter/GenericAdapter.h"
 // #include "instro/rose/pass/adapter/CygProfileAdapter.h"
 #include "instro/rose/pass/adapter/RoseConstructPrinter.h"
+#include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
 
 #include "rose.h"
 
@@ -19,6 +20,10 @@ namespace InstRO {
 namespace Rose {
 
 class RosePassFactory : public InstRO::PassFactory {
+ public:
+	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) : PassFactory(refManager), project(proj) {}
+	virtual ~RosePassFactory() {}
+
  protected:
 	RosePassImplementation* getPass(Pass* pass) {
 		if (pass == NULL)
@@ -49,8 +54,7 @@ class RosePassFactory : public InstRO::PassFactory {
 	};
 
  public:
-	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) : PassFactory(refManager), project(proj){};
-
+	virtual InstRO::Pass* createConstructHierarchyASTDotGenerator(InstRO::Pass* pass, std::string fileName);
 	virtual InstRO::Pass* createProgramEntrySelector();
 	virtual InstRO::Pass* createFunctionSelector();
 	// Text Based Selection in Various Flavors
@@ -69,8 +73,8 @@ class RosePassFactory : public InstRO::PassFactory {
 	// Call Path Based selection
 	virtual InstRO::Pass* createCallPathSelector(InstRO::Pass* callees, InstRO::Pass* caller);
 	// Elevator Selectors
-	virtual InstRO::Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructLevelType level);
-	virtual InstRO::Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructLevelType level);
+	virtual InstRO::Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
+	virtual InstRO::Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
 	// OpenMP Stuff
 	virtual InstRO::Pass* createOpenMPSelector();
 	virtual InstRO::Pass* createOpenMPFilter(Pass* input);

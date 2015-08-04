@@ -4,6 +4,7 @@
 #include "instro/pass/selector/TextStringSelector.h"
 #include "instro/pass/selector/ProgramEntrySelector.h"
 #include "instro/pass/selector/CallPathSelector.h"
+#include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
 #include "instro/rose/pass/transformer/UniqueCallpathTransformer.h"
 #include "instro/rose/RosePassFactory.h"
 
@@ -11,10 +12,16 @@
 
 namespace InstRO {
 namespace Rose {
+InstRO::Pass* RosePassFactory::createConstructHierarchyASTDotGenerator(InstRO::Pass* pass, std::string fileName) {
+	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructHierarchyASTDotGenerator(pass, fileName));
+	newPass->setPassName("InstRO::Rose::Adapter::ConstructHierarchyASTDotGenerator.h");
+	passManager->registerPass(newPass);
+	return newPass;
+}
 
 // CI: beta
 InstRO::Pass* RosePassFactory::createConstructLoweringElevator(InstRO::Pass* pass,
-																															 InstRO::Core::ConstructLevelType level) {
+																															 InstRO::Core::ConstructTraitType level) {
 	Pass* newPass = new Pass(new InstRO::Rose::Selector::ConstructLoweringElevator(pass, level));
 	newPass->setPassName("InstRO::Rose::Selector::ConstructLoweringElevator");
 	passManager->registerPass(newPass);
@@ -22,7 +29,7 @@ InstRO::Pass* RosePassFactory::createConstructLoweringElevator(InstRO::Pass* pas
 }
 
 // CI: beta
-Pass* RosePassFactory::createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructLevelType level) {
+Pass* RosePassFactory::createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) {
 	Pass* newPass = new Pass(new InstRO::Rose::Selector::ConstructRaisingElevator(pass, level));
 	newPass->setPassName("InstRO::Rose::Selector::ConstructRaisingElevator");
 	passManager->registerPass(newPass);
@@ -55,6 +62,12 @@ Pass* RosePassFactory::createFunctionBlackAndWhiteListSelector(std::vector<std::
 
 	return compountPass;
 }
+
+InstRO::Pass* createFunctionBlackAndWhiteListFilter(std::vector<std::string> rules, Pass* inputPasses) {
+	throw std::string("Not yet Implemented");
+	return nullptr;
+}
+
 /*
 Pass* RosePassFactory::createBlackNWhiteSelector(std::string string) {
 	std::vector<std::string> filters;

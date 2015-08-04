@@ -4,21 +4,73 @@
 	 The RoseConstructProvider produces constructs based on the AST.
 */
 
-#include "instro/core/ConstructSet.h"
+#include <iostream>
 #include <map>
+#include <boost/algorithm/string.hpp>
 
 #include "rose.h"
+#include "instro/core/ConstructSet.h"
 
 namespace InstRO {
 namespace Rose {
 namespace Core {
 
 namespace RoseConstructLevelPredicates {
-struct CLExpressionPredicate {
-	bool operator()(SgNode* n) const { return isSgExpression(n) != nullptr; }
+struct CTPredicate {
+	virtual bool operator()(SgNode* n) const {
+		// RN: TODO will this actually work with a base implementation?
+		return false;
+	}
+	virtual ~CTPredicate() {}
 };
 
-struct CLLoopPredicate {
+struct DefinedVariableDeclarationPredicate {
+	///XXX that is so dumb, there has to be an easier way
+	bool operator()(SgNode* n) const {
+		auto initNames = isSgVariableDeclaration(n)->get_variables();
+		return initNames[0]->get_initptr() != nullptr;
+	}
+};
+
+struct CLExpressionPredicate : public CTPredicate {
+	bool operator()(SgNode* n) const {
+		if (isSgExprListExp(n) != nullptr)
+			return false;
+		if (isSgFunctionRefExp(n) != nullptr)
+			return false;
+		if (isSgFunctionCallExp(n) != nullptr)
+			return true;
+		// for variables and values, we only accept as instrumentable, if the expression itself has an observable effect,
+		// e.g. as conditional in an if or for
+		if (isSgIntVal(n) != nullptr || isSgStringVal(n) != nullptr || isSgVarRefExp(n) != nullptr) {
+			// In Rose this is TRUE !!if!! the parent of the stmt is an SgExprStatement and the parent(parent) is either the for loops
+			// conditional or the conditional of an if or while
+			SgNode* parent = n->get_parent();
+			if (parent == nullptr)
+				return false;
+			if (isSgExprStatement(parent) == nullptr)
+				return false;
+			SgNode* grandParent = parent->get_parent();
+			if (grandParent == nullptr)
+				return false;
+			if (isSgIfStmt(grandParent) != nullptr && isSgIfStmt(grandParent)->get_conditional() == parent)
+				return true;
+			else if (isSgForStatement(grandParent) != nullptr && isSgForStatement(grandParent)->get_test() == parent)
+				return true;
+			else if (isSgDoWhileStmt(grandParent) && isSgDoWhileStmt(grandParent)->get_condition() == parent)
+				return true;
+			else if (isSgWhileStmt(grandParent) && isSgWhileStmt(grandParent)->get_condition() == parent)
+				return true;
+			else
+				return false;
+		}
+		if (isSgCastExp(n) != nullptr)
+			return false;
+		return isSgExpression(n) != nullptr;
+	}
+};
+
+struct CLLoopPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		if (isSgDoWhileStmt(n) || isSgWhileStmt(n) || isSgForStatement(n)) {
 			return true;
@@ -27,7 +79,7 @@ struct CLLoopPredicate {
 	}
 };
 
-struct CLConditionalPredicate {
+struct CLConditionalPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		if (isSgIfStmt(n) || isSgSwitchStatement(n)) {
 			return true;
@@ -36,7 +88,7 @@ struct CLConditionalPredicate {
 	}
 };
 
-struct CLScopeStatementPredicate {
+struct CLScopeStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		// ignore function scopes
 		if (isSgBasicBlock(n) && !isSgFunctionDefinition(n->get_parent())) {
@@ -46,14 +98,16 @@ struct CLScopeStatementPredicate {
 	}
 };
 
-struct CLStatementPredicate {
+struct CLStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		if (isSgDeclarationStatement(n)) {
-			if (isSgVariableDeclaration(n) && (isSgVariableDeclaration(n)->get_definition() != nullptr)) {
+			if (isSgVariableDeclaration(n) && DefinedVariableDeclarationPredicate()(n)) {
 				return true;	// only variable declarations with initializer
 			}
 			return false;
 		}
+		if (isSgIfStmt(n) || isSgSwitchStatement(n) || isSgDoWhileStmt(n) || isSgWhileStmt(n) || isSgForStatement(n))
+			return true;
 
 		if (isSgScopeStatement(n)) {
 			if (CLScopeStatementPredicate()(n)) {
@@ -69,19 +123,19 @@ struct CLStatementPredicate {
 	}
 };
 
-struct CLFunctionPredicate {
+struct CLFunctionPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const { return isSgFunctionDefinition(n) != nullptr; }
 };
 
-struct CLFileScopePredicate {
+struct CLFileScopePredicate : public CTPredicate {
 	bool operator()(SgNode* n) const { return isSgFile(n) != nullptr; }
 };
 
-struct CLGlobalScopePredicate {
+struct CLGlobalScopePredicate : public CTPredicate {
 	bool operator()(SgNode* n) const { return isSgProject(n) != nullptr; }
 };
 
-struct CLSimpleStatementPredicate {
+struct CLSimpleStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		if (CLStatementPredicate()(n)) {
 			if (CLScopeStatementPredicate()(n) || CLConditionalPredicate()(n) || CLLoopPredicate()(n)) {
@@ -94,80 +148,100 @@ struct CLSimpleStatementPredicate {
 	}
 };
 
-struct WrappableConstructPredicate {
-	bool operator()(SgNode* n) const {
-		return isSgBasicBlock(n->get_parent());
-	}
+struct CTWrappableStatementPredicate : public CTPredicate {
+	bool operator()(SgNode* n) const { return (isSgBasicBlock(n->get_parent()) != nullptr); }
 };
 
-struct InstrumentableConstructPredicate {
+struct InstrumentableConstructPredicate : public CTPredicate {
 	// TODO: how exactly is this defined?
 	bool operator()(SgNode* n) const;
 };
 
-struct ConstructPredicate {
+struct ConstructPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
-		return CLGlobalScopePredicate()(n) || CLFileScopePredicate()(n) || CLFunctionPredicate()(n)
-				|| CLStatementPredicate()(n) || CLExpressionPredicate()(n);
+		return CLGlobalScopePredicate()(n) || CLFileScopePredicate()(n) || CLFunctionPredicate()(n) ||
+					 CLStatementPredicate()(n) || CLExpressionPredicate()(n);
 	}
 };
+
+
+//// TODO actually use that mechanism
+CTPredicate getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType);
+
 }	// namespace RoseConstructLevelPredicates
 
 class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
  public:
-	ConstructGenerator() : cl(InstRO::Core::ConstructLevelType::CLNotALevel) {};
-	InstRO::Core::ConstructLevelType getCLT() { return cl; }
+	ConstructGenerator() : ct(InstRO::Core::ConstructTraitType::CTNoTraits){};
+	InstRO::Core::ConstructTrait getConstructTraits() { return ct; }
 
 	// global scope
-	void visit(SgProject* node) {
-		cl = InstRO::Core::ConstructLevelType::CLGlobalScope;
-	}
+	void visit(SgProject* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTGlobalScope); }
 
 	// file scope
-	void visit(SgSourceFile* node) {
-		cl = InstRO::Core::ConstructLevelType::CLFileScope;
-	}
+	void visit(SgSourceFile* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFileScope); }
 
 	// function
-	void visit(SgFunctionDefinition* node) { cl = InstRO::Core::ConstructLevelType::CLFunction; }
+	void visit(SgFunctionDefinition* node) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFunction);
+	}
 
 	// conditionals
-	void visit(SgIfStmt* node) { cl = InstRO::Core::ConstructLevelType::CLConditionalStatement; }
-	void visit(SgSwitchStatement* node) { cl = InstRO::Core::ConstructLevelType::CLConditionalStatement; }
+	void visit(SgIfStmt* node) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTConditionalStatement);
+		handleWrappableCheck(node);
+	}
+	void visit(SgSwitchStatement* node) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTConditionalStatement);
+		handleWrappableCheck(node);
+	}
 
 	// loops
-	void visit(SgForStatement* node) { cl = InstRO::Core::ConstructLevelType::CLLoopStatement; }
-	void visit(SgWhileStmt* node) { cl = InstRO::Core::ConstructLevelType::CLLoopStatement; }
-	void visit(SgDoWhileStmt* node) { cl = InstRO::Core::ConstructLevelType::CLLoopStatement; }
+	void visit(SgForStatement* node) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTLoopStatement);
+		handleWrappableCheck(node);
+	}
+	void visit(SgWhileStmt* node) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTLoopStatement);
+		handleWrappableCheck(node);
+	}
+	void visit(SgDoWhileStmt* node) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTLoopStatement);
+		handleWrappableCheck(node);
+	}
 
 	// scopes
 	void visit(SgBasicBlock* node) {
 		if (RoseConstructLevelPredicates::CLConditionalPredicate()(node)) {
-			cl = InstRO::Core::ConstructLevelType::CLScopeStatement;
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTScopeStatement);
+			handleWrappableCheck(node);
 		} else {
 			generateError(node);
 		}
 	}
 
 	// statements
-	// TODO: any other statements that are not simple?
 	void visit(SgStatement* node) {
 		if (RoseConstructLevelPredicates::CLSimpleStatementPredicate()(node)) {
-			cl = InstRO::Core::ConstructLevelType::CLSimpleStatement;
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTSimpleStatement);
+			handleWrappableCheck(node);
+		} else {
+			generateError(node);
+		}
+	}
+
+	void visit(SgVariableDeclaration* node) {
+		// CI: an initialized variable declaration is OK,
+		if (RoseConstructLevelPredicates::DefinedVariableDeclarationPredicate()(node)) {
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTSimpleStatement);
+			handleWrappableCheck(node);
 		} else {
 			generateError(node);
 		}
 	}
 
 	// expressions
-	void visit(SgExpression* node) { cl = InstRO::Core::ConstructLevelType::CLExpression; }
-	// CI: an initialized variable declaration is OK,
-	void visit(SgVariableDeclaration* n) {
-		if (n->get_definition()) {
-			cl = InstRO::Core::ConstructLevelType::CLSimpleStatement;
-		} else
-			generateError(n);
-	}
+	void visit(SgExpression* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTExpression); }
 
 	// this should be an error
 	void visit(SgScopeStatement* node) { generateError(node); }
@@ -175,7 +249,14 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	void visit(SgNode* node) { generateError(node); }
 
  private:
-	InstRO::Core::ConstructLevelType cl;
+	InstRO::Core::ConstructTrait ct;
+
+	void handleWrappableCheck(SgNode* node) {
+		ct.add(InstRO::Core::ConstructTraitType::CTStatement);
+		if (RoseConstructLevelPredicates::CTWrappableStatementPredicate()(node)) {
+			ct.add(InstRO::Core::ConstructTraitType::CTWrappableStatement);
+		}
+	}
 
 	void generateError(SgNode* node) {
 		std::cout << "# Encountered error case in ConstructGenerator. " << node->class_name() << "\t"
@@ -185,22 +266,57 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 class RoseConstruct : public InstRO::Core::Construct {
  public:
-	RoseConstruct(SgNode* sgnode) : Construct(InstRO::Core::ConstructLevelType::CLNotALevel), node(sgnode) {
-		if (sgnode == nullptr) {
-			construct_level = InstRO::Core::ConstructLevelType::CLNotALevel;	// XXX necessary?
+	RoseConstruct(SgNode* sgnode, InstRO::Core::ConstructTrait traits) : InstRO::Core::Construct(traits), node(sgnode) {}
+	virtual ~RoseConstruct() {}
+
+	size_t getID() const { return (size_t)node; }
+	SgNode* getNode() const { return node; }
+
+	virtual std::string toString() const override {
+		return "RoseConstruct: " + node->class_name() + ": " + node->unparseToString();
+	}
+
+	virtual std::string toDotString() const override {
+		if (isSgFunctionDefinition(node)) {	// don't print whole function
+			return isSgFunctionDefinition(node)->get_declaration()->get_name().getString();
 		} else {
-			ConstructGenerator gen;
-			node->accept(gen);
-			construct_level = gen.getCLT();
+			std::string dotString(node->unparseToString());
+			// escape " and \n (e.g. in string literals)
+			boost::replace_all(dotString, "\n", "\\n");
+			boost::replace_all(dotString, "\"", "\\\"");
+			return dotString;
 		}
 	}
 
-	virtual ~RoseConstruct() {}
+ private:
+	SgNode* node;
+};
 
-	::SgNode* getNode() const { return node; }
+class RoseFragment : public RoseConstruct {
+ public:
+	RoseFragment(SgNode* associatedNode, Sg_File_Info* info)
+			: RoseConstruct(associatedNode, InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFragment)),
+				info(info) {}
+
+	~RoseFragment() {}
+
+	size_t getID() const { return (size_t)info; };
+	Sg_File_Info* getFileInfo() { return info; }
+
+	std::string toString() const override {
+		std::stringstream ss;
+		ss << "RoseFragment line:" << info->get_line() << " col:" << info->get_col();
+		return ss.str();
+	}
+
+	std::string toDotString() const override {
+		std::stringstream ss;
+		ss << "line:" << info->get_line() << " col:" << info->get_col();
+		return ss.str();
+	}
 
  private:
-	::SgNode* node;
+	Sg_File_Info* info;
 };
 
 class RoseConstructProvider {
@@ -210,16 +326,32 @@ class RoseConstructProvider {
 		return instance;
 	}
 
+	std::shared_ptr<RoseConstruct> getFragment(SgNode* node, Sg_File_Info* fileInfo) {
+		if (node == nullptr || fileInfo == nullptr) {
+			throw std::string("RoseConstructProvider: attempted to getFragment for nullptr");
+		}
+
+		if (mapping.find(fileInfo) == mapping.end()) {
+			std::cout << "\tcreating new construct" << std::endl;
+			mapping[fileInfo] = std::make_shared<RoseFragment>(RoseFragment(node, fileInfo));
+		}
+		return mapping[fileInfo];
+	}
+
 	std::shared_ptr<RoseConstruct> getConstruct(SgNode* node) {
 		std::cout << "getConstruct(" << node << ")" << std::endl;
-		if (mapping.find(node) != mapping.end()) {
-			std::cout << "\tfound existing Construct" << std::endl;
-			return mapping[node];
+		if (node == nullptr) {
+			throw std::string("RoseConstructProvider: attempted to getConstruct for nullptr");
 		}
-		std::cout << "\tcreating new construct" << std::endl;
-		std::shared_ptr<RoseConstruct> construct = std::shared_ptr<RoseConstruct>(new RoseConstruct(node));
-		mapping[node] = construct;
-		return construct;
+
+		if (mapping.find(node) == mapping.end()) {
+			std::cout << "\tcreating new construct" << std::endl;
+
+			ConstructGenerator gen;
+			node->accept(gen);
+			mapping[node] = std::make_shared<RoseConstruct>(RoseConstruct(node, gen.getConstructTraits()));
+		}
+		return mapping[node];
 	}
 
  private:

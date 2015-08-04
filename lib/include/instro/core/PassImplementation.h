@@ -34,8 +34,9 @@ std::unordered_map<InstRO::Pass *, InstRO::Core::ConstructSet *> pToCMap;
 class ChannelConfiguration {
  protected:
 	std::vector<Pass *> inputChannelPasses;
-	std::unordered_map<Pass *, Core::ContstructLevelEnum> inputChannelMin;
-	std::unordered_map<Pass *, Core::ContstructLevelEnum> inputChannelMax;
+	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMin;
+	// std::unordered_map<Pass *, ContstructTraitType> inputChannelMin;
+	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMax;
 
  public:
 	// CI: Empty Configuration - No Input Passes used
@@ -43,8 +44,8 @@ class ChannelConfiguration {
 
 	ChannelConfiguration(Pass *p1) {
 		inputChannelPasses.push_back(p1);
-		inputChannelMin[p1] = ::InstRO::Core::ContstructLevelEnum::CLMin;
-		inputChannelMax[p1] = ::InstRO::Core::ContstructLevelEnum::CLMax;
+		inputChannelMin[p1] = ::InstRO::Core::ConstructTraitType::CTMin;
+		inputChannelMax[p1] = ::InstRO::Core::ConstructTraitType::CTMax;
 	}
 
 	template <class... PassList>
@@ -53,7 +54,7 @@ class ChannelConfiguration {
 	}
 
 	template <class Iterator>
-	ChannelConfiguration(Iterator begin, Iterator end, Core::ContstructLevelEnum minLevel, Core::ContstructLevelEnum maxLevel) {
+	ChannelConfiguration(Iterator begin, Iterator end, InstRO::Core::ConstructTraitType minLevel, InstRO::Core::ConstructTraitType maxLevel) {
         for (Iterator iter = begin; iter != end; ++iter) {
             inputChannelPasses.push_back(*iter);
             inputChannelMin[*iter] = minLevel;
@@ -63,8 +64,8 @@ class ChannelConfiguration {
 
 	struct PassMinMaxSequenceHelper {
 		::InstRO::Pass *pass;
-		::InstRO::Core::ConstructLevelType min;
-		::InstRO::Core::ConstructLevelType max;
+		::InstRO::Core::ConstructTraitType min;
+		::InstRO::Core::ConstructTraitType max;
 	};
 
 	template <class... PassList>
@@ -76,13 +77,13 @@ class ChannelConfiguration {
 		}
 	}
 
-	void setConstructLevel(Pass *inputPass, ::InstRO::Core::ContstructLevelEnum minLevel,
-												 ::InstRO::Core::ContstructLevelEnum maxLevel) {
+	void setConstructLevel(Pass *inputPass, ::InstRO::Core::ConstructTraitType minLevel,
+												 ::InstRO::Core::ConstructTraitType maxLevel) {
 		inputChannelMin[inputPass] = minLevel;
 		inputChannelMax[inputPass] = maxLevel;
 	}
-	::InstRO::Core::ContstructLevelEnum getMinConstructLevel(Pass *inputPass) { return inputChannelMin[inputPass]; }
-	::InstRO::Core::ContstructLevelEnum getMaxConstructLevel(Pass *inputPass) { return inputChannelMax[inputPass]; }
+	::InstRO::Core::ConstructTraitType getMinConstructLevel(Pass *inputPass) { return inputChannelMin[inputPass]; }
+	::InstRO::Core::ConstructTraitType getMaxConstructLevel(Pass *inputPass) { return inputChannelMax[inputPass]; }
 	std::vector<::InstRO::Pass *> const getPasses() { return inputChannelPasses; };
 };
 
@@ -92,47 +93,37 @@ class ChannelConfiguration {
  * Using the getInput(passId) one can retrieve the ConstructSet of one of the
  * predecessors.
  */
-
 class PassImplementation {
- private:
-	Core::ChannelConfiguration cfg;
-
- protected:
-	Core::ChannelConfiguration &getChannelCFG() { return cfg; }
-
-	// This set is used to track alterations to the AST and notify which nodes have been invaldated
-	std::unique_ptr<InstRO::Core::ConstructSet> collisionSet;
-
  public:
-	Core::ChannelConfiguration channelCFG() { return cfg; }
-
-	PassImplementation(Core::ChannelConfiguration cfg)
-			: cfg(cfg), collisionSet(std::make_unique<InstRO::Core::ConstructSet>()) {}
+	PassImplementation(ChannelConfiguration channelConfig)
+			: channelConfig(channelConfig), collisionSet(std::make_unique<ConstructSet>()) {}
 	PassImplementation() = delete;
+	virtual ~PassImplementation() {}
 
-	/*	void setInputAggregation(InstRO::Core::Support::InputAggregation ia) {
-			this->ia = ia;
-		}*/
 	virtual void init() = 0;
 	virtual void execute() = 0;
 	virtual void finalize() = 0;
 	virtual void releaseOutput() = 0;
-	virtual Core::ConstructSet *getOutput() = 0;
 
-	/*	void setInputAggregation(InstRO::Core::Support::InputAggregation ia) {
-			this->ia = ia;
-		}*/
+	ChannelConfiguration getChannelConfig() { return channelConfig; }
+	virtual ConstructSet *getOutput() = 0;
+	ConstructSet *getInput(Pass *pId);
 
-	InstRO::Core::ConstructSet *getInput(Pass *pId);
-
- public:
-	InstRO::Core::ConstructSet *getCollisionSet(){};
+	ConstructSet *getCollisionSet() { return collisionSet.get(); };
 
  private:
-	// Testing where this is used	InstRO::Core::Support::InputAggregation ia;
+	ChannelConfiguration channelConfig;
+
+ protected:
+	ChannelConfiguration &getChannelCFG() { return channelConfig; }
+
+	// This set is used to track alterations to the AST and notify which nodes have been invalidated
+	std::unique_ptr<ConstructSet> collisionSet;
 };
-}
-}
+
+}	// namespace Core
+}	// namespace InstRO
+
 #endif
 
 #include "instro/core/Pass.h"

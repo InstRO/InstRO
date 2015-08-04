@@ -26,3 +26,12 @@ stamp-h1
 # generated Makefiles
 Makefile
 Makefile.in
+
+# tmp files
+rose_*.*
+*.log
+*.dot
+
+# eclipse
+.project
+.cproject
