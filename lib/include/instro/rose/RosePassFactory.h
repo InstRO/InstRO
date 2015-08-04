@@ -82,6 +82,7 @@ class RosePassFactory : public InstRO::PassFactory {
 	virtual InstRO::Pass* createOPARIAdapter(Pass* input);
 
 	virtual InstRO::Pass* createUniqueCallpathTransformer(Pass* input);
+	virtual InstRO::Pass* createUniqueCallpathTransformer(Pass* input, Pass* root, Pass* active);
 
 	// Adapter
 	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input);
