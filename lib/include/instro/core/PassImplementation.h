@@ -52,6 +52,15 @@ class ChannelConfiguration {
 		inputChannelPasses.insert(inputChannelPasses.begin(), {p1, passes...});
 	}
 
+	template <class Iterator>
+	ChannelConfiguration(Iterator begin, Iterator end, Core::ContstructLevelEnum minLevel, Core::ContstructLevelEnum maxLevel) {
+        for (Iterator iter = begin; iter != end; ++iter) {
+            inputChannelPasses.push_back(*iter);
+            inputChannelMin[*iter] = minLevel;
+            inputChannelMax[*iter] = maxLevel;
+        }
+	}
+
 	struct PassMinMaxSequenceHelper {
 		::InstRO::Pass *pass;
 		::InstRO::Core::ConstructLevelType min;
