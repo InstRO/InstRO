@@ -50,6 +50,8 @@ public:
     UniqueCallpathTransformer(InstRO::Pass *pass);
     UniqueCallpathTransformer(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active);
 
+    ~UniqueCallpathTransformer();
+
     virtual void init() override {};
 	virtual void execute() override;
 	virtual void finalize() override {};
@@ -84,14 +86,12 @@ private:
 
     CallGraphManager *manager;
 
-    FunctionDeclarationSet markedFunctions;
-    FunctionDeclarationSet roots;
-
+    NodeSet rootNodes;
     NodeSet activeNodes;
 
     InstRO::Core::ChannelConfiguration createChannelConfig(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active);
 
-    FunctionDeclarationSet retrieveMarkedFunctions(InstRO::Pass *pass);
+    NodeSet retrieveInputNodes(InstRO::Pass *pass);
 
     void findCandidates(const NodeSet &markedNodes, NodeDepthMap &candidates, NodeSet &cycleNodes);
     void updateCandidates(NodeDepthMap &candidates, const NodeList &path);

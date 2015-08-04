@@ -41,14 +41,12 @@ UniqueCallpathTransformer::UniqueCallpathTransformer(InstRO::Pass *pass, InstRO:
 
 }
 
-#if 0
 UniqueCallpathTransformer::~UniqueCallpathTransformer()
 {
     if (manager) {
         delete manager;
     }
 }
-#endif
 
 InstRO::Core::ChannelConfiguration UniqueCallpathTransformer::createChannelConfig(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active)
 {
@@ -62,38 +60,24 @@ InstRO::Core::ChannelConfiguration UniqueCallpathTransformer::createChannelConfi
     return InstRO::Core::ChannelConfiguration(passes.begin(), passes.end(), ::InstRO::Core::ConstructTraitType::CTFunction, ::InstRO::Core::ConstructTraitType::CTFunction);
 }
 
-UniqueCallpathTransformer::FunctionDeclarationSet UniqueCallpathTransformer::retrieveMarkedFunctions(InstRO::Pass *pass)
+UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::retrieveInputNodes(InstRO::Pass *pass)
 {
     InstRO::InfracstructureInterface::ConstructSetCompilerInterface cs (pass->getOutput());
-    FunctionDeclarationSet result;
-    result.reserve(cs.size());
+    NodeSet nodes;
+    nodes.reserve(cs.size());
     for (auto construct : cs) {
         auto rc = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
-        result.insert(isSgFunctionDeclaration(rc->getNode()));
-    }
-
-    return result;
-    // std::cerr << SageInterface::get_name(node) << " is not a function declaration" << std::endl;
-
-}
-
-#if 0
-void UniqueCallpathTransformer::transformNode(SgNode *node)
-{
-    SgFunctionDeclaration *funDecl = isSgFunctionDeclaration(node);
-
-    if (!funDecl) {
-        if (SgFunctionDefinition *funDef = isSgFunctionDefinition(node)) {
-            funDecl = funDef->get_declaration();
+        if (SgFunctionDeclaration *decl = isSgFunctionDeclaration(rc->getNode())) {
+            nodes.insert(manager->getCallGraphNode(decl));
+        } else if (SgFunctionDefinition *def = isSgFunctionDefinition(rc->getNode())) {
+            nodes.insert(manager->getCallGraphNode(def->get_declaration()));
         } else {
-            std::cerr << "Skipping " << SageInterface::get_name(node) << ": UniqueCallpathTransformer accepts only function declarations or definitions as input" << std::endl;
-            return;
+            std::cerr << "Unsupported input node: " << SageInterface::get_name(rc->getNode()) << " (" << rc->getNode()->class_name() << ")" << std::endl;
         }
     }
 
-    markedFunctions.insert(isSgFunctionDeclaration(funDecl->get_firstNondefiningDeclaration()));
+    return nodes;
 }
-#endif
 
 void UniqueCallpathTransformer::execute() {
     // lazily initialize the call graph manager
@@ -103,35 +87,24 @@ void UniqueCallpathTransformer::execute() {
 
     // use the main function as default root if none have been specified manually
     if (!rootPass) {
-        roots.clear();
-        roots.insert(SageInterface::findMain(SageInterface::getProject()));
+        rootNodes.clear();
+        if (SgFunctionDeclaration *mainDecl = SageInterface::findMain(SageInterface::getProject())) {
+            rootNodes.insert(manager->getCallGraphNode(mainDecl));
+        } else {
+            throw std::string("Failed to find the main function");
+        }
     } else {
-        roots = retrieveMarkedFunctions(rootPass);
+        rootNodes = retrieveInputNodes(rootPass);
     }
 
     // convert marked functions to call graph nodes
+    NodeSet markedNodes = retrieveInputNodes(inputPass);
     InstRO::InfracstructureInterface::ConstructSetCompilerInterface inputCS (inputPass->getOutput());
-    std::unordered_set<SgGraphNode*> markedNodes;
-    markedNodes.reserve(inputCS.size());
-    for (auto construct : inputCS) {
-        auto rc = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
-        if (SgFunctionDeclaration *markedDecl = isSgFunctionDeclaration(rc->getNode())) {
-            markedNodes.insert(manager->getCallGraphNode(markedDecl));
-        } else if (SgFunctionDefinition *markedDef = isSgFunctionDefinition(rc->getNode())) {
-            markedNodes.insert(manager->getCallGraphNode(markedDef->get_declaration()));
-        } else {
-            std::cerr << "Unsupported input node: " << SageInterface::get_name(rc->getNode()) << " (" << rc->getNode()->class_name() << ")" << std::endl;
-        }
-    }
 
     // initialize active nodes
     activeNodes.clear();
     if (activePass) {
-        auto activeFunctions = retrieveMarkedFunctions(activePass);
-        activeNodes.reserve(activeFunctions.size());
-        for (SgFunctionDeclaration *activeFunction : activeFunctions) {
-            activeNodes.insert(manager->getCallGraphNode(activeFunction));
-        }
+        activeNodes = retrieveInputNodes(activePass);
     }
 
     // find candidates for duplication and nodes which are targeted by a backwards directed edge
@@ -204,8 +177,7 @@ void UniqueCallpathTransformer::findCandidates(const NodeSet &markedNodes, NodeD
 
     // start a depth first search starting at each root and update candidates if a marked node appears
     // at the end of the current path through the call graph
-    for (SgFunctionDeclaration* rootFunction : roots) {
-        SgGraphNode* rootNode = manager->getCallGraphNode(rootFunction);
+    for (SgGraphNode* rootNode : rootNodes) {
 
         // initialize data structures
         localPath.clear();
