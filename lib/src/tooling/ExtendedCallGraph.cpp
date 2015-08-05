@@ -20,7 +20,6 @@ ExtendedCallGraphNode* ExtendedCallGraph::addNode(ExtendedCallGraphNode* node) {
 	if (csToGraphNode.count(node->getAssociatedConstructSet()) == 0) {
 
 	csToGraphNode[node->getAssociatedConstructSet()] = node;
-	graphNodeToCs[node] = node->getAssociatedConstructSet();
 
 	predecessors[node] = std::set<ExtendedCallGraphNode*>();
 	successors[node] = std::set<ExtendedCallGraphNode*>();
@@ -97,10 +96,7 @@ int ExtendedCallGraph::getSuccessorCount(ExtendedCallGraphNode* start) {
 	return successors[start].size();
 }
 
-//// XXX from ROSE EXTENDED CALLGRAPH
-
-
-
+// TODO: swapping is now more complicated
 void ExtendedCallGraph::swapConstructSet(InstRO::Core::ConstructSet oldCS, InstRO::Core::ConstructSet newCS) {
 
 	if (csToGraphNode.find(oldCS) == csToGraphNode.end()) {
@@ -108,16 +104,11 @@ void ExtendedCallGraph::swapConstructSet(InstRO::Core::ConstructSet oldCS, InstR
 	}
 
 	ExtendedCallGraphNode* graphNode = csToGraphNode[oldCS];
-
-	graphNodeToCs[graphNode] = newCS;
+	graphNode->setAssociatedConstructSet(newCS);
 
 	csToGraphNode.erase(oldCS);
 	csToGraphNode[newCS] = graphNode;
 
-}
-
-InstRO::Core::ConstructSet ExtendedCallGraph::getConstructSet(ExtendedCallGraphNode* graphNode) {
-	return graphNodeToCs[graphNode];
 }
 
 ExtendedCallGraphNode* ExtendedCallGraph::getGraphNode(InstRO::Core::ConstructSet cs) {
@@ -129,9 +120,9 @@ void ExtendedCallGraph::dump() {
 	std::cout << "== Dumping Extended Callgraph ==" << std::endl;
 
 	for (ExtendedCallGraphNode* fromNode : getNodeSet()) {
-		std::cout << graphNodeToCs[fromNode] << " : " << getSuccessorCount(fromNode) << std::endl;
+		std::cout << fromNode->getAssociatedConstructSet() << " : " << getSuccessorCount(fromNode) << std::endl;
 		for (ExtendedCallGraphNode* toNode : getSuccessors(fromNode)) {
-			std::cout << "  -->\t" << graphNodeToCs[toNode] << std::endl;
+			std::cout << "  -->\t" << toNode->getAssociatedConstructSet() << std::endl;
 		}
 	}
 }

@@ -24,15 +24,23 @@ class ExtendedCallGraphNode {
 	ExtendedCallGraphNode(InstRO::Core::ConstructSet cs, enum ECGNodeType type) : cs(cs), type(type) {}
 
 	// Explicit RAW Pointer. We do not release control of this CS
-	Core::ConstructSet getAssociatedConstructSet() {
+	InstRO::Core::ConstructSet getAssociatedConstructSet() {
 		return cs;
 	}
 	enum ECGNodeType getNodeType() {
 		return type;
 	}
 
+	void setAssociatedConstructSet(InstRO::Core::ConstructSet cs) {
+		this->cs = cs;
+	}
+
+	std::string toDotString() {
+		return cs.toDotString();
+	}
+
 	friend std::ostream& operator<<(std::ostream& out, const ExtendedCallGraphNode& node) {
-		out << node.cs.toDotString();
+		out << node.cs;
 		return out;
 	}
 
@@ -72,7 +80,6 @@ class ExtendedCallGraph {
 	int getPredecessorCount(ExtendedCallGraphNode* start);
 	int getSuccessorCount(ExtendedCallGraphNode* start);
 
-	InstRO::Core::ConstructSet getConstructSet(ExtendedCallGraphNode* graphNode);
 	ExtendedCallGraphNode* getGraphNode(InstRO::Core::ConstructSet cs);
 
 	void dump();
@@ -89,7 +96,6 @@ class ExtendedCallGraph {
 	std::map<ExtendedCallGraphNode*, std::set<ExtendedCallGraphNode*> > successors;
 
 	std::map<InstRO::Core::ConstructSet, ExtendedCallGraphNode*> csToGraphNode;
-	std::map<ExtendedCallGraphNode*, InstRO::Core::ConstructSet> graphNodeToCs;
 };
 
 template <typename T>
