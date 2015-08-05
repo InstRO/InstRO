@@ -264,6 +264,8 @@ class ConstructSet {
 
 	std::set<std::shared_ptr<Construct> >::iterator begin();
 	std::set<std::shared_ptr<Construct> >::iterator end();
+	std::set<std::shared_ptr<Construct> >::const_iterator begin() const;
+	std::set<std::shared_ptr<Construct> >::const_iterator end() const;
 	std::set<std::shared_ptr<Construct> >::const_iterator cbegin() const;
 	std::set<std::shared_ptr<Construct> >::const_iterator cend() const;
 
@@ -295,9 +297,8 @@ class ConstructSet {
 	friend bool operator<(const ConstructSet& c1, const ConstructSet& c2) { return c1.constructs < c2.constructs; }
 	friend bool operator==(const ConstructSet& c1, const ConstructSet& c2) { return c1.constructs == c2.constructs; }
 
-	friend std::ostream& operator<<(std::ostream& out, ConstructSet& cs) {
+	friend std::ostream& operator<<(std::ostream& out, const ConstructSet& cs) {
 		out << " CS size:" << cs.size() << std::endl;
-		InfracstructureInterface::ConstructSetCompilerInterface csci(&cs);
 		for (auto const& constructPtr : cs) {
 			out << "\t" << constructPtr->toString() << std::endl;
 		}
