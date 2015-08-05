@@ -118,6 +118,8 @@ private:
 
 			if (uniqueDecls[mangledName]->get_definition() == nullptr) {
 				callgraph->swapConstructSet(uniqueNodes[mangledName]->getAssociatedConstructSet(), ecgNode->getAssociatedConstructSet());
+			} else {
+				delete ecgNode;
 			}
 
 		} else {
@@ -142,6 +144,8 @@ private:
 			callgraph->addNode(ecgNode);
 			uniqueDecls[mangledName] = node;
 			uniqueNodes[mangledName] = ecgNode;
+		} else {
+			delete ecgNode;
 		}
 		return uniqueNodes[mangledName];
 	}
@@ -198,13 +202,7 @@ public:	// Visitor Interface
 		if (!InstRO::Rose::Core::RoseConstructLevelPredicates::CLScopeStatementPredicate()(node)) {
 			return;
 		}
-
-		RoseECGConstructSetGenerator genCS;
-		node->accept(genCS);
-
-		assert(currentVisitNode.top());
-		callgraph->addEdge(currentVisitNode.top(), genCS.getECGNode());
-		currentVisitNode.push(callgraph->getGraphNode(genCS.getConstructSet()));
+		defaultPreOrderBehavior(node);
 	}
 
 	void postOrderVisit(SgFunctionDefinition* node) {
