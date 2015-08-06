@@ -114,7 +114,7 @@ class Pass {
 	// Get the number of altered, invalidated or changed constructs. We expect the next higher construct that dominates
 	// the altered or deleted constructs
 	// alternate name getInvalidationSet()
-	Core::ConstructSet *getCollisionSet() { return passImplementation->getCollisionSet(); }
+	const Core::ConstructSet *getCollisionSet() { return passImplementation->cgetCollisionSet(); }
 
  private:
 	// These flags are solely used to ensure proper sequences of initialization, execution and finalization
