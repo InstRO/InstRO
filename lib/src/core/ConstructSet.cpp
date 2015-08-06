@@ -131,6 +131,8 @@ void ConstructSet::erase(ConstructSet cs) { constructs.erase(cs.begin(), cs.end(
 
 std::set<std::shared_ptr<Construct> >::iterator ConstructSet::begin() { return constructs.begin(); }
 std::set<std::shared_ptr<Construct> >::iterator ConstructSet::end() { return constructs.end(); }
+std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::begin() const { return constructs.cbegin(); }
+std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::end() const { return constructs.cend(); }
 std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::cbegin() const { return constructs.cbegin(); }
 std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::cend() const { return constructs.cend(); }
 bool ConstructSet::contains(const std::shared_ptr<Construct>& construct) const {
