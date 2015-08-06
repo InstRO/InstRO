@@ -18,8 +18,8 @@ void CallPathSelector::execute() {
 	// toCS = this->getInput(toPass);
 	InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph *ecg =
 			getInstrumentorInstance()->getAnalysisManager()->getECG();
-	auto fromNodes = ecg->getECGNodes(fromCS);
-	auto toNodes = ecg->getECGNodes(toCS);
+	auto fromNodes = ecg->getNodeSet(fromCS);
+	auto toNodes = ecg->getNodeSet(toCS);
 
 	// for each start node trace the tree until we either have found an to node (in which case we add the nodes on the pat
 	// to the output CS
