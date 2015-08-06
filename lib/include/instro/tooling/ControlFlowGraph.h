@@ -39,7 +39,7 @@ class ControlFlowGraphNode {
 		return dotString;
 	}
 
- protected:
+ private:
 	InstRO::Core::ConstructSet* cs;
 	CFGNodeType nodeType;
 

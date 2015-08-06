@@ -6,6 +6,7 @@
 #include <memory>	// Shared pointers
 #include <vector>
 #include <set>
+#include <iostream> // XXX
 
 #include <bitset>
 
@@ -224,6 +225,10 @@ class Construct {
 
  protected:
 	ConstructTrait constructTraits;
+
+	// XXX is this necessary?
+	friend bool operator<(const std::shared_ptr<Construct>& a, const std::shared_ptr<Construct>& b) { return *a < *b; }
+	friend bool operator==(const std::shared_ptr<Construct>& a, const std::shared_ptr<Construct>& b) { return *a == *b; }
 };
 
 /* CI: The ConstructSet class is intended to be specialized for each compiler
