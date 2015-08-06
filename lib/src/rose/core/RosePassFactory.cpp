@@ -5,6 +5,7 @@
 #include "instro/pass/selector/ProgramEntrySelector.h"
 #include "instro/pass/selector/CallPathSelector.h"
 #include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
+#include "instro/rose/pass/transformer/UniqueCallpathTransformer.h"
 #include "instro/rose/RosePassFactory.h"
 
 
@@ -209,6 +210,20 @@ InstRO::Pass* RosePassFactory::createOpenMPOpariCannonizer(InstRO::Pass* input) 
 InstRO::Pass* RosePassFactory::createOPARIAdapter(InstRO::Pass* input) {
 	throw std::string("Not yet Implemented");
 	return NULL;
+}
+
+InstRO::Pass* RosePassFactory::createUniqueCallpathTransformer(InstRO::Pass* input) {
+    InstRO::Pass* newPass = new InstRO::Pass(new Transformer::UniqueCallpathTransformer(input));
+    newPass->setPassName("InstRO::Rose::Transformer::UniqueCallpathTransformer");
+    passManager->registerPass(newPass);
+    return newPass;
+}
+
+InstRO::Pass* RosePassFactory::createUniqueCallpathTransformer(Pass* input, Pass* root, Pass* active) {
+    InstRO::Pass* newPass = new InstRO::Pass(new Transformer::UniqueCallpathTransformer(input, root, active));
+    newPass->setPassName("InstRO::Rose::Transformer::UniqueCallpathTransformer");
+    passManager->registerPass(newPass);
+    return newPass;
 }
 
 }	// Rose
