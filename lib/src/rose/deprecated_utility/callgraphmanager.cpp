@@ -1,4 +1,4 @@
-#include "instro/utility/callgraphmanager.h"
+#include "instro/rose/deprecated_utility/callgraphmanager.h"
 
 #include <CallGraph.h>
 
