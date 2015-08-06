@@ -60,7 +60,7 @@ namespace {
 
 } // end of anonymous namespace
 
-GenericInstrumentationStrategy::GenericInstrumentationStrategy(ToolInitializer* toolInitializerStrategy)
+GenericInstrumentationStrategy::GenericInstrumentationStrategy(std::shared_ptr<ToolInitializer> toolInitializerStrategy)
 	: toolInitializer(toolInitializerStrategy) {
 
 }
