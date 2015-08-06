@@ -31,8 +31,13 @@ public:
 	void visit(SgFunctionDeclaration* node) {
 		assert(node);
 
+		if (node->get_definition() != nullptr) {
+			visit(node->get_definition());
+			return;
+		}
+
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getFragment(node, node->get_startOfConstruct()));
-		nodeType = ECGNodeType::FUNCTION_CALL;
+		nodeType = ECGNodeType::FUNCTION;
 	}
 	void visit(SgFunctionCallExp* node) {
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
@@ -102,14 +107,53 @@ public:
 		return callgraph;
 	}
 
-public:	// Visitor Interface
-	void preOrderVisit(SgFunctionDefinition* node) {
-
+private:
+	ExtendedCallGraphNode* getDefiningECGNode(SgFunctionDefinition* node) {
 		RoseECGConstructSetGenerator genCS;
 		node->accept(genCS);
 		auto ecgNode = genCS.getECGNode();
-		// add node so it is not missing, if it has no children
-		callgraph->addNode(ecgNode);
+
+		std::string mangledName = node->get_declaration()->get_mangled_name();
+		if (uniqueDecls.find(mangledName) != uniqueDecls.end()) {
+
+			if (uniqueDecls[mangledName]->get_definition() == nullptr) {
+				callgraph->swapConstructSet(uniqueNodes[mangledName]->getAssociatedConstructSet(), ecgNode->getAssociatedConstructSet());
+			} else {
+				delete ecgNode;
+			}
+
+		} else {
+			// add node so it is not missing, if it has no children
+			callgraph->addNode(ecgNode);
+			uniqueDecls[mangledName] = node->get_declaration();
+			uniqueNodes[mangledName] = ecgNode;
+		}
+
+		return uniqueNodes[mangledName];
+
+	}
+
+	/** this method is only called if the definition cannot be found */
+	ExtendedCallGraphNode* getDefiningECGNode(SgFunctionDeclaration* node) {
+		RoseECGConstructSetGenerator genCS;
+		node->accept(genCS);
+		auto ecgNode = genCS.getECGNode();
+
+		std::string mangledName = node->get_mangled_name();
+		if (uniqueDecls.find(mangledName) == uniqueDecls.end()) {
+			callgraph->addNode(ecgNode);
+			uniqueDecls[mangledName] = node;
+			uniqueNodes[mangledName] = ecgNode;
+		} else {
+			delete ecgNode;
+		}
+		return uniqueNodes[mangledName];
+	}
+
+public:	// Visitor Interface
+	void preOrderVisit(SgFunctionDefinition* node) {
+
+		auto ecgNode = getDefiningECGNode(node);
 
 		currentVisitNode.push(ecgNode);
 	}
@@ -131,14 +175,11 @@ public:	// Visitor Interface
 
 		SgFunctionDefinition* calledDef = tryGetDefiningDeclaration(calledDecl)->get_definition();
 		if (calledDef == nullptr) {
-			// no definition -> generate fragment
-			RoseECGConstructSetGenerator genCSCalled;
-			tryGetDefiningDeclaration(calledDecl)->accept(genCSCalled);
-			callgraph->addEdge(ecgNode, genCSCalled.getECGNode());
+			auto ecgNodeCall = getDefiningECGNode(calledDecl);
+			callgraph->addEdge(ecgNode, ecgNodeCall);
 		} else {
-			RoseECGConstructSetGenerator genCSCalled;
-			calledDef->accept(genCSCalled);
-			callgraph->addEdge(ecgNode, genCSCalled.getECGNode());
+			auto ecgNodeCall = getDefiningECGNode(calledDef);
+			callgraph->addEdge(ecgNode, ecgNodeCall);
 		}
 	}
 	void preOrderVisit(SgIfStmt* node) {
@@ -161,13 +202,7 @@ public:	// Visitor Interface
 		if (!InstRO::Rose::Core::RoseConstructLevelPredicates::CLScopeStatementPredicate()(node)) {
 			return;
 		}
-
-		RoseECGConstructSetGenerator genCS;
-		node->accept(genCS);
-
-		assert(currentVisitNode.top());
-		callgraph->addEdge(currentVisitNode.top(), genCS.getECGNode());
-		currentVisitNode.push(callgraph->getGraphNode(genCS.getConstructSet()));
+		defaultPreOrderBehavior(node);
 	}
 
 	void postOrderVisit(SgFunctionDefinition* node) {
@@ -322,28 +357,12 @@ private:
 		}
 
 		std::stringstream ss;
-		ss <<  "\"" << node << "\" [label=\"" << nodeType << "\\n" << *node
+		ss <<  "\"" << node << "\" [label=\"" << nodeType << "\\n" << node->toDotString()
 				<< "\", color=" << color << "]";
 
 		return ss.str();
 	}
 
-//	SgFunctionDeclaration* getUniqueDeclaration(SgFunctionDeclaration* fDecl) {
-//		SgFunctionDeclaration* funcDecl = tryGetDefiningDeclaration(fDecl);
-//		std::string mangledName = funcDecl->get_mangled_name();
-//
-//		if (uniqueDecls.find(mangledName) != uniqueDecls.end()) {
-//			if (funcDecl->get_definition()) {
-//
-//				callgraph->swapSgNode(uniqueDecls[mangledName], funcDecl);
-//				uniqueDecls[mangledName] = funcDecl;
-//			}
-//			return uniqueDecls[mangledName];
-//		} else {
-//			uniqueDecls[mangledName] = funcDecl;
-//			return funcDecl;
-//		}
-//	}
 };
 
 }
