@@ -1,15 +1,20 @@
 #include "instro/rose/pass/transformer/UniqueCallpathTransformer.h"
 
-#include "instro/rose/deprecated_utility/callgraphmanager.h"
+#include "instro/tooling/ExtendedCallGraph.h"
+// // #include "instro/rose/deprecated_utility/callgraphmanager.h"
 
 #include "instro/rose/utility/FunctionRenamer.h"
 
 #include "instro/rose/core/RoseConstructSet.h"
+#include "instro/core/Instrumentor.h"
+#include "instro/core/Singleton.h"
 
 #include <iostream>
 #include <stack>
 #include <queue>
 #include <algorithm>
+
+#ifdef ENABLE_UNIQUE_CALLPATHTRANSFORMER
 
 namespace {
 
@@ -30,21 +35,19 @@ using namespace InstRO::Rose;
 using namespace InstRO::Rose::Transformer;
 
 UniqueCallpathTransformer::UniqueCallpathTransformer(InstRO::Pass *pass)
-    : UniqueCallpathTransformer(pass, nullptr, nullptr)
-{
+	: UniqueCallpathTransformer(pass, nullptr, nullptr)
+{	
 
 }
 
 UniqueCallpathTransformer::UniqueCallpathTransformer(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active)
-    : RosePassImplementation(createChannelConfig(pass, root, active)), inputPass(pass), rootPass(root), activePass(active), manager(nullptr)
-{
-
+	: RosePassImplementation(createChannelConfig(pass,root,active)), inputPass(pass), rootPass(root), activePass(active), ecg(nullptr){
 }
 
 UniqueCallpathTransformer::~UniqueCallpathTransformer()
 {
-    if (manager) {
-        delete manager;
+    if (ecg) {
+        delete ecg;
     }
 }
 
@@ -63,6 +66,9 @@ InstRO::Core::ChannelConfiguration UniqueCallpathTransformer::createChannelConfi
 UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::retrieveInputNodes(InstRO::Pass *pass)
 {
     InstRO::InfracstructureInterface::ConstructSetCompilerInterface cs (pass->getOutput());
+	// CI: Get the GraphNodes; Since the Requirements are "Functions only"
+	auto ecgNodes = ecg->getNodeSet(*(pass->getOutput()));
+
     NodeSet nodes;
     nodes.reserve(cs.size());
     for (auto construct : cs) {
@@ -81,8 +87,9 @@ UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::retrieveInputNodes
 
 void UniqueCallpathTransformer::execute() {
     // lazily initialize the call graph manager
-    if (!manager) {
-        manager = new CallGraphManager(SageInterface::getProject());
+    if (ecg ==nullptr) {
+		ecg = InstRO::getInstrumentorInstance()->getAnalysisManager()->getECG();
+      //CI  manager = new CallGraphManager(SageInterface::getProject());
     }
 
     // use the main function as default root if none have been specified manually
@@ -166,8 +173,8 @@ void UniqueCallpathTransformer::execute() {
     }
 
     // invalidate the call graph
-    delete manager;
-    manager = nullptr;
+    delete ecg;
+	ecg = nullptr;
 
 }
 
@@ -354,5 +361,5 @@ SgFunctionDeclaration* UniqueCallpathTransformer::cloneFunction(SgFunctionDeclar
     return clonedFunction;
 }
 
-
+#endif
 

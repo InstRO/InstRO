@@ -52,6 +52,9 @@
     <Filter Include="instro\rose\pass\adapter\StrategyBasedAdapterSupport">
       <UniqueIdentifier>{0bc5ab33-5c7d-4a60-b05c-6130e463033e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="instro\rose\pass\transformer">
+      <UniqueIdentifier>{c5bfc8bf-0050-4674-b849-bd2c08129ed9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h">
@@ -239,6 +242,9 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\GenericAdapterBuilder.h">
       <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\transformer\UniqueCallpathTransformer.h">
+      <Filter>instro\rose\pass\transformer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp">
@@ -354,6 +360,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\GenericAdapterBuilder.cpp">
       <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\transformer\UniqueCallpathTransformer.cpp">
+      <Filter>instro\rose\pass\transformer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
