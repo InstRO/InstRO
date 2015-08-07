@@ -4,6 +4,7 @@
 #include <fstream>
 #include <algorithm>
 #include <string>
+#include "instro/core/Instrumentor.h"
 #include "instro/core/Singleton.h"
 #include "instro/core/Pass.h"
 #include "instro/core/ConstructSet.h"
