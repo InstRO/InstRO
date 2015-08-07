@@ -61,18 +61,18 @@ class ExtendedCallGraph {
 
 	virtual std::set<ExtendedCallGraphNode*> getNodeSet(Core::ConstructSet *cs);
 
-	void addEdge(ExtendedCallGraphNode* from, ExtendedCallGraphNode* to);
-	ExtendedCallGraphNode* addNode(ExtendedCallGraphNode* node);
-	void swapConstructSet(InstRO::Core::ConstructSet oldCS, InstRO::Core::ConstructSet newCS);
-
-	/** redirect edges of pred and succ if true */
-	void removeNode(ExtendedCallGraphNode* node, bool redirectEdges);
-
-
 	/** predicate is a functional with parameters(ExtendedCallGraphNode*, ExtendedCallGraph*) */
 	template <typename T>
 	std::set<ExtendedCallGraphNode*> getNodeSet(T& predicate);
 	std::set<ExtendedCallGraphNode*> getNodeSet();
+
+	/* Construction XXX maybe move these to a Builder object? */
+	ExtendedCallGraphNode* getNodeWithExactConstructSet(InstRO::Core::ConstructSet cs);
+	void addEdge(ExtendedCallGraphNode* from, ExtendedCallGraphNode* to);
+	ExtendedCallGraphNode* addNode(ExtendedCallGraphNode* node);
+	void swapConstructSet(InstRO::Core::ConstructSet oldCS, InstRO::Core::ConstructSet newCS);
+	/** redirect edges of pred and succ if true */
+	void removeNode(ExtendedCallGraphNode* node, bool redirectEdges);
 
 
 	std::set<ExtendedCallGraphNode*> getPredecessors(ExtendedCallGraphNode* start);
@@ -80,9 +80,8 @@ class ExtendedCallGraph {
 	int getPredecessorCount(ExtendedCallGraphNode* start);
 	int getSuccessorCount(ExtendedCallGraphNode* start);
 
-	ExtendedCallGraphNode* getGraphNode(InstRO::Core::ConstructSet cs);
-
 	void dump();
+
 
  private:
 	/** no copying allowed */
