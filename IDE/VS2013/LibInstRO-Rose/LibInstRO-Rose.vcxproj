@@ -131,6 +131,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\selector\CompoundSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\selector\ElevatorSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\pass\selector\NameBasedSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\transformer\UniqueCallpathTransformer.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseAnalysisInterface.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="..\..\..\lib\src\rose\pass\selector\CompoundSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\selector\ElevatorSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\pass\selector\NameBasedSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\transformer\UniqueCallpathTransformer.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseConstructElevator.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseGrammarInterface.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp" />

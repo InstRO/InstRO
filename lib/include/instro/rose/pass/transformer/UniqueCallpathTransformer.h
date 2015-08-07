@@ -3,10 +3,13 @@
 
 #include "instro/core/Pass.h"
 #include "instro/rose/core/RosePassImplementation.h"
+#include "instro/tooling/ExtendedCallGraph.h"
 
 #include <set>
 #include <unordered_set>
 #include <unordered_map>
+
+#ifdef ENABLE_UNIQUE_CALLPATHTRANSFORMER
 
 class SgFunctionDeclaration;
 class SgGraphNode;
@@ -14,7 +17,7 @@ class SgScopeStatement;
 
 namespace InstRO {
 
-class CallGraphManager;
+// CI class CallGraphManager;
 
 namespace Rose {
 namespace Transformer {
@@ -84,7 +87,8 @@ private:
     typedef std::vector<SgGraphNode*> NodeList;
     typedef std::unordered_multimap<SgGraphNode*, SgFunctionDeclaration*> NodeFunctionDeclarationMap;
 
-    CallGraphManager *manager;
+    //CI : CallGraphManager *manager;
+	InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph * ecg;
 
     NodeSet rootNodes;
     NodeSet activeNodes;
@@ -105,5 +109,6 @@ private:
 }
 }
 }
+#endif
 
 #endif // INSTRO_ROSE_UNIQUECALLPATHTRANSFORMER_H
