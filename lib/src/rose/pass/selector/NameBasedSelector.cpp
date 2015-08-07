@@ -1,5 +1,5 @@
 #include "rose.h"
-
+#include "instro/core/Instrumentor.h"
 #include "instro/tooling/NamedConstructAccess.h"
 #include "instro/rose/pass/selector/NameBasedSelector.h"
 #include "instro/tooling/AnalysisInterface.h"

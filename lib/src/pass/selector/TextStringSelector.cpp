@@ -1,3 +1,4 @@
+#include "instro/core/Instrumentor.h"
 #include "instro/tooling/NamedConstructAccess.h"
 #include "instro/pass/selector/TextStringSelector.h"
 #include "instro/tooling/AnalysisInterface.h"

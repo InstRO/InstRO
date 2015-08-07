@@ -116,7 +116,9 @@ ROSE_HFILES= \
 ./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePLoopIterationStrategy.h \
 ./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePStatementWrapperStrategy.h \
 ./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/ToolInitializer.h \
-./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/instrobuilder.h
+./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/instrobuilder.h \
+./include/instro/rose/pass/transformer/UniqueCallpathTransformer.h
+
 ROSE_SFILES= \
 ./src/rose/core/RoseConstructSet.cpp   \
 ./src/rose/core/RosePassFactory.cpp \
@@ -137,7 +139,8 @@ ROSE_SFILES= \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePLoopIterationStrategy.cpp \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePStatementWrapperStrategy.cpp \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/ToolInitializer.cpp \
-./src/rose/pass/adapter/StrategyBasedAdapterSupport/instrobuilder.cpp
+./src/rose/pass/adapter/StrategyBasedAdapterSupport/instrobuilder.cpp \
+./src/rose/pass/transformer/UniqueCallpathTransformer.cpp
 
 
 EXAMPLE_HFILES= \
