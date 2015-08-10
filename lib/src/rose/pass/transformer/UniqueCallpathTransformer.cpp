@@ -1,9 +1,9 @@
 #include "instro/rose/pass/transformer/UniqueCallpathTransformer.h"
 
-#include "instro/rose/deprecated_utility/callgraphmanager.h"
-
 #include "instro/rose/utility/FunctionRenamer.h"
 
+#include "instro/core/Instrumentor.h"
+#include "instro/core/Singleton.h"
 #include "instro/rose/core/RoseConstructSet.h"
 
 #include <iostream>
@@ -11,10 +11,12 @@
 #include <queue>
 #include <algorithm>
 
+using namespace InstRO::Tooling::ExtendedCallGraph;
+
 namespace {
 
-/// A pair consisting of a pointer to a SgGraphNode and an integer which indicates its depth.
-typedef std::pair<SgGraphNode*, int> NodeDepthEntry;
+/// A pair consisting of a pointer to a ExtendedCallGraphNode and an integer which indicates its depth.
+typedef std::pair<ExtendedCallGraphNode*, int> NodeDepthEntry;
 
 /// A functor to compare NodeDepthEntry instances by their depth using greater than.
 struct NodeDepthComparator {
@@ -26,6 +28,7 @@ struct NodeDepthComparator {
 }
 
 using namespace InstRO;
+using namespace InstRO::Core;
 using namespace InstRO::Rose;
 using namespace InstRO::Rose::Transformer;
 
@@ -36,16 +39,14 @@ UniqueCallpathTransformer::UniqueCallpathTransformer(InstRO::Pass *pass)
 }
 
 UniqueCallpathTransformer::UniqueCallpathTransformer(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active)
-    : RosePassImplementation(createChannelConfig(pass, root, active)), inputPass(pass), rootPass(root), activePass(active), manager(nullptr)
+    : RosePassImplementation(createChannelConfig(pass, root, active)), inputPass(pass), rootPass(root), activePass(active), callGraph(nullptr)
 {
 
 }
 
 UniqueCallpathTransformer::~UniqueCallpathTransformer()
 {
-    if (manager) {
-        delete manager;
-    }
+
 }
 
 InstRO::Core::ChannelConfiguration UniqueCallpathTransformer::createChannelConfig(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active)
@@ -66,40 +67,111 @@ UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::retrieveInputNodes
     NodeSet nodes;
     nodes.reserve(cs.size());
     for (auto construct : cs) {
-        auto rc = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
-        if (SgFunctionDeclaration *decl = isSgFunctionDeclaration(rc->getNode())) {
-            nodes.insert(manager->getCallGraphNode(decl));
-        } else if (SgFunctionDefinition *def = isSgFunctionDefinition(rc->getNode())) {
-            nodes.insert(manager->getCallGraphNode(def->get_declaration()));
+        if (ExtendedCallGraphNode *node = callGraph->getGraphNode(ConstructSet(construct))) {
+            nodes.insert(node);
         } else {
-            std::cerr << "Unsupported input node: " << SageInterface::get_name(rc->getNode()) << " (" << rc->getNode()->class_name() << ")" << std::endl;
+            auto rc = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
+            std::cerr << "Failed to get call graph node for " << SageInterface::get_name(rc->getNode()) << " (" << rc->getNode()->class_name() << ")" << std::endl;
         }
     }
 
     return nodes;
 }
 
-void UniqueCallpathTransformer::execute() {
-    // lazily initialize the call graph manager
-    if (!manager) {
-        manager = new CallGraphManager(SageInterface::getProject());
+InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode* UniqueCallpathTransformer::getMainFunctionNode()
+{
+    if (SgFunctionDeclaration *mainDecl = SageInterface::findMain(SageInterface::getProject())) {
+        if (SgFunctionDefinition *mainDef = mainDecl->get_definition()) {
+            ConstructSet mainCS (InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(mainDef));
+            if (ExtendedCallGraphNode *node = callGraph->getGraphNode(mainCS)) {
+                return node;
+            } else {
+                throw std::string("Failed to get the call graph node of the main function");
+            }
+        } else {
+            throw std::string("The main function does not have an available definition");
+        }
+    } else {
+        throw std::string("Failed to find the main function");
     }
+}
+
+UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::getSuccessorFunctions(ExtendedCallGraphNode *node)
+{
+    NodeSet result;
+    auto successors = callGraph->getSuccessors(node);
+    result.reserve(successors.size());
+    std::deque<ExtendedCallGraphNode*> work (successors.begin(), successors.end());
+
+    while(!work.empty()) {
+        ExtendedCallGraphNode *succ = work.back();
+        work.pop_back();
+
+        if (succ->getNodeType() == Tooling::ExtendedCallGraph::FUNCTION) {
+            result.insert(succ);
+        } else {
+            successors = callGraph->getSuccessors(succ);
+            work.insert(work.end(), successors.begin(), successors.end());
+        }
+    }
+
+    return result;
+}
+
+UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::getPredecessorFunctions(InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *node)
+{
+    NodeSet result;
+    auto predecessors = callGraph->getPredecessors(node);
+    result.reserve(predecessors.size());
+    std::deque<ExtendedCallGraphNode*> work (predecessors.begin(), predecessors.end());
+
+    while(!work.empty()) {
+        ExtendedCallGraphNode *pred = work.back();
+        work.pop_back();
+
+        if (pred->getNodeType() == Tooling::ExtendedCallGraph::FUNCTION) {
+            result.insert(pred);
+        } else {
+            predecessors = callGraph->getPredecessors(pred);
+            work.insert(work.end(), predecessors.begin(), predecessors.end());
+        }
+    }
+
+    return result;
+}
+
+SgFunctionDeclaration* UniqueCallpathTransformer::getFunDeclFromNode(ExtendedCallGraphNode *node)
+{
+    ConstructSet cs = node->getAssociatedConstructSet();
+    InstRO::InfracstructureInterface::ConstructSetCompilerInterface csci (&cs);
+    for (auto construct : csci) {
+        auto rc = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
+        if (SgFunctionDefinition *def = isSgFunctionDefinition(rc->getNode())) {
+            return def->get_declaration();
+        } else if (SgFunctionDeclaration *decl = isSgFunctionDeclaration(rc->getNode())) {
+            return decl;
+        } else {
+            std::cout << "construct is no function: " << SageInterface::get_name(rc->getNode()) << std::endl;
+        }
+    }
+
+    throw std::string("Failed to extract function declaration from call graph node");
+}
+
+void UniqueCallpathTransformer::execute() {
+    // get the call graph
+    callGraph = getInstrumentorInstance()->getAnalysisManager()->getECG();
 
     // use the main function as default root if none have been specified manually
     if (!rootPass) {
         rootNodes.clear();
-        if (SgFunctionDeclaration *mainDecl = SageInterface::findMain(SageInterface::getProject())) {
-            rootNodes.insert(manager->getCallGraphNode(mainDecl));
-        } else {
-            throw std::string("Failed to find the main function");
-        }
+        rootNodes.insert(getMainFunctionNode());
     } else {
         rootNodes = retrieveInputNodes(rootPass);
     }
 
     // convert marked functions to call graph nodes
     NodeSet markedNodes = retrieveInputNodes(inputPass);
-    InstRO::InfracstructureInterface::ConstructSetCompilerInterface inputCS (inputPass->getOutput());
 
     // initialize active nodes
     activeNodes.clear();
@@ -123,7 +195,7 @@ void UniqueCallpathTransformer::execute() {
         work.pop();
 
         // get the associated function
-        SgFunctionDeclaration *funDecl = manager->getFunctionDeclaration(entry.first);
+        SgFunctionDeclaration *funDecl = getFunDeclFromNode(entry.first);
 
         // a node may only be visited once or multiple definitions will be created
         if (visited.find(entry.first) != visited.end()) {
@@ -147,10 +219,10 @@ void UniqueCallpathTransformer::execute() {
             continue;
         }
 
-        // get the defining declaration
+        // check whether we are dealing with a real function that has a definition
         funDecl = isSgFunctionDeclaration(funDecl->get_definingDeclaration());
         if (!funDecl || !funDecl->get_definition()) {
-            funDecl = manager->getFunctionDeclaration(entry.first);
+            funDecl = getFunDeclFromNode(entry.first);
             std::cerr << "Cannot duplicate function " << SageInterface::get_name(funDecl) << " because no definition is available" << std::endl;
             continue;
         }
@@ -160,15 +232,13 @@ void UniqueCallpathTransformer::execute() {
         duplicate(entry.first, duplicatedNodes);
 
         // mark successors (functions called by the function which has just been duplicated) for duplication,
-        for (SgGraphNode *succ : manager->getChildrenSet(entry.first)) {
+        for (ExtendedCallGraphNode *succ : getSuccessorFunctions(entry.first)) {
             work.push(std::make_pair(succ, entry.second + 1));
         }
     }
 
-    // invalidate the call graph
-    delete manager;
-    manager = nullptr;
-
+    // TODO invalidate the call graph? currently assumes that there is only one static instance which is shared...
+    callGraph = nullptr;
 }
 
 void UniqueCallpathTransformer::findCandidates(const NodeSet &markedNodes, NodeDepthMap &candidates, NodeSet &cycleNodes)
@@ -177,19 +247,19 @@ void UniqueCallpathTransformer::findCandidates(const NodeSet &markedNodes, NodeD
 
     // start a depth first search starting at each root and update candidates if a marked node appears
     // at the end of the current path through the call graph
-    for (SgGraphNode* rootNode : rootNodes) {
+    for (ExtendedCallGraphNode* rootNode : rootNodes) {
 
         // initialize data structures
         localPath.clear();
 
         // start traversal at the root node at depth 0
-        std::deque<SgGraphNode*> workStack;
+        std::deque<ExtendedCallGraphNode*> workStack;
         std::deque<int> depthStack;
         workStack.push_back(rootNode);
         depthStack.push_back(0);
 
         while (!workStack.empty()) {
-            SgGraphNode *node = workStack.back();
+            ExtendedCallGraphNode *node = workStack.back();
             workStack.pop_back();
             auto depth = depthStack.back();
             depthStack.pop_back();
@@ -203,7 +273,7 @@ void UniqueCallpathTransformer::findCandidates(const NodeSet &markedNodes, NodeD
             }
             // a node is considered to start a cycle if it is contained in the current working stack
             if (std::find(workStack.begin(), workStack.end(), node) != workStack.end()) {
-                std::cerr << "Found cycle at " << SageInterface::get_name(manager->getFunctionDeclaration(node)) << std::endl;
+                std::cerr << "Found cycle at " << node->getAssociatedConstructSet().toString() << std::endl;
                 cycleNodes.insert(node);
                 continue;
             }
@@ -217,11 +287,11 @@ void UniqueCallpathTransformer::findCandidates(const NodeSet &markedNodes, NodeD
             }
 
             // add successors / children to working stack
-            auto successors = manager->getChildrenSet(node);
-            for (SgGraphNode* succ : successors) {
+            auto successors = getSuccessorFunctions(node);
+            for (ExtendedCallGraphNode* succ : successors) {
                 // check for recursion because it is not detected by the cycle check above
                 if (succ == node) {
-                    std::cerr << "Found recursion at " << SageInterface::get_name(manager->getFunctionDeclaration(node)) << std::endl;
+                    std::cerr << "Found recursion at " << node->getAssociatedConstructSet().toString() << std::endl;
                     cycleNodes.insert(node);
                 } else {
                     workStack.push_back(succ);
@@ -238,7 +308,7 @@ void UniqueCallpathTransformer::findCandidates(const NodeSet &markedNodes, NodeD
     }
 
     // remove cycle nodes from the found candidates
-    for (SgGraphNode *cn : cycleNodes) {
+    for (ExtendedCallGraphNode *cn : cycleNodes) {
         candidates.erase(cn);
     }
 }
@@ -248,7 +318,7 @@ void UniqueCallpathTransformer::updateCandidates(NodeDepthMap &candidates, const
     std::cout << "Found path: ";
     for (NodeDepthMap::mapped_type i = 0; i < path.size(); ++i) {
         // check whether node is a candidate (has more than one predecessor)
-        if (manager->getParentSet(path[i]).size() > 1) {
+        if (getPredecessorFunctions(path[i]).size() > 1) {
             auto candidateIter = candidates.find(path[i]);
             if (candidateIter != candidates.end()) {
                 // update max call depth
@@ -259,7 +329,7 @@ void UniqueCallpathTransformer::updateCandidates(NodeDepthMap &candidates, const
             }
         }
 
-        std::cout << SageInterface::get_name(manager->getFunctionDeclaration(path[i])) << " ";
+        std::cout << SageInterface::get_name(getFunDeclFromNode(path[i])) << " ";
     }
     std::cout << std::endl;
 }
@@ -269,23 +339,23 @@ std::string UniqueCallpathTransformer::generateCloneName(SgFunctionDeclaration *
     return callee->get_name().getString() + "_ucp_" + caller->get_name().getString();
 }
 
-void  UniqueCallpathTransformer::duplicate(SgGraphNode *node, NodeFunctionDeclarationMap &duplicatedNodes)
+void  UniqueCallpathTransformer::duplicate(ExtendedCallGraphNode *node, NodeFunctionDeclarationMap &duplicatedNodes)
 {
     // retrieve the defining function declaration for the node
-    SgFunctionDeclaration *funDecl = isSgFunctionDeclaration(manager->getFunctionDeclaration(node)->get_definingDeclaration());
+    SgFunctionDeclaration *funDecl = isSgFunctionDeclaration(getFunDeclFromNode(node)->get_definingDeclaration());
 
     // if a parent has already been duplicated, the clones must be used instead as they are not picked up be the 'old' call graph
-    auto parents = manager->getParentSet(node);
+    auto parents = getPredecessorFunctions(node);
     std::vector<SgFunctionDeclaration*> callingFunctions;
     callingFunctions.reserve(parents.size());
 
-    for (SgGraphNode* parentNode : parents) {
+    for (ExtendedCallGraphNode* parentNode : parents) {
         auto range = duplicatedNodes.equal_range(parentNode);
 
         if (range.first == duplicatedNodes.end()) {
             // parent has not been duplicated
             // the function definition of the parent should always be available - otherwise it would have been difficult to construct the call graph...
-            SgFunctionDeclaration *definingParentDecl = isSgFunctionDeclaration(manager->getFunctionDeclaration(parentNode)->get_definingDeclaration());
+            SgFunctionDeclaration *definingParentDecl = isSgFunctionDeclaration(getFunDeclFromNode(parentNode)->get_definingDeclaration());
             callingFunctions.push_back(definingParentDecl);
         } else {
             // parent has been duplicated, add all created duplicates
