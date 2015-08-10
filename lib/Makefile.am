@@ -120,9 +120,7 @@ ROSE_SFILES= \
 ./src/rose/tooling/RoseGrammarInterface.cpp \
 ./src/rose/pass/selector/RoseProgramEntrySelector.cpp \
 ./src/rose/pass/transformer/UniqueCallpathTransformer.cpp \
-./src/rose/utility/FunctionRenamer.cpp \
-./src/rose/deprecated_utility/callgraphmanager.cpp \
-./src/rose/deprecated_utility/asthelper.cpp
+./src/rose/utility/FunctionRenamer.cpp
 
 EXAMPLE_HFILES= \
 ./include/instro/example/ExampleConstructSet.h \
