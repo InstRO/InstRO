@@ -9,6 +9,7 @@
 #include <unordered_set>
 #include <unordered_map>
 
+class SgNode;
 class SgFunctionDeclaration;
 class SgGraphNode;
 class SgScopeStatement;
@@ -97,6 +98,8 @@ private:
     NodeSet getSuccessorFunctions(InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *node);
     NodeSet getPredecessorFunctions(InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *node);
     SgFunctionDeclaration* getFunDeclFromNode(InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *node);
+
+    void addNodeToCS(InstRO::InfracstructureInterface::ConstructSetCompilerInterface &csci, SgNode *node);
 
     void findCandidates(const NodeSet &markedNodes, NodeDepthMap &candidates, NodeSet &cycleNodes);
     void updateCandidates(NodeDepthMap &candidates, const NodeList &path);

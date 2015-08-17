@@ -237,7 +237,6 @@ void UniqueCallpathTransformer::execute() {
         }
     }
 
-    // TODO invalidate the call graph? currently assumes that there is only one static instance which is shared...
     callGraph = nullptr;
 }
 
@@ -339,6 +338,11 @@ std::string UniqueCallpathTransformer::generateCloneName(SgFunctionDeclaration *
     return callee->get_name().getString() + "_ucp_" + caller->get_name().getString();
 }
 
+void UniqueCallpathTransformer::addNodeToCS(InstRO::InfracstructureInterface::ConstructSetCompilerInterface &csci, SgNode *node)
+{
+    csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
+}
+
 void  UniqueCallpathTransformer::duplicate(ExtendedCallGraphNode *node, NodeFunctionDeclarationMap &duplicatedNodes)
 {
     // retrieve the defining function declaration for the node
@@ -380,11 +384,14 @@ void  UniqueCallpathTransformer::duplicate(ExtendedCallGraphNode *node, NodeFunc
         duplicatedNodes.insert(std::make_pair(node, clonedFunction));
 
         InstRO::InfracstructureInterface::ConstructSetCompilerInterface output (&outputCS);
-        // add the duplicate to the output of the transformer
-        output.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(clonedFunction->get_definition()));
-        // add the redirected function calls to the output
+        InstRO::InfracstructureInterface::ConstructSetCompilerInterface collisions (getCollisionSet());
+        // add the duplicate to the output of the transformer and its files scope to the collision set
+        addNodeToCS(output, clonedFunction->get_definition());
+        addNodeToCS(collisions, SageInterface::getEnclosingFileNode(clonedFunction));
+        // add the redirected function calls to the output and the enclosing function to the collision set
         for (SgFunctionCallExp *funCall : renamingProvider.getFoundFunctionCalls()) {
-            output.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(funCall));
+            addNodeToCS(output, funCall);
+            addNodeToCS(collisions, SageInterface::getEnclosingFunctionDefinition(funCall));
         }
     }
 }
