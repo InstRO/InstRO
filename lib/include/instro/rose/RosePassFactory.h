@@ -81,6 +81,7 @@ class RosePassFactory : public InstRO::PassFactory {
 	virtual InstRO::Pass* createOpenMPOpariCannonizer(Pass* input);
 	virtual InstRO::Pass* createOPARIAdapter(Pass* input);
 
+	// UniqueCallpathTransformer
 	virtual InstRO::Pass* createUniqueCallpathTransformer(Pass* input);
 	virtual InstRO::Pass* createUniqueCallpathTransformer(Pass* input, Pass* root, Pass* active);
 
