@@ -51,6 +51,7 @@ CORE_HFILES= \
 ./include/instro/tooling/GrammarInterface.h \
 ./include/instro/tooling/NamedConstructAccess.h \
 ./include/instro/tooling/TransformationInterface.h \
+./include/instro/utility/ConfigurationLoader.h \
 ./include/instro/pass/selector/ProgramEntrySelector.h \
 ./include/instro/pass/selector/TextStringSelector.h \
 ./include/instro/pass/selector/IdentifyerSelector.h \
@@ -68,6 +69,7 @@ CORE_SFILES= \
 ./src/tooling/ConstructElevator.cpp \
 ./src/tooling/ExtendedCallGraph.cpp \
 ./src/tooling/ControlFlowGraph.cpp \
+./src/ConfigurationLoader.cpp \
 ./src/pass/selector/ProgramEntrySelector.cpp \
 ./src/pass/selector/IdentifyerSelector.cpp \
 ./src/pass/selector/TextStringSelector.cpp \
