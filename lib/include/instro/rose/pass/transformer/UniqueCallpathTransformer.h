@@ -42,17 +42,15 @@ namespace Transformer {
 ///
 /// \note This transformation relies on the availability of function definitions for almost all inspected functions.
 ///
-/// \ingroup Transformer
 /// \author Simon Reuß
 class UniqueCallpathTransformer : public RosePassImplementation {
 
 public:
     /// \brief Constructs a new UniqueCallpathTransformer without any explicit passes for the roots and active functions.
-	///
     /// The main function will be used as the root of the call graph and all functions will be assumed to be duplicatable.
     /// \arg pass The pass specifying the marked functions for which a unique call path should be created
     UniqueCallpathTransformer(InstRO::Pass *pass);
-    /// \brief Constructs a new UniqueCallpathTransformer with implicit passes for the roots and active functions.
+    /// \brief Constructs a new UniqueCallpathTransformer with explicit passes for the roots and active functions.
     /// \arg pass The pass which specifies the marked functions for which a unique call path should be created
     /// \arg root The pass which specifies the roots the the call graph
     /// \arg active The pass which specifies the active functions
@@ -61,10 +59,10 @@ public:
     virtual ~UniqueCallpathTransformer();
 
     virtual void init() override {};
-	virtual void execute() override;
-	virtual void finalize() override {};
-	virtual void releaseOutput() override { outputCS.clear(); };
-	virtual InstRO::Core::ConstructSet *getOutput() override { return &outputCS; }
+    virtual void execute() override;
+    virtual void finalize() override {};
+    virtual void releaseOutput() override { outputCS.clear(); };
+    virtual InstRO::Core::ConstructSet *getOutput() override { return &outputCS; }
 
 protected:
     InstRO::Pass *inputPass;
@@ -73,7 +71,7 @@ protected:
 
     InstRO::Core::ConstructSet outputCS;
 
-    /// Generates a new name for the cloned function.
+    /// Generates the new name for the cloned function.
     /// \arg caller The function calling the duplicate
     /// \arg callee The original function
     virtual std::string generateCloneName(SgFunctionDeclaration *caller, SgFunctionDeclaration *callee);
