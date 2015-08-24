@@ -1,7 +1,7 @@
 #ifndef ASTHELPER_H
 #define ASTHELPER_H
 
-#include "../common.h"
+#include "rose.h"
 
 #include <string>
 
