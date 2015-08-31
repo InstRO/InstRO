@@ -99,6 +99,7 @@ ROSE_HFILES= \
 ./include/instro/rose/pass/selector/NameBasedSelector.h \
 ./include/instro/rose/pass/selector/CompoundSelector.h \
 ./include/instro/rose/pass/selector/RoseProgramEntrySelector.h \
+./include/instro/rose/pass/transformer/UniqueCallpathTransformer.h \
 ./include/instro/rose/tooling/RoseAnalysisInterface.h  \
 ./include/instro/rose/tooling/RoseConstructElevator.h \
 ./include/instro/rose/tooling/RoseControlFlowGraph.h \
@@ -106,7 +107,8 @@ ROSE_HFILES= \
 ./include/instro/rose/tooling/RoseGrammarInterface.h \
 ./include/instro/rose/tooling/RoseNamedConstructAccess.h \
 ./include/instro/rose/tooling/RoseTransformationInterface.h \
-./include/instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h
+./include/instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h \
+./include/instro/rose/utility/FunctionRenamer.h
 
 ROSE_SFILES= \
 ./src/rose/core/RoseConstructSet.cpp   \
@@ -118,7 +120,9 @@ ROSE_SFILES= \
 ./src/rose/tooling/RoseConstructElevator.cpp \
 ./src/rose/tooling/RoseNamedConstructAccess.cpp \
 ./src/rose/tooling/RoseGrammarInterface.cpp \
-./src/rose/pass/selector/RoseProgramEntrySelector.cpp
+./src/rose/pass/selector/RoseProgramEntrySelector.cpp \
+./src/rose/pass/transformer/UniqueCallpathTransformer.cpp \
+./src/rose/utility/FunctionRenamer.cpp
 
 EXAMPLE_HFILES= \
 ./include/instro/example/ExampleConstructSet.h \

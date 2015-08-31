@@ -282,6 +282,20 @@ class ConstructSet {
 	// CI: I would like to have s.th. like a begin() and end() returning an iterator of constructset containing individual
 	// constructs
 
+	virtual std::string toString() const {
+        std::string str;
+        auto constructIter = begin();
+        while (constructIter != end()) {
+            auto currentIter = constructIter++;
+            auto constructPtr = *currentIter;
+            str += constructPtr->toString();
+            if (constructIter != end()) {
+                str += ", ";
+            }
+        }
+        return str;
+	}
+
 	virtual std::string toDotString() const {
 		std::string dotString;
 		for (auto const& constructPtr : constructs) {
