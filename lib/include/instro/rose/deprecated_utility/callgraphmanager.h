@@ -1,7 +1,6 @@
 #ifndef CALLGRAPHMANAGER_H
 #define CALLGRAPHMANAGER_H
 
-#include "../common.h"
 #include "asthelper.h"
 
 #include <boost/unordered_map.hpp>
