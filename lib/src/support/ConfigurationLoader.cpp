@@ -115,6 +115,16 @@ std::vector<Pass*> ConfigurationParser::getInputPasses(rapidjson::Value &passVal
 	return inputPasses;
 }
 
+std::string ConfigurationParsingContext::getStringArgument(const char* memberName) {
+	auto memberIter = passValue.FindMember(memberName);
+	
+	if (memberIter != passValue.MemberEnd()) {
+		return memberIter->value.GetString();
+	} else {
+		InstRO::raise_exception("Cannot find member '" + std::string(memberName) + "'");
+	}
+}
+
 std::vector<std::string> ConfigurationParsingContext::getStringArguments(const char* memberName) {
 	std::vector<std::string> arguments;
 	auto memberIter = passValue.FindMember(memberName);
@@ -134,11 +144,24 @@ std::vector<std::string> ConfigurationParsingContext::getStringArguments(const c
 	return arguments;
 }
 
-ConfigurationPassRegistry::PassParser ConfigurationPassRegistry::lookup(const std::string &passType) {
+ConfigurationPassRegistry::PassParser BaseConfigurationPassRegistry::lookup(const std::string &passType) {
 	auto passRegistryIter = passRegistry.find(passType);
 	if (passRegistryIter == passRegistry.end()) {
 		InstRO::raise_exception("Unknown pass type: " + passType);
 	}
 	
 	return passRegistryIter->second;
+}
+
+PassFactory* BaseConfigurationPassRegistry::getFactory() {
+	return factory;
+}
+
+void BaseConfigurationPassRegistry::registerPass(const std::string &id, const PassParser &parser) {
+	// print a warning if a parser has already been registered for the specified id
+	if (passRegistry.find(id) != passRegistry.end()) {
+		std::cerr << "Warning: a parser has already been registered for id '" << id << "'" << std::endl;
+	}
+	
+	passRegistry.insert(std::make_pair(id, parser));
 }
