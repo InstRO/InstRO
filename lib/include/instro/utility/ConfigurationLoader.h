@@ -21,6 +21,7 @@ namespace Utility {
 	struct ConfigurationParsingContext {
 		ConfigurationParsingContext(rapidjson::Value &passValue, const std::vector<Pass*> &inputPasses) : passValue(passValue), inputPasses(inputPasses) {}
 		
+		std::string getStringArgument(const char* memberName);
 		std::vector<std::string> getStringArguments(const char* memberName = "args");
 		
 		rapidjson::Value &passValue;
@@ -31,14 +32,26 @@ namespace Utility {
 		public:
 			typedef std::function<Pass*(ConfigurationParsingContext&)> PassParser;
 			
-			ConfigurationPassRegistry(PassFactory *factory) : factory(factory) {}
 			virtual ~ConfigurationPassRegistry() {}
 			
-			PassParser lookup(const std::string &passType);
-		protected:
+			virtual PassParser lookup(const std::string &passType)=0;
+	};
+	
+	class BaseConfigurationPassRegistry : public ConfigurationPassRegistry {
+		public:
+			BaseConfigurationPassRegistry(PassFactory *factory) : factory(factory) {}
+			virtual ~BaseConfigurationPassRegistry() {}
 			
+			PassParser lookup(const std::string &passType) override;
+			
+		protected:
+			PassFactory* getFactory();
+			void registerPass(const std::string &id, const PassParser &parser);
+			
+		private:
 			PassFactory * const factory;
 			std::unordered_map<std::string, PassParser> passRegistry;
+		
 	};
 	
 	class ConfigurationLoader {
@@ -77,7 +90,7 @@ namespace Utility {
 		std::vector<Pass*> getInputPasses(rapidjson::Value &passValue);
 	};
 	
-	class RoseConfigurationPassRegistry : public ConfigurationPassRegistry {
+	class RoseConfigurationPassRegistry : public BaseConfigurationPassRegistry {
 	public:
 		RoseConfigurationPassRegistry(InstRO::Rose::RosePassFactory *factory);
 	};
