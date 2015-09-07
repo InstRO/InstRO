@@ -30,10 +30,21 @@ PKG_PROG_PKG_CONFIG
 # 1.3 config.h
 # -------------------------------
 # As Automake prefers its version, let automake generate the header
-AC_CONFIG_SRCDIR([config.h.in])
+AC_CONFIG_SRCDIR([lib/include/instro.h])
 # AC_CONFIG_HEADERS([config.h])
 AM_CONFIG_HEADER([config.h])
 ## CI: old version AC_CONFIG_HEADERS([config.h])
+
+
+# -------------------------------
+# Checks for programs.
+# -------------------------------
+AC_PROG_CXX
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+# LT_INIT
 
 
 # -------------------------------
@@ -60,10 +71,6 @@ AH_BOTTOM([
 #endif /* _CONFIG_H */
 ])
 
-
-# 
-# 1.6 Set AC_PROG_INSTALL
-AC_PROG_INSTALL
 
 # -------------------------------
 # 2) Configure options
@@ -208,6 +215,28 @@ AX_BOOST_REGEX
 BOOST_INCLUDEDIR="$ac_boost_path/include"
 BOOST_LIBDIR="$ac_boost_path/lib"
 
+# -------------------------------
+# check for rapidjson
+# -------------------------------
+AC_ARG_WITH([rapidjson],
+[AS_HELP_STRING([--with-rapidjson@<:@=ARG@:>@],
+[support for parsing json configuration files @<:@default=check@:>@])],
+[],
+[with_rapidjson=check])
+
+RAPIDJSON_INCLUDEDIR=
+found_rapidjson=0
+AS_IF([test "x$with_rapidjson" != xno],
+[AS_IF([test "x$with_rapidjson" = xyes -o "x$with_rapidjson" = xcheck],
+[AC_CHECK_HEADER([rapidjson/document.h],[found_rapidjson=1],[found_rapidjson=0])],
+[AC_CHECK_FILE([$with_rapidjson/include/rapidjson/document.h],[found_rapidjson=1 ; RAPIDJSON_INCLUDEDIR=$with_rapidjson/include],[found_rapidjson=0])])
+AS_IF([test "x$with_rapidjson" != xcheck -a $found_rapidjson = 0],
+[AC_MSG_FAILURE([--with-rapidjson was given, but test for the header file failed])])
+])
+
+AM_CONDITIONAL(HAVERAPIDJSON, test x"$with_rapidjson" != xno -a $found_rapidjson = 1)
+AC_SUBST(RAPIDJSON_INCLUDEDIR)
+
 
 # ------ enable libtool support
 AC_ARG_ENABLE(libtool,
@@ -222,35 +251,14 @@ esac],
 
 AM_CONDITIONAL(USELIBTOOL, test x"$libtool" = x"true")
 AM_CONDITIONAL(USEROSE, test x"$userose" = x"true")
-AM_CONDITIONAL(USECLANG, test x"useclang" = x"true")
+AM_CONDITIONAL(USECLANG, test x"$useclang" = x"true")
 
-
-# -------------------------------
-# 3) Checks for programs.
-# -------------------------------
-AC_PROG_CXX
-AC_PROG_CC
-# AC_PROG_INSTALL
-AC_PROG_MAKE_SET
-# LT_INIT
+AC_SUBST(DISABLEEXCEPTIONS, [0])
 
 
 # -------------------------------
 # 4) Checks for libraries.
 # -------------------------------
-# CI: Check for BOOST
-##    S.th. messes up, disabling boost tests for starters
-#AX_BOOST_THREAD
-#AX_BOOST_DATE_TIME
-#AX_BOOST_REGEX
-#AX_BOOST_PROGRAM_OPTIONS
-##AX_BOOST_SERIALIZATION
-##AX_BOOST_ASIO
-##AX_BOOST_SIGNALS
-##AX_BOOST_TEST_EXEC_MONITOR
-#AX_BOOST_SYSTEM
-#AX_BOOST_FILESYSTEM
-#AX_BOOST_WAVE
 
 
 # CI: Check for ROSE
@@ -318,15 +326,10 @@ AC_TYPE_SIZE_T
 AC_CHECK_FUNCS([select])
 
 ## CI: add makefiles here for configure to install in build directory
-#AC_CONFIG_FILES([Makefile
-#                 examples/BlackWhitelistSelector/Makefile
-#                 examples/CygProfileInstrumentor/Makefile
-#                 examples/Geimer/Makefile
-#                 examples/GenericPrinterExample/Makefile
-#                 examples/Makefile
-#                 lib/Makefile])
+# process template configuration header
 AC_CONFIG_FILES([Makefile
 		 lib/Makefile
+                 lib/include/instro/config.h
 		 ])
 
 #AM_COND_IF([BUILD_PUBLICATIONS_TOOLS], [

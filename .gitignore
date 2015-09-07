@@ -12,6 +12,7 @@ config/m4
 
 config*
 !configure.ac
+!lib/include/instro/config.h.in
 
 # whatever all of these do
 aclocal.m4
