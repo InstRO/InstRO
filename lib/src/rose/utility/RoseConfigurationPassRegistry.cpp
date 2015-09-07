@@ -9,8 +9,6 @@ using namespace InstRO::Utility;
 RoseConfigurationPassRegistry::RoseConfigurationPassRegistry(InstRO::Rose::RosePassFactory *factory)
 	: BaseConfigurationPassRegistry(factory)
 {
-	// TODO: Rose-prefixes?, parse ConstructTraitType
-	
 	// Selectors / Filters
 	registerPass("ProgramEntrySelector", [factory] (ConfigurationParsingContext &context) {
 		return factory->createProgramEntrySelector();
@@ -19,87 +17,59 @@ RoseConfigurationPassRegistry::RoseConfigurationPassRegistry(InstRO::Rose::RoseP
 		return factory->createIdentifyerSelector(context.getStringArguments());
 	});
 	registerPass("IdentifyerFilter", [factory] (ConfigurationParsingContext &context) -> Pass* {
-		if (context.inputPasses.size() == 1) {
-			return factory->createIdentifyerFilter(context.getStringArguments(), context.inputPasses[0]);
-		} else {
-			InstRO::raise_exception("Expected one input pass, got " + std::to_string(context.inputPasses.size()));
-		}
-		
-		return nullptr;
+		context.expectInputPasses({1});
+		return factory->createIdentifyerFilter(context.getStringArguments(), context.inputPasses[0]);
 	});
 	registerPass("TextStringSelector", [factory] (ConfigurationParsingContext &context) {
 		return factory->createTextStringSelector(context.getStringArguments());
 	});
 	registerPass("CallPathSelector", [factory] (ConfigurationParsingContext &context) -> Pass* {
-		if (context.inputPasses.size() == 2) {
-			return factory->createCallPathSelector(context.inputPasses[0], context.inputPasses[1]);
-		} else {
-			InstRO::raise_exception("Expected two input passes, got " + std::to_string(context.inputPasses.size()));
-		}
-		
-		return nullptr;
+		context.expectInputPasses({2});
+		return factory->createCallPathSelector(context.inputPasses[0], context.inputPasses[1]);
 	});
 	registerPass("BooleanOrSelector", [factory] (ConfigurationParsingContext &context) -> Pass* {
-		if (context.inputPasses.size() == 2) {
-			return factory->createBooleanOrSelector(context.inputPasses[0], context.inputPasses[1]);
-		} else {
-			InstRO::raise_exception("Expected two input passes, got " + std::to_string(context.inputPasses.size()));
-		}
-		
-		return nullptr;
+		context.expectInputPasses({1});
+		return factory->createBooleanOrSelector(context.inputPasses[0], context.inputPasses[1]);
 	});
 	registerPass("FunctionBlackAndWhiteListSelector", [factory] (ConfigurationParsingContext &context) {
 		return factory->createFunctionBlackAndWhiteListSelector(context.getStringArguments());
 	});
-/*	registerPass("ConstructLoweringElevator", [factory] (ConfigurationParsingContext &context) -> Pass* {
-		if (context.inputPasses.size() == 1) {
-			return factory->createConstructLoweringElevator(context.inputPasses[0]);
-			return factory->createIdentifyerFilter(context.getStringArguments(), context.inputPasses[0]);
-		} else {
-			InstRO::raise_exception("Expected one input pass, got " + std::to_string(context.inputPasses.size()));
-		}
-		
-		return nullptr;
-	});*/
-	
-	
-	
+
+
 	// Transformers
+	registerPass("ConstructLoweringElevator", [factory] (ConfigurationParsingContext &context) -> Pass* {
+		context.expectInputPasses({1});
+		return factory->createConstructLoweringElevator(context.inputPasses[0], context.getConstructTraitType("level"));
+	});
+	registerPass("ConstructRaisingElevator", [factory] (ConfigurationParsingContext &context) -> Pass* {
+		context.expectInputPasses({1});
+		return factory->createConstructRaisingElevator(context.inputPasses[0], context.getConstructTraitType("level"));
+	});
 	registerPass("UniqueCallpathTransformer", [factory] (ConfigurationParsingContext &context) -> Pass* {
+		context.expectInputPasses({1,3});
 		if (context.inputPasses.size() == 1) {
 			return factory->createUniqueCallpathTransformer(context.inputPasses[0]);
 		} else if (context.inputPasses.size() == 3) {
 			return factory->createUniqueCallpathTransformer(context.inputPasses[0], context.inputPasses[1], context.inputPasses[2]);
-		} else {
-			InstRO::raise_exception("Expected one or three input passes for UniqueCallpathTransformer, got " + std::to_string(context.inputPasses.size()));
 		}
-		
+
 		return nullptr;
 	});
-	
-	
+
+
 	// Adapters
 	registerPass("ConstructPrinter", [factory] (ConfigurationParsingContext &context) -> Pass* {
-		if (context.inputPasses.size() == 1) {
-			return factory->createConstructPrinter(context.inputPasses[0]);
-		} else {
-			InstRO::raise_exception("Expected one input pass, got " + std::to_string(context.inputPasses.size()));
-		}
-		
-		return nullptr;
+		context.expectInputPasses({1});
+		return factory->createConstructPrinter(context.inputPasses[0]);
+
 	});
 	registerPass("ConstructHierarchyASTDotGenerator", [factory] (ConfigurationParsingContext &context) -> Pass* {
-		if (context.inputPasses.size() == 1) {
-			return factory->createConstructHierarchyASTDotGenerator(context.inputPasses[0], context.getStringArgument("filename"));
-		} else {
-			InstRO::raise_exception("Expected one input pass, got " + std::to_string(context.inputPasses.size()));
-		}
-		
-		return nullptr;
+		context.expectInputPasses({1});
+		return factory->createConstructHierarchyASTDotGenerator(context.inputPasses[0], context.getStringArgument("filename"));
 	});
-	
-	
-	
-	
+
+
+
+
 }
 
