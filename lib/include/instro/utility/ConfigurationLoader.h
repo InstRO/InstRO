@@ -59,10 +59,14 @@ namespace Utility {
 
 			virtual ~ConfigurationPassRegistry() {}
 
+			/// \brief Looks for a PassParser capable of parsing the specified pass type.
+			///
+			/// \return A valid PassParser or an empty function if no fitting PassParser has been registered.
 			virtual PassParser lookup(const std::string &passType)=0;
 	};
 
-	/// \brief An abstract ConfigurationPassRegistry that stores its PassParser instances in a map.
+	/// \brief An abstract ConfigurationPassRegistry that stores its PassParser instances in a map
+	/// and uses a PassFactory to create the Pass instances.
 	class BaseConfigurationPassRegistry : public ConfigurationPassRegistry {
 		public:
 			BaseConfigurationPassRegistry(PassFactory *factory) : factory(factory) {}
@@ -72,7 +76,8 @@ namespace Utility {
 
 		protected:
 			PassFactory* getFactory();
-			/// \brief Registers a new PassParser instance.
+
+			/// \brief Registers a new PassParser instance for the specified pass type.
 			///
 			/// Prints a warning on standard error if a parser has already been registered for that type ands skips the registration.
 			void registerPass(const std::string &typeName, const PassParser &parser);
@@ -92,7 +97,7 @@ namespace Utility {
 	/// \li \c id (mandatory) specifies a unique identifier for the pass instance so that other passes may refer to the instance.
 	/// \li \c inputs (optional) specifies an array of pass ids that serve as input for the pass.
 	///
-	/// Please note that the order of passes inside the JSON document is redundant, as (acyclic) dependencies are automatically resolved.
+	/// Please note that the order of passes inside the JSON document is redundant because (acyclic) dependencies are automatically resolved.
 	/// \author Simon Reuß
 	class ConfigurationLoader {
 		friend class ConfigurationParser;
@@ -114,7 +119,7 @@ namespace Utility {
 			PassMap passes;
 	};
 
-	/// \brief Used by ConfigurationLoader to handle the actual parsing of a JSON file.
+	/// \brief Used by the ConfigurationLoader to handle the actual parsing of a JSON file.
 	class ConfigurationParser {
 	public:
 		ConfigurationParser(ConfigurationLoader &loader) : loader(loader) {}
