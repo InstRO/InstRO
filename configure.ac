@@ -83,13 +83,13 @@ AC_ARG_ENABLE(debug,
 AS_HELP_STRING([--enable-debug],
                [enable debugging, default: no]),
 [case "${enableval}" in
-             yes) debug=true ;;
-             no)  debug=false ;;
+             yes) ;;
+             no) ;;
              *)   AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
 esac],
-[debug=false])
+[enable_debug=no])
 
-AM_CONDITIONAL(DEBUG, test x"$debug" = x"true")
+AM_CONDITIONAL(DEBUG, test x"$enable_debug" = x"yes")
 
 
 # -------------------------------
@@ -122,46 +122,25 @@ AM_CONDITIONAL(BUILD_PUBLICATIONS_TOOLS, [test x$publications = xtrue])
 # -------------------------------
 # 2.1) add ROSE
 # -------------------------------
-# introduce the optional configure parameter for a non-standard install prefix of ROSE
-AC_ARG_ENABLE(rose,
-AS_HELP_STRING([--enable-rose],
-               [enable use of rose, default: please no]),  
-[case "${enableval}" in
-             yes) userose=true 
-AC_ARG_WITH([ROSE],[AS_HELP_STRING([--with-ROSE=prefix],
-    [try this for a non-standard install prefix of the ROSE library])],
-    [ROSEPATHSET=1],[ROSEPATHSET=0])
+AC_ARG_WITH(rose,
+[AS_HELP_STRING([--with-rose@<:@=ARG@:>@],[enable use of ROSE and optionally specify a non-standard install prefix @<:@default=no@:>@])]
+,[],[with_rose=no])
 
-AC_ARG_WITH([ROSE_INCLUDE_PATH],[AS_HELP_STRING([--with-ROSE_include_path=prefix],
-    [try this for a non-standard include path of the ROSE library])],
-    [ROSE_INC_PATHSET=1],[ROSE_INC_PATHSET=0])
-    
-# if optional parameter used, get the path for the desired rose directory (and library directory)
-if test $ROSEPATHSET = 1 ; then
-    # extend the compiler and linker flags according to the path set
-    ROSE_INCLUDEDIR="$with_ROSE/include"
-    ROSE_NEW_INCLUDEDIR="$with_ROSE/include/rose"
-    ROSE_LIBDIR="$with_ROSE/lib"
-    echo "Using ROSE in $with_ROSE"
-    userose=true
-else
-    ROSE_INCLUDEDIR=/usr/include
-    ROSE_NEW_INCLUDEDIR=/usr/include/rose
-    ROSE_LIBDIR=/usr/lib
-fi
-    ROSE_LIBS_LIST="-lrose"
-;;
-             no)  userose=false ;;
-             *)    AC_MSG_ERROR([bad value ${enableval} for --enable-rose]) ;;
-esac],
-[userose=false])
+ROSE_INCLUDEDIR=
+ROSE_LIBDIR=
+found_rose=0
+AS_IF([test x"$with_rose" != xno],
+[AS_IF([test x"$with_rose" = xyes],
+[AC_CHECK_HEADER([rose.h],[found_rose=1],[found_rose=0])],
+[ROSE_LIBDIR=$with_rose/lib
+AC_CHECK_FILE([$with_rose/include/rose.h],[found_rose=1 ; ROSE_INCLUDEDIR=$with_rose/include],[found_rose=0
+AC_CHECK_FILE([$with_rose/include/rose/rose.h],[found_rose=1 ; ROSE_INCLUDEDIR=$with_rose/include/rose],[found_rose=0])])])
+AS_IF([test $found_rose = 0],[AC_MSG_FAILURE([Failed to find the ROSE library])])],)
 
 
 ## set @ROSE_INCLUDEDIR@ and @ROSE_LIBDIR@ variables
 AC_SUBST(ROSE_INCLUDEDIR)
-AC_SUBST(ROSE_NEW_INCLUDEDIR)
 AC_SUBST(ROSE_LIBDIR)
-AC_SUBST(ROSE_LIBS_LIST)
 
 # ---------------------------
 # 2.2) Add Clang flag
@@ -206,8 +185,8 @@ fi
 AX_BOOST_BASE([1.47])
 # JP: This is just output, to see how boost flags look like
 AC_MSG_NOTICE(["ac_boost_path=$ac_boost_path"])
-AC_MSG_NOTICE(["CPPFLAGS=$BOOST_CPPFLAGS"])
-AC_MSG_NOTICE(["LDFLAGS=$BOOST_LDFLAGS"])
+AC_MSG_NOTICE(["BOOST_CPPFLAGS=$BOOST_CPPFLAGS"])
+AC_MSG_NOTICE(["BOOST_LDFLAGS=$BOOST_LDFLAGS"])
 AX_BOOST_IOSTREAMS
 AX_BOOST_SYSTEM
 AX_BOOST_REGEX
@@ -250,19 +229,20 @@ esac],
 [libtool=false])
 
 AM_CONDITIONAL(USELIBTOOL, test x"$libtool" = x"true")
-AM_CONDITIONAL(USEROSE, test x"$userose" = x"true")
+AM_CONDITIONAL(USEROSE, test x"$with_rose" != xno)
 AM_CONDITIONAL(USECLANG, test x"$useclang" = x"true")
 
-AC_SUBST(DISABLEEXCEPTIONS, [0])
+AC_SUBST(CONFIG_DISABLEEXCEPTIONS, [0])
+AC_SUBST(CONFIG_USE_ROSE, [$found_rose])
+AC_SUBST(CONFIG_USE_CLANG, [0])
 
 
 # -------------------------------
 # 4) Checks for libraries.
 # -------------------------------
-
-
 # CI: Check for ROSE
-AC_CHECK_LIB([rose], [frontend])
+# SR: commented out as it won't work anyway: library must be in LDFLAGS/default location
+#AC_CHECK_LIB([rose], [frontend])
 
 
 ##AC_DEFINE([BOOST_INCLUDEDIR], [$BOOST_INCLUDEDIR], [Description])
@@ -273,10 +253,6 @@ AC_CHECK_LIB([rose], [frontend])
 # AM_SUBST_NOTMAKE(BOOST_LIBDIR)
 AC_SUBST(BOOST_INCLUDEDIR)
 AC_SUBST(BOOST_LIBDIR)
-AC_SUBST(LDFLAGS)
-
-
-
 
 
 # -------------------------------
@@ -289,16 +265,6 @@ ROSE_CPPFLAGS="$BOOST_CPPFLAGS -I$ROSE_INCLUDEDIR -I$ROSE_INCLUDEDIR/rose"
 # JP: This is the new one we use now!
 ROSE_LINK_LIBRARIES="-lrose $BOOST_IOSTREAMS_LIB $BOOST_SYSTEM_LIB $BOOST_REGEX_LIB"
 
-INSTRO_CPP_FLAGS="$INSTRO_CPP_FLAGS --version "
-
-AC_MSG_NOTICE(["INSTRO_CXXFLAGS= $INSTRO_CXXFLAGS"])
-AC_MSG_NOTICE(["INSTRO_CPPFLAGS= $INSTRO_CPPFLAGS"])
-AC_MSG_NOTICE(["INSTRO_LDFLAGS= $INSTRO_LDFLAGS"])
-
-AC_SUBST(INSTRO_CPPFLAGS)
-AC_SUBST(INSTRO_CFLAGS)
-AC_SUBST(INSTRO_CXXFLAGS)
-AC_SUBST(INSTRO_LDFLAGS) 
 AC_SUBST(ROSE_CPPFLAGS)
 AC_SUBST(ROSE_CFLAGS)
 AC_SUBST(ROSE_CXXFLAGS)
@@ -310,7 +276,6 @@ AC_SUBST(ROSE_LINK_LIBRARIES)
 # -------------------------------
 # 5) Checks for header files.
 # -------------------------------
-
 AC_CHECK_HEADERS([stdlib.h])
 
 # -------------------------------
