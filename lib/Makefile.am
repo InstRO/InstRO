@@ -205,7 +205,7 @@ ExampleInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
 ConfigInstrumentor_SOURCES=./src/config_main.cpp
 ConfigInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@ -I@RAPIDJSON_INCLUDEDIR@
-ConfigInstrumentor_LDADD=libInstRO_rose.la @ROSE_LINK_LIBARIES@
+ConfigInstrumentor_LDADD=libInstRO_rose.la @ROSE_LINK_LIBRARIES@
 
 if HAVERAPIDJSON
 libInstRO_core_la_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
