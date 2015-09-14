@@ -3,11 +3,15 @@
 #include "instro/utility/exception.h"
 
 #include "rapidjson/filereadstream.h"
+#include "rapidjson/error/en.h"
 
 #include <type_traits> //std::underlying_type
 
 using namespace InstRO;
 using namespace InstRO::Utility;
+
+
+// ConfigurationLoader
 
 ConfigurationLoader::ConfigurationLoader(std::unique_ptr<ConfigurationPassRegistry> passRegistry)
 	: passRegistry(std::move(passRegistry)) {}
@@ -31,24 +35,29 @@ void ConfigurationLoader::load(const std::string &filename) {
 	parser.parseFile(filename);
 }
 
+
+// ConfigurationParser
+
 void ConfigurationParser::parseFile(const std::string &filename) {
-	char buffer[1024];
 	FILE *file = std::fopen(filename.c_str(), "r");
 	if (!file) {
 		std::cerr << "Failed to open file '" << filename << "'" << std::endl;
 		return;
 	}
 
+	// parse JSON file into DOM
+	char buffer[1024];
 	rapidjson::FileReadStream readStream (file, buffer, sizeof(buffer));
 	doc.ParseStream(readStream);
 
 	std::fclose(file);
 
 	if (doc.HasParseError()) {
-		std::cerr << "An error occurred while parsing the JSON document at position " << doc.GetErrorOffset() << std::endl;
+		std::cerr << "An error occurred while parsing the JSON document at position " << doc.GetErrorOffset() << ": "
+			<<  rapidjson::GetParseError_En(doc.GetParseError()) << std::endl;
 	}
 
-
+	// parse the individual passes which are specified inside the top level array
 	for (auto passValueIter = doc.Begin(); passValueIter != doc.End(); ++passValueIter) {
 		parsePass(*passValueIter);
 	}
@@ -67,9 +76,15 @@ Pass* ConfigurationParser::parsePass(rapidjson::Value &passValue) {
 
 	std::string passType = passValue["type"].GetString();
 
+	// retrieve and invoke a parser for the specified type from the registry
+	Pass *pass = nullptr;
 	auto passParser = loader.passRegistry->lookup(passType);
-	Pass *pass = passParser(context);
-	loader.passes.insert(std::make_pair(passId, pass));
+	if (passParser) {
+		pass = passParser(context);
+		loader.passes.insert(std::make_pair(passId, pass));
+	} else {
+		InstRO::raise_exception(passId + ": Failed to find a parser for a pass of type '" + passType + "'");
+	}
 
 	return pass;
 }
@@ -89,10 +104,12 @@ std::vector<Pass*> ConfigurationParser::getInputPasses(rapidjson::Value &passVal
 	std::vector<Pass*> inputPasses;
 	auto inputs = passValue.FindMember("inputs");
 
+	// check whether any passes have been specified because 'inputs' is optional
 	if (inputs != passValue.MemberEnd()) {
 		rapidjson::Value &inputsValue = inputs->value;
+		std::string passId = passValue["id"].GetString();
 		if (!inputsValue.IsArray()) {
-			InstRO::raise_exception(std::string("The 'inputs' member of '") + passValue["id"].GetString() + "' must be an array");
+			InstRO::raise_exception(passId + ": 'inputs' must be an array");
 		}
 
 		inputPasses.reserve(inputsValue.Size());
@@ -100,13 +117,13 @@ std::vector<Pass*> ConfigurationParser::getInputPasses(rapidjson::Value &passVal
 			std::string inputId = inputValueIter->GetString();
 			Pass *inputPass = loader.getPass(inputId);
 			if (!inputPass) {
-				// pass has not been parsed yet (id mentioned before declaration)
+				// pass has not been parsed yet (id used before declaration)
 				rapidjson::Value *inputPassValue = findPassValue(inputId);
 				if (inputPassValue) {
 					inputPass = parsePass(*inputPassValue);
 				} else {
 					// failed to find the declaration of that id
-					InstRO::raise_exception("No pass with id '" + inputId + "' has been declared");
+					InstRO::raise_exception(passId + ": No pass with id '" + inputId + "' has been declared");
 				}
 			}
 
@@ -117,12 +134,15 @@ std::vector<Pass*> ConfigurationParser::getInputPasses(rapidjson::Value &passVal
 	return inputPasses;
 }
 
+
+// ConfigurationParsingContext
+
 std::string ConfigurationParsingContext::getId() const {
-	return getStringArgument("id");
+	return passValue["id"].GetString();
 }
 
 std::string ConfigurationParsingContext::getType() const {
-	return getStringArgument("type");
+	return passValue["type"].GetString();
 }
 
 std::string ConfigurationParsingContext::getStringArgument(const char* memberName) const {
@@ -131,7 +151,8 @@ std::string ConfigurationParsingContext::getStringArgument(const char* memberNam
 	if (memberIter != passValue.MemberEnd()) {
 		return memberIter->value.GetString();
 	} else {
-		InstRO::raise_exception("Cannot find member '" + std::string(memberName) + "'");
+		InstRO::raise_exception(getId() + ": Cannot find member '" + std::string(memberName) + "'");
+		return std::string();
 	}
 }
 
@@ -214,12 +235,18 @@ void ConfigurationParsingContext::expectInputPasses(std::initializer_list<unsign
 
 	bool foundFit = false;
 	bool first = true; // whether this is the first element
-	auto iter = numberOfPasses.begin();
-	while (iter != numberOfPasses.end()) {
-		auto currentIter = iter++;
+	auto next = numberOfPasses.begin();
+	while (next != numberOfPasses.end()) {
+		auto current = next++;
 
-		numberBuffer += std::to_string(*currentIter);
-		if (iter != numberOfPasses.end()) {
+		if (inputPasses.size() == *current) {
+			foundFit = true;
+			break;
+		}
+
+		// append checked number of passes to the buffer for the potential error message
+		numberBuffer += std::to_string(*current);
+		if (next != numberOfPasses.end()) {
 			// append either 'or' or ','
 			if (first) {
 				numberBuffer += " or ";
@@ -227,11 +254,6 @@ void ConfigurationParsingContext::expectInputPasses(std::initializer_list<unsign
 			} else {
 				numberBuffer += ", ";
 			}
-		}
-
-		if (inputPasses.size() == *currentIter) {
-			foundFit = true;
-			break;
 		}
 	}
 
@@ -242,10 +264,12 @@ void ConfigurationParsingContext::expectInputPasses(std::initializer_list<unsign
 }
 
 
+// BaseConfigurationPassRegistry
+
 ConfigurationPassRegistry::PassParser BaseConfigurationPassRegistry::lookup(const std::string &passType) {
 	auto passRegistryIter = passRegistry.find(passType);
 	if (passRegistryIter == passRegistry.end()) {
-		InstRO::raise_exception("Unknown pass type: " + passType);
+		return PassParser();
 	}
 
 	return passRegistryIter->second;
