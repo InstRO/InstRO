@@ -10,32 +10,47 @@
 // using namespace InstRO;
 
 int main(int argc, char** argv) {
-	try {
-		InstRO::Instrumentor* instro = new InstRO::ExampleInstrumentor();
-		// CI - Reseting Classic Implementation  InstRO::Ext::VisualizingPassManager * passManager=new
-		// InstRO::Ext::VisualizingPassManager();
-		// CI - Reseting Classic Implementation  instro->setPassManager(passManager);
+	//		try {
+	InstRO::Instrumentor* instro = new InstRO::ExampleInstrumentor();
+	auto defaultFactory = instro->getFactory();
 
-		auto aFactory = dynamic_cast<InstRO::Example::ExamplePassFactory*>(instro->getFactory());
+	// CI - Reseting Classic Implementation  InstRO::Ext::VisualizingPassManager * passManager=new
+	// InstRO::Ext::VisualizingPassManager();
+	// CI - Reseting Classic Implementation  instro->setPassManager(passManager);
 
-		std::vector<std::string> filterRules;
-		filterRules.push_back("main");
-		auto aPass = aFactory->createNameBasedSelector(filterRules);
-		auto bPass = aFactory->createNameBasedSelector(filterRules);
-		auto compound = aFactory->createBooleanOrSelector(aPass, bPass);
+	InstRO::Example::ExamplePassFactory* aFactory =
+			dynamic_cast<InstRO::Example::ExamplePassFactory*>(instro->getFactory());
 
-		auto adapter = aFactory->createGPIAdapter(compound);
-		aFactory->createConstructPrinter(aPass);
-		instro->init();
-		instro->apply();
-		instro->finalize();
+	std::vector<std::string> filterRules;
+	filterRules.push_back("main");
+	auto aPass = aFactory->createIdentifyerSelector(filterRules);
+	auto bPass = aFactory->createIdentifyerSelector(filterRules);
 
-		// CI - Reseting Classic Implementation   passManager->outputConfiguration("InstRO-CFG.dot");
+	auto compound = aFactory->createBooleanOrSelector(aPass, bPass);
 
-	} catch (std::string stringBasedException) {
-		std::cout << stringBasedException << std::endl;
-		std::cout.flush();
-	}
+	auto adapter = aFactory->createGPIAdapter(compound);
+
+	/*	aFactory->createConstructPrinter(aPass);
+		aPass->initPass();
+		aPass->executePass();
+		bPass->initPass();
+		bPass->executePass();
+
+		auto intersectionInputA = aPass->getOutput();
+		auto intersectionInputB = bPass->getOutput();
+		auto intersection = intersectionInputA->intersect(*intersectionInputB);*/
+
+	instro->init();
+	instro->apply();
+
+	instro->finalize();
+
+	// CI - Reseting Classic Implementation   passManager->outputConfiguration("InstRO-CFG.dot");
+
+	//	} catch (std::string stringBasedException) {
+	//		std::cout << stringBasedException << std::endl;
+	//		std::cout.flush();
+	//	}
 
 	/*
 	InstRO::Instrumentor * instro=new InstRO::RoseInstrumentor();

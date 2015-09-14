@@ -55,11 +55,10 @@ namespace Example {};	// An example implementation and usage of the InstRO inter
 //#include "instro/core/PassManager.h"
 
 #ifdef USING_ROSE
-#include "instro/rose/RosePass.h"
+#include "instro/rose/core/RosePassImplementation.h"
 #include "instro/rose/RosePassFactory.h"
 #include "instro/rose/RoseInstrumentor.h"
-#include "instro/rose/adapters/CygProfileAdapter.h"
-#include "instro/rose/selectors/CompoundSelectors.h"
+#include "instro/rose/pass/adapter/RoseConstructPrinter.h"
 #endif
 
 #ifdef USING_LLVM
@@ -67,6 +66,7 @@ namespace Example {};	// An example implementation and usage of the InstRO inter
 #endif
 
 #ifdef USING_EXAMPLE
+//#include "instro/example/ExampleConstructProvider.h"
 #include "instro/example/ExampleInstrumentor.h"
 #include "instro/example/ExamplePass.h"
 #include "instro/example/ExamplePassFactory.h"

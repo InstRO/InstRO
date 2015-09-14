@@ -27,7 +27,7 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 	virtual bool hasInputDependencies(Pass *pass) { return getPredecessors(getEnvelope(pass)).size() > 0; };
 
  protected:
-	InstRO::Core::ConstructSet *elevate(Core::ConstructLevelType inputLevel) {
+	InstRO::Core::ConstructSet *elevate(Core::ConstructTraitType inputLevel) {
 		// TODO(CI): Implement Elevation
 		return NULL;
 	}

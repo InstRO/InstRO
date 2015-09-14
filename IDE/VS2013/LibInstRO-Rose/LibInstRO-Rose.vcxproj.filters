@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="instro">
+      <UniqueIdentifier>{aec1a036-b1d2-4a83-9847-181b4c28434b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\core">
+      <UniqueIdentifier>{963ad70a-ad7d-4ca3-a95e-58ff4da24aae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\rose">
+      <UniqueIdentifier>{9ddd7f44-b779-4318-ac37-461259cb2fce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\rose\core">
+      <UniqueIdentifier>{7f4d730b-0edb-4763-b25e-ace851b0757e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\rose\tooling">
+      <UniqueIdentifier>{38999b17-eea3-47c8-890b-b23120960758}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\llvm">
+      <UniqueIdentifier>{d013ed9f-acba-4c06-bd6e-981b6529ec56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\support">
+      <UniqueIdentifier>{8b9876e8-07c6-4813-8046-45194d90456a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\extra">
+      <UniqueIdentifier>{22e1ab6b-f6de-46b7-8edd-21092df36525}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\tooling">
+      <UniqueIdentifier>{c1cf7131-bba8-4085-9f55-90d5ce7a8b87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\example">
+      <UniqueIdentifier>{872a2657-6864-4e6d-9a2e-950dcd2637fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\example\tooling">
+      <UniqueIdentifier>{17f75d3c-8dc1-42f7-b794-9adef9f1c10f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\rose\pass">
+      <UniqueIdentifier>{3ded2658-1228-48e9-88e0-216b9142d680}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\rose\pass\adapter">
+      <UniqueIdentifier>{1b31f1c0-a77d-4562-90b4-23be6d054d7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\rose\pass\selector">
+      <UniqueIdentifier>{4af22494-0362-4f30-a387-b7b53cacc301}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\pass">
+      <UniqueIdentifier>{f60174be-717e-4c11-a2ed-99d2299e735f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\pass\selector">
+      <UniqueIdentifier>{efab79fb-0cc1-4a17-a98c-cc872f9ee37c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h">
+      <Filter>instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\Factory.h">
+      <Filter>instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\Instrumentor.h">
+      <Filter>instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\Pass.h">
+      <Filter>instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassExecuter.h">
+      <Filter>instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassFactory.h">
+      <Filter>instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassImplementation.h">
+      <Filter>instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\PassManager.h">
+      <Filter>instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\SimplePassManager.h">
+      <Filter>instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h">
+      <Filter>instro\rose</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\support\BWLFileReader.h">
+      <Filter>instro\support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\CallPathSelector.h">
+      <Filter>instro\example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleInstrumentor.h">
+      <Filter>instro\example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePass.h">
+      <Filter>instro\example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePassFactory.h">
+      <Filter>instro\example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructSet.h">
+      <Filter>instro\example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleAnalysisInterface.h">
+      <Filter>instro\example\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\Singleton.h">
+      <Filter>instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\AnalysisInterface.h">
+      <Filter>instro\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\TransformationInterface.h">
+      <Filter>instro\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseAnalysisInterface.h">
+      <Filter>instro\rose\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\NamedConstructAccess.h">
+      <Filter>instro\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseNamedConstructAccess.h">
+      <Filter>instro\rose\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseConstructElevator.h">
+      <Filter>instro\rose\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\ConstructElevator.h">
+      <Filter>instro\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\ControlFlowGraph.h">
+      <Filter>instro\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\ExtendedCallGraph.h">
+      <Filter>instro\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\GrammarInterface.h">
+      <Filter>instro\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseConstructPrinter.h">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\selector\CompoundSelector.h">
+      <Filter>instro\rose\pass\selector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\selector\NameBasedSelector.h">
+      <Filter>instro\rose\pass\selector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\core\RoseConstructSet.h">
+      <Filter>instro\rose\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\core\RoseLegacySelector.h">
+      <Filter>instro\rose\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\core\RosePassImplementation.h">
+      <Filter>instro\rose\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseControlFlowGraph.h">
+      <Filter>instro\rose\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseExtendedCallGraph.h">
+      <Filter>instro\rose\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseGrammarInterface.h">
+      <Filter>instro\rose\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseTransformationInterface.h">
+      <Filter>instro\rose\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\selector\ElevatorSelector.h">
+      <Filter>instro\rose\pass\selector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\GNUProfilingInterfaceAdapter.h">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h">
+      <Filter>instro\rose\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\ProgramEntrySelector.h">
+      <Filter>instro\pass\selector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\IdentifyerSelector.h">
+      <Filter>instro\pass\selector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\TextStringSelector.h">
+      <Filter>instro\pass\selector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\CallPathSelector.h">
+      <Filter>instro\pass\selector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructProvider.h">
+      <Filter>instro\example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\ConstructHierarchyASTDotGenerator.h">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rose.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp">
+      <Filter>instro\rose\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAccess.cpp">
+      <Filter>instro\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseConstructElevator.cpp">
+      <Filter>instro\rose\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseConstructPrinter.cpp">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp">
+      <Filter>instro\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\Pass.cpp">
+      <Filter>instro\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp">
+      <Filter>instro\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp">
+      <Filter>instro\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp">
+      <Filter>instro\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\tooling\ConstructElevator.cpp">
+      <Filter>instro\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\roseInstrumentor.cpp">
+      <Filter>instro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp">
+      <Filter>instro\support</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\selector\NameBasedSelector.cpp">
+      <Filter>instro\rose\pass\selector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\selector\ElevatorSelector.cpp">
+      <Filter>instro\rose\pass\selector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\GNUProfilingInterfaceAdapter.cpp">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\core\RosePassFactory.cpp">
+      <Filter>instro\rose\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\pass\selector\ProgramEntrySelector.cpp">
+      <Filter>instro\pass\selector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\pass\selector\IdentifyerSelector.cpp">
+      <Filter>instro\pass\selector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\pass\selector\TextStringSelector.cpp">
+      <Filter>instro\pass\selector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\pass\selector\CallPathSelector.cpp">
+      <Filter>instro\pass\selector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseGrammarInterface.cpp">
+      <Filter>instro\rose\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\tooling\ControlFlowGraph.cpp">
+      <Filter>instro\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\tooling\ExtendedCallGraph.cpp">
+      <Filter>instro\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\selector\CompoundSelector.cpp">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -3,22 +3,15 @@ AM_CPPFLAGS=-I$(top_srcdir)/lib/include
 
 if DEBUG
 AM_CFLAGS = -g3 -O0
-AM_CPPFLAGS += -g3 -O0 -std=gnu++0x
+AM_CPPFLAGS += -g3 -O0 -std=c++11 -DPROVIDE_MAKE_UNIQUE
 else
 AM_CFLAGS = -O2
-AM_CPPFLAGS += -O2 -std=gnu++0x
+AM_CPPFLAGS += -O2 -std=c++11 -DPROVIDE_MAKE_UNIQUE
 endif
 
-CORE_SFILES= \
-./src/core/ConstructSet.cpp \
-./src/core/SimplePassManager.cpp \
-./src/core/Singleton.cpp \
-./src/core/Pass.cpp \
-./src/support/BWLFileReader.cpp \
-./src/tooling/AnalysisInterface.cpp
-# ./src/core/ConstructSetManagement.cpp 
 
-
+ROSEINSTROASTPRINTER_SFILES=\
+./src/rose/extra/main.cxx
 
 CLANG_SFILES= \
 ./src/clang/adapter/CygProfileAdapter.cpp \
@@ -32,12 +25,12 @@ CLANG_SFILES= \
 ./src/clang/support/InstROASTConsumer.cpp
 
 EXAMPLE_SFILES= \
-./src/example/CallPathSelector.cpp \
 ./src/example/ExampleConstructPrinter.cpp \
 ./src/example/ExampleConstructSet.cpp \
 ./src/example/ExampleInstrumentor.cpp \
 ./src/example/ExampleNamedConstructAccess.cpp \
-./src/example/NameBasedSelector.cpp 
+./src/example/NameBasedSelector.cpp \
+./src/example/CompoundSelector.cpp
 
 #./src/clang/Instrumentor.cpp 
 
@@ -52,8 +45,16 @@ CORE_HFILES= \
 ./include/instro/core/PassImplementation.h \
 ./include/instro/core/Singleton.h \
 ./include/instro/tooling/AnalysisInterface.h \
+./include/instro/tooling/ConstructElevator.h \
+./include/instro/tooling/ControlFlowGraph.h \
+./include/instro/tooling/ExtendedCallGraph.h \
+./include/instro/tooling/GrammarInterface.h \
 ./include/instro/tooling/NamedConstructAccess.h \
-./include/instro/tooling/TransformationInterface.h 
+./include/instro/tooling/TransformationInterface.h \
+./include/instro/pass/selector/ProgramEntrySelector.h \
+./include/instro/pass/selector/TextStringSelector.h \
+./include/instro/pass/selector/IdentifyerSelector.h \
+./include/instro/pass/selector/CallPathSelector.h
 
 CORE_SFILES= \
 ./src/core/ConstructSet.cpp \
@@ -61,11 +62,16 @@ CORE_SFILES= \
 ./src/core/PassImplemention.cpp \
 ./src/core/SimplePassManager.cpp \
 ./src/core/Singleton.cpp \
-./src/tooling/NamedConstructAccess.cpp 
-
-# ./include/instro/core/ConstructSetManagement.h \
-#./include/instro/core/ConstructLevelManagrment.h \
-#./include/instro/core/ConstructElevator.h 
+./src/core/Helper.cpp \
+./src/tooling/AnalysisInterface.cpp \
+./src/tooling/NamedConstructAccess.cpp \
+./src/tooling/ConstructElevator.cpp \
+./src/tooling/ExtendedCallGraph.cpp \
+./src/tooling/ControlFlowGraph.cpp \
+./src/pass/selector/ProgramEntrySelector.cpp \
+./src/pass/selector/IdentifyerSelector.cpp \
+./src/pass/selector/TextStringSelector.cpp \
+./src/pass/selector/CallPathSelector.cpp 
 
 CLANG_HFILES= \
 ./include/instro/clang/adapter/CygProfileAdapter.h \
@@ -79,35 +85,42 @@ CLANG_HFILES= \
 ./include/instro/clang/selector/BlackWhitelistSelector.h \
 ./include/instro/clang/selector/FunctionDefinitionSelector.h \
 ./include/instro/clang/support/InstROASTConsumer.h
-#./include/instro/agnosticSupport.h \
-#./include/instro/misc/VisualizingManager.h \
-#./include/instro/misc/VisualizingPassManager.h \
-#./include/instro/rose/RoseInstrumentor.h \
-#./include/instro/rose/RosePass.h \
-#./include/instro/rose/RosePassFactory.h \
-#./include/instro/rose/contrib/geimeradapter.h \
-#./include/instro/rose/contrib/geimerparser.h \
-#./include/instro/rose/contrib/geimerselector.h \
-#./include/instro/rose/selectors/BlackAndWhiteListSelector.h \
-#./include/instro/rose/selectors/CompoundSelectors.h \
-#./include/instro/rose/adapters/CygProfileAdapter.h \
-#./include/instro/rose/adapters/GenericAdapter.h \
-#./include/instro/roseInstRO.h \
-#./include/instro/llvmInstRO.h
 
 ROSE_HFILES= \
 ./include/instro/rose/RoseInstrumentor.h  \
 ./include/instro/rose/RosePassFactory.h  \
-./include/instro/rose/RosePass.h  \
 ./include/instro/rose/core/RoseConstructSet.h  \
+./include/instro/rose/core/RosePass.h  \
+./include/instro/rose/core/RoseLegacySelector.h \
+./include/instro/rose/pass/adapter/RoseConstructPrinter.h \
+./include/instro/rose/pass/selector/ElevatorSelector.h \
+./include/instro/rose/pass/selector/NameBasedSelector.h \
+./include/instro/rose/pass/selector/CompoundSelector.h \
+./include/instro/rose/pass/selector/RoseProgramEntrySelector.h \
+./include/instro/rose/pass/transformer/UniqueCallpathTransformer.h \
 ./include/instro/rose/tooling/RoseAnalysisInterface.h  \
-./include/instro/rose/tooling/RoseNamedConstructAccess.h  \
-./include/instro/rose/selectorsNameBasedSelector.h 
+./include/instro/rose/tooling/RoseConstructElevator.h \
+./include/instro/rose/tooling/RoseControlFlowGraph.h \
+./include/instro/rose/tooling/RoseExtendedCallGraph.h \
+./include/instro/rose/tooling/RoseGrammarInterface.h \
+./include/instro/rose/tooling/RoseNamedConstructAccess.h \
+./include/instro/rose/tooling/RoseTransformationInterface.h \
+./include/instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h \
+./include/instro/rose/utility/FunctionRenamer.h
 
 ROSE_SFILES= \
 ./src/rose/core/RoseConstructSet.cpp   \
-./src/rose/tooling/RoseNamedConstructAccess.cpp   \
-./src/rose/selectors/NameBasedSelector.cpp  
+./src/rose/core/RosePassFactory.cpp \
+./src/rose/pass/adapter/RoseConstructPrinter.cpp \
+./src/rose/pass/selector/CompoundSelector.cpp  \
+./src/rose/pass/selector/NameBasedSelector.cpp  \
+./src/rose/pass/selector/ElevatorSelector.cpp \
+./src/rose/tooling/RoseConstructElevator.cpp \
+./src/rose/tooling/RoseNamedConstructAccess.cpp \
+./src/rose/tooling/RoseGrammarInterface.cpp \
+./src/rose/pass/selector/RoseProgramEntrySelector.cpp \
+./src/rose/pass/transformer/UniqueCallpathTransformer.cpp \
+./src/rose/utility/FunctionRenamer.cpp
 
 EXAMPLE_HFILES= \
 ./include/instro/example/ExampleConstructSet.h \
@@ -115,7 +128,6 @@ EXAMPLE_HFILES= \
 ./include/instro/example/ExamplePassFactory.h \
 ./include/instro/example/ExamplePass.h \
 ./include/instro/example/ExampleAnalysisInterface.h \
-./include/instro/example/CallPathSelector.h \
 ./include/instro/example/ExampleConstructPrinter.h  \
 ./include/instro/example/ExampleNamedConstructAccess.h \
 ./include/instro/example/NameBasedSelector.h
@@ -125,8 +137,21 @@ EXAMPLE_HFILES= \
 if USELIBTOOL
 # LIBTOOL RULE FOR LIBINSTRO
 #lib_LTLIBRARIES= libInstRO_core.la libInstRO_clang.la libInstRO.la
-lib_LTLIBRARIES= libInstRO_core.la libInstRO_example.la libInstRO_rose.la
-bin_PROGRAMS=ExampleInstrumentor RoseInstrumentor
+lib_LTLIBRARIES= libInstRO_core.la libInstRO_example.la
+#lib_LTLIBRARIES= libInstRO_core.la libInstRO_example.la libInstRO_rose.la
+bin_PROGRAMS=ExampleInstrumentor RoseInstrumentor ROSEInstROASTPrinter
+#bin_PROGRAMS=ExampleInstrumentor RoseInstrumentor
+
+if USECLANG
+lib_LTLIBRARIES += libInstRO_clang.la
+bin_PROGRAMS += ClangInstrumentor
+endif
+
+if USECLANG
+lib_LTLIBRARIES += libInstRO_rose.la
+bin_PROGRAMS += RoseInstrumentor
+endif
+
 
 libInstRO_core_la_SOURCES= \
 	$(CORE_SFILES) \
@@ -144,19 +169,24 @@ libInstRO_example_la_SOURCES= \
 	$(ROSE_SFILES) \
 	$(ROSE_HFILES) 
 
-libInstRO_example_la_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+libInstRO_example_la_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
-libInstRO_rose_la_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+libInstRO_rose_la_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
 RoseInstrumentor_SOURCES = \
-	./src/rose_main.cpp
+	./src/roseInstrumentor.cpp
+RoseInstrumentor_LDADD= libInstRO_rose.a @ROSE_LINK_LIBRARIES@
 
 ExampleInstrumentor_SOURCES = \
 	./src/example_main.cpp
 
+ROSEInstROASTPrinter_SOURCES = \ 
+	./src/rose/extra/instro_rose_astprinter/main.cxx
+ROSEInstROASTPrinter_LDADD= libInstRO_rose.a @ROSE_LINK_LIBRARIES@
+
 ExampleInstrumentor_LDADD= libInstRO_example.a
 # ExampleInstrumentor_LDFLAGS=
-ExampleInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+ExampleInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
 #libInstRO_clang_la_SOURCES= \
 #	$(CLANG_SFILES) \
@@ -170,7 +200,7 @@ ExampleInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_IN
 ## libInstRO_la_DEPENDENCIES = @ROSE@
 # Add Rose as an dependency
 ## libInstRO_la_LIBADD= @ROSE@
-libInstRO_core_la_CPPFLAGS=-I$(srcdir)/include -I@CLANG_INCLUDE_PATH@ -I@LLVM_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+libInstRO_core_la_CPPFLAGS=-I$(srcdir)/include -I@CLANG_INCLUDE_PATH@ -I@LLVM_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 ## libInstRO_la_CFLAGS=-I@ROSE_INCLUDEDIR@
 ## libInstRO_la_CXXFLAGS=-I@ROSE_INCLUDEDIR@
 #libInstRO_la_LDFLAGS=-L@ROSE_LIBDIR@
@@ -180,10 +210,24 @@ libInstRO_core_la_CPPFLAGS=-I$(srcdir)/include -I@CLANG_INCLUDE_PATH@ -I@LLVM_IN
 else
 # STATIC LIBRARY FOR LIBINSTRO
 #lib_LIBRARIES=libInstRO.a
-lib_LIBRARIES= libInstRO_core.a libInstRO_example.a libInstRO_rose.a
+lib_LIBRARIES= libInstRO_core.a libInstRO_example.a
+#lib_LIBRARIES= libInstRO_core.a libInstRO_example.a libInstRO_rose.a libInstRO_clang.a
 #libInstRO_clang.a
 
-bin_PROGRAMS=ClangInstrumentor ExampleInstrumentor RoseInstrumentor
+# bin_PROGRAMS=ClangInstrumentor ExampleInstrumentor RoseInstrumentor
+bin_PROGRAMS=ExampleInstrumentor 
+
+if USECLANG
+lib_LIBRARIES += libInstRO_clang.a
+bin_PROGRAMS += ClangInstrumentor
+endif
+
+if USEROSE
+lib_LIBRARIES += libInstRO_rose.a
+bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter
+
+endif
+
 
 ClangInstrumentor_SOURCES = \
 	./src/clang/Instrumentor.cpp
@@ -193,11 +237,17 @@ ClangInstrumentor_LDFLAGS= -L@CLANG_LIB_DIR@ @CLANG_LIBS_LIST@ @LLVM_LINK_COMMAN
 ClangInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include @LLVM_INCLUDE_FLAGS@ -I@CLANG_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 
 RoseInstrumentor_SOURCES = \
-	./src/rose_main.cpp
+	./src/roseInstrumentor.cpp
 
 RoseInstrumentor_LDADD= libInstRO_core.a libInstRO_rose.a
-RoseInstrumentor_LDFLAGS= @ROSE_LIB_DIR@ @ROSE_LIBS_LIST@ -lrose
-RoseInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+RoseInstrumentor_LDFLAGS= -std=c++11 -L@ROSE_LIBDIR@ @ROSE_LIBS_LIST@ -lrose @ROSE_LINK_LIBRARIES@
+RoseInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
+
+ROSEInstROASTPrinter_SOURCES = \ 
+	./src/rose/extra/instro_rose_astprinter/main.cxx
+ROSEInstROASTPrinter_LDADD=libInstRO_core.a libInstRO_rose.a
+ROSEInstROASTPrinter_LDFLAGS= -std=c++11 -L@ROSE_LIBDIR@ @ROSE_LIBS_LIST@ -lrose @ROSE_LINK_LIBRARIES@
+ROSEInstROASTPrinter_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
 
 
@@ -206,29 +256,35 @@ ExampleInstrumentor_SOURCES = \
 
 ExampleInstrumentor_LDADD= libInstRO_example.a
 # ExampleInstrumentor_LDFLAGS=
-ExampleInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+ExampleInstrumentor_CPPFLAGS= -std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
 libInstRO_example_a_SOURCES= \
 	$(CORE_SFILES) \
 	$(CORE_HFILES) \
 	$(EXAMPLE_SFILES) \
 	$(EXAMPLE_HFILES) 
-libInstRO_example_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@
+libInstRO_example_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
 libInstRO_rose_a_SOURCES= \
 	$(CORE_SFILES) \
 	$(CORE_HFILES) \
 	$(ROSE_SFILES) \
 	$(ROSE_HFILES) 
-libInstRO_rose_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@
+libInstRO_rose_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
 libInstRO_core_a_SOURCES= \
+	$(CORE_SFILES) \
+	$(CORE_HFILES) 
+
+libInstRO_clang_a_SOURCES= \
 	$(CORE_SFILES) \
 	$(CORE_HFILES) \
 	$(CLANG_SFILES) \
 	$(CLANG_HFILES)
 
-libInstRO_core_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include @LLVM_INCLUDE_FLAGS@ -I@CLANG_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+libInstRO_clang_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include @LLVM_INCLUDE_FLAGS@ -I@CLANG_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@ROSE_NEW_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+
+libInstRO_core_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include -I@BOOST_INCLUDEDIR@ -DPROVIDE_MAKE_UNIQUE
 
 
 #libInstRO_clang_a_SOURCES= 
