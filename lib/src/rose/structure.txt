@@ -1,0 +1,1 @@
+core contains all "core" functionality of InstRO for ROSE, e.g. analyst interface, factories

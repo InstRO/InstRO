@@ -3,6 +3,9 @@
 
 #include "instro/core/Instrumentor.h"
 #include "instro/rose/RosePassFactory.h"
+#include "instro/rose/tooling/RoseAnalysisInterface.h"
+
+#include "instro/core/Singleton.h"
 
 #include "rose.h"
 
@@ -13,34 +16,34 @@ class RosePassFactory;
 }
 
 class RoseInstrumentor : public Instrumentor {
- protected:
-	// Store the Project. It is required for all passes later on ..
-	SgProject* project;
-
  public:
-	RoseInstrumentor(int* argc, char*** argv) {
+	RoseInstrumentor(int argc, char** argv) {
 		// TODO: Initialize Rose here
-		project = frontend(argc, argv);
+		project = ::frontend(argc, argv);
+		ram = new InstRO::Rose::Tooling::RoseAnalysisManager(project);
+		InstRO::setInstrumentorInstance(this);
 	};
+
 	~RoseInstrumentor() { delete (project); }
-	InstRO::PassFactory* getFactory(Instrumentor::CompilationPhase phase) {
+
+	virtual Rose::RosePassFactory* getFactory(
+			Instrumentor::CompilationPhase phase = Instrumentor::CompilationPhase::frontend) override {
 		//		lockPassManager();
 		return new Rose::RosePassFactory(passManager, project);
 	}
-	//		PassFactory * getFactory(In
-	void init(){
-
-	};
-	void apply(){};
+	void init() {}
+	void apply() { passManager->execute(); };
 	void finalize() {
 		// unparse instrumented source
 		project->unparse();
 	};
 
-	virtual Tooling::AnalysisManager* getAnalysisManager() {
-		throw std::string("Not Implemented");
-		return NULL;
-	}
+	virtual Tooling::AnalysisManager* getAnalysisManager() { return ram; }
+
+ protected:
+	// Store the Project. It is required for all passes later on ..
+	SgProject* project;
+	InstRO::Rose::Tooling::RoseAnalysisManager* ram;
 };
 };
 #endif

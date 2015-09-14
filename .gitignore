@@ -1,0 +1,37 @@
+# objects
+lib/src/**/*.o
+lib/**/*.a
+
+.deps
+.dirstamp
+
+# all those magic
+config/*
+config/m4
+!config/m4/ax_boost*
+
+config*
+!configure.ac
+
+# whatever all of these do
+aclocal.m4
+autom4te.cache/
+autoscan.log
+libtool
+stamp-h1
+
+# vim
+.*.swp
+
+# generated Makefiles
+Makefile
+Makefile.in
+
+# tmp files
+rose_*.*
+*.log
+*.dot
+
+# eclipse
+.project
+.cproject

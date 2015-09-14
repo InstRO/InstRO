@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <vector>
 #include <unordered_map>
 #include "instro/core/ConstructSet.h"
@@ -5,77 +6,117 @@
 namespace InstRO {
 namespace Core {
 
-std::string constructLevelToString(ConstructLevelType type) {
+std::string constructLevelToString(ConstructTraitType type) {
 	switch (type) {
-		// case 1: return std::string("LiteralConstructLevel");break;
-
-		// case InstRO::Core::ContstructLevelEnum::CLMin:
-		case InstRO::Core::ContstructLevelEnum::CLFragment:
-			return std::string("CL-Fragment");
+		case ConstructTraitType::CTFragment:
+			return std::string("Fragment");
 			break;
-		case CLExpression:
-			return std::string("CL-Expression");
+		case ConstructTraitType::CTExpression:
+			return std::string("Expression");
 			break;
-		case CLStatement:
-			return std::string("CL-Statement");
+		case ConstructTraitType::CTStatement:
+			return std::string("Statement");
 			break;
-		case CLLoop:
-			return std::string("CL-LoopStatement");
+		case ConstructTraitType::CTWrappableStatement:
+			return std::string("WrappableStatement");
 			break;
-		case CLConditional:
-			return std::string("CL-ConditionalStatement");
+		case ConstructTraitType::CTLoopStatement:
+			return std::string("LoopStatement");
 			break;
-		case CLScope:
-			return std::string("CL-ScopeStatement");
+		case ConstructTraitType::CTConditionalStatement:
+			return std::string("ConditionalStatement");
 			break;
-		case CLSimple:
-			return std::string("CL-SimpleStatement");
+		case ConstructTraitType::CTScopeStatement:
+			return std::string("ScopeStatement");
 			break;
-		case CLFunction:
-			return std::string("CL-FunctionStatement");
+		case ConstructTraitType::CTSimpleStatement:
+			return std::string("SimpleStatement");
 			break;
-		case CLFileScope:
-			return std::string("CL-FileScope");
+		case ConstructTraitType::CTFunction:
+			return std::string("Function");
 			break;
-		// case CLMax:
-		case CLGlobalScope:
-			return std::string("CL-GlobalScope");
+		case ConstructTraitType::CTFileScope:
+			return std::string("FileScope");
+			break;
+		case ConstructTraitType::CTGlobalScope:
+			return std::string("GlobalScope");
 			break;
 
 		default:
-			return std::string("UnknownConstructLevel");
+			return std::string("Invalid ConstructTrait [") + std::to_string(static_cast<unsigned int>(type)) +
+						 std::string("]");
 			break;
 	}
 }
-std::string operator+(const std::string& lhs, const ConstructLevelType& type) {
-	return std::string(lhs).append(constructLevelToString(type));
-	/*switch(type)
-	{
-	case 1: return std::string(lhs).append(std::string("LiteralConstructLevel"));break;
-	default: return std::string(lhs).append(std::string("UnknownConstructLevel"));break;
-	}*/
+std::string constructLevelToStringShort(ConstructTraitType type) {
+	switch (type) {
+		case ConstructTraitType::CTFragment:
+			return std::string("Frag");
+			break;
+		case ConstructTraitType::CTExpression:
+			return std::string("Expr");
+			break;
+		case ConstructTraitType::CTStatement:
+			return std::string("Stmt");
+			break;
+		case ConstructTraitType::CTWrappableStatement:
+			return std::string("WSmt");
+			break;
+		case ConstructTraitType::CTLoopStatement:
+			return std::string("Loop");
+			break;
+		case ConstructTraitType::CTConditionalStatement:
+			return std::string("Cond");
+			break;
+		case ConstructTraitType::CTScopeStatement:
+			return std::string("ScopeStatement");
+			break;
+		case ConstructTraitType::CTSimpleStatement:
+			return std::string("SSmt");
+			break;
+		case ConstructTraitType::CTFunction:
+			return std::string("Func");
+			break;
+		case ConstructTraitType::CTFileScope:
+			return std::string("File");
+			break;
+		case ConstructTraitType::CTGlobalScope:
+			return std::string("Glob");
+			break;
+
+		default:
+			return std::string("Invalid ConstructTrait");
+			break;
+	}
 }
 
-// CI: return a vector (ordered) with all construct levels from the set
-std::vector<ConstructLevelType> ConstructSet::getConstructLevels() {
-	std::vector<int> levels;
-	for (int i = ConstructLevelType::CLMin; i < ConstructLevelType::CLMax; i++)
-		levels.push_back(0);
-	for (auto construct : this->constructs) {
-		levels[(*construct).getLevel()]++;
-	}
-	std::vector<ConstructLevelType> returnVector;
-	for (int i = ConstructLevelType::CLMin; i < ConstructLevelType::CLMax; i++) {
-		if (levels[i])
-			returnVector.push_back(ConstructLevelType(i));
-	}
-	return returnVector;
+std::string operator+(const std::string& lhs, const ConstructTraitType& type) {
+	return std::string(lhs).append(constructLevelToString(type));
 }
-ConstructLevelType ConstructSet::getMaxConstructLevel() { return ConstructSet::getConstructLevels().back(); }
-ConstructLevelType ConstructSet::getMinConstructLevel() { return ConstructSet::getConstructLevels().front(); }
+
+ConstructTraitType ConstructSet::getMaxConstructLevel() {
+	ConstructTraitType max = ConstructTraitType::CTMin;
+	for (auto construct : constructs) {
+		auto curr = construct->getTraits().max();
+		if (curr > max) {
+			max = curr;
+		}
+	}
+	return max;
+}
+ConstructTraitType ConstructSet::getMinConstructLevel() {
+	ConstructTraitType min = ConstructTraitType::CTMax;
+	for (auto construct : constructs) {
+		auto curr = construct->getTraits().min();
+		if (curr < min) {
+			min = curr;
+		}
+	}
+	return min;
+}
 void ConstructSet::clear() { constructs.clear(); }
-bool ConstructSet::empty() { return constructs.empty(); }
-size_t ConstructSet::size() { return constructs.size(); }
+bool ConstructSet::empty() const { return constructs.empty(); }
+size_t ConstructSet::size() const { return constructs.size(); }
 /*
 virtual void add(ConstructSet * setB) = NULL;
 virtual void add(ConstructSet & set) = NULL;*/
@@ -90,6 +131,8 @@ void ConstructSet::erase(ConstructSet cs) { constructs.erase(cs.begin(), cs.end(
 
 std::set<std::shared_ptr<Construct> >::iterator ConstructSet::begin() { return constructs.begin(); }
 std::set<std::shared_ptr<Construct> >::iterator ConstructSet::end() { return constructs.end(); }
+std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::begin() const { return constructs.cbegin(); }
+std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::end() const { return constructs.cend(); }
 std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::cbegin() const { return constructs.cbegin(); }
 std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::cend() const { return constructs.cend(); }
 bool ConstructSet::contains(const std::shared_ptr<Construct>& construct) const {
@@ -106,11 +149,13 @@ ConstructSet ConstructSet::combine(const ConstructSet& rhs) const {
 	retSet.put(rhs);
 	return retSet;
 }
+
 ConstructSet ConstructSet::intersect(const ConstructSet& other) const {
 	ConstructSet retSet;
 	for (std::set<std::shared_ptr<Construct> >::const_iterator constructB = other.cbegin(); constructB != other.cend();
 			 constructB++) {
-		if (constructs.find(*constructB) == constructs.end())
+		// if there is a match between both sets, add it to the output set
+		if (constructs.find(*constructB) != constructs.end())
 			retSet.put(*constructB);
 	}
 	return retSet;
@@ -133,18 +178,19 @@ ConstructSet ConstructSet::symmerticDifference(const ConstructSet& other) const 
 	}
 	return retSet;
 }
-// virtual ConstructSet copy(){ return  };
-::std::vector<ConstructSet> ConstructSet::split() const {
-	std::vector<ConstructSet> retSet;
-	retSet.reserve(constructs.size());
-	//	retSet.insert(constructs.begin(), constructs.end());
-	for (auto construct : constructs) {
-		retSet.push_back(ConstructSet(construct));
-	}
-	return retSet;
+
+bool ConstructSet::intersects(const ConstructSet& other) const {
+	return !(this->intersect(other).empty());
 }
-// CI: I would like to have s.th. like a begin() and end() returning an iterator of constructset containing individual
-// constructs
+
+std::vector<ConstructSet> ConstructSet::split() const {
+	std::vector<ConstructSet> retVec;
+	retVec.reserve(constructs.size());
+	for (auto construct : constructs) {
+		retVec.push_back(ConstructSet(construct));
+	}
+	return retVec;
+}
 
 }	// namespace Core
 
@@ -173,6 +219,92 @@ std::set<std::shared_ptr<Core::Construct> >::const_iterator ConstructSetCompiler
 void ConstructSetCompilerInterface::clear() { csPtr->clear(); }
 bool ConstructSetCompilerInterface::empty() { return csPtr->empty(); }
 size_t ConstructSetCompilerInterface::size() { return csPtr->size(); }
+
+ReadOnlyConstructSetCompilerInterface::ReadOnlyConstructSetCompilerInterface(const Core::ConstructSet* pcs)
+		: csPtr(pcs){};
+
+bool ReadOnlyConstructSetCompilerInterface::contains(const std::shared_ptr<Core::Construct>& construct) const {
+	return csPtr->contains(construct);
+};
+
+std::set<std::shared_ptr<Core::Construct> >::const_iterator ReadOnlyConstructSetCompilerInterface::cbegin() const {
+	return csPtr->cbegin();
+};
+std::set<std::shared_ptr<Core::Construct> >::const_iterator ReadOnlyConstructSetCompilerInterface::cend() const {
+	return csPtr->cend();
+};
+
+bool ReadOnlyConstructSetCompilerInterface::empty() const { return csPtr->empty(); }
+size_t ReadOnlyConstructSetCompilerInterface::size() const { return csPtr->size(); }
 }
 
 }	// End namespace InstRO
+
+InstRO::Core::ConstructTraitType& operator++(InstRO::Core::ConstructTraitType& f) {
+	InstRO::Core::ConstructLevelHelper::ConstructLevelHierarchy::raise(f);
+	return f;
+}
+
+InstRO::Core::ConstructTraitType& operator--(InstRO::Core::ConstructTraitType& f) {
+	InstRO::Core::ConstructLevelHelper::ConstructLevelHierarchy::lower(f);
+	return f;
+}
+
+InstRO::Core::ConstructTraitType& operator++(InstRO::Core::ConstructTraitType& f, int f2) {
+	InstRO::Core::ConstructLevelHelper::ConstructLevelHierarchy::raise(f);
+	return f;
+}
+
+InstRO::Core::ConstructTraitType& operator--(InstRO::Core::ConstructTraitType& f, int f2) {
+	InstRO::Core::ConstructLevelHelper::ConstructLevelHierarchy::lower(f);
+	return f;
+}
+
+std::ostream& operator<<(std::ostream& os, InstRO::Core::ConstructTraitType f) {
+	switch (f) {
+		case InstRO::Core::ConstructTraitType::CTNoTraits:
+			os << "ConstructTraitType::CTNoTraits";
+			return os;
+		case InstRO::Core::ConstructTraitType::CTMin:
+			os << "ConstructTraitType::CTMin";
+			return os;
+		case InstRO::Core::ConstructTraitType::CTFragment:
+			os << "ConstructTraitType::CTFragment";
+			return os;
+		case InstRO::Core::ConstructTraitType::CTExpression:
+			os << "ConstructTraitType::CTExpression";
+			return os;
+		case InstRO::Core::ConstructTraitType::CTLoopStatement:
+			os << "ConstructTraitType::CTLoopStatement";
+			return os;
+		case InstRO::Core::ConstructTraitType::CTConditionalStatement:
+			os << "ConstructTraitType::CTConditionalStatement";
+			return os;
+		case InstRO::Core::ConstructTraitType::CTScopeStatement:
+			os << "ConstructTraitType::CTScopeStatement";
+			return os;
+		case InstRO::Core::ConstructTraitType::CTSimpleStatement:
+			os << "ConstructTraitType::CTSimpleStatement";
+			return os;
+		case InstRO::Core::ConstructTraitType::CTStatement:
+			os << "ConstructTraitType::CTStatement";
+			return os;
+
+		case InstRO::Core::ConstructTraitType::CTWrappableStatement:
+			os << "ConstructTraitType::CTWrappableStatement";
+			return os;
+		case InstRO::Core::ConstructTraitType::CTFunction:
+			os << "ConstructTraitType::CTFunction";
+			return os;
+		case InstRO::Core::ConstructTraitType::CTFileScope:
+			os << "ConstructTraitType::CTFileScope";
+			return os;
+		case InstRO::Core::ConstructTraitType::CTGlobalScope:
+			os << "ConstructTraitType::CTGlobalScope";
+			return os;
+		case InstRO::Core::ConstructTraitType::CTMax:
+			os << "ConstructTraitType::CTMax";
+			return os;
+	}
+	return os;
+}

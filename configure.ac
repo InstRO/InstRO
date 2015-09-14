@@ -116,6 +116,11 @@ AM_CONDITIONAL(BUILD_PUBLICATIONS_TOOLS, [test x$publications = xtrue])
 # 2.1) add ROSE
 # -------------------------------
 # introduce the optional configure parameter for a non-standard install prefix of ROSE
+AC_ARG_ENABLE(rose,
+AS_HELP_STRING([--enable-rose],
+               [enable use of rose, default: please no]),  
+[case "${enableval}" in
+             yes) userose=true 
 AC_ARG_WITH([ROSE],[AS_HELP_STRING([--with-ROSE=prefix],
     [try this for a non-standard install prefix of the ROSE library])],
     [ROSEPATHSET=1],[ROSEPATHSET=0])
@@ -131,16 +136,25 @@ if test $ROSEPATHSET = 1 ; then
     ROSE_NEW_INCLUDEDIR="$with_ROSE/include/rose"
     ROSE_LIBDIR="$with_ROSE/lib"
     echo "Using ROSE in $with_ROSE"
+    userose=true
 else
     ROSE_INCLUDEDIR=/usr/include
     ROSE_NEW_INCLUDEDIR=/usr/include/rose
     ROSE_LIBDIR=/usr/lib
 fi
+    ROSE_LIBS_LIST="-lrose"
+;;
+             no)  userose=false ;;
+             *)    AC_MSG_ERROR([bad value ${enableval} for --enable-rose]) ;;
+esac],
+[userose=false])
+
 
 ## set @ROSE_INCLUDEDIR@ and @ROSE_LIBDIR@ variables
 AC_SUBST(ROSE_INCLUDEDIR)
 AC_SUBST(ROSE_NEW_INCLUDEDIR)
 AC_SUBST(ROSE_LIBDIR)
+AC_SUBST(ROSE_LIBS_LIST)
 
 # ---------------------------
 # 2.2) Add Clang flag
@@ -207,6 +221,8 @@ esac],
 [libtool=false])
 
 AM_CONDITIONAL(USELIBTOOL, test x"$libtool" = x"true")
+AM_CONDITIONAL(USEROSE, test x"$userose" = x"true")
+AM_CONDITIONAL(USECLANG, test x"useclang" = x"true")
 
 
 # -------------------------------

@@ -30,7 +30,7 @@ class Matcher {
 	virtual bool isMatch(std::string str) = 0;
 	/** returns a vector of vectors holding the ids in list of the patterns which match */
 	//			virtual std::vector<std::vector<int> > match(std::vector<std::string> strList, std::list<std::string> list) =
-	//0;
+	// 0;
 	/** get the matching string by id */
 	//			virtual std::vector<int> getMatchIds() = 0; // XXX 2013-10-08 JP: really reasonable?
 };
@@ -102,6 +102,7 @@ class NamedConstructAccess {
 #ifdef __EXCEPTIONS
 		throw std::string("Not Implemented");
 #endif
+		return std::unique_ptr<InstRO::Core::ConstructSet>(nullptr);
 	}
 };
 }

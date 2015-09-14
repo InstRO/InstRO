@@ -22,50 +22,35 @@
     <Filter Include="include\instro\llvm">
       <UniqueIdentifier>{d013ed9f-acba-4c06-bd6e-981b6529ec56}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\instro\support">
-      <UniqueIdentifier>{8b9876e8-07c6-4813-8046-45194d90456a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source">
       <UniqueIdentifier>{0f79c7e0-9fdc-4796-9a9e-15109530cfbc}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\lib">
       <UniqueIdentifier>{e9ddab49-6a6d-4d00-853c-528ac33d9568}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\lib\core">
-      <UniqueIdentifier>{ed292247-d84b-464a-94d6-9e78c50b92b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\lib\support">
-      <UniqueIdentifier>{099f4105-2705-47d4-accf-531dd5ce3014}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\instro\extra">
       <UniqueIdentifier>{22e1ab6b-f6de-46b7-8edd-21092df36525}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="include\instro\tooling">
-      <UniqueIdentifier>{c1cf7131-bba8-4085-9f55-90d5ce7a8b87}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\lib\tooling">
-      <UniqueIdentifier>{a7ecd454-95d0-4236-99f7-2d553b8a11b9}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\instro\example">
       <UniqueIdentifier>{872a2657-6864-4e6d-9a2e-950dcd2637fc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\lib\example">
-      <UniqueIdentifier>{f02c97f0-6b58-4bd8-8cf3-2843e6698fed}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\instro\example\tooling">
       <UniqueIdentifier>{17f75d3c-8dc1-42f7-b794-9adef9f1c10f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\instro\example\passes">
+      <UniqueIdentifier>{27550a29-f348-4d3a-a635-eac02f5a4354}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib\tooling">
+      <UniqueIdentifier>{c1cf7131-bba8-4085-9f55-90d5ce7a8b87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lib\support">
+      <UniqueIdentifier>{8b9876e8-07c6-4813-8046-45194d90456a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\instro\tooling">
+      <UniqueIdentifier>{b1cec1e3-58c6-4054-b243-da1e360539dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\lib\include\instro.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\agnosticSupport.h">
-      <Filter>include\instro</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h">
-      <Filter>include\instro</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h">
       <Filter>include\instro\core</Filter>
     </ClInclude>
@@ -102,16 +87,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h">
       <Filter>include\instro\rose</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\support\BWLFileReader.h">
-      <Filter>include\instro\support</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\example\CallPathSelector.h">
-      <Filter>include\instro\example</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleInstrumentor.h">
-      <Filter>include\instro\example</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePass.h">
       <Filter>include\instro\example</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePassFactory.h">
@@ -127,36 +103,100 @@
       <Filter>include\instro\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\tooling\AnalysisInterface.h">
-      <Filter>include\instro\tooling</Filter>
+      <Filter>source\lib\tooling</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\tooling\TransformationInterface.h">
-      <Filter>include\instro\tooling</Filter>
+      <Filter>source\lib\tooling</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\NamedConstructAccess.h">
+      <Filter>source\lib\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleNamedConstructAccess.h">
+      <Filter>include\instro\example\tooling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePass.h">
+      <Filter>include\instro\example\passes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\NameBasedSelector.h">
+      <Filter>include\instro\example\passes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h">
+      <Filter>source\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\agnosticSupport.h">
+      <Filter>source\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\CompoundSelector.h">
+      <Filter>include\instro\example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\Helper.h">
+      <Filter>include\instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructPrinter.h">
+      <Filter>include\instro\example\passes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\CallPathSelector.h">
+      <Filter>include\instro\example\passes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructProvider.h">
+      <Filter>include\instro\example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibInstRO-Rose\include\rose.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp">
-      <Filter>source\lib\core</Filter>
+    <ClCompile Include="..\..\..\lib\src\example\ExampleConstructSet.cpp">
+      <Filter>include\instro\example</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\core\Pass.cpp">
-      <Filter>source\lib\core</Filter>
+    <ClCompile Include="..\..\..\lib\src\example\ExampleInstrumentor.cpp">
+      <Filter>include\instro\example</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp">
-      <Filter>source\lib\core</Filter>
+    <ClCompile Include="..\..\..\lib\src\example\ExampleNamedConstructAccess.cpp">
+      <Filter>include\instro\example</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp">
-      <Filter>source\lib\support</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\main.cxx">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp">
-      <Filter>source\lib\example</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp">
-      <Filter>source\lib\core</Filter>
+    <ClCompile Include="..\..\..\lib\src\example\NameBasedSelector.cpp">
+      <Filter>include\instro\example</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp">
       <Filter>source\lib\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp">
+      <Filter>include\instro\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\Pass.cpp">
+      <Filter>include\instro\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\PassImplemention.cpp">
+      <Filter>include\instro\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp">
+      <Filter>include\instro\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp">
+      <Filter>include\instro\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\example_main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAccess.cpp">
+      <Filter>source\lib\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\example\CompoundSelector.cpp">
+      <Filter>include\instro\example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\Helper.cpp">
+      <Filter>include\instro\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\tooling\ConstructElevator.cpp">
+      <Filter>source\lib\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\example\ExampleConstructPrinter.cpp">
+      <Filter>include\instro\example\passes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\pass\selector\CallPathSelector.cpp">
+      <Filter>include\instro\example\passes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
