@@ -48,7 +48,11 @@ namespace Utility {
 		/// \brief Checks whether the specified number of input passes are available and raises an exception if not.
 		void expectInputPasses(std::initializer_list<unsigned int> numberOfPasses) const;
 
+		/// \brief The JSON object representing the Pass.
+		///
+		/// Instead of accessing this directly, consider using one of the methods available to extract information.
 		rapidjson::Value &passValue;
+		/// \brief The Pass instances which serve as inputs for the Pass that is parsed.
 		std::vector<Pass*> inputPasses;
 	};
 
