@@ -10,9 +10,9 @@ config/*
 config/m4
 !config/m4/ax_boost*
 
-config*
-!configure.ac
-!lib/include/instro/config.h.in
+./config*
+#!configure.ac
+#!lib/include/instro/config.h.in
 
 # whatever all of these do
 aclocal.m4
