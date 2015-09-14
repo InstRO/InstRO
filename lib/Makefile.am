@@ -174,30 +174,30 @@ libInstRO_example_la_SOURCES= \
 	$(EXAMPLE_SFILES) \
 	$(EXAMPLE_HFILES) 
 
-libInstRO_example_la_SOURCES= \
+libInstRO_rose_la_SOURCES= \
 	$(CORE_SFILES) \
 	$(CORE_HFILES) \
 	$(ROSE_SFILES) \
 	$(ROSE_HFILES) 
 
-libInstRO_core_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@CLANG_INCLUDE_PATH@ -I@LLVM_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+libInstRO_core_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@CLANG_INCLUDE_PATH@ -I@LLVM_INCLUDE_PATH@ -I@BOOST_INCLUDEDIR@
 
 libInstRO_example_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
-libInstRO_rose_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+libInstRO_rose_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@
 
 RoseInstrumentor_SOURCES = \
 	./src/roseInstrumentor.cpp
-RoseInstrumentor_LDADD= libInstRO_rose.a @ROSE_LINK_LIBRARIES@
+RoseInstrumentor_LDADD= libInstRO_rose.la @ROSE_LINK_LIBRARIES@
 
 ExampleInstrumentor_SOURCES = \
 	./src/example_main.cpp
 
 ROSEInstROASTPrinter_SOURCES = \ 
 	./src/rose/extra/instro_rose_astprinter/main.cxx
-ROSEInstROASTPrinter_LDADD= libInstRO_rose.a @ROSE_LINK_LIBRARIES@
+ROSEInstROASTPrinter_LDADD= libInstRO_rose.la @ROSE_LINK_LIBRARIES@
 
-ExampleInstrumentor_LDADD= libInstRO_example.a
+ExampleInstrumentor_LDADD= libInstRO_example.la
 # ExampleInstrumentor_LDFLAGS=
 ExampleInstrumentor_CPPFLAGS= $(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
