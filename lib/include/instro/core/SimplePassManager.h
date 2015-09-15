@@ -20,7 +20,6 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 		getEnvelope(currentPass)->predecessors.push_back(input);
 		getEnvelope(input)->existingOuputDependency = true;
 	};
-	void setExecuter(PassExecuter *executer) override;
 	int execute() override;
 
 	virtual bool hasOutputDependencies(Pass *pass) { return getEnvelope(pass)->existingOuputDependency; };
