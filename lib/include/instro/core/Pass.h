@@ -10,7 +10,6 @@
 #include <unordered_map>
 
 #include "instro/core/ConstructSet.h"
-#include "instro/core/PassExecuter.h"
 #include "instro/core/PassImplementation.h"
 
 namespace InstRO {
@@ -44,7 +43,6 @@ class Pass {
 	void initPass();
 	// CI: Execute the pass, this generates the output-constructset
 	void executePass();
-	// CI: Refactoring to remove the Executor stuff|	void execute(InstRO::PassManagement::PassExecuter *executer);
 	void finalizePass();
 
 	/*-------------------------------------------------------------*/

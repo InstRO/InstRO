@@ -26,21 +26,6 @@ void InstRO::Pass::executePass() {
 	passExecuted = true;
 }
 
-#ifdef LEGACY_LLVM
-void InstRO::Pass::execute(InstRO::PassManagement::PassExecuter *executer) {
-	assert(false);
-	if (passInitialized)
-		executer->execute(passImplementation);
-	else
-#ifdef __EXCEPTIONS
-		throw std::string("Pass not Initialized!");
-#else
-		std::cerr << "Pass: Pass not initialized" << std::endl;
-#endif
-	passExecuted = true;
-}
-#endif
-
 void InstRO::Pass::finalizePass() {
 	if (passInitialized && passExecuted)
 		passImplementation->finalize();

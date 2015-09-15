@@ -3,7 +3,6 @@
 
 #include <vector>
 #include "instro/core/Pass.h"
-#include "instro/core/PassExecuter.h"
 
 namespace InstRO {
 namespace Core {
@@ -40,7 +39,6 @@ class PassManager {
 	friend Pass;
 	// Enable the Pass Manager to query the pass for its dependencies
 	virtual void registerPass(Pass *currentPass) = 0;
-	virtual void setExecuter(PassExecuter *executer) = 0;
 	virtual int execute() = 0;
 	//		virtual bool usesInput(Pass * pass){hasInputDependencies;
 	// virtual bool isInput(Pass * pass)=0;
@@ -54,9 +52,6 @@ class PassManager {
 	// FIXME Why is that here?
 	std::vector<Pass *> predeciessors;
 
-	// 2015-06-18 CI: JP - please explain to me why the exctutor has to be part of the pass manager ...
-	// delegate for compiler specific invocation of a pass implementation
-	PassExecuter *executer;
 };
 
 }	// End namespace PassManagement

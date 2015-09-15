@@ -20,10 +20,6 @@ void InstRO::PassManagement::SimplePassManager::registerPass(Pass *currentPass) 
 	}
 }
 
-void InstRO::PassManagement::SimplePassManager::setExecuter(InstRO::PassManagement::PassExecuter *executer) {
-	this->executer = executer;
-}
-
 int InstRO::PassManagement::SimplePassManager::execute() {
 	std::cout << "InstRO::PassManagement::SimplePassManager::execute()" << std::endl;
 
