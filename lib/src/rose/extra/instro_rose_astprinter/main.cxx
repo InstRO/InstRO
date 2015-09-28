@@ -160,23 +160,6 @@ int main(int argc, char ** argv)
 			std::string nodeToString=constructToString(node);
 
 			std::string nodeFormatArgs;
-	//			outFile << "\tn" << node << " [label=\"" << roseClassName << "\\n" << nodeToString << "\"" << nodeFormatArgs << "];" << std::endl;
-
-			// if the parent of the current node is compiler generated, get the next non-compiler generated node and uses it instead
-			SgNode * parent = node->get_parent();
-			while (parent != nullptr) {
-				if (!(parent->get_file_info()==nullptr || parent->get_file_info()->isCompilerGenerated ())) {
-					// break with a non-null parent to create edge
-					if (InstRO::Rose::Core::RoseConstructLevelPredicates::ConstructPredicate()(parent)) break;
-				}
-				parent = parent->get_parent();					
-			}
-					
-			if (parent == nullptr) continue;
-
-//			if (parent->get_file_info()==nullptr || parent->get_file_info()->isCompilerGenerated ())
-				toDoList.push_back(parent);
-
 			if (InstRO::Rose::Core::RoseConstructLevelPredicates::ConstructPredicate()(node)) {
 				nodeFormatArgs = ",shape=box,peripheries=2,style=filled, fillcolor=palegreen,fontsize=10,margin=0.02";
 			// Make sure we don't have any stray " in our strings		
@@ -185,6 +168,24 @@ int main(int argc, char ** argv)
 
 				outFile << "\tn" << node << " [label=\"" << instroConstructName << "\"" << nodeFormatArgs << "];" << std::endl;
 	//			outFile << "\tn" << node << " [label=\"" << roseClassName << "\\n" << nodeToString << "\"" << nodeFormatArgs << "];" << std::endl;
+}
+			// if the parent of the current node is compiler generated, get the next non-compiler generated node and uses it instead
+			SgNode * parent = node->get_parent();
+			while (parent != nullptr) {
+//				if (!(parent->get_file_info()==nullptr || parent->get_file_info()->isCompilerGenerated ())) {
+					// break with a non-null parent to create edge
+					if (InstRO::Rose::Core::RoseConstructLevelPredicates::ConstructPredicate()(parent)) break;
+//				}
+				parent = parent->get_parent();					
+			}
+					
+			if (parent == nullptr) continue;
+
+//			if (parent->get_file_info()==nullptr || parent->get_file_info()->isCompilerGenerated ())
+				toDoList.push_back(parent);
+
+	//			outFile << "\tn" << node << " [label=\"" << roseClassName << "\\n" << nodeToString << "\"" << nodeFormatArgs << "];" << std::endl;
+			if (InstRO::Rose::Core::RoseConstructLevelPredicates::ConstructPredicate()(node)) {
 				outFile << "\tn" << node << " -> n" << parent <<";"<< std::endl;
 			}
 			

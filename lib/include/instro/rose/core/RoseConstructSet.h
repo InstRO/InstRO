@@ -212,12 +212,13 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// scopes
 	void visit(SgBasicBlock* node) {
-		if (RoseConstructLevelPredicates::CLConditionalPredicate()(node)) {
+//CI: why?: TODO
+//		if (RoseConstructLevelPredicates::CLConditionalPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTScopeStatement);
 			handleWrappableCheck(node);
-		} else {
-			generateError(node);
-		}
+//		} else {
+//			generateError(node);
+//		}
 	}
 
 	// statements
