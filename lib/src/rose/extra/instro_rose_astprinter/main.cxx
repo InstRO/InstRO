@@ -62,6 +62,7 @@ int main(int argc, char ** argv)
 
 	std::vector<SgNode*> nodes = NodeQuery::querySubTree(project, V_SgNode);
 	std::vector<SgNode*> processing,toDoList,doneList;
+	std::map<SgNode*,int> nodeToIDMap;
 	for (auto node : nodes)
 	{
 		if (node->get_file_info()==nullptr || node->get_file_info()->isCompilerGenerated ()) continue;
@@ -69,6 +70,7 @@ int main(int argc, char ** argv)
 	}
 
 
+	int idCounter=0;
 	while (toDoList.size())
 	{
 		processing=toDoList;
@@ -78,6 +80,7 @@ int main(int argc, char ** argv)
 			if (std::find(doneList.begin(),doneList.end(),node)!=doneList.end())
 				continue;
 			doneList.push_back(node);
+			nodeToIDMap[node]=idCounter;idCounter++;
 
 			// gather the name of the node, and some syntactical represenation
 			std::string roseClassName=node->class_name();
@@ -102,8 +105,8 @@ int main(int argc, char ** argv)
 			std::replace(nodeFormatArgs.begin(), nodeFormatArgs.end(), '"', ' ');
 			std::replace(nodeToString.begin(), nodeToString.end(), '"', ' ');
 
-			outFile << "\tn" << node << " [label=\"" << roseClassName << "\\n" << instroConstructName << "\\n" << nodeToString << "\"" << nodeFormatArgs << "];" << std::endl;
-//			outFile << "\tn" << node << " [label=\"" << roseClassName << "\\n" << nodeToString << "\"" << nodeFormatArgs << "];" << std::endl;
+//			outFile << "\tn" << node << " [label=\"" << roseClassName << "\\n" << instroConstructName << "\\n" << nodeToString << "\"" << nodeFormatArgs << "];" << std::endl;
+			outFile << "\tn" << node << " [label=\"" << roseClassName << "\\n" << nodeToString <<"\\nID " << nodeToIDMap[node] << "\"" << nodeFormatArgs << "];" << std::endl;
 
 			// if the parent of the current node is compiler generated, get the next non-compiler generated node and uses it instead
 			SgNode * parent = node->get_parent();
@@ -166,7 +169,7 @@ int main(int argc, char ** argv)
 				std::replace(nodeFormatArgs.begin(), nodeFormatArgs.end(), '"', ' ');
 				std::replace(nodeToString.begin(), nodeToString.end(), '"', ' ');
 
-				outFile << "\tn" << node << " [label=\"" << instroConstructName << "\"" << nodeFormatArgs << "];" << std::endl;
+				outFile << "\tn" << node << " [label=\"" << instroConstructName << "\\nID " << nodeToIDMap[node] << "\"" << nodeFormatArgs << "];" << std::endl;
 	//			outFile << "\tn" << node << " [label=\"" << roseClassName << "\\n" << nodeToString << "\"" << nodeFormatArgs << "];" << std::endl;
 }
 			// if the parent of the current node is compiler generated, get the next non-compiler generated node and uses it instead
