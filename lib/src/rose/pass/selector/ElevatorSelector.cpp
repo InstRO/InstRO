@@ -1,3 +1,4 @@
+#include "instro/core/Instrumentor.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/core/Singleton.h"
 //#include "instro/rose/core/RosePassImplementation.h"
