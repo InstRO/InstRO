@@ -19,10 +19,10 @@ ExtendedCallGraphNode* ExtendedCallGraph::addNode(ExtendedCallGraphNode* node) {
 
 	if (csToGraphNode.count(node->getAssociatedConstructSet()) == 0) {
 
-	csToGraphNode[node->getAssociatedConstructSet()] = node;
+		csToGraphNode[node->getAssociatedConstructSet()] = node;
 
-	predecessors[node] = std::set<ExtendedCallGraphNode*>();
-	successors[node] = std::set<ExtendedCallGraphNode*>();
+		predecessors[node] = std::set<ExtendedCallGraphNode*>();
+		successors[node] = std::set<ExtendedCallGraphNode*>();
 	}
 		return csToGraphNode[node->getAssociatedConstructSet()];
 
@@ -111,7 +111,7 @@ void ExtendedCallGraph::swapConstructSet(InstRO::Core::ConstructSet oldCS, InstR
 
 }
 
-ExtendedCallGraphNode* ExtendedCallGraph::getGraphNode(InstRO::Core::ConstructSet cs) {
+ExtendedCallGraphNode* ExtendedCallGraph::getNodeWithExactConstructSet(InstRO::Core::ConstructSet cs) {
 	return csToGraphNode[cs];
 }
 
