@@ -133,7 +133,7 @@ ROSE_SFILES= \
 ./src/rose/tooling/RoseGrammarInterface.cpp \
 ./src/rose/pass/selector/RoseProgramEntrySelector.cpp \
 ./src/rose/pass/transformer/UniqueCallpathTransformer.cpp \
-./src/rose/utility/FunctionRenamer.cpp
+./src/rose/utility/FunctionRenamer.cpp \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionHelper.cpp \
 ./src/rose/pass/adapter/RoseStrategyBasedAdapter.cpp \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionPointSelector.cpp \
