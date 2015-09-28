@@ -60,6 +60,10 @@ int main(int argc, char ** argv)
 
 			// gather the name of the node, and some syntactical represenation
 			std::string roseClassName=node->class_name();
+			// Remove Sg
+                        roseClassName=roseClassName.erase(roseClassName.find("Sg"),std::string("Sg").length());
+
+ 
 			InstRO::Rose::Core::ConstructGenerator cg;
 			node->accept(cg);
 			std::string instroConstructName = cg.getConstructTraits().toStringShort();
@@ -69,9 +73,9 @@ int main(int argc, char ** argv)
 
 			std::string nodeFormatArgs;
 			if (InstRO::Rose::Core::RoseConstructLevelPredicates::ConstructPredicate()(node))
-				nodeFormatArgs = ",shape=box";
+				nodeFormatArgs = ",shape=box,peripheries=2";
 			else
-				nodeFormatArgs = ",shape=hexagon";
+				nodeFormatArgs = ",shape=box";
 
 			// Make sure we don't have any stray " in our strings		
 			std::replace(nodeFormatArgs.begin(), nodeFormatArgs.end(), '"', ' ');
