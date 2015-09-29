@@ -4,6 +4,7 @@
 #include <fstream>
 #include <algorithm>
 #include <string>
+#include <boost/algorithm/string.hpp>
 #include "instro/core/Instrumentor.h"
 #include "instro/core/Singleton.h"
 #include "instro/core/Pass.h"
@@ -32,11 +33,12 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 	virtual void execute() {
 		outFile << "digraph InstROAST{" << std::endl;
 		auto elevator = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator();
-		InstRO::Core::ConstructSet csAggregation, toDoList, workList;
+		InstRO::Core::ConstructSet csAggregation, workList;
 		workList = *(inputPass->getOutput());
 
 		while (workList.size()){
-			InstRO::InfracstructureInterface::ConstructSetCompilerInterface csci(inputPass->getOutput());
+			InstRO::Core::ConstructSet  toDoList;
+			InstRO::InfracstructureInterface::ConstructSetCompilerInterface csci(&workList);
 			for (auto construct : csci) {
 				auto child = construct;
 				auto parent = child;
@@ -50,11 +52,10 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTScopeStatement);
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTConditionalStatement);
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTSimpleStatement);
+					traitList.push_back(InstRO::Core::ConstructTraitType::CTWrappableStatement);
 
 				}
 				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTStatement)
-					traitList.push_back(InstRO::Core::ConstructTraitType::CTWrappableStatement);
-				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTWrappableStatement)
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTFunction);
 				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTFunction)
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTFileScope);
@@ -87,6 +88,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 		for (auto construct : csci) {
 			std::string csName = constructToString(construct);
 			std::replace(csName.begin(), csName.end(), '"', ' ');
+			boost::replace_all(csName, "\n", "\\n");
 			outFile << "\t" << construct->getID() << std::string("[label=\"") << csName << std::string("\"];") << std::endl;
 		}
 
