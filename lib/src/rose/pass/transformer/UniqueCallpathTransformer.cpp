@@ -1,14 +1,10 @@
 #include "instro/rose/pass/transformer/UniqueCallpathTransformer.h"
 
-#include "instro/tooling/ExtendedCallGraph.h"
-// // #include "instro/rose/deprecated_utility/callgraphmanager.h"
 #include "instro/rose/utility/FunctionRenamer.h"
 
 #include "instro/core/Instrumentor.h"
 #include "instro/core/Singleton.h"
 #include "instro/rose/core/RoseConstructSet.h"
-#include "instro/core/Instrumentor.h"
-#include "instro/core/Singleton.h"
 
 #include <iostream>
 #include <stack>
@@ -16,7 +12,6 @@
 #include <algorithm>
 
 using namespace InstRO::Tooling::ExtendedCallGraph;
-#ifdef ENABLE_UNIQUE_CALLPATHTRANSFORMER
 
 namespace {
 
@@ -38,8 +33,8 @@ using namespace InstRO::Rose;
 using namespace InstRO::Rose::Transformer;
 
 UniqueCallpathTransformer::UniqueCallpathTransformer(InstRO::Pass *pass)
-	: UniqueCallpathTransformer(pass, nullptr, nullptr)
-{	
+    : UniqueCallpathTransformer(pass, nullptr, nullptr)
+{
 
 }
 
@@ -51,7 +46,7 @@ UniqueCallpathTransformer::UniqueCallpathTransformer(InstRO::Pass *pass, InstRO:
 
 UniqueCallpathTransformer::~UniqueCallpathTransformer()
 {
-	//CI: Do we have to delete the callGraph? or the instnace thereof?
+
 }
 
 InstRO::Core::ChannelConfiguration UniqueCallpathTransformer::createChannelConfig(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active)
@@ -69,13 +64,10 @@ InstRO::Core::ChannelConfiguration UniqueCallpathTransformer::createChannelConfi
 UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::retrieveInputNodes(InstRO::Pass *pass)
 {
     InstRO::InfracstructureInterface::ConstructSetCompilerInterface cs (pass->getOutput());
-	// CI: Get the GraphNodes; Since the Requirements are "Functions only"
-	auto ecgNodes = ecg->getNodeSet(*(pass->getOutput()));
-
     NodeSet nodes;
     nodes.reserve(cs.size());
     for (auto construct : cs) {
-        if (ExtendedCallGraphNode *node = callGraph->getGraphNode(ConstructSet(construct))) {
+        if (ExtendedCallGraphNode *node = callGraph->getNodeWithExactConstructSet(ConstructSet(construct))) {
             nodes.insert(node);
         } else {
             auto rc = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
@@ -91,7 +83,7 @@ InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode* UniqueCallpathTransfo
     if (SgFunctionDeclaration *mainDecl = SageInterface::findMain(SageInterface::getProject())) {
         if (SgFunctionDefinition *mainDef = mainDecl->get_definition()) {
             ConstructSet mainCS (InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(mainDef));
-            if (ExtendedCallGraphNode *node = callGraph->getGraphNode(mainCS)) {
+            if (ExtendedCallGraphNode *node = callGraph->getNodeWithExactConstructSet(mainCS)) {
                 return node;
             } else {
                 throw std::string("Failed to get the call graph node of the main function");
@@ -101,15 +93,6 @@ InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode* UniqueCallpathTransfo
         }
     } else {
         throw std::string("Failed to find the main function");
-}
-}
-
-// CI: This function is a result of the merging process. Will have to evaluate, if we have to keep it
-void UniqueCallpathTransformer::execute() {
-    // lazily initialize the call graph manager
-    if (ecg ==nullptr) {
-		ecg = InstRO::getInstrumentorInstance()->getAnalysisManager()->getECG();
-      //CI  manager = new CallGraphManager(SageInterface::getProject());
     }
 }
 
@@ -448,5 +431,5 @@ SgFunctionDeclaration* UniqueCallpathTransformer::cloneFunction(SgFunctionDeclar
     return clonedFunction;
 }
 
-#endif
+
 
