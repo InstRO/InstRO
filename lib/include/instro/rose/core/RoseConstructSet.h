@@ -189,43 +189,42 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	// conditionals
 	void visit(SgIfStmt* node) {
 		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTConditionalStatement);
-		handleWrappableCheck(node);
+		handleStatementWithWrappableCheck(node);
 	}
 	void visit(SgSwitchStatement* node) {
 		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTConditionalStatement);
-		handleWrappableCheck(node);
+		handleStatementWithWrappableCheck(node);
 	}
 
 	// loops
 	void visit(SgForStatement* node) {
 		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTLoopStatement);
-		handleWrappableCheck(node);
+		handleStatementWithWrappableCheck(node);
 	}
 	void visit(SgWhileStmt* node) {
 		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTLoopStatement);
-		handleWrappableCheck(node);
+		handleStatementWithWrappableCheck(node);
 	}
 	void visit(SgDoWhileStmt* node) {
 		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTLoopStatement);
-		handleWrappableCheck(node);
+		handleStatementWithWrappableCheck(node);
 	}
 
 	// scopes
 	void visit(SgBasicBlock* node) {
-//CI: why?: TODO
-//		if (RoseConstructLevelPredicates::CLConditionalPredicate()(node)) {
+		if (RoseConstructLevelPredicates::CLScopeStatementPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTScopeStatement);
-			handleWrappableCheck(node);
-//		} else {
-//			generateError(node);
-//		}
+			handleStatementWithWrappableCheck(node);
+		} else {
+			generateError(node);
+		}
 	}
 
 	// statements
 	void visit(SgStatement* node) {
 		if (RoseConstructLevelPredicates::CLSimpleStatementPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTSimpleStatement);
-			handleWrappableCheck(node);
+			handleStatementWithWrappableCheck(node);
 		} else {
 			generateError(node);
 		}
@@ -235,7 +234,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 		// CI: an initialized variable declaration is OK,
 		if (RoseConstructLevelPredicates::DefinedVariableDeclarationPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTSimpleStatement);
-			handleWrappableCheck(node);
+			handleStatementWithWrappableCheck(node);
 		} else {
 			generateError(node);
 		}
@@ -252,7 +251,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
  private:
 	InstRO::Core::ConstructTrait ct;
 
-	void handleWrappableCheck(SgNode* node) {
+	void handleStatementWithWrappableCheck(SgNode* node) {
 		ct.add(InstRO::Core::ConstructTraitType::CTStatement);
 		if (RoseConstructLevelPredicates::CTWrappableStatementPredicate()(node)) {
 			ct.add(InstRO::Core::ConstructTraitType::CTWrappableStatement);
