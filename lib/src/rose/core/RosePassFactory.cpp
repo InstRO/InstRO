@@ -212,7 +212,6 @@ InstRO::Pass* RosePassFactory::createOPARIAdapter(InstRO::Pass* input) {
 	return NULL;
 }
 
-#ifdef ENABLE_UNIQUE_CALLPATHTRANSFORMER
 InstRO::Pass* RosePassFactory::createUniqueCallpathTransformer(InstRO::Pass* input) {
     InstRO::Pass* newPass = new InstRO::Pass(new Transformer::UniqueCallpathTransformer(input));
     newPass->setPassName("InstRO::Rose::Transformer::UniqueCallpathTransformer");
@@ -226,6 +225,5 @@ InstRO::Pass* RosePassFactory::createUniqueCallpathTransformer(Pass* input, Pass
     passManager->registerPass(newPass);
     return newPass;
 }
-#endif
 }	// Rose
 }	// InstRO

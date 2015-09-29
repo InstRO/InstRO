@@ -10,8 +10,6 @@
 #include <unordered_map>
 
 class SgNode;
-#ifdef ENABLE_UNIQUE_CALLPATHTRANSFORMER
-
 class SgFunctionDeclaration;
 class SgGraphNode;
 class SgScopeStatement;
@@ -113,6 +111,5 @@ private:
 }
 }
 }
-#endif
 
 #endif // INSTRO_ROSE_UNIQUECALLPATHTRANSFORMER_H
