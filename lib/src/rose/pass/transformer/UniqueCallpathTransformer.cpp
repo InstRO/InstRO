@@ -67,7 +67,7 @@ UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::retrieveInputNodes
     NodeSet nodes;
     nodes.reserve(cs.size());
     for (auto construct : cs) {
-        if (ExtendedCallGraphNode *node = callGraph->getGraphNode(ConstructSet(construct))) {
+        if (ExtendedCallGraphNode *node = callGraph->getNodeWithExactConstructSet(ConstructSet(construct))) {
             nodes.insert(node);
         } else {
             auto rc = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
@@ -83,7 +83,7 @@ InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode* UniqueCallpathTransfo
     if (SgFunctionDeclaration *mainDecl = SageInterface::findMain(SageInterface::getProject())) {
         if (SgFunctionDefinition *mainDef = mainDecl->get_definition()) {
             ConstructSet mainCS (InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(mainDef));
-            if (ExtendedCallGraphNode *node = callGraph->getGraphNode(mainCS)) {
+            if (ExtendedCallGraphNode *node = callGraph->getNodeWithExactConstructSet(mainCS)) {
                 return node;
             } else {
                 throw std::string("Failed to get the call graph node of the main function");
