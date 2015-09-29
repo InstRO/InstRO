@@ -49,6 +49,12 @@
     <Filter Include="instro\pass\selector">
       <UniqueIdentifier>{efab79fb-0cc1-4a17-a98c-cc872f9ee37c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="instro\rose\pass\adapter\StrategyBasedAdapterSupport">
+      <UniqueIdentifier>{0bc5ab33-5c7d-4a60-b05c-6130e463033e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instro\rose\pass\transformer">
+      <UniqueIdentifier>{c5bfc8bf-0050-4674-b849-bd2c08129ed9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h">
@@ -194,6 +200,51 @@
       <Filter>instro\rose\pass\adapter</Filter>
     </ClInclude>
     <ClInclude Include="include\rose.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseScorePAdapter.h">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseGPIAdapter.h">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseStrategyBasedAdapter.h">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\GenericInstrumentationStrategy.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ToolInitializer.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePLoopIterationStrategy.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePStatementWrapperStrategy.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePFunctionScopeStrategy.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePAdapterBuilder.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePInitializer.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\instrobuilder.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\CodeInsertionHelper.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\CodeInsertionPointSelector.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\GenericAdapterBuilder.h">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\transformer\UniqueCallpathTransformer.h">
+      <Filter>instro\rose\pass\transformer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp">
@@ -267,6 +318,51 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\rose\pass\selector\CompoundSelector.cpp">
       <Filter>instro\rose\pass\adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseScorePAdapter.cpp">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseGPIAdapter.cpp">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseStrategyBasedAdapter.cpp">
+      <Filter>instro\rose\pass\adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePStatementWrapperStrategy.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePLoopIterationStrategy.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePFunctionScopeStrategy.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePAdapterBuilder.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePInitializer.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ToolInitializer.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\GenericInstrumentationStrategy.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\instrobuilder.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\CodeInsertionHelper.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\CodeInsertionPointSelector.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\GenericAdapterBuilder.cpp">
+      <Filter>instro\rose\pass\adapter\StrategyBasedAdapterSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\rose\pass\transformer\UniqueCallpathTransformer.cpp">
+      <Filter>instro\rose\pass\transformer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
