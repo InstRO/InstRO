@@ -1,5 +1,6 @@
 #include <memory>
 #include <set>
+#include "instro/core/Instrumentor.h"
 #include "instro/core/Singleton.h"
 #include "instro/pass/selector/CallPathSelector.h"
 #include "instro/tooling/AnalysisInterface.h"

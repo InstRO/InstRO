@@ -8,10 +8,29 @@
 #include "instro/rose/pass/transformer/UniqueCallpathTransformer.h"
 #include "instro/rose/RosePassFactory.h"
 
+
+#include "instro/rose/pass/adapter/RoseStrategyBasedAdapter.h"
+
 #include "rose.h"
 
 namespace InstRO {
 namespace Rose {
+
+	InstRO::Pass* RosePassFactory::createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass * pass){
+		auto initializer = std::make_shared<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePInitializer>();
+		std::unique_ptr<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::GenericInstrumentationStrategy> my_strategy = std::make_unique<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePStatementWrapperStrategy>(initializer);
+		std::unique_ptr<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::GenericInstrumentationStrategy> my_strategy2 = std::make_unique<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePLoopIterationStrategy>(initializer);
+		std::unique_ptr<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::GenericInstrumentationStrategy> my_strategy3 = std::make_unique<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePFunctionScopeStrategy>(initializer);
+
+		Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseStrategyBasedAdapter(pass,std::move(my_strategy),std::move(my_strategy2),std::move(my_strategy3)));
+		newPass->setPassName("InstRO::Rose::Adapter::MatthiasZoellnerLoopInstrumentationAdapter");
+		passManager->registerPass(newPass);
+		return newPass;
+
+	}
+	
+
+
 InstRO::Pass* RosePassFactory::createConstructHierarchyASTDotGenerator(InstRO::Pass* pass, std::string fileName) {
 	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructHierarchyASTDotGenerator(pass, fileName));
 	newPass->setPassName("InstRO::Rose::Adapter::ConstructHierarchyASTDotGenerator.h");
@@ -206,6 +225,5 @@ InstRO::Pass* RosePassFactory::createUniqueCallpathTransformer(Pass* input, Pass
     passManager->registerPass(newPass);
     return newPass;
 }
-
 }	// Rose
 }	// InstRO

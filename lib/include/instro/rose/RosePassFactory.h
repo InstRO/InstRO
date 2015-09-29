@@ -54,6 +54,9 @@ class RosePassFactory : public InstRO::PassFactory {
 	};
 
  public:
+	 virtual InstRO::Pass* createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass * pass);
+	
+
 	virtual InstRO::Pass* createConstructHierarchyASTDotGenerator(InstRO::Pass* pass, std::string fileName);
 	virtual InstRO::Pass* createProgramEntrySelector();
 	virtual InstRO::Pass* createFunctionSelector();
@@ -84,7 +87,6 @@ class RosePassFactory : public InstRO::PassFactory {
 	// UniqueCallpathTransformer
 	virtual InstRO::Pass* createUniqueCallpathTransformer(Pass* input);
 	virtual InstRO::Pass* createUniqueCallpathTransformer(Pass* input, Pass* root, Pass* active);
-
 	// Adapter
 	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input);
 	virtual InstRO::Pass* createConstructPrinter(InstRO::Pass* pass);
