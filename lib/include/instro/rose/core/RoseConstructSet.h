@@ -338,6 +338,7 @@ class RoseConstructProvider {
 		return mapping[fileInfo];
 	}
 
+	/** XXX this method does no checks on the SgNode! */
 	std::shared_ptr<RoseConstruct> getConstruct(SgNode* node) {
 //		std::cout << "getConstruct(" << node << ")" << std::endl;
 		if (node == nullptr) {

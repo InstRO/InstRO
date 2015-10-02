@@ -131,20 +131,6 @@ class ExampleConstructElevator : public InstRO::Tooling::ConstructElevator::Cons
 
 class ExampleGrammarInterface : public InstRO::Tooling::GrammarInterface::GrammarInterface {
  public:
-	// class ConstructSetToGrammarTypeMapper
-	std::list<InstRO::Tooling::GrammarInterface::GrammarTypesType> getGrammerTypes(
-			const InstRO::Core::ConstructSet &cs) {
-		throw std::string("ExampleGrammarInterface::getGrammerTypes : Not Implemented");
-		return std::list<InstRO::Tooling::GrammarInterface::GrammarTypesType>();
-	}
-
-	// class RequestCSByGrammarTypeInterface
-	std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByType(
-			const InstRO::Tooling::GrammarInterface::GrammarTypesType &types) override {
-		throw std::string("ExampleGrammarInterface::getConstructsByType : Not Implemented");
-		return std::make_unique<InstRO::Core::ConstructSet>(InstRO::Core::ConstructSet());
-	};
-
 	std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByClass(
 			const InstRO::Core::ConstructTraitType constructClass) override {
 		throw std::string("ExampleGrammarInterface::getConstructsByClass : Not Implemented");
