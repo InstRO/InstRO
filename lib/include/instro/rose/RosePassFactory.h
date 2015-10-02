@@ -75,6 +75,8 @@ class RosePassFactory : public InstRO::PassFactory {
 	virtual InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
 	// Call Path Based selection
 	virtual InstRO::Pass* createCallPathSelector(InstRO::Pass* callees, InstRO::Pass* caller);
+
+	InstRO::Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass);
 	// Elevator Selectors
 	virtual InstRO::Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
 	virtual InstRO::Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);

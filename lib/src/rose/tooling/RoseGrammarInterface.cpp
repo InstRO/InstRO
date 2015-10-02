@@ -76,6 +76,22 @@ std::list<InstRO::Tooling::GrammarInterface::GrammarTypesType> RoseGrammarInterf
 	return retList;
 }	// getGrammerTypes
 
+std::unique_ptr<InstRO::Core::ConstructSet> RoseGrammarInterface::getConstructsByClass(
+		const InstRO::Core::ConstructTraitType constructClass) {
+
+	std::unique_ptr<InstRO::Core::ConstructSet> result = std::make_unique<InstRO::Core::ConstructSet>();
+	InstRO::InfracstructureInterface::ConstructSetCompilerInterface csci(result.get());
+
+	for (auto sgNode : SageInterface::querySubTree<SgNode>(proj, V_SgNode)) {
+		auto construct = InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(sgNode);
+		if (construct->getTraits().is(constructClass)) {
+			csci.put(construct);
+		}
+	}
+
+	return result;
+}
+
 }	// GrammarInterface
 }	// Tooling
 }	// Rose

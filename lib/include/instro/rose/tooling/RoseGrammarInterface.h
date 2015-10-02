@@ -18,10 +18,15 @@ class RoseGrammarInterface : public InstRO::Tooling::GrammarInterface::GrammarIn
  public:
 	RoseGrammarInterface() = delete;
 	RoseGrammarInterface(SgProject *projArg) : proj(projArg) {}
-	virtual std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByType(
+
+	std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByType(
 			const InstRO::Tooling::GrammarInterface::GrammarTypesType &types) override;
-	virtual std::list<InstRO::Tooling::GrammarInterface::GrammarTypesType> getGrammerTypes(
+
+	std::list<InstRO::Tooling::GrammarInterface::GrammarTypesType> getGrammerTypes(
 			const InstRO::Core::ConstructSet &cs) override;
+
+	std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByClass(
+			const InstRO::Core::ConstructTraitType constructClass) override;
 };
 }
 }

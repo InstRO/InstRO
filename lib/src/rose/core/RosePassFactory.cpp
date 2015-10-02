@@ -1,9 +1,11 @@
+
 #include "instro/core/Pass.h"
 #include "instro/core/Singleton.h"
 #include "instro/pass/selector/IdentifyerSelector.h"
 #include "instro/pass/selector/TextStringSelector.h"
 #include "instro/pass/selector/ProgramEntrySelector.h"
 #include "instro/pass/selector/CallPathSelector.h"
+#include "instro/pass/selector/ConstructClassSelector.h"
 #include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
 #include "instro/rose/pass/transformer/UniqueCallpathTransformer.h"
 #include "instro/rose/RosePassFactory.h"
@@ -195,6 +197,14 @@ InstRO::Pass* RosePassFactory::createCallPathSelector(InstRO::Pass* callee, Inst
 	passManager->registerPass(newPass);
 	return newPass;
 }
+
+InstRO::Pass* RosePassFactory::createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass) {
+	InstRO::Pass* newPass = new InstRO::Pass(new InstRO::Selector::ConstructClassSelector(constructClass));
+	newPass->setPassName("InstRO::Selector::ConstructClassSelector");
+	passManager->registerPass(newPass);
+	return newPass;
+}
+
 InstRO::Pass* RosePassFactory::createOpenMPSelector() {
 	throw std::string("Not yet Implemented");
 	return NULL;
