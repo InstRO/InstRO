@@ -83,9 +83,11 @@ std::unique_ptr<InstRO::Core::ConstructSet> RoseGrammarInterface::getConstructsB
 	InstRO::InfracstructureInterface::ConstructSetCompilerInterface csci(result.get());
 
 	for (auto sgNode : SageInterface::querySubTree<SgNode>(proj, V_SgNode)) {
-		auto construct = InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(sgNode);
-		if (construct->getTraits().is(constructClass)) {
-			csci.put(construct);
+		if (InstRO::Rose::Core::RoseConstructLevelPredicates::ConstructPredicate()(sgNode)) {
+			auto construct = InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(sgNode);
+			if (construct->getTraits().is(constructClass)) {
+				csci.put(construct);
+			}
 		}
 	}
 
