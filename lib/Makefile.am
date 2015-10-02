@@ -56,7 +56,8 @@ CORE_HFILES= \
 ./include/instro/pass/selector/ProgramEntrySelector.h \
 ./include/instro/pass/selector/IdentifyerSelector.h \
 ./include/instro/pass/selector/CallPathSelector.h \
-./include/instro/pass/selector/ConstructClassSelector.h
+./include/instro/pass/selector/ConstructClassSelector.h \
+./include/instro/pass/selector/ElevatorSelector.h
 
 CORE_SFILES= \
 ./src/core/ConstructSet.cpp \
@@ -73,7 +74,8 @@ CORE_SFILES= \
 ./src/pass/selector/ProgramEntrySelector.cpp \
 ./src/pass/selector/IdentifyerSelector.cpp \
 ./src/pass/selector/CallPathSelector.cpp \
-./src/pass/selector/ConstructClassSelector.cpp
+./src/pass/selector/ConstructClassSelector.cpp \
+./src/pass/selector/ElevatorSelector.cpp
 
 CLANG_HFILES= \
 ./include/instro/clang/adapter/CygProfileAdapter.h \
@@ -95,7 +97,6 @@ ROSE_HFILES= \
 ./include/instro/rose/core/RosePass.h  \
 ./include/instro/rose/core/RoseLegacySelector.h \
 ./include/instro/rose/pass/adapter/RoseConstructPrinter.h \
-./include/instro/rose/pass/selector/ElevatorSelector.h \
 ./include/instro/rose/pass/selector/NameBasedSelector.h \
 ./include/instro/rose/pass/selector/CompoundSelector.h \
 ./include/instro/rose/pass/transformer/UniqueCallpathTransformer.h \
@@ -126,7 +127,6 @@ ROSE_SFILES= \
 ./src/rose/pass/adapter/RoseConstructPrinter.cpp \
 ./src/rose/pass/selector/CompoundSelector.cpp  \
 ./src/rose/pass/selector/NameBasedSelector.cpp  \
-./src/rose/pass/selector/ElevatorSelector.cpp \
 ./src/rose/tooling/RoseConstructElevator.cpp \
 ./src/rose/tooling/RoseNamedConstructAccess.cpp \
 ./src/rose/tooling/RoseGrammarInterface.cpp \

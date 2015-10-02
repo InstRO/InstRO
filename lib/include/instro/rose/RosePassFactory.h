@@ -8,7 +8,6 @@
 // #include "instro/rose/selectors/BlackAndWhiteListSelector.h"
 #include "instro/rose/pass/selector/NameBasedSelector.h"
 #include "instro/rose/pass/selector/CompoundSelector.h"
-#include "instro/rose/pass/selector/ElevatorSelector.h"
 // #include "instro/rose/pass/adapter/GenericAdapter.h"
 // #include "instro/rose/pass/adapter/CygProfileAdapter.h"
 #include "instro/rose/pass/adapter/RoseConstructPrinter.h"
@@ -74,8 +73,9 @@ class RosePassFactory : public InstRO::PassFactory {
 
 	InstRO::Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass);
 	// Elevator Selectors
-	virtual InstRO::Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
 	virtual InstRO::Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
+	virtual InstRO::Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
+	virtual InstRO::Pass* createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel, InstRO::Core::ConstructTraitType maxLevel);
 	// OpenMP Stuff
 	virtual InstRO::Pass* createOpenMPSelector();
 	virtual InstRO::Pass* createOpenMPFilter(Pass* input);
