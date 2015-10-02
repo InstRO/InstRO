@@ -56,16 +56,12 @@ class RosePassFactory : public InstRO::PassFactory {
  public:
 	 virtual InstRO::Pass* createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass * pass);
 	
-
 	virtual InstRO::Pass* createConstructHierarchyASTDotGenerator(InstRO::Pass* pass, std::string fileName);
 	virtual InstRO::Pass* createProgramEntrySelector();
 	virtual InstRO::Pass* createFunctionSelector();
 	// Text Based Selection in Various Flavors
-	virtual InstRO::Pass* createIdentifyerSelector(
-			std::vector<std::string> matchList);	// * Match Identifyers against the matchList
+	virtual InstRO::Pass* createIdentifyerSelector(std::vector<std::string> matchList);	// * Match Identifyers against the matchList
 	virtual InstRO::Pass* createIdentifyerFilter(std::vector<std::string> matchList, Pass* filterInput);
-	virtual InstRO::Pass* createTextStringSelector(
-			std::vector<std::string> matchList);	// Search within user strings "myText"
 
 	virtual InstRO::Pass* createFunctionBlackAndWhiteListSelector(std::vector<std::string> rules);
 	virtual InstRO::Pass* createFunctionBlackAndWhiteListFilter(std::vector<std::string> rules, Pass* inputPasses);
