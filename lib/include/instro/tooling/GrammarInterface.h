@@ -27,11 +27,15 @@ typedef enum {
 
 class GrammarInterface {
  public:
+	virtual ~GrammarInterface() {}
+
 	// class ConstructSetToGrammarTypeMapper
 	virtual std::list<GrammarTypesType> getGrammerTypes(const Core::ConstructSet &cs) = 0;
 
 	// class RequestCSByGrammarTypeInterface
 	virtual std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByType(const GrammarTypesType &types) = 0;
+
+	virtual std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByClass(const InstRO::Core::ConstructTraitType constructClass) = 0;
 };
 
 }	// GrammarInterface

@@ -1,0 +1,9 @@
+#ifndef INSTRO_CONFIG
+#define INSTRO_CONFIG
+
+#define INSTRO_DISABLE_EXCEPTIONS 0
+
+#define INSTRO_USE_ROSE 1
+#define INSTRO_USE_CLANG 0
+
+#endif
