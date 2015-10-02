@@ -339,7 +339,7 @@ class RoseConstructProvider {
 	}
 
 	std::shared_ptr<RoseConstruct> getConstruct(SgNode* node) {
-		std::cout << "getConstruct(" << node << ")" << std::endl;
+//		std::cout << "getConstruct(" << node << ")" << std::endl;
 		if (node == nullptr) {
 			throw std::string("RoseConstructProvider: attempted to getConstruct for nullptr");
 		}
