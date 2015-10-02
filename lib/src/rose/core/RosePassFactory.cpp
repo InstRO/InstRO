@@ -2,7 +2,6 @@
 #include "instro/core/Pass.h"
 #include "instro/core/Singleton.h"
 #include "instro/pass/selector/IdentifyerSelector.h"
-#include "instro/pass/selector/TextStringSelector.h"
 #include "instro/pass/selector/ProgramEntrySelector.h"
 #include "instro/pass/selector/CallPathSelector.h"
 #include "instro/pass/selector/ConstructClassSelector.h"
@@ -156,24 +155,6 @@ InstRO::Pass* RosePassFactory::createIdentifyerFilter(std::vector<std::string> m
 	passManager->registerPass(newPass);
 	return newPass;
 };
-
-InstRO::Pass* RosePassFactory::createTextStringSelector(std::vector<std::string> matchList) {
-	Pass* newPass = new Pass(new InstRO::Selector::TextStringSelector(matchList));
-	newPass->setPassName("InstRO::Rose::IdentifyerSelector");
-	passManager->registerPass(newPass);
-	return newPass;
-}
-
-/*
-InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA,InstRO::Pass* inputB) override {
-return NULL;
-}*/
-
-// Convenience
-/*
-InstRO::Pass* createProgramEntrySelector() override {
-return NULL;
-}*/
 
 InstRO::Pass* RosePassFactory::createFunctionSelector() {
 	throw std::string("Not yet Implemented");
