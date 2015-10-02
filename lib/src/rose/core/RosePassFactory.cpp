@@ -7,6 +7,8 @@
 #include "instro/pass/selector/ConstructClassSelector.h"
 #include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
 #include "instro/rose/pass/transformer/UniqueCallpathTransformer.h"
+#include "instro/pass/selector/ElevatorSelector.h"
+
 #include "instro/rose/RosePassFactory.h"
 
 
@@ -39,24 +41,27 @@ InstRO::Pass* RosePassFactory::createConstructHierarchyASTDotGenerator(InstRO::P
 	return newPass;
 }
 
-// CI: beta
-InstRO::Pass* RosePassFactory::createConstructLoweringElevator(InstRO::Pass* pass,
-																															 InstRO::Core::ConstructTraitType level) {
-	Pass* newPass = new Pass(new InstRO::Rose::Selector::ConstructLoweringElevator(pass, level));
-	newPass->setPassName("InstRO::Rose::Selector::ConstructLoweringElevator");
-	passManager->registerPass(newPass);
-	return newPass;
-}
-
-// CI: beta
 Pass* RosePassFactory::createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) {
-	Pass* newPass = new Pass(new InstRO::Rose::Selector::ConstructRaisingElevator(pass, level));
-	newPass->setPassName("InstRO::Rose::Selector::ConstructRaisingElevator");
+	Pass* newPass = new Pass(new InstRO::Selector::ConstructRaisingElevator(pass, level));
+	newPass->setPassName("InstRO::Selector::ConstructRaisingElevator");
 	passManager->registerPass(newPass);
 	return newPass;
 }
 
-// CI: beta
+Pass* RosePassFactory::createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) {
+	Pass* newPass = new Pass(new InstRO::Selector::ConstructLoweringElevator(pass, level));
+	newPass->setPassName("InstRO::Selector::ConstructLoweringElevator");
+	passManager->registerPass(newPass);
+	return newPass;
+}
+
+Pass* RosePassFactory::createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel, InstRO::Core::ConstructTraitType maxLevel) {
+	Pass* newPass = new Pass(new InstRO::Selector::ConstructCroppingElevator(pass, minLevel, maxLevel));
+	newPass->setPassName("InstRO::Selector::ConstructCroppingElevator");
+	passManager->registerPass(newPass);
+	return newPass;
+}
+
 Pass* RosePassFactory::createConstructPrinter(InstRO::Pass* pass) {
 	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructPrinter(pass));
 	newPass->setPassName("InstRO::Rose::Adapter::RoseConstructPrinter");
