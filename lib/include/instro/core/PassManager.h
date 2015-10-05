@@ -42,7 +42,9 @@ class PassManager {
 	// virtual bool isInput(Pass * pass)=0;
 	virtual bool hasOutputDependencies(Pass *) = 0;
 	virtual bool hasInputDependencies(Pass *) = 0;
-
+	// To allow explicit sequencing the user can use this call to establish an explicit before-after relationship between passes.
+	// This sequencing is overruled, by the input-dependencies.
+	virtual void setDependence(Pass * predecessor, Pass * pass) = 0;
  protected:
 	// FIXME Why is that here?
 	Pass *pass;
