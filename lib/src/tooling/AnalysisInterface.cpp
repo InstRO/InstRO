@@ -1,4 +1,6 @@
 #include <memory>	// Shared_ptr
+
+#include "instro/core/ConstructSet.h"
 #include "instro/tooling/AnalysisInterface.h"
 
 namespace InstRO {

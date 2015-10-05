@@ -41,11 +41,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>d:\Daten\Christian\Arbeit\Rose\include;$(IncludePath)</IncludePath>
+    <IncludePath>d:\Daten\Christian\Arbeit\Rose\include;../../../lib/include;$(IncludePath);./include;C:\Users\ci24amun\Documents\Visual Studio 2012\Boost\1_57_0\include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>d:\Daten\Christian\Arbeit\Rose\include;$(IncludePath)</IncludePath>
+    <IncludePath>d:\Daten\Christian\Arbeit\Rose\include;../../../lib/include;$(IncludePath);./include;C:\Users\ci24amun\Documents\Visual Studio 2012\Boost\1_57_0\include</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -56,6 +56,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\ci24amun\Documents\Development\rose\git-rose\include;../../../lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
+      <AdditionalOptions>/DUSE_ROSE_DUMMY %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -75,6 +76,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\ci24amun\Documents\Development\rose\git-rose\include;../../lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/DUSE_ROSE_DUMMY %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -84,7 +86,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Rose\include\rose.h" />
     <ClInclude Include="..\..\..\lib\include\instro.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Factory.h" />
@@ -98,43 +99,98 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\Singleton.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\CallPathSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleAnalysisInterface.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructProvider.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePassFactory.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\CallPathSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\IdentifyerSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\ProgramEntrySelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\TextStringSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\core\RoseConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\core\RoseLegacySelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\core\RosePassImplementation.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\ConstructHierarchyASTDotGenerator.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\GNUProfilingInterfaceAdapter.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseConstructPrinter.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseGPIAdapter.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseScorePAdapter.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\RoseStrategyBasedAdapter.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\CodeInsertionHelper.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\CodeInsertionPointSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\GenericAdapterBuilder.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\GenericInstrumentationStrategy.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\instrobuilder.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePAdapterBuilder.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePFunctionScopeStrategy.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePInitializer.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePLoopIterationStrategy.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePStatementWrapperStrategy.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\adapter\StrategyBasedAdapterSupport\ToolInitializer.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\selector\CompoundSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\selector\ElevatorSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\selector\NameBasedSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\pass\transformer\UniqueCallpathTransformer.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePassFactory.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\CompoundSelector.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\CompoundSelectors.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\rose\selectors\NameBasedSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseAnalysisInterface.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseConstructElevator.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseControlFlowGraph.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseExtendedCallGraph.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseGrammarInterface.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseNamedConstructAccess.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\rose\tooling\RoseTransformationInterface.h" />
     <ClInclude Include="..\..\..\lib\include\instro\support\BWLFileReader.h" />
     <ClInclude Include="..\..\..\lib\include\instro\tooling\AnalysisInterface.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\ConstructElevator.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\ControlFlowGraph.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\ExtendedCallGraph.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\tooling\GrammarInterface.h" />
     <ClInclude Include="..\..\..\lib\include\instro\tooling\NamedConstructAccess.h" />
     <ClInclude Include="..\..\..\lib\include\instro\tooling\TransformationInterface.h" />
+    <ClInclude Include="include\rose.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Pass.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp" />
-    <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp" />
-    <ClCompile Include="..\..\..\lib\src\rose\core\RoseConstructSet.cpp" />
-    <ClCompile Include="..\..\..\lib\src\rose\selectors\CompoundSelector.cpp" />
-    <ClCompile Include="..\..\..\lib\src\rose\selectors\NameBasedSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\pass\selector\CallPathSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\pass\selector\IdentifyerSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\pass\selector\ProgramEntrySelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\pass\selector\TextStringSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\core\RosePassFactory.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\GNUProfilingInterfaceAdapter.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseConstructPrinter.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseGPIAdapter.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseScorePAdapter.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\RoseStrategyBasedAdapter.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\CodeInsertionHelper.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\CodeInsertionPointSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\GenericAdapterBuilder.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\GenericInstrumentationStrategy.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\instrobuilder.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePAdapterBuilder.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePFunctionScopeStrategy.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePInitializer.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePLoopIterationStrategy.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ScorePInstrumentation\ScorePStatementWrapperStrategy.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\adapter\StrategyBasedAdapterSupport\ToolInitializer.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\selector\CompoundSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\selector\ElevatorSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\selector\NameBasedSelector.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\pass\transformer\UniqueCallpathTransformer.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseConstructElevator.cpp" />
+    <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseGrammarInterface.cpp" />
     <ClCompile Include="..\..\..\lib\src\rose\tooling\RoseNamedConstructAccess.cpp" />
-    <ClCompile Include="..\..\..\lib\src\rose_main.cpp" />
+    <ClCompile Include="..\..\..\lib\src\roseInstrumentor.cpp" />
     <ClCompile Include="..\..\..\lib\src\support\BWLFileReader.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp" />
+    <ClCompile Include="..\..\..\lib\src\tooling\ConstructElevator.cpp" />
+    <ClCompile Include="..\..\..\lib\src\tooling\ControlFlowGraph.cpp" />
+    <ClCompile Include="..\..\..\lib\src\tooling\ExtendedCallGraph.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAccess.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
