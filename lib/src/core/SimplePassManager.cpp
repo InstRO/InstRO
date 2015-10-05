@@ -24,6 +24,12 @@ void InstRO::PassManagement::SimplePassManager::setExecuter(InstRO::PassManageme
 	this->executer = executer;
 }
 
+bool InstRO::PassManagement::SimplePassManager::createPassTraversalOder()
+{
+	return true;
+}
+
+
 int InstRO::PassManagement::SimplePassManager::execute() {
 	std::cout << "InstRO::PassManagement::SimplePassManager::execute()" << std::endl;
 
