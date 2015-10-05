@@ -370,7 +370,7 @@ void  UniqueCallpathTransformer::duplicate(ExtendedCallGraphNode *node, NodeFunc
 
     // create a duplicate of the function for each function calling it
     for (SgFunctionDeclaration *callingFunDecl : callingFunctions) {
-        FunctionRenamer renamingProvider (funDecl);
+        InstRO::Rose::Utility::FunctionRenamer renamingProvider (funDecl);
         // look for function calls to the function to be duplicated inside the definition of the calling parent function
         renamingProvider.findFunctionCalls(std::vector<SgNode*> {callingFunDecl});
 
