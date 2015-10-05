@@ -5,6 +5,7 @@
 
 namespace InstRO {
 namespace Rose {
+namespace Utility {
 
 /// \brief A utility class for finding function calls of a specific function and renaming them or the definition of the function.
 /// \author Simon Reuß
@@ -32,6 +33,7 @@ private:
 
 };
 
+}
 }
 }
 

@@ -2,6 +2,7 @@
 
 using namespace InstRO;
 using namespace InstRO::Rose;
+using namespace InstRO::Rose::Utility;
 
 namespace {
 
