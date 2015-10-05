@@ -14,20 +14,8 @@
  *
  *
  */
-#ifndef USING_EXAMPLE
-#ifndef USING_ROSE
-#ifndef USING_LLVM
-#define USING_ROSE
-#endif
-#else
-
-#endif
-#endif
-// InstRO includes
-// #ifndef DEFAULT_INSTRO
-// #define USING_ROSE
-// #define USING_LLVM
-// #endif
+#include "instro/config.h"
+ 
 
 namespace InstRO {
 namespace Core {};		 // Here we define the core interfaces and classes of instro
@@ -54,12 +42,11 @@ namespace Example {};	// An example implementation and usage of the InstRO inter
 
 //#include "instro/core/PassManager.h"
 
-#ifdef USING_ROSE
-#include "instro/rose/RosePass.h"
+#if INSTRO_USE_ROSE && !defined(USING_EXAMPLE)
+#include "instro/rose/core/RosePassImplementation.h"
 #include "instro/rose/RosePassFactory.h"
 #include "instro/rose/RoseInstrumentor.h"
-#include "instro/rose/adapters/CygProfileAdapter.h"
-#include "instro/rose/selectors/CompoundSelector.h"
+#include "instro/rose/pass/adapter/RoseConstructPrinter.h"
 #endif
 
 #ifdef USING_LLVM
@@ -67,6 +54,7 @@ namespace Example {};	// An example implementation and usage of the InstRO inter
 #endif
 
 #ifdef USING_EXAMPLE
+//#include "instro/example/ExampleConstructProvider.h"
 #include "instro/example/ExampleInstrumentor.h"
 #include "instro/example/ExamplePass.h"
 #include "instro/example/ExamplePassFactory.h"

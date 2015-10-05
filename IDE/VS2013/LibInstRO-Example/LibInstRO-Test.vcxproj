@@ -87,6 +87,7 @@
     <ClInclude Include="..\..\..\lib\include\instro\agnosticSupport.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Factory.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\core\Helper.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Instrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Pass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\PassExecuter.h" />
@@ -95,16 +96,17 @@
     <ClInclude Include="..\..\..\lib\include\instro\core\PassManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\SimplePassManager.h" />
     <ClInclude Include="..\..\..\lib\include\instro\core\Singleton.h" />
-    <ClInclude Include="..\..\..\lib\include\instro\example\CallPathSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\CompoundSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleAnalysisInterface.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructPrinter.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructProvider.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructSet.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExampleNamedConstructAccess.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePass.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePassFactory.h" />
     <ClInclude Include="..\..\..\lib\include\instro\example\NameBasedSelector.h" />
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\CallPathSelector.h" />
     <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RoseInstrumentor.h" />
     <ClInclude Include="..\..\..\lib\include\instro\rose\RosePass.h" />
@@ -112,14 +114,15 @@
     <ClInclude Include="..\..\..\lib\include\instro\tooling\AnalysisInterface.h" />
     <ClInclude Include="..\..\..\lib\include\instro\tooling\NamedConstructAccess.h" />
     <ClInclude Include="..\..\..\lib\include\instro\tooling\TransformationInterface.h" />
+    <ClInclude Include="..\LibInstRO-Rose\include\rose.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\lib\src\core\ConstructSet.cpp" />
+    <ClCompile Include="..\..\..\lib\src\core\Helper.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Pass.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\PassImplemention.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\SimplePassManager.cpp" />
     <ClCompile Include="..\..\..\lib\src\core\Singleton.cpp" />
-    <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\CompoundSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\ExampleConstructPrinter.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\ExampleConstructSet.cpp" />
@@ -127,7 +130,9 @@
     <ClCompile Include="..\..\..\lib\src\example\ExampleNamedConstructAccess.cpp" />
     <ClCompile Include="..\..\..\lib\src\example\NameBasedSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\example_main.cpp" />
+    <ClCompile Include="..\..\..\lib\src\pass\selector\CallPathSelector.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\AnalysisInterface.cpp" />
+    <ClCompile Include="..\..\..\lib\src\tooling\ConstructElevator.cpp" />
     <ClCompile Include="..\..\..\lib\src\tooling\NamedConstructAccess.cpp" />
   </ItemGroup>
   <ItemGroup>

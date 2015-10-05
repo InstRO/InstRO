@@ -13,7 +13,8 @@ void InstRO::Pass::initPass() {
 }
 
 void InstRO::Pass::executePass() {
-	std::cout << "Executing inside Pass base class" << std::endl;
+	assert(passImplementation);
+	std::cout << "InstRO::Pass::executePass:\t calling execute on PassImplementation" << std::endl;
 	if (passInitialized)
 		passImplementation->execute();
 	else

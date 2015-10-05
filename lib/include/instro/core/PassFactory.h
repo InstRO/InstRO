@@ -33,20 +33,10 @@ class PassFactory {
  public:
 	/* CI: A PassFactory must be initialized with the PassManager. */
 	PassFactory(PassManagement::PassManager* manager) : passManager(manager){};
-	virtual InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) = 0;
-
-	virtual InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) = 0;
-
-	// Convenience
-	virtual InstRO::Pass* createProgramEntrySelector() = 0;
-	virtual InstRO::Pass* createFunctionSelector() = 0;
-	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input) = 0;
+	// Currently we need to force the class to be virtual
+	virtual void someFunction(){};
 
  protected:
-	/*	void registerPass(Pass * pass)
-		{
-			refToGobalPassManager->registerPass(pass);
-		}*/
 	PassManagement::PassManager* passManager;
 };
 

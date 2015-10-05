@@ -46,6 +46,9 @@
     <Filter Include="source\lib\support">
       <UniqueIdentifier>{8b9876e8-07c6-4813-8046-45194d90456a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\instro\tooling">
+      <UniqueIdentifier>{b1cec1e3-58c6-4054-b243-da1e360539dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\instro\core\ConstructSet.h">
@@ -105,9 +108,6 @@
     <ClInclude Include="..\..\..\lib\include\instro\tooling\TransformationInterface.h">
       <Filter>source\lib\tooling</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructPrinter.h">
-      <Filter>include\instro\example</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\tooling\NamedConstructAccess.h">
       <Filter>source\lib\tooling</Filter>
     </ClInclude>
@@ -117,14 +117,8 @@
     <ClInclude Include="..\..\..\lib\include\instro\example\ExamplePass.h">
       <Filter>include\instro\example\passes</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro\example\CallPathSelector.h">
-      <Filter>include\instro\example\passes</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\example\NameBasedSelector.h">
       <Filter>include\instro\example\passes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\lib\include\instro.h">
-      <Filter>source\lib</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\lib\include\instro\roseInstRO.h">
       <Filter>source\lib</Filter>
@@ -135,14 +129,24 @@
     <ClInclude Include="..\..\..\lib\include\instro\example\CompoundSelector.h">
       <Filter>include\instro\example</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\core\Helper.h">
+      <Filter>include\instro\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructPrinter.h">
+      <Filter>include\instro\example\passes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\pass\selector\CallPathSelector.h">
+      <Filter>include\instro\example\passes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro\example\ExampleConstructProvider.h">
+      <Filter>include\instro\example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\instro.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibInstRO-Rose\include\rose.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\lib\src\example\CallPathSelector.cpp">
-      <Filter>include\instro\example</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\lib\src\example\ExampleConstructPrinter.cpp">
-      <Filter>include\instro\example</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\lib\src\example\ExampleConstructSet.cpp">
       <Filter>include\instro\example</Filter>
     </ClCompile>
@@ -181,6 +185,18 @@
     </ClCompile>
     <ClCompile Include="..\..\..\lib\src\example\CompoundSelector.cpp">
       <Filter>include\instro\example</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\core\Helper.cpp">
+      <Filter>include\instro\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\tooling\ConstructElevator.cpp">
+      <Filter>source\lib\tooling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\example\ExampleConstructPrinter.cpp">
+      <Filter>include\instro\example\passes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\src\pass\selector\CallPathSelector.cpp">
+      <Filter>include\instro\example\passes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

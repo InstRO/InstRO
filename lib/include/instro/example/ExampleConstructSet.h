@@ -10,41 +10,51 @@ namespace Example {
 namespace Core {
 class ExampleConstruct : public InstRO::Core::Construct {
  public:
-	ExampleConstruct(InstRO::Core::ConstructLevelType level, std::string nname) : Construct(level), name(nname){};
-	std::string toString() { return name; };
+	size_t getID() const { return 0; }
+	ExampleConstruct(InstRO::Core::ConstructTrait level, std::string nname)
+			: Construct(level), name(nname), hierarchyPartent(nullptr) {
+		constructTraits = InstRO::Core::ConstructTrait(level);
+	}
+	ExampleConstruct(InstRO::Core::ConstructTrait level, std::string nname, ExampleConstruct *parent)
+			: Construct(level), name(nname), hierarchyPartent(parent) {
+		constructTraits = InstRO::Core::ConstructTrait(level);
+	}
+	std::string toString() const override { return name; }
+	std::string toDotString() const override { return name;	}
 
  protected:
 	std::string name;
-	int type;
+	ExampleConstruct *hierarchyPartent;
 };
-namespace InfracstructureInterface {/*
+namespace InfracstructureInterface {
+/*
 
-	 class ExampleConstructSet :public InstRO::Core::ConstructSet {
-	 public:
-		 ExampleConstructSet(InstRO::Core::ConstructSet & cs){
-			 constructs = cs.constructs;
+ class ExampleConstructSet :public InstRO::Core::ConstructSet {
+ public:
+	 ExampleConstructSet(InstRO::Core::ConstructSet & cs){
+		 constructs = cs.constructs;
 
-		 };
-		 ExampleConstructSet(){};
-		 virtual void put(const std::shared_ptr<InstRO::Core::Construct>& construct){
-			 InstRO::Core::ConstructSet::put(construct);
-		 }
-		 virtual void erase(const std::shared_ptr<InstRO::Core::Construct>& construct){
-			 InstRO::Core::ConstructSet::erase(construct);
-		 };
- //		virtual void put(ConstructSet cs);
- //		virtual void erase(ConstructSet cs);
- //		bool contains(const std::shared_ptr<InstRO::Core::Construct>& construct) const;
-		 std::set<std::shared_ptr<InstRO::Core::Construct> >::iterator begin()
-		 {
-			 return InstRO::Core::ConstructSet::begin();
-		 }
-		 std::set<std::shared_ptr<InstRO::Core::Construct> >::iterator end(){
-			 return InstRO::Core::ConstructSet::end();
-		 }
-		 std::set<std::shared_ptr<InstRO::Core::Construct> >::const_iterator  cbegin()const;
-		 std::set<std::shared_ptr<InstRO::Core::Construct> >::const_iterator  cend()const;
-	 };*/
+	 };
+	 ExampleConstructSet(){};
+	 virtual void put(const std::shared_ptr<InstRO::Core::Construct>& construct){
+		 InstRO::Core::ConstructSet::put(construct);
+	 }
+	 virtual void erase(const std::shared_ptr<InstRO::Core::Construct>& construct){
+		 InstRO::Core::ConstructSet::erase(construct);
+	 };
+//		virtual void put(ConstructSet cs);
+//		virtual void erase(ConstructSet cs);
+//		bool contains(const std::shared_ptr<InstRO::Core::Construct>& construct) const;
+	 std::set<std::shared_ptr<InstRO::Core::Construct> >::iterator begin()
+	 {
+		 return InstRO::Core::ConstructSet::begin();
+	 }
+	 std::set<std::shared_ptr<InstRO::Core::Construct> >::iterator end(){
+		 return InstRO::Core::ConstructSet::end();
+	 }
+	 std::set<std::shared_ptr<InstRO::Core::Construct> >::const_iterator  cbegin()const;
+	 std::set<std::shared_ptr<InstRO::Core::Construct> >::const_iterator  cend()const;
+ };*/
 }
 
 #ifdef DEPRECATEDCS
@@ -57,14 +67,14 @@ class ExampleConstructSet : public InstRO::Core::ConstructSet {
 
  public:
 	ExampleConstructSet(){};
-	virtual ::std::vector<InstRO::Core::ConstructLevelType> getConstructLevels() override {
+	virtual ::std::vector<InstRO::Core::ConstructTraitType> getConstructLevels() override {
 		// InstRO::Core::ConstructTypesType type;
-		return std::vector<InstRO::Core::ConstructLevelType>();
+		return std::vector<InstRO::Core::ConstructTraitType>();
 	}
-	virtual InstRO::Core::ConstructLevelType getMaxConstructLevel() override {
+	virtual InstRO::Core::ConstructTraitType getMaxConstructLevel() override {
 		return InstRO::Core::ContstructLevelEnum::CLLoop;
 	}
-	virtual InstRO::Core::ConstructLevelType getMinConstructLevel() override {
+	virtual InstRO::Core::ConstructTraitType getMinConstructLevel() override {
 		return InstRO::Core::ContstructLevelEnum::CLMin;
 	}
 	virtual void clear() override { constructs.clear(); }

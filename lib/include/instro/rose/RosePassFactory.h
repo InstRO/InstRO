@@ -4,12 +4,14 @@
 #include "instro/core/PassFactory.h"
 #include "instro/core/PassManager.h"
 
-#include "instro/rose/RosePass.h"
+#include "instro/rose/core/RosePassImplementation.h"
 // #include "instro/rose/selectors/BlackAndWhiteListSelector.h"
-#include "instro/rose/selectors/NameBasedSelector.h"
-#include "instro/rose/selectors/CompoundSelector.h"
-#include "instro/rose/adapters/GenericAdapter.h"
-#include "instro/rose/adapters/CygProfileAdapter.h"
+#include "instro/rose/pass/selector/NameBasedSelector.h"
+#include "instro/rose/pass/selector/CompoundSelector.h"
+// #include "instro/rose/pass/adapter/GenericAdapter.h"
+// #include "instro/rose/pass/adapter/CygProfileAdapter.h"
+#include "instro/rose/pass/adapter/RoseConstructPrinter.h"
+#include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
 
 #include "rose.h"
 
@@ -17,16 +19,23 @@ namespace InstRO {
 namespace Rose {
 
 class RosePassFactory : public InstRO::PassFactory {
+ public:
+	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) : PassFactory(refManager), project(proj) {}
+	virtual ~RosePassFactory() {}
+
  protected:
-	RosePass* getPass(Pass* pass) {
+	RosePassImplementation* getPass(Pass* pass) {
 		if (pass == NULL)
 			return NULL;
-		RosePass* rosePass = dynamic_cast<RosePass*>(pass->getPassImplementation());
+		RosePassImplementation* rosePass = dynamic_cast<RosePassImplementation*>(pass->getPassImplementation());
 		if (pass->getPassImplementation() != NULL && rosePass == NULL)
 			throw std::string("Oh my god, what is going on");
 		return rosePass;
 	}
 	SgProject* project;
+
+	std::vector<InstRO::Pass*> passBucket;
+	std::vector<InstRO::Core::PassImplementation*> passImplementationBucket;
 
  public:
 	class GenericAdapterConfiguration {
@@ -44,100 +53,43 @@ class RosePassFactory : public InstRO::PassFactory {
 	};
 
  public:
-	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) : PassFactory(refManager), project(proj){};
+	 virtual InstRO::Pass* createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass * pass);
+	
+	virtual InstRO::Pass* createConstructHierarchyASTDotGenerator(InstRO::Pass* pass, std::string fileName);
+	virtual InstRO::Pass* createProgramEntrySelector();
+	virtual InstRO::Pass* createFunctionSelector();
+	// Text Based Selection in Various Flavors
+	virtual InstRO::Pass* createIdentifyerSelector(std::vector<std::string> matchList);	// * Match Identifyers against the matchList
+	virtual InstRO::Pass* createIdentifyerFilter(std::vector<std::string> matchList, Pass* filterInput);
 
-	Pass* createBlackAndWhiteListSelector(std::vector<std::string> rules) {
-		std::vector<std::string> wlrules;
-		std::vector<std::string> blrules;
-		// get a matcher pass for the white list
-		Pass* wlPass = new Pass(new Selectors::NameBasedSelector(wlrules));
-		wlPass->setPassName("InstRO::Rose::BlackAndWhiteList-WhiteList");
-		passManager->registerPass(wlPass);
+	virtual InstRO::Pass* createFunctionBlackAndWhiteListSelector(std::vector<std::string> rules);
+	virtual InstRO::Pass* createFunctionBlackAndWhiteListFilter(std::vector<std::string> rules, Pass* inputPasses);
+	//	virtual InstRO::Pass* createFunctionBlackNWhiteSelector(std::string string);
 
-		Pass* blPass = new Pass(new Selectors::NameBasedSelector(blrules));
-		blPass->setPassName("InstRO::Rose::BlackAndWhiteList-BlackList");
-		passManager->registerPass(blPass);
+	virtual InstRO::Pass* createBooleanAndSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
+	virtual InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
+	// Call Path Based selection
+	virtual InstRO::Pass* createCallPathSelector(InstRO::Pass* callees, InstRO::Pass* caller);
 
-		Pass * compountPass = new Pass(new Selectors::CompoundSelector(wlPass, blPass, Selectors::CompoundSelector::CO_Or));
-		compountPass->setPassName("InstRO::Rose:BlackAndWhiteList-Compound");
-		passManager->registerPass(compountPass);
+	InstRO::Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass);
+	// Elevator Selectors
+	virtual InstRO::Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
+	virtual InstRO::Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
+	virtual InstRO::Pass* createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel, InstRO::Core::ConstructTraitType maxLevel);
+	// OpenMP Stuff
+	virtual InstRO::Pass* createOpenMPSelector();
+	virtual InstRO::Pass* createOpenMPFilter(Pass* input);
+	virtual InstRO::Pass* createOpenMPOpariCannonizer(Pass* input);
+	virtual InstRO::Pass* createOPARIAdapter(Pass* input);
 
-		return compountPass;
-	}
-
-	Pass* createBlackNWhiteSelector(std::string string) {
-		std::vector<std::string> filters;
-		filters.push_back(string);
-		return createBlackAndWhiteListSelector(filters);
-	};
-
-	Pass* createBooleanOrSelector(Pass* inputA, Pass* inputB) override {
-		Pass* newPass = new InstRO::Pass(new Rose::Selectors::CompoundSelector(inputA, inputB, Selectors::CompoundSelector::CO_Or));
-		newPass->setPassName("InstRO::Rose::BooleanOrSelector");
-		passManager->registerPass(newPass);
-		/*		Pass * compoundPass=new Pass(new Selectors::CompoundSelector(getPass(inputA),getPass(inputB)));
-				compoundPass->setPassName("ROSE_BooleanOr");
-				compoundPass->setRequiresInput();
-				compoundPass->setProvidesOutput();
-				compoundPass->setOutputLevel(Core::ConstructLevelMin);
-				compoundPass->registerInputPass(inputA,Core::ConstructLevelMin);
-				compoundPass->registerInputPass(inputB,Core::ConstructLevelMin);
-				passManager->registerPass(compoundPass);
-				return compoundPass;*/
-		return newPass;
-	};
-
-	Pass* createProgramEntrySelector() override { return NULL; };
-
-	Pass* createCygProfileAdapter(Pass* input) {
-		Pass* newPass = new Pass(new Adapters::CygProfileAdapter(input));
-		newPass->setPassName("InstRO::Rose::CygProfileAdapter");
-		passManager->registerPass(newPass);
-		return newPass;
-	};
-
-	Pass* createGenericAdapter(Pass* functionSelection, Pass* loopSelection, Pass* branchingSelection) {
-		// RosePass * roseFunctionSelectionPass,* roseLoopSelectionPass,*roseBranchingSelectionPass;
-
-		Adapters::GenericAdapter* roseAdapter =
-				new Adapters::GenericAdapter(functionSelection, loopSelection, branchingSelection);
-		Pass* newPass = new Pass(roseAdapter);
-		newPass->setPassName("InstRO::Rose::GenericAdapter");
-		passManager->registerPass(newPass);
-		return newPass;
-	};
-
-	Pass* createGenericAdapter(GenericAdapterConfiguration gac) {
-		return createGenericAdapter(gac.getFunctionSelector(), gac.getLoopConstructSelector(), gac.getLoopBodySelector());
-	};
-
-	InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) override {
-		Pass* newPass = new Pass(new Selectors::NameBasedSelector(matchList));
-		newPass->setPassName("InstRO::Rose::NameBasedSelector");
-		passManager->registerPass(newPass);
-		return newPass;
-	};
-
-	InstRO::Pass* createNameBasedFilter(std::vector<std::string> matchList, Pass* filterInput) {
-		Pass* newPass = new Pass(new Selectors::NameBasedSelector(matchList, filterInput));
-		newPass->setPassName("InstRO::Rose::NameBasedFilter");
-		passManager->registerPass(newPass);
-		return newPass;
-	};
-	/*
-	InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA,InstRO::Pass* inputB) override {
-		return NULL;
-	}*/
-
-	// Convenience
-	/*
-	InstRO::Pass* createProgramEntrySelector() override {
-		return NULL;
-	}*/
-
-	InstRO::Pass* createFunctionSelector() override { return NULL; }
-
-	InstRO::Pass* createGPIAdapter(InstRO::Pass* input) override { return NULL; }
+	// UniqueCallpathTransformer
+	virtual InstRO::Pass* createUniqueCallpathTransformer(Pass* input);
+	virtual InstRO::Pass* createUniqueCallpathTransformer(Pass* input, Pass* root, Pass* active);
+	// Adapter
+	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input);
+	virtual InstRO::Pass* createConstructPrinter(InstRO::Pass* pass);
+	virtual InstRO::Pass* createGenericAdapter(GenericAdapterConfiguration gac);
+	virtual InstRO::Pass* createGenericAdapter(Pass* functionSelection, Pass* loopSelection, Pass* branchingSelection);
 };
 }
 }
