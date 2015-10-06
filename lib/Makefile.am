@@ -177,7 +177,6 @@ bin_PROGRAMS=ExampleInstrumentor
 
 if USECLANG
 lib_LTLIBRARIES += libInstRO_clang.la
-bin_PROGRAMS += ClangInstrumentor
 endif
 
 if USEROSE
@@ -245,13 +244,13 @@ libInstRO_rose_la_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
 endif
 
 
-ClangInstrumentor_SOURCES = \
-	./src/clang/Instrumentor.cpp
+#ClangInstrumentor_SOURCES = \
+#	./src/clang/Instrumentor.cpp
 
-ClangInstrumentor_LDADD=libInstRO_core.a libInstRO_clang.a @LLVM_LDFLAGS@ @CLANG_LIBS_LIST@ @CLANG_LIBS_LIST@
-ClangInstrumentor_LDFLAGS= @LLVM_LDFLAGS@ @CLANG_LIBS_LIST@ @CLANG_LIBS_LIST@
-ClangInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@CLANG_SRC_INCLUDE_PATH@ -I@LLVM_SRC_INCLUDE_PATH@  @LLVM_CXXFLAGS_FLAGS@ -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
-ClangInstrumentor_LIBTOOLFLAGS=--preserve-dup-deps
+#ClangInstrumentor_LDADD=libInstRO_core.a libInstRO_clang.a @LLVM_LDFLAGS@ @CLANG_LIBS_LIST@ @CLANG_LIBS_LIST@
+#ClangInstrumentor_LDFLAGS= @LLVM_LDFLAGS@ @CLANG_LIBS_LIST@ @CLANG_LIBS_LIST@
+#ClangInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@CLANG_SRC_INCLUDE_PATH@ -I@LLVM_SRC_INCLUDE_PATH@  @LLVM_CXXFLAGS_FLAGS@ -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+#ClangInstrumentor_LIBTOOLFLAGS=--preserve-dup-deps
 
 
 
@@ -265,7 +264,6 @@ bin_PROGRAMS=ExampleInstrumentor
 
 if USECLANG
 lib_LIBRARIES += libInstRO_clang.a
-bin_PROGRAMS += ClangInstrumentor
 endif
 
 if USEROSE
