@@ -258,12 +258,12 @@ bin_PROGRAMS += ConfigInstrumentor
 endif
 
 
-ClangInstrumentor_SOURCES = \
+#ClangInstrumentor_SOURCES = \
 	./src/clang/Instrumentor.cpp
 
-ClangInstrumentor_LDADD=libInstRO_core.a libInstRO_clang.a @CLANG_LIBS_LIST@ @LLVM_LDFLAGS@
+#ClangInstrumentor_LDADD=libInstRO_core.a libInstRO_clang.a @CLANG_LIBS_LIST@ @LLVM_LDFLAGS@
 #ClangInstrumentor_LDFLAGS=@LLVM_LDFLAGS@ @CLANG_LIBS_LIST@
-ClangInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@CLANG_SRC_INCLUDE_PATH@ -I@LLVM_SRC_INCLUDE_PATH@ @LLVM_CXXFLAGS_FLAGS@ -I@BOOST_INCLUDEDIR@
+#ClangInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@CLANG_SRC_INCLUDE_PATH@ -I@LLVM_SRC_INCLUDE_PATH@ @LLVM_CXXFLAGS_FLAGS@ -I@BOOST_INCLUDEDIR@
 
 RoseInstrumentor_SOURCES = \
 	./src/roseInstrumentor.cpp
@@ -320,6 +320,12 @@ libInstRO_clang_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@LLVM_SRC_INCLUDE_PATH@ 
 libInstRO_clang_a_LDFLAGS=@CLANG_LIBS_LIST@ @LLVM_LDFLAGS@
 
 libInstRO_core_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+
+## Manually crafted Clang stuff!
+# FIXME Figure out how this can be done using actually autotools
+ClangInstRO:
+	$(CXX) --verbose $(LLVM_CXXFLAGS_FLAGS) -I$(LLVM_SRC_INCLUDE_PATH) -I$(CLANG_SRC_INCLUDE_PATH) -I$(BOOST_INCLUDEDIR) $(AM_CPPFLAGS) $(top_srcdir)/lib/src/clang/Instrumentor.cpp libInstRO_clang.a libInstRO_core.a $(CLANG_LIBS_LIST) $(LLVM_LDFLAGS) -o $@
+
 
 if HAVERAPIDJSON
 libInstRO_core_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
