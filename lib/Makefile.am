@@ -17,14 +17,17 @@ ROSEINSTROASTPRINTER_SFILES=\
 
 CLANG_SFILES= \
 ./src/clang/adapter/CygProfileAdapter.cpp \
+./src/clang/adapter/LLVMInputAdapter.cpp \
 ./src/clang/ClangInstrumentor.cpp \
 ./src/clang/core/ClangPassExecuter.cpp \
 ./src/clang/core/ConstructSet.cpp \
 ./src/clang/core/PassFactory.cpp \
 ./src/clang/selector/BlackWhitelistSelector.cpp \
 ./src/clang/selector/FunctionDefinitionSelector.cpp \
+./src/clang/selector/BooleanCompoundSelector.cpp \
 ./src/clang/support/ClangConsumerFactory.cpp \
-./src/clang/support/InstROASTConsumer.cpp
+./src/clang/support/InstROASTConsumer.cpp \
+./src/support/BWLFileReader.cpp
 
 EXAMPLE_SFILES= \
 ./src/example/ExampleConstructPrinter.cpp \
@@ -77,8 +80,9 @@ CORE_SFILES= \
 
 CLANG_HFILES= \
 ./include/instro/clang/adapter/CygProfileAdapter.h \
+./include/instro/clang/adapter/LLVMInputAdapter.h \
 ./include/instro/clang/ClangInstrumentor.h \
-./include/instro/clang/core/ClangAdapterPass.h \
+./include/instro/clang/core/ClangPassImplBase.h \
 ./include/instro/clang/core/ClangConsumerFactory.h \
 ./include/instro/clang/core/ClangPassExecuter.h \
 ./include/instro/clang/core/ConstructSet.h \
@@ -86,7 +90,9 @@ CLANG_HFILES= \
 ./include/instro/clang/core/Pass.h \
 ./include/instro/clang/selector/BlackWhitelistSelector.h \
 ./include/instro/clang/selector/FunctionDefinitionSelector.h \
-./include/instro/clang/support/InstROASTConsumer.h
+./include/instro/clang/selector/BooleanCompoundSelector.h \
+./include/instro/clang/support/InstROASTConsumer.h \
+./include/instro/support/BWLFileReader.h
 
 ROSE_HFILES= \
 ./include/instro/rose/RoseInstrumentor.h  \
@@ -180,7 +186,12 @@ libInstRO_rose_la_SOURCES= \
 	$(ROSE_SFILES) \
 	$(ROSE_HFILES) 
 
-libInstRO_core_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@CLANG_INCLUDE_PATH@ -I@LLVM_INCLUDE_PATH@ -I@BOOST_INCLUDEDIR@
+libInstRO_clang_la_SOURCES= \
+	$(CLANG_SFILES) \
+	$(CLANG_HFILES)
+
+#libInstRO_core_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@CLANG_INCLUDE_PATH@ -I@LLVM_INCLUDE_PATH@ -I@BOOST_INCLUDEDIR@
+libInstRO_core_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
 libInstRO_example_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
@@ -213,16 +224,21 @@ libInstRO_example_la_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
 libInstRO_rose_la_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
 endif
 
-#libInstRO_clang_la_SOURCES= \
-#	$(CLANG_SFILES) \
-#	$(CLANG_HFILES)
+
+ClangInstrumentor_SOURCES = \
+	./src/clang/Instrumentor.cpp
+
+ClangInstrumentor_LDADD=libInstRO_core.a libInstRO_clang.a @LLVM_LDFLAGS@ @CLANG_LIBS_LIST@ @CLANG_LIBS_LIST@
+ClangInstrumentor_LDFLAGS= @LLVM_LDFLAGS@ @CLANG_LIBS_LIST@ @CLANG_LIBS_LIST@
+ClangInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@CLANG_SRC_INCLUDE_PATH@ -I@LLVM_SRC_INCLUDE_PATH@  @LLVM_CXXFLAGS_FLAGS@ -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+ClangInstrumentor_LIBTOOLFLAGS=--preserve-dup-deps
+
 
 
 else #USELIBTOOL
+
 # STATIC LIBRARY FOR LIBINSTRO
 lib_LIBRARIES= libInstRO_core.a libInstRO_example.a
-#lib_LIBRARIES= libInstRO_core.a libInstRO_example.a libInstRO_rose.a libInstRO_clang.a
-#libInstRO_clang.a
 
 # bin_PROGRAMS=ClangInstrumentor ExampleInstrumentor RoseInstrumentor
 bin_PROGRAMS=ExampleInstrumentor 
@@ -245,9 +261,9 @@ endif
 ClangInstrumentor_SOURCES = \
 	./src/clang/Instrumentor.cpp
 
-ClangInstrumentor_LDADD=libInstRO_core.a -L@CLANG_LIB_DIR@ @CLANG_LIBS_LIST@ @LLVM_LINK_COMMAND@ -lclang
-ClangInstrumentor_LDFLAGS=-L@CLANG_LIB_DIR@ @CLANG_LIBS_LIST@ @LLVM_LINK_COMMAND@ -lclang
-ClangInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) @LLVM_INCLUDE_FLAGS@ -I@CLANG_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+ClangInstrumentor_LDADD=libInstRO_core.a libInstRO_clang.a @CLANG_LIBS_LIST@ @LLVM_LDFLAGS@
+#ClangInstrumentor_LDFLAGS=@LLVM_LDFLAGS@ @CLANG_LIBS_LIST@
+ClangInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@CLANG_SRC_INCLUDE_PATH@ -I@LLVM_SRC_INCLUDE_PATH@ @LLVM_CXXFLAGS_FLAGS@ -I@BOOST_INCLUDEDIR@
 
 RoseInstrumentor_SOURCES = \
 	./src/roseInstrumentor.cpp
@@ -266,7 +282,6 @@ ExampleInstrumentor_SOURCES = \
 	./src/example_main.cpp
 
 ExampleInstrumentor_LDADD= libInstRO_example.a
-# ExampleInstrumentor_LDFLAGS=
 ExampleInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
 ConfigInstrumentor_SOURCES =./src/config_main.cpp
@@ -299,7 +314,10 @@ libInstRO_clang_a_SOURCES= \
 	$(CLANG_SFILES) \
 	$(CLANG_HFILES)
 
-libInstRO_clang_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) @LLVM_INCLUDE_FLAGS@ -I@CLANG_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+libInstRO_clang_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@LLVM_SRC_INCLUDE_PATH@ @LLVM_CXXFLAGS_FLAGS@ -I@CLANG_SRC_INCLUDE_PATH@ -I@BOOST_INCLUDEDIR@
+
+# We use LDFLAGS for this list according to https://www.gnu.org/software/automake/manual/html_node/Libtool-Flags.html#Libtool-Flags
+libInstRO_clang_a_LDFLAGS=@CLANG_LIBS_LIST@ @LLVM_LDFLAGS@
 
 libInstRO_core_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
@@ -308,15 +326,6 @@ libInstRO_core_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
 libInstRO_example_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
 libInstRO_rose_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
 endif
-
-
-#libInstRO_clang_a_SOURCES= 
-
-#libInstRO_core_a_LIBADD=-L@CLANG_LIB_DIR@ @CLANG_LIBS_LIST@ @LLVM_LINK_COMMAND@ -lclangToolingCore
-#ClangInstrumentor_LDADD= libInstRO_core.a libInstRO_clang.a -L@CLANG_LIB_DIR@ @CLANG_LIBS_LIST@ @LLVM_LINK_COMMAND@
-
-#libInstRO_clang_a_CPPFLAGS=-std=c++11 -I$(top_srcdir)/lib/include @LLVM_INCLUDE_FLAGS@ -I@CLANG_INCLUDE_PATH@ -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
-
 
 endif #USELIBTOOL
 

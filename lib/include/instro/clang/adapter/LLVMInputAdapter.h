@@ -4,18 +4,18 @@
 #include <fstream>
 
 #include "instro/clang/core/ConstructSet.h"
-#include "instro/clang/core/ClangAdapterPass.h"
+#include "instro/clang/core/ClangPassImplBase.h"
 
 namespace InstRO {
 namespace Clang {
-class LLVMInputAdapter : public InstRO::Clang::Core::ClangPassImplementation {
+class LLVMInputAdapter : public InstRO::Clang::ClangPassImplBase<LLVMInputAdapter> {
  public:
 	LLVMInputAdapter(InstRO::Core::ChannelConfiguration cfg);
 
-	bool VisitFunctionDecl(clang::FunctionDecl *fDecl) override;
+	bool VisitFunctionDecl(clang::FunctionDecl *fDecl);
 
 	void init() override;
-	void execute() override;
+//	void execute() override;
 	void finalize() override;
 	void releaseOutput() override;
 	InstRO::Clang::ClangConstructSet *getOutput() override;

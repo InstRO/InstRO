@@ -1,3 +1,4 @@
+#if 0
 #include "instro/clang/core/ClangPassExecuter.h"
 
 InstRO::Clang::PassManagement::ClangPassExecuter::ClangPassExecuter(clang::ASTContext *context) : context(context) {}
@@ -45,3 +46,5 @@ void InstRO::Clang::PassManagement::NonVisitingClangPassExecuter::execute(InstRO
 	pImpl->setASTContext(context);
 	pImpl->exec();
 }
+
+#endif
