@@ -2,7 +2,7 @@
 
 InstRO::Clang::CygProfileAdapter::CygProfileAdapter(InstRO::Core::ChannelConfiguration cfg,
 																										clang::tooling::Replacements &reps, clang::SourceManager *sm)
-		: ClangPassImplementation(cfg),
+		: ClangPassImplBase(cfg, new InstRO::Clang::VisitingPassExecuter<CygProfileAdapter>()),
 			sm(sm),
 			replacements(reps),
 			labelCount(0),
@@ -10,7 +10,7 @@ InstRO::Clang::CygProfileAdapter::CygProfileAdapter(InstRO::Core::ChannelConfigu
 
 void InstRO::Clang::CygProfileAdapter::init() {}
 
-void InstRO::Clang::CygProfileAdapter::execute() { executer->execute(this); }
+//void InstRO::Clang::CygProfileAdapter::execute() { executer->execute(this); }
 
 bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *decl) {
 	if (context == nullptr) {
@@ -18,10 +18,12 @@ bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *de
 		return false;
 	}
 	// The context is in ClangPassImplementation
+	// FIXME Is this now a pointer to pointer?
 	sm = &context->getSourceManager();
 
 	// since we are in a Clang Adapter, we cast. I KNOW THIS IS UGLY
 	InstRO::Core::ConstructSet *c = getInput(decidingSelector);
+	// FIXME Use dynamic cast instead
 	cs = *(reinterpret_cast<InstRO::Clang::ClangConstructSet *>(c));
 
 	for (auto &construct : cs.getConstructSet()) {
