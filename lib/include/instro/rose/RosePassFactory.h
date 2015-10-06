@@ -8,7 +8,6 @@
 // #include "instro/rose/selectors/BlackAndWhiteListSelector.h"
 #include "instro/rose/pass/selector/NameBasedSelector.h"
 #include "instro/rose/pass/selector/CompoundSelector.h"
-#include "instro/rose/pass/selector/ElevatorSelector.h"
 // #include "instro/rose/pass/adapter/GenericAdapter.h"
 // #include "instro/rose/pass/adapter/CygProfileAdapter.h"
 #include "instro/rose/pass/adapter/RoseConstructPrinter.h"
@@ -54,15 +53,14 @@ class RosePassFactory : public InstRO::PassFactory {
 	};
 
  public:
+	 virtual InstRO::Pass* createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass * pass);
+	
 	virtual InstRO::Pass* createConstructHierarchyASTDotGenerator(InstRO::Pass* pass, std::string fileName);
 	virtual InstRO::Pass* createProgramEntrySelector();
 	virtual InstRO::Pass* createFunctionSelector();
 	// Text Based Selection in Various Flavors
-	virtual InstRO::Pass* createIdentifyerSelector(
-			std::vector<std::string> matchList);	// * Match Identifyers against the matchList
+	virtual InstRO::Pass* createIdentifyerSelector(std::vector<std::string> matchList);	// * Match Identifyers against the matchList
 	virtual InstRO::Pass* createIdentifyerFilter(std::vector<std::string> matchList, Pass* filterInput);
-	virtual InstRO::Pass* createTextStringSelector(
-			std::vector<std::string> matchList);	// Search within user strings "myText"
 
 	virtual InstRO::Pass* createFunctionBlackAndWhiteListSelector(std::vector<std::string> rules);
 	virtual InstRO::Pass* createFunctionBlackAndWhiteListFilter(std::vector<std::string> rules, Pass* inputPasses);
@@ -72,9 +70,12 @@ class RosePassFactory : public InstRO::PassFactory {
 	virtual InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
 	// Call Path Based selection
 	virtual InstRO::Pass* createCallPathSelector(InstRO::Pass* callees, InstRO::Pass* caller);
+
+	InstRO::Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass);
 	// Elevator Selectors
-	virtual InstRO::Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
 	virtual InstRO::Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
+	virtual InstRO::Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
+	virtual InstRO::Pass* createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel, InstRO::Core::ConstructTraitType maxLevel);
 	// OpenMP Stuff
 	virtual InstRO::Pass* createOpenMPSelector();
 	virtual InstRO::Pass* createOpenMPFilter(Pass* input);
@@ -84,7 +85,6 @@ class RosePassFactory : public InstRO::PassFactory {
 	// UniqueCallpathTransformer
 	virtual InstRO::Pass* createUniqueCallpathTransformer(Pass* input);
 	virtual InstRO::Pass* createUniqueCallpathTransformer(Pass* input, Pass* root, Pass* active);
-
 	// Adapter
 	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input);
 	virtual InstRO::Pass* createConstructPrinter(InstRO::Pass* pass);

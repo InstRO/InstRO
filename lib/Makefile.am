@@ -57,9 +57,10 @@ CORE_HFILES= \
 ./include/instro/tooling/NamedConstructAccess.h \
 ./include/instro/tooling/TransformationInterface.h \
 ./include/instro/pass/selector/ProgramEntrySelector.h \
-./include/instro/pass/selector/TextStringSelector.h \
 ./include/instro/pass/selector/IdentifyerSelector.h \
-./include/instro/pass/selector/CallPathSelector.h
+./include/instro/pass/selector/CallPathSelector.h \
+./include/instro/pass/selector/ConstructClassSelector.h \
+./include/instro/pass/selector/ElevatorSelector.h
 
 CORE_SFILES= \
 ./src/core/ConstructSet.cpp \
@@ -75,8 +76,9 @@ CORE_SFILES= \
 ./src/tooling/ControlFlowGraph.cpp \
 ./src/pass/selector/ProgramEntrySelector.cpp \
 ./src/pass/selector/IdentifyerSelector.cpp \
-./src/pass/selector/TextStringSelector.cpp \
-./src/pass/selector/CallPathSelector.cpp 
+./src/pass/selector/CallPathSelector.cpp \
+./src/pass/selector/ConstructClassSelector.cpp \
+./src/pass/selector/ElevatorSelector.cpp
 
 CLANG_HFILES= \
 ./include/instro/clang/adapter/CygProfileAdapter.h \
@@ -101,10 +103,8 @@ ROSE_HFILES= \
 ./include/instro/rose/core/RosePass.h  \
 ./include/instro/rose/core/RoseLegacySelector.h \
 ./include/instro/rose/pass/adapter/RoseConstructPrinter.h \
-./include/instro/rose/pass/selector/ElevatorSelector.h \
 ./include/instro/rose/pass/selector/NameBasedSelector.h \
 ./include/instro/rose/pass/selector/CompoundSelector.h \
-./include/instro/rose/pass/selector/RoseProgramEntrySelector.h \
 ./include/instro/rose/pass/transformer/UniqueCallpathTransformer.h \
 ./include/instro/rose/tooling/RoseAnalysisInterface.h  \
 ./include/instro/rose/tooling/RoseConstructElevator.h \
@@ -114,7 +114,18 @@ ROSE_HFILES= \
 ./include/instro/rose/tooling/RoseNamedConstructAccess.h \
 ./include/instro/rose/tooling/RoseTransformationInterface.h \
 ./include/instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h \
-./include/instro/rose/utility/FunctionRenamer.h
+./include/instro/rose/utility/FunctionRenamer.h \
+./include/instro/rose/pass/adapter/RoseStrategyBasedAdapter.h \
+./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionHelper.h \
+./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionPointSelector.h \
+./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/GenericInstrumentationStrategy.h \
+./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePFunctionScopeStrategy.h \
+./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePInitializer.h \
+./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePLoopIterationStrategy.h \
+./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePStatementWrapperStrategy.h \
+./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/ToolInitializer.h \
+./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/instrobuilder.h \
+./include/instro/rose/pass/transformer/UniqueCallpathTransformer.h
 
 ROSE_SFILES= \
 ./src/rose/core/RoseConstructSet.cpp   \
@@ -122,13 +133,22 @@ ROSE_SFILES= \
 ./src/rose/pass/adapter/RoseConstructPrinter.cpp \
 ./src/rose/pass/selector/CompoundSelector.cpp  \
 ./src/rose/pass/selector/NameBasedSelector.cpp  \
-./src/rose/pass/selector/ElevatorSelector.cpp \
 ./src/rose/tooling/RoseConstructElevator.cpp \
 ./src/rose/tooling/RoseNamedConstructAccess.cpp \
 ./src/rose/tooling/RoseGrammarInterface.cpp \
-./src/rose/pass/selector/RoseProgramEntrySelector.cpp \
 ./src/rose/pass/transformer/UniqueCallpathTransformer.cpp \
-./src/rose/utility/FunctionRenamer.cpp
+./src/rose/utility/FunctionRenamer.cpp \
+./src/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionHelper.cpp \
+./src/rose/pass/adapter/RoseStrategyBasedAdapter.cpp \
+./src/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionPointSelector.cpp \
+./src/rose/pass/adapter/StrategyBasedAdapterSupport/GenericInstrumentationStrategy.cpp \
+./src/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePFunctionScopeStrategy.cpp \
+./src/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePInitializer.cpp \
+./src/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePLoopIterationStrategy.cpp \
+./src/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePStatementWrapperStrategy.cpp \
+./src/rose/pass/adapter/StrategyBasedAdapterSupport/ToolInitializer.cpp \
+./src/rose/pass/adapter/StrategyBasedAdapterSupport/instrobuilder.cpp \
+./src/rose/pass/transformer/UniqueCallpathTransformer.cpp
 
 EXAMPLE_HFILES= \
 ./include/instro/example/ExampleConstructSet.h \

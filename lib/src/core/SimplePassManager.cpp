@@ -20,6 +20,12 @@ void InstRO::PassManagement::SimplePassManager::registerPass(Pass *currentPass) 
 	}
 }
 
+bool InstRO::PassManagement::SimplePassManager::createPassTraversalOder()
+{
+	return true;
+}
+
+
 int InstRO::PassManagement::SimplePassManager::execute() {
 	std::cout << "InstRO::PassManagement::SimplePassManager::execute()" << std::endl;
 

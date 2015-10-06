@@ -25,7 +25,15 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 	virtual bool hasOutputDependencies(Pass *pass) { return getEnvelope(pass)->existingOuputDependency; };
 	virtual bool hasInputDependencies(Pass *pass) { return getPredecessors(getEnvelope(pass)).size() > 0; };
 
+	virtual void setDependence(Pass * predecessor, Pass * pass) {
+		// TODO CI valudate functionality
+		addDependency(predecessor,pass);		
+	}
+
  protected:
+	// Flatten the configuration graph to a sequence preserving input-ouput order
+	bool createPassTraversalOder();
+ 
 	InstRO::Core::ConstructSet *elevate(Core::ConstructTraitType inputLevel) {
 		// TODO(CI): Implement Elevation
 		return NULL;

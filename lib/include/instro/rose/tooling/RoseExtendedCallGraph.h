@@ -280,16 +280,18 @@ private:
 
 	std::stack<ExtendedCallGraphNode*>  currentVisitNode;
 
+	std::map<InstRO::Core::ConstructSet, ExtendedCallGraphNode*> csToGraphNode;
+
 	std::map<std::string, SgFunctionDeclaration*> uniqueDecls;	// unique function-declaration per function
 	std::map<std::string, ExtendedCallGraphNode*> uniqueNodes;	// unique graph node per mangled function name
 
 private:
-	ExtendedCallGraphNode* defaultPreOrderBehavior(SgNode* node) {
+	void defaultPreOrderBehavior(SgNode* node) {
 		RoseECGConstructSetGenerator genCS;
 		node->accept(genCS);
 
 		callgraph->addEdge(currentVisitNode.top(), genCS.getECGNode());
-		currentVisitNode.push(callgraph->getGraphNode(genCS.getConstructSet()));
+		currentVisitNode.push(callgraph->getNodeWithExactConstructSet(genCS.getConstructSet()));
 	}
 
 	SgFunctionDeclaration* getDefiningDeclaration(SgFunctionDeclaration* oldDecl) {

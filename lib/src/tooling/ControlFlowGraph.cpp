@@ -1,4 +1,4 @@
-
+#include "instro/core/Instrumentor.h"
 #include "instro/tooling/ControlFlowGraph.h"
 
 #include "instro/core/Singleton.h"
