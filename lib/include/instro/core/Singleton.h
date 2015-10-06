@@ -1,9 +1,9 @@
 #ifndef INSTRO_SINGLETON_H
 #define INSTRO_SINGLETON_H
 
-#include "instro/core/Instrumentor.h"
 
 namespace InstRO {
+class Instrumentor;
 
 InstRO::Instrumentor* getInstrumentorInstance();
 void setInstrumentorInstance(InstRO::Instrumentor* instance);

@@ -17,11 +17,8 @@ RoseConfigurationPassRegistry::RoseConfigurationPassRegistry(InstRO::Rose::RoseP
 		return factory->createIdentifyerSelector(context.getStringArguments());
 	});
 	registerPass("IdentifyerFilter", [factory] (ConfigurationParsingContext &context) -> Pass* {
-		context.expectInputPasses({1});
+		context.expectInputPasses({0,1});
 		return factory->createIdentifyerFilter(context.getStringArguments(), context.inputPasses[0]);
-	});
-	registerPass("TextStringSelector", [factory] (ConfigurationParsingContext &context) {
-		return factory->createTextStringSelector(context.getStringArguments());
 	});
 	registerPass("CallPathSelector", [factory] (ConfigurationParsingContext &context) -> Pass* {
 		context.expectInputPasses({2});

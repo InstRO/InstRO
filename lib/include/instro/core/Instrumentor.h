@@ -13,6 +13,7 @@
 // CI: deprecated | #include "instro/core/ConstructLevelManagement.h"
 // CI: deprecated | #include "instro/core/ConstructSetManagement.h"
 
+#include "instro/core/Singleton.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/core/PassManager.h"
 #include "instro/core/SimplePassManager.h"
@@ -20,9 +21,8 @@
 #include "instro/tooling/AnalysisInterface.h"
 
 namespace InstRO {
-
 namespace PassManagement {
-class PassManager;
+	class PassManager;
 }	// PassManagement
 
 class Instrumentor {
@@ -95,6 +95,13 @@ class Instrumentor {
 	virtual void init() = 0;
 	virtual void apply() = 0;
 	virtual void finalize() = 0;
+public:
+	/*
+	static Instrumentor * getInstROInstance(){
+		return getInstrumentorInstance();
+
+	}*/
+
 };
 }
 #endif

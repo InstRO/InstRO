@@ -42,7 +42,7 @@ struct CLExpressionPredicate : public CTPredicate {
 			return true;
 		// for variables and values, we only accept as instrumentable, if the expression itself has an observable effect,
 		// e.g. as conditional in an if or for
-		if (isSgIntVal(n) != nullptr || isSgStringVal(n) != nullptr || isSgVarRefExp(n) != nullptr) {
+		if (isSgValueExp(n) != nullptr || isSgIntVal(n) != nullptr || isSgStringVal(n) != nullptr || isSgVarRefExp(n) != nullptr) {
 			// In Rose this is TRUE !!if!! the parent of the stmt is an SgExprStatement and the parent(parent) is either the for loops
 			// conditional or the conditional of an if or while
 			SgNode* parent = n->get_parent();
@@ -189,32 +189,32 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	// conditionals
 	void visit(SgIfStmt* node) {
 		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTConditionalStatement);
-		handleWrappableCheck(node);
+		handleStatementWithWrappableCheck(node);
 	}
 	void visit(SgSwitchStatement* node) {
 		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTConditionalStatement);
-		handleWrappableCheck(node);
+		handleStatementWithWrappableCheck(node);
 	}
 
 	// loops
 	void visit(SgForStatement* node) {
 		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTLoopStatement);
-		handleWrappableCheck(node);
+		handleStatementWithWrappableCheck(node);
 	}
 	void visit(SgWhileStmt* node) {
 		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTLoopStatement);
-		handleWrappableCheck(node);
+		handleStatementWithWrappableCheck(node);
 	}
 	void visit(SgDoWhileStmt* node) {
 		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTLoopStatement);
-		handleWrappableCheck(node);
+		handleStatementWithWrappableCheck(node);
 	}
 
 	// scopes
 	void visit(SgBasicBlock* node) {
-		if (RoseConstructLevelPredicates::CLConditionalPredicate()(node)) {
+		if (RoseConstructLevelPredicates::CLScopeStatementPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTScopeStatement);
-			handleWrappableCheck(node);
+			handleStatementWithWrappableCheck(node);
 		} else {
 			generateError(node);
 		}
@@ -224,7 +224,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	void visit(SgStatement* node) {
 		if (RoseConstructLevelPredicates::CLSimpleStatementPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTSimpleStatement);
-			handleWrappableCheck(node);
+			handleStatementWithWrappableCheck(node);
 		} else {
 			generateError(node);
 		}
@@ -234,7 +234,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 		// CI: an initialized variable declaration is OK,
 		if (RoseConstructLevelPredicates::DefinedVariableDeclarationPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTSimpleStatement);
-			handleWrappableCheck(node);
+			handleStatementWithWrappableCheck(node);
 		} else {
 			generateError(node);
 		}
@@ -251,7 +251,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
  private:
 	InstRO::Core::ConstructTrait ct;
 
-	void handleWrappableCheck(SgNode* node) {
+	void handleStatementWithWrappableCheck(SgNode* node) {
 		ct.add(InstRO::Core::ConstructTraitType::CTStatement);
 		if (RoseConstructLevelPredicates::CTWrappableStatementPredicate()(node)) {
 			ct.add(InstRO::Core::ConstructTraitType::CTWrappableStatement);
@@ -338,8 +338,9 @@ class RoseConstructProvider {
 		return mapping[fileInfo];
 	}
 
+	/** XXX this method does no checks on the SgNode! */
 	std::shared_ptr<RoseConstruct> getConstruct(SgNode* node) {
-		std::cout << "getConstruct(" << node << ")" << std::endl;
+//		std::cout << "getConstruct(" << node << ")" << std::endl;
 		if (node == nullptr) {
 			throw std::string("RoseConstructProvider: attempted to getConstruct for nullptr");
 		}
