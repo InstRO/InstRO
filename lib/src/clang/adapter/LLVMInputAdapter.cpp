@@ -1,7 +1,7 @@
 #include "instro/clang/adapter/LLVMInputAdapter.h"
 
 InstRO::Clang::LLVMInputAdapter::LLVMInputAdapter(InstRO::Core::ChannelConfiguration cfg)
-		: InstRO::Clang::Core::ClangPassImplementation(cfg), outfileName("instro-temp-file") {}
+		: InstRO::Clang::ClangPassImplBase<LLVMInputAdapter>(cfg, new InstRO::Clang::NonVisitingPassExecuter<LLVMInputAdapter>()), outfileName("instro-temp-file") {}
 
 bool InstRO::Clang::LLVMInputAdapter::VisitFunctionDecl(clang::FunctionDecl *fDecl) {}
 
@@ -10,8 +10,6 @@ void InstRO::Clang::LLVMInputAdapter::init() {}
 void InstRO::Clang::LLVMInputAdapter::finalize() {}
 
 void InstRO::Clang::LLVMInputAdapter::releaseOutput() {}
-
-void InstRO::Clang::LLVMInputAdapter::execute() { executer->execute(this); }
 
 void InstRO::Clang::LLVMInputAdapter::exec() {
 	std::cout << "Running exec" << std::endl;

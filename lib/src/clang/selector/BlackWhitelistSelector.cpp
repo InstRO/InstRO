@@ -2,7 +2,10 @@
 
 InstRO::Clang::BlackWhitelistSelector::BlackWhitelistSelector(std::vector<std::string> blacklist,
 																															std::vector<std::string> whitelist)
-		: ClangPassImplementation(InstRO::Core::ChannelConfiguration()), blacklist(blacklist), whitelist(whitelist) {
+		: ClangPassImplBase<BlackWhitelistSelector>(InstRO::Core::ChannelConfiguration(),
+																								new InstRO::Clang::VisitingPassExecuter<BlackWhitelistSelector>()),
+			blacklist(blacklist),
+			whitelist(whitelist) {
 	std::cout << "Creating BW Selector with blacklist(-) and whitelist (+):\n";
 	for (auto &s : blacklist) {
 		std::cout << "- " << s << "\n";
@@ -42,7 +45,9 @@ void InstRO::Clang::BlackWhitelistSelector::readFilterFile(std::string filename)
 
 void InstRO::Clang::BlackWhitelistSelector::init() {}
 
+#if 0
 void InstRO::Clang::BlackWhitelistSelector::execute() { executer->execute(this); }
+#endif
 
 void InstRO::Clang::BlackWhitelistSelector::finalize() {}
 
