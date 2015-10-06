@@ -5,15 +5,15 @@
 
 #include "instro/clang/core/ConstructSet.h"
 #include "instro/utility/BWLFileReader.h"
-#include "instro/clang/core/ClangAdapterPass.h"
+#include "instro/clang/core/ClangPassImplBase.h"
 
 namespace InstRO {
 namespace Clang {
 /*
  * Implements the black and white list selection process.
- * XXX Double check semantics with Christian/Roman
+ * FIXME Double check semantics with Christian/Roman
  */
-class BlackWhitelistSelector : public InstRO::Clang::Core::ClangPassImplementation {
+class BlackWhitelistSelector : public InstRO::Clang::ClangPassImplBase<BlackWhitelistSelector> {
  public:
 	BlackWhitelistSelector(std::vector<std::string> blacklist, std::vector<std::string> whitelist);
 	bool VisitFunctionDecl(clang::FunctionDecl *decl);
@@ -21,7 +21,7 @@ class BlackWhitelistSelector : public InstRO::Clang::Core::ClangPassImplementati
 	void readFilterFile(std::string filename);
 
 	void init() override;
-	void execute() override;
+//	void execute() override;
 	void finalize() override;
 	void releaseOutput() override;
 	InstRO::Clang::ClangConstructSet *getOutput() override;

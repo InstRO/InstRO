@@ -25,11 +25,6 @@ namespace Clang {
  */
 class ClangInstrumentor : public InstRO::Instrumentor {
  public:
-/** CTor a user wants to use */
-#if 0
-	 ClangInstrumentor(int argc, const char** argv,
-										::InstRO::Core::PassManagement::PassManager* manager);
-#endif
 	ClangInstrumentor() = delete;
 	ClangInstrumentor(int argc, const char** argv, llvm::cl::OptionCategory& llvmThing);
 	/** Provides the ToolAction, which a clang::RefactoringTool awaits */
@@ -37,6 +32,7 @@ class ClangInstrumentor : public InstRO::Instrumentor {
 	/** Returns the factory used to create the passes a user builds the
 	 * instrumentor with */
 	InstRO::Clang::PassFactory* getFactory(CompilationPhase phase = frontend);
+	/** Accessor function for the (in general) compiler independent analysis layer */
 	virtual Tooling::AnalysisManager* getAnalysisManager() override { return nullptr; };
 
 	void init();
@@ -49,9 +45,7 @@ class ClangInstrumentor : public InstRO::Instrumentor {
 	clang::tooling::CommonOptionsParser cop;
 	clang::tooling::RefactoringTool tool;
 	std::unique_ptr<InstRO::Clang::PassFactory> fac;
-	InstRO::Clang::PassManagement::VisitingClangPassExecuter visitingExecuter;
-	InstRO::Clang::PassManagement::NonVisitingClangPassExecuter nonVisitingExecuter;
 };
 }	// Clang
-}	// INstRO
+}	// InstRO
 #endif

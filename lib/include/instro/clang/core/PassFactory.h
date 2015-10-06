@@ -1,6 +1,7 @@
 #ifndef INSTRO_CLANG_PASSFACTORY_H
 #define INSTRO_CLANG_PASSFACTORY_H
 
+#include <set>
 #include "instro/core/PassFactory.h"
 #include "instro/core/PassManager.h"
 #include "instro/clang/core/Pass.h"
@@ -19,20 +20,13 @@
 namespace InstRO {
 namespace Clang {
 /*
- * XXX Should a PassFactory return std::unique_ptr<Pass> instead of the raw
- * pointer
- * to a Pass? We know, that the Pass, if wrapped within a unique ptr will not
- * outlive
- * the overall InstRO Framework. So it should be safe to return a unique ptr,
- * but still
- * reference the Passes internally by raw pointers
- */
+ * The PassFactory exposes a handle to the created pass by a raw pointer.
+ * This does _not_ transfer ownership.
+ **/
 class PassFactory : public InstRO::PassFactory {
  public:
-	PassFactory(InstRO::PassManagement::PassManager* manager, clang::tooling::Replacements& reps,
-							InstRO::Clang::PassManagement::VisitingClangPassExecuter* vExecuter,
-							InstRO::Clang::PassManagement::NonVisitingClangPassExecuter* nvExecuter)
-			: InstRO::PassFactory(manager), replacements(reps), vExecuter(vExecuter), nvExecuter(nvExecuter){};
+	PassFactory(InstRO::PassManagement::PassManager* manager, clang::tooling::Replacements& reps)
+			: InstRO::PassFactory(manager), replacements(reps){};
 
 	Pass* createBlackAndWhiteListSelector(std::vector<std::string> blacklist, std::vector<std::string> whitelist);
 	Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
@@ -44,14 +38,20 @@ class PassFactory : public InstRO::PassFactory {
 	/**
 	 * Introduced in the base class. So I had to provide some implementation..
 	 */
-	virtual InstRO::Pass* createFunctionSelector() override { return nullptr; };
-	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input) override { return nullptr; };
-	virtual InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) override { return nullptr; };
+//	virtual InstRO::Pass* createFunctionSelector() override { return nullptr; };
+//	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input) override { return nullptr; };
+//	virtual InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) override { return nullptr; };
 
+	/* We need this in order to lazily initialize the AST Context within the passes */
+	void finishConstruction(clang::ASTContext *context){
+		for(auto p : lazyContextProvidingMap){
+			p->setASTContext(context);
+		}
+	}
+		
  private:
 	clang::tooling::Replacements& replacements;
-	InstRO::Clang::PassManagement::VisitingClangPassExecuter* vExecuter;
-	InstRO::Clang::PassManagement::NonVisitingClangPassExecuter* nvExecuter;
+	std::set<InstRO::Clang::ASTContextProvider *> lazyContextProvidingMap;
 };
 }	// Clang
 }	// INstRO
