@@ -360,7 +360,6 @@ nodist_include_HEADERS=./include/instro/config.h
 
 pkginclude_HEADERS=\
 	$(CORE_HFILES) \
-	$(CLANG_HFILES) \
 	$(EXAMPLE_HFILES)
 
 
