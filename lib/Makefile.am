@@ -51,6 +51,12 @@ CORE_HFILES= \
 ./include/instro/tooling/GrammarInterface.h \
 ./include/instro/tooling/NamedConstructAccess.h \
 ./include/instro/tooling/TransformationInterface.h \
+./include/instro/tooling/ECGUtils/ExtendedCallgraphCostOptimizationStrategy.h \
+./include/instro/tooling/ECGUtils/ExtendedCallgraphFilters.h \
+./include/instro/tooling/ECGUtils/ExtendedCallgraphPathCostPredicate.h \
+./include/instro/tooling/ECGUtils/ExtendedCallgraphPredicate.h \
+./include/instro/tooling/ECGUtils/GraphNodeParentRelationPredicate.h \
+./include/instro/tooling/ECGUtils/GraphNodeTypePredicate.h \
 ./include/instro/pass/selector/ProgramEntrySelector.h \
 ./include/instro/pass/selector/TextStringSelector.h \
 ./include/instro/pass/selector/IdentifyerSelector.h \
@@ -68,6 +74,9 @@ CORE_SFILES= \
 ./src/tooling/ConstructElevator.cpp \
 ./src/tooling/ExtendedCallGraph.cpp \
 ./src/tooling/ControlFlowGraph.cpp \
+./src/tooling/ECGUtils/ExtendedCallgraphCostOptimizationStrategy.cpp \
+./src/tooling/ECGUtils/ExtendedCallgraphFilters.cpp \
+./src/tooling/ECGUtils/ExtendedCallgraphPathCostPredicate.cpp \
 ./src/pass/selector/ProgramEntrySelector.cpp \
 ./src/pass/selector/IdentifyerSelector.cpp \
 ./src/pass/selector/TextStringSelector.cpp \
@@ -97,6 +106,7 @@ ROSE_HFILES= \
 ./include/instro/rose/pass/selector/NameBasedSelector.h \
 ./include/instro/rose/pass/selector/CompoundSelector.h \
 ./include/instro/rose/pass/selector/RoseProgramEntrySelector.h \
+./include/instro/rose/pass/selector/ExtendedCallgraphCostbasedSelector.h \
 ./include/instro/rose/pass/transformer/UniqueCallpathTransformer.h \
 ./include/instro/rose/tooling/RoseAnalysisInterface.h  \
 ./include/instro/rose/tooling/RoseConstructElevator.h \
@@ -105,6 +115,7 @@ ROSE_HFILES= \
 ./include/instro/rose/tooling/RoseGrammarInterface.h \
 ./include/instro/rose/tooling/RoseNamedConstructAccess.h \
 ./include/instro/rose/tooling/RoseTransformationInterface.h \
+./include/instro/rose/tooling/ECGUtils/NondefiningDeclarationPredicate.h \
 ./include/instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h \
 ./include/instro/rose/utility/FunctionRenamer.h \
 ./include/instro/rose/pass/adapter/RoseStrategyBasedAdapter.h \
@@ -126,9 +137,11 @@ ROSE_SFILES= \
 ./src/rose/pass/selector/CompoundSelector.cpp  \
 ./src/rose/pass/selector/NameBasedSelector.cpp  \
 ./src/rose/pass/selector/ElevatorSelector.cpp \
+./src/rose/pass/selector/ExtendedCallgraphCostbasedSelector.cpp \
 ./src/rose/tooling/RoseConstructElevator.cpp \
 ./src/rose/tooling/RoseNamedConstructAccess.cpp \
 ./src/rose/tooling/RoseGrammarInterface.cpp \
+./src/rose/tooling/ECGUtils/NondefiningDeclarationPredicate.cpp \
 ./src/rose/pass/selector/RoseProgramEntrySelector.cpp \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionHelper.cpp \
 ./src/rose/pass/adapter/RoseStrategyBasedAdapter.cpp \
@@ -141,7 +154,6 @@ ROSE_SFILES= \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/ToolInitializer.cpp \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/instrobuilder.cpp \
 ./src/rose/pass/transformer/UniqueCallpathTransformer.cpp
-
 
 EXAMPLE_HFILES= \
 ./include/instro/example/ExampleConstructSet.h \
