@@ -15,7 +15,7 @@ using namespace InstRO::Rose;
 using namespace InstRO::Rose::Transformer;
 
 FunctionWrapper::FunctionWrapper(InstRO::Pass *input, NameTransformer nameTransformer)
-    : RosePassImplementation(createChannelConfig(input, nullptr)), nameTrafo(nameTransformer), defPrefix(), wrapPrefix(),
+    : RosePassImplementation(FunctionWrapper::createChannelConfig(input, nullptr)), nameTrafo(nameTransformer), defPrefix(), wrapPrefix(),
         mainScope(nullptr), inputPass(input), renamingPass(nullptr)
 
 {
@@ -23,7 +23,7 @@ FunctionWrapper::FunctionWrapper(InstRO::Pass *input, NameTransformer nameTransf
 
 FunctionWrapper::FunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, NameTransformer nameTransformer, const std::string &definitionPrefix,
 								const std::string &wrapperPrefix)
-    : RosePassImplementation(createChannelConfig(input, renaming)), nameTrafo(nameTransformer), defPrefix(definitionPrefix), wrapPrefix(wrapperPrefix),
+    : RosePassImplementation(FunctionWrapper::createChannelConfig(input, renaming)), nameTrafo(nameTransformer), defPrefix(definitionPrefix), wrapPrefix(wrapperPrefix),
         mainScope(nullptr), inputPass(input), renamingPass(renaming)
 {
 }
@@ -61,7 +61,7 @@ void FunctionWrapper::execute() {
 	for (SgNode *node : inputNodes) {
 		SgFunctionDeclaration *funDecl = findInputDeclaration(node);
 		if (funDecl) {
-			inputFunctions.insert(funDecl);
+			inputFunctions.insert(isSgFunctionDeclaration(funDecl->get_firstNondefiningDeclaration()));
 		}
 	}
 
@@ -71,7 +71,7 @@ void FunctionWrapper::execute() {
 	}
 }
 
-InstRO::Core::ChannelConfiguration createChannelConfig(InstRO::Pass *input, InstRO::Pass *renaming) {
+InstRO::Core::ChannelConfiguration FunctionWrapper::createChannelConfig(InstRO::Pass *input, InstRO::Pass *renaming) {
 	std::vector<InstRO::Pass*> passes {input};
 
 	auto channelConfig = InstRO::Core::ChannelConfiguration(passes.begin(), passes.end(), ::InstRO::Core::ConstructTraitType::CTExpression, ::InstRO::Core::ConstructTraitType::CTFunction);
@@ -99,13 +99,10 @@ FunctionWrapper::RoseNodeSet FunctionWrapper::retrieveNodes(InstRO::Pass *pass) 
 void FunctionWrapper::findMainScope()
 {
     mainScope = nullptr;
-    SgProject *project = SageInterface::getProject();
 
-    if (project)
+    if (SgProject *project = SageInterface::getProject())
     {
-        SgFunctionDeclaration *mainDecl = findMain(project);
-
-        if (mainDecl)
+		if (SgFunctionDeclaration *mainDecl = findMain(project))
         {
             mainScope = getGlobalScope(mainDecl);
         }
@@ -148,8 +145,12 @@ void FunctionWrapper::wrapFunction(SgFunctionDeclaration *fDecl, const RoseNodeL
         std::cout << "Warning: Creating wrappers for class member functions has not yet been explicitly implemented and will probably not work..." << std::endl;
     }
 
-    // extract the function definition of the definition (NULL, if there is no associated definition)
-    SgFunctionDefinition *fDefinition = fDecl->get_definition();
+    // attempt to get the function definition if one is available
+    SgFunctionDefinition *fDefinition = nullptr;
+	if (SgFunctionDeclaration *defFunDecl = isSgFunctionDeclaration(fDecl->get_definingDeclaration())) {
+		fDecl = defFunDecl;
+		fDefinition = defFunDecl->get_definition();
+	}
 
     SgScopeStatement *fDeclScope = fDecl->get_scope();
     std::string filePostfix;
@@ -168,6 +169,7 @@ void FunctionWrapper::wrapFunction(SgFunctionDeclaration *fDecl, const RoseNodeL
     // push the target scope onto the scope stack of ROSE & make sure that it is popped after the guard is destroyed
     InstRO::Rose::Utility::ScopeStackGuard targetScopeGuard(targetScope);
 
+	// generate names: apply the NameTransformer to the original name and create the names for the definition (only used if one is available) and wrapper
     SgName originalFunctionName = fDecl->get_name();
     std::string transformedName = nameTrafo(originalFunctionName.getString());
     std::string definitionName = defPrefix + originalFunctionName.getString() + filePostfix;
@@ -233,7 +235,7 @@ void FunctionWrapper::wrapFunction(SgFunctionDeclaration *fDecl, const RoseNodeL
     // add the created wrapper, renamed function calls and the definition (if it has been renamed) to the output of this pass
     InstRO::InfracstructureInterface::ConstructSetCompilerInterface output (&outputCS);
     auto &constructProvider = InstRO::Rose::Core::RoseConstructProvider::getInstance();
-    output.put(constructProvider.getConstruct(wrapperDecl));
+    output.put(constructProvider.getConstruct(wrapperDecl->get_definition()));
     for (auto *funCall : funcRenamer.getFoundFunctionCalls()) {
 		output.put(constructProvider.getConstruct(funCall));
     }
@@ -251,16 +253,23 @@ SgFunctionDeclaration* FunctionWrapper::findInputDeclaration(SgNode *node)
             SgFunctionCallExp *fCallExp = isSgFunctionCallExp(node);
             SgFunctionDeclaration *aFDecl = fCallExp->getAssociatedFunctionDeclaration();
 
-            if (!aFDecl)
-            {
+            if (!aFDecl) {
                 std::cerr << "Skipping node due to missing associated function declaration: " << get_name(node) << std::endl;
                 return nullptr;
-            }
-            else
-            {
+            } else {
                 return aFDecl;
             }
         }
+        case V_SgFunctionRefExp:
+		{
+			SgFunctionDeclaration *aFDecl = isSgFunctionRefExp(node)->getAssociatedFunctionDeclaration();
+			if (!aFDecl) {
+                std::cerr << "Skipping node due to missing associated function declaration: " << get_name(node) << std::endl;
+                return nullptr;
+            } else {
+                return aFDecl;
+            }
+		}
         case V_SgFunctionDeclaration:
             return isSgFunctionDeclaration(node);
         case V_SgFunctionDefinition:
@@ -327,9 +336,7 @@ void FunctionWrapper::buildWrapperBody(SgFunctionDeclaration *fDec, SgFunctionDe
     // void functions do not need returns
     if (isSgTypeVoid(retType)) {
         appendStatement(buildExprStatement(orgCall));
-    }
-    else
-    {
+    } else {
         appendStatement(buildReturnStmt(orgCall));
     }
 }
