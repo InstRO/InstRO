@@ -22,7 +22,8 @@ namespace Transformer {
 /// \li function definitions
 /// \li function declarations
 ///
-/// As output, the function declaration of the created wrapper is selected so that it may be refined by a following AdapterBuilder.
+/// As output, the function definition of the created wrapper is selected so that it may be refined by a following adapter.
+/// Further output depends on the mode of operation and includes renamed function calls and the renamed original function definition (if applicable).
 ///
 /// The function wrapper supports both functions with and without a definition in the project scope and provides means to specify prefixes for the generated wrappers and renamed function definitions.
 /// In order to keep this implementation as generic as possible several input configurations are available:
@@ -98,7 +99,7 @@ protected:
 	///
 	/// For the default implementation the constructed body consists of an immediate return statement calling the specified function.
 	/// If the return type is \c void, only a function call statement is built.
-	void virtual buildWrapperBody(SgFunctionDeclaration *fDec, SgFunctionDeclaration *wrapperDec, const std::string &functionToCall);
+	virtual void buildWrapperBody(SgFunctionDeclaration *fDec, SgFunctionDeclaration *wrapperDec, const std::string &functionToCall);
 
 	/// \brief Called once to initialize the global scope of the main function.
 	///
