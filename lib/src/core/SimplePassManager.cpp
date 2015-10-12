@@ -20,10 +20,6 @@ void InstRO::PassManagement::SimplePassManager::registerPass(Pass *currentPass) 
 	}
 }
 
-void InstRO::PassManagement::SimplePassManager::setExecuter(InstRO::PassManagement::PassExecuter *executer) {
-	this->executer = executer;
-}
-
 bool InstRO::PassManagement::SimplePassManager::createPassTraversalOder()
 {
 	return true;

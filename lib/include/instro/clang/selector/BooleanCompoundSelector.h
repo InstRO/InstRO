@@ -3,23 +3,24 @@
 #include "clang/AST/RecursiveASTVisitor.h"
 
 #include "instro/clang/core/ConstructSet.h"
-#include "instro/clang/core/ClangAdapterPass.h"
+#include "instro/clang/core/ClangPassImplBase.h"
 
 namespace InstRO {
 namespace Clang {
-class BooleanCompoundSelector : public InstRO::Clang::Core::ClangPassImplementation {
+class BooleanCompoundSelector : public InstRO::Clang::ClangPassImplBase<BooleanCompoundSelector> {
  public:
 	typedef enum { AND, OR, NOT } op_t;
 
 	BooleanCompoundSelector(InstRO::Pass *inA, InstRO::Pass *inB, op_t operation);
 
 	void init() override;
-	void execute() override;
+//	void execute() override;
+	void exec() override;
 	void finalize() override;
 	void releaseOutput() override;
 	InstRO::Clang::ClangConstructSet *getOutput() override;
 
-	bool VisitFunctionDecl(clang::FunctionDecl *decl) override;
+	bool VisitFunctionDecl(clang::FunctionDecl *decl);
 
  protected:
 	void doOr(InstRO::Clang::ClangConstructSet &a, InstRO::Clang::ClangConstructSet &b);

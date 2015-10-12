@@ -18,9 +18,6 @@
 #include <vector>
 
 #include "instro/core/Pass.h"
-//  CI: There is a reference to the ClangPassExecuturer in the InstRO Core Layer.
-// TODO-JP:  Please put this somewhere more suitable, e.g. in the clang section
-//  #include "instro/clang/core/ClangPassExecuter.h"
 
 namespace InstRO {
 class Pass;
