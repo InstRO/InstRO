@@ -59,7 +59,6 @@ AC_PROG_RANLIB
 AC_PROG_LIBTOOL([])
 LT_INIT
 
-
 # -------------------------------
 # 1.5 Autoheader Options
 # -------------------------------
@@ -143,40 +142,83 @@ AC_SUBST(ROSE_INCLUDEDIR)
 AC_SUBST(ROSE_LIBDIR)
 
 # ---------------------------
-# 2.2) Add Clang flag
+# 2.2) Add LLVM/Clang toolchain
+# XXX It is a little unfortunate but it seems that we need access to the source as well as the build/install
+# directory of llvm/clang.
 # ---------------------------
-AC_ARG_WITH([clang], [AS_HELP_STRING([--with-clang=prefix], 
-						[Tells the build process the toplevel directory of the clang installation])], 
-						[CLANGPATHSET=1],[CLANGPATHSET=0])
-if test $CLANGPATHSET = 1 ; then
-	CLANG_BASE_PATH="$with_clang"
-	CLANG_INCLUDE_PATH=$CLANG_BASE_PATH/include
-	CLANG_LIB_DIR=$CLANG_BASE_PATH/lib
-	LLVM_INCLUDE_PATH=$CLANG_BASE_PATH/include
-# in order to query the tools for the compile flags we need to know the binary dir
-	CLANG_BIN_SUPPORT=$CLANG_BASE_PATH/bin
-	AC_MSG_NOTICE(["Clang base path has been set to $CLANG_BASE_PATH"])
-	AC_MSG_NOTICE(["Clang include path has been set to $CLANG_INCLUDE_PATH"])
+AC_ARG_WITH([llvm-src], 
+						[AS_HELP_STRING([--with-llvm-src@<:@=ARG@:>@], 
+						[Tells the build process the toplevel directory of the llvm/clang sources @<:@default=no@:>@])], 
+						[],[with_llvm_src=no])
+if test x"$with_llvm_src" != xno ; then
+	LLVM_SRC_PATH="$with_llvm_src"
+	CLANG_SRC_INCLUDE_PATH=$LLVM_SRC_PATH/tools/clang/include
+	LLVM_SRC_INCLUDE_PATH=$LLVM_SRC_PATH/include
+
+	AC_MSG_NOTICE(["Clang includes are searched in source tree at $CLANG_SRC_INCLUDE_PATH"])
+	AC_MSG_NOTICE(["LLVM includes are searched in source tree at $LLVM_SRC_INCLUDE_PATH"])
+
+else
+	LLVM_SRC_PATH="UDEF"
+	echo "No llvm top level source directory set"
+fi
+
+AC_ARG_WITH([llvm-install],
+						[AS_HELP_STRING([--with-llvm-install@<:@=ARG@:>@],
+						[Tells the build process the toplevel directory of the llvm/clang build @<:@default=no@:>@])],
+						[],[with_llvm_install=no])
+if test x"$with_llvm_install" != xno ; then
+	LLVM_INSTALL_PATH="$with_llvm_install"
+	CLANG_INSTALL_INCLUDE_PATH=$LLVM_INSTALL_PATH/include
+	LLVM_INSTALL_INCLUDE_PATH=$LLVM_INSTALL_PATH/include
+
+	# XXX This might go away
+	LLVM_LIB_PATH=$LLVM_INSTALL_PATH/lib
+
+	# As we use the installation path, we can use the LLVM config tool. This gives us the correct directory for -L
+	# XXX This is deprecated
+	LLVM_BIN_PATH=$LLVM_INSTALL_PATH/bin
+
+
+	AC_MSG_NOTICE(["LLVM install path has been set to $LLVM_INSTALL_PATH"])
 
 	# we list all the libraries we need to link, when we build with clang
-	CLANG_LIBS_LIST='-Wl,--start-group,-lclangAST,-lclangAnalysis,-lclangBasic,-lclangDriver,-lclangEdit,-lclangFrontend,-lclangFrontendTool,-lclangLex,-lclangParse,-lclangSema,-lclangEdit,-lclangASTMatchers,-lclangRewrite,-lclangRewriteFrontend,-lclangStaticAnalyzerFrontend,-lclangStaticAnalyzerCheckers,-lclangStaticAnalyzerCore,-lclangSerialization,-lclangToolingCore,-lclangTooling,-lclangToolingCore,--end-group'
-
+	CLANG_LIBS_LIST='-Wl,--start-group,-lclangAST,-lclangAnalysis,-lclangBasic,-lclangDriver,-lclangEdit,-lclangFrontend,-lclangFrontendTool,-lclangLex,-lclangParse,-lclangSema,-lclangEdit,-lclangASTMatchers,-lclangRewrite,-lclangRewriteFrontend,-lclangStaticAnalyzerFrontend,-lclangStaticAnalyzerCheckers,-lclangStaticAnalyzerCore,-lclangSerialization,-lclangToolingCore,-lclangTooling,--end-group'
+	
+	
 	AC_MSG_NOTICE(["Clang Libs: $CLANG_LIBS_LIST"])
-	# if the clang path is set, then we export those variables
-	AC_SUBST(CLANG_INCLUDE_PATH)
-	AC_SUBST(LLVM_INCLUDE_PATH)
-	# This is ONLY Clang
-	AC_SUBST(CLANG_BIN_SUPPORT)
-	AC_SUBST(CLANG_LIB_DIR)
+
+	# XXX It might be sufficient to have the source include files.
+	AC_SUBST(CLANG_SRC_INCLUDE_PATH)
+	AC_SUBST(LLVM_SRC_INCLUDE_PATH)
+	AC_SUBST(CLANG_INSTALL_INCLUDE_PATH)
+	AC_SUBST(LLVM_INSTALL_INCLUDE_PATH)
+
 	AC_SUBST(CLANG_LIBS_LIST)
-	# We also need LLVM
-	LLVM_INCLUDE_FLAGS="\`$CLANG_BIN_SUPPORT/llvm-config --cxxflags\`"
-	LLVM_LINK_COMMAND="\`$CLANG_BIN_SUPPORT/llvm-config --ldflags --libs --system-libs\`"
-	AC_SUBST(LLVM_INCLUDE_FLAGS)
-	AC_SUBST(LLVM_LINK_COMMAND)
+
+	LLVM_CXXFLAGS_FLAGS="\`$LLVM_BIN_PATH/llvm-config --cxxflags\`"
+	LLVM_LDFLAGS="\`$LLVM_BIN_PATH/llvm-config --ldflags --libs --system-libs\`"
+
+	AC_SUBST(LLVM_CXXFLAGS_FLAGS)
+	AC_SUBST(LLVM_LDFLAGS)
 else
-	echo "No clang path set"
+	LLVM_INSTALL_PATH="UDEF"
+	echo "No llvm installation path set"
 fi
+
+if test $LLVM_SRC_PATH != "UDEF" ; then
+	if test $LLVM_INSTALL_PATH == "UDEF" ; then
+		AC_MSG_ERROR(["Please set llvm-src as well as llvm-install"])
+	fi
+fi
+
+if test $LLVM_INSTALL_PATH != "UDEF" ; then
+	if test $LLVM_SRC_PATH == "UDEF" ; then
+		AC_MSG_ERROR(["Please set llvm-src as well as llvm-install"])
+	fi
+fi
+
+
 
 
 # -------------------------------
@@ -230,7 +272,7 @@ esac],
 
 AM_CONDITIONAL(USELIBTOOL, test x"$libtool" = x"true")
 AM_CONDITIONAL(USEROSE, test x"$with_rose" != xno)
-AM_CONDITIONAL(USECLANG, test x"$useclang" = x"true")
+AM_CONDITIONAL(USECLANG, test x"$with_llvm_src" != xno)
 
 AC_SUBST(CONFIG_DISABLEEXCEPTIONS, [0])
 AC_SUBST(CONFIG_USE_ROSE, [$found_rose])

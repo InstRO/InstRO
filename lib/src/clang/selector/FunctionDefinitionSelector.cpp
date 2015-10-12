@@ -1,7 +1,7 @@
 #include "instro/clang/selector/FunctionDefinitionSelector.h"
 
 InstRO::Clang::FunctionDefinitionSelector::FunctionDefinitionSelector()
-		: ClangPassImplementation(InstRO::Core::ChannelConfiguration()) {}
+		: ClangPassImplBase<FunctionDefinitionSelector>(InstRO::Core::ChannelConfiguration(), new InstRO::Clang::VisitingPassExecuter<FunctionDefinitionSelector>()) {}
 
 bool InstRO::Clang::FunctionDefinitionSelector::VisitFunctionDecl(clang::FunctionDecl *fDecl) {
 	if (fDecl->hasBody()) {

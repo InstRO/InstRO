@@ -9,21 +9,21 @@
 
 #include "instro/clang/core/ConstructSet.h"
 #include "instro/clang/core/Pass.h"
-#include "instro/clang/core/ClangAdapterPass.h"
+#include "instro/clang/core/ClangPassImplBase.h"
 
 namespace InstRO {
 namespace Clang {
 
-class CygProfileAdapter : public InstRO::Clang::Core::ClangPassImplementation {
+class CygProfileAdapter : public InstRO::Clang::ClangPassImplBase<CygProfileAdapter> {
  public:
 	CygProfileAdapter(InstRO::Core::ChannelConfiguration cfg, clang::tooling::Replacements &replacements,
 										clang::SourceManager *sm);
 
-	bool VisitFunctionDecl(clang::FunctionDecl *decl) override;
+	bool VisitFunctionDecl(clang::FunctionDecl *decl);
 
 	void init();
 
-	void execute();
+//	void execute();
 
 	void finalize();
 

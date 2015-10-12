@@ -13,29 +13,14 @@ namespace InstRO {
 class Pass;
 
 namespace Core {
-namespace Support {
+
 /*
- * Support class to hand the inputs from the pass manager to the
- * PassImplementation
+ * The class serves as interface between Pass and PassImplementation to make them independent of the actual input channel
  */
-/*
-class InputAggregation {
-public:
-InputAggregation(){};
-InputAggregation(std::unordered_map<InstRO::Pass *, ConstructSet *> m) : pToCMap(m) {}
-ConstructSet *getConstructSet(InstRO::Pass *p) { return pToCMap[p]; }
-
-private:
-// CI: Us the Pass as a AccessHandle to the RespectiveConstruct set
-std::unordered_map<InstRO::Pass *, InstRO::Core::ConstructSet *> pToCMap;
-};*/
-}
-
 class ChannelConfiguration {
  protected:
 	std::vector<Pass *> inputChannelPasses;
 	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMin;
-	// std::unordered_map<Pass *, ContstructTraitType> inputChannelMin;
 	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMax;
 
  public:
