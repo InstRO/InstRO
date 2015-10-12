@@ -12,6 +12,7 @@
 // #include "instro/rose/pass/adapter/CygProfileAdapter.h"
 #include "instro/rose/pass/adapter/RoseConstructPrinter.h"
 #include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
+#include "instro/rose/pass/transformer/FunctionWrapper.h"
 
 #include "rose.h"
 
@@ -85,6 +86,13 @@ class RosePassFactory : public InstRO::PassFactory {
 	// UniqueCallpathTransformer
 	virtual InstRO::Pass* createUniqueCallpathTransformer(Pass* input);
 	virtual InstRO::Pass* createUniqueCallpathTransformer(Pass* input, Pass* root, Pass* active);
+
+	// FunctionWrapper
+	virtual InstRO::Pass* createFunctionWrapper(InstRO::Pass *input, InstRO::Rose::Transformer::FunctionWrapper::NameTransformer nameTransformer);
+	virtual InstRO::Pass* createFunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, InstRO::Rose::Transformer::FunctionWrapper::NameTransformer nameTransformer,
+						const std::string &definitionPrefix, const std::string &wrapperPrefix);
+	virtual InstRO::Pass* createMPIFunctionWrapper(InstRO::Pass *input);
+
 	// Adapter
 	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input);
 	virtual InstRO::Pass* createConstructPrinter(InstRO::Pass* pass);

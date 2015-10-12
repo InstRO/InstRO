@@ -52,6 +52,10 @@ RoseConfigurationPassRegistry::RoseConfigurationPassRegistry(InstRO::Rose::RoseP
 
 		return nullptr;
 	});
+	registerPass("MPIFunctionWrapper", [factory] (ConfigurationParsingContext &context) -> Pass* {
+		context.expectInputPasses({1});
+		return factory->createMPIFunctionWrapper(context.inputPasses[0]);
+	});
 
 
 	// Adapters

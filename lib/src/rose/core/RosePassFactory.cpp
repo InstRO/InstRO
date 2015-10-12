@@ -221,5 +221,28 @@ InstRO::Pass* RosePassFactory::createUniqueCallpathTransformer(Pass* input, Pass
     passManager->registerPass(newPass);
     return newPass;
 }
+
+InstRO::Pass* RosePassFactory::createFunctionWrapper(InstRO::Pass *input, InstRO::Rose::Transformer::FunctionWrapper::NameTransformer nameTransformer) {
+	InstRO::Pass *newPass = new InstRO::Pass(new Transformer::FunctionWrapper(input, nameTransformer));
+	newPass->setPassName("InstRO::Rose::Transformer::FunctionWrapper");
+	passManager->registerPass(newPass);
+	return newPass;
+}
+InstRO::Pass* RosePassFactory::createFunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, InstRO::Rose::Transformer::FunctionWrapper::NameTransformer nameTransformer,
+						const std::string &definitionPrefix, const std::string &wrapperPrefix) {
+	InstRO::Pass *newPass = new InstRO::Pass(new Transformer::FunctionWrapper(input, renaming, nameTransformer,
+						definitionPrefix, wrapperPrefix));
+	newPass->setPassName("InstRO::Rose::Transformer::FunctionWrapper");
+	passManager->registerPass(newPass);
+	return newPass;
+}
+
+InstRO::Pass* RosePassFactory::createMPIFunctionWrapper(InstRO::Pass *input) {
+	InstRO::Pass *newPass = new InstRO::Pass(new Transformer::MPIFunctionWrapper(input));
+	newPass->setPassName("InstRO::Rose::Transformer::MPIFunctionWrapper");
+	passManager->registerPass(newPass);
+	return newPass;
+}
+
 }	// Rose
 }	// InstRO
