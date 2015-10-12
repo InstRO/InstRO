@@ -57,7 +57,7 @@ class ExtendedCallGraphNode {
 class ExtendedCallGraph {
  public:
 	ExtendedCallGraph();
-	~ExtendedCallGraph();
+	virtual ~ExtendedCallGraph();
 
 	virtual std::set<ExtendedCallGraphNode*> getNodeSet(Core::ConstructSet *cs);
 
