@@ -38,6 +38,7 @@ namespace Utility {
 		std::string getType() const;
 
 		std::string getStringArgument(const char* memberName) const;
+		std::string getStringArgumentOrDefault(const char* memberName, const std::string &defaultArg) const;
 		std::vector<std::string> getStringArguments(const char* memberName = "args") const;
 
 		/// \brief Gets the InstRO::Core::ConstructTraitType of the specified member.

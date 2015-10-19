@@ -156,6 +156,16 @@ std::string ConfigurationParsingContext::getStringArgument(const char* memberNam
 	}
 }
 
+std::string ConfigurationParsingContext::getStringArgumentOrDefault(const char* memberName, const std::string &defaultArg) const {
+	auto memberIter = passValue.FindMember(memberName);
+
+	if (memberIter != passValue.MemberEnd()) {
+		return memberIter->value.GetString();
+	} else {
+		return defaultArg;
+	}
+}
+
 std::vector<std::string> ConfigurationParsingContext::getStringArguments(const char* memberName) const {
 	std::vector<std::string> arguments;
 	auto memberIter = passValue.FindMember(memberName);
