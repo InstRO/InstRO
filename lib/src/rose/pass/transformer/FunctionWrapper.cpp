@@ -355,6 +355,12 @@ MPIFunctionWrapper::MPIFunctionWrapper(InstRO::Pass *input)
 
 }
 
+MPIFunctionWrapper::MPIFunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, const std::string &definitionPrefix, const std::string &wrapperPrefix)
+	: FunctionWrapper(input, renaming, PMPINameTransformer(), definitionPrefix, wrapperPrefix)
+{
+
+}
+
 std::string MPIFunctionWrapper::PMPINameTransformer::operator()(const std::string &mpiName)
 {
 	return "P" + mpiName;
