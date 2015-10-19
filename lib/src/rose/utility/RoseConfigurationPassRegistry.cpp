@@ -53,8 +53,14 @@ RoseConfigurationPassRegistry::RoseConfigurationPassRegistry(InstRO::Rose::RoseP
 		return nullptr;
 	});
 	registerPass("MPIFunctionWrapper", [factory] (ConfigurationParsingContext &context) -> Pass* {
-		context.expectInputPasses({1});
-		return factory->createMPIFunctionWrapper(context.inputPasses[0]);
+		context.expectInputPasses({1,2});
+		InstRO::Pass *renamingPass = (context.inputPasses.size() == 2) ? context.inputPasses[1] : nullptr;
+
+		// prefixes are optional and irrelevant for most use cases
+		std::string definitionPrefix = context.getStringArgumentOrDefault("definitionPrefix", std::string());
+		std::string wrapperPrefix = context.getStringArgumentOrDefault("wrapperPrefix", std::string());
+
+		return factory->createMPIFunctionWrapper(context.inputPasses[0], renamingPass, definitionPrefix, wrapperPrefix);
 	});
 
 

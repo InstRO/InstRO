@@ -154,6 +154,7 @@ class MPIFunctionWrapper
 {
 public:
 	MPIFunctionWrapper(InstRO::Pass *input);
+	MPIFunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, const std::string &definitionPrefix, const std::string &wrapperPrefix);
 
 	/// \brief Functor which transforms MPI function names to their corresponding PMPI name
 	/// by prepending a 'P' to the original name.

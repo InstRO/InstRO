@@ -31,7 +31,7 @@ namespace Rose {
 		return newPass;
 
 	}
-	
+
 
 
 InstRO::Pass* RosePassFactory::createConstructHierarchyASTDotGenerator(InstRO::Pass* pass, std::string fileName) {
@@ -239,6 +239,13 @@ InstRO::Pass* RosePassFactory::createFunctionWrapper(InstRO::Pass *input, InstRO
 
 InstRO::Pass* RosePassFactory::createMPIFunctionWrapper(InstRO::Pass *input) {
 	InstRO::Pass *newPass = new InstRO::Pass(new Transformer::MPIFunctionWrapper(input));
+	newPass->setPassName("InstRO::Rose::Transformer::MPIFunctionWrapper");
+	passManager->registerPass(newPass);
+	return newPass;
+}
+
+InstRO::Pass* RosePassFactory::createMPIFunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, const std::string &definitionPrefix, const std::string &wrapperPrefix) {
+	InstRO::Pass *newPass = new InstRO::Pass(new Transformer::MPIFunctionWrapper(input, renaming, definitionPrefix, wrapperPrefix));
 	newPass->setPassName("InstRO::Rose::Transformer::MPIFunctionWrapper");
 	passManager->registerPass(newPass);
 	return newPass;
