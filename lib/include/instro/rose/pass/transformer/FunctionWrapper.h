@@ -15,7 +15,8 @@ namespace InstRO {
 namespace Rose {
 namespace Transformer {
 
-/// \brief Wraps functions by creating a new defining function declaration calling the original function or another one derived from the original name.
+/// \brief Wraps functions by creating a new defining function declaration calling the original function
+/// or another one derived from the name of the original function.
 ///
 /// This Transformer accepts the following input:
 /// \li function call expressions: Attempts to find and wrap the associated function declaration
@@ -25,9 +26,11 @@ namespace Transformer {
 /// As output, the function definition of the created wrapper is selected so that it may be refined by a following adapter.
 /// Further output depends on the mode of operation and includes renamed function calls and the renamed original function definition (if applicable).
 ///
-/// The function wrapper supports both functions with and without a definition in the project scope and provides means to specify prefixes for the generated wrappers and renamed function definitions.
+/// The function wrapper supports both functions with and without a definition in the project scope
+/// and provides means to specify prefixes for the generated wrappers and renamed function definitions.
 /// In order to keep this implementation as generic as possible several input configurations are available:
-/// \li A FunctionWrapper::NameTransformer functor which generates the name of the function which is called inside the wrapper if the definition of the function to be wrapped cannot be found. If a definition is found, it is renamed using the transformed name.
+/// \li A FunctionWrapper::NameTransformer functor which generates the name of the function which is called inside the wrapper
+/// if the definition of the function to be wrapped cannot be found. If a definition is found, it is renamed using the transformed name.
 /// \li A <tt>definition prefix</tt> which is used to rename the definition of the function to be wrapped.
 /// \li A <tt>wrapper prefix</tt> which gets prepended to the name of the wrapper.
 /// \li A Selector which specifies the starting points in the AST for the search of calls to the original function.
