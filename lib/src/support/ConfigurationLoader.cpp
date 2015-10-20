@@ -5,22 +5,19 @@
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/error/en.h"
 
-#include <type_traits> //std::underlying_type
+#include <type_traits>	//std::underlying_type
 
 using namespace InstRO;
 using namespace InstRO::Utility;
 
-
 // ConfigurationLoader
 
 ConfigurationLoader::ConfigurationLoader(std::unique_ptr<ConfigurationPassRegistry> passRegistry)
-	: passRegistry(std::move(passRegistry)) {}
+		: passRegistry(std::move(passRegistry)) {}
 
-ConfigurationLoader::PassMap ConfigurationLoader::getPasses() const {
-	return passes;
-}
+ConfigurationLoader::PassMap ConfigurationLoader::getPasses() const { return passes; }
 
-Pass* ConfigurationLoader::getPass(const std::string &passId) const {
+Pass *ConfigurationLoader::getPass(const std::string &passId) const {
 	auto passIter = passes.find(passId);
 
 	if (passIter != passes.end()) {
@@ -31,10 +28,9 @@ Pass* ConfigurationLoader::getPass(const std::string &passId) const {
 }
 
 void ConfigurationLoader::load(const std::string &filename) {
-	ConfigurationParser parser (*this);
+	ConfigurationParser parser(*this);
 	parser.parseFile(filename);
 }
-
 
 // ConfigurationParser
 
@@ -47,14 +43,14 @@ void ConfigurationParser::parseFile(const std::string &filename) {
 
 	// parse JSON file into DOM
 	char buffer[1024];
-	rapidjson::FileReadStream readStream (file, buffer, sizeof(buffer));
+	rapidjson::FileReadStream readStream(file, buffer, sizeof(buffer));
 	doc.ParseStream(readStream);
 
 	std::fclose(file);
 
 	if (doc.HasParseError()) {
 		std::cerr << "An error occurred while parsing the JSON document at position " << doc.GetErrorOffset() << ": "
-			<<  rapidjson::GetParseError_En(doc.GetParseError()) << std::endl;
+							<< rapidjson::GetParseError_En(doc.GetParseError()) << std::endl;
 	}
 
 	// parse the individual passes which are specified inside the top level array
@@ -63,7 +59,7 @@ void ConfigurationParser::parseFile(const std::string &filename) {
 	}
 }
 
-Pass* ConfigurationParser::parsePass(rapidjson::Value &passValue) {
+Pass *ConfigurationParser::parsePass(rapidjson::Value &passValue) {
 	std::string passId = passValue["id"].GetString();
 
 	// check whether the pass has already been parsed (due to a forward dependency)
@@ -72,7 +68,7 @@ Pass* ConfigurationParser::parsePass(rapidjson::Value &passValue) {
 	}
 
 	// create context: ensure that input passes are already parsed
-	ConfigurationParsingContext context (passValue, getInputPasses(passValue));
+	ConfigurationParsingContext context(passValue, getInputPasses(passValue));
 
 	std::string passType = passValue["type"].GetString();
 
@@ -89,7 +85,7 @@ Pass* ConfigurationParser::parsePass(rapidjson::Value &passValue) {
 	return pass;
 }
 
-rapidjson::Value* ConfigurationParser::findPassValue(const std::string &passId) {
+rapidjson::Value *ConfigurationParser::findPassValue(const std::string &passId) {
 	for (auto passValueIter = doc.Begin(); passValueIter != doc.End(); ++passValueIter) {
 		std::string currentPassId = (*passValueIter)["id"].GetString();
 		if (currentPassId == passId) {
@@ -100,8 +96,8 @@ rapidjson::Value* ConfigurationParser::findPassValue(const std::string &passId) 
 	return nullptr;
 }
 
-std::vector<Pass*> ConfigurationParser::getInputPasses(rapidjson::Value &passValue) {
-	std::vector<Pass*> inputPasses;
+std::vector<Pass *> ConfigurationParser::getInputPasses(rapidjson::Value &passValue) {
+	std::vector<Pass *> inputPasses;
 	auto inputs = passValue.FindMember("inputs");
 
 	// check whether any passes have been specified because 'inputs' is optional
@@ -134,18 +130,13 @@ std::vector<Pass*> ConfigurationParser::getInputPasses(rapidjson::Value &passVal
 	return inputPasses;
 }
 
-
 // ConfigurationParsingContext
 
-std::string ConfigurationParsingContext::getId() const {
-	return passValue["id"].GetString();
-}
+std::string ConfigurationParsingContext::getId() const { return passValue["id"].GetString(); }
 
-std::string ConfigurationParsingContext::getType() const {
-	return passValue["type"].GetString();
-}
+std::string ConfigurationParsingContext::getType() const { return passValue["type"].GetString(); }
 
-std::string ConfigurationParsingContext::getStringArgument(const char* memberName) const {
+std::string ConfigurationParsingContext::getStringArgument(const char *memberName) const {
 	auto memberIter = passValue.FindMember(memberName);
 
 	if (memberIter != passValue.MemberEnd()) {
@@ -156,7 +147,8 @@ std::string ConfigurationParsingContext::getStringArgument(const char* memberNam
 	}
 }
 
-std::string ConfigurationParsingContext::getStringArgumentOrDefault(const char* memberName, const std::string &defaultArg) const {
+std::string ConfigurationParsingContext::getStringArgumentOrDefault(const char *memberName,
+																																		const std::string &defaultArg) const {
 	auto memberIter = passValue.FindMember(memberName);
 
 	if (memberIter != passValue.MemberEnd()) {
@@ -166,7 +158,7 @@ std::string ConfigurationParsingContext::getStringArgumentOrDefault(const char* 
 	}
 }
 
-std::vector<std::string> ConfigurationParsingContext::getStringArguments(const char* memberName) const {
+std::vector<std::string> ConfigurationParsingContext::getStringArguments(const char *memberName) const {
 	std::vector<std::string> arguments;
 	auto memberIter = passValue.FindMember(memberName);
 
@@ -187,7 +179,7 @@ std::vector<std::string> ConfigurationParsingContext::getStringArguments(const c
 	return arguments;
 }
 
-InstRO::Core::ConstructTraitType ConfigurationParsingContext::getConstructTraitType(const char* memberName) const {
+InstRO::Core::ConstructTraitType ConfigurationParsingContext::getConstructTraitType(const char *memberName) const {
 	auto memberIter = passValue.FindMember(memberName);
 
 	if (memberIter != passValue.MemberEnd()) {
@@ -195,10 +187,13 @@ InstRO::Core::ConstructTraitType ConfigurationParsingContext::getConstructTraitT
 		if (cttValue.IsInt()) {
 			auto ctt = cttValue.GetInt();
 			// check whether the specified integer maps to a valid enumeration entry - must be in [CTMin, CTMax]
-			auto minIntVal = static_cast<std::underlying_type<InstRO::Core::ConstructTraitType>::type>(InstRO::Core::ConstructTraitType::CTMin);
-			auto maxIntVal = static_cast<std::underlying_type<InstRO::Core::ConstructTraitType>::type>(InstRO::Core::ConstructTraitType::CTMax);
+			auto minIntVal = static_cast<std::underlying_type<InstRO::Core::ConstructTraitType>::type>(
+					InstRO::Core::ConstructTraitType::CTMin);
+			auto maxIntVal = static_cast<std::underlying_type<InstRO::Core::ConstructTraitType>::type>(
+					InstRO::Core::ConstructTraitType::CTMax);
 			if (ctt < minIntVal || ctt > maxIntVal) {
-				InstRO::raise_exception(getId() + ": Cannot parse ConstructTraitType due to invalid integer value '" + std::to_string(ctt) + "'");
+				InstRO::raise_exception(getId() + ": Cannot parse ConstructTraitType due to invalid integer value '" +
+																std::to_string(ctt) + "'");
 			} else {
 				return static_cast<InstRO::Core::ConstructTraitType>(ctt);
 			}
@@ -244,7 +239,7 @@ void ConfigurationParsingContext::expectInputPasses(std::initializer_list<unsign
 	numberBuffer.reserve(numberOfPasses.size());
 
 	bool foundFit = false;
-	bool first = true; // whether this is the first element
+	bool first = true;	// whether this is the first element
 	auto next = numberOfPasses.begin();
 	while (next != numberOfPasses.end()) {
 		auto current = next++;
@@ -269,10 +264,10 @@ void ConfigurationParsingContext::expectInputPasses(std::initializer_list<unsign
 
 	if (!foundFit) {
 		std::string passWord = (inputPasses.size() == 1) ? "pass" : "passes";
-		InstRO::raise_exception(getId() + ": Expected " + numberBuffer + " input " + passWord + ", but got " + std::to_string(inputPasses.size()));
+		InstRO::raise_exception(getId() + ": Expected " + numberBuffer + " input " + passWord + ", but got " +
+														std::to_string(inputPasses.size()));
 	}
 }
-
 
 // BaseConfigurationPassRegistry
 
@@ -285,14 +280,13 @@ ConfigurationPassRegistry::PassParser BaseConfigurationPassRegistry::lookup(cons
 	return passRegistryIter->second;
 }
 
-PassFactory* BaseConfigurationPassRegistry::getFactory() {
-	return factory;
-}
+PassFactory *BaseConfigurationPassRegistry::getFactory() { return factory; }
 
 void BaseConfigurationPassRegistry::registerPass(const std::string &typeName, const PassParser &parser) {
 	// print a warning if a parser has already been registered for the specified id
 	if (passRegistry.find(typeName) != passRegistry.end()) {
-		std::cerr << "Warning: a parser has already been registered for type '" << typeName << "'. Skipping..." << std::endl;
+		std::cerr << "Warning: a parser has already been registered for type '" << typeName << "'. Skipping..."
+							<< std::endl;
 		return;
 	}
 
