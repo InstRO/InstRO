@@ -95,14 +95,14 @@ AM_CONDITIONAL(DEBUG, test x"$enable_debug" = x"yes")
 # 2.0.1) Add examples option
 # -------------------------------
 
-#AC_ARG_ENABLE([examples], 
-#	AS_HELP_STRING([--disable-examples], [disable examples default: yes?]),
-#	 [case "${enableval}" in 
-#						yes)	examples=true ;;
-#						no)		examples=false ;;
-#			esac],[examples=false])
-#
-AM_CONDITIONAL(BUILD_EXAMPLES, [test x$examples = xtrue])
+AC_ARG_ENABLE(examples, 
+	AS_HELP_STRING([enable examples], [build examples, default: no]),
+	[case "${enableval}" in 
+						yes) ;;
+						no) ;;
+			esac],[enable_examples=no])
+
+AM_CONDITIONAL(BUILD_EXAMPLES, [test x"$enable_examples" = x"yes"])
 
 # ------------------------------
 # 2.0.2) Add publication tools
@@ -335,9 +335,9 @@ AC_CHECK_FUNCS([select])
 ## CI: add makefiles here for configure to install in build directory
 # process template configuration header
 AC_CONFIG_FILES([Makefile
-		 lib/Makefile
-                 lib/include/instro/config.h
-		 ])
+		lib/Makefile
+		lib/include/instro/config.h
+	])
 
 #AM_COND_IF([BUILD_PUBLICATIONS_TOOLS], [
 #	AC_CONFIG_FILES([
@@ -361,6 +361,12 @@ AC_CONFIG_FILES([Makefile
 #		 examples/CallPathInstrumentor/Makefile
 #		 examples/AdvancedAnalyticsInstrumentor/Makefile
 #		])])
+
+AM_COND_IF([BUILD_EXAMPLES],[
+	AC_CONFIG_FILES([
+			examples/Makefile
+		])
+])
 
 # -------------------------------
 # 8) generate Makefiles from Makefil.in
