@@ -173,7 +173,7 @@ if USELIBTOOL
 # LIBTOOL RULE FOR LIBINSTRO
 lib_LTLIBRARIES= libInstRO_core.la libInstRO_example.la
 #lib_LTLIBRARIES= libInstRO_core.la libInstRO_example.la libInstRO_rose.la
-bin_PROGRAMS=ExampleInstrumentor
+#bin_PROGRAMS=ExampleInstrumentor
 
 if USECLANG
 lib_LTLIBRARIES += libInstRO_clang.la
@@ -181,11 +181,11 @@ endif
 
 if USEROSE
 lib_LTLIBRARIES += libInstRO_rose.la
-bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter
+#bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter
 endif
 
 if HAVERAPIDJSON
-bin_PROGRAMS += ConfigInstrumentor
+#bin_PROGRAMS += ConfigInstrumentor
 endif
 
 
@@ -216,26 +216,26 @@ libInstRO_example_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
 libInstRO_rose_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@
 
-RoseInstrumentor_SOURCES = \
-	./src/roseInstrumentor.cpp
-RoseInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
-RoseInstrumentor_LDADD=libInstRO_rose.la @ROSE_LINK_LIBRARIES@
+#RoseInstrumentor_SOURCES = \
+#	./src/roseInstrumentor.cpp
+#RoseInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+#RoseInstrumentor_LDADD=libInstRO_rose.la @ROSE_LINK_LIBRARIES@
 
-ExampleInstrumentor_SOURCES = \
-	./src/example_main.cpp
+#ExampleInstrumentor_SOURCES = \
+#	./src/example_main.cpp
 
-ROSEInstROASTPrinter_SOURCES = \ 
-	./src/rose/extra/instro_rose_astprinter/main.cxx
-ROSEInstROASTPrinter_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
-ROSEInstROASTPrinter_LDADD=libInstRO_rose.la @ROSE_LINK_LIBRARIES@
+#ROSEInstROASTPrinter_SOURCES = \
+#	./src/rose/extra/instro_rose_astprinter/main.cxx
+#ROSEInstROASTPrinter_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+#ROSEInstROASTPrinter_LDADD=libInstRO_rose.la @ROSE_LINK_LIBRARIES@
 
-ExampleInstrumentor_LDADD=libInstRO_example.la
+#ExampleInstrumentor_LDADD=libInstRO_example.la
 # ExampleInstrumentor_LDFLAGS=
-ExampleInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+#ExampleInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
-ConfigInstrumentor_SOURCES=./src/config_main.cpp
-ConfigInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@ -I@RAPIDJSON_INCLUDEDIR@
-ConfigInstrumentor_LDADD=libInstRO_rose.la @ROSE_LINK_LIBRARIES@
+#ConfigInstrumentor_SOURCES=./src/config_main.cpp
+#ConfigInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@ -I@RAPIDJSON_INCLUDEDIR@
+#ConfigInstrumentor_LDADD=libInstRO_rose.la @ROSE_LINK_LIBRARIES@
 
 if HAVERAPIDJSON
 libInstRO_core_la_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
@@ -260,7 +260,7 @@ else #USELIBTOOL
 lib_LIBRARIES= libInstRO_core.a libInstRO_example.a
 
 # bin_PROGRAMS=ClangInstrumentor ExampleInstrumentor RoseInstrumentor
-bin_PROGRAMS=ExampleInstrumentor 
+#bin_PROGRAMS=ExampleInstrumentor 
 
 if USECLANG
 lib_LIBRARIES += libInstRO_clang.a
@@ -268,11 +268,11 @@ endif
 
 if USEROSE
 lib_LIBRARIES += libInstRO_rose.a
-bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter
+#bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter
 endif
 
 if HAVERAPIDJSON
-bin_PROGRAMS += ConfigInstrumentor
+#bin_PROGRAMS += ConfigInstrumentor
 endif
 
 
@@ -283,29 +283,29 @@ endif
 #ClangInstrumentor_LDFLAGS=@LLVM_LDFLAGS@ @CLANG_LIBS_LIST@
 #ClangInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@CLANG_SRC_INCLUDE_PATH@ -I@LLVM_SRC_INCLUDE_PATH@ @LLVM_CXXFLAGS_FLAGS@ -I@BOOST_INCLUDEDIR@
 
-RoseInstrumentor_SOURCES = \
-	./src/roseInstrumentor.cpp
+#RoseInstrumentor_SOURCES = \
+#	./src/roseInstrumentor.cpp
 
-RoseInstrumentor_LDADD=libInstRO_core.a libInstRO_rose.a
-RoseInstrumentor_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@
-RoseInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+#RoseInstrumentor_LDADD=libInstRO_core.a libInstRO_rose.a
+#RoseInstrumentor_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@
+#RoseInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 
-ROSEInstROASTPrinter_SOURCES = \ 
-	./src/rose/extra/instro_rose_astprinter/main.cxx
-ROSEInstROASTPrinter_LDADD=libInstRO_core.a libInstRO_rose.a
-ROSEInstROASTPrinter_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@
-ROSEInstROASTPrinter_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+#ROSEInstROASTPrinter_SOURCES = \
+#	./src/rose/extra/instro_rose_astprinter/main.cxx
+#ROSEInstROASTPrinter_LDADD=libInstRO_core.a libInstRO_rose.a
+#ROSEInstROASTPrinter_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@
+#ROSEInstROASTPrinter_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 
-ExampleInstrumentor_SOURCES = \
-	./src/example_main.cpp
+#ExampleInstrumentor_SOURCES = \
+#	./src/example_main.cpp
 
-ExampleInstrumentor_LDADD= libInstRO_example.a
-ExampleInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+#ExampleInstrumentor_LDADD= libInstRO_example.a
+#ExampleInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
-ConfigInstrumentor_SOURCES =./src/config_main.cpp
-ConfigInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@ -I@RAPIDJSON_INCLUDEDIR@
-ConfigInstrumentor_LDADD=libInstRO_core.a libInstRO_rose.a
-ConfigInstrumentor_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@
+#ConfigInstrumentor_SOURCES =./src/config_main.cpp
+#ConfigInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@ -I@RAPIDJSON_INCLUDEDIR@
+#ConfigInstrumentor_LDADD=libInstRO_core.a libInstRO_rose.a
+#ConfigInstrumentor_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@
 
 
 libInstRO_example_a_SOURCES= \
