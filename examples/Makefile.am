@@ -35,14 +35,14 @@ ExampleInstrumentor_SOURCES = \
 ROSEInstROASTPrinter_SOURCES = \
 	./main.cxx
 ROSEInstROASTPrinter_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
-ROSEInstROASTPrinter_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@
+ROSEInstROASTPrinter_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
 
 ExampleInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_example.la
-ExampleInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+ExampleInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@  -L@BOOST_LIBDIR@
 
 ConfigInstrumentor_SOURCES=./config_main.cpp
 ConfigInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@ -I@RAPIDJSON_INCLUDEDIR@
-ConfigInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@
+ConfigInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@  -L@BOOST_LIBDIR@
 
 else # USELIBTOOL
 
@@ -61,14 +61,14 @@ RoseInstrumentor_SOURCES = \
 	./roseInstrumentor.cpp
 
 RoseInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_core.a $(top_builddir)/lib/libInstRO_rose.a
-RoseInstrumentor_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@
+RoseInstrumentor_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@  -L@BOOST_LIBDIR@
 RoseInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 
 # TODO Is this actually an example?
 ROSEInstROASTPrinter_SOURCES = \
 	./main.cxx
 ROSEInstROASTPrinter_LDADD=$(top_builddir)/lib/libInstRO_core.a $(top_builddir)/lib/libInstRO_rose.a
-ROSEInstROASTPrinter_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@
+ROSEInstROASTPrinter_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
 ROSEInstROASTPrinter_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 
 ExampleInstrumentor_SOURCES = \
@@ -80,7 +80,7 @@ ExampleInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 ConfigInstrumentor_SOURCES= \
 	./config_main.cpp
 ConfigInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@ -I@RAPIDJSON_INCLUDEDIR@
-ConfigInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_core.a $(top_builddir)/lib/libInstRO_rose.a
+ConfigInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_core.a $(top_builddir)/lib/libInstRO_rose.a -L@BOOST_LIBDIR@
 ConfigInstrumentor_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@
 
 
