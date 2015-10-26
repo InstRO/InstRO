@@ -77,6 +77,7 @@ class WildcardedStringMatcher : public Matcher {
 
 class NamedConstructAccess {
  public:
+	virtual ~NamedConstructAccess() {}
 	// CI: what could we match against
 	// a) any userdefined identifyer, e.g. variable names, function / method names, labels
 	// b) user supplied text, e.g. identifyer, but also contents of strings and comments
