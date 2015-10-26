@@ -44,72 +44,72 @@ namespace Transformer {
 ///
 /// \author Simon Reuß
 class UniqueCallpathTransformer : public RosePassImplementation {
+ public:
+	/// \brief Constructs a new UniqueCallpathTransformer without any explicit passes for the roots and active functions.
+	/// The main function will be used as the root of the call graph and all functions will be assumed to be duplicatable.
+	/// \arg pass The pass specifying the marked functions for which a unique call path should be created
+	UniqueCallpathTransformer(InstRO::Pass *pass);
+	/// \brief Constructs a new UniqueCallpathTransformer with explicit passes for the roots and active functions.
+	/// \arg pass The pass which specifies the marked functions for which a unique call path should be created
+	/// \arg root The pass which specifies the roots the the call graph
+	/// \arg active The pass which specifies the active functions
+	UniqueCallpathTransformer(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active);
 
-public:
-    /// \brief Constructs a new UniqueCallpathTransformer without any explicit passes for the roots and active functions.
-    /// The main function will be used as the root of the call graph and all functions will be assumed to be duplicatable.
-    /// \arg pass The pass specifying the marked functions for which a unique call path should be created
-    UniqueCallpathTransformer(InstRO::Pass *pass);
-    /// \brief Constructs a new UniqueCallpathTransformer with explicit passes for the roots and active functions.
-    /// \arg pass The pass which specifies the marked functions for which a unique call path should be created
-    /// \arg root The pass which specifies the roots the the call graph
-    /// \arg active The pass which specifies the active functions
-    UniqueCallpathTransformer(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active);
+	virtual ~UniqueCallpathTransformer();
 
-    virtual ~UniqueCallpathTransformer();
+	virtual void init() override{};
+	virtual void execute() override;
+	virtual void finalize() override{};
+	virtual void releaseOutput() override { outputCS.clear(); };
+	virtual InstRO::Core::ConstructSet *getOutput() override { return &outputCS; }
 
-    virtual void init() override {};
-    virtual void execute() override;
-    virtual void finalize() override {};
-    virtual void releaseOutput() override { outputCS.clear(); };
-    virtual InstRO::Core::ConstructSet *getOutput() override { return &outputCS; }
+ protected:
+	InstRO::Pass *inputPass;
+	InstRO::Pass *rootPass;
+	InstRO::Pass *activePass;
 
-protected:
-    InstRO::Pass *inputPass;
-    InstRO::Pass *rootPass;
-    InstRO::Pass *activePass;
+	InstRO::Core::ConstructSet outputCS;
 
-    InstRO::Core::ConstructSet outputCS;
+	/// Generates the new name for the cloned function.
+	/// \arg caller The function calling the duplicate
+	/// \arg callee The original function
+	virtual std::string generateCloneName(SgFunctionDeclaration *caller, SgFunctionDeclaration *callee);
 
-    /// Generates the new name for the cloned function.
-    /// \arg caller The function calling the duplicate
-    /// \arg callee The original function
-    virtual std::string generateCloneName(SgFunctionDeclaration *caller, SgFunctionDeclaration *callee);
+ private:
+	typedef std::unordered_map<InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *, int> NodeDepthMap;
+	typedef std::unordered_set<InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *> NodeSet;
+	typedef std::unordered_set<SgFunctionDeclaration *> FunctionDeclarationSet;
+	typedef std::vector<InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *> NodeList;
+	typedef std::unordered_multimap<InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *, SgFunctionDeclaration *>
+			NodeFunctionDeclarationMap;
 
-private:
-    typedef std::unordered_map<InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode*, int> NodeDepthMap;
-    typedef std::unordered_set<InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode*> NodeSet;
-    typedef std::unordered_set<SgFunctionDeclaration*> FunctionDeclarationSet;
-    typedef std::vector<InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode*> NodeList;
-    typedef std::unordered_multimap<InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode*, SgFunctionDeclaration*> NodeFunctionDeclarationMap;
+	InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph *callGraph;
 
-    InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph* callGraph;
+	NodeSet rootNodes;
+	NodeSet activeNodes;
 
-    NodeSet rootNodes;
-    NodeSet activeNodes;
+	InstRO::Core::ChannelConfiguration createChannelConfig(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active);
 
-    InstRO::Core::ChannelConfiguration createChannelConfig(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active);
+	NodeSet retrieveInputNodes(InstRO::Pass *pass);
+	InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *getMainFunctionNode();
 
-    NodeSet retrieveInputNodes(InstRO::Pass *pass);
-    InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode* getMainFunctionNode();
+	NodeSet getSuccessorFunctions(InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *node);
+	NodeSet getPredecessorFunctions(InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *node);
+	SgFunctionDeclaration *getFunDeclFromNode(InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *node);
 
-    NodeSet getSuccessorFunctions(InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *node);
-    NodeSet getPredecessorFunctions(InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *node);
-    SgFunctionDeclaration* getFunDeclFromNode(InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *node);
+	void addNodeToCS(InstRO::InfracstructureInterface::ConstructSetCompilerInterface &csci, SgNode *node);
 
-    void addNodeToCS(InstRO::InfracstructureInterface::ConstructSetCompilerInterface &csci, SgNode *node);
+	void findCandidates(const NodeSet &markedNodes, NodeDepthMap &candidates, NodeSet &cycleNodes);
+	void updateCandidates(NodeDepthMap &candidates, const NodeList &path);
 
-    void findCandidates(const NodeSet &markedNodes, NodeDepthMap &candidates, NodeSet &cycleNodes);
-    void updateCandidates(NodeDepthMap &candidates, const NodeList &path);
+	void duplicate(InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *node,
+								 NodeFunctionDeclarationMap &duplicatedNodes);
 
-    void duplicate(InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *node, NodeFunctionDeclarationMap &duplicatedNodes);
-
-    SgFunctionDeclaration* cloneFunction(SgFunctionDeclaration* originalFunction, const std::string &cloneName, SgScopeStatement *scope);
-
+	SgFunctionDeclaration *cloneFunction(SgFunctionDeclaration *originalFunction, const std::string &cloneName,
+																			 SgScopeStatement *scope);
 };
-
 }
 }
 }
 
-#endif // INSTRO_ROSE_UNIQUECALLPATHTRANSFORMER_H
+#endif	// INSTRO_ROSE_UNIQUECALLPATHTRANSFORMER_H
