@@ -8,8 +8,9 @@ SUBDIRS= \
 #
 # Build the examples
 #
-# SUBDIRS+= \
-	# examples
+if BUILD_EXAMPLES
+SUBDIRS+= examples
+endif
 
 #
 # Build the tests

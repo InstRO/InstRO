@@ -96,7 +96,7 @@ AM_CONDITIONAL(DEBUG, test x"$enable_debug" = x"yes")
 # -------------------------------
 
 AC_ARG_ENABLE(examples, 
-	AS_HELP_STRING([enable examples], [build examples, default: no]),
+	AS_HELP_STRING([--enable-examples], [build examples, default: no]),
 	[case "${enableval}" in 
 						yes) ;;
 						no) ;;
