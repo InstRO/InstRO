@@ -1,4 +1,4 @@
-#include "instro/instro/utility/ConfigurationLoader.h"
+#include "instro/utility/ConfigurationLoader.h"
 
 #include "instro/clang/core/PassFactory.h"
 
