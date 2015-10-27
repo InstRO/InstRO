@@ -12,7 +12,8 @@
 namespace InstRO {
 namespace Clang {
 
-template <typename T> class ClangPassImplBase;
+template <typename T>
+class ClangPassImplBase;
 
 /**
  * The interface serves as delegate to be able to decide whether a traversal is
@@ -22,17 +23,16 @@ template <typename T> class ClangPassImplBase;
  * type to static_cast it for invocation. With that we get a nice and clean
  * interface but still inherit from RecursiveASTVisitor at a fairly high stage.
  */
-template <typename T> class PassExecuter {
-public:
+template <typename T>
+class PassExecuter {
+ public:
 	PassExecuter(){};
 	PassExecuter(clang::ASTContext *ctx) : context(ctx){};
 	virtual void execute(T *pass) = 0;
 
-	virtual void setASTContext(clang::ASTContext *ctxt){
-		context = ctxt;
-	};
+	virtual void setASTContext(clang::ASTContext *ctxt) { context = ctxt; };
 
-protected:
+ protected:
 	clang::ASTContext *context;
 };
 
@@ -41,15 +41,15 @@ protected:
  * This implementation invokes the TraverseDecl(TranslationUnitDecl) method on
  * the pass object.
  */
-template <typename T> class VisitingPassExecuter : public PassExecuter<T> {
-public:
-	VisitingPassExecuter() : counter(0) {};
+template <typename T>
+class VisitingPassExecuter : public PassExecuter<T> {
+ public:
+	VisitingPassExecuter() : counter(0){};
 	VisitingPassExecuter(clang::ASTContext *context);
-  void execute(T *pass) override;
+	void execute(T *pass) override;
 
-private:
-  int counter;
-//  clang::ASTContext *context;
+ private:
+	int counter;
 };
 
 /**
@@ -57,42 +57,37 @@ private:
  * This implementation invokes the exec() method (defined in ClangPassImplBase
  * interface) on the pass object.
  */
-template <typename T> class NonVisitingPassExecuter : public PassExecuter<T> {
-public:
-  NonVisitingPassExecuter() {};
+template <typename T>
+class NonVisitingPassExecuter : public PassExecuter<T> {
+ public:
+	NonVisitingPassExecuter(){};
 	NonVisitingPassExecuter(clang::ASTContext *context);
-  void execute(T *pass) override;
-
-//private:
-//  clang::ASTContext *context;
+	void execute(T *pass) override;
 };
 
-} // instro
-} // clang
+}	// instro
+}	// clang
 
 template <typename T>
-InstRO::Clang::VisitingPassExecuter<T>::VisitingPassExecuter(
-    clang::ASTContext *context)
-    : PassExecuter<T>(context) {}
+InstRO::Clang::VisitingPassExecuter<T>::VisitingPassExecuter(clang::ASTContext *context)
+		: PassExecuter<T>(context) {}
 
 template <typename T>
 void InstRO::Clang::VisitingPassExecuter<T>::execute(T *pass) {
-  assert(pass != nullptr);
-  assert(context != nullptr);
-  assert(context->getTranslationUnitDecl() != nullptr &&
-         "translation unit null");
-  // traverse the Clang AST
-  pass->TraverseDecl(this->context->getTranslationUnitDecl());
+	assert(pass != nullptr);
+	assert(context != nullptr);
+	assert(context->getTranslationUnitDecl() != nullptr && "translation unit null");
+	// traverse the Clang AST
+	pass->TraverseDecl(this->context->getTranslationUnitDecl());
 }
 
 template <typename T>
-InstRO::Clang::NonVisitingPassExecuter<T>::NonVisitingPassExecuter(
-    clang::ASTContext *context)
-    : PassExecuter<T>(context) {}
+InstRO::Clang::NonVisitingPassExecuter<T>::NonVisitingPassExecuter(clang::ASTContext *context)
+		: PassExecuter<T>(context) {}
 
 template <typename T>
 void InstRO::Clang::NonVisitingPassExecuter<T>::execute(T *pass) {
-  assert(pass != nullptr);
-  pass->exec();
+	assert(pass != nullptr);
+	pass->exec();
 }
 #endif

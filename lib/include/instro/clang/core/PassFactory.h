@@ -38,20 +38,20 @@ class PassFactory : public InstRO::PassFactory {
 	/**
 	 * Introduced in the base class. So I had to provide some implementation..
 	 */
-//	virtual InstRO::Pass* createFunctionSelector() override { return nullptr; };
-//	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input) override { return nullptr; };
-//	virtual InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) override { return nullptr; };
+	//	virtual InstRO::Pass* createFunctionSelector() override { return nullptr; };
+	//	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input) override { return nullptr; };
+	//	virtual InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) override { return nullptr; };
 
 	/* We need this in order to lazily initialize the AST Context within the passes */
-	void finishConstruction(clang::ASTContext *context){
-		for(auto p : lazyContextProvidingMap){
+	void finishConstruction(clang::ASTContext* context) {
+		for (auto p : lazyContextProvidingMap) {
 			p->setASTContext(context);
 		}
 	}
-		
+
  private:
 	clang::tooling::Replacements& replacements;
-	std::set<InstRO::Clang::ASTContextProvider *> lazyContextProvidingMap;
+	std::set<InstRO::Clang::ASTContextProvider*> lazyContextProvidingMap;
 };
 }	// Clang
 }	// INstRO

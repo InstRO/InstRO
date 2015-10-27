@@ -23,8 +23,6 @@ class CygProfileAdapter : public InstRO::Clang::ClangPassImplBase<CygProfileAdap
 
 	void init();
 
-//	void execute();
-
 	void finalize();
 
 	void releaseOutput();

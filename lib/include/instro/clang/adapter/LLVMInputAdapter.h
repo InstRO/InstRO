@@ -15,7 +15,6 @@ class LLVMInputAdapter : public InstRO::Clang::ClangPassImplBase<LLVMInputAdapte
 	bool VisitFunctionDecl(clang::FunctionDecl *fDecl);
 
 	void init() override;
-//	void execute() override;
 	void finalize() override;
 	void releaseOutput() override;
 	InstRO::Clang::ClangConstructSet *getOutput() override;
