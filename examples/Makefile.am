@@ -19,7 +19,7 @@ bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter
 endif
 
 if HAVERAPIDJSON
-bin_PROGRAMS += ConfigInstrumentor
+SUBDIRS= ConfigurationLoader
 endif
 
 
@@ -40,10 +40,6 @@ ROSEInstROASTPrinter_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBR
 ExampleInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_example.la
 ExampleInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@  -L@BOOST_LIBDIR@
 
-ConfigInstrumentor_SOURCES=./config_main.cpp
-ConfigInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@ -I@RAPIDJSON_INCLUDEDIR@
-ConfigInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@  -L@BOOST_LIBDIR@
-
 else # USELIBTOOL
 
 bin_PROGRAMS=ExampleInstrumentor 
@@ -53,7 +49,7 @@ bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter
 endif
 
 if HAVERAPIDJSON
-bin_PROGRAMS += ConfigInstrumentor
+SUBDIRS= ConfigurationLoader
 endif
 
 
@@ -76,13 +72,6 @@ ExampleInstrumentor_SOURCES = \
 
 ExampleInstrumentor_LDADD= $(top_builddir)/lib/libInstRO_example.a
 ExampleInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
-
-ConfigInstrumentor_SOURCES= \
-	./config_main.cpp
-ConfigInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@ -I@RAPIDJSON_INCLUDEDIR@
-ConfigInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_core.a $(top_builddir)/lib/libInstRO_rose.a -L@BOOST_LIBDIR@
-ConfigInstrumentor_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@
-
 
 ## Manually crafted Clang stuff!
 # FIXME Figure out how this can be done using actually autotools

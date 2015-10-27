@@ -371,6 +371,7 @@ AC_CONFIG_FILES([Makefile
 AM_COND_IF([BUILD_EXAMPLES],[
 	AC_CONFIG_FILES([
 			examples/Makefile
+			examples/ConfigurationLoader/Makefile
 		])
 ])
 
