@@ -3,6 +3,8 @@
 
 #include "instro/core/Singleton.h"
 
+using namespace boost;
+
 namespace InstRO {
 namespace Tooling {
 namespace ControlFlowGraph {
