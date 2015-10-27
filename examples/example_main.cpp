@@ -1,25 +1,16 @@
 #define USING_EXAMPLE
 #include "instro.h"
 
-// #include "instro/misc/VisualizingPassManager.h"
-
 #include <vector>
 #include <string>
 #include <iostream>
 
-// using namespace InstRO;
 
 int main(int argc, char** argv) {
-	//		try {
-	InstRO::Instrumentor* instro = new InstRO::ExampleInstrumentor();
-	auto defaultFactory = instro->getFactory();
-
-	// CI - Reseting Classic Implementation  InstRO::Ext::VisualizingPassManager * passManager=new
-	// InstRO::Ext::VisualizingPassManager();
-	// CI - Reseting Classic Implementation  instro->setPassManager(passManager);
-
-	InstRO::Example::ExamplePassFactory* aFactory =
-			dynamic_cast<InstRO::Example::ExamplePassFactory*>(instro->getFactory());
+try {
+	InstRO::ExampleInstrumentor* instro = new InstRO::ExampleInstrumentor();
+	
+	auto aFactory = instro->getFactory();
 
 	std::vector<std::string> filterRules;
 	filterRules.push_back("main");
@@ -30,52 +21,13 @@ int main(int argc, char** argv) {
 
 	auto adapter = aFactory->createGPIAdapter(compound);
 
-	/*	aFactory->createConstructPrinter(aPass);
-		aPass->initPass();
-		aPass->executePass();
-		bPass->initPass();
-		bPass->executePass();
-
-		auto intersectionInputA = aPass->getOutput();
-		auto intersectionInputB = bPass->getOutput();
-		auto intersection = intersectionInputA->intersect(*intersectionInputB);*/
-
 	instro->init();
 	instro->apply();
 
 	instro->finalize();
-
-	// CI - Reseting Classic Implementation   passManager->outputConfiguration("InstRO-CFG.dot");
-
-	//	} catch (std::string stringBasedException) {
-	//		std::cout << stringBasedException << std::endl;
-	//		std::cout.flush();
-	//	}
-
-	/*
-	InstRO::Instrumentor * instro=new InstRO::RoseInstrumentor();
-	InstRO::PassFactory * factory = instro->getFactory();
-	InstRO::Pass * bnwSelector,* programEntrySelector,*orSelector,*adapter;
-	bnwSelector=factory->createBlackNWhiteSelector("HelloWorld*");
-	programEntrySelector=factory->createProgramEntrySelector();
-	orSelector=factory->createBooleanOrSelector(bnwSelector,programEntrySelector);
-	adapter=factory->createCygProfileAdapter(orSelector);
-	instro->init();
-//	::InstRO::Rose::Selector * myDevelopStuff=new ::InstRO::Rose::Selector();
-	//instro->getPassManager()->registerPass
-	instro->apply();
-	instro->finalize();
-
-	*/
-	/*	::InstRO::InstRO * instro;
-		//CI: Rose specific constructor for the RoseInstrumentor - factory
-		instro=new ::InstRO::RoseInstrumentor(&argc,&argv);
-		::InstRO::Factory * fac=instro->getFactory();
-		::InstRO::Selector * exampleSelector=fac->createExampleSelector();
-		instro->printDebugStatus();
-
-		Pass *PickerA,*PickerB,*Filter;
-		*/
+	} catch (...){
+		std::cerr << "An exception was thrown." << std::endl;
+	}
 
 	return 0;
 }
