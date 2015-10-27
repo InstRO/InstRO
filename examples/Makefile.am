@@ -24,16 +24,16 @@ endif
 
 
 RoseInstrumentor_SOURCES = \
-	./roseInstrumentor.cpp
+	./RoseInstrumentor.cpp
 RoseInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 RoseInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@
 
 ExampleInstrumentor_SOURCES = \
-	./example_main.cpp
+	./ExampleMain.cpp
 
 # TODO Is this actually an example?
 ROSEInstROASTPrinter_SOURCES = \
-	./main.cxx
+	./RoseConstructASTExporter.cpp
 ROSEInstROASTPrinter_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 ROSEInstROASTPrinter_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
 
@@ -54,7 +54,7 @@ endif
 
 
 RoseInstrumentor_SOURCES = \
-	./roseInstrumentor.cpp
+	./RoseInstrumentor.cpp
 
 RoseInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_core.a $(top_builddir)/lib/libInstRO_rose.a
 RoseInstrumentor_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@  -L@BOOST_LIBDIR@
@@ -62,13 +62,13 @@ RoseInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOS
 
 # TODO Is this actually an example?
 ROSEInstROASTPrinter_SOURCES = \
-	./main.cxx
+	./RoseConstructASTExporter.cpp
 ROSEInstROASTPrinter_LDADD=$(top_builddir)/lib/libInstRO_core.a $(top_builddir)/lib/libInstRO_rose.a
 ROSEInstROASTPrinter_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
 ROSEInstROASTPrinter_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 
 ExampleInstrumentor_SOURCES = \
-	./example_main.cpp
+	./ExampleMain.cpp
 
 ExampleInstrumentor_LDADD= $(top_builddir)/lib/libInstRO_example.a
 ExampleInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
