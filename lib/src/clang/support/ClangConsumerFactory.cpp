@@ -1,8 +1,8 @@
 #include "instro/clang/core/ClangConsumerFactory.h"
 
-InstRO::Clang::Support::ClangConsumerFactory::ClangConsumerFactory(
-		InstRO::PassManagement::PassManager *manager, clang::tooling::Replacements &replacements,
-		InstRO::Clang::PassFactory *fac)
+InstRO::Clang::Support::ClangConsumerFactory::ClangConsumerFactory(InstRO::PassManagement::PassManager *manager,
+																																	 clang::tooling::Replacements &replacements,
+																																	 InstRO::Clang::PassFactory *fac)
 		: manager(manager), factory(fac), replacements(replacements) {}
 
 InstRO::Clang::Support::ClangConsumerFactory::~ClangConsumerFactory() {}
