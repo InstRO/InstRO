@@ -13,9 +13,9 @@
 namespace InstRO {
 namespace Clang {
 
-	/**
-	 * Interface to set the clang::ASTContext afterwards
-	 */
+/**
+ * Interface to set the clang::ASTContext afterwards
+ */
 class ASTContextProvider {
  public:
 	void setASTContext(clang::ASTContext *ctx) { context = ctx; }
@@ -51,13 +51,8 @@ class ClangPassImplBase : public InstRO::Clang::ASTContextProvider,
 
 	bool shouldVisitImplicitCode() const { return true; }
 
-	//	void setASTContext(clang::ASTContext *ctx){
-	//		context = ctx;
-	//		executer->setASTContext(ctx);
-	//	}
  protected:
 	std::unique_ptr<PassExecuter<T>> executer;
-	//	clang::ASTContext *context;
 };
 }
 }

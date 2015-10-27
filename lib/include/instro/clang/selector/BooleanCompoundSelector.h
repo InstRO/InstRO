@@ -14,7 +14,6 @@ class BooleanCompoundSelector : public InstRO::Clang::ClangPassImplBase<BooleanC
 	BooleanCompoundSelector(InstRO::Pass *inA, InstRO::Pass *inB, op_t operation);
 
 	void init() override;
-//	void execute() override;
 	void exec() override;
 	void finalize() override;
 	void releaseOutput() override;
