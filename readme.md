@@ -1,3 +1,24 @@
+## Libraries and Versions
+
+Internally we use the following version of compilers and libraries for building InstRO and ROSE.
+
+### To build InstRO
+- GCC 4.8.5
+- Boost 1.57.0
+- automake 1.14
+- autoconf 2.69
+- libtool 2.4
+
+### Additionally to build ROSE
+- graphviz 2.38
+- java 1.8
+- doxygen 1.8.8
+- ghostscript 9.16
+
+### Building with Clang
+The support to build with Clang will soon be available
+
+
 ## Style guidelines
 
 ### Filenames
