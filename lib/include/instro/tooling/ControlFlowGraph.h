@@ -9,7 +9,6 @@
 #include <boost/graph/labeled_graph.hpp>
 #include <boost/graph/graphviz.hpp>
 
-using namespace boost;
 
 namespace InstRO {
 namespace Tooling {
@@ -51,7 +50,7 @@ class ControlFlowGraphNode {
 	}
 };
 
-typedef labeled_graph<adjacency_list<setS, vecS, directedS, ControlFlowGraphNode>, InstRO::Core::ConstructSet> Graph;
+typedef boost::labeled_graph<boost::adjacency_list<boost::setS, boost::vecS, boost::directedS, ControlFlowGraphNode>, InstRO::Core::ConstructSet> Graph;
 
 class BoostCFG {
  public:
@@ -62,8 +61,8 @@ class BoostCFG {
 	}
 
 	bool contains(ControlFlowGraphNode cfgNode) {
-		auto graphNode = vertex_by_label(*cfgNode.getAssociatedConstructSet(), graph);
-		return graphNode != graph_traits<Graph>::null_vertex();
+		auto graphNode = boost::vertex_by_label(*cfgNode.getAssociatedConstructSet(), graph);
+		return graphNode != boost::graph_traits<Graph>::null_vertex();
 	}
 
 	void setStartNode(ControlFlowGraphNode cfgNode) {
@@ -94,7 +93,7 @@ class BoostCFG {
 	void print(std::string name) const {
 		std::ofstream outputStream;
 		outputStream.open(name);
-		write_graphviz(outputStream, graph, NodeWriter(graph));
+		boost::write_graphviz(outputStream, graph, NodeWriter(graph));
 		outputStream.close();
 	}
 
@@ -158,7 +157,7 @@ class AbstractControlFlowGraph : public ControlFlowGraph {
 
 		for (auto const& boostCFG : cfgs) {
 			Graph::vertex_iterator vertexIter, vertexEnd;
-			for (tie(vertexIter, vertexEnd) = vertices(boostCFG.getGraph()); vertexIter != vertexEnd; vertexIter++) {
+			for (boost::tie(vertexIter, vertexEnd) = vertices(boostCFG.getGraph()); vertexIter != vertexEnd; vertexIter++) {
 				ControlFlowGraphNode node = boostCFG.getGraph().graph()[*vertexIter];
 
 				if (node.getAssociatedConstructSet()->intersects(cs)) {

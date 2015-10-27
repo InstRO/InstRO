@@ -218,7 +218,7 @@ if test $LLVM_INSTALL_PATH != "UDEF" ; then
 	fi
 fi
 
-
+AS_IF([test x"${with_llvm_src}${with_llvm_install}" != xnono],[found_llvm=1], [found_llvm=0])
 
 
 # -------------------------------
@@ -274,9 +274,9 @@ AM_CONDITIONAL(USELIBTOOL, test x"$libtool" = x"true")
 AM_CONDITIONAL(USEROSE, test x"$with_rose" != xno)
 AM_CONDITIONAL(USECLANG, test x"$with_llvm_src" != xno)
 
-AC_SUBST(CONFIG_DISABLEEXCEPTIONS, [0])
+AC_SUBST(CONFIG_DISABLEEXCEPTIONS, [$found_llvm])
 AC_SUBST(CONFIG_USE_ROSE, [$found_rose])
-AC_SUBST(CONFIG_USE_CLANG, [0])
+AC_SUBST(CONFIG_USE_CLANG, [$found_llvm])
 
 
 # -------------------------------
