@@ -1,6 +1,7 @@
 #include "instro/clang/support/InstROASTConsumer.h"
 
-InstRO::Clang::Support::InstROASTConsumer::InstROASTConsumer(InstRO::PassManagement::PassManager *passManager, InstRO::Clang::PassFactory *fac)
+InstRO::Clang::Support::InstROASTConsumer::InstROASTConsumer(InstRO::PassManagement::PassManager *passManager,
+																														 InstRO::Clang::PassFactory *fac)
 		: passManager(passManager), factory(fac) {}
 
 #if 0

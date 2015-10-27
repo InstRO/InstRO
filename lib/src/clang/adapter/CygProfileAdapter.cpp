@@ -10,7 +10,7 @@ InstRO::Clang::CygProfileAdapter::CygProfileAdapter(InstRO::Core::ChannelConfigu
 
 void InstRO::Clang::CygProfileAdapter::init() {}
 
-//void InstRO::Clang::CygProfileAdapter::execute() { executer->execute(this); }
+// void InstRO::Clang::CygProfileAdapter::execute() { executer->execute(this); }
 
 bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *decl) {
 	if (context == nullptr) {

@@ -2,11 +2,12 @@
 
 InstRO::Pass *InstRO::Clang::PassFactory::createBlackAndWhiteListSelector(std::vector<std::string> blacklist,
 																																					std::vector<std::string> whitelist) {
-//	InstRO::Clang::Core::ClangPassImplementation *pImpl = new InstRO::Clang::BlackWhitelistSelector(blacklist, whitelist);
+	//	InstRO::Clang::Core::ClangPassImplementation *pImpl = new InstRO::Clang::BlackWhitelistSelector(blacklist,
+	//whitelist);
 	auto pImpl = new InstRO::Clang::BlackWhitelistSelector(blacklist, whitelist);
 
 	lazyContextProvidingMap.insert(pImpl);
-	
+
 	InstRO::Pass *p = new InstRO::Pass(pImpl);
 	p->setPassName("BlackWhitelist Selector");
 	passManager->registerPass(p);
@@ -14,8 +15,7 @@ InstRO::Pass *InstRO::Clang::PassFactory::createBlackAndWhiteListSelector(std::v
 }
 
 InstRO::Pass *InstRO::Clang::PassFactory::createBooleanOrSelector(InstRO::Pass *inputA, InstRO::Pass *inputB) {
-	auto pImpl =
-			new InstRO::Clang::BooleanCompoundSelector(inputA, inputB, InstRO::Clang::BooleanCompoundSelector::OR);
+	auto pImpl = new InstRO::Clang::BooleanCompoundSelector(inputA, inputB, InstRO::Clang::BooleanCompoundSelector::OR);
 	lazyContextProvidingMap.insert(pImpl);
 	InstRO::Pass *p = new InstRO::Pass(pImpl);
 	p->setPassName("Boolean OR Selector");
