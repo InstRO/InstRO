@@ -31,9 +31,7 @@ PKG_PROG_PKG_CONFIG
 # -------------------------------
 # As Automake prefers its version, let automake generate the header
 AC_CONFIG_SRCDIR([lib/include/instro.h])
-# AC_CONFIG_HEADERS([config.h])
 AM_CONFIG_HEADER([config.h])
-## CI: old version AC_CONFIG_HEADERS([config.h])
 
 
 # -------------------------------
@@ -44,7 +42,6 @@ AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
-# LT_INIT
 
 
 # -------------------------------
@@ -282,17 +279,8 @@ AC_SUBST(CONFIG_USE_CLANG, [$found_llvm])
 # -------------------------------
 # 4) Checks for libraries.
 # -------------------------------
-# CI: Check for ROSE
-# SR: commented out as it won't work anyway: library must be in LDFLAGS/default location
-#AC_CHECK_LIB([rose], [frontend])
 
-
-##AC_DEFINE([BOOST_INCLUDEDIR], [$BOOST_INCLUDEDIR], [Description])
-##AC_SUBST(BOOST_INCLUDEDIR,[$BOOST_INCLUDEDIR])
-##AC_SUBST(BOOST_LIBDIR,[$BOOST_LIBDIR])
-
-# AM_SUBST_NOTMAKE(BOOST_INCLUDEDIR)
-# AM_SUBST_NOTMAKE(BOOST_LIBDIR)
+# Export Boost variables
 AC_SUBST(BOOST_INCLUDEDIR)
 AC_SUBST(BOOST_LIBDIR)
 
@@ -302,9 +290,7 @@ AC_SUBST(BOOST_LIBDIR)
 # -------------------------------
 
 ROSE_CPPFLAGS="$BOOST_CPPFLAGS -I$ROSE_INCLUDEDIR -I$ROSE_INCLUDEDIR/rose"
-# JP: I am renaming this, so using this option is deprecated
-#ROSE_LDFLAGS="-lrose $BOOST_IOSTREAMS_LIB $BOOST_SYSTEM_LIB"
-# JP: This is the new one we use now!
+
 ROSE_LINK_LIBRARIES="-lrose $BOOST_IOSTREAMS_LIB $BOOST_SYSTEM_LIB $BOOST_REGEX_LIB"
 
 AC_MSG_NOTICE(["Boost: BOOST_IOSTREAMS == $BOOST_IOSTREAMS_LIB"])
@@ -316,9 +302,7 @@ AC_MSG_NOTICE(["ROSE: ROSE_LINK_LIBRARIES := $ROSE_LINK_LIBRARIES"])
 AC_SUBST(ROSE_CPPFLAGS)
 AC_SUBST(ROSE_CFLAGS)
 AC_SUBST(ROSE_CXXFLAGS)
-# JP: I guess this has to go away then...DIE!!!!
-#AC_SUBST(ROSE_LDFLAGS)
-# JP: This is the new one we use!
+
 AC_SUBST(ROSE_LINK_LIBRARIES)
 
 # -------------------------------
@@ -338,36 +322,14 @@ AC_TYPE_SIZE_T
 # -------------------------------
 AC_CHECK_FUNCS([select])
 
-## CI: add makefiles here for configure to install in build directory
-# process template configuration header
+# Makefiles wich are always generated
 AC_CONFIG_FILES([Makefile
 		lib/Makefile
 		lib/include/instro/config.h
+		support/Makefile
 	])
 
-#AM_COND_IF([BUILD_PUBLICATIONS_TOOLS], [
-#	AC_CONFIG_FILES([
-#		 examples/Instrumentors/Makefile
-#	])])
-
-#AM_COND_IF([BUILD_EXAMPLES],[
-#	AC_CONFIG_FILES([
-#		 examples/BlackWhitelistSelector/Makefile
-#		 examples/ExcludeFilePathInstrumentor/Makefile
-#		 examples/FunctionPrinter/Makefile
-#		 examples/CallSiteInstrumentor/Makefile
-#		 examples/CallGraphPrinter/Makefile
-#		 examples/CygProfileInstrumentor/Makefile
-#		 examples/ProfileBasedSelector/Makefile
-#		 examples/MPIInstrumentor/Makefile
-#		 examples/IdentityTranslator/Makefile
-#		 examples/NameMatchingSelector/Makefile
-#		 examples/CallFrequencyHeuristic/Makefile
-#		 examples/CompilerSupportedSamplingInstrumentor/Makefile
-#		 examples/CallPathInstrumentor/Makefile
-#		 examples/AdvancedAnalyticsInstrumentor/Makefile
-#		])])
-
+# Build the shipped examples conditionally
 AM_COND_IF([BUILD_EXAMPLES],[
 	AC_CONFIG_FILES([
 			examples/Makefile
