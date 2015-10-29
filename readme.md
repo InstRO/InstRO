@@ -8,6 +8,7 @@ Internally we use the following version of compilers and libraries for building 
 - automake 1.14
 - autoconf 2.69
 - libtool 2.4
+- RapidJSON (github master head)
 
 ### Additionally to build ROSE
 - graphviz 2.38
