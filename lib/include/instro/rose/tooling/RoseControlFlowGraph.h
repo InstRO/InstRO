@@ -8,6 +8,7 @@
 
 #include "instro/rose/core/RoseConstructSet.h"
 #include "instro/tooling/ControlFlowGraph.h"
+#include "instro/utility/Logger.h"
 
 namespace InstRO {
 namespace Rose {
@@ -44,7 +45,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 			nodeType = FUNC_EXIT;
 			fileInfo = node->get_body()->get_endOfConstruct();
 		} else {
-			std::cout << "CFGConstructSetGenerator: encountered Function with invalid index" << std::endl;
+			logIt(ERROR) << "CFGConstructSetGenerator: encountered Function with invalid index" << std::endl;
 			exit(1);
 		}
 		// we always have to have an associated node in order for the construct to work in the construct elevator
@@ -133,8 +134,8 @@ class RoseSingleFunctionCFGGenerator {
 	RoseSingleFunctionCFGGenerator(SgFunctionDefinition* funcDef) {
 
 		//XXX generate whole virtualcfg
-		std::string name = funcDef->get_declaration()->get_name().getString();
-		VirtualCFG::cfgToDot(funcDef, "virtualcfg-"+name+".dot");
+//		std::string name = funcDef->get_declaration()->get_name().getString();
+//		VirtualCFG::cfgToDot(funcDef, "virtualcfg-"+name+".dot");
 
 		auto cfgStartNode = aquireControlFlowGraphNode(funcDef->cfgForBeginning());
 		cfg.setStartNode(cfgStartNode);
@@ -150,9 +151,9 @@ class RoseSingleFunctionCFGGenerator {
 		}
 
 		///XXX dump cfg
-		cfg.print(name+".dot");
-		std::cout << boost::num_vertices(cfg.getGraph()) << " vertices" << std::endl;
-		std::cout << boost::num_edges(cfg.getGraph()) << " edges" << std::endl;
+//		cfg.print(name+".dot");
+		logIt(INFO) << "RoseControlFlowGraph: " << boost::num_vertices(cfg.getGraph()) << " vertices and "
+				<< boost::num_edges(cfg.getGraph()) << " edges" << std::endl;
 	}
 
 	BoostCFG getCFG() { return std::move(cfg); }
