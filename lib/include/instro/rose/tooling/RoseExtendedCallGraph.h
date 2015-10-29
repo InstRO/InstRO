@@ -102,7 +102,7 @@ public:
 		}
 
 		///XXX
-		print(callgraph, "extendedCallGraph.dot");
+		//print(callgraph, "extendedCallGraph.dot");
 
 		return callgraph;
 	}
