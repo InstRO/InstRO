@@ -3,7 +3,8 @@
 #
 
 SUBDIRS= \
-	lib 
+	lib \
+	support
 
 #
 # Build the examples
