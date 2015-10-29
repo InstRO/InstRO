@@ -9,7 +9,9 @@
 #include <boost/algorithm/string.hpp>
 
 #include "rose.h"
+
 #include "instro/core/ConstructSet.h"
+#include "instro/utility/Logger.h"
 
 namespace InstRO {
 namespace Rose {
@@ -259,7 +261,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	}
 
 	void generateError(SgNode* node) {
-		std::cout << "# Encountered error case in ConstructGenerator. " << node->class_name() << "\t"
+		logIt(ERROR) << "# Encountered error case in ConstructGenerator. " << node->class_name() << "\t"
 							<< node->unparseToString() << std::endl;
 	}
 };
@@ -332,7 +334,7 @@ class RoseConstructProvider {
 		}
 
 		if (mapping.find(fileInfo) == mapping.end()) {
-			std::cout << "\tcreating new construct" << std::endl;
+			logIt(DEBUG) << "\tcreating new construct" << std::endl;
 			mapping[fileInfo] = std::make_shared<RoseFragment>(RoseFragment(node, fileInfo));
 		}
 		return mapping[fileInfo];
@@ -340,13 +342,12 @@ class RoseConstructProvider {
 
 	/** XXX this method does no checks on the SgNode! */
 	std::shared_ptr<RoseConstruct> getConstruct(SgNode* node) {
-//		std::cout << "getConstruct(" << node << ")" << std::endl;
 		if (node == nullptr) {
 			throw std::string("RoseConstructProvider: attempted to getConstruct for nullptr");
 		}
 
 		if (mapping.find(node) == mapping.end()) {
-			std::cout << "\tcreating new construct" << std::endl;
+			logIt(DEBUG) << "\tcreating new construct" << std::endl;
 
 			ConstructGenerator gen;
 			node->accept(gen);

@@ -58,7 +58,8 @@ CORE_HFILES= \
 ./include/instro/pass/selector/IdentifyerSelector.h \
 ./include/instro/pass/selector/CallPathSelector.h \
 ./include/instro/pass/selector/ConstructClassSelector.h \
-./include/instro/pass/selector/ElevatorSelector.h
+./include/instro/pass/selector/ElevatorSelector.h \
+./include/instro/utility/Logger.h
 
 CORE_SFILES= \
 ./src/core/ConstructSet.cpp \
@@ -76,7 +77,8 @@ CORE_SFILES= \
 ./src/pass/selector/IdentifyerSelector.cpp \
 ./src/pass/selector/CallPathSelector.cpp \
 ./src/pass/selector/ConstructClassSelector.cpp \
-./src/pass/selector/ElevatorSelector.cpp
+./src/pass/selector/ElevatorSelector.cpp \
+./src/utility/Logger.cpp
 
 CLANG_HFILES= \
 ./include/instro/clang/adapter/CygProfileAdapter.h \
