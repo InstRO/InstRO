@@ -12,9 +12,6 @@
 #include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/GenericInstrumentationStrategy.h"
 #include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ToolInitializer.h"
 
-
-// InstRO::Rose::Adapter::StrategyBasedAdapterSupport
-
 namespace InstRO {
 	namespace Rose {
 		namespace Adapter {

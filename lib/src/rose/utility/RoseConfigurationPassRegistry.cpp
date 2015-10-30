@@ -12,15 +12,11 @@ RoseConfigurationPassRegistry::RoseConfigurationPassRegistry(InstRO::Rose::RoseP
 	registerPass("ProgramEntrySelector",
 							 [factory](ConfigurationParsingContext &context) { return factory->createProgramEntrySelector(); });
 	registerPass("IdentifyerSelector", [factory](ConfigurationParsingContext &context) {
-		return factory->createIdentifyerSelector(context.getStringArguments());
-	});
-	registerPass("IdentifyerFilter", [factory](ConfigurationParsingContext &context) -> Pass *{
-		context.expectInputPasses({0, 1});
-		return factory->createIdentifyerFilter(context.getStringArguments(), context.inputPasses[0]);
+		return factory->createIdentifierMatcherSelector(context.getStringArguments());
 	});
 	registerPass("CallPathSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
 		context.expectInputPasses({2});
-		return factory->createCallPathSelector(context.inputPasses[0], context.inputPasses[1]);
+		return factory->createCallpathSelector(context.inputPasses[0], context.inputPasses[1]);
 	});
 	registerPass("BooleanOrSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
 		context.expectInputPasses({1});
