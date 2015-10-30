@@ -1,6 +1,6 @@
-#include "instro/rose/deprecated_utility/asthelper.h"
+#include "instro/rose/utility/ASTHelper.h"
 
-using namespace InstRO;
+using namespace InstRO::Rose::Utility;
 
 /**
  * \brief Shortcut to get the defining declaration of a given declaration
