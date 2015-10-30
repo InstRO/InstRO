@@ -19,7 +19,6 @@ CLANG_SFILES= \
 ./src/clang/adapter/CygProfileAdapter.cpp \
 ./src/clang/adapter/LLVMInputAdapter.cpp \
 ./src/clang/ClangInstrumentor.cpp \
-./src/clang/core/ClangPassExecuter.cpp \
 ./src/clang/core/ConstructSet.cpp \
 ./src/clang/core/PassFactory.cpp \
 ./src/clang/selector/BlackWhitelistSelector.cpp \
