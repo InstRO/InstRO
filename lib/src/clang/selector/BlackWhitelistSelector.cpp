@@ -11,7 +11,7 @@ InstRO::Clang::BlackWhitelistSelector::BlackWhitelistSelector(std::vector<std::s
 		std::cout << "- " << s << "\n";
 	}
 	for (auto &s : whitelist) {
-		std::cout << "+ " << s < "\n";
+		std::cout << "+ " << s << "\n";
 	}
 	std::cout << std::endl;
 }
