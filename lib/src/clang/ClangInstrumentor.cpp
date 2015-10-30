@@ -6,7 +6,6 @@ InstRO::Clang::ClangInstrumentor::ClangInstrumentor(int argc, const char** argv,
 InstRO::Clang::PassFactory* InstRO::Clang::ClangInstrumentor::getFactory(CompilationPhase phase) {
 	if (fac == nullptr) {
 		fac.reset(new InstRO::Clang::PassFactory(getPassManager(), tool.getReplacements()));
-		//		fac = std::move(t);
 	}
 	return fac.get();
 }
