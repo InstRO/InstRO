@@ -116,6 +116,7 @@ ROSE_HFILES= \
 ./include/instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h \
 ./include/instro/rose/utility/FunctionRenamer.h \
 ./include/instro/rose/utility/ScopeStackGuard.hpp \
+./include/instro/rose/utility/ASTHelper.h \
 ./include/instro/rose/pass/adapter/RoseStrategyBasedAdapter.h \
 ./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionHelper.h \
 ./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionPointSelector.h \
@@ -140,6 +141,7 @@ ROSE_SFILES= \
 ./src/rose/tooling/RoseGrammarInterface.cpp \
 ./src/rose/pass/transformer/UniqueCallpathTransformer.cpp \
 ./src/rose/utility/FunctionRenamer.cpp \
+./src/rose/utility/ASTHelper.cpp \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionHelper.cpp \
 ./src/rose/pass/adapter/RoseStrategyBasedAdapter.cpp \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionPointSelector.cpp \
