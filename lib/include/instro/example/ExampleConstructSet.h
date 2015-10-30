@@ -26,7 +26,7 @@ class ExampleConstruct : public InstRO::Core::Construct {
 	std::string name;
 	ExampleConstruct *hierarchyPartent;
 };
-namespace InfracstructureInterface {
+namespace InfrastructureInterface {
 /*
 
  class ExampleConstructSet :public InstRO::Core::ConstructSet {

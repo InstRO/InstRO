@@ -34,7 +34,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 	// FUNCTION ENTER or EXIT
 	void visit(SgFunctionDefinition* node) {
 		auto construct = InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node);
-		InfracstructureInterface::ConstructSetCompilerInterface csci(cs);
+		InfrastructureInterface::ConstructSetCompilerInterface csci(cs);
 		csci.put(construct);
 
 		Sg_File_Info* fileInfo;
@@ -68,7 +68,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 			return;
 		}
 
-		InfracstructureInterface::ConstructSetCompilerInterface csci(cs);
+		InfrastructureInterface::ConstructSetCompilerInterface csci(cs);
 		if (magicIndexVariable == 0) {
 			nodeType = SCOPE_ENTRY;
 			csci.put(
@@ -88,7 +88,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 		}
 
 		nodeType = STMT;
-		InfracstructureInterface::ConstructSetCompilerInterface csci(cs);
+		InfrastructureInterface::ConstructSetCompilerInterface csci(cs);
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
 	}
 
@@ -99,7 +99,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 	// statements
 	void visit(SgStatement* node) {
 		nodeType = STMT;
-		InfracstructureInterface::ConstructSetCompilerInterface csci(cs);
+		InfrastructureInterface::ConstructSetCompilerInterface csci(cs);
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
 	}
 
@@ -108,7 +108,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 		auto parentNode = node->get_parent();
 		if (parentNode!=nullptr && Core::RoseConstructLevelPredicates::CLLoopPredicate()(parentNode)) {
 			nodeType = EXPR;
-			InfracstructureInterface::ConstructSetCompilerInterface csci(cs);
+			InfrastructureInterface::ConstructSetCompilerInterface csci(cs);
 			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
 		} else {
 			invalidate(node);

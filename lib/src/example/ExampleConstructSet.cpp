@@ -7,7 +7,7 @@
 namespace InstRO {
 namespace Example {
 namespace Core {
-namespace InfracstructureInterface {
+namespace InfrastructureInterface {
 /*
 std::set<std::shared_ptr<ExampleConstruct> >::iterator ExampleConstructSet::begin(){
 std::set<
