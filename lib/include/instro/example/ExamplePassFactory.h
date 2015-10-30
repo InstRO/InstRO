@@ -23,7 +23,7 @@ class ExamplePassFactory : public InstRO::PassFactory {
 		passManager->registerPass(newPass);
 		return newPass;
 	};
-	InstRO::Pass* createIdentifyerSelector(std::vector<std::string> matchList) {
+	InstRO::Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList) {
 		InstRO::Pass* newPass = new InstRO::Pass(new Selectors::NameBasedSelector(matchList));
 		passManager->registerPass(newPass);
 		newPass->setPassName("InstRO::Example::NameBasedSelector");
@@ -44,15 +44,30 @@ class ExamplePassFactory : public InstRO::PassFactory {
 		return newPass;
 	}
 
-	virtual Pass* createBlackNWhiteFilter(Pass* input) {return nullptr;};
 	virtual Pass* createBlackNWhiteSelector(std::string string) {return nullptr;};
 	virtual Pass* createCygProfileAdapter(Pass* input) {return nullptr;};
-
 
 	// Convenience
 	InstRO::Pass* createProgramEntrySelector() { return NULL; };
 	InstRO::Pass* createFunctionSelector() { return NULL; };
 	InstRO::Pass* createGPIAdapter(InstRO::Pass* input) { return NULL; };
+
+
+	/**
+	 * Minimal InstRO compliance
+	 */
+	virtual Pass* createBooleanAndSelector(Pass* passA, Pass* passB) {return nullptr;};
+
+	virtual Pass* createCallpathSelector(Pass* passA, Pass* passB) {return nullptr;};
+	virtual Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass) {return nullptr;};
+	virtual Pass* createAggregationStatementCountSelector(int threshold) {return nullptr;};
+
+	virtual Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) {return nullptr;};
+	virtual Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) {return nullptr;};
+	virtual Pass* createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel,
+																								InstRO::Core::ConstructTraitType maxLevel) {return nullptr;};
+
+	virtual Pass* createInstROMeasurementInterfaceAdapter(Pass* input) {return nullptr;};
 };
 }
 }

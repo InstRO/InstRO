@@ -14,8 +14,8 @@ try {
 
 	std::vector<std::string> filterRules;
 	filterRules.push_back("main");
-	auto aPass = aFactory->createIdentifyerSelector(filterRules);
-	auto bPass = aFactory->createIdentifyerSelector(filterRules);
+	auto aPass = aFactory->createIdentifierMatcherSelector(filterRules);
+	auto bPass = aFactory->createIdentifierMatcherSelector(filterRules);
 
 	auto compound = aFactory->createBooleanOrSelector(aPass, bPass);
 
