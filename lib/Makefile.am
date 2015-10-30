@@ -40,7 +40,6 @@ EXAMPLE_SFILES= \
 CORE_HFILES= \
 ./include/instro.h \
 ./include/instro/core/ConstructSet.h \
-./include/instro/core/Factory.h \
 ./include/instro/core/Instrumentor.h \
 ./include/instro/core/Pass.h \
 ./include/instro/core/PassFactory.h \
