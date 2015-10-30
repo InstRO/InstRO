@@ -10,11 +10,12 @@
 #include "instro/core/Pass.h"
 
 namespace InstRO {
+	class PassManager;
 /* PassFactory: Interface for the mandatory InstRO Passes. */
 class PassFactory {
  public:
 	/* CI: A PassFactory must be initialized with the PassManager. */
-	PassFactory(PassManagement::PassManager* refManager) : refToGobalPassManager(refManager){};
+	PassFactory(PassManagement::PassManager* refManager) : passManager(refManager){};
 	virtual Pass* createBlackNWhiteFilter(Pass* input) = 0;
 	virtual Pass* createBlackNWhiteSelector(std::string string) = 0;
 	virtual Pass* createBooleanOrSelector(Pass* inputA, Pass* inputB) = 0;
@@ -22,7 +23,7 @@ class PassFactory {
 	virtual Pass* createCygProfileAdapter(Pass* input) = 0;
 
  protected:
-	PassManagement::PassManager* refToGobalPassManager;
+	PassManagement::PassManager* passManager;
 };
 }
 #endif

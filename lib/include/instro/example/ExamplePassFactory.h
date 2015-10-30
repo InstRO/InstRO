@@ -1,15 +1,14 @@
 #ifndef INSTRO_ROSE_PASSFACTORY_H
 #define INSTRO_ROSE_PASSFACTORY_H
 
-#include "instro/core/PassFactory.h"
 #include "instro/core/PassManager.h"
+#include "instro/core/PassFactory.h"
 
 #include "instro/example/ExamplePass.h"
 #include "instro/pass/selector/CallPathSelector.h"
 #include "instro/example/CompoundSelector.h"
 #include "instro/example/NameBasedSelector.h"
 #include "instro/example/ExampleConstructPrinter.h"
-// #include "instro/test/selectors/BlackAndWhiteListSelector.h"
 
 namespace InstRO {
 namespace Example {
@@ -44,6 +43,11 @@ class ExamplePassFactory : public InstRO::PassFactory {
 		passManager->registerPass(newPass);
 		return newPass;
 	}
+
+	virtual Pass* createBlackNWhiteFilter(Pass* input) {return nullptr;};
+	virtual Pass* createBlackNWhiteSelector(std::string string) {return nullptr;};
+	virtual Pass* createCygProfileAdapter(Pass* input) {return nullptr;};
+
 
 	// Convenience
 	InstRO::Pass* createProgramEntrySelector() { return NULL; };
