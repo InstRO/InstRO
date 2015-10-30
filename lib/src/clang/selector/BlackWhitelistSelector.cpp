@@ -45,10 +45,6 @@ void InstRO::Clang::BlackWhitelistSelector::readFilterFile(std::string filename)
 
 void InstRO::Clang::BlackWhitelistSelector::init() {}
 
-#if 0
-void InstRO::Clang::BlackWhitelistSelector::execute() { executer->execute(this); }
-#endif
-
 void InstRO::Clang::BlackWhitelistSelector::finalize() {}
 
 void InstRO::Clang::BlackWhitelistSelector::releaseOutput() {}
