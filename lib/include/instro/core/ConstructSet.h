@@ -56,7 +56,7 @@ class ReadOnlyConstructSetCompilerInterface {
 	bool empty() const;
 	size_t size() const;
 };
-}	// namespace InfracstructureInterface
+}	// namespace InfrastructureInterface
 
 namespace Core {
 

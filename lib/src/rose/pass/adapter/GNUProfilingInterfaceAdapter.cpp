@@ -8,7 +8,7 @@ namespace Rose {
 namespace Adapter {
 
 void GNUProfilingInterfaceAdapter::execute() {
-	InstRO::InfracstructureInterface::ConstructSetCompilerInterface cs(inputPass->getOutput());
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(inputPass->getOutput());
 	outputCS = *inputPass->getOutput();
 }
 

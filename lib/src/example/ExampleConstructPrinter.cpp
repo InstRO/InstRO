@@ -9,9 +9,6 @@ namespace Example {
 
 void ExampleConstructPrinter::execute() {
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(inputPass->getOutput());
-	/*InstRO::Example::Core::InfracstructureInterface::ExampleConstructSet * pecs =
-	dynamic_cast<InstRO::Example::Core::InfracstructureInterface::ExampleConstructSet *>(ocs);
-	InstRO::Example::Core::InfracstructureInterface::ExampleConstructSet cs = *(pecs);*/
 	std::cout << "ConstructSet contains " << cs.size() << " constructs:" << std::endl;
 	unsigned long count = 0;
 	for (auto construct : cs) {

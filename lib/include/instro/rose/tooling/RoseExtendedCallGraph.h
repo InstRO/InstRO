@@ -80,7 +80,7 @@ public:
 
 private:
 	InstRO::Core::ConstructSet cs;
-	InstRO::InfracstructureInterface::ConstructSetCompilerInterface csci;
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci;
 
 	enum ECGNodeType nodeType;
 };
