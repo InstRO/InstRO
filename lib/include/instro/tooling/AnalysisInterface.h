@@ -11,11 +11,11 @@
 namespace InstRO {
 namespace Tooling {
 
-namespace ExtendedCallGraph {};
-namespace ControlFlowGraph {};
-namespace ConstructElevator {};
-namespace GrammarInterface {};
-namespace NamedConstructAccess {};
+namespace ExtendedCallGraph {}
+namespace ControlFlowGraph {}
+namespace ConstructElevator {}
+namespace GrammarInterface {}
+namespace NamedConstructAccess {}
 
 class AnalysisManager {
  public:

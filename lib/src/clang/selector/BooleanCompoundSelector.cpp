@@ -33,7 +33,7 @@ void InstRO::Clang::BooleanCompoundSelector::exec() {
 	}
 }
 
-bool InstRO::Clang::BooleanCompoundSelector::VisitFunctionDecl(clang::FunctionDecl *d) {}
+bool InstRO::Clang::BooleanCompoundSelector::VisitFunctionDecl(clang::FunctionDecl *d) { return true; }
 
 void InstRO::Clang::BooleanCompoundSelector::doOr(InstRO::Clang::ClangConstructSet &a,
 																									InstRO::Clang::ClangConstructSet &b) {
