@@ -2,12 +2,8 @@
 
 InstRO::Pass *InstRO::Clang::PassFactory::createBlackAndWhiteListSelector(std::vector<std::string> blacklist,
 																																					std::vector<std::string> whitelist) {
-	//	InstRO::Clang::Core::ClangPassImplementation *pImpl = new InstRO::Clang::BlackWhitelistSelector(blacklist,
-	//whitelist);
 	auto pImpl = new InstRO::Clang::BlackWhitelistSelector(blacklist, whitelist);
-
 	lazyContextProvidingMap.insert(pImpl);
-
 	InstRO::Pass *p = new InstRO::Pass(pImpl);
 	p->setPassName("BlackWhitelist Selector");
 	passManager->registerPass(p);

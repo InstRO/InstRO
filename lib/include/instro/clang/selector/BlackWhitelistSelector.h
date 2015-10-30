@@ -31,8 +31,8 @@ class BlackWhitelistSelector : public InstRO::Clang::ClangPassImplBase<BlackWhit
 	void addWhitelistEntry(std::string functionName);
 
  private:
-	std::vector<std::string> whitelist;
 	std::vector<std::string> blacklist;
+	std::vector<std::string> whitelist;
 	InstRO::Clang::ClangConstructSet cs;
 };
 }	// Clang
