@@ -5,11 +5,8 @@
 #include "instro/core/PassManager.h"
 
 #include "instro/rose/core/RosePassImplementation.h"
-// #include "instro/rose/selectors/BlackAndWhiteListSelector.h"
 #include "instro/rose/pass/selector/NameBasedSelector.h"
 #include "instro/rose/pass/selector/CompoundSelector.h"
-// #include "instro/rose/pass/adapter/GenericAdapter.h"
-// #include "instro/rose/pass/adapter/CygProfileAdapter.h"
 #include "instro/rose/pass/adapter/RoseConstructPrinter.h"
 #include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
 #include "instro/rose/pass/transformer/FunctionWrapper.h"
@@ -54,58 +51,52 @@ class RosePassFactory : public InstRO::PassFactory {
 	};
 
  public:
-	virtual InstRO::Pass* createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass* pass);
+	InstRO::Pass* createBooleanAndSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
+	InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
 
-	virtual InstRO::Pass* createConstructHierarchyASTDotGenerator(InstRO::Pass* pass, std::string fileName);
-	virtual InstRO::Pass* createProgramEntrySelector();
-	virtual InstRO::Pass* createFunctionSelector();
-	// Text Based Selection in Various Flavors
-	virtual InstRO::Pass* createIdentifyerSelector(
-			std::vector<std::string> matchList);	// * Match Identifyers against the matchList
-	virtual InstRO::Pass* createIdentifyerFilter(std::vector<std::string> matchList, Pass* filterInput);
-
-	virtual InstRO::Pass* createFunctionBlackAndWhiteListSelector(std::vector<std::string> rules);
-	virtual InstRO::Pass* createFunctionBlackAndWhiteListFilter(std::vector<std::string> rules, Pass* inputPasses);
-	//	virtual InstRO::Pass* createFunctionBlackNWhiteSelector(std::string string);
-
-	virtual InstRO::Pass* createBooleanAndSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
-	virtual InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
-	// Call Path Based selection
-	virtual InstRO::Pass* createCallPathSelector(InstRO::Pass* callees, InstRO::Pass* caller);
-
+	InstRO::Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList);
+	InstRO::Pass* createCallpathSelector(InstRO::Pass* callees, InstRO::Pass* caller);
 	InstRO::Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass);
+	InstRO::Pass* createAggregationStatementCountSelector(int threshold);
+
 	// Elevator Selectors
-	virtual InstRO::Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
-	virtual InstRO::Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
-	virtual InstRO::Pass* createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel,
+	InstRO::Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
+	InstRO::Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
+	InstRO::Pass* createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel,
 																												InstRO::Core::ConstructTraitType maxLevel);
-	// OpenMP Stuff
-	virtual InstRO::Pass* createOpenMPSelector();
-	virtual InstRO::Pass* createOpenMPFilter(Pass* input);
-	virtual InstRO::Pass* createOpenMPOpariCannonizer(Pass* input);
-	virtual InstRO::Pass* createOPARIAdapter(Pass* input);
+
+	InstRO::Pass* createInstROMeasurementInterfaceAdapter(InstRO::Pass* input);
+
+
+	/* ROSE ONLY */
 
 	// UniqueCallpathTransformer
-	virtual InstRO::Pass* createUniqueCallpathTransformer(Pass* input);
-	virtual InstRO::Pass* createUniqueCallpathTransformer(Pass* input, Pass* root, Pass* active);
+	InstRO::Pass* createUniqueCallpathTransformer(Pass* input);
+	InstRO::Pass* createUniqueCallpathTransformer(Pass* input, Pass* root, Pass* active);
 
 	// FunctionWrapper
-	virtual InstRO::Pass* createFunctionWrapper(
+	InstRO::Pass* createFunctionWrapper(
 			InstRO::Pass* input, InstRO::Rose::Transformer::FunctionWrapper::NameTransformer nameTransformer);
-	virtual InstRO::Pass* createFunctionWrapper(
+	InstRO::Pass* createFunctionWrapper(
 			InstRO::Pass* input, InstRO::Pass* renaming,
 			InstRO::Rose::Transformer::FunctionWrapper::NameTransformer nameTransformer, const std::string& definitionPrefix,
 			const std::string& wrapperPrefix);
-	virtual InstRO::Pass* createMPIFunctionWrapper(InstRO::Pass* input);
-	virtual InstRO::Pass* createMPIFunctionWrapper(InstRO::Pass* input, InstRO::Pass* renaming,
+	InstRO::Pass* createMPIFunctionWrapper(InstRO::Pass* input);
+	InstRO::Pass* createMPIFunctionWrapper(InstRO::Pass* input, InstRO::Pass* renaming,
 																								 const std::string& definitionPrefix, const std::string& wrapperPrefix);
 
-	// Adapter
-	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input);
-	virtual InstRO::Pass* createConstructPrinter(InstRO::Pass* pass);
-	virtual InstRO::Pass* createGenericAdapter(GenericAdapterConfiguration gac);
-	virtual InstRO::Pass* createGenericAdapter(Pass* functionSelection, Pass* loopSelection, Pass* branchingSelection);
+
+	InstRO::Pass* createConstructPrinter(InstRO::Pass* pass);
+
+	InstRO::Pass* createFunctionBlackAndWhiteListSelector(std::vector<std::string> rules);
+
+	InstRO::Pass* createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass* pass);
+
+	InstRO::Pass* createConstructHierarchyASTDotGenerator(InstRO::Pass* pass, std::string fileName);
+	InstRO::Pass* createProgramEntrySelector();
+
 };
+
 }
 }
 #endif
