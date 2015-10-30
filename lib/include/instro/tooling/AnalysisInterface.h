@@ -1,9 +1,6 @@
 #ifndef INSTRO_ANALYSIS_INTERFACE
 #define INSTRO_ANALYSIS_INTERFACE
 
-#include <memory>	// We need shared pointers
-#include <list>		 // We use List in the GrammarInterface
-#include "instro/core/ConstructSet.h"
 
 #include "instro/tooling/NamedConstructAccess.h"
 #include "instro/tooling/ConstructElevator.h"
@@ -13,9 +10,6 @@
 
 namespace InstRO {
 namespace Tooling {
-
-// CI: The specification and interfaces for the NamedConstructAccess methods are found in
-// "instro/tooling/NamedConstructAccess.h"
 
 namespace ExtendedCallGraph {};
 namespace ControlFlowGraph {};
@@ -39,7 +33,6 @@ class AnalysisManager {
 	virtual NamedConstructAccess::NamedConstructAccess *getNamedConstructAccessFacility() = 0;
 };
 
-//  extern std::shared_ptr<AnalysisManager> analysisManager;
 }
 }
 #endif

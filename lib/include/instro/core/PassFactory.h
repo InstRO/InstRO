@@ -13,32 +13,37 @@
 namespace InstRO {
 /* PassFactory: Interface for the mandatory InstRO Passes. */
 class PassFactory {
- public:
+public:
 	/* CI: A PassFactory must be initialized with the PassManager. */
-	PassFactory(PassManagement::PassManager* refManager) : passManager(refManager){};
-	virtual Pass* createBlackNWhiteSelector(std::string string) = 0;
+	PassFactory(PassManagement::PassManager* refManager) :
+			passManager(refManager) {
+	}
+	;
+	virtual ~PassFactory() {
+	}
+
 	virtual Pass* createProgramEntrySelector() = 0;
 	virtual Pass* createCygProfileAdapter(Pass* input) = 0;
-
 
 	/*
 	 * According to our minimal InstRO compliance file this is the list of components we need to provide.
 	 */
 	virtual Pass* createBooleanAndSelector(Pass *passA, Pass *passB) = 0;
 	virtual Pass* createBooleanOrSelector(Pass *passA, Pass *passB) = 0;
-	virtual Pass* createIdentifierMatcherSelector() = 0;
-	virtual Pass* createCallpathSelector() = 0;
-	virtual Pass* createConstructClassSelector() = 0;
-	virtual Pass* createAggregationStatementCountSelector() = 0;
 
-	virtual Pass* createConstructRaisingElevator() = 0;
-	virtual Pass* createConstructLoweringElevator() = 0;
-	virtual Pass* createConstructCroppingElevator() = 0;
+	virtual Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList) = 0;
+	virtual Pass* createCallpathSelector(Pass *passA, Pass *passB) = 0;
+	virtual Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass) = 0;
+	virtual Pass* createAggregationStatementCountSelector(int threshold) = 0;
 
+	virtual Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) = 0;
+	virtual Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) = 0;
+	virtual Pass* createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel,
+			InstRO::Core::ConstructTraitType maxLevel) = 0;
 
 	virtual Pass* createInstROMeasurementInterfaceAdapter(Pass *input) = 0;
 
- protected:
+protected:
 	PassManagement::PassManager* passManager;
 };
 }
