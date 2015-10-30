@@ -122,7 +122,7 @@ class NameMatchingASTTraversal : public AstPrePostProcessing {
 	bool preOrderMatch,	// match first, if unsuccessfull decend afterwards
 			postOrderMatch,	// descend first, match afterwards
 			continueDescend;
-	InstRO::InfracstructureInterface::ConstructSetCompilerInterface csci;
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci;
 	//	IN_enum nodetypeToMark;																						 // Where to save the ASTMarker
 	::InstRO::Tooling::NamedConstructAccess::Matcher* matchingObject;	// Which matcher object should be used
 	// std::list<std::string>* listToMatchAgainst; // List of strings to check against

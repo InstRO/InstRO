@@ -38,7 +38,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 
 		while (workList.size()){
 			InstRO::Core::ConstructSet  toDoList;
-			InstRO::InfracstructureInterface::ConstructSetCompilerInterface csci(&workList);
+			InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci(&workList);
 			for (auto construct : csci) {
 				auto child = construct;
 				auto parent = child;
@@ -67,8 +67,8 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 
 				for (auto constructTrait : traitList) {
 					auto parentCS = elevator->raise(childCS, constructTrait);
-					InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface rocsciChild(&childCS);
-					InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface rocsciParent(&parentCS);
+					InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface rocsciChild(&childCS);
+					InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface rocsciParent(&parentCS);
 					// if there is no partent continue
 					if (parentCS.empty())
 						continue;
@@ -84,7 +84,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 			workList = toDoList;
 		}
 		csAggregation = csAggregation.combine(*inputPass->getOutput());
-		auto csci = InstRO::InfracstructureInterface::ConstructSetCompilerInterface(&csAggregation);
+		auto csci = InstRO::InfrastructureInterface::ConstructSetCompilerInterface(&csAggregation);
 		for (auto construct : csci) {
 			std::string csName = constructToString(construct);
 			std::replace(csName.begin(), csName.end(), '"', ' ');

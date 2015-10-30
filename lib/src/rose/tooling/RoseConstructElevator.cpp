@@ -56,9 +56,9 @@ using namespace InstRO::Rose::Core::RoseConstructLevelPredicates;
 
 InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::ConstructSet &inputCS,
 																										InstRO::Core::ConstructTraitType traitType) {
-	InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface input(&inputCS);
+	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface input(&inputCS);
 	std::unique_ptr<InstRO::Core::ConstructSet> newConstructSet = std::make_unique<InstRO::Core::ConstructSet>();
-	InstRO::InfracstructureInterface::ConstructSetCompilerInterface output(newConstructSet.get());
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(newConstructSet.get());
 	std::cout << "ConstructElevator::raise to " << traitType << ":\t Input-ConstructSet contains " << inputCS.size()
 						<< "elements " << std::endl;
 	for (auto construct = input.cbegin(); construct != input.cend(); construct++) {
@@ -125,10 +125,10 @@ InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::Construc
 InstRO::Core::ConstructSet ConstructElevator::lower(const InstRO::Core::ConstructSet &inputCS,
 																										InstRO::Core::ConstructTraitType traitType) {
 	std::unique_ptr<InstRO::Core::ConstructSet> newConstructSet = std::make_unique<InstRO::Core::ConstructSet>();
-	InstRO::InfracstructureInterface::ConstructSetCompilerInterface output(newConstructSet.get());
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(newConstructSet.get());
 
 	// CI: check each input construct separately
-	InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface input(&inputCS);
+	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface input(&inputCS);
 	for (auto construct = input.cbegin(); construct != input.cend(); construct++) {
 		std::set<std::shared_ptr<InstRO::Rose::Core::RoseConstruct> > newConstructs;
 		// CI: make sure it is a ROSE construct

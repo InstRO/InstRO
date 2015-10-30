@@ -11,18 +11,6 @@ namespace InstRO {
 namespace Example {
 namespace Tooling {
 
-/*
-namespace NamedConstructAccess
-{
-	class ExampleNamedConstructAccess :public InstRO::Tooling :: NamedConstructAccess::NamedConstructAccess{
-		InstRO::Core::ConstructSet getConstructsByIdentifyerName(InstRO::Tooling::NamedConstructAccess::Matcher &){ return
-InstRO::Core::ConstructSet(); }
-		// b) contents of strings
-		InstRO::Core::ConstructSet getConstructsByUserTextStringMatch(InstRO::Tooling::NamedConstructAccess::Matcher &){
-return InstRO::Core::ConstructSet(); };
-	};
-}*/
-
 class ExampleControlFlowGraph : public InstRO::Tooling::ControlFlowGraph::ControlFlowGraph {
  protected:
 	InstRO::Core::ConstructSet *cs;
@@ -100,9 +88,9 @@ class ExampleConstructElevator : public InstRO::Tooling::ConstructElevator::Cons
 	// This is the implicit way, that the PassManager will allways apply
 	virtual InstRO::Core::ConstructSet raise(const InstRO::Core::ConstructSet &input,
 																					 InstRO::Core::ConstructTraitType cl) override {
-		InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface inputCSCI(&input);
+		InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface inputCSCI(&input);
 		auto outputCS = std::make_unique<InstRO::Core::ConstructSet>();
-		InstRO::InfracstructureInterface::ConstructSetCompilerInterface outputCSCI(outputCS.get());
+		InstRO::InfrastructureInterface::ConstructSetCompilerInterface outputCSCI(outputCS.get());
 		//		for (auto construct : inputCSCI)	{
 		//			auto traits=construct->getTraits();
 		//			if (!traits.is(cl))	{

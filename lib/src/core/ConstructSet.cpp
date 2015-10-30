@@ -117,10 +117,6 @@ ConstructTraitType ConstructSet::getMinConstructLevel() {
 void ConstructSet::clear() { constructs.clear(); }
 bool ConstructSet::empty() const { return constructs.empty(); }
 size_t ConstructSet::size() const { return constructs.size(); }
-/*
-virtual void add(ConstructSet * setB) = NULL;
-virtual void add(ConstructSet & set) = NULL;*/
-// virtual ConstructSet intersect(ConstructSet b) = NULL;
 
 // this will be in the protected developer interface
 void ConstructSet::put(const std::shared_ptr<Construct>& construct) { constructs.insert(construct); }
@@ -194,7 +190,7 @@ std::vector<ConstructSet> ConstructSet::split() const {
 
 }	// namespace Core
 
-namespace InfracstructureInterface {
+namespace InfrastructureInterface {
 ConstructSetCompilerInterface::ConstructSetCompilerInterface(Core::ConstructSet* pcs) : csPtr(pcs){};
 
 void ConstructSetCompilerInterface::put(const std::shared_ptr<Core::Construct>& construct) { csPtr->put(construct); };

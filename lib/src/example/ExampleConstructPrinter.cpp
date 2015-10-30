@@ -8,7 +8,7 @@ namespace InstRO {
 namespace Example {
 
 void ExampleConstructPrinter::execute() {
-	InstRO::InfracstructureInterface::ConstructSetCompilerInterface cs(inputPass->getOutput());
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(inputPass->getOutput());
 	/*InstRO::Example::Core::InfracstructureInterface::ExampleConstructSet * pecs =
 	dynamic_cast<InstRO::Example::Core::InfracstructureInterface::ExampleConstructSet *>(ocs);
 	InstRO::Example::Core::InfracstructureInterface::ExampleConstructSet cs = *(pecs);*/

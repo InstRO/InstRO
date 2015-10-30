@@ -45,10 +45,6 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 				return i;
 		}
 		return NULL;
-		/*		std::vector<PassEnvelope*>::iterator
-			 result=std::find(passList.begin(),passList.end(),pass);
-				if (result==passList.end()) return NULL;
-				else return (*result);*/
 	};
 	std::vector<Pass *> getPredecessors(PassEnvelope *envelope) { return envelope->predecessors; };
 	Pass *getPass(PassEnvelope *env) { return env->pass; };

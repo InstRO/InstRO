@@ -8,7 +8,7 @@ namespace Rose {
 namespace Adapter {
 
 void RoseConstructPrinter::execute() {
-	InstRO::InfracstructureInterface::ConstructSetCompilerInterface cs(inputPass->getOutput());
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(inputPass->getOutput());
 	std::cout << "ConstructSet contains " << cs.size() << " constructs:" << std::endl;
 
 	unsigned long count = 0;

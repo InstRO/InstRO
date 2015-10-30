@@ -17,7 +17,7 @@ class Construct;
 class ConstructSet;
 }
 
-namespace InfracstructureInterface {
+namespace InfrastructureInterface {
 class ConstructSetCompilerInterface {
  protected:
 	Core::ConstructSet* csPtr;
@@ -59,11 +59,6 @@ class ReadOnlyConstructSetCompilerInterface {
 }	// namespace InfracstructureInterface
 
 namespace Core {
-
-/*
-typedef enum ContstructTraitEnum {...
-} ConstructTraitType;
-*/
 
 enum class ConstructTraitType {
 	CTNoTraits = 0,	// TODO this should no longer be necessary?
@@ -151,11 +146,6 @@ class ConstructTrait {
 	}
 	ConstructTrait() = delete;
 
-	/*	template <class... TraitList>
-		ChannelConfiguration(Pass *p1, PassList... passes) {
-			inputChannelPasses.insert(inputChannelPasses.begin(), { p1, passes... });
-		}*/
-
 	template <class... TraitList>
 	ConstructTrait(TraitList... traits) {
 		cts.insert({traits...});
@@ -236,8 +226,8 @@ class Construct {
  * are contained.
  */
 class ConstructSet {
-	friend class InstRO::InfracstructureInterface::ConstructSetCompilerInterface;
-	friend class InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface;
+	friend class InstRO::InfrastructureInterface::ConstructSetCompilerInterface;
+	friend class InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface;
 
  public:
 	ConstructSet(){};
@@ -279,8 +269,6 @@ class ConstructSet {
 	virtual bool intersects(const ConstructSet&) const;
 
 	virtual std::vector<ConstructSet> split() const;
-	// CI: I would like to have s.th. like a begin() and end() returning an iterator of constructset containing individual
-	// constructs
 
 	virtual std::string toString() const {
         std::string str;

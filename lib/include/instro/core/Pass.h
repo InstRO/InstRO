@@ -13,7 +13,6 @@
 #include "instro/core/PassImplementation.h"
 
 namespace InstRO {
-/* PassFactory: Interface for the mandatory InstRO Passes. */
 namespace PassManagement {
 class PassManager;
 }
@@ -66,38 +65,10 @@ class Pass {
 		inputOverride[from] = sharedSet;
 	}
 
-	// 2015-06-19 - Deprecated:	void releaseOutput();
-
-	// CI: Enable Input is called externally to indicate, that  the input passes
-	// have beend processed and that the current pass can now use the
-	// getInput(Pass*) to obtain the construct sets of its predecessors
-	//	void setInputEnabled() { inputReady = true; };
-	// CI: Disable Input is called externally to indicate, that the input passes
-	// have cleared their internal state AND their output construct set such that
-	// the
-	//     getInput(Pass*) does not provide a vaild construct set. The provided
-	//     construct set may no longer be used as it could have been deallocated
-	//	void setInputDisabled() { inputReady = false; };
-	// CI: queryFunction to determin, if the input is enabled
-	//	bool isInputEnabled() { return true; };
-	//	bool isOutputEnabled() { return passExecuted && !passOutputReleased; }
-
-	// Info Functions:
-	//	bool providesOutput() { return passProvidesOutputFlag; }
-	//	bool requiresInput() { return passRequiresInputFlag; }
-	//	void setProvidesOutput(bool value = true) { passProvidesOutputFlag = value; };
-	//	void setRequiresInput(bool value = true) { passRequiresInputFlag = value; };
-
 	// This allows for passes to have a unique name defined by the PassFactory. I.e. if the pass is used in different
 	// instances
 	virtual std::string passName() { return passNameString; };
 	void setPassName(std::string passName) { passNameString = passName; };
-
-	//	void setOutputLevel(Core::ConstructLevelType level) { outputLevel = level; };
-	//	Core::ConstructLevelType getOutputLevel() { return outputLevel; };
-
-	// Deprecated|void registerInputPass(Pass *pass, Core::ConstructLevelType level) {		inputPasses.push_back(pass);
-	// setInputLevelRequirement(pass, level);	}
 
 	std::vector<Pass *> const getInputPasses() { return passImplementation->getChannelConfig().getPasses(); };
 	Core::ConstructTraitType getMinInputLevelRequirement(Pass *pass) {
@@ -106,7 +77,6 @@ class Pass {
 	Core::ConstructTraitType getMaxInputLevelRequirement(Pass *pass) {
 		return passImplementation->getChannelConfig().getMaxConstructLevel(pass);
 	};
-	// Deprecated| void setInputLevelRequirement(Pass *pass, Core::ConstructLevelType level) { inputRequiredLevels[pass] =
 	// level; }
  protected:
 	// Get the number of altered, invalidated or changed constructs. We expect the next higher construct that dominates
@@ -118,9 +88,6 @@ class Pass {
 	// These flags are solely used to ensure proper sequences of initialization, execution and finalization
 	bool passInitialized, passExecuted, passFinalized;
 
-	// bool passRequiresInputFlag, passProvidesOutputFlag;
-	// bool passInitialized, passExecuted, passFinalize, passOutputReleased;
-	// bool inputReady;
 	std::string passNameString;
 
 	// A Pointer to the compiler-specific implementation
