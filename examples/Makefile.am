@@ -16,11 +16,12 @@ bin_PROGRAMS=ExampleInstrumentor
 
 if USEROSE
 bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter
-endif
 
 if HAVERAPIDJSON
 SUBDIRS= ConfigurationLoader
 endif
+
+endif #USEROSE
 
 
 RoseInstrumentor_SOURCES = \
@@ -46,11 +47,12 @@ bin_PROGRAMS=ExampleInstrumentor
 
 if USEROSE
 bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter
-endif
 
 if HAVERAPIDJSON
 SUBDIRS= ConfigurationLoader
 endif
+
+endif #USEROSE
 
 
 RoseInstrumentor_SOURCES = \
