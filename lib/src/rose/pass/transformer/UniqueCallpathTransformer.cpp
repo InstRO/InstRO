@@ -57,7 +57,7 @@ InstRO::Core::ChannelConfiguration UniqueCallpathTransformer::createChannelConfi
 }
 
 UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::retrieveInputNodes(InstRO::Pass *pass) {
-	InstRO::InfracstructureInterface::ConstructSetCompilerInterface cs(pass->getOutput());
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(pass->getOutput());
 	NodeSet nodes;
 	nodes.reserve(cs.size());
 	for (auto construct : cs) {
@@ -135,7 +135,7 @@ UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::getPredecessorFunc
 
 SgFunctionDeclaration *UniqueCallpathTransformer::getFunDeclFromNode(ExtendedCallGraphNode *node) {
 	ConstructSet cs = node->getAssociatedConstructSet();
-	InstRO::InfracstructureInterface::ConstructSetCompilerInterface csci(&cs);
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci(&cs);
 	for (auto construct : csci) {
 		auto rc = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
 		if (SgFunctionDefinition *def = isSgFunctionDefinition(rc->getNode())) {
@@ -331,7 +331,7 @@ std::string UniqueCallpathTransformer::generateCloneName(SgFunctionDeclaration *
 	return callee->get_name().getString() + "_ucp_" + caller->get_name().getString();
 }
 
-void UniqueCallpathTransformer::addNodeToCS(InstRO::InfracstructureInterface::ConstructSetCompilerInterface &csci,
+void UniqueCallpathTransformer::addNodeToCS(InstRO::InfrastructureInterface::ConstructSetCompilerInterface &csci,
 																						SgNode *node) {
 	csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
 }
@@ -380,8 +380,8 @@ void UniqueCallpathTransformer::duplicate(ExtendedCallGraphNode *node, NodeFunct
 		// remember the duplicate for successors of the node which might have to be duplicated
 		duplicatedNodes.insert(std::make_pair(node, clonedFunction));
 
-		InstRO::InfracstructureInterface::ConstructSetCompilerInterface output(&outputCS);
-		InstRO::InfracstructureInterface::ConstructSetCompilerInterface collisions(getCollisionSet());
+		InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(&outputCS);
+		InstRO::InfrastructureInterface::ConstructSetCompilerInterface collisions(getCollisionSet());
 		// add the duplicate to the output of the transformer and its files scope to the collision set
 		addNodeToCS(output, clonedFunction->get_definition());
 		addNodeToCS(collisions, SageInterface::getEnclosingFileNode(clonedFunction));

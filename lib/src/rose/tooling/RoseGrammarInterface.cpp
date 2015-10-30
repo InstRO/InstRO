@@ -12,7 +12,7 @@ std::unique_ptr<InstRO::Core::ConstructSet> RoseGrammarInterface::getConstructsB
 		const InstRO::Core::ConstructTraitType constructClass) {
 
 	std::unique_ptr<InstRO::Core::ConstructSet> result = std::make_unique<InstRO::Core::ConstructSet>();
-	InstRO::InfracstructureInterface::ConstructSetCompilerInterface csci(result.get());
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci(result.get());
 
 	for (auto sgNode : SageInterface::querySubTree<SgNode>(proj, V_SgNode)) {
 		if (InstRO::Rose::Core::RoseConstructLevelPredicates::ConstructPredicate()(sgNode)) {

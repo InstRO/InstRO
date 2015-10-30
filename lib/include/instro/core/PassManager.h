@@ -12,21 +12,17 @@ class ConstructSet;
 namespace PassManagement {
 
 class PassEnvelope {
-	//	friend class PassManager;
 	friend class SimplePassManager;
 
  public:
 	PassEnvelope(Pass *newPass) {
 		pass = newPass;
 		existingOuputDependency = false;
-		//			successor=NULL;
 	}
 
  protected:
 	bool existingOuputDependency;
-	//		bool existingInputDependency;
 	Pass *pass;
-	// Pass * successor;
 	std::vector<Pass *> predecessors;
 };
 
@@ -43,19 +39,11 @@ class PassManager {
 	// Enable the Pass Manager to query the pass for its dependencies
 	virtual void registerPass(Pass *currentPass) = 0;
 	virtual int execute() = 0;
-	//		virtual bool usesInput(Pass * pass){hasInputDependencies;
-	// virtual bool isInput(Pass * pass)=0;
 	virtual bool hasOutputDependencies(Pass *) = 0;
 	virtual bool hasInputDependencies(Pass *) = 0;
 	// To allow explicit sequencing the user can use this call to establish an explicit before-after relationship between passes.
 	// This sequencing is overruled, by the input-dependencies.
 	virtual void setDependence(Pass * predecessor, Pass * pass) = 0;
- protected:
-	// FIXME Why is that here?
-	Pass *pass;
-	// Pass * successor;
-	// FIXME Why is that here?
-	std::vector<Pass *> predeciessors;
 
 };
 

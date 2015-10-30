@@ -14,7 +14,7 @@ namespace Adapter {
 	}
 
 void RoseStrategyBasedAdapter::execute() {
-	auto rocsci = InstRO::InfracstructureInterface::ReadOnlyConstructSetCompilerInterface(input->getOutput());
+	auto rocsci = InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface(input->getOutput());
 	for (auto construct = rocsci.cbegin(); construct != rocsci.cend(); construct++)
 	{
 		auto rC= isRoseConstruct(*construct);
@@ -23,8 +23,8 @@ void RoseStrategyBasedAdapter::execute() {
 		for (i = strategies.begin(); i != strategies.end(); ++i) {
 			if (i->second->isImplementedFor(rC->getNode())) {
 				i->second->applyInstrumentationFor(rC->getNode());
-				InstRO::InfracstructureInterface::ConstructSetCompilerInterface(getCollisionSet()).put(rC);
-				InstRO::InfracstructureInterface::ConstructSetCompilerInterface(&outputCS).put(rC);
+				InstRO::InfrastructureInterface::ConstructSetCompilerInterface(getCollisionSet()).put(rC);
+				InstRO::InfrastructureInterface::ConstructSetCompilerInterface(&outputCS).put(rC);
 				// optional: break to avoid multiple strategies on a single node
 			}
 		}

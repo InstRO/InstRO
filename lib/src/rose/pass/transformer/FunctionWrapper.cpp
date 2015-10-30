@@ -91,7 +91,7 @@ InstRO::Core::ChannelConfiguration FunctionWrapper::createChannelConfig(InstRO::
 }
 
 FunctionWrapper::RoseNodeSet FunctionWrapper::retrieveNodes(InstRO::Pass *pass) {
-	InstRO::InfracstructureInterface::ConstructSetCompilerInterface cs(pass->getOutput());
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(pass->getOutput());
 	RoseNodeSet nodes;
 	nodes.reserve(cs.size());
 
@@ -217,7 +217,7 @@ void FunctionWrapper::wrapFunction(SgFunctionDeclaration *fDecl, const RoseNodeL
 
 	// add the created wrapper, renamed function calls and the definition (if it has been renamed) to the output of this
 	// pass
-	InstRO::InfracstructureInterface::ConstructSetCompilerInterface output(&outputCS);
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(&outputCS);
 	auto &constructProvider = InstRO::Rose::Core::RoseConstructProvider::getInstance();
 	output.put(constructProvider.getConstruct(wrapperDecl->get_definition()));
 	for (auto *funCall : funcRenamer.getFoundFunctionCalls()) {
