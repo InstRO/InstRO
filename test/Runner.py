@@ -82,18 +82,20 @@ def buildWithClang(arguments, baseDir):
 def configureAndBuildFlavor(arguments):
     baseDir = os.getcwd()[0:os.getcwd().rfind('/')]
     tempDirectory = createAndCDToTempDir()
-    # We want to check whether we have to build using ROSE, Clang, and RapidJson
-    if arguments.boost == None:
-        raise Exception("no boost path specified")
+    try:
+        # We want to check whether we have to build using ROSE, Clang, and RapidJson
+        if arguments.boost == None:
+            raise Exception("no boost path specified")
 
-    if arguments.rosepath != None:
-        buildWithRose(arguments, baseDir)
+        if arguments.rosepath != None:
+            buildWithRose(arguments, baseDir)
 
-    if arguments.llvmsrc != None and arguments.llvminstall != None:
-        buildWithClang(arguments, baseDir)
+        if arguments.llvmsrc != None and arguments.llvminstall != None:
+            buildWithClang(arguments, baseDir)
 
-    os.chdir(baseDir)
-    os.rmdir(tempDirectory)
+    finally:
+        os.chdir(baseDir)
+        os.rmdir(tempDirectory)
 
 args = cmdParser.parse_args()
 configureAndBuildFlavor(args)
