@@ -80,11 +80,27 @@ def buildWithClang(arguments, baseDir):
         
     subprocess.call("rm -rf *", shell=True)
 
+def checkArguments(arguments):
+    if arguments.boost != None and os.path.isdir(arguments.boost) == False:
+        raise Exception("Provided Boost path isn't an accesible directory.")
+
+    if arguments.rosepath != None and os.path.isdir(arguments.rosepath) == False:
+        raise Exception("Provided ROSE path isn't an accessible directory.")
+
+    if arguments.llvmsrc != None and os.path.isdir(arguments.llvmsrc) == False:
+        raise Exception("Provided LLVM source directory isn't accessible.")
+
+    if arguments.llvminstall != None and os.path.isdir(arguments.llvminstall) == False:
+        raise Exception("Provided LLVM install directory isn't accessible.")
+
+    if arguments.rapidjson != None and os.path.isdir(arguments.rapidjson) == False:
+        raise Exception("Provided rapidjson directory is not a directory.")
 
 # We get the parsed commandline arguments and build the flavors accordingly
 def configureAndBuildFlavor(arguments):
     baseDir = os.getcwd()[0:os.getcwd().rfind('/')]
     tempDirectory = createAndCDToTempDir()
+    checkArguments(arguments)
     try:
         # We want to check whether we have to build using ROSE, Clang, and RapidJson
         if arguments.boost == None:
