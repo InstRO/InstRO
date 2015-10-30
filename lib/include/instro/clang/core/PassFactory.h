@@ -7,9 +7,6 @@
 #include "instro/clang/core/Pass.h"
 #include "instro/clang/core/ClangPassExecuter.h"
 
-/*
- * I guess we would need to know all the passes...
- */
 #include "instro/clang/selector/FunctionDefinitionSelector.h"
 #include "instro/clang/selector/BlackWhitelistSelector.h"
 #include "instro/clang/selector/BooleanCompoundSelector.h"
@@ -31,16 +28,59 @@ class PassFactory : public InstRO::PassFactory {
 	Pass* createBlackAndWhiteListSelector(std::vector<std::string> blacklist, std::vector<std::string> whitelist);
 	Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
 	Pass* createFunctionDefinitionSelector();
-	Pass* createProgramEntrySelector(){};
 	Pass* createCygProfileAdapter(InstRO::Pass* input);
 	Pass* createLLVMInputAdapter(InstRO::Pass* input);
 
-	/**
-	 * Introduced in the base class. So I had to provide some implementation..
-	 */
-	//	virtual InstRO::Pass* createFunctionSelector() override { return nullptr; };
-	//	virtual InstRO::Pass* createGPIAdapter(InstRO::Pass* input) override { return nullptr; };
-	//	virtual InstRO::Pass* createNameBasedSelector(std::vector<std::string> matchList) override { return nullptr; };
+	Pass* createProgramEntrySelector() {
+		// TODO Implement
+		return nullptr;
+	};
+
+	Pass* createBooleanAndSelector(Pass* passA, Pass* passB) override {
+		// TODO Implmenent
+		return nullptr;
+	};
+
+	Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList) override {
+		// TODO Implement
+		return nullptr;
+	}
+
+	Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass) override {
+		// TODO Implement
+		return nullptr;
+	}
+
+	Pass* createCallpathSelector(Pass* passA, Pass* passB) override {
+		// TODO Implement
+		return nullptr;
+	}
+
+	Pass* createAggregationStatementCountSelector(int threshold) override {
+		// TODO Implement
+		return nullptr;
+	}
+
+	Pass* createConstructRaisingElevator(Pass* pass, InstRO::Core::ConstructTraitType level) override {
+		// TODO Implement
+		return nullptr;
+	}
+
+	Pass* createConstructLoweringElevator(Pass* pass, InstRO::Core::ConstructTraitType level) override {
+		// TODO Implement
+		return nullptr;
+	}
+
+	Pass* createConstructCroppingElevator(Pass* pass, InstRO::Core::ConstructTraitType minLevel,
+																				InstRO::Core::ConstructTraitType maxLevel) override {
+		// TODO Implement
+		return nullptr;
+	}
+
+	Pass* createInstROMeasurementInterfaceAdapter(Pass* input) override {
+		// TODO Implement
+		return nullptr;
+	}
 
 	/* We need this in order to lazily initialize the AST Context within the passes */
 	void finishConstruction(clang::ASTContext* context) {
