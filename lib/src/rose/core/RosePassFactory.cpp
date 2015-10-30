@@ -18,29 +18,6 @@
 namespace InstRO {
 namespace Rose {
 
-InstRO::Pass* RosePassFactory::createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass* pass) {
-	auto initializer = std::make_shared<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePInitializer>();
-	std::unique_ptr<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::GenericInstrumentationStrategy> my_strategy =
-			std::make_unique<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePStatementWrapperStrategy>(initializer);
-	std::unique_ptr<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::GenericInstrumentationStrategy> my_strategy2 =
-			std::make_unique<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePLoopIterationStrategy>(initializer);
-	std::unique_ptr<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::GenericInstrumentationStrategy> my_strategy3 =
-			std::make_unique<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePFunctionScopeStrategy>(initializer);
-
-	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseStrategyBasedAdapter(
-			pass, std::move(my_strategy), std::move(my_strategy2), std::move(my_strategy3)));
-	newPass->setPassName("InstRO::Rose::Adapter::MatthiasZoellnerLoopInstrumentationAdapter");
-	passManager->registerPass(newPass);
-	return newPass;
-}
-
-InstRO::Pass* RosePassFactory::createConstructHierarchyASTDotGenerator(InstRO::Pass* pass, std::string fileName) {
-	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructHierarchyASTDotGenerator(pass, fileName));
-	newPass->setPassName("InstRO::Rose::Adapter::ConstructHierarchyASTDotGenerator.h");
-	passManager->registerPass(newPass);
-	return newPass;
-}
-
 Pass* RosePassFactory::createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) {
 	Pass* newPass = new Pass(new InstRO::Selector::ConstructRaisingElevator(pass, level));
 	newPass->setPassName("InstRO::Selector::ConstructRaisingElevator");
@@ -61,6 +38,11 @@ Pass* RosePassFactory::createConstructCroppingElevator(InstRO::Pass* pass, InstR
 	newPass->setPassName("InstRO::Selector::ConstructCroppingElevator");
 	passManager->registerPass(newPass);
 	return newPass;
+}
+
+Pass* RosePassFactory::createInstROMeasurementInterfaceAdapter(InstRO::Pass* input) {
+	// TODO implement me
+	throw std::string("Not yet Implemented");
 }
 
 Pass* RosePassFactory::createConstructPrinter(InstRO::Pass* pass) {
@@ -89,40 +71,17 @@ Pass* RosePassFactory::createFunctionBlackAndWhiteListSelector(std::vector<std::
 	return compountPass;
 }
 
-InstRO::Pass* createFunctionBlackAndWhiteListFilter(std::vector<std::string> rules, Pass* inputPasses) {
-	throw std::string("Not yet Implemented");
-	return nullptr;
-}
-
-/*
-Pass* RosePassFactory::createBlackNWhiteSelector(std::string string) {
-	std::vector<std::string> filters;
-	filters.push_back(string);
-	return createBlackAndWhiteListSelector(filters);
-};*/
-
-// CI: Todo
 Pass* RosePassFactory::createBooleanOrSelector(Pass* inputA, Pass* inputB) {
 	Pass* newPass =
 			new InstRO::Pass(new Rose::Selector::CompoundSelector(inputA, inputB, Selector::CompoundSelector::CO_Or));
 	newPass->setPassName("InstRO::Rose::BooleanOrSelector");
 	passManager->registerPass(newPass);
-	/*		Pass * compoundPass=new Pass(new Selectors::CompoundSelector(getPass(inputA),getPass(inputB)));
-	compoundPass->setPassName("ROSE_BooleanOr");
-	compoundPass->setRequiresInput();
-	compoundPass->setProvidesOutput();
-	compoundPass->setOutputLevel(Core::ConstructLevelMin);
-	compoundPass->registerInputPass(inputA,Core::ConstructLevelMin);
-	compoundPass->registerInputPass(inputB,Core::ConstructLevelMin);
-	passManager->registerPass(compoundPass);
-	return compoundPass;*/
 	return newPass;
 };
 
-// CI: Todo
 InstRO::Pass* RosePassFactory::createBooleanAndSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) {
+	// TODO implement me
 	throw std::string("Not yet Implemented");
-	return NULL;
 }
 
 Pass* RosePassFactory::createProgramEntrySelector() {
@@ -132,53 +91,14 @@ Pass* RosePassFactory::createProgramEntrySelector() {
 	return newPass;
 };
 
-Pass* RosePassFactory::createGenericAdapter(Pass* functionSelection, Pass* loopSelection, Pass* branchingSelection) {
-	// RosePass * roseFunctionSelectionPass,* roseLoopSelectionPass,*roseBranchingSelectionPass;
-	/*
-	Adapter::GenericAdapter* roseAdapter =
-	new Adapters::GenericAdapter(functionSelection, loopSelection, branchingSelection);
-	Pass* newPass = new Pass(roseAdapter);
-	newPass->setPassName("InstRO::Rose::GenericAdapter");
-	passManager->registerPass(newPass);*/
-	throw std::string("Not yet Implemented");
-	return nullptr;
-};
-
-InstRO::Pass* RosePassFactory::createGenericAdapter(GenericAdapterConfiguration gac) {
-	return createGenericAdapter(gac.getFunctionSelector(), gac.getLoopConstructSelector(), gac.getLoopBodySelector());
-};
-
-InstRO::Pass* RosePassFactory::createIdentifyerSelector(std::vector<std::string> matchList) {
+InstRO::Pass* RosePassFactory::createIdentifierMatcherSelector(std::vector<std::string> matchList) {
 	Pass* newPass = new Pass(new InstRO::Selector::IdentifyerSelector(matchList));
 	newPass->setPassName("InstRO::Rose::IdentifyerSelector");
 	passManager->registerPass(newPass);
 	return newPass;
 };
 
-InstRO::Pass* RosePassFactory::createIdentifyerFilter(std::vector<std::string> matchList, InstRO::Pass* filterInput) {
-	Pass* newPass = new Pass(new InstRO::Selector::IdentifyerSelector(matchList, filterInput));
-	newPass->setPassName("InstRO::Rose::IdentifyerFilter");
-	passManager->registerPass(newPass);
-	return newPass;
-};
-
-InstRO::Pass* RosePassFactory::createFunctionSelector() {
-	throw std::string("Not yet Implemented");
-	return NULL;
-}
-
-InstRO::Pass* RosePassFactory::createGPIAdapter(InstRO::Pass* input) {
-	throw std::string("Not yet Implemented");
-	return NULL;
-}
-
-InstRO::Pass* RosePassFactory::createFunctionBlackAndWhiteListFilter(std::vector<std::string> matchList,
-																																		 InstRO::Pass* inputB) {
-	throw std::string("Not yet Implemented");
-	return NULL;
-}
-
-InstRO::Pass* RosePassFactory::createCallPathSelector(InstRO::Pass* callee, InstRO::Pass* caller) {
+InstRO::Pass* RosePassFactory::createCallpathSelector(InstRO::Pass* callee, InstRO::Pass* caller) {
 	InstRO::Pass* newPass = new InstRO::Pass(new InstRO::Selectors::CallPathSelector(callee, caller));
 	newPass->setPassName("InstRO::Selector::CallPathSelector");
 	passManager->registerPass(newPass);
@@ -192,22 +112,38 @@ InstRO::Pass* RosePassFactory::createConstructClassSelector(InstRO::Core::Constr
 	return newPass;
 }
 
-InstRO::Pass* RosePassFactory::createOpenMPSelector() {
+InstRO::Pass* RosePassFactory::createAggregationStatementCountSelector(int threshold) {
+	// TODO implement me
 	throw std::string("Not yet Implemented");
-	return NULL;
 }
-InstRO::Pass* RosePassFactory::createOpenMPFilter(InstRO::Pass* input) {
-	throw std::string("Not yet Implemented");
-	return NULL;
+
+
+/* ROSE ONLY */
+
+InstRO::Pass* RosePassFactory::createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass* pass) {
+	auto initializer = std::make_shared<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePInitializer>();
+	std::unique_ptr<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::GenericInstrumentationStrategy> my_strategy =
+			std::make_unique<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePStatementWrapperStrategy>(initializer);
+	std::unique_ptr<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::GenericInstrumentationStrategy> my_strategy2 =
+			std::make_unique<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePLoopIterationStrategy>(initializer);
+	std::unique_ptr<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::GenericInstrumentationStrategy> my_strategy3 =
+			std::make_unique<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePFunctionScopeStrategy>(initializer);
+
+	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseStrategyBasedAdapter(
+			pass, std::move(my_strategy), std::move(my_strategy2), std::move(my_strategy3)));
+	newPass->setPassName("InstRO::Rose::Adapter::MatthiasZoellnerLoopInstrumentationAdapter");
+	passManager->registerPass(newPass);
+	return newPass;
 }
-InstRO::Pass* RosePassFactory::createOpenMPOpariCannonizer(InstRO::Pass* input) {
-	throw std::string("Not yet Implemented");
-	return NULL;
+
+InstRO::Pass* RosePassFactory::createConstructHierarchyASTDotGenerator(InstRO::Pass* pass, std::string fileName) {
+	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructHierarchyASTDotGenerator(pass, fileName));
+	newPass->setPassName("InstRO::Rose::Adapter::ConstructHierarchyASTDotGenerator.h");
+	passManager->registerPass(newPass);
+	return newPass;
 }
-InstRO::Pass* RosePassFactory::createOPARIAdapter(InstRO::Pass* input) {
-	throw std::string("Not yet Implemented");
-	return NULL;
-}
+
+
 
 InstRO::Pass* RosePassFactory::createUniqueCallpathTransformer(InstRO::Pass* input) {
 	InstRO::Pass* newPass = new InstRO::Pass(new Transformer::UniqueCallpathTransformer(input));
@@ -223,6 +159,7 @@ InstRO::Pass* RosePassFactory::createUniqueCallpathTransformer(Pass* input, Pass
 	return newPass;
 }
 
+
 InstRO::Pass* RosePassFactory::createFunctionWrapper(
 		InstRO::Pass* input, InstRO::Rose::Transformer::FunctionWrapper::NameTransformer nameTransformer) {
 	InstRO::Pass* newPass = new InstRO::Pass(new Transformer::FunctionWrapper(input, nameTransformer));
@@ -230,8 +167,7 @@ InstRO::Pass* RosePassFactory::createFunctionWrapper(
 	passManager->registerPass(newPass);
 	return newPass;
 }
-InstRO::Pass* RosePassFactory::createFunctionWrapper(
-		InstRO::Pass* input, InstRO::Pass* renaming,
+InstRO::Pass* RosePassFactory::createFunctionWrapper(InstRO::Pass* input, InstRO::Pass* renaming,
 		InstRO::Rose::Transformer::FunctionWrapper::NameTransformer nameTransformer, const std::string& definitionPrefix,
 		const std::string& wrapperPrefix) {
 	InstRO::Pass* newPass = new InstRO::Pass(
@@ -257,6 +193,7 @@ InstRO::Pass* RosePassFactory::createMPIFunctionWrapper(InstRO::Pass* input, Ins
 	passManager->registerPass(newPass);
 	return newPass;
 }
+
 
 }	// Rose
 }	// InstRO
