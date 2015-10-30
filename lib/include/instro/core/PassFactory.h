@@ -17,8 +17,6 @@ class PassFactory {
 	virtual ~PassFactory() {}
 
 	virtual Pass* createProgramEntrySelector() = 0;
-	virtual Pass* createCygProfileAdapter(Pass* input) = 0;
-
 	/*
 	 * According to our minimal InstRO compliance file this is the list of components we need to provide.
 	 */
