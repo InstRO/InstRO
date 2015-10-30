@@ -1,6 +1,7 @@
 import subprocess
 import os
 import tempfile
+import shutil
 import argparse
 
 # The InstRO test runner should do:
@@ -33,7 +34,7 @@ def buildWithConfigureLine(configLine, baseDir):
     print(os.getcwd())
     retCode = subprocess.call("make -j8", shell=True)
     if retCode != 0:
-        raise Exception("Building failed with err code " + retCode)
+        raise Exception("Building failed with err code " + str(retCode))
 
 def buildWithRose(arguments, baseDir):
     numBuilds = 1
@@ -47,6 +48,7 @@ def buildWithRose(arguments, baseDir):
         configureLine = "configure "
         configureLine += "--with-rose=" + arguments.rosepath + " "
         configureLine += "--with-boost=" + arguments.boost + " "
+        configureLine += "--enable-examples "
 
         if arguments.rapidjson != None and i == 1:
             configureLine += "--with-rapidjson=" + arguments.rapidjson + " "
@@ -69,6 +71,7 @@ def buildWithClang(arguments, baseDir):
         configureLine += "--with-llvm-src=" + arguments.llvmsrc + " "
         configureLine += "--with-llvm-install=" + arguments.llvminstall + " "
         configureLine += "--with-boost=" + arguments.boost + " "
+        configureLine += "--enable-examples "
 
         if arguments.rapidjson != None and i == 1:
             configureLine += "--with-rapidjson=" + arguments.rapidjson + " "
@@ -95,7 +98,7 @@ def configureAndBuildFlavor(arguments):
 
     finally:
         os.chdir(baseDir)
-        os.rmdir(tempDirectory)
+        shutil.rmtree(tempDirectory)
 
 args = cmdParser.parse_args()
 configureAndBuildFlavor(args)
