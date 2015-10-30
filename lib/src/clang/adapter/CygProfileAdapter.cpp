@@ -10,15 +10,12 @@ InstRO::Clang::CygProfileAdapter::CygProfileAdapter(InstRO::Core::ChannelConfigu
 
 void InstRO::Clang::CygProfileAdapter::init() {}
 
-// void InstRO::Clang::CygProfileAdapter::execute() { executer->execute(this); }
-
 bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *decl) {
 	if (context == nullptr) {
 		std::cerr << "Context NULL, stopping adapter pass." << std::endl;
 		return false;
 	}
 	// The context is in ClangPassImplementation
-	// FIXME Is this now a pointer to pointer?
 	sm = &context->getSourceManager();
 
 	// since we are in a Clang Adapter, we cast. I KNOW THIS IS UGLY
@@ -84,9 +81,6 @@ bool InstRO::Clang::CygProfileAdapter::isOverloadedFunction(clang::FunctionDecl 
 		if (testDecl != nullptr) {
 			// the found declaration actually is a function declaration
 			if (decl->getDeclName() != testDecl->getDeclName()) {
-				//				std::cout << "decl: " << decl->getNameAsString() << " testDecl: " << testDecl->getNameAsString() <<
-				// std::endl;
-				//				std::cout << "Found a different name" << std::endl;
 				continue;
 			}
 			clang::QualType qt = testDecl->getType();
@@ -98,13 +92,12 @@ bool InstRO::Clang::CygProfileAdapter::isOverloadedFunction(clang::FunctionDecl 
 				const clang::Type *dtypePtr = dqt.getTypePtr();
 				const clang::FunctionType *dfType = llvm::dyn_cast<clang::FunctionType>(dtypePtr);
 				if (dfType && fType == dfType) {
-					//					std::cout << "Function Type pointer were equal." << std::endl;
 				} else {
-					//					std::cout << "Function type were different" << std::endl;
 					overloadCount++;
 				}
 			}
 		}
+		// TODO Move this to use the logger.
 		if (overloadCount > 0) {
 			std::cout << "The result " << res->getNameAsString() << " was an overload" << std::endl;
 		}
@@ -137,7 +130,6 @@ void InstRO::Clang::CygProfileAdapter::instrumentFunctionBody(clang::CompoundStm
 	instrumentReturnStatements(body, entryStr, exitStr);
 
 	// We add the calls to our entry functions
-	//	clang::Stmt *startStmt = body;	//*(fBody->body().begin());
 	clang::tooling::Replacement repMent(*sm, body->getLBracLoc(), 1, std::string("{" + entryStr));
 	replacements.insert(repMent);
 }
@@ -241,6 +233,7 @@ std::string InstRO::Clang::CygProfileAdapter::generateCallTo(std::string fName, 
 	snippet += newDecl;
 	snippet += " , 0);";
 
+	// TODO If at all move to logger
 	std::cout << "Cyg Profile call: " << snippet << std::endl;
 
 	return snippet;
@@ -253,6 +246,7 @@ std::string InstRO::Clang::CygProfileAdapter::generateCallTo(std::string fName, 
 	snippet += d->getNameInfo().getName().getAsString();
 	snippet += ", 0);";
 
+	// TODO If at all move to logger
 	std::cout << "Cyg Profile call: " << snippet << std::endl;
 
 	return snippet;

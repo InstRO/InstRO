@@ -21,11 +21,6 @@ class InstROASTConsumer : public clang::ASTConsumer {
  public:
 	/* Pass Manager knows when to run which pass */
 	InstROASTConsumer(InstRO::PassManagement::PassManager *passManager, InstRO::Clang::PassFactory *fac);
-#if 0
-	InstROASTConsumer(InstRO::PassManagement::PassManager *passManager,
-										InstRO::Clang::PassManagement::ClangPassExecuter *vExecuter,
-										InstRO::Clang::PassManagement::ClangPassExecuter *nvExecuter);
-#endif
 
 	/* Gets invoked per Translation Unit. Runs all passes, registered in
 	 * PassManager on the TranslationUnit */
@@ -36,10 +31,6 @@ class InstROASTConsumer : public clang::ASTConsumer {
 	// by the Instrumentor
 	InstRO::PassManagement::PassManager *passManager;
 	InstRO::Clang::PassFactory *factory;
-#if 0
-	InstRO::Clang::PassManagement::ClangPassExecuter *vExecuter;
-	InstRO::Clang::PassManagement::ClangPassExecuter *nvExecuter;
-#endif
 };
 }
 }
