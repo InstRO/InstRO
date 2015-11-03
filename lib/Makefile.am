@@ -263,12 +263,6 @@ libInstRO_clang_a_LDFLAGS=@CLANG_LIBS_LIST@ @LLVM_LDFLAGS@
 
 libInstRO_core_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
-## Manually crafted Clang stuff!
-# FIXME Figure out how this can be done using actually autotools
-ClangInstRO:
-	$(CXX) --verbose $(LLVM_CXXFLAGS_FLAGS) -I$(LLVM_SRC_INCLUDE_PATH) -I$(CLANG_SRC_INCLUDE_PATH) -I$(BOOST_INCLUDEDIR) $(AM_CPPFLAGS) $(top_srcdir)/lib/src/clang/Instrumentor.cpp libInstRO_clang.a libInstRO_core.a $(CLANG_LIBS_LIST) $(LLVM_LDFLAGS) -o $@
-
-
 if HAVERAPIDJSON
 libInstRO_core_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
 libInstRO_example_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
