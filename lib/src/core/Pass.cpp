@@ -1,40 +1,33 @@
 #include "instro/core/Pass.h"
+#include "instro/utility/exception.h"
+#include "instro/utility/Logger.h"
 
 void InstRO::Pass::initPass() {
 	if (!passInitialized && !passFinalized) {
 		passImplementation->init();
 		passInitialized = true;
-	} else
-#ifdef __EXCEPTIONS
-		throw std::string("Pass Initialized after Finalize! Not Supported!");
-#else
-		std::cerr << "Pass Initialized after Finalize! Not Supported!" << std::endl;
-#endif
+	} else {
+		raise_exception("Pass Initialized after Finalize. Not supported.");
+	}
 }
 
 void InstRO::Pass::executePass() {
 	assert(passImplementation);
-	std::cout << "InstRO::Pass::executePass:\t calling execute on PassImplementation" << std::endl;
-	if (passInitialized)
+	logIt(INFO) << "InstRO::Pass::executePass:\t calling execute on PassImplementation" << std::endl;
+	if (passInitialized) {
 		passImplementation->execute();
-	else
-#ifdef __EXCEPTIONS
-		throw std::string("Pass not Initialized!");
-#else
-		std::cerr << "Pass: Pass not initialized" << std::endl;
-#endif
+	} else {
+		raise_exception("Pass not initialized.");
+	}
 	passExecuted = true;
 }
 
 void InstRO::Pass::finalizePass() {
-	if (passInitialized && passExecuted)
+	if (passInitialized && passExecuted) {
 		passImplementation->finalize();
-	else
-#ifdef __EXCEPTIONS
-		throw std::string("Must Initialize Pass First!");
-#else
-		std::cerr << "Pass: Must Initialize Pass First" << std::endl;
-#endif
+	} else {
+		raise_exception("Must initialize pass first.");
+	}
 	passFinalized = true;
 	passInitialized = false;
 }
