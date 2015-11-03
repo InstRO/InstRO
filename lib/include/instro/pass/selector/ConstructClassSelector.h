@@ -21,15 +21,8 @@ class ConstructClassSelector : public InstRO::Core::PassImplementation {
 	void init() override {}
  	void execute() override;
  	void finalize() override {}
-	void releaseOutput() override {
-		output->clear();
-	}
-	InstRO::Core::ConstructSet *getOutput() override {
-		return output.get();
-	}
 
  private:
- 	std::unique_ptr<InstRO::Core::ConstructSet> output;
  	InstRO::Core::ConstructTraitType constructClass;
 };
 

@@ -94,16 +94,16 @@ class NamedConstructAccess {
 	// flawed. In principle, a single selection is sufficient.
 
 	// a) any userdefined symbols, e.g. variable names, function / method names, labels
-	virtual std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByIdentifyerName(Matcher &) = 0;
+	virtual InstRO::Core::ConstructSet getConstructsByIdentifyerName(Matcher &) = 0;
 	// b) contents of strings
-	virtual std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByUserTextStringMatch(Matcher &) = 0;
+	virtual InstRO::Core::ConstructSet getConstructsByUserTextStringMatch(Matcher &) = 0;
 	// c) raw source code. First all symbols, then the upward expressions, then the upward statement are matched. Last is
 	// the whole function matched.
-	virtual std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByCodeMatch(Matcher &) {
+	virtual InstRO::Core::ConstructSet getConstructsByCodeMatch(Matcher &) {
 #ifdef __EXCEPTIONS
 		throw std::string("Not Implemented");
 #endif
-		return std::unique_ptr<InstRO::Core::ConstructSet>(nullptr);
+		return InstRO::Core::ConstructSet();
 	}
 };
 }

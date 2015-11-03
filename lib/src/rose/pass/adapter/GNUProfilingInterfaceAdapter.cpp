@@ -9,7 +9,8 @@ namespace Adapter {
 
 void GNUProfilingInterfaceAdapter::execute() {
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(inputPass->getOutput());
-	outputCS = *inputPass->getOutput();
+
+	// TODO implement me
 }
 
 }	// InstRO

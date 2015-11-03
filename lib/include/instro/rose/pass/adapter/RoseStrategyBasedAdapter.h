@@ -25,7 +25,6 @@ namespace InstRO {
 
 			protected:
 				InstRO::Pass *input;
-				InstRO::Core::ConstructSet outputCS;
 				template<class... stratList> void ctorStrategyInserter(std::unique_ptr<InstRO
 						::Rose::Adapter::StrategyBasedAdapterSupport::GenericInstrumentationStrategy> && strat1, stratList&&... strategyArgs){
 					strategyUniqPtrs.push_back(std::move(strat1));
@@ -59,8 +58,6 @@ namespace InstRO {
 				void init(){};
 				void execute() override;
 				void finalize(){};
-				void releaseOutput() { outputCS.clear(); };
-				InstRO::Core::ConstructSet *getOutput() { return &outputCS; }
 			};
 		}
 	}

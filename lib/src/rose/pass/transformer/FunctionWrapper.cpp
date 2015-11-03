@@ -219,7 +219,7 @@ void FunctionWrapper::wrapFunction(SgFunctionDeclaration *fDecl, const RoseNodeL
 
 	// add the created wrapper, renamed function calls and the definition (if it has been renamed) to the output of this
 	// pass
-	InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(&outputCS);
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(&outputSet);
 	auto &constructProvider = InstRO::Rose::Core::RoseConstructProvider::getInstance();
 	output.put(constructProvider.getConstruct(wrapperDecl->get_definition()));
 	for (auto *funCall : funcRenamer.getFoundFunctionCalls()) {

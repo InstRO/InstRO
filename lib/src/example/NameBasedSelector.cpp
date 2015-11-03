@@ -17,15 +17,11 @@ void NameBasedSelector::execute() {
 	std::list<std::string> matchingRules(rules.begin(), rules.end());
 	Tooling::NamedConstructAccess::WildcardedStringMatcher *stringMatcher =
 			new ::InstRO::Tooling::NamedConstructAccess::WildcardedStringMatcher(matchingRules);
-	std::unique_ptr<InstRO::Core::ConstructSet> cs = nca->getConstructsByIdentifyerName(*stringMatcher);
-	output = *cs;
+	outputSet = nca->getConstructsByIdentifyerName(*stringMatcher);
 }
 
 void NameBasedSelector::finalize() {}
 
-void NameBasedSelector::releaseOutput() { output.clear(); }
-
-Core::ConstructSet *NameBasedSelector::getOutput() { return &output; }
 }
 }
 }

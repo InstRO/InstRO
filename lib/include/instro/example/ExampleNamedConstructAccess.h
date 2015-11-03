@@ -23,27 +23,27 @@ class ExampleNamedConstructAccess : public ::InstRO::Tooling::NamedConstructAcce
 		userTextStrings.insert("Hello World\n");
 	};
 
-	std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByIdentifyerName(
+	InstRO::Core::ConstructSet getConstructsByIdentifyerName(
 			::InstRO::Tooling::NamedConstructAccess::Matcher &matcher) override {
-		InstRO::Core::ConstructSet *cs = new InstRO::Core::ConstructSet();
-		InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci(cs);
+		InstRO::Core::ConstructSet cs;
+		InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci(&cs);
 		for (auto identifyer : namedConstructs) {
 			if (matcher.isMatch(identifyer))
 				csci.put(std::make_shared<InstRO::Example::Core::ExampleConstruct>(
 						InstRO::Example::Core::ExampleConstruct(InstRO::Core::ConstructTraitType::CTFunction, identifyer)));
 		}
-		return std::unique_ptr<InstRO::Core::ConstructSet>(cs);
+		return cs;
 	};
-	std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByUserTextStringMatch(
+	InstRO::Core::ConstructSet getConstructsByUserTextStringMatch(
 			::InstRO::Tooling::NamedConstructAccess::Matcher &matcher) override {
-		InstRO::Core::ConstructSet *cs = new InstRO::Core::ConstructSet();
-		InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci(cs);
+		InstRO::Core::ConstructSet cs;
+		InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci(&cs);
 		for (auto identifyer : userTextStrings) {
 			if (matcher.isMatch(identifyer))
 				csci.put(std::make_shared<InstRO::Example::Core::ExampleConstruct>(
 						InstRO::Example::Core::ExampleConstruct(InstRO::Core::ConstructTraitType::CTExpression, identifyer)));
 		}
-		return std::unique_ptr<InstRO::Core::ConstructSet>(cs);
+		return cs;
 	};
 };
 }

@@ -19,7 +19,6 @@ namespace Adapter {
 class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementation {
  protected:
 	InstRO::Pass *inputPass;
-	InstRO::Core::ConstructSet outputCS;
 	std::string fileName;
 	std::fstream outFile;
 
@@ -95,8 +94,6 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 		outFile << "}" << std::endl;
 	}
 	virtual void finalize() { outFile.close(); };
-	void releaseOutput() { outputCS.clear(); };
-	InstRO::Core::ConstructSet *getOutput() { return &outputCS; }
 };
 }
 }

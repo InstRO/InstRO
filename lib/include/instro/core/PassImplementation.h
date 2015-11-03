@@ -88,26 +88,26 @@ public:
 	virtual void init() = 0;
 	virtual void execute() = 0;
 	virtual void finalize() = 0;
-	virtual void releaseOutput() = 0;
 
+	virtual void releaseOutput() { outputSet.clear(); }
 	ChannelConfiguration getChannelConfig() { return channelConfig; }
-	virtual ConstructSet *getOutput() = 0;
-	ConstructSet *getInput(Pass *pId);
 
-	
+	virtual ConstructSet* getOutput() { return &outputSet; };
+	ConstructSet* getInput(Pass *pId);
 
 private:
 	ChannelConfiguration channelConfig;
 
 protected:
+	ConstructSet outputSet;
 	
 	ChannelConfiguration &getChannelCFG() { return channelConfig; }
 
 	// This set is used to track alterations to the AST and notify which nodes have been invalidated
 	ConstructSet collisionSet;
-	ConstructSet *getCollisionSet() { return &collisionSet; }
+	ConstructSet* getCollisionSet() { return &collisionSet; }
 public:
-	const ConstructSet *cgetCollisionSet() { return &collisionSet; };
+	const ConstructSet* cgetCollisionSet() { return &collisionSet; };
 
 };
 

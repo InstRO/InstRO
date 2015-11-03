@@ -13,8 +13,6 @@ class CallPathSelector : public InstRO::Core::PassImplementation {
 	virtual void init() override;
 	virtual void execute() override;
 	virtual void finalize() override;
-	virtual void releaseOutput() override;
-	virtual Core::ConstructSet *getOutput() override;
 
  protected:
 	// InstRO::Example::output;

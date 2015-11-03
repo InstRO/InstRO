@@ -6,7 +6,6 @@ namespace Example {
 class ExampleConstructPrinter : public ExamplePass {
  protected:
 	InstRO::Pass *inputPass;
-	InstRO::Core::ConstructSet outputCS;
 
  public:
 	ExampleConstructPrinter(InstRO::Pass *pass)
@@ -14,8 +13,6 @@ class ExampleConstructPrinter : public ExamplePass {
 	virtual void init(){};
 	virtual void execute() override;
 	virtual void finalize(){};
-	virtual void releaseOutput() { outputCS.clear(); };
-	virtual InstRO::Core::ConstructSet *getOutput() { return &outputCS; }
 };
 }
 }

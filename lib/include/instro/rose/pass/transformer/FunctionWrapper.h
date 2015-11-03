@@ -101,8 +101,6 @@ class FunctionWrapper : public RosePassImplementation {
 	virtual void init() override;
 	virtual void execute() override;
 	virtual void finalize() override{};
-	virtual void releaseOutput() override { outputCS.clear(); };
-	virtual InstRO::Core::ConstructSet *getOutput() override { return &outputCS; }
 
 	std::string getDefinitionPrefix() const;
 	void setDefinitionPrefix(const std::string &prefix);
@@ -138,8 +136,6 @@ class FunctionWrapper : public RosePassImplementation {
 
 	InstRO::Pass *inputPass;
 	InstRO::Pass *renamingPass;
-
-	InstRO::Core::ConstructSet outputCS;
 
 	typedef std::unordered_set<SgNode *> RoseNodeSet;
 	typedef std::vector<SgNode *> RoseNodeList;

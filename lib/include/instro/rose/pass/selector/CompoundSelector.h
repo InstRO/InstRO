@@ -12,8 +12,6 @@ namespace Rose {
 namespace Selector {
 
 class CompoundSelector : public InstRO::Rose::RosePassImplementation {
- protected:
-	std::unique_ptr<InstRO::Core::ConstructSet> passOutput;
 
  public:
 	typedef enum { CO_Or, CO_And, CO_XOr } CompoundOperationType;
@@ -24,8 +22,6 @@ class CompoundSelector : public InstRO::Rose::RosePassImplementation {
 	void init() override{};
 	void execute() override;
 	void finalize() override{};
-	void releaseOutput() { passOutput->clear(); };
-	InstRO::Core::ConstructSet* getOutput() override { return passOutput.get(); }
 };
 }	// End namespace Selectors
 }	// End namespace Rose

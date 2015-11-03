@@ -18,7 +18,7 @@ void ExampleConstructPrinter::execute() {
 		std::cout << count << ":\t Level " << ec->getTraits().toString() << "\t:" << ec->toString() << std::endl;
 		count++;
 	}
-	outputCS = *(inputPass->getOutput());
+	outputSet = *(inputPass->getOutput());
 }
 }
 }

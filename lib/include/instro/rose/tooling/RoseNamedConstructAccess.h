@@ -71,26 +71,25 @@ class NameMatchingASTTraversal : public AstPrePostProcessing {
 		postOrderMatch = false;
 	};
 
-	std::unique_ptr<InstRO::Core::ConstructSet> matchUserIdentifyer(
+	InstRO::Core::ConstructSet matchUserIdentifyer(
 			::InstRO::Tooling::NamedConstructAccess::Matcher* matcher, SgProject* proj) {
 		matchingObject = matcher;
 		cs.clear();
 		traverseAST(proj);
-		return std::make_unique<InstRO::Core::ConstructSet>(cs);
+		return cs;
 	}
-	std::unique_ptr<InstRO::Core::ConstructSet> matchUserTextString(
+	InstRO::Core::ConstructSet matchUserTextString(
 			::InstRO::Tooling::NamedConstructAccess::Matcher* matcher, SgProject* proj) {
 		matchingObject = matcher;
 		cs.clear();
 		traverseAST(proj);
-		return std::make_unique<InstRO::Core::ConstructSet>(cs);
+		return cs;
 	}
-	std::unique_ptr<InstRO::Core::ConstructSet> matchCode(::InstRO::Tooling::NamedConstructAccess::Matcher* matcher,
-																												SgProject* proj) {
+	InstRO::Core::ConstructSet matchCode(::InstRO::Tooling::NamedConstructAccess::Matcher* matcher, SgProject* proj) {
 		matchingObject = matcher;
 		cs.clear();
 		traverseAST(proj);
-		return std::make_unique<InstRO::Core::ConstructSet>(cs);
+		return cs;
 	}
 
 	//	virtual void selectionBegin( 			SgProject*					project); /**< \brief Gets called before the selection
@@ -146,25 +145,20 @@ class RoseNamedConstructAccess : public ::InstRO::Tooling::NamedConstructAccess:
 	RoseNamedConstructAccess(SgProject* proj) : project(proj) {
 		std::cout << "Constructing RoseNamedConstructAccess" << std::endl;
 	};
-	std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByIdentifyerName(
+	InstRO::Core::ConstructSet getConstructsByIdentifyerName(
 			::InstRO::Tooling::NamedConstructAccess::Matcher& matcher) override {
 		std::cout << "Searching the ROSE AST for suitable strings\n" << std::endl;
 		traversal.reset();
 		traversal.setMatchMin();
 		return traversal.matchUserIdentifyer(&matcher, project);
 	};
-	std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByUserTextStringMatch(
+	InstRO::Core::ConstructSet getConstructsByUserTextStringMatch(
 			::InstRO::Tooling::NamedConstructAccess::Matcher& matcher) override {
 		traversal.reset();
 		traversal.setMatchMin();
 		return traversal.matchUserTextString(&matcher, project);
 	};
-	/* Not implemented in current instro
-	Core::ConstructSet getConstructsByCodeMatch(::InstRO::Tooling::NamedConstructAccess::Matcher & matcher) override{
-		traversal.reset();
-		traversal.setMatchMin();
-		return traversal.matchCode(&matcher, project);
-	};*/
+
 };
 }
 }

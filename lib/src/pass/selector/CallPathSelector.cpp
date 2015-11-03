@@ -10,6 +10,9 @@ namespace Selectors {
 
 void CallPathSelector::init() {}
 void CallPathSelector::execute() {
+
+	// TODO implement me
+
 	// InstRO::Core::ConstructSet * fromCS, *toCS;
 
 	// auto fromCS = std::make_shared<InstRO::Core::ConstructSet> (this->getInput(fromPass));
@@ -40,11 +43,7 @@ void CallPathSelector::execute() {
 }
 void CallPathSelector::finalize(){
 
-};
-void CallPathSelector::releaseOutput(){
-		//	output.clear();
-};
-Core::ConstructSet *CallPathSelector::getOutput() { return NULL; };
+}
 
 }	// Selector
 }	// InstRO
