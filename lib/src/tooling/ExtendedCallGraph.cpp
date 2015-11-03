@@ -1,6 +1,7 @@
 #include "instro/tooling/ExtendedCallGraph.h"
 
 #include <cassert>
+#include <iostream>
 
 namespace InstRO {
 namespace Tooling {
