@@ -1,8 +1,11 @@
 #include "instro/clang/adapter/CygProfileAdapter.h"
+#include "instro/utility/Logger.h"
 
-InstRO::Clang::CygProfileAdapter::CygProfileAdapter(InstRO::Core::ChannelConfiguration cfg,
-																										clang::tooling::Replacements &reps, clang::SourceManager *sm)
-		: ClangPassImplBase(cfg, new InstRO::Clang::VisitingPassExecuter<CygProfileAdapter>()),
+InstRO::Clang::CygProfileAdapter::CygProfileAdapter(InstRO::Pass *pId, clang::tooling::Replacements &reps,
+																										clang::SourceManager *sm)
+		: ClangPassImplBase(InstRO::Core::ChannelConfiguration(pId),
+												new InstRO::Clang::VisitingPassExecuter<CygProfileAdapter>()),
+			decidingSelector(pId),
 			sm(sm),
 			replacements(reps),
 			labelCount(0),
@@ -12,7 +15,7 @@ void InstRO::Clang::CygProfileAdapter::init() {}
 
 bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *decl) {
 	if (context == nullptr) {
-		std::cerr << "Context NULL, stopping adapter pass." << std::endl;
+		logIt(ERROR) << "Context NULL, stopping adapter pass." << std::endl;
 		return false;
 	}
 	// The context is in ClangPassImplementation
@@ -41,7 +44,7 @@ void InstRO::Clang::CygProfileAdapter::releaseOutput() {}
 InstRO::Clang::ClangConstructSet *InstRO::Clang::CygProfileAdapter::getOutput() { return nullptr; }
 
 void InstRO::Clang::CygProfileAdapter::dispatch(clang::Decl *c) {
-	std::cout << "Dispatching..." << std::endl;
+	logIt(DEBUG) << "Dispatching..." << std::endl;
 	clang::CXXMethodDecl *mDef = llvm::dyn_cast<clang::CXXMethodDecl>(c);
 	if (mDef != nullptr) {
 		transform(sm, mDef);
@@ -60,7 +63,7 @@ void InstRO::Clang::CygProfileAdapter::transform(clang::SourceManager *sm, clang
 	clang::FunctionDecl *fDef = llvm::dyn_cast<clang::FunctionDecl>(decl);
 
 	// Depending on whether the funciton is overloaded we need to generate different strings
-	std::cout << "Trying to query the decl context" << std::endl;
+	logIt(DEBUG) << "Trying to query the decl context" << std::endl;
 
 	std::string entryReplaceStr = generateFunctionEntry(fDef);
 	std::string exitReplaceStr = generateFunctionExit(fDef);
@@ -97,9 +100,8 @@ bool InstRO::Clang::CygProfileAdapter::isOverloadedFunction(clang::FunctionDecl 
 				}
 			}
 		}
-		// TODO Move this to use the logger.
 		if (overloadCount > 0) {
-			std::cout << "The result " << res->getNameAsString() << " was an overload" << std::endl;
+			logIt(INFO) << "The result " << res->getNameAsString() << " was an overload" << std::endl;
 		}
 	}
 	return (overloadCount > 0);
@@ -233,8 +235,7 @@ std::string InstRO::Clang::CygProfileAdapter::generateCallTo(std::string fName, 
 	snippet += newDecl;
 	snippet += " , 0);";
 
-	// TODO If at all move to logger
-	std::cout << "Cyg Profile call: " << snippet << std::endl;
+	logIt(DEBUG) << "Cyg Profile call: " << snippet << std::endl;
 
 	return snippet;
 }
@@ -246,8 +247,7 @@ std::string InstRO::Clang::CygProfileAdapter::generateCallTo(std::string fName, 
 	snippet += d->getNameInfo().getName().getAsString();
 	snippet += ", 0);";
 
-	// TODO If at all move to logger
-	std::cout << "Cyg Profile call: " << snippet << std::endl;
+	logIt(DEBUG) << "Cyg Profile call: " << snippet << std::endl;
 
 	return snippet;
 }

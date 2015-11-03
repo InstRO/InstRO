@@ -29,8 +29,7 @@ InstRO::Pass *InstRO::Clang::PassFactory::createFunctionDefinitionSelector() {
 }
 
 InstRO::Pass *InstRO::Clang::PassFactory::createCygProfileAdapter(InstRO::Pass *input) {
-	InstRO::Core::ChannelConfiguration cc(input);
-	auto pImpl = new InstRO::Clang::CygProfileAdapter(cc, replacements, nullptr);
+	auto pImpl = new InstRO::Clang::CygProfileAdapter(input, replacements, nullptr);
 	lazyContextProvidingMap.insert(pImpl);
 	InstRO::Pass *p = new InstRO::Pass(pImpl);
 	p->setPassName(std::string("CygProfile Adapter"));
@@ -39,8 +38,7 @@ InstRO::Pass *InstRO::Clang::PassFactory::createCygProfileAdapter(InstRO::Pass *
 }
 
 InstRO::Pass *InstRO::Clang::PassFactory::createLLVMInputAdapter(InstRO::Pass *input) {
-	InstRO::Core::ChannelConfiguration cc(input);
-	auto pImpl = new InstRO::Clang::LLVMInputAdapter(cc);
+	auto pImpl = new InstRO::Clang::LLVMInputAdapter(input);
 	lazyContextProvidingMap.insert(pImpl);
 	InstRO::Pass *p = new InstRO::Pass(pImpl);
 	p->setPassName(std::string("LLVM Input Adapter"));

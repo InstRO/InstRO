@@ -10,7 +10,7 @@ namespace InstRO {
 namespace Clang {
 class LLVMInputAdapter : public InstRO::Clang::ClangPassImplBase<LLVMInputAdapter> {
  public:
-	LLVMInputAdapter(InstRO::Core::ChannelConfiguration cfg);
+	LLVMInputAdapter(InstRO::Pass *pId);
 
 	bool VisitFunctionDecl(clang::FunctionDecl *fDecl);
 
