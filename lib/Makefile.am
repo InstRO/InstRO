@@ -62,7 +62,7 @@ CORE_HFILES= \
 CORE_SFILES= \
 ./src/core/ConstructSet.cpp \
 ./src/core/Pass.cpp \
-./src/core/PassImplemention.cpp \
+./src/core/PassImplementation.cpp \
 ./src/core/SimplePassManager.cpp \
 ./src/core/Singleton.cpp \
 ./src/core/Helper.cpp \
