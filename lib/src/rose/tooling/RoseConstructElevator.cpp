@@ -16,7 +16,7 @@ namespace ConstructElevator {
 namespace ConstructElevatorHelper {
 
 template <class Predicate>
-std::shared_ptr<InstRO::Rose::Core::RoseConstruct> raiseConstruct(InstRO::Rose::Core::RoseConstruct *src,
+std::shared_ptr<InstRO::Rose::Core::RoseConstruct> raiseConstruct(std::shared_ptr<InstRO::Rose::Core::RoseConstruct> src,
 																																	Predicate pred) {
 	SgNode *current = src->getNode();
 	// CI Walk the AST upwards, until the current node is either NULL or it is the desired construct type
@@ -35,7 +35,7 @@ std::shared_ptr<InstRO::Rose::Core::RoseConstruct> raiseConstruct(InstRO::Rose::
 }
 
 template <class Predicate>
-std::set<std::shared_ptr<InstRO::Rose::Core::RoseConstruct> > lowerConstruct(InstRO::Rose::Core::RoseConstruct *src,
+std::set<std::shared_ptr<InstRO::Rose::Core::RoseConstruct> > lowerConstruct(std::shared_ptr<InstRO::Rose::Core::RoseConstruct> src,
 																																						 Predicate pred) {
 	std::set<std::shared_ptr<InstRO::Rose::Core::RoseConstruct> > retSet;
 	// rose-query sub-tree with the right selectors
@@ -62,10 +62,9 @@ InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::Construc
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(newConstructSet.get());
 	logIt(INFO) << "ConstructElevator::raise to " << traitType << ":\t Input-ConstructSet contains " << inputCS.size()
 						<< "elements " << std::endl;
-	for (auto construct = input.cbegin(); construct != input.cend(); construct++) {
+	for (auto construct : input) {
 		std::shared_ptr<InstRO::Rose::Core::RoseConstruct> newConstruct;
-		InstRO::Rose::Core::RoseConstruct *roseConstruct =
-				dynamic_cast<InstRO::Rose::Core::RoseConstruct *>(construct->get());
+		auto roseConstruct = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
 		if (roseConstruct == nullptr) {
 			throw std::string(
 					"A non InstRO::Rose::Core::RoseConstruct in the ROSE interface. Either multiple compiler interfaces are used, "
@@ -130,10 +129,10 @@ InstRO::Core::ConstructSet ConstructElevator::lower(const InstRO::Core::Construc
 
 	// CI: check each input construct separately
 	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface input(&inputCS);
-	for (auto construct = input.cbegin(); construct != input.cend(); construct++) {
+	for (auto construct : input) {
 		std::set<std::shared_ptr<InstRO::Rose::Core::RoseConstruct> > newConstructs;
 		// CI: make sure it is a ROSE construct
-		auto roseConstruct = dynamic_cast<InstRO::Rose::Core::RoseConstruct *>(construct->get());
+		auto roseConstruct = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
 		if (roseConstruct == nullptr) {
 			throw std::string(
 					"A non InstRO::Rose::Core::RoseConstruct in the ROSE interface. Either multiple compiler interfaces are used, "
