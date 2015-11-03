@@ -74,7 +74,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 						continue;
 					if (rocsciChild.size() != 1 || rocsciParent.size() != 1)
 						throw std::string("Problem in ConstructHierarchyASTDotGenerator");
-					outFile << "\t" << rocsciChild.cbegin()->get()->getID() << " -> " << rocsciParent.cbegin()->get()->getID()
+					outFile << "\t" << rocsciChild.begin()->get()->getID() << " -> " << rocsciParent.begin()->get()->getID()
 						<< ";\n";
 					// add the discoreved node to the processing list
 					csAggregation = csAggregation.combine(parentCS);

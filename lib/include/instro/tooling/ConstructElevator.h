@@ -13,8 +13,9 @@ class ConstructElevator {
 	virtual ~ConstructElevator() {}
 
 	// This is the implicit way that the PassManager will always apply
-	virtual Core::ConstructSet raise(const Core::ConstructSet *input, Core::ConstructTraitType cl) = 0;
+	virtual Core::ConstructSet raise(const Core::ConstructSet *input, Core::ConstructTraitType cl);
 	virtual Core::ConstructSet raise(const Core::ConstructSet &input, Core::ConstructTraitType cl) = 0;
+
 	// This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
 	virtual Core::ConstructSet lower(const Core::ConstructSet *input, Core::ConstructTraitType cl);
 	virtual Core::ConstructSet lower(const Core::ConstructSet &input, Core::ConstructTraitType cl) = 0;
