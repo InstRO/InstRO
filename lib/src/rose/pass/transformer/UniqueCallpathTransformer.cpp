@@ -5,8 +5,8 @@
 #include "instro/core/Instrumentor.h"
 #include "instro/core/Singleton.h"
 #include "instro/rose/core/RoseConstructSet.h"
+#include "instro/utility/Logger.h"
 
-#include <iostream>
 #include <stack>
 #include <queue>
 #include <algorithm>
@@ -65,7 +65,7 @@ UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::retrieveInputNodes
 			nodes.insert(node);
 		} else {
 			auto rc = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
-			std::cerr << "Failed to get call graph node for " << SageInterface::get_name(rc->getNode()) << " ("
+			logIt(ERROR) << "Failed to get call graph node for " << SageInterface::get_name(rc->getNode()) << " ("
 								<< rc->getNode()->class_name() << ")" << std::endl;
 		}
 	}
@@ -143,7 +143,7 @@ SgFunctionDeclaration *UniqueCallpathTransformer::getFunDeclFromNode(ExtendedCal
 		} else if (SgFunctionDeclaration *decl = isSgFunctionDeclaration(rc->getNode())) {
 			return decl;
 		} else {
-			std::cout << "construct is no function: " << SageInterface::get_name(rc->getNode()) << std::endl;
+			logIt(WARN) << "construct is no function: " << SageInterface::get_name(rc->getNode()) << std::endl;
 		}
 	}
 
@@ -192,23 +192,23 @@ void UniqueCallpathTransformer::execute() {
 
 		// a node may only be visited once or multiple definitions will be created
 		if (visited.find(entry.first) != visited.end()) {
-			std::cout << SageInterface::get_name(funDecl) << " has already been visited" << std::endl;
+			logIt(DEBUG) << SageInterface::get_name(funDecl) << " has already been visited" << std::endl;
 			continue;
 		}
 		visited.insert(entry.first);
 
 		// safety check, in case a node which starts a cycle somehow manages to sneak in
 		if (cycleNodes.find(entry.first) != cycleNodes.end()) {
-			std::cout << "Ignore loop node" << std::endl;
+			logIt(DEBUG) << "Ignore loop node" << std::endl;
 			continue;
 		}
 
 		// debug output...
-		std::cout << "Visiting " << SageInterface::get_name(funDecl) << " with depth " << entry.second << std::endl;
+		logIt(DEBUG) << "Visiting " << SageInterface::get_name(funDecl) << " with depth " << entry.second << std::endl;
 
 		// only active nodes may be transformed (if enabled)
 		if (!activeNodes.empty() && activeNodes.find(entry.first) == activeNodes.end()) {
-			std::cerr << "Cannot create unique call path because function " << SageInterface::get_name(funDecl)
+			logIt(WARN) << "Cannot create unique call path because function " << SageInterface::get_name(funDecl)
 								<< " is not considered 'active'" << std::endl;
 			continue;
 		}
@@ -217,13 +217,13 @@ void UniqueCallpathTransformer::execute() {
 		funDecl = isSgFunctionDeclaration(funDecl->get_definingDeclaration());
 		if (!funDecl || !funDecl->get_definition()) {
 			funDecl = getFunDeclFromNode(entry.first);
-			std::cerr << "Cannot duplicate function " << SageInterface::get_name(funDecl)
+			logIt(WARN) << "Cannot duplicate function " << SageInterface::get_name(funDecl)
 								<< " because no definition is available" << std::endl;
 			continue;
 		}
 
 		// duplicate function
-		std::cout << "Duplicating " << SageInterface::get_name(funDecl) << std::endl;
+		logIt(DEBUG) << "Duplicating " << SageInterface::get_name(funDecl) << std::endl;
 		duplicate(entry.first, duplicatedNodes);
 
 		// mark successors (functions called by the function which has just been duplicated) for duplication,
@@ -267,7 +267,7 @@ void UniqueCallpathTransformer::findCandidates(const NodeSet &markedNodes, NodeD
 			}
 			// a node is considered to start a cycle if it is contained in the current working stack
 			if (std::find(workStack.begin(), workStack.end(), node) != workStack.end()) {
-				std::cerr << "Found cycle at " << node->getAssociatedConstructSet().toString() << std::endl;
+				logIt(WARN) << "Found cycle at " << node->getAssociatedConstructSet().toString() << std::endl;
 				cycleNodes.insert(node);
 				continue;
 			}
@@ -285,7 +285,7 @@ void UniqueCallpathTransformer::findCandidates(const NodeSet &markedNodes, NodeD
 			for (ExtendedCallGraphNode *succ : successors) {
 				// check for recursion because it is not detected by the cycle check above
 				if (succ == node) {
-					std::cerr << "Found recursion at " << node->getAssociatedConstructSet().toString() << std::endl;
+					logIt(WARN) << "Found recursion at " << node->getAssociatedConstructSet().toString() << std::endl;
 					cycleNodes.insert(node);
 				} else {
 					workStack.push_back(succ);
@@ -308,7 +308,7 @@ void UniqueCallpathTransformer::findCandidates(const NodeSet &markedNodes, NodeD
 }
 
 void UniqueCallpathTransformer::updateCandidates(NodeDepthMap &candidates, const NodeList &path) {
-	std::cout << "Found path: ";
+	logIt(DEBUG) << "Found path: ";
 	for (NodeDepthMap::mapped_type i = 0; i < path.size(); ++i) {
 		// check whether node is a candidate (has more than one predecessor)
 		if (getPredecessorFunctions(path[i]).size() > 1) {
@@ -322,9 +322,9 @@ void UniqueCallpathTransformer::updateCandidates(NodeDepthMap &candidates, const
 			}
 		}
 
-		std::cout << SageInterface::get_name(getFunDeclFromNode(path[i])) << " ";
+		logIt(DEBUG) << SageInterface::get_name(getFunDeclFromNode(path[i])) << " ";
 	}
-	std::cout << std::endl;
+	logIt(DEBUG) << std::endl;
 }
 
 std::string UniqueCallpathTransformer::generateCloneName(SgFunctionDeclaration *caller, SgFunctionDeclaration *callee) {
