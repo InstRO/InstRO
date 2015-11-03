@@ -4,6 +4,7 @@
 
 #include "instro/rose/utility/ScopeStackGuard.hpp"
 #include "instro/rose/utility/FunctionRenamer.h"
+#include "instro/utility/Logger.h"
 
 #include <sstream>
 #include <boost/functional/hash.hpp>
@@ -11,6 +12,7 @@
 using namespace SageInterface;
 using namespace SageBuilder;
 
+using namespace InstRO;
 using namespace InstRO::Rose;
 using namespace InstRO::Rose::Transformer;
 
@@ -55,7 +57,7 @@ void FunctionWrapper::execute() {
 		if (SgProject *project = SageInterface::getProject()) {
 			funCallSearchSP.push_back(project);
 		} else {
-			std::cerr << "Failed to find the current SgProject, no function calls will be renamed" << std::endl;
+			logIt(ERROR) << "Failed to find the current SgProject, no function calls will be renamed" << std::endl;
 		}
 	}
 
@@ -113,7 +115,7 @@ void FunctionWrapper::findMainScope() {
 	}
 
 	if (!mainScope) {
-		std::cerr << "Failed to find main function, wrappers are placed inside the respective translation unit"
+		logIt(ERROR) << "Failed to find main function, wrappers are placed inside the respective translation unit"
 							<< std::endl;
 	}
 }
@@ -130,7 +132,7 @@ void FunctionWrapper::setWrapperPrefix(const std::string &prefix) { wrapPrefix =
 
 void FunctionWrapper::wrapFunction(SgFunctionDeclaration *fDecl, const RoseNodeList &funCallSearchStartPoints) {
 	if (isSgMemberFunctionDeclaration(fDecl)) {
-		std::cout << "Warning: Creating wrappers for class member functions has not yet been explicitly implemented and "
+		logIt(WARN) << "Creating wrappers for class member functions has not yet been explicitly implemented and "
 								 "will probably not work..." << std::endl;
 	}
 
@@ -171,7 +173,7 @@ void FunctionWrapper::wrapFunction(SgFunctionDeclaration *fDecl, const RoseNodeL
 		// specified by the renaming selector
 		bool foundNone = funcRenamer.findFunctionCalls(funCallSearchStartPoints).empty();
 		if (foundNone) {
-			std::cout << "Warning: Wrapper '" << wrapperName
+			logIt(WARN) << "Wrapper '" << wrapperName
 								<< "' is not used since there are no function calls which have to be renamed" << std::endl;
 		}
 	}
@@ -182,7 +184,7 @@ void FunctionWrapper::wrapFunction(SgFunctionDeclaration *fDecl, const RoseNodeL
 		// skip the node if there is no prefix for either the definition or the wrapper -> definition & wrapper would share
 		// the same name!
 		if (defPrefix.empty() && wrapPrefix.empty()) {
-			std::cerr << "Skipping node due to missing prefix for renaming: " << originalFunctionName << std::endl;
+			logIt(ERROR) << "Skipping node due to missing prefix for renaming: " << originalFunctionName << std::endl;
 			return;
 		} else {
 			funcRenamer.renameFunctionDefinition(definitionName);
@@ -235,7 +237,7 @@ SgFunctionDeclaration *FunctionWrapper::findInputDeclaration(SgNode *node) {
 			SgFunctionDeclaration *aFDecl = fCallExp->getAssociatedFunctionDeclaration();
 
 			if (!aFDecl) {
-				std::cerr << "Skipping node due to missing associated function declaration: " << get_name(node) << std::endl;
+				logIt(ERROR) << "Skipping node due to missing associated function declaration: " << get_name(node) << std::endl;
 				return nullptr;
 			} else {
 				return aFDecl;
@@ -244,7 +246,7 @@ SgFunctionDeclaration *FunctionWrapper::findInputDeclaration(SgNode *node) {
 		case V_SgFunctionRefExp: {
 			SgFunctionDeclaration *aFDecl = isSgFunctionRefExp(node)->getAssociatedFunctionDeclaration();
 			if (!aFDecl) {
-				std::cerr << "Skipping node due to missing associated function declaration: " << get_name(node) << std::endl;
+				logIt(ERROR) << "Skipping node due to missing associated function declaration: " << get_name(node) << std::endl;
 				return nullptr;
 			} else {
 				return aFDecl;
@@ -257,7 +259,7 @@ SgFunctionDeclaration *FunctionWrapper::findInputDeclaration(SgNode *node) {
 			return fDef->get_declaration();
 		}
 		default:
-			std::cerr << "Skipping node due to invalid input type: " << node->class_name() << std::endl;
+			logIt(ERROR) << "Skipping node due to invalid input type: " << node->class_name() << std::endl;
 			return nullptr;
 	}
 }
