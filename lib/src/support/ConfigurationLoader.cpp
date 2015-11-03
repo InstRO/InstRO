@@ -1,6 +1,7 @@
 #include "instro/utility/ConfigurationLoader.h"
 
 #include "instro/utility/exception.h"
+#include "instro/utility/Logger.h"
 
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/error/en.h"
@@ -37,7 +38,7 @@ void ConfigurationLoader::load(const std::string &filename) {
 void ConfigurationParser::parseFile(const std::string &filename) {
 	FILE *file = std::fopen(filename.c_str(), "r");
 	if (!file) {
-		std::cerr << "Failed to open file '" << filename << "'" << std::endl;
+		logIt(ERROR) << "Failed to open file '" << filename << "'" << std::endl;
 		return;
 	}
 
@@ -49,7 +50,7 @@ void ConfigurationParser::parseFile(const std::string &filename) {
 	std::fclose(file);
 
 	if (doc.HasParseError()) {
-		std::cerr << "An error occurred while parsing the JSON document at position " << doc.GetErrorOffset() << ": "
+		logIt(ERROR) << "An error occurred while parsing the JSON document at position " << doc.GetErrorOffset() << ": "
 							<< rapidjson::GetParseError_En(doc.GetParseError()) << std::endl;
 	}
 
@@ -285,7 +286,7 @@ PassFactory *BaseConfigurationPassRegistry::getFactory() { return factory; }
 void BaseConfigurationPassRegistry::registerPass(const std::string &typeName, const PassParser &parser) {
 	// print a warning if a parser has already been registered for the specified id
 	if (passRegistry.find(typeName) != passRegistry.end()) {
-		std::cerr << "Warning: a parser has already been registered for type '" << typeName << "'. Skipping..."
+		logIt(WARN) << "A parser has already been registered for type '" << typeName << "'. Skipping..."
 							<< std::endl;
 		return;
 	}
