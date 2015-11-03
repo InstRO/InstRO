@@ -334,6 +334,7 @@ AM_COND_IF([BUILD_EXAMPLES],[
 	AC_CONFIG_FILES([
 			examples/Makefile
 			examples/ConfigurationLoader/Makefile
+			examples/ClangSrcToSrcFunctionInstrumentor/Makefile
 		])
 ])
 
