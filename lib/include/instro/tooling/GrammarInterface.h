@@ -12,8 +12,7 @@ public:
 	virtual ~GrammarInterface() {
 	}
 
-	virtual std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByClass(
-			const InstRO::Core::ConstructTraitType constructClass) = 0;
+	virtual InstRO::Core::ConstructSet getConstructsByClass(const InstRO::Core::ConstructTraitType constructClass) = 0;
 };
 
 }	// GrammarInterface

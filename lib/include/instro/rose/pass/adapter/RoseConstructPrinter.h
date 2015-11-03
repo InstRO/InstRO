@@ -10,7 +10,6 @@ namespace Adapter {
 class RoseConstructPrinter : public RosePassImplementation {
  protected:
 	InstRO::Pass *inputPass;
-	InstRO::Core::ConstructSet outputCS;
 
  public:
 	RoseConstructPrinter(InstRO::Pass *pass)
@@ -18,8 +17,6 @@ class RoseConstructPrinter : public RosePassImplementation {
 	void init(){};
 	void execute() override;
 	void finalize(){};
-	void releaseOutput() { outputCS.clear(); };
-	InstRO::Core::ConstructSet *getOutput() { return &outputCS; }
 };
 }
 }

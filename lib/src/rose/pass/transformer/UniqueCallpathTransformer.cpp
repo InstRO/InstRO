@@ -380,7 +380,7 @@ void UniqueCallpathTransformer::duplicate(ExtendedCallGraphNode *node, NodeFunct
 		// remember the duplicate for successors of the node which might have to be duplicated
 		duplicatedNodes.insert(std::make_pair(node, clonedFunction));
 
-		InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(&outputCS);
+		InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(&outputSet);
 		InstRO::InfrastructureInterface::ConstructSetCompilerInterface collisions(getCollisionSet());
 		// add the duplicate to the output of the transformer and its files scope to the collision set
 		addNodeToCS(output, clonedFunction->get_definition());

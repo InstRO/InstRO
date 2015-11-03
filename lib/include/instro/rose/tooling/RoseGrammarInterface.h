@@ -17,8 +17,7 @@ class RoseGrammarInterface : public InstRO::Tooling::GrammarInterface::GrammarIn
 	RoseGrammarInterface() = delete;
 	RoseGrammarInterface(SgProject *projArg) : proj(projArg) {}
 
-	std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByClass(
-			const InstRO::Core::ConstructTraitType constructClass) override;
+	InstRO::Core::ConstructSet getConstructsByClass(const InstRO::Core::ConstructTraitType constructClass) override;
 };
 }
 }

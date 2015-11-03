@@ -27,7 +27,6 @@ void RoseConstructPrinter::execute() {
 		}
 		count++;
 	}
-	outputCS = *(inputPass->getOutput());
 }
 
 }	// namespace Adapter

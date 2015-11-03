@@ -13,7 +13,6 @@ namespace Selectors {
 
 class CompoundSelector : public InstRO::Example::ExamplePass {
  protected:
-	std::unique_ptr<InstRO::Core::ConstructSet> passOutput;
 	// CI: I see different compare modes:
 	// 1) Strict: a pair only matches, if both are at the same level and the Operation results in true
 	// 2) Parent-child: one of the operands is the "AST"-Parent of the child node
@@ -37,8 +36,6 @@ class CompoundSelector : public InstRO::Example::ExamplePass {
 	void init() override{};
 	void execute() override;
 	void finalize() override{};
-	void releaseOutput() { passOutput->clear(); };
-	InstRO::Core::ConstructSet* getOutput() override { return passOutput.get(); }
 
  protected:
 	bool isStrict() { return true; };

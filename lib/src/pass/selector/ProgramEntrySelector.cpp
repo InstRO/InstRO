@@ -19,7 +19,7 @@ void ProgramEntrySelector::execute() {
 	std::list<std::string> mainString = { std::string("main") };
 	auto mainMatcher = InstRO::Tooling::NamedConstructAccess::WildcardedStringMatcher(mainString);
 
-	std::unique_ptr<InstRO::Core::ConstructSet> csByNameMain =
+	InstRO::Core::ConstructSet csByNameMain =
 			getInstrumentorInstance()->getAnalysisManager()->getNamedConstructAccessFacility()->getConstructsByIdentifyerName(
 					mainMatcher);
 
@@ -27,15 +27,7 @@ void ProgramEntrySelector::execute() {
 	auto csFunctions = getInstrumentorInstance()->getAnalysisManager()->getGrammarInterface()->getConstructsByClass(
 			InstRO::Core::ConstructTraitType::CTFunction);
 
-	output = std::make_unique<InstRO::Core::ConstructSet>(csFunctions->intersect(*csByNameMain));
-}
-
-Core::ConstructSet* ProgramEntrySelector::getOutput() {
-	return output.get();
-}
-
-void ProgramEntrySelector::releaseOutput() {
-	output->clear();
+	outputSet = csFunctions.intersect(csByNameMain);
 }
 
 }	// Selector

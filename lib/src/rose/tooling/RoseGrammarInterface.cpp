@@ -8,11 +8,11 @@ namespace Rose {
 namespace Tooling {
 namespace GrammarInterface {
 
-std::unique_ptr<InstRO::Core::ConstructSet> RoseGrammarInterface::getConstructsByClass(
+InstRO::Core::ConstructSet RoseGrammarInterface::getConstructsByClass(
 		const InstRO::Core::ConstructTraitType constructClass) {
 
-	std::unique_ptr<InstRO::Core::ConstructSet> result = std::make_unique<InstRO::Core::ConstructSet>();
-	InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci(result.get());
+	InstRO::Core::ConstructSet result;
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci(&result);
 
 	for (auto sgNode : SageInterface::querySubTree<SgNode>(proj, V_SgNode)) {
 		if (InstRO::Rose::Core::RoseConstructLevelPredicates::ConstructPredicate()(sgNode)) {

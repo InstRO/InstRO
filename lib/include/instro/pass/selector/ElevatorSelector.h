@@ -18,14 +18,9 @@ public:
 
 	void finalize() override {}
 
-	void releaseOutput() override { output->clear();	}
-
-	InstRO::Core::ConstructSet *getOutput() override { return output.get();	}
-
  protected:
 	Pass* inputPass;
 	InstRO::Core::ConstructTraitType targetLevel;
-	std::unique_ptr<InstRO::Core::ConstructSet> output;
 };
 
 class ConstructRaisingElevator : public ConstructElevatorSelector {

@@ -60,15 +60,11 @@ class UniqueCallpathTransformer : public RosePassImplementation {
 	virtual void init() override{};
 	virtual void execute() override;
 	virtual void finalize() override{};
-	virtual void releaseOutput() override { outputCS.clear(); };
-	virtual InstRO::Core::ConstructSet *getOutput() override { return &outputCS; }
 
  protected:
 	InstRO::Pass *inputPass;
 	InstRO::Pass *rootPass;
 	InstRO::Pass *activePass;
-
-	InstRO::Core::ConstructSet outputCS;
 
 	/// Generates the new name for the cloned function.
 	/// \arg caller The function calling the duplicate

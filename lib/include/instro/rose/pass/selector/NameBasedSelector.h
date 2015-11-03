@@ -9,7 +9,6 @@ class NameBasedSelector : public InstRO::Rose::RosePassImplementation {
 	Pass *filterChannel;
 	std::vector<std::string> rules;
 	NameBasedSelector() = delete;
-	std::unique_ptr<InstRO::Core::ConstructSet> output;
 
  public:
 	NameBasedSelector(std::vector<std::string> matchRules, Pass *filter)
@@ -19,8 +18,6 @@ class NameBasedSelector : public InstRO::Rose::RosePassImplementation {
 	virtual void init() override;
 	virtual void execute() override;
 	virtual void finalize() override;
-	virtual void releaseOutput() override;
-	virtual InstRO::Core::ConstructSet *getOutput() override;
 
  protected:
 };

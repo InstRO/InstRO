@@ -11,7 +11,6 @@ namespace Adapter {
 class GNUProfilingInterfaceAdapter : public RosePassImplementation {
  protected:
 	::InstRO::Pass *inputPass;
-	::InstRO::Core::ConstructSet outputCS;
 
  public:
 	// This Pass only accepts functions
@@ -22,8 +21,6 @@ class GNUProfilingInterfaceAdapter : public RosePassImplementation {
 	virtual void init(){};
 	virtual void execute() override;
 	virtual void finalize(){};
-	virtual void releaseOutput() { outputCS.clear(); };
-	virtual InstRO::Core::ConstructSet *getOutput() { return &outputCS; }
 };
 }
 }

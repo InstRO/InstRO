@@ -11,7 +11,7 @@ void ConstructClassSelector::execute() {
 	InstRO::Tooling::GrammarInterface::GrammarInterface* gi =
 			getInstrumentorInstance()->getAnalysisManager()->getGrammarInterface();
 
-	output = gi->getConstructsByClass(constructClass);
+	outputSet = gi->getConstructsByClass(constructClass);
 }
 
 }	// namespace Selector

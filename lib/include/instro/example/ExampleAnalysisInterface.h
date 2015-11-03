@@ -119,10 +119,8 @@ class ExampleConstructElevator : public InstRO::Tooling::ConstructElevator::Cons
 
 class ExampleGrammarInterface : public InstRO::Tooling::GrammarInterface::GrammarInterface {
  public:
-	std::unique_ptr<InstRO::Core::ConstructSet> getConstructsByClass(
-			const InstRO::Core::ConstructTraitType constructClass) override {
+	InstRO::Core::ConstructSet getConstructsByClass(const InstRO::Core::ConstructTraitType constructClass) override {
 		throw std::string("ExampleGrammarInterface::getConstructsByClass : Not Implemented");
-		return std::make_unique<InstRO::Core::ConstructSet>(InstRO::Core::ConstructSet());
 	};
 };
 

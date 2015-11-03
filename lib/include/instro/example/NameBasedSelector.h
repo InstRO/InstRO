@@ -10,7 +10,6 @@ class NameBasedSelector : public InstRO::Example::ExamplePass {
 	Pass *filterChannel;
 	std::vector<std::string> rules;
 	NameBasedSelector() = delete;
-	InstRO::Core::ConstructSet output;
 
  public:
 	NameBasedSelector(std::vector<std::string> matchRules, Pass *filter)
@@ -20,8 +19,6 @@ class NameBasedSelector : public InstRO::Example::ExamplePass {
 	virtual void init() override;
 	virtual void execute() override;
 	virtual void finalize() override;
-	virtual void releaseOutput() override;
-	virtual InstRO::Core::ConstructSet *getOutput() override;
 
  protected:
 };
