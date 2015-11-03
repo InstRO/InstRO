@@ -1,11 +1,13 @@
 #include "instro/clang/adapter/LLVMInputAdapter.h"
+#include "instro/utility/Logger.h"
 
-InstRO::Clang::LLVMInputAdapter::LLVMInputAdapter(InstRO::Core::ChannelConfiguration cfg)
+InstRO::Clang::LLVMInputAdapter::LLVMInputAdapter(InstRO::Pass *pId)
 		: InstRO::Clang::ClangPassImplBase<LLVMInputAdapter>(
-					cfg, new InstRO::Clang::NonVisitingPassExecuter<LLVMInputAdapter>()),
+					InstRO::Core::ChannelConfiguration(pId), new InstRO::Clang::NonVisitingPassExecuter<LLVMInputAdapter>()),
+			decidingSelector(pId),
 			outfileName("instro-temp-file") {}
 
-bool InstRO::Clang::LLVMInputAdapter::VisitFunctionDecl(clang::FunctionDecl *fDecl) {}
+bool InstRO::Clang::LLVMInputAdapter::VisitFunctionDecl(clang::FunctionDecl *fDecl) { return true; }
 
 void InstRO::Clang::LLVMInputAdapter::init() {}
 
@@ -14,9 +16,9 @@ void InstRO::Clang::LLVMInputAdapter::finalize() {}
 void InstRO::Clang::LLVMInputAdapter::releaseOutput() {}
 
 void InstRO::Clang::LLVMInputAdapter::exec() {
-	std::cout << "Running exec" << std::endl;
 	if (context == nullptr) {
-		std::cerr << "Context was nullptr" << std::endl;
+		logIt(ERROR) << "ASTContext was null" << std::endl;
+		;
 		exit(-1);
 	}
 	std::ofstream outStream;
@@ -25,7 +27,7 @@ void InstRO::Clang::LLVMInputAdapter::exec() {
 	if (outStream) {
 		auto inputSet = getInput(decidingSelector);
 		if (inputSet == nullptr) {
-			std::cerr << "inputSet was nullptr" << std::endl;
+			logIt(ERROR) << "inputSet was nullptr" << std::endl;
 			exit(-1);
 		}
 		auto cs = reinterpret_cast<InstRO::Clang::ClangConstructSet *>(inputSet);

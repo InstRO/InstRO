@@ -42,6 +42,7 @@ class ClangPassImplBase : public InstRO::Clang::ASTContextProvider,
 
 	virtual void execute() final override {
 		assert(executer != nullptr);
+		executer->setASTContext(context);
 		executer->execute(static_cast<T *>(this));
 	};
 

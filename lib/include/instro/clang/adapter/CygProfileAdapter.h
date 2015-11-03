@@ -16,8 +16,7 @@ namespace Clang {
 
 class CygProfileAdapter : public InstRO::Clang::ClangPassImplBase<CygProfileAdapter> {
  public:
-	CygProfileAdapter(InstRO::Core::ChannelConfiguration cfg, clang::tooling::Replacements &replacements,
-										clang::SourceManager *sm);
+	CygProfileAdapter(InstRO::Pass *pId, clang::tooling::Replacements &replacements, clang::SourceManager *sm);
 
 	bool VisitFunctionDecl(clang::FunctionDecl *decl);
 

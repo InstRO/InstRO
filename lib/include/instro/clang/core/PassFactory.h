@@ -16,7 +16,8 @@
 
 namespace InstRO {
 namespace Clang {
-/*
+
+	/*
  * The PassFactory exposes a handle to the created pass by a raw pointer.
  * This does _not_ transfer ownership.
  **/
