@@ -6,10 +6,10 @@
 namespace InstRO {
 
 enum LogLevel {
-    ERROR,
-    WARN,
-    INFO,
-    DEBUG
+	ERROR,
+	WARN,
+	INFO,
+	DEBUG
 };
 
 /* Default Log Level */
@@ -21,36 +21,42 @@ enum LogLevel {
  * \brief The visible logLevel is configurable per translation unit.
  * \author Roman Ness
  */
-class Logger : public std::ostream  {
+class Logger: public std::ostream {
 public:
-    void setLevel(enum LogLevel level) {
-        this->level = level;
-    }
+	void setLevel(enum LogLevel level) {
+		this->level = level;
+	}
 
-    void setThreshold(enum LogLevel threshold) {
-        this->threshold = threshold;
-    }
+	void setThreshold(enum LogLevel threshold) {
+		this->threshold = threshold;
+	}
 
 private:
-    enum LogLevel level;
-    enum LogLevel threshold;
+	enum LogLevel level;
+	enum LogLevel threshold;
 
 public:
 
-    template <typename T>
-    Logger& operator<<(T const& val) {
-        if (level <= threshold) {
-            std::cout << val;
-        }
-        return *this;
-    }
+	template<typename T>
+	Logger& operator<<(T const& val) {
+		if (level <= threshold) {
+			if (level == ERROR) {
+				std::cout << "[Error] ";
+			}
+			std::cout << val;
+		}
+		return *this;
+	}
 
-    Logger& operator<<( std::ostream& (val) (std::ostream&) ) {
-        if (level <= threshold) {
-            std::cout << val;
-        }
-        return *this;
-    }
+	Logger& operator<<(std::ostream& (val)(std::ostream&)) {
+		if (level <= threshold) {
+			if (level == ERROR) {
+				std::cout << "[Error] ";
+			}
+			std::cout << val;
+		}
+		return *this;
+	}
 
 };
 
