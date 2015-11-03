@@ -7,6 +7,8 @@
  * As this interface is more likely a C-style interface we use snake case here.
  */
 
+#include "stddef.h"
+
 /*
  * Check for GNU compiler to use GNU attributes
  */
