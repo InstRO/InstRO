@@ -11,18 +11,20 @@ namespace ConstructElevator {
 InstRO::Core::ConstructSet ConstructElevator::crop(const InstRO::Core::ConstructSet &inputCS,
 																									 InstRO::Core::ConstructTraitType min,
 																									 InstRO::Core::ConstructTraitType max) {
-	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface input(&inputCS);
-	auto outputCS = std::make_unique<InstRO::Core::ConstructSet>();
-	InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(outputCS.get());
 
-	for (auto construct = input.cbegin(); construct != input.cend(); construct++) {
-		if (construct->get()->getTraits().min() > max || construct->get()->getTraits().max() < min) {
+	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface input(&inputCS);
+
+	InstRO::Core::ConstructSet outputCS;
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(&outputCS);
+
+	for (auto construct : input) {
+		if (construct->getTraits().min() > max || construct->getTraits().max() < min) {
 			continue;
 		} else {
-			output.put(*construct);
+			output.put(construct);
 		}
 	}
-	return *outputCS;
+	return outputCS;
 }
 InstRO::Core::ConstructSet ConstructElevator::raise(const Core::ConstructSet *input, Core::ConstructTraitType cl) {
 	return raise(*input, cl);

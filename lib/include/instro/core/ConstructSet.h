@@ -48,8 +48,8 @@ class ReadOnlyConstructSetCompilerInterface {
 
 	bool contains(const std::shared_ptr<Core::Construct>& construct) const;
 
-	std::set<std::shared_ptr<Core::Construct> >::const_iterator cbegin() const;
-	std::set<std::shared_ptr<Core::Construct> >::const_iterator cend() const;
+	std::set<std::shared_ptr<Core::Construct> >::const_iterator begin() const;
+	std::set<std::shared_ptr<Core::Construct> >::const_iterator end() const;
 	bool empty() const;
 	size_t size() const;
 };

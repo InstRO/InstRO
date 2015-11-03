@@ -223,10 +223,10 @@ bool ReadOnlyConstructSetCompilerInterface::contains(const std::shared_ptr<Core:
 	return csPtr->contains(construct);
 };
 
-std::set<std::shared_ptr<Core::Construct> >::const_iterator ReadOnlyConstructSetCompilerInterface::cbegin() const {
+std::set<std::shared_ptr<Core::Construct> >::const_iterator ReadOnlyConstructSetCompilerInterface::begin() const {
 	return csPtr->cbegin();
 };
-std::set<std::shared_ptr<Core::Construct> >::const_iterator ReadOnlyConstructSetCompilerInterface::cend() const {
+std::set<std::shared_ptr<Core::Construct> >::const_iterator ReadOnlyConstructSetCompilerInterface::end() const {
 	return csPtr->cend();
 };
 
