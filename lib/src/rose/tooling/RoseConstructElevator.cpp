@@ -1,10 +1,11 @@
 #include <memory>
-#include <iostream>
 #include "instro/core/Helper.h"
 
 #include "instro/core/ConstructSet.h"
 #include "instro/rose/core/RoseConstructSet.h"
 #include "instro/rose/tooling/RoseConstructElevator.h"
+
+#include "instro/utility/Logger.h"
 
 #include "rose.h"
 
@@ -20,16 +21,16 @@ std::shared_ptr<InstRO::Rose::Core::RoseConstruct> raiseConstruct(InstRO::Rose::
 	SgNode *current = src->getNode();
 	// CI Walk the AST upwards, until the current node is either NULL or it is the desired construct type
 	while (current != nullptr && !pred(current)) {
-		std::cout << " --> " << current->class_name();
+		logIt(INFO) << " --> " << current->class_name();
 		current = current->get_parent();
 	}
 	if (current == nullptr) {
-		std::cout << " --> NULL" << std::endl;
+		logIt(INFO) << " --> NULL" << std::endl;
 		return nullptr;
 	}
 
-	std::cout << "raiseConstruct: raising ended with " << current->class_name() << std::endl;
-	// geth the corresponding construct from the RoseConstructProvider
+	logIt(INFO) << "raiseConstruct: raising ended with " << current->class_name() << std::endl;
+	// get the corresponding construct from the RoseConstructProvider
 	return InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(current);
 }
 
@@ -59,7 +60,7 @@ InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::Construc
 	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface input(&inputCS);
 	std::unique_ptr<InstRO::Core::ConstructSet> newConstructSet = std::make_unique<InstRO::Core::ConstructSet>();
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(newConstructSet.get());
-	std::cout << "ConstructElevator::raise to " << traitType << ":\t Input-ConstructSet contains " << inputCS.size()
+	logIt(INFO) << "ConstructElevator::raise to " << traitType << ":\t Input-ConstructSet contains " << inputCS.size()
 						<< "elements " << std::endl;
 	for (auto construct = input.cbegin(); construct != input.cend(); construct++) {
 		std::shared_ptr<InstRO::Rose::Core::RoseConstruct> newConstruct;
@@ -108,7 +109,7 @@ InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::Construc
 			output.put(newConstruct);
 		}
 	}
-	std::cout << "ConstructElevator::raise:\t ConstructSet contains " << newConstructSet->size() << " elements "
+	logIt(INFO) << "ConstructElevator::raise:\t ConstructSet contains " << newConstructSet->size() << " elements "
 						<< std::endl;
 	return *newConstructSet;
 };
