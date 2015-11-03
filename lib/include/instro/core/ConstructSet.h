@@ -6,9 +6,6 @@
 #include <memory>	// Shared pointers
 #include <vector>
 #include <set>
-#include <iostream> // XXX
-
-#include <bitset>
 
 namespace InstRO {
 
@@ -221,35 +218,26 @@ class Construct {
 	friend bool operator==(const std::shared_ptr<Construct>& a, const std::shared_ptr<Construct>& b) { return *a == *b; }
 };
 
-/* CI: The ConstructSet class is intended to be specialized for each compiler
- * interface. It provides the basic mechanisms to specify what construct level
- * are contained.
- */
 class ConstructSet {
 	friend class InstRO::InfrastructureInterface::ConstructSetCompilerInterface;
 	friend class InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface;
 
  public:
 	ConstructSet(){};
-	// XXX RN: in the long run there should be no child classes from ConstructSet
-	virtual ~ConstructSet(){};
 
-	void setCurrentMinLevel(ConstructTraitType minLevel){};	// TODO
-	void setCurrentMaxLevel(ConstructTraitType maxLevel){};	// TODO
-
-	virtual ConstructTraitType getMaxConstructLevel();
-	virtual ConstructTraitType getMinConstructLevel();
-	virtual void clear();
+	ConstructTraitType getMaxConstructLevel();
+	ConstructTraitType getMinConstructLevel();
+	void clear();
 	bool empty() const;
 	size_t size() const;
 
 	ConstructSet(const std::shared_ptr<Construct>& construct) { constructs.insert(construct); };
 
  protected:
-	virtual void put(const std::shared_ptr<Construct>& construct);
-	virtual void erase(const std::shared_ptr<Construct>& construct);
-	virtual void put(ConstructSet cs);
-	virtual void erase(ConstructSet cs);
+	void put(const std::shared_ptr<Construct>& construct);
+	void erase(const std::shared_ptr<Construct>& construct);
+	void put(ConstructSet cs);
+	void erase(ConstructSet cs);
 	bool contains(const std::shared_ptr<Construct>& construct) const;
 
 	std::set<std::shared_ptr<Construct> >::iterator begin();
@@ -261,16 +249,16 @@ class ConstructSet {
 
  public:
 	// https://en.wikipedia.org/wiki/Set_(mathematics)
-	virtual ConstructSet combine(const ConstructSet&) const;
-	virtual ConstructSet intersect(const ConstructSet&) const;
-	virtual ConstructSet relativecomplement(const ConstructSet&) const;
-	virtual ConstructSet symmerticDifference(const ConstructSet&) const;
+	ConstructSet combine(const ConstructSet&) const;
+	ConstructSet intersect(const ConstructSet&) const;
+	ConstructSet relativecomplement(const ConstructSet&) const;
+	ConstructSet symmerticDifference(const ConstructSet&) const;
 
-	virtual bool intersects(const ConstructSet&) const;
+	bool intersects(const ConstructSet&) const;
 
-	virtual std::vector<ConstructSet> split() const;
+	std::vector<ConstructSet> split() const;
 
-	virtual std::string toString() const {
+	std::string toString() const {
         std::string str;
         auto constructIter = begin();
         while (constructIter != end()) {
@@ -284,7 +272,7 @@ class ConstructSet {
         return str;
 	}
 
-	virtual std::string toDotString() const {
+	std::string toDotString() const {
 		std::string dotString;
 		for (auto const& constructPtr : constructs) {
 			dotString += constructPtr->toDotString();
