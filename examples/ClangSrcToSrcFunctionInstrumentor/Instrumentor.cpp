@@ -6,8 +6,9 @@
 #include "instro/utility/Logger.h"
 
 /*
- * This is meant as something where one can simply look up
- * syntax and to check whether instantiations would compile :)
+ * The example is a simple GNU Profiling interface compliant source to source instrumentation tool based on Clang's
+ * libTooling implementation of InstRO.
+ * Attention: It modifies the files in-place!
  */
 
 static llvm::cl::OptionCategory MyTool("my tool");
@@ -21,7 +22,6 @@ int main(int argc, char **argv) {
 	auto fDefSel = fac->createFunctionDefinitionSelector();
 
 	fac->createCygProfileAdapter(fDefSel);
-//	fac->createLLVMInputAdapter(fDefSel);
 
 	instro.apply();
 
