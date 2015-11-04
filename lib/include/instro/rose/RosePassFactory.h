@@ -1,13 +1,14 @@
 #ifndef INSTRO_ROSE_PASSFACTORY_H
 #define INSTRO_ROSE_PASSFACTORY_H
 
+#include "instro/core/Pass.h"
 #include "instro/core/PassFactory.h"
 #include "instro/core/PassManager.h"
-
 #include "instro/rose/core/RosePassImplementation.h"
-#include "instro/rose/pass/adapter/RoseConstructPrinter.h"
-#include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
+
 #include "instro/rose/pass/transformer/FunctionWrapper.h"
+
+#include <rose.h>
 
 namespace InstRO {
 namespace Rose {
@@ -15,36 +16,9 @@ namespace Rose {
 class RosePassFactory : public InstRO::PassFactory {
  public:
 	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) : PassFactory(refManager), project(proj) {}
-	virtual ~RosePassFactory() {}
 
- protected:
-	RosePassImplementation* getPass(Pass* pass) {
-		if (pass == NULL)
-			return NULL;
-		RosePassImplementation* rosePass = dynamic_cast<RosePassImplementation*>(pass->getPassImplementation());
-		if (pass->getPassImplementation() != NULL && rosePass == NULL)
-			throw std::string("Oh my god, what is going on");
-		return rosePass;
-	}
+ private:
 	SgProject* project;
-
-	std::vector<InstRO::Pass*> passBucket;
-	std::vector<InstRO::Core::PassImplementation*> passImplementationBucket;
-
- public:
-	class GenericAdapterConfiguration {
-	 public:
-		GenericAdapterConfiguration() { loopPass = functionPass = loopBodyPass = NULL; }
-		void instrumentFunctions(Pass* functionSelector) { functionPass = functionSelector; };
-		void instrumentLoopConstruct(Pass* loopConstructSelector) { loopPass = loopConstructSelector; };
-		void instrumentLoopBody(Pass* loopBodySelector) { loopBodyPass = loopBodySelector; };
-		Pass* getFunctionSelector() { return functionPass; }
-		Pass* getLoopConstructSelector() { return loopPass; }
-		Pass* getLoopBodySelector() { return loopBodyPass; }
-
-	 protected:
-		Pass* loopPass, *functionPass, *loopBodyPass;
-	};
 
  public:
 	InstRO::Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList);
