@@ -22,9 +22,6 @@ RoseConfigurationPassRegistry::RoseConfigurationPassRegistry(InstRO::Rose::RoseP
 		context.expectInputPasses({1});
 		return factory->createBooleanOrSelector(context.inputPasses[0], context.inputPasses[1]);
 	});
-	registerPass("FunctionBlackAndWhiteListSelector", [factory](ConfigurationParsingContext &context) {
-		return factory->createFunctionBlackAndWhiteListSelector(context.getStringArguments());
-	});
 
 	// Transformers
 	registerPass("ConstructLoweringElevator", [factory](ConfigurationParsingContext &context) -> Pass *{

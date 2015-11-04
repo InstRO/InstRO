@@ -52,25 +52,6 @@ Pass* RosePassFactory::createConstructPrinter(InstRO::Pass* pass) {
 	return newPass;
 }
 
-Pass* RosePassFactory::createFunctionBlackAndWhiteListSelector(std::vector<std::string> rules) {
-	std::vector<std::string> wlrules;
-	std::vector<std::string> blrules;
-	// get a matcher pass for the white list
-	Pass* wlPass = new Pass(new Selector::NameBasedSelector(wlrules));
-	wlPass->setPassName("InstRO::Rose::FunctionBlackAndWhiteListSelector-WhiteList");
-	passManager->registerPass(wlPass);
-
-	Pass* blPass = new Pass(new Selector::NameBasedSelector(blrules));
-	blPass->setPassName("InstRO::Rose::FunctionBlackAndWhiteListSelector-BlackList");
-	passManager->registerPass(blPass);
-
-	Pass* compountPass = new Pass(new Selector::CompoundSelector(wlPass, blPass, Selector::CompoundSelector::CO_Or));
-	compountPass->setPassName("InstRO::Rose:FunctionBlackAndWhiteListSelector-Compound");
-	passManager->registerPass(compountPass);
-
-	return compountPass;
-}
-
 Pass* RosePassFactory::createBooleanOrSelector(Pass* inputA, Pass* inputB) {
 	Pass* newPass =
 			new InstRO::Pass(new Rose::Selector::CompoundSelector(inputA, inputB, Selector::CompoundSelector::CO_Or));
