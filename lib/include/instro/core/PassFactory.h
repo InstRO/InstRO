@@ -1,11 +1,6 @@
 #ifndef INSTRO_CORE_FACTORY_H
 #define INSTRO_CORE_FACTORY_H
 
-#include <string>
-#include <iostream>
-
-#include <vector>
-
 #include "instro/core/Pass.h"
 #include "instro/core/PassManager.h"
 
@@ -22,6 +17,8 @@ class PassFactory {
 	 */
 	Pass* createBooleanAndSelector(Pass* passA, Pass* passB);
 	Pass* createBooleanOrSelector(Pass* passA, Pass* passB);
+	Pass* createBooleanXorSelector(Pass* passA, Pass* passB);
+	Pass* createBooleanMinusSelector(Pass* passA, Pass* passB);
 
 	virtual Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList) = 0;
 	virtual Pass* createCallpathSelector(Pass* passA, Pass* passB) = 0;
