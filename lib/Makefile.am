@@ -57,6 +57,7 @@ CORE_HFILES= \
 ./include/instro/pass/selector/ConstructClassSelector.h \
 ./include/instro/pass/selector/ElevatorSelector.h \
 ./include/instro/pass/selector/BooleanCompoundSelector.h \
+./include/instro/pass/adapter/DefaultInstrumentationAdapter.h \
 ./include/instro/utility/Logger.h
 
 CORE_SFILES= \
@@ -78,6 +79,7 @@ CORE_SFILES= \
 ./src/pass/selector/ConstructClassSelector.cpp \
 ./src/pass/selector/ElevatorSelector.cpp \
 ./src/pass/selector/BooleanCompoundSelector.cpp  \
+./src/pass/adapter/DefaultInstrumentationAdapter.cpp  \
 ./src/utility/Logger.cpp
 
 CLANG_HFILES= \

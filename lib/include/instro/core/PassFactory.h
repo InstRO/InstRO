@@ -30,7 +30,7 @@ class PassFactory {
 	virtual Pass* createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel,
 																								InstRO::Core::ConstructTraitType maxLevel) = 0;
 
-	virtual Pass* createInstROMeasurementInterfaceAdapter(Pass* input) = 0;
+	virtual Pass* createDefaultInstrumentationAdapter(Pass* input) = 0;
 
  protected:
 	PassManagement::PassManager* passManager;
