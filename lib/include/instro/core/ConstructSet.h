@@ -251,8 +251,8 @@ class ConstructSet {
 	// https://en.wikipedia.org/wiki/Set_(mathematics)
 	ConstructSet combine(const ConstructSet&) const;
 	ConstructSet intersect(const ConstructSet&) const;
-	ConstructSet relativecomplement(const ConstructSet&) const;
-	ConstructSet symmerticDifference(const ConstructSet&) const;
+	ConstructSet relativeComplement(const ConstructSet&) const;
+	ConstructSet symmertricDifference(const ConstructSet&) const;
 
 	bool intersects(const ConstructSet&) const;
 

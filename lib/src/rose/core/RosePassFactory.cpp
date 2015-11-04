@@ -53,8 +53,7 @@ Pass* RosePassFactory::createConstructPrinter(InstRO::Pass* pass) {
 }
 
 Pass* RosePassFactory::createBooleanOrSelector(Pass* inputA, Pass* inputB) {
-	Pass* newPass =
-			new InstRO::Pass(new Selector::BooleanCompoundSelector(inputA, inputB, Selector::BooleanCompoundSelector::CO_Or));
+	Pass* newPass = new Pass(new Selector::BooleanCompoundSelector(inputA, inputB, Selector::BooleanCompoundSelector::CO_OR));
 	newPass->setPassName("InstRO::Selector::BooleanOrSelector");
 	passManager->registerPass(newPass);
 	return newPass;

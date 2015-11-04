@@ -156,7 +156,7 @@ ConstructSet ConstructSet::intersect(const ConstructSet& other) const {
 	}
 	return retSet;
 }
-ConstructSet ConstructSet::relativecomplement(const ConstructSet& other) const {
+ConstructSet ConstructSet::relativeComplement(const ConstructSet& other) const {
 	ConstructSet retSet;
 	/* there may be a more efficient way of doing this, but it works*/
 	for (auto constructA : constructs) {
@@ -165,7 +165,7 @@ ConstructSet ConstructSet::relativecomplement(const ConstructSet& other) const {
 	}
 	return retSet;
 }
-ConstructSet ConstructSet::symmerticDifference(const ConstructSet& other) const {
+ConstructSet ConstructSet::symmertricDifference(const ConstructSet& other) const {
 	ConstructSet retSet;
 	for (std::set<std::shared_ptr<Construct> >::const_iterator constructB = other.cbegin(); constructB != other.cend();
 			 constructB++) {

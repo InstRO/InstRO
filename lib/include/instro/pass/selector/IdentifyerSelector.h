@@ -1,3 +1,6 @@
+#ifndef INSTRO_CORE_IDENTIFYERSELECTOR_H
+#define INSTRO_CORE_IDENTIFYERSELECTOR_H
+
 #include "instro/core/PassImplementation.h"
 
 namespace InstRO {
@@ -22,3 +25,5 @@ class IdentifyerSelector : public InstRO::Core::PassImplementation {
 };
 }
 }
+
+#endif	// INSTRO_CORE_IDENTIFYERSELECTOR_H
