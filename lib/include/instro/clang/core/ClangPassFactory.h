@@ -21,9 +21,9 @@ namespace Clang {
  * The PassFactory exposes a handle to the created pass by a raw pointer.
  * This does _not_ transfer ownership.
  **/
-class PassFactory : public InstRO::PassFactory {
+class ClangPassFactory : public InstRO::PassFactory {
  public:
-	PassFactory(InstRO::PassManagement::PassManager* manager, clang::tooling::Replacements& reps)
+	ClangPassFactory(InstRO::PassManagement::PassManager* manager, clang::tooling::Replacements& reps)
 			: InstRO::PassFactory(manager), replacements(reps){};
 
 	Pass* createBlackAndWhiteListSelector(std::vector<std::string> blacklist, std::vector<std::string> whitelist);
