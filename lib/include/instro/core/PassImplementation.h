@@ -36,6 +36,12 @@ class ChannelConfiguration {
 	template <class... PassList>
 	ChannelConfiguration(Pass *p1, PassList... passes) {
 		inputChannelPasses.insert(inputChannelPasses.begin(), {p1, passes...});
+
+		std::vector<Pass*> allPasses = {p1, passes...};
+		for (auto pass : allPasses) {
+			inputChannelMin[pass] = InstRO::Core::ConstructTraitType::CTMin;
+			inputChannelMax[pass] = InstRO::Core::ConstructTraitType::CTMax;
+		}
 	}
 
 	template <class Iterator>

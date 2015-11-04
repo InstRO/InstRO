@@ -34,13 +34,18 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 	int passCount = 1;
 
 	for (PassEnvelope *passEnvelope : passList) {
-		logIt(INFO) << "\texecuting pass (" << passCount << "):\t" << passEnvelope->pass->passName() << std::endl;
+		logIt(INFO) << "Executing pass (" << passCount << "):\t" << passEnvelope->pass->passName() << std::endl;
 
 		for (auto &i : getPredecessors(passEnvelope)) {
 			// CI: do we have to perform some form of elevation
 			if (i->getOutput()->getMinConstructLevel() < passEnvelope->pass->getMinInputLevelRequirement(i) ||
 					i->getOutput()->getMaxConstructLevel() > passEnvelope->pass->getMaxInputLevelRequirement(i)) {
-				logIt(WARN) << "\t construct level mismatch " << std::endl;
+
+				logIt(WARN) << " [WARN] construct level mismatch "
+						<< "\texpected " << passEnvelope->pass->getMinInputLevelRequirement(i) << " - "
+						<< passEnvelope->pass->getMaxInputLevelRequirement(i) << std::endl
+						<< "\tprovided " << i->getOutput()->getMinConstructLevel() << " - "
+						<< i->getOutput()->getMaxConstructLevel() << std::endl;
 
 				// We need to cast the construct set
 				Core::ConstructSet originalConstructSet = *(i->getOutput());
