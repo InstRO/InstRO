@@ -5,7 +5,6 @@
 #include "instro/core/PassManager.h"
 
 #include "instro/rose/core/RosePassImplementation.h"
-#include "instro/rose/pass/selector/NameBasedSelector.h"
 #include "instro/rose/pass/selector/CompoundSelector.h"
 #include "instro/rose/pass/adapter/RoseConstructPrinter.h"
 #include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
@@ -87,8 +86,6 @@ class RosePassFactory : public InstRO::PassFactory {
 
 
 	InstRO::Pass* createConstructPrinter(InstRO::Pass* pass);
-
-	InstRO::Pass* createFunctionBlackAndWhiteListSelector(std::vector<std::string> rules);
 
 	InstRO::Pass* createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass* pass);
 
