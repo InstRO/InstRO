@@ -52,18 +52,6 @@ Pass* RosePassFactory::createConstructPrinter(InstRO::Pass* pass) {
 	return newPass;
 }
 
-Pass* RosePassFactory::createBooleanOrSelector(Pass* inputA, Pass* inputB) {
-	Pass* newPass = new Pass(new Selector::BooleanCompoundSelector(inputA, inputB, Selector::BooleanCompoundSelector::CO_OR));
-	newPass->setPassName("InstRO::Selector::BooleanOrSelector");
-	passManager->registerPass(newPass);
-	return newPass;
-};
-
-InstRO::Pass* RosePassFactory::createBooleanAndSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) {
-	// TODO implement me
-	throw std::string("Not yet Implemented");
-}
-
 Pass* RosePassFactory::createProgramEntrySelector() {
 	Pass* newPass = new Pass(new InstRO::Selector::ProgramEntrySelector());
 	newPass->setPassName("InstRO::Selector::ProgramEntrySelector");

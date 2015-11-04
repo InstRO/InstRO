@@ -19,10 +19,6 @@ RoseConfigurationPassRegistry::RoseConfigurationPassRegistry(InstRO::Rose::RoseP
 		context.expectInputPasses({2});
 		return factory->createCallpathSelector(context.inputPasses[0], context.inputPasses[1]);
 	});
-	registerPass("BooleanOrSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
-		context.expectInputPasses({1});
-		return factory->createBooleanOrSelector(context.inputPasses[0], context.inputPasses[1]);
-	});
 
 	// Transformers
 	registerPass("ConstructLoweringElevator", [factory](ConfigurationParsingContext &context) -> Pass *{

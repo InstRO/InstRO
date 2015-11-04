@@ -10,15 +10,6 @@ InstRO::Pass *InstRO::Clang::ClangPassFactory::createBlackAndWhiteListSelector(s
 	return p;
 }
 
-InstRO::Pass *InstRO::Clang::ClangPassFactory::createBooleanOrSelector(InstRO::Pass *inputA, InstRO::Pass *inputB) {
-	auto pImpl = new InstRO::Clang::BooleanCompoundSelector(inputA, inputB, InstRO::Clang::BooleanCompoundSelector::OR);
-	lazyContextProvidingMap.insert(pImpl);
-	InstRO::Pass *p = new InstRO::Pass(pImpl);
-	p->setPassName("Boolean OR Selector");
-	passManager->registerPass(p);
-	return p;
-}
-
 InstRO::Pass *InstRO::Clang::ClangPassFactory::createFunctionDefinitionSelector() {
 	auto pImpl = new InstRO::Clang::FunctionDefinitionSelector();
 	lazyContextProvidingMap.insert(pImpl);

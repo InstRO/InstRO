@@ -20,8 +20,8 @@ class PassFactory {
 	/*
 	 * According to our minimal InstRO compliance file this is the list of components we need to provide.
 	 */
-	virtual Pass* createBooleanAndSelector(Pass* passA, Pass* passB) = 0;
-	virtual Pass* createBooleanOrSelector(Pass* passA, Pass* passB) = 0;
+	Pass* createBooleanAndSelector(Pass* passA, Pass* passB);
+	Pass* createBooleanOrSelector(Pass* passA, Pass* passB);
 
 	virtual Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList) = 0;
 	virtual Pass* createCallpathSelector(Pass* passA, Pass* passB) = 0;
