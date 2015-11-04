@@ -1,3 +1,25 @@
+## Modules
+
+The following Passes are currently planned [ ] and implemented [x] in InstRO.
+
+#### Selectors
+- [ ] AggregationStatementSelector
+- [x] BooleanCompoundSelector 
+- [ ] CallpathSelector
+- [x] ConstructClassSelector
+- [x] ConstructElevator
+- [ ] IdentifierMatcherSelector
+- [x] ProgramEntrySelector
+
+#### Adapters
+- [ ] DefaultInstrumentationAdapter
+
+#### Rose only Implementations
+- [x] FunctionWrapper (transformer)
+- [x] UniqueCallpathTransformer
+- [x] ConstructPrinter (Adapter)
+- [x] RoseStrategyBasedAdapter
+
 ## Libraries and Versions
 
 Internally we use the following version of compilers and libraries for building InstRO and ROSE.
