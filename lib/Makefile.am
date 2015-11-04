@@ -57,6 +57,7 @@ CORE_HFILES= \
 ./include/instro/pass/selector/CallPathSelector.h \
 ./include/instro/pass/selector/ConstructClassSelector.h \
 ./include/instro/pass/selector/ElevatorSelector.h \
+./include/instro/pass/selector/CompoundSelector.h \
 ./include/instro/utility/Logger.h
 
 CORE_SFILES= \
@@ -76,6 +77,7 @@ CORE_SFILES= \
 ./src/pass/selector/CallPathSelector.cpp \
 ./src/pass/selector/ConstructClassSelector.cpp \
 ./src/pass/selector/ElevatorSelector.cpp \
+./src/pass/selector/CompoundSelector.cpp  \
 ./src/utility/Logger.cpp
 
 CLANG_HFILES= \
@@ -101,7 +103,6 @@ ROSE_HFILES= \
 ./include/instro/rose/core/RosePass.h  \
 ./include/instro/rose/core/RoseLegacySelector.h \
 ./include/instro/rose/pass/adapter/RoseConstructPrinter.h \
-./include/instro/rose/pass/selector/CompoundSelector.h \
 ./include/instro/rose/pass/transformer/UniqueCallpathTransformer.h \
 ./include/instro/rose/tooling/RoseAnalysisInterface.h  \
 ./include/instro/rose/tooling/RoseConstructElevator.h \
@@ -131,7 +132,6 @@ ROSE_SFILES= \
 ./src/rose/core/RoseConstructSet.cpp   \
 ./src/rose/core/RosePassFactory.cpp \
 ./src/rose/pass/adapter/RoseConstructPrinter.cpp \
-./src/rose/pass/selector/CompoundSelector.cpp  \
 ./src/rose/tooling/RoseConstructElevator.cpp \
 ./src/rose/tooling/RoseNamedConstructAccess.cpp \
 ./src/rose/tooling/RoseGrammarInterface.cpp \

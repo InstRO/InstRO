@@ -1,10 +1,8 @@
-#include "instro/rose/pass/selector/CompoundSelector.h"
+#include "instro/pass/selector/CompoundSelector.h"
 
 namespace InstRO {
-namespace Rose {
 namespace Selector {
 
 void CompoundSelector::execute() {}
-}
 }
 }
