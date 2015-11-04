@@ -5,7 +5,7 @@
 #include "instro/core/PassManager.h"
 
 #include "instro/rose/core/RosePassImplementation.h"
-#include "instro/pass/selector/CompoundSelector.h"
+#include "instro/pass/selector/BooleanCompoundSelector.h"
 #include "instro/rose/pass/adapter/RoseConstructPrinter.h"
 #include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
 #include "instro/rose/pass/transformer/FunctionWrapper.h"
