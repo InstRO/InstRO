@@ -71,7 +71,7 @@ class ClangPassFactory : public InstRO::PassFactory {
 		return nullptr;
 	}
 
-	Pass* createInstROMeasurementInterfaceAdapter(Pass* input) override {
+	Pass* createDefaultInstrumentationAdapter(Pass* input) override {
 		// TODO Implement
 		return nullptr;
 	}

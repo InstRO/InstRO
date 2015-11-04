@@ -21,18 +21,18 @@ class RosePassFactory : public InstRO::PassFactory {
 	SgProject* project;
 
  public:
-	InstRO::Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList);
-	InstRO::Pass* createCallpathSelector(InstRO::Pass* callees, InstRO::Pass* caller);
-	InstRO::Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass);
-	InstRO::Pass* createAggregationStatementCountSelector(int threshold);
+	InstRO::Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList) override;
+	InstRO::Pass* createCallpathSelector(InstRO::Pass* callees, InstRO::Pass* caller) override;
+	InstRO::Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass) override;
+	InstRO::Pass* createAggregationStatementCountSelector(int threshold) override;
 
 	// Elevator Selectors
-	InstRO::Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
-	InstRO::Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
+	InstRO::Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) override;
+	InstRO::Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) override;
 	InstRO::Pass* createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel,
-																												InstRO::Core::ConstructTraitType maxLevel);
+																												InstRO::Core::ConstructTraitType maxLevel) override;
 
-	InstRO::Pass* createInstROMeasurementInterfaceAdapter(InstRO::Pass* input);
+	InstRO::Pass* createDefaultInstrumentationAdapter(InstRO::Pass* input) override;
 
 
 	/* ROSE ONLY */

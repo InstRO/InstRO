@@ -38,7 +38,7 @@ Pass* RosePassFactory::createConstructCroppingElevator(InstRO::Pass* pass, InstR
 	return newPass;
 }
 
-Pass* RosePassFactory::createInstROMeasurementInterfaceAdapter(InstRO::Pass* input) {
+Pass* RosePassFactory::createDefaultInstrumentationAdapter(InstRO::Pass* input) {
 	// TODO implement me
 	throw std::string("Not yet Implemented");
 }
