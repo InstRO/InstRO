@@ -1,25 +1,40 @@
 #ifndef INSTRO_CORE_BOOLEANCOMPOUNDSELECTOR_H
 #define INSTRO_CORE_BOOLEANCOMPOUNDSELECTOR_H
 
-#include "instro/core/Pass.h"								 // Pass
-#include "instro/core/PassImplementation.h"	// ChannelConfiguration
+#include "instro/core/PassImplementation.h"
 
 namespace InstRO {
 namespace Selector {
 
+/**
+ * \brief Provides boolean operations on the streams of two input selectors
+ * \author Roman Ness
+ * XXX RN: do we need inverted inputs?
+ */
 class BooleanCompoundSelector : public InstRO::Core::PassImplementation {
 
  public:
-	typedef enum { CO_Or, CO_And, CO_XOr } CompoundOperationType;
+	enum CompoundOperationType { CO_OR, CO_AND, CO_XOR, CO_MINUS };
 
-	BooleanCompoundSelector(Pass* inputA, Pass* inputB, CompoundOperationType Operation)
-			: PassImplementation(InstRO::Core::ChannelConfiguration(inputA, inputB)){};
-	BooleanCompoundSelector(Pass* inputA, bool invertPassA, Pass* inputB, bool invertPassB, CompoundOperationType Operation)
-			: PassImplementation(InstRO::Core::ChannelConfiguration(inputA, inputB)){};
-	void init() override{};
+	BooleanCompoundSelector(Pass* inputLeft, Pass* inputRight, CompoundOperationType operationType)
+			: PassImplementation(InstRO::Core::ChannelConfiguration(inputLeft, inputRight)),
+				csLeft(inputLeft->getOutput()),
+				csRight(inputRight->getOutput()),
+				operationType(operationType) {}
+
 	void execute() override;
-	void finalize() override{};
+
+	void init() override{}
+	void finalize() override{}
+
+ private:
+	Core::ConstructSet* csLeft;
+	Core::ConstructSet* csRight;
+
+	enum CompoundOperationType operationType;
+
 };
+
 }	// namespace Selector
 }	// namepsace InstRO
 
