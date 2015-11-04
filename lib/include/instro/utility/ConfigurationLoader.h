@@ -20,7 +20,7 @@ class RosePassFactory;
 }
 
 namespace Clang {
-class PassFactory;
+class ClangPassFactory;
 }
 
 namespace Utility {
@@ -156,7 +156,7 @@ class RoseConfigurationPassRegistry : public BaseConfigurationPassRegistry {
 /// declaration.
 class ClangConfigurationPassRegistry : public BaseConfigurationPassRegistry {
  public:
-	ClangConfigurationPassRegistry(InstRO::Clang::PassFactory *factory);
+	ClangConfigurationPassRegistry(InstRO::Clang::ClangPassFactory *factory);
 };
 }
 }

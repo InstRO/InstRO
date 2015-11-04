@@ -20,7 +20,7 @@ CLANG_SFILES= \
 ./src/clang/adapter/LLVMInputAdapter.cpp \
 ./src/clang/ClangInstrumentor.cpp \
 ./src/clang/core/ConstructSet.cpp \
-./src/clang/core/PassFactory.cpp \
+./src/clang/core/ClangPassFactory.cpp \
 ./src/clang/selector/BlackWhitelistSelector.cpp \
 ./src/clang/selector/FunctionDefinitionSelector.cpp \
 ./src/clang/selector/BooleanCompoundSelector.cpp \
@@ -88,7 +88,7 @@ CLANG_HFILES= \
 ./include/instro/clang/core/ClangConsumerFactory.h \
 ./include/instro/clang/core/ClangPassExecuter.h \
 ./include/instro/clang/core/ConstructSet.h \
-./include/instro/clang/core/PassFactory.h \
+./include/instro/clang/core/ClangPassFactory.h \
 ./include/instro/clang/core/Pass.h \
 ./include/instro/clang/selector/BlackWhitelistSelector.h \
 ./include/instro/clang/selector/FunctionDefinitionSelector.h \

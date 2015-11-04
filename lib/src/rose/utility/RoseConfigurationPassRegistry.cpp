@@ -6,6 +6,7 @@
 using namespace InstRO;
 using namespace InstRO::Utility;
 
+// TODO RN 2015-11: which factory methods are still missing here?
 RoseConfigurationPassRegistry::RoseConfigurationPassRegistry(InstRO::Rose::RosePassFactory *factory)
 		: BaseConfigurationPassRegistry(factory) {
 	// Selectors / Filters
