@@ -11,7 +11,6 @@ Pass* PassFactory::createBooleanOrSelector(Pass* inputA, Pass* inputB) {
 	passManager->registerPass(newPass);
 	return newPass;
 }
-;
 
 InstRO::Pass* PassFactory::createBooleanAndSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) {
 	Pass* newPass = new Pass(

@@ -1,19 +1,14 @@
+#include "instro/rose/RosePassFactory.h"
 
-#include "instro/core/Pass.h"
-#include "instro/core/Singleton.h"
 #include "instro/pass/selector/IdentifyerSelector.h"
 #include "instro/pass/selector/ProgramEntrySelector.h"
 #include "instro/pass/selector/CallPathSelector.h"
 #include "instro/pass/selector/ConstructClassSelector.h"
-#include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
-#include "instro/rose/pass/transformer/UniqueCallpathTransformer.h"
 #include "instro/pass/selector/ElevatorSelector.h"
-
-#include "instro/rose/RosePassFactory.h"
-
+#include "instro/rose/pass/transformer/UniqueCallpathTransformer.h"
+#include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
 #include "instro/rose/pass/adapter/RoseStrategyBasedAdapter.h"
-
-#include "rose.h"
+#include "instro/rose/pass/adapter/RoseConstructPrinter.h"
 
 namespace InstRO {
 namespace Rose {
