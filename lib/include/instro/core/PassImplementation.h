@@ -85,9 +85,9 @@ public:
 	PassImplementation() = delete;
 	virtual ~PassImplementation() {}
 
-	virtual void init() = 0;
+	virtual void init() {}	// provide default impl because this is the default case
 	virtual void execute() = 0;
-	virtual void finalize() = 0;
+	virtual void finalize() {}	// provide default impl because this is the default case
 
 	virtual void releaseOutput() { outputSet.clear(); }
 	ChannelConfiguration getChannelConfig() { return channelConfig; }

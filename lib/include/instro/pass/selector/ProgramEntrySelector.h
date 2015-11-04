@@ -8,9 +8,7 @@ class ProgramEntrySelector : public InstRO::Core::PassImplementation {
 
  public:
 	ProgramEntrySelector() : PassImplementation(Core::ChannelConfiguration()){};
-	virtual void init() override {}
 	virtual void execute() override;
-	virtual void finalize() override {}
 
 };
 

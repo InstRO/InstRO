@@ -14,9 +14,7 @@ class RoseConstructPrinter : public RosePassImplementation {
  public:
 	RoseConstructPrinter(InstRO::Pass *pass)
 			: RosePassImplementation(InstRO::Core::ChannelConfiguration(pass)), inputPass(pass) {}
-	void init(){};
 	void execute() override;
-	void finalize(){};
 };
 }
 }

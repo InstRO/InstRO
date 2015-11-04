@@ -16,11 +16,7 @@ public:
 	DefaultInstrumentationAdapter(InstRO::Pass* input) :
 			PassImplementation(InstRO::Core::ChannelConfiguration(input)) {}
 
-
 	void execute() override;
-
-	void init() override {}
-	void finalize() override {}
 
 };
 

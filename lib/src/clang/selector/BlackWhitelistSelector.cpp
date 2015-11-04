@@ -43,10 +43,6 @@ void InstRO::Clang::BlackWhitelistSelector::readFilterFile(std::string filename)
 	whitelist = lists.second;
 }
 
-void InstRO::Clang::BlackWhitelistSelector::init() {}
-
-void InstRO::Clang::BlackWhitelistSelector::finalize() {}
-
 void InstRO::Clang::BlackWhitelistSelector::releaseOutput() {}
 
 InstRO::Clang::ClangConstructSet *InstRO::Clang::BlackWhitelistSelector::getOutput() { return &cs; }

@@ -10,9 +10,7 @@ class ExampleConstructPrinter : public ExamplePass {
  public:
 	ExampleConstructPrinter(InstRO::Pass *pass)
 			: ExamplePass(InstRO::Core::ChannelConfiguration(pass)), inputPass(pass) {}
-	virtual void init(){};
 	virtual void execute() override;
-	virtual void finalize(){};
 };
 }
 }

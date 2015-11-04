@@ -57,9 +57,7 @@ class UniqueCallpathTransformer : public RosePassImplementation {
 
 	virtual ~UniqueCallpathTransformer();
 
-	virtual void init() override{};
 	virtual void execute() override;
-	virtual void finalize() override{};
 
  protected:
 	InstRO::Pass *inputPass;

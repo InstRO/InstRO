@@ -7,9 +7,6 @@
 namespace InstRO {
 namespace Selector {
 
-void IdentifyerSelector::init() {
-	// CI: Nothing to do here.
-}
 void IdentifyerSelector::execute() {
 	Tooling::NamedConstructAccess::NamedConstructAccess *nca =
 			getInstrumentorInstance()->getAnalysisManager()->getNamedConstructAccessFacility();
@@ -18,8 +15,6 @@ void IdentifyerSelector::execute() {
 			new ::InstRO::Tooling::NamedConstructAccess::WildcardedStringMatcher(matchingRules);
 	outputSet = nca->getConstructsByIdentifyerName(*stringMatcher);
 }
-
-void IdentifyerSelector::finalize() {}
 
 }
 }

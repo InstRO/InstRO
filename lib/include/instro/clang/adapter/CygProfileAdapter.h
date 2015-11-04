@@ -20,10 +20,6 @@ class CygProfileAdapter : public InstRO::Clang::ClangPassImplBase<CygProfileAdap
 
 	bool VisitFunctionDecl(clang::FunctionDecl *decl);
 
-	void init();
-
-	void finalize();
-
 	void releaseOutput();
 
 	InstRO::Clang::ClangConstructSet *getOutput();

@@ -18,9 +18,7 @@ class GNUProfilingInterfaceAdapter : public RosePassImplementation {
 			: RosePassImplementation(::InstRO::Core::ChannelConfiguration(
 						{pass, ::InstRO::Core::ConstructTraitType::CTFunction, ::InstRO::Core::ConstructTraitType::CTFunction})),
 				inputPass(pass) {}
-	virtual void init(){};
 	virtual void execute() override;
-	virtual void finalize(){};
 };
 }
 }

@@ -18,9 +18,7 @@ class ConstructClassSelector : public InstRO::Core::PassImplementation {
 			constructClass(constructClass) {
 	}
 
-	void init() override {}
  	void execute() override;
- 	void finalize() override {}
 
  private:
  	InstRO::Core::ConstructTraitType constructClass;

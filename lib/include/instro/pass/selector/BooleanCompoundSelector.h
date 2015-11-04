@@ -24,9 +24,6 @@ class BooleanCompoundSelector : public InstRO::Core::PassImplementation {
 
 	void execute() override;
 
-	void init() override{}
-	void finalize() override{}
-
  private:
 	Core::ConstructSet* csLeft;
 	Core::ConstructSet* csRight;
