@@ -29,13 +29,6 @@ class ExamplePassFactory : public InstRO::PassFactory {
 		newPass->setPassName("InstRO::Example::NameBasedSelector");
 		return newPass;
 	};
-	InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) {
-		InstRO::Pass* newPass =
-				new InstRO::Pass(new Selectors::CompoundSelector(inputA, inputB, Selectors::CompoundSelector::CO_Or));
-		passManager->registerPass(newPass);
-		newPass->setPassName("InstRO::Example::BooleanOrSelector");
-		return newPass;
-	};
 
 	InstRO::Pass* createCallPathSelector(InstRO::Pass* from, InstRO::Pass* to) {
 		InstRO::Pass* newPass = new InstRO::Pass(new InstRO::Selectors::CallPathSelector(from, to));
@@ -56,8 +49,6 @@ class ExamplePassFactory : public InstRO::PassFactory {
 	/**
 	 * Minimal InstRO compliance
 	 */
-	virtual Pass* createBooleanAndSelector(Pass* passA, Pass* passB) {return nullptr;};
-
 	virtual Pass* createCallpathSelector(Pass* passA, Pass* passB) {return nullptr;};
 	virtual Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass) {return nullptr;};
 	virtual Pass* createAggregationStatementCountSelector(int threshold) {return nullptr;};

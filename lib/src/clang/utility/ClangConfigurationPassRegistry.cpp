@@ -13,10 +13,6 @@ ClangConfigurationPassRegistry::ClangConfigurationPassRegistry(InstRO::Clang::Cl
 		return factory->createBlackAndWhiteListSelector(context.getStringArguments("blacklist"),
 																										context.getStringArguments("whitelist"));
 	});
-	registerPass("BooleanOrSelector", [factory](ConfigurationParsingContext &context) {
-		context.expectInputPasses({2});
-		return factory->createBooleanOrSelector(context.inputPasses[0], context.inputPasses[1]);
-	});
 	registerPass("FunctionDefinitionSelector", [factory](ConfigurationParsingContext &context) {
 		context.expectInputPasses({0});
 		return factory->createFunctionDefinitionSelector();

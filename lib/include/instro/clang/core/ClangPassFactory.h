@@ -9,7 +9,6 @@
 
 #include "instro/clang/selector/FunctionDefinitionSelector.h"
 #include "instro/clang/selector/BlackWhitelistSelector.h"
-#include "instro/clang/selector/BooleanCompoundSelector.h"
 
 #include "instro/clang/adapter/CygProfileAdapter.h"
 #include "instro/clang/adapter/LLVMInputAdapter.h"
@@ -27,18 +26,12 @@ class ClangPassFactory : public InstRO::PassFactory {
 			: InstRO::PassFactory(manager), replacements(reps){};
 
 	Pass* createBlackAndWhiteListSelector(std::vector<std::string> blacklist, std::vector<std::string> whitelist);
-	Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
 	Pass* createFunctionDefinitionSelector();
 	Pass* createCygProfileAdapter(InstRO::Pass* input);
 	Pass* createLLVMInputAdapter(InstRO::Pass* input);
 
 	Pass* createProgramEntrySelector() {
 		// TODO Implement
-		return nullptr;
-	};
-
-	Pass* createBooleanAndSelector(Pass* passA, Pass* passB) override {
-		// TODO Implmenent
 		return nullptr;
 	};
 

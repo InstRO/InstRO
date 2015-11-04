@@ -5,12 +5,9 @@
 #include "instro/core/PassManager.h"
 
 #include "instro/rose/core/RosePassImplementation.h"
-#include "instro/pass/selector/BooleanCompoundSelector.h"
 #include "instro/rose/pass/adapter/RoseConstructPrinter.h"
 #include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
 #include "instro/rose/pass/transformer/FunctionWrapper.h"
-
-#include "rose.h"
 
 namespace InstRO {
 namespace Rose {
@@ -50,9 +47,6 @@ class RosePassFactory : public InstRO::PassFactory {
 	};
 
  public:
-	InstRO::Pass* createBooleanAndSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
-	InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB);
-
 	InstRO::Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList);
 	InstRO::Pass* createCallpathSelector(InstRO::Pass* callees, InstRO::Pass* caller);
 	InstRO::Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass);

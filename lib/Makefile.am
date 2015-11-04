@@ -23,7 +23,6 @@ CLANG_SFILES= \
 ./src/clang/core/ClangPassFactory.cpp \
 ./src/clang/selector/BlackWhitelistSelector.cpp \
 ./src/clang/selector/FunctionDefinitionSelector.cpp \
-./src/clang/selector/BooleanCompoundSelector.cpp \
 ./src/clang/support/ClangConsumerFactory.cpp \
 ./src/clang/support/InstROASTConsumer.cpp \
 ./src/support/BWLFileReader.cpp
@@ -63,6 +62,7 @@ CORE_HFILES= \
 CORE_SFILES= \
 ./src/core/ConstructSet.cpp \
 ./src/core/Pass.cpp \
+./src/core/PassFactory.cpp \
 ./src/core/PassImplementation.cpp \
 ./src/core/SimplePassManager.cpp \
 ./src/core/Singleton.cpp \
@@ -92,7 +92,6 @@ CLANG_HFILES= \
 ./include/instro/clang/core/Pass.h \
 ./include/instro/clang/selector/BlackWhitelistSelector.h \
 ./include/instro/clang/selector/FunctionDefinitionSelector.h \
-./include/instro/clang/selector/BooleanCompoundSelector.h \
 ./include/instro/clang/support/InstROASTConsumer.h \
 ./include/instro/support/BWLFileReader.h
 
