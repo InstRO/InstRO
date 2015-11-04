@@ -10,6 +10,9 @@
 #include "instro/rose/pass/adapter/RoseStrategyBasedAdapter.h"
 #include "instro/rose/pass/adapter/RoseConstructPrinter.h"
 
+#include <string>
+#include <vector>
+
 namespace InstRO {
 namespace Rose {
 
@@ -38,13 +41,6 @@ Pass* RosePassFactory::createConstructCroppingElevator(InstRO::Pass* pass, InstR
 Pass* RosePassFactory::createInstROMeasurementInterfaceAdapter(InstRO::Pass* input) {
 	// TODO implement me
 	throw std::string("Not yet Implemented");
-}
-
-Pass* RosePassFactory::createConstructPrinter(InstRO::Pass* pass) {
-	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructPrinter(pass));
-	newPass->setPassName("InstRO::Rose::Adapter::RoseConstructPrinter");
-	passManager->registerPass(newPass);
-	return newPass;
 }
 
 Pass* RosePassFactory::createProgramEntrySelector() {
@@ -82,6 +78,13 @@ InstRO::Pass* RosePassFactory::createAggregationStatementCountSelector(int thres
 
 
 /* ROSE ONLY */
+
+Pass* RosePassFactory::createConstructPrinter(InstRO::Pass* pass) {
+	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructPrinter(pass));
+	newPass->setPassName("InstRO::Rose::Adapter::RoseConstructPrinter");
+	passManager->registerPass(newPass);
+	return newPass;
+}
 
 InstRO::Pass* RosePassFactory::createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass* pass) {
 	auto initializer = std::make_shared<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePInitializer>();
