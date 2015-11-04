@@ -8,7 +8,6 @@
 namespace InstRO {
 namespace Selectors {
 
-void CallPathSelector::init() {}
 void CallPathSelector::execute() {
 
 	// TODO implement me
@@ -40,9 +39,6 @@ void CallPathSelector::execute() {
 		}
 	}
 	// for (InstRO::Core::ConstructSet * csInstance=)
-}
-void CallPathSelector::finalize(){
-
 }
 
 }	// Selector

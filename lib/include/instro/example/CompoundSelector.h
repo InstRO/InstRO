@@ -33,9 +33,7 @@ class CompoundSelector : public InstRO::Example::ExamplePass {
 				firstArg(inputA),
 				secondArg(inputB),
 				compoundOperation(Operation){};
-	void init() override{};
 	void execute() override;
-	void finalize() override{};
 
  protected:
 	bool isStrict() { return true; };

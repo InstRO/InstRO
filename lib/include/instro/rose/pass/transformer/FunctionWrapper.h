@@ -100,7 +100,6 @@ class FunctionWrapper : public RosePassImplementation {
 
 	virtual void init() override;
 	virtual void execute() override;
-	virtual void finalize() override{};
 
 	std::string getDefinitionPrefix() const;
 	void setDefinitionPrefix(const std::string &prefix);

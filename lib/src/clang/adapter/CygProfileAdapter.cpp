@@ -11,8 +11,6 @@ InstRO::Clang::CygProfileAdapter::CygProfileAdapter(InstRO::Pass *pId, clang::to
 			labelCount(0),
 			cygProfFuncPtrName("__instro_func_ptr") {}
 
-void InstRO::Clang::CygProfileAdapter::init() {}
-
 bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *decl) {
 	if (context == nullptr) {
 		logIt(ERROR) << "Context NULL, stopping adapter pass." << std::endl;
@@ -36,8 +34,6 @@ bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *de
 	labelCount++;
 	return true;
 }
-
-void InstRO::Clang::CygProfileAdapter::finalize() {}
 
 void InstRO::Clang::CygProfileAdapter::releaseOutput() {}
 

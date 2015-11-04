@@ -19,8 +19,6 @@ class FunctionDefinitionSelector : public InstRO::Clang::ClangPassImplBase<Funct
 	FunctionDefinitionSelector();
 	bool VisitFunctionDecl(clang::FunctionDecl *fDecl);
 
-	void init(){};
-	void finalize(){};
 	void releaseOutput(){};
 	InstRO::Clang::ClangConstructSet *getOutput();
 
