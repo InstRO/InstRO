@@ -40,16 +40,25 @@ CTPredicate getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType)
 
 }	// namespace RoseConstructLevelPredicates
 
+std::string RoseConstruct::getIdentifier() const {
+	std::string identifier("");
+	if (isSgLocatedNode(node) != nullptr) {
+		auto locatedNode = isSgLocatedNode(node);
+		Sg_File_Info *fInfo = locatedNode->get_file_info();
+		identifier += fInfo->get_filenameString() + ":" + std::to_string(fInfo->get_line());
+		identifier += "--" + constructLevelToString(getTraits().max());
+		if (isSgFunctionDefinition(node)) {
+			auto fDef = isSgFunctionDefinition(node);
+			identifier += "-" + fDef->get_declaration()->get_name().getString();
+		}
+	} else {
+		logIt(WARN) << "The node in Construct " << getID() << " was not a located node." << std::endl;
+		raise_exception("The construct was not exportable");
+	}
+	return identifier;
+}
+
 }	// namespace Core
 }	// namespace Rose
 }	// namespace InstRO
-//
-// struct InstrumentableConstructPredicate {
-//	bool operator()(SgNode* n) const {
-//		if (isSgDoWhileStmt(n) || isSgBasicBlock(n) || isSgFunctionDefinition(n))
-//			return true;
-//		if (isSgExpression(n) != nullptr)
-//			return true;
-//		return false;
-//	}
-//};
+

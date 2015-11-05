@@ -45,6 +45,7 @@ CORE_HFILES= \
 ./include/instro/core/PassManager.h \
 ./include/instro/core/PassImplementation.h \
 ./include/instro/core/Singleton.h \
+./include/instro/tooling/IdentifierProvider.h \
 ./include/instro/tooling/AnalysisInterface.h \
 ./include/instro/tooling/ConstructElevator.h \
 ./include/instro/tooling/ControlFlowGraph.h \
@@ -129,7 +130,7 @@ ROSE_HFILES= \
 ./include/instro/rose/pass/transformer/FunctionWrapper.h
 
 ROSE_SFILES= \
-./src/rose/core/RoseConstructSet.cpp   \
+./src/rose/core/RoseConstructSet.cpp \
 ./src/rose/core/RosePassFactory.cpp \
 ./src/rose/pass/adapter/RoseConstructPrinter.cpp \
 ./src/rose/pass/selector/CompoundSelector.cpp  \
