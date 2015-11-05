@@ -31,7 +31,7 @@ class ExamplePassFactory : public InstRO::PassFactory {
 	};
 
 	InstRO::Pass* createCallPathSelector(InstRO::Pass* from, InstRO::Pass* to) {
-		InstRO::Pass* newPass = new InstRO::Pass(new InstRO::Selectors::CallPathSelector(from, to));
+		InstRO::Pass* newPass = new InstRO::Pass(new InstRO::Selector::CallPathSelector(from, to));
 		newPass->setPassName("InstRO::Example::CallPathSelector");
 		passManager->registerPass(newPass);
 		return newPass;
