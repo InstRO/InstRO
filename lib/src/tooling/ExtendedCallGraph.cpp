@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <queue>
 
 namespace InstRO {
 namespace Tooling {
@@ -95,6 +96,61 @@ int ExtendedCallGraph::getPredecessorCount(ExtendedCallGraphNode* start) {
 
 int ExtendedCallGraph::getSuccessorCount(ExtendedCallGraphNode* start) {
 	return successors[start].size();
+}
+
+InstRO::Core::ConstructSet ExtendedCallGraph::getAllReachablePredecessors(std::set<ExtendedCallGraphNode*> startNodes) {
+
+	std::set<ExtendedCallGraphNode*> visitedNodes = startNodes;
+	std::queue<ExtendedCallGraphNode*> todo;
+	for (auto n : startNodes) {
+		todo.push(n);
+	}
+
+	while (!todo.empty()) {
+		auto currentNode = todo.front();
+		todo.pop();
+
+		for (auto predecessor : getPredecessors(currentNode)) {
+			if (visitedNodes.find(predecessor) == visitedNodes.end()) {
+				todo.push(predecessor);
+				visitedNodes.insert(predecessor);
+			}
+		}
+	}
+
+	return getConstructSet(visitedNodes);
+}
+InstRO::Core::ConstructSet ExtendedCallGraph::getAllReachableSuccessors(std::set<ExtendedCallGraphNode*> startNodes) {
+
+	std::set<ExtendedCallGraphNode*> visitedNodes = startNodes;
+	std::queue<ExtendedCallGraphNode*> todo;
+	for (auto n : startNodes) {
+		todo.push(n);
+	}
+
+	while (!todo.empty()) {
+		auto currentNode = todo.front();
+		todo.pop();
+
+		for (auto successor : getSuccessors(currentNode)) {
+			if (visitedNodes.find(successor) == visitedNodes.end()) {
+				todo.push(successor);
+				visitedNodes.insert(successor);
+			}
+		}
+	}
+
+	return getConstructSet(visitedNodes);
+}
+
+InstRO::Core::ConstructSet ExtendedCallGraph::getConstructSet(std::set<ExtendedCallGraphNode*> graphNodes) {
+	InstRO::Core::ConstructSet returnSet;
+
+	for (auto graphNode : graphNodes) {
+		returnSet = returnSet.combine(graphNode->getAssociatedConstructSet());
+	}
+
+	return returnSet;
 }
 
 // TODO: swapping is now more complicated

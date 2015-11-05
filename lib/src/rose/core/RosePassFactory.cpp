@@ -58,7 +58,7 @@ InstRO::Pass* RosePassFactory::createIdentifierMatcherSelector(std::vector<std::
 };
 
 InstRO::Pass* RosePassFactory::createCallpathSelector(InstRO::Pass* callee, InstRO::Pass* caller) {
-	InstRO::Pass* newPass = new InstRO::Pass(new InstRO::Selectors::CallPathSelector(callee, caller));
+	InstRO::Pass* newPass = new InstRO::Pass(new InstRO::Selector::CallPathSelector(callee, caller));
 	newPass->setPassName("InstRO::Selector::CallPathSelector");
 	passManager->registerPass(newPass);
 	return newPass;

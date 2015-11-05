@@ -11,7 +11,7 @@ void RoseConstructPrinter::execute() {
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(inputPass->getOutput());
 
 	auto minLevel = inputPass->getOutput()->getMinConstructLevel();
-	auto maxLevel = inputPass->getOutput()->getMinConstructLevel();
+	auto maxLevel = inputPass->getOutput()->getMaxConstructLevel();
 
 	std::cout << "ConstructSet contains " << cs.size() << " constructs";
 	if (!cs.empty()) {
