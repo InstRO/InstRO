@@ -10,7 +10,7 @@
 int main(int argc, char** argv) {
 	try {
 		auto instro = new InstRO::RoseInstrumentor(argc, argv);
-		auto aFactory = dynamic_cast<InstRO::Rose::RosePassFactory*>(instro->getFactory());
+		auto aFactory = instro->getFactory();
 
 		auto functions = aFactory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
 		aFactory->createConstructPrinter(functions);
