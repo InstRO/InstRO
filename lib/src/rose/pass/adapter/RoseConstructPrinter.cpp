@@ -2,6 +2,7 @@
 #include "instro/core/ConstructSet.h"
 #include "instro/rose/core/RoseConstructSet.h"
 #include "instro/rose/pass/adapter/RoseConstructPrinter.h"
+#include "instro/utility/Logger.h"
 
 namespace InstRO {
 namespace Rose {
@@ -9,7 +10,7 @@ namespace Adapter {
 
 void RoseConstructPrinter::execute() {
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(inputPass->getOutput());
-	std::cout << "ConstructSet contains " << cs.size() << " constructs:" << std::endl;
+	logIt(INFO) << "ConstructSet contains " << cs.size() << " constructs:" << std::endl;
 
 	unsigned long count = 0;
 	for (auto construct : cs) {
