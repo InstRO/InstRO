@@ -12,11 +12,29 @@ int main(int argc, char** argv) {
 		auto instro = new InstRO::RoseInstrumentor(argc, argv);
 		auto aFactory = dynamic_cast<InstRO::Rose::RosePassFactory*>(instro->getFactory());
 
+		auto mainFunction = aFactory->createProgramEntrySelector();
+		aFactory->createConstructPrinter(mainFunction);
+
 		auto functions = aFactory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
 		aFactory->createConstructPrinter(functions);
 
-		auto statements = aFactory->createConstructLoweringElevator(functions, InstRO::Core::ConstructTraitType::CTStatement);
-		aFactory->createConstructPrinter(statements);
+//		auto statements = aFactory->createConstructLoweringElevator(functions, InstRO::Core::ConstructTraitType::CTStatement);
+//		aFactory->createConstructPrinter(statements);
+
+		auto intersect = aFactory->createBooleanAndSelector(mainFunction, functions);
+		aFactory->createConstructPrinter(intersect);
+
+		intersect = aFactory->createBooleanOrSelector(mainFunction, functions);
+		aFactory->createConstructPrinter(intersect);
+
+		intersect = aFactory->createBooleanXorSelector(mainFunction, functions);
+		aFactory->createConstructPrinter(intersect);
+
+		intersect = aFactory->createBooleanMinusSelector(functions, mainFunction);
+		aFactory->createConstructPrinter(intersect);
+
+		auto paths = aFactory->createCallpathSelector(mainFunction, functions);
+		aFactory->createConstructPrinter(paths);
 
 //		aFactory->createMatthiasZoellnerLoopInstrumentationAdapter(functions);
 
