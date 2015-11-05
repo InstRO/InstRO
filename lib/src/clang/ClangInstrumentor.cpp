@@ -3,9 +3,9 @@
 InstRO::Clang::ClangInstrumentor::ClangInstrumentor(int argc, const char** argv, llvm::cl::OptionCategory& llvmThing)
 		: argc(argc), argv(argv), cop(argc, argv, llvmThing), tool(cop.getCompilations(), cop.getSourcePathList()) {}
 
-InstRO::Clang::PassFactory* InstRO::Clang::ClangInstrumentor::getFactory(CompilationPhase phase) {
+InstRO::Clang::ClangPassFactory* InstRO::Clang::ClangInstrumentor::getFactory(CompilationPhase phase) {
 	if (fac == nullptr) {
-		fac.reset(new InstRO::Clang::PassFactory(getPassManager(), tool.getReplacements()));
+		fac.reset(new InstRO::Clang::ClangPassFactory(getPassManager(), tool.getReplacements()));
 	}
 	return fac.get();
 }

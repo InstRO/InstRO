@@ -20,8 +20,6 @@ class BlackWhitelistSelector : public InstRO::Clang::ClangPassImplBase<BlackWhit
 
 	void readFilterFile(std::string filename);
 
-	void init() override;
-	void finalize() override;
 	void releaseOutput() override;
 	InstRO::Clang::ClangConstructSet *getOutput() override;
 

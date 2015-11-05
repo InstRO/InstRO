@@ -12,7 +12,7 @@
 #include "instro/core/SimplePassManager.h"
 #include "instro/core/Instrumentor.h"
 #include "instro/clang/core/ClangConsumerFactory.h"
-#include "instro/clang/core/PassFactory.h"
+#include "instro/clang/core/ClangPassFactory.h"
 
 namespace InstRO {
 namespace Clang {
@@ -31,7 +31,7 @@ class ClangInstrumentor : public InstRO::Instrumentor {
 	clang::tooling::ToolAction* getClangAction();
 	/** Returns the factory used to create the passes a user builds the
 	 * instrumentor with */
-	InstRO::Clang::PassFactory* getFactory(CompilationPhase phase = frontend);
+	InstRO::Clang::ClangPassFactory* getFactory(CompilationPhase phase = frontend);
 	/** Accessor function for the (in general) compiler independent analysis layer */
 	virtual Tooling::AnalysisManager* getAnalysisManager() override { return nullptr; };
 
@@ -44,7 +44,7 @@ class ClangInstrumentor : public InstRO::Instrumentor {
 	const char** argv;
 	clang::tooling::CommonOptionsParser cop;
 	clang::tooling::RefactoringTool tool;
-	std::unique_ptr<InstRO::Clang::PassFactory> fac;
+	std::unique_ptr<InstRO::Clang::ClangPassFactory> fac;
 };
 }	// Clang
 }	// InstRO

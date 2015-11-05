@@ -28,7 +28,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
  public:
 	ConstructHierarchyASTDotGenerator(InstRO::Pass *pass, std::string filename)
 			: PassImplementation(InstRO::Core::ChannelConfiguration(pass)), inputPass(pass), fileName(filename) {}
-	virtual void init() { outFile.open(fileName, std::ios_base::out); };
+	virtual void init() override { outFile.open(fileName, std::ios_base::out); };
 	virtual void execute() {
 		outFile << "digraph InstROAST{" << std::endl;
 		auto elevator = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator();
@@ -93,7 +93,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 
 		outFile << "}" << std::endl;
 	}
-	virtual void finalize() { outFile.close(); };
+	virtual void finalize() override { outFile.close(); };
 };
 }
 }

@@ -24,21 +24,14 @@ class ExamplePassFactory : public InstRO::PassFactory {
 		return newPass;
 	};
 	InstRO::Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList) {
-		InstRO::Pass* newPass = new InstRO::Pass(new Selectors::NameBasedSelector(matchList));
+		InstRO::Pass* newPass = new InstRO::Pass(new Selector::NameBasedSelector(matchList));
 		passManager->registerPass(newPass);
 		newPass->setPassName("InstRO::Example::NameBasedSelector");
 		return newPass;
 	};
-	InstRO::Pass* createBooleanOrSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) {
-		InstRO::Pass* newPass =
-				new InstRO::Pass(new Selectors::CompoundSelector(inputA, inputB, Selectors::CompoundSelector::CO_Or));
-		passManager->registerPass(newPass);
-		newPass->setPassName("InstRO::Example::BooleanOrSelector");
-		return newPass;
-	};
 
 	InstRO::Pass* createCallPathSelector(InstRO::Pass* from, InstRO::Pass* to) {
-		InstRO::Pass* newPass = new InstRO::Pass(new InstRO::Selectors::CallPathSelector(from, to));
+		InstRO::Pass* newPass = new InstRO::Pass(new InstRO::Selector::CallPathSelector(from, to));
 		newPass->setPassName("InstRO::Example::CallPathSelector");
 		passManager->registerPass(newPass);
 		return newPass;
@@ -56,18 +49,16 @@ class ExamplePassFactory : public InstRO::PassFactory {
 	/**
 	 * Minimal InstRO compliance
 	 */
-	virtual Pass* createBooleanAndSelector(Pass* passA, Pass* passB) {return nullptr;};
+	virtual Pass* createCallpathSelector(Pass* passA, Pass* passB) override {return nullptr;};
+	virtual Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass) override {return nullptr;};
+	virtual Pass* createAggregationStatementCountSelector(int threshold) override {return nullptr;};
 
-	virtual Pass* createCallpathSelector(Pass* passA, Pass* passB) {return nullptr;};
-	virtual Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass) {return nullptr;};
-	virtual Pass* createAggregationStatementCountSelector(int threshold) {return nullptr;};
-
-	virtual Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) {return nullptr;};
-	virtual Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) {return nullptr;};
+	virtual Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) override {return nullptr;};
+	virtual Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) override {return nullptr;};
 	virtual Pass* createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel,
-																								InstRO::Core::ConstructTraitType maxLevel) {return nullptr;};
+																								InstRO::Core::ConstructTraitType maxLevel) override {return nullptr;};
 
-	virtual Pass* createInstROMeasurementInterfaceAdapter(Pass* input) {return nullptr;};
+	virtual Pass* createDefaultInstrumentationAdapter(Pass* input) override {return nullptr;};
 };
 }
 }

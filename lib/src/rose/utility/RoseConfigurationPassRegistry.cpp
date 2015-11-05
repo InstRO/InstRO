@@ -6,6 +6,7 @@
 using namespace InstRO;
 using namespace InstRO::Utility;
 
+// TODO RN 2015-11: which factory methods are still missing here?
 RoseConfigurationPassRegistry::RoseConfigurationPassRegistry(InstRO::Rose::RosePassFactory *factory)
 		: BaseConfigurationPassRegistry(factory) {
 	// Selectors / Filters
@@ -17,13 +18,6 @@ RoseConfigurationPassRegistry::RoseConfigurationPassRegistry(InstRO::Rose::RoseP
 	registerPass("CallPathSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
 		context.expectInputPasses({2});
 		return factory->createCallpathSelector(context.inputPasses[0], context.inputPasses[1]);
-	});
-	registerPass("BooleanOrSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
-		context.expectInputPasses({1});
-		return factory->createBooleanOrSelector(context.inputPasses[0], context.inputPasses[1]);
-	});
-	registerPass("FunctionBlackAndWhiteListSelector", [factory](ConfigurationParsingContext &context) {
-		return factory->createFunctionBlackAndWhiteListSelector(context.getStringArguments());
 	});
 
 	// Transformers

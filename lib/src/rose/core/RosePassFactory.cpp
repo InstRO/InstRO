@@ -1,19 +1,17 @@
+#include "instro/rose/RosePassFactory.h"
 
-#include "instro/core/Pass.h"
-#include "instro/core/Singleton.h"
 #include "instro/pass/selector/IdentifyerSelector.h"
 #include "instro/pass/selector/ProgramEntrySelector.h"
 #include "instro/pass/selector/CallPathSelector.h"
 #include "instro/pass/selector/ConstructClassSelector.h"
-#include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
-#include "instro/rose/pass/transformer/UniqueCallpathTransformer.h"
 #include "instro/pass/selector/ElevatorSelector.h"
-
-#include "instro/rose/RosePassFactory.h"
-
+#include "instro/rose/pass/transformer/UniqueCallpathTransformer.h"
+#include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
 #include "instro/rose/pass/adapter/RoseStrategyBasedAdapter.h"
+#include "instro/rose/pass/adapter/RoseConstructPrinter.h"
 
-#include "rose.h"
+#include <string>
+#include <vector>
 
 namespace InstRO {
 namespace Rose {
@@ -40,46 +38,7 @@ Pass* RosePassFactory::createConstructCroppingElevator(InstRO::Pass* pass, InstR
 	return newPass;
 }
 
-Pass* RosePassFactory::createInstROMeasurementInterfaceAdapter(InstRO::Pass* input) {
-	// TODO implement me
-	throw std::string("Not yet Implemented");
-}
-
-Pass* RosePassFactory::createConstructPrinter(InstRO::Pass* pass) {
-	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructPrinter(pass));
-	newPass->setPassName("InstRO::Rose::Adapter::RoseConstructPrinter");
-	passManager->registerPass(newPass);
-	return newPass;
-}
-
-Pass* RosePassFactory::createFunctionBlackAndWhiteListSelector(std::vector<std::string> rules) {
-	std::vector<std::string> wlrules;
-	std::vector<std::string> blrules;
-	// get a matcher pass for the white list
-	Pass* wlPass = new Pass(new Selector::NameBasedSelector(wlrules));
-	wlPass->setPassName("InstRO::Rose::FunctionBlackAndWhiteListSelector-WhiteList");
-	passManager->registerPass(wlPass);
-
-	Pass* blPass = new Pass(new Selector::NameBasedSelector(blrules));
-	blPass->setPassName("InstRO::Rose::FunctionBlackAndWhiteListSelector-BlackList");
-	passManager->registerPass(blPass);
-
-	Pass* compountPass = new Pass(new Selector::CompoundSelector(wlPass, blPass, Selector::CompoundSelector::CO_Or));
-	compountPass->setPassName("InstRO::Rose:FunctionBlackAndWhiteListSelector-Compound");
-	passManager->registerPass(compountPass);
-
-	return compountPass;
-}
-
-Pass* RosePassFactory::createBooleanOrSelector(Pass* inputA, Pass* inputB) {
-	Pass* newPass =
-			new InstRO::Pass(new Rose::Selector::CompoundSelector(inputA, inputB, Selector::CompoundSelector::CO_Or));
-	newPass->setPassName("InstRO::Rose::BooleanOrSelector");
-	passManager->registerPass(newPass);
-	return newPass;
-};
-
-InstRO::Pass* RosePassFactory::createBooleanAndSelector(InstRO::Pass* inputA, InstRO::Pass* inputB) {
+Pass* RosePassFactory::createDefaultInstrumentationAdapter(InstRO::Pass* input) {
 	// TODO implement me
 	throw std::string("Not yet Implemented");
 }
@@ -99,7 +58,7 @@ InstRO::Pass* RosePassFactory::createIdentifierMatcherSelector(std::vector<std::
 };
 
 InstRO::Pass* RosePassFactory::createCallpathSelector(InstRO::Pass* callee, InstRO::Pass* caller) {
-	InstRO::Pass* newPass = new InstRO::Pass(new InstRO::Selectors::CallPathSelector(callee, caller));
+	InstRO::Pass* newPass = new InstRO::Pass(new InstRO::Selector::CallPathSelector(callee, caller));
 	newPass->setPassName("InstRO::Selector::CallPathSelector");
 	passManager->registerPass(newPass);
 	return newPass;
@@ -119,6 +78,13 @@ InstRO::Pass* RosePassFactory::createAggregationStatementCountSelector(int thres
 
 
 /* ROSE ONLY */
+
+Pass* RosePassFactory::createConstructPrinter(InstRO::Pass* pass) {
+	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructPrinter(pass));
+	newPass->setPassName("InstRO::Rose::Adapter::RoseConstructPrinter");
+	passManager->registerPass(newPass);
+	return newPass;
+}
 
 InstRO::Pass* RosePassFactory::createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass* pass) {
 	auto initializer = std::make_shared<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePInitializer>();

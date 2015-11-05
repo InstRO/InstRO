@@ -1,11 +1,6 @@
 #ifndef INSTRO_CORE_FACTORY_H
 #define INSTRO_CORE_FACTORY_H
 
-#include <string>
-#include <iostream>
-
-#include <vector>
-
 #include "instro/core/Pass.h"
 #include "instro/core/PassManager.h"
 
@@ -20,8 +15,10 @@ class PassFactory {
 	/*
 	 * According to our minimal InstRO compliance file this is the list of components we need to provide.
 	 */
-	virtual Pass* createBooleanAndSelector(Pass* passA, Pass* passB) = 0;
-	virtual Pass* createBooleanOrSelector(Pass* passA, Pass* passB) = 0;
+	Pass* createBooleanAndSelector(Pass* passA, Pass* passB);
+	Pass* createBooleanOrSelector(Pass* passA, Pass* passB);
+	Pass* createBooleanXorSelector(Pass* passA, Pass* passB);
+	Pass* createBooleanMinusSelector(Pass* passA, Pass* passB);
 
 	virtual Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList) = 0;
 	virtual Pass* createCallpathSelector(Pass* passA, Pass* passB) = 0;
@@ -33,7 +30,7 @@ class PassFactory {
 	virtual Pass* createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel,
 																								InstRO::Core::ConstructTraitType maxLevel) = 0;
 
-	virtual Pass* createInstROMeasurementInterfaceAdapter(Pass* input) = 0;
+	virtual Pass* createDefaultInstrumentationAdapter(Pass* input) = 0;
 
  protected:
 	PassManagement::PassManager* passManager;

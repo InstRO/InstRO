@@ -9,10 +9,6 @@ InstRO::Clang::LLVMInputAdapter::LLVMInputAdapter(InstRO::Pass *pId)
 
 bool InstRO::Clang::LLVMInputAdapter::VisitFunctionDecl(clang::FunctionDecl *fDecl) { return true; }
 
-void InstRO::Clang::LLVMInputAdapter::init() {}
-
-void InstRO::Clang::LLVMInputAdapter::finalize() {}
-
 void InstRO::Clang::LLVMInputAdapter::releaseOutput() {}
 
 void InstRO::Clang::LLVMInputAdapter::exec() {
