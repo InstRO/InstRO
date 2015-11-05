@@ -229,9 +229,9 @@ class ConstructSet {
 	friend class std::insert_iterator<ConstructSet>;
 
  public:
-	typedef std::set<std::shared_ptr<Construct> >::iterator iterator;
-	typedef std::set<std::shared_ptr<Construct> >::const_iterator const_iterator;
 	typedef std::shared_ptr<Construct> value_type;
+	typedef std::set<value_type>::iterator iterator;
+	typedef std::set<value_type>::const_iterator const_iterator;
 
 	ConstructSet(){};
 
@@ -241,25 +241,25 @@ class ConstructSet {
 	bool empty() const;
 	size_t size() const;
 
-	ConstructSet(const std::shared_ptr<Construct>& construct) { constructs.insert(construct); };
+	ConstructSet(const value_type& construct) { constructs.insert(construct); };
  protected:
 	iterator insert(iterator it, const value_type& val) {
 		return constructs.insert(it, val);
 	}
 
  protected:
-	void put(const std::shared_ptr<Construct>& construct);
-	void erase(const std::shared_ptr<Construct>& construct);
+	void put(const value_type& construct);
+	void erase(const value_type& construct);
 	void put(ConstructSet cs);
 	void erase(ConstructSet cs);
-	bool contains(const std::shared_ptr<Construct>& construct) const;
+	bool contains(const value_type& construct) const;
 
-	std::set<std::shared_ptr<Construct> >::iterator begin();
-	std::set<std::shared_ptr<Construct> >::iterator end();
-	std::set<std::shared_ptr<Construct> >::const_iterator begin() const;
-	std::set<std::shared_ptr<Construct> >::const_iterator end() const;
-	std::set<std::shared_ptr<Construct> >::const_iterator cbegin() const;
-	std::set<std::shared_ptr<Construct> >::const_iterator cend() const;
+	iterator begin();
+	iterator end();
+	const_iterator begin() const;
+	const_iterator end() const;
+	const_iterator cbegin() const;
+	const_iterator cend() const;
 
  public:
 	// https://en.wikipedia.org/wiki/Set_(mathematics)
