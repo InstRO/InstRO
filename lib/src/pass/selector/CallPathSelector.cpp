@@ -1,4 +1,3 @@
-#define INSTRO_LOG_LEVEL DEBUG
 #include "instro/utility/Logger.h"
 
 #include "instro/pass/selector/CallPathSelector.h"
@@ -6,7 +5,6 @@
 #include "instro/core/Instrumentor.h"
 #include "instro/core/Singleton.h"
 #include "instro/tooling/AnalysisInterface.h"
-
 
 #include <set>
 
@@ -30,6 +28,7 @@ void CallPathSelector::execute() {
 	logIt(DEBUG) << "successorsOfFrom elements: " << successorsOfFrom.size() << std::endl;
 
 	outputSet = predecessorsOfTo.intersect(successorsOfFrom);
+
 }
 
 }	// Selector
