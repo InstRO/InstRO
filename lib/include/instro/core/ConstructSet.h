@@ -1,5 +1,5 @@
 #ifndef INSTRO_CORE_CONSTRUCTSET_H
-#define INSTRO_CORE_CONSTRUCTSET_H 0.1
+#define INSTRO_CORE_CONSTRUCTSET_H
 
 #include <string>
 #include <sstream>
@@ -203,26 +203,36 @@ class Construct {
 
 	const std::set<ConstructTraitType>& getTraitsAsSet() { return constructTraits.getTraitsAsSet(); }
 
-	bool operator<(const Construct& other) { return getID() < other.getID(); }
-	bool operator==(const Construct& other) { return getID() == other.getID(); }
-
 	virtual size_t getID() const = 0;
 	virtual std::string toString() const { return std::string("Construct(abstract)"); }
 	virtual std::string toDotString() const = 0;
 
+
+
  protected:
 	ConstructTrait constructTraits;
 
-	// XXX is this necessary?
-	friend bool operator<(const std::shared_ptr<Construct>& a, const std::shared_ptr<Construct>& b) { return *a < *b; }
-	friend bool operator==(const std::shared_ptr<Construct>& a, const std::shared_ptr<Construct>& b) { return *a == *b; }
+	friend bool __attribute__ ((always_inline)) operator<(const std::shared_ptr<Construct>& a, const std::shared_ptr<Construct>& b) {
+
+		// FIXME RN 2015-11: For some supernatural reason the operator does not work correctly without the following statement.
+		b->toString();
+
+		return a->getID() < b->getID();
+	}
+
+//	friend bool operator==(const std::shared_ptr<Construct>& a, const std::shared_ptr<Construct>& b) { return a->getID() == b->getID(); }
 };
 
 class ConstructSet {
 	friend class InstRO::InfrastructureInterface::ConstructSetCompilerInterface;
 	friend class InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface;
+	friend class std::insert_iterator<ConstructSet>;
 
  public:
+	typedef std::set<std::shared_ptr<Construct> >::iterator iterator;
+	typedef std::set<std::shared_ptr<Construct> >::const_iterator const_iterator;
+	typedef std::shared_ptr<Construct> value_type;
+
 	ConstructSet(){};
 
 	ConstructTraitType getMaxConstructLevel();
@@ -232,6 +242,10 @@ class ConstructSet {
 	size_t size() const;
 
 	ConstructSet(const std::shared_ptr<Construct>& construct) { constructs.insert(construct); };
+ protected:
+	iterator insert(iterator it, const value_type& val) {
+		return constructs.insert(it, val);
+	}
 
  protected:
 	void put(const std::shared_ptr<Construct>& construct);
@@ -282,10 +296,10 @@ class ConstructSet {
 	}
 
  protected:
-	std::set<std::shared_ptr<Construct> > constructs;
+	std::set<value_type> constructs;
 
 	friend bool operator<(const ConstructSet& c1, const ConstructSet& c2) { return c1.constructs < c2.constructs; }
-	friend bool operator==(const ConstructSet& c1, const ConstructSet& c2) { return c1.constructs == c2.constructs; }
+//	friend bool operator==(const ConstructSet& c1, const ConstructSet& c2) { return c1.constructs == c2.constructs; }
 
 	friend std::ostream& operator<<(std::ostream& out, const ConstructSet& cs) {
 		out << " CS size:" << cs.size() << std::endl;
