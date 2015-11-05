@@ -3,7 +3,7 @@
 
 #include "clang/AST/ASTConsumer.h"
 
-#include "instro/clang/core/PassFactory.h"
+#include "instro/clang/core/ClangPassFactory.h"
 #include "instro/core/PassManager.h"
 #include "instro/clang/core/ClangPassExecuter.h"
 
