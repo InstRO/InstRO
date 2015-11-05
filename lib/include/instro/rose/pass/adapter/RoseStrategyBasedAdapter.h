@@ -55,9 +55,7 @@ namespace InstRO {
 						//.insert(inputChannelPasses.begin(), { p1, passes... });
 					}
 				}
-				void init(){};
 				void execute() override;
-				void finalize(){};
 			};
 		}
 	}

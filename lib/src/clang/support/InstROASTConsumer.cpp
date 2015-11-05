@@ -2,7 +2,7 @@
 #include "instro/utility/Logger.h"
 
 InstRO::Clang::Support::InstROASTConsumer::InstROASTConsumer(InstRO::PassManagement::PassManager *passManager,
-																														 InstRO::Clang::PassFactory *fac)
+																														 InstRO::Clang::ClangPassFactory *fac)
 		: passManager(passManager), factory(fac) {}
 
 void InstRO::Clang::Support::InstROASTConsumer::HandleTranslationUnit(clang::ASTContext &context) {

@@ -10,7 +10,7 @@
 namespace InstRO {
 namespace Clang {
 
-class PassFactory;
+class ClangPassFactory;
 
 namespace Support {
 
@@ -20,7 +20,7 @@ namespace Support {
 class InstROASTConsumer : public clang::ASTConsumer {
  public:
 	/* Pass Manager knows when to run which pass */
-	InstROASTConsumer(InstRO::PassManagement::PassManager *passManager, InstRO::Clang::PassFactory *fac);
+	InstROASTConsumer(InstRO::PassManagement::PassManager *passManager, InstRO::Clang::ClangPassFactory *fac);
 
 	/* Gets invoked per Translation Unit. Runs all passes, registered in
 	 * PassManager on the TranslationUnit */
@@ -30,7 +30,7 @@ class InstROASTConsumer : public clang::ASTConsumer {
 	// This is a raw pointer, since it is a reference to an entity that is owned
 	// by the Instrumentor
 	InstRO::PassManagement::PassManager *passManager;
-	InstRO::Clang::PassFactory *factory;
+	InstRO::Clang::ClangPassFactory *factory;
 };
 }
 }

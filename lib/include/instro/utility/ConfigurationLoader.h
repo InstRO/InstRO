@@ -20,7 +20,7 @@ class RosePassFactory;
 }
 
 namespace Clang {
-class PassFactory;
+class ClangPassFactory;
 }
 
 namespace Utility {
@@ -75,7 +75,15 @@ class ConfigurationPassRegistry {
 /// and uses a PassFactory to create the Pass instances.
 class BaseConfigurationPassRegistry : public ConfigurationPassRegistry {
  public:
-	BaseConfigurationPassRegistry(PassFactory *factory) : factory(factory) {}
+	BaseConfigurationPassRegistry(PassFactory *factory) : factory(factory) {
+
+		registerPass("BooleanOrSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
+			context.expectInputPasses({1});
+			return factory->createBooleanOrSelector(context.inputPasses[0], context.inputPasses[1]);
+		});
+
+	}
+
 	virtual ~BaseConfigurationPassRegistry() {}
 
 	PassParser lookup(const std::string &passType) override;
@@ -156,7 +164,7 @@ class RoseConfigurationPassRegistry : public BaseConfigurationPassRegistry {
 /// declaration.
 class ClangConfigurationPassRegistry : public BaseConfigurationPassRegistry {
  public:
-	ClangConfigurationPassRegistry(InstRO::Clang::PassFactory *factory);
+	ClangConfigurationPassRegistry(InstRO::Clang::ClangPassFactory *factory);
 };
 }
 }

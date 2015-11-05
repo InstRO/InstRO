@@ -7,8 +7,8 @@ if DEBUG
 AM_CFLAGS += -g3 -O0 -Wall
 AM_CXXFLAGS += -g3 -O0 -Wall
 else
-AM_CFLAGS += -O2
-AM_CXXFLAGS += -O2
+AM_CFLAGS += -g -O2
+AM_CXXFLAGS += -g -O2
 endif
 
 
@@ -20,10 +20,9 @@ CLANG_SFILES= \
 ./src/clang/adapter/LLVMInputAdapter.cpp \
 ./src/clang/ClangInstrumentor.cpp \
 ./src/clang/core/ConstructSet.cpp \
-./src/clang/core/PassFactory.cpp \
+./src/clang/core/ClangPassFactory.cpp \
 ./src/clang/selector/BlackWhitelistSelector.cpp \
 ./src/clang/selector/FunctionDefinitionSelector.cpp \
-./src/clang/selector/BooleanCompoundSelector.cpp \
 ./src/clang/support/ClangConsumerFactory.cpp \
 ./src/clang/support/InstROASTConsumer.cpp \
 ./src/support/BWLFileReader.cpp
@@ -58,11 +57,14 @@ CORE_HFILES= \
 ./include/instro/pass/selector/CallPathSelector.h \
 ./include/instro/pass/selector/ConstructClassSelector.h \
 ./include/instro/pass/selector/ElevatorSelector.h \
+./include/instro/pass/selector/BooleanCompoundSelector.h \
+./include/instro/pass/adapter/DefaultInstrumentationAdapter.h \
 ./include/instro/utility/Logger.h
 
 CORE_SFILES= \
 ./src/core/ConstructSet.cpp \
 ./src/core/Pass.cpp \
+./src/core/PassFactory.cpp \
 ./src/core/PassImplementation.cpp \
 ./src/core/SimplePassManager.cpp \
 ./src/core/Singleton.cpp \
@@ -77,6 +79,8 @@ CORE_SFILES= \
 ./src/pass/selector/CallPathSelector.cpp \
 ./src/pass/selector/ConstructClassSelector.cpp \
 ./src/pass/selector/ElevatorSelector.cpp \
+./src/pass/selector/BooleanCompoundSelector.cpp  \
+./src/pass/adapter/DefaultInstrumentationAdapter.cpp  \
 ./src/utility/Logger.cpp
 
 CLANG_HFILES= \
@@ -87,11 +91,10 @@ CLANG_HFILES= \
 ./include/instro/clang/core/ClangConsumerFactory.h \
 ./include/instro/clang/core/ClangPassExecuter.h \
 ./include/instro/clang/core/ConstructSet.h \
-./include/instro/clang/core/PassFactory.h \
+./include/instro/clang/core/ClangPassFactory.h \
 ./include/instro/clang/core/Pass.h \
 ./include/instro/clang/selector/BlackWhitelistSelector.h \
 ./include/instro/clang/selector/FunctionDefinitionSelector.h \
-./include/instro/clang/selector/BooleanCompoundSelector.h \
 ./include/instro/clang/support/InstROASTConsumer.h \
 ./include/instro/support/BWLFileReader.h
 
@@ -102,8 +105,6 @@ ROSE_HFILES= \
 ./include/instro/rose/core/RosePass.h  \
 ./include/instro/rose/core/RoseLegacySelector.h \
 ./include/instro/rose/pass/adapter/RoseConstructPrinter.h \
-./include/instro/rose/pass/selector/NameBasedSelector.h \
-./include/instro/rose/pass/selector/CompoundSelector.h \
 ./include/instro/rose/pass/transformer/UniqueCallpathTransformer.h \
 ./include/instro/rose/tooling/RoseAnalysisInterface.h  \
 ./include/instro/rose/tooling/RoseConstructElevator.h \
@@ -133,8 +134,6 @@ ROSE_SFILES= \
 ./src/rose/core/RoseConstructSet.cpp \
 ./src/rose/core/RosePassFactory.cpp \
 ./src/rose/pass/adapter/RoseConstructPrinter.cpp \
-./src/rose/pass/selector/CompoundSelector.cpp  \
-./src/rose/pass/selector/NameBasedSelector.cpp  \
 ./src/rose/tooling/RoseConstructElevator.cpp \
 ./src/rose/tooling/RoseNamedConstructAccess.cpp \
 ./src/rose/tooling/RoseGrammarInterface.cpp \

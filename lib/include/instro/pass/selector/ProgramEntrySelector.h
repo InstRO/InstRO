@@ -3,15 +3,14 @@
 namespace InstRO {
 namespace Selector {
 
+/** \brief Get the main function */
 class ProgramEntrySelector : public InstRO::Core::PassImplementation {
 
  public:
 	ProgramEntrySelector() : PassImplementation(Core::ChannelConfiguration()){};
-	virtual void init() override;
 	virtual void execute() override;
-	virtual void finalize() override;
 
- protected:
 };
-}
-}
+
+}	// namespace Selector
+}	// namespace InstRO

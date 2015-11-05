@@ -10,7 +10,17 @@ namespace Adapter {
 
 void RoseConstructPrinter::execute() {
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(inputPass->getOutput());
-	logIt(INFO) << "ConstructSet contains " << cs.size() << " constructs:" << std::endl;
+
+	auto minLevel = inputPass->getOutput()->getMinConstructLevel();
+	auto maxLevel = inputPass->getOutput()->getMaxConstructLevel();
+
+	std::cout << "ConstructSet contains " << cs.size() << " constructs";
+	if (!cs.empty()) {
+		std::cout << " | min: " << InstRO::Core::constructLevelToString(minLevel)
+				<< " | max: " << InstRO::Core::constructLevelToString(maxLevel) << std::endl;
+	} else {
+		std::cout << std::endl;
+	}
 
 	unsigned long count = 0;
 	for (auto construct : cs) {

@@ -6,11 +6,8 @@
 
 namespace InstRO {
 namespace Example {
-namespace Selectors {
+namespace Selector {
 
-void NameBasedSelector::init() {
-	// CI: Nothing to do here.
-}
 void NameBasedSelector::execute() {
 	Tooling::NamedConstructAccess::NamedConstructAccess *nca =
 			getInstrumentorInstance()->getAnalysisManager()->getNamedConstructAccessFacility();
@@ -19,8 +16,6 @@ void NameBasedSelector::execute() {
 			new ::InstRO::Tooling::NamedConstructAccess::WildcardedStringMatcher(matchingRules);
 	outputSet = nca->getConstructsByIdentifyerName(*stringMatcher);
 }
-
-void NameBasedSelector::finalize() {}
 
 }
 }

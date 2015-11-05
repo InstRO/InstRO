@@ -14,10 +14,6 @@ public:
 
 	~ConstructElevatorSelector() {}
 
-	void init() override {}
-
-	void finalize() override {}
-
  protected:
 	Pass* inputPass;
 	InstRO::Core::ConstructTraitType targetLevel;

@@ -3,7 +3,7 @@
 
 namespace InstRO {
 namespace Example {
-namespace Selectors {
+namespace Selector {
 
 class NameBasedSelector : public InstRO::Example::ExamplePass {
  protected:
@@ -16,9 +16,7 @@ class NameBasedSelector : public InstRO::Example::ExamplePass {
 			: ExamplePass(InstRO::Core::ChannelConfiguration(filter)), filterChannel(filter), rules(matchRules){};
 	NameBasedSelector(std::vector<std::string> matchRules)
 			: ExamplePass(InstRO::Core::ChannelConfiguration()), filterChannel(NULL), rules(matchRules){};
-	virtual void init() override;
 	virtual void execute() override;
-	virtual void finalize() override;
 
  protected:
 };

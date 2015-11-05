@@ -81,6 +81,9 @@ class ExtendedCallGraph {
 	int getPredecessorCount(ExtendedCallGraphNode* start);
 	int getSuccessorCount(ExtendedCallGraphNode* start);
 
+	InstRO::Core::ConstructSet getAllReachablePredecessors(std::set<ExtendedCallGraphNode*> startNodes);
+	InstRO::Core::ConstructSet getAllReachableSuccessors(std::set<ExtendedCallGraphNode*> startNodes);
+
 	void dump();
 
 
@@ -96,6 +99,8 @@ class ExtendedCallGraph {
 	std::map<ExtendedCallGraphNode*, std::set<ExtendedCallGraphNode*> > successors;
 
 	std::map<InstRO::Core::ConstructSet, ExtendedCallGraphNode*> csToGraphNode;
+
+	InstRO::Core::ConstructSet getConstructSet(std::set<ExtendedCallGraphNode*> graphNodes);
 };
 
 template <typename T>

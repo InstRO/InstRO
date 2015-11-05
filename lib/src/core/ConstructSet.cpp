@@ -1,7 +1,11 @@
 #include <assert.h>
 #include <vector>
 #include <unordered_map>
+#include <algorithm>
+#include <iterator>
 #include "instro/core/ConstructSet.h"
+
+#include "instro/utility/Logger.h"
 
 namespace InstRO {
 namespace Core {
@@ -131,6 +135,7 @@ std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::begin() cons
 std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::end() const { return constructs.cend(); }
 std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::cbegin() const { return constructs.cbegin(); }
 std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::cend() const { return constructs.cend(); }
+
 bool ConstructSet::contains(const std::shared_ptr<Construct>& construct) const {
 	if (constructs.find(construct) == constructs.end())
 		return false;
@@ -138,40 +143,43 @@ bool ConstructSet::contains(const std::shared_ptr<Construct>& construct) const {
 }
 
 // https://en.wikipedia.org/wiki/Set_(mathematics)
-// virtual unique_ptr<ConstructSet*> combine()
-ConstructSet ConstructSet::combine(const ConstructSet& rhs) const {
+ConstructSet ConstructSet::combine(const ConstructSet& other) const {
 	ConstructSet retSet;
-	retSet.put(*this);
-	retSet.put(rhs);
+
+	std::set_union(
+			begin(), end(), other.begin(), other.end(),
+			std::inserter(retSet, retSet.begin()));
+
 	return retSet;
 }
 
 ConstructSet ConstructSet::intersect(const ConstructSet& other) const {
 	ConstructSet retSet;
-	for (std::set<std::shared_ptr<Construct> >::const_iterator constructB = other.cbegin(); constructB != other.cend();
-			 constructB++) {
-		// if there is a match between both sets, add it to the output set
-		if (constructs.find(*constructB) != constructs.end())
-			retSet.put(*constructB);
-	}
+
+	std::set_intersection(
+			begin(), end(), other.begin(), other.end(),
+			std::inserter(retSet, retSet.begin()));
+
 	return retSet;
 }
-ConstructSet ConstructSet::relativecomplement(const ConstructSet& other) const {
+
+ConstructSet ConstructSet::relativeComplement(const ConstructSet& other) const {
 	ConstructSet retSet;
-	/* there may be a more efficient way of doing this, but it works*/
-	for (auto constructA : constructs) {
-		if (!other.contains(constructA))
-			retSet.put(constructA);
-	}
+
+	std::set_difference(
+			begin(), end(), other.begin(), other.end(),
+			std::inserter(retSet, retSet.begin()));
+
 	return retSet;
 }
-ConstructSet ConstructSet::symmerticDifference(const ConstructSet& other) const {
+
+ConstructSet ConstructSet::symmertricDifference(const ConstructSet& other) const {
 	ConstructSet retSet;
-	for (std::set<std::shared_ptr<Construct> >::const_iterator constructB = other.cbegin(); constructB != other.cend();
-			 constructB++) {
-		if (constructs.find(*constructB) != constructs.end())
-			retSet.put(*constructB);
-	}
+
+	std::set_symmetric_difference(
+			begin(), end(), other.begin(), other.end(),
+			std::inserter(retSet, retSet.begin()));
+
 	return retSet;
 }
 
