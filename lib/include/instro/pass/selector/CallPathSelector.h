@@ -9,15 +9,17 @@ namespace Selector {
  * */
 class CallPathSelector: public InstRO::Core::PassImplementation {
 public:
-	CallPathSelector(Pass *from, Pass *to) :
+	CallPathSelector(Pass *from, Pass *to, std::string dotName) :
 			InstRO::Core::PassImplementation(Core::ChannelConfiguration(from, to)),
 			fromCS(from->getOutput()),
-			toCS(to->getOutput()) {}
+			toCS(to->getOutput()),
+			dotName(dotName) {}
 
 	virtual void execute() override;
 
  private:
 	InstRO::Core::ConstructSet *fromCS, *toCS;
+	std::string dotName;
 
 };
 

@@ -5,7 +5,7 @@ The following Passes are currently planned [ ] and implemented [x] in InstRO.
 #### Selectors
 - [ ] AggregationStatementSelector
 - [x] BooleanCompoundSelector 
-- [ ] CallpathSelector
+- [x] CallpathSelector
 - [x] ConstructClassSelector
 - [x] ConstructElevator
 - [ ] IdentifierMatcherSelector
