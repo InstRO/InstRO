@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
 		intersect = aFactory->createBooleanMinusSelector(functions, mainFunction);
 		aFactory->createConstructPrinter(intersect);
 
-		auto paths = aFactory->createCallpathSelector(mainFunction, functions);
+		auto paths = aFactory->createCallpathSelector(mainFunction, functions, "cps.dot");
 		aFactory->createConstructPrinter(paths);
 
 //		aFactory->createMatthiasZoellnerLoopInstrumentationAdapter(functions);

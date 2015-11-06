@@ -21,7 +21,7 @@ class PassFactory {
 	Pass* createBooleanMinusSelector(Pass* passA, Pass* passB);
 
 	Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList);
-	Pass* createCallpathSelector(Pass* passA, Pass* passB);
+	Pass* createCallpathSelector(Pass* passA, Pass* passB, std::string dotName=std::string(""));
 	Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass);
 	Pass* createAggregationStatementCountSelector(int threshold);
 

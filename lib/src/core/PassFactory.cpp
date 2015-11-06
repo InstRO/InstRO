@@ -84,8 +84,8 @@ InstRO::Pass* PassFactory::createIdentifierMatcherSelector(std::vector<std::stri
 	return newPass;
 };
 
-InstRO::Pass* PassFactory::createCallpathSelector(InstRO::Pass* callee, InstRO::Pass* caller) {
-	Pass* newPass = new InstRO::Pass(new Selector::CallPathSelector(callee, caller));
+InstRO::Pass* PassFactory::createCallpathSelector(InstRO::Pass* callee, InstRO::Pass* caller, std::string dotName) {
+	Pass* newPass = new InstRO::Pass(new Selector::CallPathSelector(callee, caller, dotName));
 	newPass->setPassName("InstRO::Selector::CallPathSelector");
 	passManager->registerPass(newPass);
 	return newPass;

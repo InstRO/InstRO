@@ -30,8 +30,9 @@ void CallPathSelector::execute() {
 
 	outputSet = predecessorsOfTo.intersect(successorsOfFrom);
 
-	ecg->print("callPathSelector.dot", ecg->getNodeSet(&outputSet));
-
+	if (!dotName.empty()) {
+		ecg->print(dotName, ecg->getNodeSet(&outputSet));
+	}
 }
 
 }	// Selector
