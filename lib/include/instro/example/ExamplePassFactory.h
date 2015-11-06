@@ -41,24 +41,10 @@ class ExamplePassFactory : public InstRO::PassFactory {
 	virtual Pass* createCygProfileAdapter(Pass* input) {return nullptr;};
 
 	// Convenience
-	InstRO::Pass* createProgramEntrySelector() { return NULL; };
 	InstRO::Pass* createFunctionSelector() { return NULL; };
 	InstRO::Pass* createGPIAdapter(InstRO::Pass* input) { return NULL; };
 
 
-	/**
-	 * Minimal InstRO compliance
-	 */
-	virtual Pass* createCallpathSelector(Pass* passA, Pass* passB) override {return nullptr;};
-	virtual Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass) override {return nullptr;};
-	virtual Pass* createAggregationStatementCountSelector(int threshold) override {return nullptr;};
-
-	virtual Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) override {return nullptr;};
-	virtual Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) override {return nullptr;};
-	virtual Pass* createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel,
-																								InstRO::Core::ConstructTraitType maxLevel) override {return nullptr;};
-
-	virtual Pass* createDefaultInstrumentationAdapter(Pass* input) override {return nullptr;};
 };
 }
 }

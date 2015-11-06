@@ -11,7 +11,7 @@ class PassFactory {
 	PassFactory(PassManagement::PassManager* refManager) : passManager(refManager){};
 	virtual ~PassFactory() {}
 
-	virtual Pass* createProgramEntrySelector() = 0;
+	virtual Pass* createProgramEntrySelector();
 	/*
 	 * According to our minimal InstRO compliance file this is the list of components we need to provide.
 	 */
@@ -20,17 +20,17 @@ class PassFactory {
 	Pass* createBooleanXorSelector(Pass* passA, Pass* passB);
 	Pass* createBooleanMinusSelector(Pass* passA, Pass* passB);
 
-	virtual Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList) = 0;
-	virtual Pass* createCallpathSelector(Pass* passA, Pass* passB) = 0;
-	virtual Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass) = 0;
-	virtual Pass* createAggregationStatementCountSelector(int threshold) = 0;
+	Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList);
+	Pass* createCallpathSelector(Pass* passA, Pass* passB);
+	Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass);
+	Pass* createAggregationStatementCountSelector(int threshold);
 
-	virtual Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) = 0;
-	virtual Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) = 0;
-	virtual Pass* createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel,
-																								InstRO::Core::ConstructTraitType maxLevel) = 0;
+	Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
+	Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level);
+	Pass* createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel,
+																								InstRO::Core::ConstructTraitType maxLevel);
 
-	virtual Pass* createDefaultInstrumentationAdapter(Pass* input) = 0;
+	Pass* createDefaultInstrumentationAdapter(Pass* input);
 
  protected:
 	PassManagement::PassManager* passManager;

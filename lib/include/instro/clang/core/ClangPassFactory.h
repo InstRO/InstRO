@@ -30,53 +30,7 @@ class ClangPassFactory : public InstRO::PassFactory {
 	Pass* createCygProfileAdapter(InstRO::Pass* input);
 	Pass* createLLVMInputAdapter(InstRO::Pass* input);
 
-	Pass* createProgramEntrySelector() {
-		// TODO Implement
-		return nullptr;
-	};
-
-	Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList) override {
-		// TODO Implement
-		return nullptr;
-	}
-
-	Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass) override {
-		// TODO Implement
-		return nullptr;
-	}
-
-	Pass* createCallpathSelector(Pass* passA, Pass* passB) override {
-		// TODO Implement
-		return nullptr;
-	}
-
-	Pass* createAggregationStatementCountSelector(int threshold) override {
-		// TODO Implement
-		return nullptr;
-	}
-
-	Pass* createConstructRaisingElevator(Pass* pass, InstRO::Core::ConstructTraitType level) override {
-		// TODO Implement
-		return nullptr;
-	}
-
-	Pass* createConstructLoweringElevator(Pass* pass, InstRO::Core::ConstructTraitType level) override {
-		// TODO Implement
-		return nullptr;
-	}
-
-	Pass* createConstructCroppingElevator(Pass* pass, InstRO::Core::ConstructTraitType minLevel,
-																				InstRO::Core::ConstructTraitType maxLevel) override {
-		// TODO Implement
-		return nullptr;
-	}
-
-	Pass* createDefaultInstrumentationAdapter(Pass* input) override {
-		// TODO Implement
-		return nullptr;
-	}
-
-	/* We need this in order to lazily initialize the AST Context within the passes */
+		/* We need this in order to lazily initialize the AST Context within the passes */
 	void finishConstruction(clang::ASTContext* context) {
 		for (auto p : lazyContextProvidingMap) {
 			p->setASTContext(context);

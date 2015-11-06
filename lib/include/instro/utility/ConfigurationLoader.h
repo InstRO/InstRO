@@ -77,9 +77,30 @@ class BaseConfigurationPassRegistry : public ConfigurationPassRegistry {
  public:
 	BaseConfigurationPassRegistry(PassFactory *factory) : factory(factory) {
 
-		registerPass("BooleanOrSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
-			context.expectInputPasses({1});
+		// TODO RN 2015-11: which factory methods are still missing here?
+
+		registerPass("BooleanOrSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
+			context.expectInputPasses( {1});
 			return factory->createBooleanOrSelector(context.inputPasses[0], context.inputPasses[1]);
+		});
+
+		registerPass("ProgramEntrySelector",
+				[factory](ConfigurationParsingContext &context) {return factory->createProgramEntrySelector();});
+		registerPass("IdentifyerSelector", [factory](ConfigurationParsingContext &context) {
+			return factory->createIdentifierMatcherSelector(context.getStringArguments());
+		});
+		registerPass("CallPathSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
+			context.expectInputPasses( {2});
+			return factory->createCallpathSelector(context.inputPasses[0], context.inputPasses[1]);
+		});
+
+		registerPass("ConstructLoweringElevator", [factory](ConfigurationParsingContext &context) -> Pass * {
+			context.expectInputPasses( {1});
+			return factory->createConstructLoweringElevator(context.inputPasses[0], context.getConstructTraitType("level"));
+		});
+		registerPass("ConstructRaisingElevator", [factory](ConfigurationParsingContext &context) -> Pass * {
+			context.expectInputPasses( {1});
+			return factory->createConstructRaisingElevator(context.inputPasses[0], context.getConstructTraitType("level"));
 		});
 
 	}

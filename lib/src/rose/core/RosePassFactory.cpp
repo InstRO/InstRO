@@ -1,10 +1,5 @@
 #include "instro/rose/RosePassFactory.h"
 
-#include "instro/pass/selector/IdentifyerSelector.h"
-#include "instro/pass/selector/ProgramEntrySelector.h"
-#include "instro/pass/selector/CallPathSelector.h"
-#include "instro/pass/selector/ConstructClassSelector.h"
-#include "instro/pass/selector/ElevatorSelector.h"
 #include "instro/rose/pass/transformer/UniqueCallpathTransformer.h"
 #include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
 #include "instro/rose/pass/adapter/RoseStrategyBasedAdapter.h"
@@ -16,65 +11,6 @@
 namespace InstRO {
 namespace Rose {
 
-Pass* RosePassFactory::createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) {
-	Pass* newPass = new Pass(new InstRO::Selector::ConstructRaisingElevator(pass, level));
-	newPass->setPassName("InstRO::Selector::ConstructRaisingElevator");
-	passManager->registerPass(newPass);
-	return newPass;
-}
-
-Pass* RosePassFactory::createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) {
-	Pass* newPass = new Pass(new InstRO::Selector::ConstructLoweringElevator(pass, level));
-	newPass->setPassName("InstRO::Selector::ConstructLoweringElevator");
-	passManager->registerPass(newPass);
-	return newPass;
-}
-
-Pass* RosePassFactory::createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel,
-																											 InstRO::Core::ConstructTraitType maxLevel) {
-	Pass* newPass = new Pass(new InstRO::Selector::ConstructCroppingElevator(pass, minLevel, maxLevel));
-	newPass->setPassName("InstRO::Selector::ConstructCroppingElevator");
-	passManager->registerPass(newPass);
-	return newPass;
-}
-
-Pass* RosePassFactory::createDefaultInstrumentationAdapter(InstRO::Pass* input) {
-	// TODO implement me
-	throw std::string("Not yet Implemented");
-}
-
-Pass* RosePassFactory::createProgramEntrySelector() {
-	Pass* newPass = new Pass(new InstRO::Selector::ProgramEntrySelector());
-	newPass->setPassName("InstRO::Selector::ProgramEntrySelector");
-	passManager->registerPass(newPass);
-	return newPass;
-};
-
-InstRO::Pass* RosePassFactory::createIdentifierMatcherSelector(std::vector<std::string> matchList) {
-	Pass* newPass = new Pass(new InstRO::Selector::IdentifyerSelector(matchList));
-	newPass->setPassName("InstRO::Rose::IdentifyerSelector");
-	passManager->registerPass(newPass);
-	return newPass;
-};
-
-InstRO::Pass* RosePassFactory::createCallpathSelector(InstRO::Pass* callee, InstRO::Pass* caller) {
-	InstRO::Pass* newPass = new InstRO::Pass(new InstRO::Selector::CallPathSelector(callee, caller));
-	newPass->setPassName("InstRO::Selector::CallPathSelector");
-	passManager->registerPass(newPass);
-	return newPass;
-}
-
-InstRO::Pass* RosePassFactory::createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass) {
-	InstRO::Pass* newPass = new InstRO::Pass(new InstRO::Selector::ConstructClassSelector(constructClass));
-	newPass->setPassName("InstRO::Selector::ConstructClassSelector");
-	passManager->registerPass(newPass);
-	return newPass;
-}
-
-InstRO::Pass* RosePassFactory::createAggregationStatementCountSelector(int threshold) {
-	// TODO implement me
-	throw std::string("Not yet Implemented");
-}
 
 
 /* ROSE ONLY */
