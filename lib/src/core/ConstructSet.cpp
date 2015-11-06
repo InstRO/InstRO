@@ -98,7 +98,7 @@ std::string operator+(const std::string& lhs, const ConstructTraitType& type) {
 	return std::string(lhs).append(constructLevelToString(type));
 }
 
-ConstructTraitType ConstructSet::getMaxConstructLevel() {
+ConstructTraitType ConstructSet::getMaxConstructLevel() const {
 	ConstructTraitType max = ConstructTraitType::CTMin;
 	for (auto construct : constructs) {
 		auto curr = construct->getTraits().max();
@@ -108,7 +108,7 @@ ConstructTraitType ConstructSet::getMaxConstructLevel() {
 	}
 	return max;
 }
-ConstructTraitType ConstructSet::getMinConstructLevel() {
+ConstructTraitType ConstructSet::getMinConstructLevel() const {
 	ConstructTraitType min = ConstructTraitType::CTMax;
 	for (auto construct : constructs) {
 		auto curr = construct->getTraits().min();
@@ -194,6 +194,29 @@ std::vector<ConstructSet> ConstructSet::split() const {
 		retVec.push_back(ConstructSet(construct));
 	}
 	return retVec;
+}
+
+std::string ConstructSet::toString() const {
+      std::string str;
+      auto constructIter = begin();
+      while (constructIter != end()) {
+          auto currentIter = constructIter++;
+          auto constructPtr = *currentIter;
+          str += constructPtr->toString();
+          if (constructIter != end()) {
+              str += ", ";
+          }
+      }
+      return str;
+}
+
+std::string ConstructSet::toDotString() const {
+	std::string dotString;
+	for (auto const& constructPtr : constructs) {
+		dotString += constructPtr->toDotString();
+		dotString += "\\n";
+	}
+	return dotString;
 }
 
 }	// namespace Core
