@@ -6,6 +6,8 @@
 
 #include <set>
 #include <map>
+#include <iostream>
+#include <string>
 
 namespace InstRO {
 namespace Tooling {
@@ -86,6 +88,7 @@ class ExtendedCallGraph {
 
 	void dump();
 
+	void print(std::string filename, std::set<ExtendedCallGraphNode*> specialNodes = std::set<ExtendedCallGraphNode*>());
 
  private:
 	/** no copying allowed */
@@ -93,6 +96,8 @@ class ExtendedCallGraph {
 	ExtendedCallGraph& operator =(const ExtendedCallGraph& o) {
 		return *this;
 	}
+
+	std::string dumpToDotString(ExtendedCallGraphNode* node, std::string fillcolor = std::string("white"));
 
  private:
 	std::map<ExtendedCallGraphNode*, std::set<ExtendedCallGraphNode*> > predecessors;

@@ -102,7 +102,7 @@ public:
 		}
 
 		///XXX
-		//print(callgraph, "extendedCallGraph.dot");
+//		callgraph->print("extendedCallGraph.dot");
 
 		return callgraph;
 	}
@@ -305,64 +305,6 @@ private:
 			return definingDecl;
 		}
 		return oldDecl;
-	}
-
-	void print(ExtendedCallGraph* callgraph, std::string filename) {
-
-		std::ofstream outfile(filename, std::ofstream::out);
-		outfile << "digraph callgraph {\nnode [shape=oval]\n";
-
-		for (ExtendedCallGraphNode* fromNode : callgraph->getNodeSet()) {
-
-			outfile << dumpToDotString(callgraph, fromNode) << std::endl;
-
-			for (ExtendedCallGraphNode* toNode : callgraph->getSuccessors(fromNode)) {
-				outfile << "\"" << fromNode << "\" -> \"" << toNode << "\"" << std::endl;
-			}
-
-		}
-		outfile << "\n}" << std::endl;
-		outfile.close();
-	}
-
-	std::string dumpToDotString(ExtendedCallGraph* callgraph, ExtendedCallGraphNode* node) {
-
-		std::string nodeType;
-		std::string color = "black";
-
-
-		switch (node->getNodeType()) {
-		case ECGNodeType::FUNCTION:
-			nodeType = "FUNCTION";
-			color = "red";
-			break;
-		case ECGNodeType::FUNCTION_CALL:
-			nodeType = "CALL";
-			color = "green";
-			break;
-		case ECGNodeType::CONDITIONAL:
-			nodeType = "CONDITIONAL";
-			color = "blue";
-			break;
-		case ECGNodeType::LOOP:
-			nodeType = "LOOP";
-			color = "orange";
-			break;
-		case ECGNodeType::SCOPE:
-			nodeType = "SCOPE";
-			break;
-		case ECGNodeType::DEFAULT:
-			nodeType = "DEFAULT";
-			break;
-		default:
-			assert(false);
-		}
-
-		std::stringstream ss;
-		ss <<  "\"" << node << "\" [label=\"" << nodeType << "\\n" << node->toDotString()
-				<< "\", color=" << color << "]";
-
-		return ss.str();
 	}
 
 };
