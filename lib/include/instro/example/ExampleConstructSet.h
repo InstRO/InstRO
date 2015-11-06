@@ -13,11 +13,9 @@ class ExampleConstruct : public InstRO::Core::Construct {
 	size_t getID() const { return 0; }
 	ExampleConstruct(InstRO::Core::ConstructTrait level, std::string nname)
 			: Construct(level), name(nname), hierarchyPartent(nullptr) {
-		constructTraits = InstRO::Core::ConstructTrait(level);
 	}
 	ExampleConstruct(InstRO::Core::ConstructTrait level, std::string nname, ExampleConstruct *parent)
 			: Construct(level), name(nname), hierarchyPartent(parent) {
-		constructTraits = InstRO::Core::ConstructTrait(level);
 	}
 	std::string toString() const override { return name; }
 	std::string toDotString() const override { return name;	}

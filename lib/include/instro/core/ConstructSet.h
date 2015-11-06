@@ -11,26 +11,28 @@
 
 
 namespace InstRO {
-
 namespace Core {
 class Construct;
 class ConstructSet;
-}
-}
+}	// namespace Core
+}	// namespace InstRO
+
 
 /*
  * RN: 2015-11
  * Some set algorithms use std::less() instead of operator<().
  * Since our typical value_type is a shared_ptr, std::less() does not redirect to operator<().
  * So I have to provide this specification myself.
- * XXX i do not know if other function object classes are already used as well (e.g. std::equal_to)
+ * XXX algorithms using other function object classes (e.g. std::equal_to, std::greater) will not work on ConstructSets
  */
 namespace std {
-template <>
+template<>
 struct less<std::shared_ptr<InstRO::Core::Construct> > {
-	bool operator() (const std::shared_ptr<InstRO::Core::Construct>& a, const std::shared_ptr<InstRO::Core::Construct>& b) const;
+	bool operator()(const std::shared_ptr<InstRO::Core::Construct>& a,
+									const std::shared_ptr<InstRO::Core::Construct>& b) const;
 };
 }	// namespace std
+
 
 namespace InstRO {
 
@@ -156,7 +158,7 @@ std::string operator+(const std::string& lhs, const ConstructTraitType& type);
 
 class ConstructTrait {
  public:
-	bool operator==(const ConstructTraitType& comparator) {
+	bool operator==(const ConstructTraitType& comparator) const {
 		if (cts.find(comparator) != cts.end())
 			return true;
 		return false;
@@ -170,7 +172,7 @@ class ConstructTrait {
 
 	ConstructTrait(ConstructTraitType type) { add(type); }
 
-	bool is(ConstructTraitType type) {
+	bool is(ConstructTraitType type) const {
 		if (cts.empty()) {
 			return type == ConstructTraitType::CTNoTraits;
 		}
@@ -178,11 +180,11 @@ class ConstructTrait {
 	}
 
 	void add(ConstructTraitType type) { cts.insert(type); }
-	ConstructTraitType max() { return *cts.crbegin(); }
-	ConstructTraitType min() { return *cts.cbegin(); }
-	const std::set<ConstructTraitType>& getTraitsAsSet() { return cts; }
+	ConstructTraitType max() const { return *cts.crbegin(); }
+	ConstructTraitType min() const { return *cts.cbegin(); }
+	const std::set<ConstructTraitType>& getTraitsAsSet() const { return cts; }
 
-	std::string toString() {
+	std::string toString() const {
 		if (cts.empty()) {
 			return InstRO::Core::constructLevelToString(ConstructTraitType::CTNoTraits);
 		}
@@ -195,7 +197,7 @@ class ConstructTrait {
 		ss << "]";
 		return ss.str();
 	}
-	std::string toStringShort() {
+	std::string toStringShort() const {
 		if (cts.empty()) {
 			return InstRO::Core::constructLevelToString(ConstructTraitType::CTNoTraits);
 		}
@@ -223,20 +225,23 @@ class Construct {
 	virtual ~Construct() {}
 
 	ConstructTrait getTraits() const { return constructTraits; }
-
 	const std::set<ConstructTraitType>& getTraitsAsSet() { return constructTraits.getTraitsAsSet(); }
 
 	virtual size_t getID() const = 0;
-	virtual std::string toString() const = 0;
-	virtual std::string toDotString() const = 0;
 	virtual std::string getIdentifier() const = 0;
 
- protected:
-	ConstructTrait constructTraits;
+	virtual std::string toString() const = 0;
+	virtual std::string toDotString() const = 0;
 
- public:
-	friend bool operator<(const std::shared_ptr<Construct>& a, const std::shared_ptr<Construct>& b) { return a->getID() < b->getID(); }
-	friend bool operator==(const std::shared_ptr<Construct>& a, const std::shared_ptr<Construct>& b) { return a->getID() == b->getID(); }
+ private:
+	const ConstructTrait constructTraits;	// traits can only be set once
+
+	friend bool operator<(const std::shared_ptr<Construct>& a, const std::shared_ptr<Construct>& b) {
+		return a->getID() < b->getID();
+	}
+	friend bool operator==(const std::shared_ptr<Construct>& a, const std::shared_ptr<Construct>& b) {
+		return a->getID() == b->getID();
+	}
 
 };
 
@@ -252,21 +257,33 @@ class ConstructSet {
 	typedef std::set<value_type>::const_iterator const_iterator;
 
 	ConstructSet(){};
+	ConstructSet(const value_type& construct) { constructs.insert(construct); };
 
-	ConstructTraitType getMaxConstructLevel();
-	ConstructTraitType getMinConstructLevel();
+	ConstructTraitType getMaxConstructLevel() const;
+	ConstructTraitType getMinConstructLevel() const;
 	void clear();
 	bool empty() const;
 	size_t size() const;
 
-	ConstructSet(const value_type& construct) { constructs.insert(construct); };
- protected:
+	// https://en.wikipedia.org/wiki/Set_(mathematics)
+	ConstructSet combine(const ConstructSet&) const;
+	ConstructSet intersect(const ConstructSet&) const;
+	ConstructSet relativeComplement(const ConstructSet&) const;
+	ConstructSet symmertricDifference(const ConstructSet&) const;
+	std::vector<ConstructSet> split() const;
+
+	bool intersects(const ConstructSet&) const;
+
+	std::string toString() const;
+	std::string toDotString() const;
+
+ private:
 	// for std::inserter. the alternative would have been to provide an inserter in the compiler interface
 	iterator insert(iterator it, const value_type& val) {
 		return constructs.insert(it, val);
 	}
 
- protected:
+ private:
 	void put(const value_type& construct);
 	void erase(const value_type& construct);
 	void put(ConstructSet cs);
@@ -280,41 +297,7 @@ class ConstructSet {
 	const_iterator cbegin() const;
 	const_iterator cend() const;
 
- public:
-	// https://en.wikipedia.org/wiki/Set_(mathematics)
-	ConstructSet combine(const ConstructSet&) const;
-	ConstructSet intersect(const ConstructSet&) const;
-	ConstructSet relativeComplement(const ConstructSet&) const;
-	ConstructSet symmertricDifference(const ConstructSet&) const;
-
-	bool intersects(const ConstructSet&) const;
-
-	std::vector<ConstructSet> split() const;
-
-	std::string toString() const {
-        std::string str;
-        auto constructIter = begin();
-        while (constructIter != end()) {
-            auto currentIter = constructIter++;
-            auto constructPtr = *currentIter;
-            str += constructPtr->toString();
-            if (constructIter != end()) {
-                str += ", ";
-            }
-        }
-        return str;
-	}
-
-	std::string toDotString() const {
-		std::string dotString;
-		for (auto const& constructPtr : constructs) {
-			dotString += constructPtr->toDotString();
-			dotString += "\\n";
-		}
-		return dotString;
-	}
-
- protected:
+ private:
 	std::set<value_type> constructs;
 
 	friend bool operator<(const ConstructSet& c1, const ConstructSet& c2) { return c1.constructs < c2.constructs; }

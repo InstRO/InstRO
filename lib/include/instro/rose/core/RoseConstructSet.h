@@ -309,7 +309,7 @@ class RoseFragment : public RoseConstruct {
 
 	~RoseFragment() {}
 
-	size_t getID() const override { return (size_t)info; };
+	size_t getID() const override { return reinterpret_cast<size_t>(info); };
 	Sg_File_Info* getFileInfo() { return info; }
 
 	std::string toString() const override {
