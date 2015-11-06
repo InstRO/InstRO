@@ -22,6 +22,9 @@ class ExampleConstruct : public InstRO::Core::Construct {
 	std::string toString() const override { return name; }
 	std::string toDotString() const override { return name;	}
 
+	std::string getIdentifier() const override {
+		return "Funny Example Construct";
+	}
  protected:
 	std::string name;
 	ExampleConstruct *hierarchyPartent;

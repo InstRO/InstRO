@@ -1,5 +1,5 @@
-#ifndef LIB_INCLUDE_INSTRO_V5_PREVIEW_CONSTRUCTSET_H_
-#define LIB_INCLUDE_INSTRO_V5_PREVIEW_CONSTRUCTSET_H_
+#ifndef LIB_INCLUDE_INSTRO_ROSE_CORE_CONSTRUCTSET_H_
+#define LIB_INCLUDE_INSTRO_ROSE_CORE_CONSTRUCTSET_H_
 /* Base Implementation of the Construct for ROSE.
 	 The RoseConstructProvider produces constructs based on the AST.
 */
@@ -13,6 +13,7 @@
 #include "rose.h"
 
 #include "instro/core/ConstructSet.h"
+#include "instro/utility/exception.h"
 #include "instro/utility/Logger.h"
 
 namespace InstRO {
@@ -275,6 +276,10 @@ class RoseConstruct : public InstRO::Core::Construct {
 
 	virtual size_t getID() const override { return reinterpret_cast<size_t>(node); }
 	SgNode* getNode() const { return node; }
+
+	// we construct the identification as follows:
+	// filename:startline--ConstructTrait[-functionName]
+	std::string getIdentifier() const;
 
 	virtual std::string toString() const override {
 		return "RoseConstruct: " + node->class_name() + ": " + node->unparseToString();
