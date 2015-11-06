@@ -2,6 +2,7 @@
 #include "instro/core/ConstructSet.h"
 #include "instro/rose/core/RoseConstructSet.h"
 #include "instro/rose/pass/adapter/RoseConstructPrinter.h"
+#include "instro/utility/Logger.h"
 
 namespace InstRO {
 namespace Rose {

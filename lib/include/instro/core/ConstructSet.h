@@ -222,13 +222,14 @@ class Construct {
 	Construct(ConstructTrait traits) : constructTraits(traits) {}
 	virtual ~Construct() {}
 
-	ConstructTrait getTraits() { return constructTraits; }
+	ConstructTrait getTraits() const { return constructTraits; }
 
 	const std::set<ConstructTraitType>& getTraitsAsSet() { return constructTraits.getTraitsAsSet(); }
 
 	virtual size_t getID() const = 0;
 	virtual std::string toString() const = 0;
 	virtual std::string toDotString() const = 0;
+	virtual std::string getIdentifier() const = 0;
 
  protected:
 	ConstructTrait constructTraits;
@@ -325,6 +326,14 @@ class ConstructSet {
 			out << "\t" << constructPtr->toString() << std::endl;
 		}
 		return out;
+	}
+};
+
+
+template<typename T>
+struct ConstructHasher {
+	size_t operator()(T const &c){
+		return c.getID();
 	}
 };
 
