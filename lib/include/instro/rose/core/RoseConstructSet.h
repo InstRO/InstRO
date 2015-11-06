@@ -8,6 +8,8 @@
 #include <map>
 #include <boost/algorithm/string.hpp>
 
+#include <cassert>
+
 #include "rose.h"
 
 #include "instro/core/ConstructSet.h"
@@ -268,10 +270,10 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 class RoseConstruct : public InstRO::Core::Construct {
  public:
-	RoseConstruct(SgNode* sgnode, InstRO::Core::ConstructTrait traits) : InstRO::Core::Construct(traits), node(sgnode) {}
+	RoseConstruct(SgNode* const sgnode, InstRO::Core::ConstructTrait traits) : InstRO::Core::Construct(traits), node(sgnode) {}
 	virtual ~RoseConstruct() {}
 
-	size_t getID() const { return (size_t)node; }
+	virtual size_t getID() const override { return reinterpret_cast<size_t>(node); }
 	SgNode* getNode() const { return node; }
 
 	virtual std::string toString() const override {
@@ -291,7 +293,7 @@ class RoseConstruct : public InstRO::Core::Construct {
 	}
 
  private:
-	SgNode* node;
+	SgNode* const node;
 };
 
 class RoseFragment : public RoseConstruct {
@@ -302,7 +304,7 @@ class RoseFragment : public RoseConstruct {
 
 	~RoseFragment() {}
 
-	size_t getID() const { return (size_t)info; };
+	size_t getID() const override { return (size_t)info; };
 	Sg_File_Info* getFileInfo() { return info; }
 
 	std::string toString() const override {
@@ -318,7 +320,7 @@ class RoseFragment : public RoseConstruct {
 	}
 
  private:
-	Sg_File_Info* info;
+	Sg_File_Info* const info;
 };
 
 class RoseConstructProvider {
@@ -341,7 +343,7 @@ class RoseConstructProvider {
 	}
 
 	/** XXX this method does no checks on the SgNode! */
-	std::shared_ptr<RoseConstruct> getConstruct(SgNode* node) {
+	std::shared_ptr<RoseConstruct> getConstruct(SgNode* const node) {
 		if (node == nullptr) {
 			throw std::string("RoseConstructProvider: attempted to getConstruct for nullptr");
 		}
@@ -357,7 +359,7 @@ class RoseConstructProvider {
 	}
 
  private:
-	std::map<SgNode*, std::shared_ptr<RoseConstruct> > mapping;
+	std::map<SgNode* const, std::shared_ptr<RoseConstruct> > mapping;
 
  private:
 	RoseConstructProvider(){};

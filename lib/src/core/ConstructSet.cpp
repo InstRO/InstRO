@@ -312,3 +312,10 @@ std::ostream& operator<<(std::ostream& os, InstRO::Core::ConstructTraitType f) {
 	}
 	return os;
 }
+
+namespace std {
+bool less<std::shared_ptr<InstRO::Core::Construct> >::operator()(const std::shared_ptr<InstRO::Core::Construct>& a,
+		const std::shared_ptr<InstRO::Core::Construct>& b) const {
+	return a < b;
+}
+}

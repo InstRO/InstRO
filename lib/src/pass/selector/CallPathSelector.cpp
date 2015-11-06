@@ -1,3 +1,4 @@
+#define INSTRO_LOG_LEVEL DEBUG
 #include "instro/utility/Logger.h"
 
 #include "instro/pass/selector/CallPathSelector.h"
@@ -28,6 +29,8 @@ void CallPathSelector::execute() {
 	logIt(DEBUG) << "successorsOfFrom elements: " << successorsOfFrom.size() << std::endl;
 
 	outputSet = predecessorsOfTo.intersect(successorsOfFrom);
+
+//	ecg->print("callPathSelector.dot", ecg->getNodeSet(&outputSet));
 
 }
 
