@@ -6,6 +6,9 @@
 #include <memory>	// Shared pointers
 #include <vector>
 #include <set>
+#include <functional>// std::less
+
+
 
 namespace InstRO {
 
@@ -13,6 +16,23 @@ namespace Core {
 class Construct;
 class ConstructSet;
 }
+}
+
+/*
+ * RN: 2015-11
+ * Some set algorithms use std::less() instead of operator<().
+ * Since our typical value_type is a shared_ptr, std::less() does not redirect to operator<().
+ * So I have to provide this specification myself.
+ * XXX i do not know if other function object classes are already used as well (e.g. std::equal_to)
+ */
+namespace std {
+template <>
+struct less<std::shared_ptr<InstRO::Core::Construct> > {
+	bool operator() (const std::shared_ptr<InstRO::Core::Construct>& a, const std::shared_ptr<InstRO::Core::Construct>& b) const;
+};
+}	// namespace std
+
+namespace InstRO {
 
 namespace InfrastructureInterface {
 class ConstructSetCompilerInterface {
@@ -193,7 +213,10 @@ class ConstructTrait {
 	std::set<ConstructTraitType> cts;
 };
 
-/* CI: Construct Set implementation. Contribution by Roman Ness */
+/**
+ * \brief The abstract base type for constructs.
+ * \author Roman Ness
+ */
 class Construct {
  public:
 	Construct(ConstructTrait traits) : constructTraits(traits) {}
@@ -204,23 +227,16 @@ class Construct {
 	const std::set<ConstructTraitType>& getTraitsAsSet() { return constructTraits.getTraitsAsSet(); }
 
 	virtual size_t getID() const = 0;
-	virtual std::string toString() const { return std::string("Construct(abstract)"); }
+	virtual std::string toString() const = 0;
 	virtual std::string toDotString() const = 0;
-
-
 
  protected:
 	ConstructTrait constructTraits;
 
-	friend bool __attribute__ ((always_inline)) operator<(const std::shared_ptr<Construct>& a, const std::shared_ptr<Construct>& b) {
+ public:
+	friend bool operator<(const std::shared_ptr<Construct>& a, const std::shared_ptr<Construct>& b) { return a->getID() < b->getID(); }
+	friend bool operator==(const std::shared_ptr<Construct>& a, const std::shared_ptr<Construct>& b) { return a->getID() == b->getID(); }
 
-		// FIXME RN 2015-11: For some supernatural reason the operator does not work correctly without the following statement.
-		b->toString();
-
-		return a->getID() < b->getID();
-	}
-
-//	friend bool operator==(const std::shared_ptr<Construct>& a, const std::shared_ptr<Construct>& b) { return a->getID() == b->getID(); }
 };
 
 class ConstructSet {
@@ -230,6 +246,7 @@ class ConstructSet {
 
  public:
 	typedef std::shared_ptr<Construct> value_type;
+	typedef std::shared_ptr<Construct> key_type;
 	typedef std::set<value_type>::iterator iterator;
 	typedef std::set<value_type>::const_iterator const_iterator;
 
@@ -243,6 +260,7 @@ class ConstructSet {
 
 	ConstructSet(const value_type& construct) { constructs.insert(construct); };
  protected:
+	// for std::inserter. the alternative would have been to provide an inserter in the compiler interface
 	iterator insert(iterator it, const value_type& val) {
 		return constructs.insert(it, val);
 	}
@@ -299,7 +317,7 @@ class ConstructSet {
 	std::set<value_type> constructs;
 
 	friend bool operator<(const ConstructSet& c1, const ConstructSet& c2) { return c1.constructs < c2.constructs; }
-//	friend bool operator==(const ConstructSet& c1, const ConstructSet& c2) { return c1.constructs == c2.constructs; }
+	friend bool operator==(const ConstructSet& c1, const ConstructSet& c2) { return c1.constructs == c2.constructs; }
 
 	friend std::ostream& operator<<(std::ostream& out, const ConstructSet& cs) {
 		out << " CS size:" << cs.size() << std::endl;
@@ -312,6 +330,7 @@ class ConstructSet {
 
 }	// End Namespace Core
 }	// End namespace InstRO
+
 
 InstRO::Core::ConstructTraitType& operator++(InstRO::Core::ConstructTraitType& f);
 InstRO::Core::ConstructTraitType& operator--(InstRO::Core::ConstructTraitType& f);
