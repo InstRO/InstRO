@@ -9,26 +9,7 @@ using namespace InstRO::Utility;
 // TODO RN 2015-11: which factory methods are still missing here?
 RoseConfigurationPassRegistry::RoseConfigurationPassRegistry(InstRO::Rose::RosePassFactory *factory)
 		: BaseConfigurationPassRegistry(factory) {
-	// Selectors / Filters
-	registerPass("ProgramEntrySelector",
-							 [factory](ConfigurationParsingContext &context) { return factory->createProgramEntrySelector(); });
-	registerPass("IdentifyerSelector", [factory](ConfigurationParsingContext &context) {
-		return factory->createIdentifierMatcherSelector(context.getStringArguments());
-	});
-	registerPass("CallPathSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
-		context.expectInputPasses({2});
-		return factory->createCallpathSelector(context.inputPasses[0], context.inputPasses[1]);
-	});
 
-	// Transformers
-	registerPass("ConstructLoweringElevator", [factory](ConfigurationParsingContext &context) -> Pass *{
-		context.expectInputPasses({1});
-		return factory->createConstructLoweringElevator(context.inputPasses[0], context.getConstructTraitType("level"));
-	});
-	registerPass("ConstructRaisingElevator", [factory](ConfigurationParsingContext &context) -> Pass *{
-		context.expectInputPasses({1});
-		return factory->createConstructRaisingElevator(context.inputPasses[0], context.getConstructTraitType("level"));
-	});
 	registerPass("UniqueCallpathTransformer", [factory](ConfigurationParsingContext &context) -> Pass *{
 		context.expectInputPasses({1, 3});
 		if (context.inputPasses.size() == 1) {
@@ -37,9 +18,9 @@ RoseConfigurationPassRegistry::RoseConfigurationPassRegistry(InstRO::Rose::RoseP
 			return factory->createUniqueCallpathTransformer(context.inputPasses[0], context.inputPasses[1],
 																											context.inputPasses[2]);
 		}
-
 		return nullptr;
 	});
+
 	registerPass("MPIFunctionWrapper", [factory](ConfigurationParsingContext &context) -> Pass *{
 		context.expectInputPasses({1, 2});
 		InstRO::Pass *renamingPass = (context.inputPasses.size() == 2) ? context.inputPasses[1] : nullptr;

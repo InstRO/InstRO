@@ -21,20 +21,6 @@ class RosePassFactory : public InstRO::PassFactory {
 	SgProject* project;
 
  public:
-	InstRO::Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList) override;
-	InstRO::Pass* createCallpathSelector(InstRO::Pass* callees, InstRO::Pass* caller) override;
-	InstRO::Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass) override;
-	InstRO::Pass* createAggregationStatementCountSelector(int threshold) override;
-
-	// Elevator Selectors
-	InstRO::Pass* createConstructRaisingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) override;
-	InstRO::Pass* createConstructLoweringElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType level) override;
-	InstRO::Pass* createConstructCroppingElevator(InstRO::Pass* pass, InstRO::Core::ConstructTraitType minLevel,
-																												InstRO::Core::ConstructTraitType maxLevel) override;
-
-	InstRO::Pass* createDefaultInstrumentationAdapter(InstRO::Pass* input) override;
-
-
 	/* ROSE ONLY */
 
 	// UniqueCallpathTransformer
@@ -58,7 +44,6 @@ class RosePassFactory : public InstRO::PassFactory {
 	InstRO::Pass* createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass* pass);
 
 	InstRO::Pass* createConstructHierarchyASTDotGenerator(InstRO::Pass* pass, std::string fileName);
-	InstRO::Pass* createProgramEntrySelector();
 
 };
 
