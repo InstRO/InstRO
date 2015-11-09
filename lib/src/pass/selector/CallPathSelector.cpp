@@ -1,4 +1,3 @@
-#define INSTRO_LOG_LEVEL DEBUG
 #include "instro/utility/Logger.h"
 
 #include "instro/pass/selector/CallPathSelector.h"
