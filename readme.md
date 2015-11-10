@@ -58,6 +58,8 @@ We use an indentation with only tab characters. With that users can decide to di
 
 Namespaces are not indented. Accordingly a class definition starts at column 0.
 
+We use include guards which correspond to the directory structure that lead to the respective file. If the file is located at lib/include/instro/pass/foo/Foo.h then its respective include guard is INSTRO_PASS_FOO_FOO_H.
+
 ### Naming
 
 Although we use namespaces to separate disstinct entities, we still reflect this in a classes name.
