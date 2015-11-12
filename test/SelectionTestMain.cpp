@@ -42,16 +42,16 @@ int main(int argc, char **argv){
 	using InstrumentorType = RoseTest::RoseTestInstrumentor;
 #endif
 
-	auto instrumentor = new InstrumentorType(argc, argv);
-	auto factory = instrumentor->getFactory();
+	InstrumentorType instrumentor(argc, argv);
+	auto factory = instrumentor.getFactory();
 
 	std::set<std::string> expItems;
-	expItems.insert("main.cpp:3");
+	expItems.insert("emptyMain.cpp:3--Function-main");
 
 	auto sel = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
 	auto testAdapter = factory->createTestAdapter(sel, expItems);
 
-	instrumentor->apply();
+	instrumentor.apply();
 
 	return 0;
 }
