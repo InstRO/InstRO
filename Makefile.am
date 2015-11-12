@@ -4,6 +4,7 @@
 
 SUBDIRS= \
 	lib \
+	test \
 	support
 
 #

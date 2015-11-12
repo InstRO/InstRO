@@ -327,6 +327,7 @@ AC_CONFIG_FILES([Makefile
 		lib/Makefile
 		lib/include/instro/config.h
 		support/Makefile
+		test/Makefile
 	])
 
 # Build the shipped examples conditionally
