@@ -16,7 +16,7 @@ void InstRO::Test::TestAdapter::checkIfConstructSetMatches(InstRO::Core::Constru
 	for (const auto idPair : idMap) {
 		// TODO before we find something we need to prepare the identifier
 		// as we don't want to match full paths.
-
+		std::cout << "Pair: " << idPair.second << std::endl;
 		// erase returns number of elements removed
 		if (expectedItems.erase(idPair.second) > 0) {
 		} else {
