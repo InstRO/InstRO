@@ -1,5 +1,5 @@
-#ifndef INSTRO_CORE_FACTORY_H
-#define INSTRO_CORE_FACTORY_H
+#ifndef INSTRO_CORE_PASSFACTORY_H
+#define INSTRO_CORE_PASSFACTORY_H
 
 #include "instro/core/Pass.h"
 #include "instro/core/PassManager.h"
