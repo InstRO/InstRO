@@ -60,7 +60,7 @@ libInstRO_test_a_SOURCES= \
 	$(TEST_SFILES) \
 	$(TEST_HFILES) 
 
-libInstRO_test_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+libInstRO_test_a_CPPFLAGS=$(top_srcdir)/lib $(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
 # This is the actual test executable
 SelectionTest_SOURCES= \
@@ -70,7 +70,7 @@ SelectionTest_LDADD=libInstRO_test.a $(top_builddir)/lib/libInstRO_core.a
 SelectionTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
 if USEROSE
-SelectionTest_CPPFLAGS+= -I$(top_srcdir)/../lib/include -I@ROSE_INCLUDEDIR@
+SelectionTest_CPPFLAGS+= -DUSE_ROSE -I$(top_srcdir)/lib -I@ROSE_INCLUDEDIR@
 SelectionTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.a @ROSE_LINK_LIBRARIES@
 # TODO Add the library dependencies for ROSE
 endif

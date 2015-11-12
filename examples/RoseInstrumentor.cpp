@@ -1,4 +1,4 @@
-#define USING_ROSE
+#define USE_ROSE
 #include "instro.h"
 
 #include <vector>
