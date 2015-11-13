@@ -13,8 +13,9 @@ class RoseTestFactory : public InstRO::Rose::RosePassFactory {
  public:
 	RoseTestFactory(InstRO::PassManagement::PassManager *manager, SgProject *project)
 			: InstRO::Rose::RosePassFactory(manager, project) {}
-	InstRO::Pass *createTestAdapter(InstRO::Pass *input, std::set<std::string> expectedItems) {
-		auto pImpl = new InstRO::Test::TestAdapter(input, expectedItems);
+
+	InstRO::Pass *createTestAdapter(InstRO::Pass *input, std::string label, std::string filename) {
+		auto pImpl = new InstRO::Test::TestAdapter(input, label, filename);
 		InstRO::Pass *p = new InstRO::Pass(pImpl);
 		p->setPassName("TestAdapter");
 		passManager->registerPass(p);

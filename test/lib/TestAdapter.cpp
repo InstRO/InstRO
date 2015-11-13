@@ -2,6 +2,10 @@
 #include "instro/utility/Logger.h"
 #include "instro/tooling/IdentifierProvider.h"
 
+void InstRO::Test::TestAdapter::init(){
+	expectedItems = readExpectedItemsFile();
+}
+
 void InstRO::Test::TestAdapter::execute() {
 	auto cfg = getChannelConfig();
 	for (auto p : cfg.getPasses()) {
@@ -25,15 +29,14 @@ void InstRO::Test::TestAdapter::checkIfConstructSetMatches(InstRO::Core::Constru
 }
 
 void InstRO::Test::TestAdapter::finalize() {
-
-	if(expectedItems.size() > 0){
+	if (expectedItems.size() > 0) {
 		logIt(ERROR) << "UNFOUND items " << expectedItems.size() << "\n";
 		for (const auto i : expectedItems) {
 			logIt(INFO) << i << "\n";
 		}
 	}
 
-	if(erroneouslyContainedInConstructSet.size() > 0){
+	if (erroneouslyContainedInConstructSet.size() > 0) {
 		logIt(ERROR) << "WRONGLY MARKED " << erroneouslyContainedInConstructSet.size() << "\n";
 		for (const auto i : erroneouslyContainedInConstructSet) {
 			logIt(INFO) << i << "\n";
@@ -41,7 +44,37 @@ void InstRO::Test::TestAdapter::finalize() {
 	}
 
 	// XXX Make this exit with different return codes for different errors
-	if(expectedItems.size() > 0 || erroneouslyContainedInConstructSet.size() > 0){
+	if (expectedItems.size() > 0 || erroneouslyContainedInConstructSet.size() > 0) {
 		exit(-1);
 	}
+}
+
+
+// builds a set of expected items
+std::set<std::string> InstRO::Test::TestAdapter::readExpectedItemsFile() {
+	std::set<std::string> ei;
+
+	std::cout << filename << std::endl;
+
+	std::ifstream inFile(filename);
+
+	bool labelApplies(false);
+	while (inFile.good()) {
+		std::string line;
+		std::getline(inFile, line);
+
+		if(line.front() == '+'){
+			labelApplies = (label == line.substr(1));
+			continue;
+		}
+
+		if (labelApplies && !line.empty()) {
+			ei.insert(line);
+		}
+	}
+
+	for(const auto i : ei){
+		std::cout << i << std::endl;
+	}
+	return ei;
 }
