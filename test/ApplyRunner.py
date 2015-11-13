@@ -22,19 +22,17 @@ def runApply(arguments):
             workList[name].append(f)
         else:
             workList[name] = [f]
-    
+ 
     for k in workList:
         element = workList[k]
-#        print(element)
         srcFile = ""
         specFile = ""
         for e in element:
- #           print(e)
             if e.rfind(".in") != -1:
                 specFile = e
             else:
                 srcFile = e
-        
+
         os.environ["INSTRO_TEST_INPUT_FILENAME"] = inputDirectory + '/' + specFile
         invocationString = "./SelectionTest " + inputDirectory + '/' + srcFile
         subprocess.call(invocationString, shell=True)

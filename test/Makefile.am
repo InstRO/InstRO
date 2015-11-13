@@ -66,7 +66,7 @@ libInstRO_test_a_CPPFLAGS=$(top_srcdir)/lib $(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_
 SelectionTest_SOURCES= \
 	./SelectionTestMain.cpp
 
-SelectionTest_LDADD=libInstRO_test.a $(top_builddir)/lib/libInstRO_core.a
+SelectionTest_LDADD=libInstRO_test.a $(top_builddir)/lib/libInstRO_core.a -L@BOOST_LIBDIR@
 SelectionTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
 if USEROSE
