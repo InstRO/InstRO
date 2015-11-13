@@ -71,7 +71,7 @@ SelectionTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
 if USEROSE
 SelectionTest_CPPFLAGS+= -DUSE_ROSE -I$(top_srcdir)/lib -I@ROSE_INCLUDEDIR@
-SelectionTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.a @ROSE_LINK_LIBRARIES@
+SelectionTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.a @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
 # TODO Add the library dependencies for ROSE
 endif
 
