@@ -14,9 +14,6 @@ void InstRO::Test::TestAdapter::checkIfConstructSetMatches(InstRO::Core::Constru
 	auto idMap = ip.getIdentifierMap(cs);
 
 	for (const auto idPair : idMap) {
-		// TODO before we find something we need to prepare the identifier
-		// as we don't want to match full paths.
-		
 		std::string keyVal(idPair.second);
 		std::string testString(keyVal.substr(keyVal.rfind("/") + 1));
 		// erase returns number of elements removed
