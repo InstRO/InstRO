@@ -2,7 +2,7 @@ import os
 import subprocess
 import argparse
 
-cmdParser = argparse.ArgumentParser(description='The script compiles all flavors possible with the given arguments.')
+cmdParser = argparse.ArgumentParser(description='Runs the test instrumentor executable on all input files.')
 cmdParser.add_argument('src', type=str, help="/path/to/instro/repo")
 cmdParser.add_argument('build', type=str, help="/path/to/instro/repo")
 
