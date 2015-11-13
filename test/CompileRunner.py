@@ -11,7 +11,7 @@ import argparse
 #   - invoke the test translators/executables on the respective inputs
 # - if any: run unit-tests
 
-cmdParser = argparse.ArgumentParser(description='Run InstRO test suite. It compiles add flavors possible with the given arguments.')
+cmdParser = argparse.ArgumentParser(description='The script compiles all flavors possible with the given arguments.')
 cmdParser.add_argument('--rose', type=str, dest='rosepath', help="/path/to/rose/installation")
 cmdParser.add_argument('--llvm-src', type=str, dest='llvmsrc', help="/path/to/llvm/source")
 cmdParser.add_argument('--llvm-install', type=str, dest='llvminstall', help="/path/to/llvm/installation")

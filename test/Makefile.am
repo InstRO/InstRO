@@ -75,6 +75,8 @@ SelectionTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.a @ROSE_LINK_LIBRARIES@
 # TODO Add the library dependencies for ROSE
 endif
 
+check:
+	python $(top_srcdir)/test/ApplyRunner.py $(top_srcdir) $(top_builddir)
 
 endif #USELIBTOOL
 
