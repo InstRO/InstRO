@@ -54,8 +54,6 @@ void InstRO::Test::TestAdapter::finalize() {
 std::set<std::string> InstRO::Test::TestAdapter::readExpectedItemsFile() {
 	std::set<std::string> ei;
 
-	std::cout << filename << std::endl;
-
 	std::ifstream inFile(filename);
 
 	bool labelApplies(false);
@@ -73,8 +71,5 @@ std::set<std::string> InstRO::Test::TestAdapter::readExpectedItemsFile() {
 		}
 	}
 
-	for(const auto i : ei){
-		std::cout << i << std::endl;
-	}
 	return ei;
 }

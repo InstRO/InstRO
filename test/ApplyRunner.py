@@ -25,11 +25,11 @@ def runApply(arguments):
     
     for k in workList:
         element = workList[k]
-        print(element)
+#        print(element)
         srcFile = ""
         specFile = ""
         for e in element:
-            print(e)
+ #           print(e)
             if e.rfind(".in") != -1:
                 specFile = e
             else:
@@ -39,6 +39,7 @@ def runApply(arguments):
         invocationString = "./SelectionTest " + inputDirectory + '/' + srcFile
         subprocess.call(invocationString, shell=True)
 
+    print("\n==== Tests finished normally ====\n")
 
 # we use two command line parameters to get build and source directory
 args = cmdParser.parse_args()
