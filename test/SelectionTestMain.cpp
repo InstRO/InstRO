@@ -2,13 +2,38 @@
 #include "instro.h"
 #include <iostream>
 
-
 #ifdef USE_ROSE
 #include "lib/RoseTestSupport.h"
 #endif
 
 /**
  * This is the TestInstrumentor implementation.
+ *
+ * It expects a file with the expected items, one per line, exported to the environment variable
+ * INSTRO_TEST_INPUT_FILENAME. The check is not performed on the fully qualified filename (as returned in the
+ * Construct's identifier) but only the filename. Fully qualified path is strongly preferred.
+ *
+ * TODO Have the selection graph runtime configurable (JSON?)
+ *
+ */
+
+
+// reads environment variable to return the filename
+std::string getInputFilename() {
+	std::string filename;
+	char *ev = getenv("INSTRO_TEST_INPUT_FILENAME");
+	if (ev != nullptr) {
+		filename = std::string(ev);
+	} else {
+		exit(-2);
+	}
+
+	return filename;
+}
+
+
+/**
+ * Actual instrumentor
  */
 int main(int argc, char **argv) {
 /*
@@ -21,11 +46,10 @@ int main(int argc, char **argv) {
 	InstrumentorType instrumentor(argc, argv);
 	auto factory = instrumentor.getFactory();
 
-	std::set<std::string> expItems;
-	expItems.insert("emptyMain.cpp:3--Function-main");
+	std::string filename = getInputFilename();
 
 	auto sel = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
-	auto testAdapter = factory->createTestAdapter(sel, expItems);
+	auto testAdapter = factory->createTestAdapter(sel, "Selector1", filename);
 
 	instrumentor.apply();
 
