@@ -1,5 +1,7 @@
 #include "rose.h"
 
+#include "instro/utility/Logger.h"
+
 #include "instro/tooling/ExtendedCallGraph.h"
 #include "instro/rose/core/RoseConstructSet.h"
 
@@ -102,7 +104,7 @@ public:
 		}
 
 		///XXX
-//		callgraph->print("extendedCallGraph.dot");
+		callgraph->print("extendedCallGraph.dot");
 
 		return callgraph;
 	}
@@ -170,7 +172,24 @@ public:	// Visitor Interface
 
 		SgFunctionDeclaration* calledDecl = node->getAssociatedFunctionDeclaration();
 		if (calledDecl == nullptr) {
-			return;	// FIXME MZ: calledDecl is not always available
+
+			logIt(WARN) << "Virtual call in line "<< node->get_startOfConstruct()->get_line() << ": " << node->unparseToString() << std::endl;
+
+			auto arrowExp = isSgArrowExp(node->get_function());
+			if (arrowExp == nullptr) {
+				return;
+			}
+
+			auto memberFuncRefExp = isSgMemberFunctionRefExp(arrowExp->get_rhs_operand());
+			if (memberFuncRefExp == nullptr) {
+				return;
+			}
+
+			calledDecl = memberFuncRefExp->getAssociatedMemberFunctionDeclaration();
+			if (calledDecl == nullptr) {
+				logIt(WARN) << "No associated function declaration for: " << node->unparseToString() << std::endl;
+				return;	// FIXME MZ: calledDecl is not always available
+			}
 		}
 
 		SgFunctionDefinition* calledDef = tryGetDefiningDeclaration(calledDecl)->get_definition();
