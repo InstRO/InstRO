@@ -40,9 +40,6 @@ public:
 	template<typename T>
 	Logger& operator<<(T const& val) {
 		if (level <= threshold) {
-			if (level == ERROR) {
-				std::cout << "[Error] ";
-			}
 			std::cout << val;
 		}
 		return *this;
@@ -50,9 +47,6 @@ public:
 
 	Logger& operator<<(std::ostream& (val)(std::ostream&)) {
 		if (level <= threshold) {
-			if (level == ERROR) {
-				std::cout << "[Error] ";
-			}
 			std::cout << val;
 		}
 		return *this;

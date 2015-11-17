@@ -36,3 +36,8 @@ rose_*.*
 # eclipse
 .project
 .cproject
+
+# generated documentation
+!docs/Makefile
+docs/html
+docs/latex

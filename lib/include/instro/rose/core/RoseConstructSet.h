@@ -288,7 +288,7 @@ class RoseConstruct : public InstRO::Core::Construct {
 
 	virtual std::string toDotString() const override {
 		if (isSgFunctionDefinition(node)) {	// don't print whole function
-			return isSgFunctionDefinition(node)->get_declaration()->get_name().getString();
+			return isSgFunctionDefinition(node)->get_declaration()->get_qualified_name().getString();
 		} else {
 			std::string dotString(node->unparseToString());
 			// escape " and \n (e.g. in string literals)
