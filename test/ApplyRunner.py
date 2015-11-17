@@ -6,41 +6,37 @@ cmdParser = argparse.ArgumentParser(description='Runs the test instrumentor exec
 cmdParser.add_argument('src', type=str, help="/path/to/instro/repo")
 cmdParser.add_argument('build', type=str, help="/path/to/instro/repo")
 
+# This is the list of test programs which should be applied.
+testPrograms = ["ConstructHierarchySelectionTest"]
 
+# The list of targets is read from a targets.lst which resides in a test/input/BinaryName directory
+def readTargetFileSpecification(tInstrumentor, directory):
+    targets = []
+    inFile = open(directory + '/' + tInstrumentor + "/targets.lst")
+    for line in inFile:
+        targets.append(line.strip())
+
+    return targets
+
+# Runs each TestInstrumentor on the given target list
 def runApply(arguments):
-    # For each unique name in test/input
-    # export environment variable to point to $$.in file
-    # apply TestInstrumentor to $$.cpp file
-    # Test return code
     baseDir = os.getcwd()[0:os.getcwd().rfind('/')]
+    
     inputDirectory = arguments.src + "/test/input"
-    fileList = os.listdir(inputDirectory)
-    workList = dict()
-    for f in fileList:
-        if f[0] == '.':
-            continue
-        name = f[0 : f.rfind('.')]
-        if workList.has_key(name):
-            workList[name].append(f)
-        else:
-            workList[name] = [f]
- 
+    
     failedRuns = 0
-    for k in workList:
-        element = workList[k]
-        srcFile = ""
-        specFile = ""
-        for e in element:
-            if e.rfind(".in") != -1:
-                specFile = e
-            else:
-                srcFile = e
 
-        os.environ["INSTRO_TEST_INPUT_FILENAME"] = inputDirectory + '/' + specFile
-        invocationString = "./SelectionTest " + inputDirectory + '/' + srcFile
-        errCode = subprocess.call(invocationString, shell=True)
-        if errCode != 0:
-            failedRuns += 1
+    for b in testPrograms:
+        targets = readTargetFileSpecification(b, inputDirectory);
+        for k in targets:
+            srcFile = k + ".cpp"
+            specFile = k + ".in"
+
+            os.environ["INSTRO_TEST_INPUT_FILENAME"] = inputDirectory + '/' + b + '/' + specFile
+            invocationString = "./" + b + " " + inputDirectory + '/' + srcFile
+            errCode = subprocess.call(invocationString, shell=True)
+            if errCode != 0:
+                failedRuns += 1
 
     if failedRuns != 0:
         print("\n=== Tests failed ===\n" + str(failedRuns) + " test cases failed due to error\n")
