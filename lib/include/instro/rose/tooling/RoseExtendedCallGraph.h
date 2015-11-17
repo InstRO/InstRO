@@ -1,3 +1,6 @@
+#ifndef INSTRO_ROSE_TOOLING_ROSE_EXTENDED_CALL_GRAPH_H
+#define INSTRO_ROSE_TOOLING_ROSE_EXTENDED_CALL_GRAPH_H
+
 #include "rose.h"
 
 #include "instro/tooling/ExtendedCallGraph.h"
@@ -313,3 +316,5 @@ private:
 }
 }
 }
+
+#endif

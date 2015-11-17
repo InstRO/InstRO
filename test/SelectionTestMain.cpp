@@ -48,8 +48,12 @@ int main(int argc, char **argv) {
 
 	std::string filename = getInputFilename();
 
-	auto sel = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
-	auto testAdapter = factory->createTestAdapter(sel, "CTFunctionSelector", filename);
+	auto ctFuncLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
+	auto ctLoopLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTLoopStatement);
+
+	// sink, so we ignore the returned Pass *
+	factory->createTestAdapter(ctFuncLvlSelector, "CTFunctionSelector", filename);
+	factory->createTestAdapter(ctLoopLvlSelector, "CTLoopSelector", filename);
 
 	instrumentor.apply();
 
