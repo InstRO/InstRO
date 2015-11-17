@@ -24,8 +24,7 @@ def runApply(arguments):
     
     inputDirectory = arguments.src + "/test/input"
     
-    failedRuns = 0
-
+    failedRuns = []
     for b in testPrograms:
         targets = readTargetFileSpecification(b, inputDirectory);
         for k in targets:
@@ -34,14 +33,26 @@ def runApply(arguments):
 
             os.environ["INSTRO_TEST_INPUT_FILENAME"] = inputDirectory + '/' + b + '/' + specFile
             invocationString = "./" + b + " " + inputDirectory + '/' + srcFile
-            errCode = subprocess.call(invocationString, shell=True)
-            if errCode != 0:
-                failedRuns += 1
+            
+            print("\n[Running]\n" + b + " " + srcFile)
 
-    if failedRuns != 0:
-        print("\n=== Tests failed ===\n" + str(failedRuns) + " test cases failed due to error\n")
-    else:
-        print("\n==== Tests finished normally ====\n")
+            errCode = subprocess.call(invocationString, shell=True)
+            print("[Done]")
+            if errCode != 0:
+                failedRuns.append((b, srcFile))
+
+    print("\n|=== Tests failed ===")
+    print("|= Number of failing tests due to error: " + str(len(failedRuns)))
+    print("|--- Failing testcases:")
+    print("|---")
+#        print("|--- Executable \t\t\tSource file")
+    for fr in failedRuns:
+        print("|--- " + fr[0] + "\t" + fr[1])
+    print("|=== End report ===\n")
+    if len(failedRuns) == 0:
+        print("\n=================================")
+        print("==== Tests finished normally ====")
+        print("=================================\n")
 
 # we use two command line parameters to get build and source directory
 args = cmdParser.parse_args()
