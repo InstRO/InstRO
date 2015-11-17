@@ -1,3 +1,5 @@
+# InstRO README
+
 ## Modules
 
 The following Passes are currently planned [ ] and implemented [x] in InstRO.
@@ -20,11 +22,11 @@ The following Passes are currently planned [ ] and implemented [x] in InstRO.
 - [x] ConstructPrinter (Adapter)
 - [x] RoseStrategyBasedAdapter
 
-## Libraries and Versions
+## Dependencies
 
 Internally we use the following version of compilers and libraries for building InstRO and ROSE.
 
-### To build InstRO
+### Building InstRO
 - GCC 4.8.5
 - Boost 1.57.0
 - automake 1.14
@@ -32,11 +34,8 @@ Internally we use the following version of compilers and libraries for building 
 - libtool 2.4
 - RapidJSON (github master head)
 
-### Additionally to build ROSE
-- graphviz 2.38
-- java 1.8
-- doxygen 1.8.8
-- ghostscript 9.16
+### Testing InstRO
+- Python 2.7.10
 
 ### Building with Clang
 The support to build with Clang will soon be available
@@ -46,7 +45,7 @@ The support to build with Clang will soon be available
 
 ### Filenames
 
-Filenemas are generally mixed case. That means a file starts with an uppercase letter and then uses cammel case.
+Filenames are generally mixed case. That means a file starts with an uppercase letter and then uses cammel case.
 For example PassFactory.h
 
 Files should be named like the class it contains. Generally one should have one class per file, unless there is a very good reason for not to follow this guideline.
