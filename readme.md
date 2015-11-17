@@ -32,7 +32,7 @@ Internally we use the following version of compilers and libraries for building 
 - libtool 2.4
 - RapidJSON (github master head)
 
-### Testing InstRO
+### To test InstRO
 - Python 2.7.10
 
 ### Building with Clang
