@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
 	std::string filename = getInputFilename();
 
 	auto sel = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
-	auto testAdapter = factory->createTestAdapter(sel, "Selector1", filename);
+	auto testAdapter = factory->createTestAdapter(sel, "CTFunctionSelector", filename);
 
 	instrumentor.apply();
 
