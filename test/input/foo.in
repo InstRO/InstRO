@@ -1,0 +1,3 @@
++CTFunctionSelector
+foo.cpp:4--Function-foo
+foo.cpp:2--Function-bar
