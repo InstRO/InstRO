@@ -32,11 +32,8 @@ Internally we use the following version of compilers and libraries for building 
 - libtool 2.4
 - RapidJSON (github master head)
 
-### Additionally to build ROSE
-- graphviz 2.38
-- java 1.8
-- doxygen 1.8.8
-- ghostscript 9.16
+### Testing InstRO
+- Python 2.7.10
 
 ### Building with Clang
 The support to build with Clang will soon be available
