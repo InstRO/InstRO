@@ -38,5 +38,6 @@ rose_*.*
 .cproject
 
 # generated documentation
+!docs/Makefile
 docs/html
 docs/latex
