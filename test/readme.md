@@ -26,7 +26,7 @@ So a valid .in file for some file main.cpp with `int main(...){...}` in line one
 +CTFunctionSelector
 main.cpp:1--Function-main
 ```
-And a valid targets.lst file which references solely the `main.cpp` test-case source file would look like
+And a valid `targets.lst` file which references solely the `main.cpp` test-case source file would look like
 ```
 main
 ```
