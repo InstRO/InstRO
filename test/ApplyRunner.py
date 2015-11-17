@@ -17,6 +17,8 @@ def runApply(arguments):
     fileList = os.listdir(inputDirectory)
     workList = dict()
     for f in fileList:
+        if f[0] == '.':
+            continue
         name = f[0 : f.rfind('.')]
         if workList.has_key(name):
             workList[name].append(f)
