@@ -1,3 +1,6 @@
+#ifndef INSTRO_ROSE_TOOLING_ROSE_GRAMMAR_INTERFACE_H
+#define INSTRO_ROSE_TOOLING_ROSE_GRAMMAR_INTERFACE_H
+
 #include "instro/core/ConstructSet.h"
 #include "instro/tooling/GrammarInterface.h"
 
@@ -23,3 +26,5 @@ class RoseGrammarInterface : public InstRO::Tooling::GrammarInterface::GrammarIn
 }
 }
 }
+
+#endif

@@ -7,6 +7,7 @@ void InstRO::Test::TestAdapter::init(){
 }
 
 void InstRO::Test::TestAdapter::execute() {
+	logIt(INFO) << "Running TestAdapter with labeled \"" << label << "\"" << std::endl;
 	auto cfg = getChannelConfig();
 	for (auto p : cfg.getPasses()) {
 		checkIfConstructSetMatches(getInput(p));

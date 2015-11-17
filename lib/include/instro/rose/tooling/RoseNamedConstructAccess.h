@@ -1,3 +1,6 @@
+#ifndef INSTRO_ROSE_TOOLING_ROSE_NAMED_CONSTRUCT_ACCESS_H
+#define INSTRO_ROSE_TOOLING_ROSE_NAMED_CONSTRUCT_ACCESS_H
+
 #include <memory>	// We need shared pointers
 #include <list>		 // We use List in the GrammarInterface
 #include <stack>
@@ -143,11 +146,9 @@ class RoseNamedConstructAccess : public ::InstRO::Tooling::NamedConstructAccess:
 
  public:
 	RoseNamedConstructAccess(SgProject* proj) : project(proj) {
-		std::cout << "Constructing RoseNamedConstructAccess" << std::endl;
 	};
 	InstRO::Core::ConstructSet getConstructsByIdentifyerName(
 			::InstRO::Tooling::NamedConstructAccess::Matcher& matcher) override {
-		std::cout << "Searching the ROSE AST for suitable strings\n" << std::endl;
 		traversal.reset();
 		traversal.setMatchMin();
 		return traversal.matchUserIdentifyer(&matcher, project);
@@ -164,3 +165,6 @@ class RoseNamedConstructAccess : public ::InstRO::Tooling::NamedConstructAccess:
 }
 }
 }
+
+
+#endif
