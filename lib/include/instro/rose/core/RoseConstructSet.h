@@ -280,6 +280,7 @@ class RoseConstruct : public InstRO::Core::Construct {
 	// we construct the identification as follows:
 	// filename:startline--ConstructTrait[-functionName]
 	std::string getIdentifier() const;
+	std::string generateConstructIdentifier() const;
 
 	virtual std::string toString() const override {
 		return "RoseConstruct: " + node->class_name() + ": " + node->unparseToString();

@@ -33,14 +33,14 @@ void InstRO::Test::TestAdapter::finalize() {
 	if (expectedItems.size() > 0) {
 		logIt(ERROR) << "UNFOUND items " << expectedItems.size() << "\n";
 		for (const auto i : expectedItems) {
-			logIt(INFO) << i << "\n";
+			logIt(ERROR) << i << "\n";
 		}
 	}
 
 	if (erroneouslyContainedInConstructSet.size() > 0) {
 		logIt(ERROR) << "WRONGLY MARKED " << erroneouslyContainedInConstructSet.size() << "\n";
 		for (const auto i : erroneouslyContainedInConstructSet) {
-			logIt(INFO) << i << "\n";
+			logIt(ERROR) << i << "\n";
 		}
 	}
 

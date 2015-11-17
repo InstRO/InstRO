@@ -46,7 +46,7 @@ std::string RoseConstruct::getIdentifier() const {
 		auto locatedNode = isSgLocatedNode(node);
 		Sg_File_Info *fInfo = locatedNode->get_file_info();
 		identifier += fInfo->get_filenameString() + ":" + std::to_string(fInfo->get_line());
-		identifier += "--" + constructLevelToString(getTraits().max());
+		identifier += "--" + generateConstructIdentifier();
 		if (isSgFunctionDefinition(node)) {
 			auto fDef = isSgFunctionDefinition(node);
 			identifier += "-" + fDef->get_declaration()->get_name().getString();
@@ -56,6 +56,28 @@ std::string RoseConstruct::getIdentifier() const {
 		raise_exception("The construct was not exportable");
 	}
 	return identifier;
+}
+
+std::string RoseConstruct::generateConstructIdentifier() const {
+	using CTLvl = InstRO::Core::ConstructTraitType;
+	auto cts = getTraits();
+	if(cts.is(CTLvl::CTConditionalStatement)){
+		return "ConditionalStatement";
+	}
+	if(cts.is(CTLvl::CTLoopStatement)){
+		return "LoopStatement";
+	}
+	if(cts.is(CTLvl::CTScopeStatement)){
+		return "ScopeStatement";
+	}
+	if(cts.is(CTLvl::CTSimpleStatement)){
+		return "SimpleStatement";
+	}
+	if(cts.is(CTLvl::CTWrappableStatement)){
+		return "WrappableStatement";
+	}
+	
+	return constructLevelToString(cts.max());
 }
 
 }	// namespace Core
