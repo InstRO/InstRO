@@ -25,6 +25,7 @@ def runApply(arguments):
         else:
             workList[name] = [f]
  
+    failedRuns = 0
     for k in workList:
         element = workList[k]
         srcFile = ""
@@ -37,9 +38,14 @@ def runApply(arguments):
 
         os.environ["INSTRO_TEST_INPUT_FILENAME"] = inputDirectory + '/' + specFile
         invocationString = "./SelectionTest " + inputDirectory + '/' + srcFile
-        subprocess.call(invocationString, shell=True)
+        errCode = subprocess.call(invocationString, shell=True)
+        if errCode != 0:
+            failedRuns += 1
 
-    print("\n==== Tests finished normally ====\n")
+    if failedRuns != 0:
+        print("\n=== Tests failed ===\n" + str(failedRuns) + " test cases failed due to error\n")
+    else:
+        print("\n==== Tests finished normally ====\n")
 
 # we use two command line parameters to get build and source directory
 args = cmdParser.parse_args()

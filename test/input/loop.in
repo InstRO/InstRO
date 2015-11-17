@@ -1,0 +1,6 @@
++CTFunctionSelector
+loop.cpp:2--Function-doSomething
+loop.cpp:4--Function-foo
+
++CTLoopSelector
+loop.cpp:5--LoopStatement
