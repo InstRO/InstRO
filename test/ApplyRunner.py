@@ -41,18 +41,19 @@ def runApply(arguments):
             if errCode != 0:
                 failedRuns.append((b, srcFile))
 
-    print("\n|=== Tests failed ===")
-    print("|= Number of failing tests due to error: " + str(len(failedRuns)))
-    print("|--- Failing testcases:")
-    print("|---")
-#        print("|--- Executable \t\t\tSource file")
-    for fr in failedRuns:
-        print("|--- " + fr[0] + "\t" + fr[1])
-    print("|=== End report ===\n")
     if len(failedRuns) == 0:
         print("\n=================================")
         print("==== Tests finished normally ====")
         print("=================================\n")
+    else:
+        print("\n|=== Tests failed ===")
+        print("|= Number of failing tests due to error: " + str(len(failedRuns)))
+        print("|--- Failing testcases:")
+        print("|---")
+        for fr in failedRuns:
+            print("|--- " + fr[0] + "\t" + fr[1])
+        print("|=== End report ===\n")
+
 
 # we use two command line parameters to get build and source directory
 args = cmdParser.parse_args()
