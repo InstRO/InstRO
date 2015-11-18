@@ -21,6 +21,8 @@ class RosePassFactory : public InstRO::PassFactory {
 	SgProject* project;
 
  public:
+	Pass* createDefaultInstrumentationAdapter(InstRO::Pass* input);
+
 	/* ROSE ONLY */
 
 	// UniqueCallpathTransformer
