@@ -17,6 +17,10 @@ class ExamplePassFactory : public InstRO::PassFactory {
  public:
 	ExamplePassFactory(PassManagement::PassManager* refManager) : PassFactory(refManager){};
 
+	InstRO::Pass* createDefaultInstrumentationAdapter(InstRO::Pass* input) {
+		return nullptr;
+	}
+
 	InstRO::Pass* createConstructPrinter(InstRO::Pass* input) {
 		InstRO::Pass* newPass = new Pass(new ExampleConstructPrinter(input));
 		newPass->setPassName("InstRO::Example::ExampleConstructPrinter");

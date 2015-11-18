@@ -4,6 +4,7 @@
 #include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
 #include "instro/rose/pass/adapter/RoseStrategyBasedAdapter.h"
 #include "instro/rose/pass/adapter/RoseConstructPrinter.h"
+#include "instro/rose/pass/adapter/RoseDefaultInstrumentationAdapter.h"
 
 #include <string>
 #include <vector>
@@ -11,7 +12,12 @@
 namespace InstRO {
 namespace Rose {
 
-
+Pass* RosePassFactory::createDefaultInstrumentationAdapter(InstRO::Pass* input) {
+	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseDefaultInstrumentationAdapter(input));
+	newPass->setPassName("InstRO::Rose::Adapter::RoseDefaultInstrumentationAdapter");
+	passManager->registerPass(newPass);
+	return newPass;
+}
 
 /* ROSE ONLY */
 
