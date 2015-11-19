@@ -5,6 +5,7 @@
 #include "instro/core/ConstructSet.h"
 
 #include <fstream>
+#include <algorithm>
 
 namespace InstRO {
 namespace Test {
@@ -25,7 +26,9 @@ class TestAdapter : public InstRO::Core::PassImplementation {
 
 	std::string label;
 	std::string filename;
+	// To allow for multi occurence we save the marked values in markedValues and have a set_difference at the end
 	std::set<std::string> expectedItems;
+	std::set<std::string> markedItems;
 	std::set<std::string> erroneouslyContainedInConstructSet;
 };
 }

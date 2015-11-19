@@ -2,9 +2,7 @@
 #include "instro/utility/Logger.h"
 #include "instro/tooling/IdentifierProvider.h"
 
-void InstRO::Test::TestAdapter::init(){
-	expectedItems = readExpectedItemsFile();
-}
+void InstRO::Test::TestAdapter::init() { expectedItems = readExpectedItemsFile(); }
 
 void InstRO::Test::TestAdapter::execute() {
 	logIt(INFO) << "Running TestAdapter with labeled \"" << label << "\"" << std::endl;
@@ -21,8 +19,10 @@ void InstRO::Test::TestAdapter::checkIfConstructSetMatches(InstRO::Core::Constru
 	for (const auto idPair : idMap) {
 		std::string keyVal(idPair.second);
 		std::string testString(keyVal.substr(keyVal.rfind("/") + 1));
+		markedItems.insert(testString);
+
 		// erase returns number of elements removed
-		if (expectedItems.erase(testString) > 0) {
+		if (expectedItems.find(testString) != expectedItems.end()) {
 		} else {
 			erroneouslyContainedInConstructSet.insert(idPair.second);
 		}
@@ -30,9 +30,17 @@ void InstRO::Test::TestAdapter::checkIfConstructSetMatches(InstRO::Core::Constru
 }
 
 void InstRO::Test::TestAdapter::finalize() {
-	if (expectedItems.size() > 0) {
-		logIt(ERROR) << "UNFOUND items " << expectedItems.size() << "\n";
-		for (const auto i : expectedItems) {
+	std::set<std::string> unfoundSet;
+	std::set_difference(expectedItems.begin(), expectedItems.end(), markedItems.begin(), markedItems.end(),
+											std::inserter(unfoundSet, unfoundSet.begin()));
+
+	if (unfoundSet.size() > 0 || erroneouslyContainedInConstructSet.size() > 0) {
+		logIt(ERROR) << "Adapter: " << label << std::endl;
+	}
+
+	if (unfoundSet.size() > 0) {
+		logIt(ERROR) << "UNFOUND items " << unfoundSet.size() << "\n";
+		for (const auto i : unfoundSet) {
 			logIt(ERROR) << i << "\n";
 		}
 	}
@@ -45,11 +53,10 @@ void InstRO::Test::TestAdapter::finalize() {
 	}
 
 	// XXX Make this exit with different return codes for different errors
-	if (expectedItems.size() > 0 || erroneouslyContainedInConstructSet.size() > 0) {
+	if (unfoundSet.size() > 0 || erroneouslyContainedInConstructSet.size() > 0) {
 		exit(-1);
 	}
 }
-
 
 // builds a set of expected items
 std::set<std::string> InstRO::Test::TestAdapter::readExpectedItemsFile() {
@@ -62,7 +69,7 @@ std::set<std::string> InstRO::Test::TestAdapter::readExpectedItemsFile() {
 		std::string line;
 		std::getline(inFile, line);
 
-		if(line.front() == '+'){
+		if (line.front() == '+') {
 			labelApplies = (label == line.substr(1));
 			continue;
 		}

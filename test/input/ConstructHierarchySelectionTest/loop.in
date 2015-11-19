@@ -4,3 +4,9 @@ loop.cpp:4--Function-foo
 
 +CTLoopSelector
 loop.cpp:5--LoopStatement
+
++CTStatementSelector
+loop.cpp:5--LoopStatement
+loop.cpp:5--SimpleStatement
+loop.cpp:5--ScopeStatement
+loop.cpp:6--SimpleStatement
