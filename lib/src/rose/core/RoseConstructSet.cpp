@@ -42,15 +42,21 @@ CTPredicate getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType)
 
 std::string RoseConstruct::getIdentifier() const {
 	std::string identifier("");
+
 	if (isSgLocatedNode(node) != nullptr) {
 		auto locatedNode = isSgLocatedNode(node);
+		logIt(DEBUG) << "getIdentifier(): \nNode type: " << locatedNode->class_name() << std::endl;
+	
 		Sg_File_Info *fInfo = locatedNode->get_file_info();
 		identifier += fInfo->get_filenameString() + ":" + std::to_string(fInfo->get_line());
 		identifier += "--" + generateConstructIdentifier();
+		
 		if (isSgFunctionDefinition(node)) {
 			auto fDef = isSgFunctionDefinition(node);
-			identifier += "-" + fDef->get_declaration()->get_name().getString();
+			identifier += "-" + fDef->get_declaration()->get_qualified_name().getString();
 		}
+
+		logIt(DEBUG) << "Generated identifier: " << identifier << std::endl;
 	} else {
 		logIt(WARN) << "The node in Construct " << getID() << " was not a located node." << std::endl;
 		raise_exception("The construct was not exportable");

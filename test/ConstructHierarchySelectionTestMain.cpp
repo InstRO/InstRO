@@ -51,12 +51,16 @@ int main(int argc, char **argv) {
 	auto ctStmtLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTStatement);
 	auto ctCondLvlSelector =
 			factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTConditionalStatement);
+	auto ctScopeLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTScopeStatement);
+	auto ctExprLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTExpression);
 
 	// sink, so we ignore the returned Pass *
 	factory->createTestAdapter(ctFuncLvlSelector, "CTFunctionSelector", filename);
 	factory->createTestAdapter(ctLoopLvlSelector, "CTLoopSelector", filename);
 	factory->createTestAdapter(ctStmtLvlSelector, "CTStatementSelector", filename);
 	factory->createTestAdapter(ctCondLvlSelector, "CTConditionalSelector", filename);
+	factory->createTestAdapter(ctScopeLvlSelector, "CTScopeSelector", filename);
+	factory->createTestAdapter(ctExprLvlSelector, "CTExpressionSelector", filename);
 
 	instrumentor.apply();
 

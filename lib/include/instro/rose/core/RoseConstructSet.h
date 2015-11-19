@@ -14,6 +14,9 @@
 
 #include "instro/core/ConstructSet.h"
 #include "instro/utility/exception.h"
+
+//#define INSTRO_LOG_LEVEL DEBUG
+
 #include "instro/utility/Logger.h"
 
 namespace InstRO {

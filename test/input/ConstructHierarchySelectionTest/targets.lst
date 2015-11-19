@@ -2,3 +2,5 @@ loop
 main
 foo
 if
+scopes
+memfunc
