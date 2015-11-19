@@ -1,5 +1,5 @@
-#ifndef INSTRO_UTIL_BWLFILEREADER
-#define INSTRO_UTIL_BWLFILEREADER
+#ifndef INSTRO_UTILITY_BWL_FILE_READER
+#define INSTRO_UTILITY_BWL_FILE_READER
 
 #include <string>
 #include <fstream>
