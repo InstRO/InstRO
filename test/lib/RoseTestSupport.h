@@ -15,12 +15,17 @@ class RoseTestFactory : public InstRO::Rose::RosePassFactory {
 			: InstRO::Rose::RosePassFactory(manager, project) {}
 
 	InstRO::Pass *createTestAdapter(InstRO::Pass *input, std::string label, std::string filename) {
-		auto pImpl = new InstRO::Test::TestAdapter(input, label, filename);
+		std::unique_ptr<InstRO::Test::TestReporter> tr(new InstRO::Test::TestReporter(label));
+		testReporter.push_back(std::move(tr));
+
+		auto pImpl = new InstRO::Test::TestAdapter(input, label, filename, testReporter.back().get());
 		InstRO::Pass *p = new InstRO::Pass(pImpl);
-		p->setPassName("TestAdapter");
+		p->setPassName("TestAdapter " + label);
 		passManager->registerPass(p);
 		return p;
 	}
+
+	std::vector<std::unique_ptr<InstRO::Test::TestReporter>> testReporter;
 };
 
 /**

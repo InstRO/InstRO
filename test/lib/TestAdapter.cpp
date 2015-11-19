@@ -2,6 +2,29 @@
 #include "instro/utility/Logger.h"
 #include "instro/tooling/IdentifierProvider.h"
 
+
+void InstRO::Test::TestReporter::printResults(){
+
+	if (unfoundSet.size() > 0 || addMarked.size() > 0) {
+		logIt(ERROR) << "Adapter: " << lbl << std::endl;
+	}
+
+	if (unfoundSet.size() > 0) {
+		logIt(ERROR) << "UNFOUND items " << unfoundSet.size() << "\n";
+		for (const auto i : unfoundSet) {
+			logIt(ERROR) << i << "\n";
+		}
+	}
+
+	if (addMarked.size() > 0) {
+		logIt(ERROR) << "WRONGLY MARKED " << addMarked.size() << "\n";
+		for (const auto i : addMarked) {
+			logIt(ERROR) << i << "\n";
+		}
+	}
+}
+
+
 void InstRO::Test::TestAdapter::init() { expectedItems = readExpectedItemsFile(); }
 
 void InstRO::Test::TestAdapter::execute() {
@@ -34,28 +57,7 @@ void InstRO::Test::TestAdapter::finalize() {
 	std::set_difference(expectedItems.begin(), expectedItems.end(), markedItems.begin(), markedItems.end(),
 											std::inserter(unfoundSet, unfoundSet.begin()));
 
-	if (unfoundSet.size() > 0 || erroneouslyContainedInConstructSet.size() > 0) {
-		logIt(ERROR) << "Adapter: " << label << std::endl;
-	}
-
-	if (unfoundSet.size() > 0) {
-		logIt(ERROR) << "UNFOUND items " << unfoundSet.size() << "\n";
-		for (const auto i : unfoundSet) {
-			logIt(ERROR) << i << "\n";
-		}
-	}
-
-	if (erroneouslyContainedInConstructSet.size() > 0) {
-		logIt(ERROR) << "WRONGLY MARKED " << erroneouslyContainedInConstructSet.size() << "\n";
-		for (const auto i : erroneouslyContainedInConstructSet) {
-			logIt(ERROR) << i << "\n";
-		}
-	}
-
-	// XXX Make this exit with different return codes for different errors
-	if (unfoundSet.size() > 0 || erroneouslyContainedInConstructSet.size() > 0) {
-		exit(-1);
-	}
+	reporter->setTestResult(std::move(unfoundSet), std::move(erroneouslyContainedInConstructSet));
 }
 
 // builds a set of expected items

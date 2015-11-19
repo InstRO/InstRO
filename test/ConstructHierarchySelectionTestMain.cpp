@@ -17,7 +17,6 @@
  *
  */
 
-
 // reads environment variable to return the filename
 std::string getInputFilename() {
 	std::string filename;
@@ -30,7 +29,6 @@ std::string getInputFilename() {
 
 	return filename;
 }
-
 
 /**
  * Actual instrumentor
@@ -51,13 +49,28 @@ int main(int argc, char **argv) {
 	auto ctFuncLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
 	auto ctLoopLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTLoopStatement);
 	auto ctStmtLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTStatement);
+	auto ctCondLvlSelector =
+			factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTConditionalStatement);
 
 	// sink, so we ignore the returned Pass *
 	factory->createTestAdapter(ctFuncLvlSelector, "CTFunctionSelector", filename);
 	factory->createTestAdapter(ctLoopLvlSelector, "CTLoopSelector", filename);
 	factory->createTestAdapter(ctStmtLvlSelector, "CTStatementSelector", filename);
+	factory->createTestAdapter(ctCondLvlSelector, "CTConditionalSelector", filename);
 
 	instrumentor.apply();
+
+	bool hasTestFailed(false);
+	for (std::unique_ptr<InstRO::Test::TestReporter> &tr : factory->testReporter) {
+		tr->printResults();
+		if (tr->failed()) {
+			hasTestFailed = true;
+		}
+	}
+
+	if (hasTestFailed) {
+		return -1;
+	}
 
 	return 0;
 }
