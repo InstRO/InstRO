@@ -1,0 +1,11 @@
++CTFunctionSelector
+if.cpp:1--Function-doA
+if.cpp:2--Function-foo
+
++CTStatementSelector
+if.cpp:3--ConditionalStatement
+if.cpp:3--ScopeStatement
+if.cpp:4--SimpleStatement
+
++CTConditionalSelector
+if.cpp:3--ConditionalStatement
