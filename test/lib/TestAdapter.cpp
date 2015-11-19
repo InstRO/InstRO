@@ -3,7 +3,7 @@
 #include "instro/tooling/IdentifierProvider.h"
 
 
-void InstRO::Test::TestReporter::printResults(){
+void InstRO::Test::TestSummary::printResults(){
 
 	if (unfoundSet.size() > 0 || addMarked.size() > 0) {
 		logIt(ERROR) << "Adapter: " << lbl << std::endl;
@@ -57,7 +57,7 @@ void InstRO::Test::TestAdapter::finalize() {
 	std::set_difference(expectedItems.begin(), expectedItems.end(), markedItems.begin(), markedItems.end(),
 											std::inserter(unfoundSet, unfoundSet.begin()));
 
-	reporter->setTestResult(std::move(unfoundSet), std::move(erroneouslyContainedInConstructSet));
+	summary->setTestResult(std::move(unfoundSet), std::move(erroneouslyContainedInConstructSet));
 }
 
 // builds a set of expected items

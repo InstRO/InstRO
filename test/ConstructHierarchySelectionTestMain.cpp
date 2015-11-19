@@ -60,5 +60,6 @@ int main(int argc, char **argv) {
 
 	instrumentor.apply();
 
+	// Returns false if everything was fine, true otherwise
 	return instrumentor.testFailed();
 }

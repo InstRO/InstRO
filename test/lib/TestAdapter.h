@@ -10,9 +10,9 @@
 namespace InstRO {
 namespace Test {
 
-class TestReporter {
+class TestSummary {
  public:
-	 TestReporter(std::string adapterLabel) : lbl(adapterLabel){}
+	 TestSummary(std::string adapterLabel) : lbl(adapterLabel){}
 
 	void setTestResult(std::set<std::string> &&unFound, std::set<std::string> &&additionallyMarked) {
 		unfoundSet.insert(unFound.begin(), unFound.end());
@@ -31,8 +31,8 @@ class TestReporter {
 
 class TestAdapter : public InstRO::Core::PassImplementation {
  public:
-	TestAdapter(InstRO::Pass *input, std::string lab, std::string filename, TestReporter *tr)
-			: InstRO::Core::PassImplementation(InstRO::Core::ChannelConfiguration(input)), label(lab), filename(filename), reporter(tr) {}
+	TestAdapter(InstRO::Pass *input, std::string lab, std::string filename, TestSummary *tr)
+			: InstRO::Core::PassImplementation(InstRO::Core::ChannelConfiguration(input)), label(lab), filename(filename), summary(tr) {}
 
 	void init() override;
 	void execute() override;
@@ -45,7 +45,7 @@ class TestAdapter : public InstRO::Core::PassImplementation {
 
 	std::string label;
 	std::string filename;
-	TestReporter *reporter;
+	TestSummary *summary;
 	// To allow for multi occurence we save the marked values in markedValues and have a set_difference at the end
 	std::set<std::string> expectedItems;
 	std::set<std::string> markedItems;
