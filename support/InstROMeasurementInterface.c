@@ -1,5 +1,8 @@
 #include "InstROMeasurementInterface.h"
 
+void __instro_init() {}
+
+void __instro_fini() {}
 
 void __instro_start_function(size_t construct_hash, void *callsite) {}
 
