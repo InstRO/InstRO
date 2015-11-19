@@ -18,6 +18,17 @@
 #define _INSTRO_WEAK_DECL
 #endif
 
+/*
+ * Called before any hook is called.
+ * If construction needs to take place things go here.
+ */
+void __instro_init() _INSTRO_WEAK_DECL;
+
+/*
+ * Called before program exits.
+ * Clean up code should be placed inside this function
+ */
+void __instro_fini() __INSTRO_WEAK_DECL;
 
 /*
  * Resembles GNU __cyg_profile_enter function.
