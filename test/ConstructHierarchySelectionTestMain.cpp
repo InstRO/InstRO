@@ -60,17 +60,5 @@ int main(int argc, char **argv) {
 
 	instrumentor.apply();
 
-	bool hasTestFailed(false);
-	for (std::unique_ptr<InstRO::Test::TestReporter> &tr : factory->testReporter) {
-		tr->printResults();
-		if (tr->failed()) {
-			hasTestFailed = true;
-		}
-	}
-
-	if (hasTestFailed) {
-		return -1;
-	}
-
-	return 0;
+	return instrumentor.testFailed();
 }

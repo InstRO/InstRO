@@ -5,7 +5,7 @@
 #include "lib/TestAdapter.h"
 
 namespace RoseTest {
-
+class RoseTestInstrumentor;
 /**
  * Extends the normal RosePassFactory with the possibility to create a TestAdapter instance
  */
@@ -25,6 +25,8 @@ class RoseTestFactory : public InstRO::Rose::RosePassFactory {
 		return p;
 	}
 
+ private:
+	friend class RoseTestInstrumentor;
 	std::vector<std::unique_ptr<InstRO::Test::TestReporter>> testReporter;
 };
 
@@ -37,8 +39,27 @@ class RoseTestInstrumentor : public InstRO::RoseInstrumentor {
 
 	RoseTestFactory *getFactory(
 			InstRO::Instrumentor::CompilationPhase phase = InstRO::Instrumentor::CompilationPhase::frontend) override {
-		return new RoseTestFactory(passManager, project);
+		if (fac == nullptr) {
+			fac.reset(new RoseTestFactory(passManager, project));
+		}
+		return fac.get();
 	}
+
+	bool testFailed() {
+		bool hasTestFailed(false);
+
+		for (std::unique_ptr<InstRO::Test::TestReporter> &tr : fac->testReporter) {
+			tr->printResults();
+			if (tr->failed()) {
+				hasTestFailed = true;
+			}
+		}
+
+		return hasTestFailed;
+	}
+
+ private:
+	std::unique_ptr<RoseTestFactory> fac;
 };
 }
 
