@@ -50,10 +50,12 @@ int main(int argc, char **argv) {
 
 	auto ctFuncLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
 	auto ctLoopLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTLoopStatement);
+	auto ctStmtLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTStatement);
 
 	// sink, so we ignore the returned Pass *
 	factory->createTestAdapter(ctFuncLvlSelector, "CTFunctionSelector", filename);
 	factory->createTestAdapter(ctLoopLvlSelector, "CTLoopSelector", filename);
+	factory->createTestAdapter(ctStmtLvlSelector, "CTStatementSelector", filename);
 
 	instrumentor.apply();
 
