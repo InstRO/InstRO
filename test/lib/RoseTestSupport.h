@@ -15,10 +15,10 @@ class RoseTestFactory : public InstRO::Rose::RosePassFactory {
 			: InstRO::Rose::RosePassFactory(manager, project) {}
 
 	InstRO::Pass *createTestAdapter(InstRO::Pass *input, std::string label, std::string filename) {
-		std::unique_ptr<InstRO::Test::TestReporter> tr(new InstRO::Test::TestReporter(label));
-		testReporter.push_back(std::move(tr));
+		std::unique_ptr<InstRO::Test::TestSummary> tr(new InstRO::Test::TestSummary(label));
+		testSummaries.push_back(std::move(tr));
 
-		auto pImpl = new InstRO::Test::TestAdapter(input, label, filename, testReporter.back().get());
+		auto pImpl = new InstRO::Test::TestAdapter(input, label, filename, testSummaries.back().get());
 		InstRO::Pass *p = new InstRO::Pass(pImpl);
 		p->setPassName("TestAdapter " + label);
 		passManager->registerPass(p);
@@ -27,7 +27,7 @@ class RoseTestFactory : public InstRO::Rose::RosePassFactory {
 
  private:
 	friend class RoseTestInstrumentor;
-	std::vector<std::unique_ptr<InstRO::Test::TestReporter>> testReporter;
+	std::vector<std::unique_ptr<InstRO::Test::TestSummary>> testSummaries;
 };
 
 /**
@@ -48,7 +48,7 @@ class RoseTestInstrumentor : public InstRO::RoseInstrumentor {
 	bool testFailed() {
 		bool hasTestFailed(false);
 
-		for (std::unique_ptr<InstRO::Test::TestReporter> &tr : fac->testReporter) {
+		for (std::unique_ptr<InstRO::Test::TestSummary> &tr : fac->testSummaries) {
 			tr->printResults();
 			if (tr->failed()) {
 				hasTestFailed = true;
