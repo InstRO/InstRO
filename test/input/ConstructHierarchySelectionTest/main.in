@@ -1,5 +1,5 @@
 +CTFunctionSelector
-main.cpp:1--Function-main
+main.cpp:1--Function-::main
 
 +CTStatementSelector
 main.cpp:1--SimpleStatement
