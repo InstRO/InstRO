@@ -1,3 +1,5 @@
+//#define INSTRO_LOG_LEVEL DEBUG
+
 #include "TestAdapter.h"
 #include "instro/utility/Logger.h"
 #include "instro/tooling/IdentifierProvider.h"
@@ -28,7 +30,7 @@ void InstRO::Test::TestSummary::printResults(){
 void InstRO::Test::TestAdapter::init() { expectedItems = readExpectedItemsFile(); }
 
 void InstRO::Test::TestAdapter::execute() {
-	logIt(INFO) << "Running TestAdapter with labeled \"" << label << "\"" << std::endl;
+	logIt(INFO) << "Running TestAdapter with label \"" << label << "\"" << std::endl;
 	auto cfg = getChannelConfig();
 	for (auto p : cfg.getPasses()) {
 		checkIfConstructSetMatches(getInput(p));
@@ -44,25 +46,35 @@ void InstRO::Test::TestAdapter::checkIfConstructSetMatches(InstRO::Core::Constru
 		std::string testString(keyVal.substr(keyVal.rfind("/") + 1));
 		markedItems.insert(testString);
 
-		// erase returns number of elements removed
+		logIt(DEBUG) << "Marking " << keyVal << " as selected" << std::endl;
+
 		if (expectedItems.find(testString) != expectedItems.end()) {
 		} else {
-			erroneouslyContainedInConstructSet.insert(idPair.second);
+			erroneouslyContainedInConstructSet.insert(testString);
 		}
 	}
 }
 
 void InstRO::Test::TestAdapter::finalize() {
-	std::set<std::string> unfoundSet;
+	std::multiset<std::string> unfoundSet;
 	std::set_difference(expectedItems.begin(), expectedItems.end(), markedItems.begin(), markedItems.end(),
 											std::inserter(unfoundSet, unfoundSet.begin()));
 
-	summary->setTestResult(std::move(unfoundSet), std::move(erroneouslyContainedInConstructSet));
+	std::multiset<std::string> tempAdditionals;
+	std::set_difference(markedItems.begin(), markedItems.end(), expectedItems.begin(), expectedItems.end(),
+											std::inserter(tempAdditionals, tempAdditionals.begin()));
+
+	std::multiset<std::string> addNodes;
+	std::set_union(tempAdditionals.begin(), tempAdditionals.end(), erroneouslyContainedInConstructSet.begin(),
+								 erroneouslyContainedInConstructSet.end(), std::inserter(addNodes, addNodes.begin()));
+
+	summary->setTestResult(std::move(unfoundSet), std::move(addNodes));
+//	summary->setTestResult(std::move(unfoundSet), std::move(erroneouslyContainedInConstructSet));
 }
 
 // builds a set of expected items
-std::set<std::string> InstRO::Test::TestAdapter::readExpectedItemsFile() {
-	std::set<std::string> ei;
+std::multiset<std::string> InstRO::Test::TestAdapter::readExpectedItemsFile() {
+	std::multiset<std::string> ei;
 
 	std::ifstream inFile(filename);
 

@@ -14,7 +14,7 @@ class TestSummary {
  public:
 	 TestSummary(std::string adapterLabel) : lbl(adapterLabel){}
 
-	void setTestResult(std::set<std::string> &&unFound, std::set<std::string> &&additionallyMarked) {
+	void setTestResult(std::multiset<std::string> &&unFound, std::multiset<std::string> &&additionallyMarked) {
 		unfoundSet.insert(unFound.begin(), unFound.end());
 		addMarked.insert(additionallyMarked.begin(), additionallyMarked.end());
 	}
@@ -25,8 +25,8 @@ class TestSummary {
 
  private:
 	std::string lbl;
-	std::set<std::string> unfoundSet;
-	std::set<std::string> addMarked;
+	std::multiset<std::string> unfoundSet;
+	std::multiset<std::string> addMarked;
 };
 
 class TestAdapter : public InstRO::Core::PassImplementation {
@@ -41,15 +41,15 @@ class TestAdapter : public InstRO::Core::PassImplementation {
  private:
 	void checkIfConstructSetMatches(InstRO::Core::ConstructSet *cs);
 
-	std::set<std::string> readExpectedItemsFile();
+	std::multiset<std::string> readExpectedItemsFile();
 
 	std::string label;
 	std::string filename;
 	TestSummary *summary;
 	// To allow for multi occurence we save the marked values in markedValues and have a set_difference at the end
-	std::set<std::string> expectedItems;
-	std::set<std::string> markedItems;
-	std::set<std::string> erroneouslyContainedInConstructSet;
+	std::multiset<std::string> expectedItems;
+	std::multiset<std::string> markedItems;
+	std::multiset<std::string> erroneouslyContainedInConstructSet;
 };
 }
 }
