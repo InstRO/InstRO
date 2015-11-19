@@ -56,6 +56,10 @@ void InstRO::Test::TestAdapter::checkIfConstructSetMatches(InstRO::Core::Constru
 }
 
 void InstRO::Test::TestAdapter::finalize() {
+	/*
+	 * We want to have all nodes which were found but not expected as well as all nodes which were not found but expected.
+	 * The fun part is, we need to have them in the correct amount, as we are dealing with multisets here.
+	 */
 	std::multiset<std::string> unfoundSet;
 	std::set_difference(expectedItems.begin(), expectedItems.end(), markedItems.begin(), markedItems.end(),
 											std::inserter(unfoundSet, unfoundSet.begin()));
@@ -69,10 +73,9 @@ void InstRO::Test::TestAdapter::finalize() {
 								 erroneouslyContainedInConstructSet.end(), std::inserter(addNodes, addNodes.begin()));
 
 	summary->setTestResult(std::move(unfoundSet), std::move(addNodes));
-//	summary->setTestResult(std::move(unfoundSet), std::move(erroneouslyContainedInConstructSet));
 }
 
-// builds a set of expected items
+/* builds a multiset of expected items */
 std::multiset<std::string> InstRO::Test::TestAdapter::readExpectedItemsFile() {
 	std::multiset<std::string> ei;
 

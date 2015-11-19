@@ -10,6 +10,15 @@
 namespace InstRO {
 namespace Test {
 
+/*
+ * The class is used to decouple the process of acquiring the data during a test run (done by TestAdapter) and printing
+ * the data.
+ *
+ * Holds two multisets
+ * - nodes which were expected but not found
+ * - nodes that were found but not expected
+ *
+ */
 class TestSummary {
  public:
 	 TestSummary(std::string adapterLabel) : lbl(adapterLabel){}
@@ -29,6 +38,10 @@ class TestSummary {
 	std::multiset<std::string> addMarked;
 };
 
+/*
+ * Reads the file at the provided location and fills the expected list according to the given label.
+ * Pushes the collected multisets into a TestSummary, which is managed inside the Instrumentor/Factory.
+ */
 class TestAdapter : public InstRO::Core::PassImplementation {
  public:
 	TestAdapter(InstRO::Pass *input, std::string lab, std::string filename, TestSummary *tr)

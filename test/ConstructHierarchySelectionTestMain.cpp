@@ -11,7 +11,8 @@
  *
  * It expects a file with the expected items, one per line, exported to the environment variable
  * INSTRO_TEST_INPUT_FILENAME. The check is not performed on the fully qualified filename (as returned in the
- * Construct's identifier) but only the filename. Fully qualified path is strongly preferred.
+ * Construct's identifier) but only the filename. 
+ * Fully qualified path to the input file is strongly preferred.
  *
  * TODO Have the selection graph runtime configurable (JSON?)
  *
@@ -32,6 +33,17 @@ std::string getInputFilename() {
 
 /**
  * Actual instrumentor
+ *
+ * This instrumentor uses the ConstructClassSelector to select each of
+ * - expressions
+ * - scope statements
+ * - conditional statements
+ * - loop statements
+ * - statements
+ * - functions
+ * each of these selectors is fed into one TestAdapter instance. The TestAdapter reads the given input file and outputs
+ * the result to the TestSummary object.
+ * If all selectors produce the expected ConstructSet the app returns 0.
  */
 int main(int argc, char **argv) {
 /*
