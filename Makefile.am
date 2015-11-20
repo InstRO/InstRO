@@ -1,7 +1,6 @@
 #
 # Build the library
 #
-
 SUBDIRS= \
 	lib \
 	test \
@@ -13,13 +12,6 @@ SUBDIRS= \
 if BUILD_EXAMPLES
 SUBDIRS+= examples
 endif
-
-#
-# Build the tests
-#
-# SUBDIRS+= \
-	# test
-
 
 printSetup:
 	@echo Rose expected at $(ROSE_INSTALL_DIR)
