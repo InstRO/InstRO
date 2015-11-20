@@ -20,8 +20,6 @@ AC_INIT([instro], [0.3], [christian.iwainsky@sc.tu-darmstadt.de],[instro])
 # -------------------------------
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_MACRO_DIR([config/m4])
-# CI: not available until autoconf 1.14
-# AC_CONFIG_MACRO_DIRS([config/m4])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 PKG_PROG_PKG_CONFIG
 

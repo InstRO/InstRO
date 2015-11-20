@@ -40,13 +40,11 @@ ConstructHierarchySelectionTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INC
 if USEROSE
 ConstructHierarchySelectionTest_CPPFLAGS+= -I$(top_srcdir)/../lib/include -I@ROSE_INCLUDEDIR@
 ConstructHierarchySelectionTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@
-# TODO Add the library dependencies for ROSE
 endif
 
 if USECLANG
+# FIXME Untested so far.
 ConstructHierarchySelectionTest_LDADD+= $(top_builddir)/lib/libInstRO_clang.la
-# TODO Add the library dependencies for Clang
-# Maybe leave aside the Clang part for the moment?
 endif
 
 else #USELIBTOOL
@@ -72,7 +70,6 @@ ConstructHierarchySelectionTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INC
 if USEROSE
 ConstructHierarchySelectionTest_CPPFLAGS+= -DUSE_ROSE -I$(top_srcdir)/lib -I@ROSE_INCLUDEDIR@
 ConstructHierarchySelectionTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.a @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
-# TODO Add the library dependencies for ROSE
 endif
 
 check:
