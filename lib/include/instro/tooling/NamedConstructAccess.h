@@ -1,5 +1,5 @@
-#ifndef INSTRO_ANALYSIS_INTERFACE_NAMED_CONSTRUCT_ACCESS
-#define INSTRO_ANALYSIS_INTERFACE_NAMED_CONSTRUCT_ACCESS
+#ifndef INSTRO_TOOLING_NAMED_CONSTRUCT_ACCESS
+#define INSTRO_TOOLING_NAMED_CONSTRUCT_ACCESS
 
 #include <memory>	// We need shared pointers
 #include <list>		 // We use List in the GrammarInterface
@@ -21,21 +21,12 @@ class Matcher {
 	Matcher(){};
 	virtual ~Matcher() {}
 
-	/** returns the ids in list of the patterns which match */
-	//			virtual std::vector<int> match(std::string str, std::list<std::string> list) = 0;
-	/** 2013-10-15 JP: New function added. Maybe to replace the std::vector<int> match(...) function */
-	//			virtual bool bMatch(std::string str, std::list<std::string> list) = 0;
+	virtual bool isMatch(std::string candidate, std::string pattern) = 0;
 
-	/** 2015-07-02 CI: Generic Match function **/
-	virtual bool isMatch(std::string str) = 0;
-	/** returns a vector of vectors holding the ids in list of the patterns which match */
-	//			virtual std::vector<std::vector<int> > match(std::vector<std::string> strList, std::list<std::string> list) =
-	// 0;
-	/** get the matching string by id */
-	//			virtual std::vector<int> getMatchIds() = 0; // XXX 2013-10-08 JP: really reasonable?
+	virtual bool isMatch(std::string candidate) = 0;
+
 };
 
-//#define WILDCARDCHAR '#'
 /**
 * This class implements a wildcard string matching.
 * The '#' character is considered to be the Wildcard which can substitute 0,..,n characters.
@@ -43,35 +34,22 @@ class Matcher {
 * \author Jan-Patrick Lehr
 */
 class WildcardedStringMatcher : public Matcher {
- protected:
-	std::list<std::string> wildcardStrings;
-
  public:
-	/** Initializes the wild card char to # and sets verbose to false. */
-	WildcardedStringMatcher(std::list<std::string> inputWildcardStrings)
-			: wildcardStrings(inputWildcardStrings),
-				WILDCARDCHAR('#'),
-				verbose(false){};	// Todo JP: Maybe we should have here parameters with default values?
+	/** Initializes the wild card char to # */
+	WildcardedStringMatcher() : WILDCARDCHAR('#') {}
 
-	/** returns a vector with the ids of the matching strings in list */
-	virtual std::vector<int> match(std::string str, std::list<std::string> list);
-	/** returns a boolean if anything matched. The match can be retrieved using the get method */
-	virtual bool bMatch(std::string str, std::list<std::string> list);
-	virtual bool isMatch(std::string str) override;
-	/** returns a vector with vectors of ids of the matching strings in the list. */
-	virtual std::vector<std::vector<int> > match(std::vector<std::string> strList, std::list<std::string> list);
-	/** Returns a list of integers indicating the position which matched 'str' after one call to match(...) */
-	virtual std::vector<int> getMatchIds();
-	/** Sets the verbose mode. If verbose is set, a lot of output will be created! */
-	void setVerbose(bool verbose);	// enables verbose output
-	std::vector<std::string> getMatchingStringList();
+	WildcardedStringMatcher(std::vector<std::string> patternList) : patterns(patternList), WILDCARDCHAR('#') {}
 
+	virtual bool isMatch(std::string candidate, std::string pattern) override;
+
+	/** Uses internal list of patterns to match against, short circuits on first match */
+	virtual bool isMatch(std::string candidate) override;
+ 
  protected:
-	std::vector<int> matchingList;	// holds the position of each matching pattern after one call to match(..)
+	bool bMatch(std::string str, std::string pattern);
 
  private:
-	std::vector<std::string> matchingStringList;	// holds all matching patterns after one call to match(..)
-	bool verbose;																	// Indicates verbosity of the matcher object
+	std::vector<std::string> patterns;
 	char WILDCARDCHAR;														// The used wild card character
 };
 

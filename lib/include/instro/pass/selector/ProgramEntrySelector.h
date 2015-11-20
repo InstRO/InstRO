@@ -1,3 +1,7 @@
+#ifndef INSTRO_PASS_SELECTOR_PROGRAM_ENTRY_SELECTOR_H
+#define INSTRO_PASS_SELECTOR_PROGRAM_ENTRY_SELECTOR_H
+
+
 #include "instro/core/PassImplementation.h"
 
 namespace InstRO {
@@ -14,3 +18,5 @@ class ProgramEntrySelector : public InstRO::Core::PassImplementation {
 
 }	// namespace Selector
 }	// namespace InstRO
+
+#endif

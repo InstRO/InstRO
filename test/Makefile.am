@@ -89,6 +89,7 @@ ConstructHierarchySelectionTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.a @RO
 endif
 
 check:
+	./MatcherUnitTest
 	python $(top_srcdir)/test/ApplyRunner.py $(top_srcdir) $(top_builddir)
 
 endif #USELIBTOOL
