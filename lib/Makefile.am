@@ -27,13 +27,13 @@ CLANG_SFILES= \
 ./src/clang/support/InstROASTConsumer.cpp \
 ./src/support/BWLFileReader.cpp
 
-EXAMPLE_SFILES= \
-./src/example/ExampleConstructPrinter.cpp \
-./src/example/ExampleConstructSet.cpp \
-./src/example/ExampleInstrumentor.cpp \
-./src/example/ExampleNamedConstructAccess.cpp \
-./src/example/NameBasedSelector.cpp \
-./src/example/CompoundSelector.cpp
+#EXAMPLE_SFILES= 
+#./src/example/ExampleConstructPrinter.cpp 
+#./src/example/ExampleConstructSet.cpp 
+#./src/example/ExampleInstrumentor.cpp 
+#./src/example/ExampleNamedConstructAccess.cpp 
+#./src/example/NameBasedSelector.cpp 
+#./src/example/CompoundSelector.cpp
 
 CORE_HFILES= \
 ./include/instro.h \
@@ -153,15 +153,15 @@ ROSE_SFILES= \
 ./src/rose/pass/transformer/UniqueCallpathTransformer.cpp \
 ./src/rose/pass/transformer/FunctionWrapper.cpp
 
-EXAMPLE_HFILES= \
-./include/instro/example/ExampleConstructSet.h \
-./include/instro/example/ExampleInstrumentor.h \
-./include/instro/example/ExamplePassFactory.h \
-./include/instro/example/ExamplePass.h \
-./include/instro/example/ExampleAnalysisInterface.h \
-./include/instro/example/ExampleConstructPrinter.h  \
-./include/instro/example/ExampleNamedConstructAccess.h \
-./include/instro/example/NameBasedSelector.h
+#EXAMPLE_HFILES= 
+#./include/instro/example/ExampleConstructSet.h 
+#./include/instro/example/ExampleInstrumentor.h 
+#./include/instro/example/ExamplePassFactory.h 
+#./include/instro/example/ExamplePass.h 
+#./include/instro/example/ExampleAnalysisInterface.h 
+#./include/instro/example/ExampleConstructPrinter.h  
+#./include/instro/example/ExampleNamedConstructAccess.h 
+#./include/instro/example/NameBasedSelector.h
 
 
 if HAVERAPIDJSON
@@ -174,7 +174,8 @@ endif
 
 if USELIBTOOL
 # LIBTOOL RULE FOR LIBINSTRO
-lib_LTLIBRARIES= libInstRO_core.la libInstRO_example.la
+lib_LTLIBRARIES= libInstRO_core.la
+#libInstRO_example.la
 
 if USECLANG
 lib_LTLIBRARIES += libInstRO_clang.la
@@ -189,11 +190,11 @@ libInstRO_core_la_SOURCES= \
 	$(CORE_SFILES) \
 	$(CORE_HFILES)
 
-libInstRO_example_la_SOURCES= \
-	$(CORE_SFILES) \
-	$(CORE_HFILES) \
-	$(EXAMPLE_SFILES) \
-	$(EXAMPLE_HFILES) 
+#libInstRO_example_la_SOURCES= 
+#	$(CORE_SFILES) 
+#	$(CORE_HFILES) 
+#	$(EXAMPLE_SFILES) 
+#	$(EXAMPLE_HFILES) 
 
 libInstRO_rose_la_SOURCES= \
 	$(CORE_SFILES) \
@@ -207,13 +208,13 @@ libInstRO_clang_la_SOURCES= \
 
 libInstRO_core_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
-libInstRO_example_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+#libInstRO_example_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
 libInstRO_rose_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@
 
 if HAVERAPIDJSON
 libInstRO_core_la_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
-libInstRO_example_la_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
+#libInstRO_example_la_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
 libInstRO_clang_la_CPPFLAGS = -I@RAPIDJSON_INCLUDEDIR@
 libInstRO_rose_la_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
 endif
@@ -221,7 +222,8 @@ endif
 else #USELIBTOOL
 
 # STATIC LIBRARY FOR LIBINSTRO
-lib_LIBRARIES= libInstRO_core.a libInstRO_example.a
+lib_LIBRARIES= libInstRO_core.a 
+#libInstRO_example.a
 
 if USECLANG
 lib_LIBRARIES += libInstRO_clang.a
@@ -232,12 +234,13 @@ lib_LIBRARIES += libInstRO_rose.a
 endif
 
 
-libInstRO_example_a_SOURCES= \
-	$(CORE_SFILES) \
-	$(CORE_HFILES) \
-	$(EXAMPLE_SFILES) \
-	$(EXAMPLE_HFILES) 
-libInstRO_example_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+#libInstRO_example_a_SOURCES= 
+#	$(CORE_SFILES) 
+#	$(CORE_HFILES) 
+#	$(EXAMPLE_SFILES) 
+#	$(EXAMPLE_HFILES) 
+#
+#libInstRO_example_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
 libInstRO_rose_a_SOURCES= \
 	$(CORE_SFILES) \
@@ -265,7 +268,7 @@ libInstRO_core_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
 if HAVERAPIDJSON
 libInstRO_core_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
-libInstRO_example_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
+#libInstRO_example_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
 libInstRO_clang_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
 libInstRO_rose_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
 endif
@@ -276,8 +279,8 @@ include_HEADERS=./include/instro.h
 nodist_include_HEADERS=./include/instro/config.h
 
 pkginclude_HEADERS=\
-	$(CORE_HFILES) \
-	$(EXAMPLE_HFILES)
+	$(CORE_HFILES) 
+#	$(EXAMPLE_HFILES)
 
 
 

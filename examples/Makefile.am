@@ -12,7 +12,8 @@ AM_CXXFLAGS += -O2
 endif
 
 if USELIBTOOL
-bin_PROGRAMS=ExampleInstrumentor
+#bin_PROGRAMS=ExampleInstrumentor
+bin_PROGRAMS=
 
 if USEROSE
 bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter
@@ -32,8 +33,12 @@ RoseInstrumentor_SOURCES = \
 RoseInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 RoseInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@
 
-ExampleInstrumentor_SOURCES = \
-	./ExampleMain.cpp
+#ExampleInstrumentor_SOURCES = 
+#	./ExampleMain.cpp
+
+#ExampleInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_example.la
+#ExampleInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@  -L@BOOST_LIBDIR@
+
 
 # TODO Is this actually an example?
 ROSEInstROASTPrinter_SOURCES = \
@@ -41,12 +46,12 @@ ROSEInstROASTPrinter_SOURCES = \
 ROSEInstROASTPrinter_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 ROSEInstROASTPrinter_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
 
-ExampleInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_example.la
-ExampleInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@  -L@BOOST_LIBDIR@
 
 else # USELIBTOOL
 
-bin_PROGRAMS=ExampleInstrumentor 
+#bin_PROGRAMS=ExampleInstrumentor 
+bin_PROGRAMS=
+
 
 if USEROSE
 bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter
@@ -75,10 +80,10 @@ ROSEInstROASTPrinter_LDADD=$(top_builddir)/lib/libInstRO_core.a $(top_builddir)/
 ROSEInstROASTPrinter_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
 ROSEInstROASTPrinter_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 
-ExampleInstrumentor_SOURCES = \
-	./ExampleMain.cpp
+#ExampleInstrumentor_SOURCES = 
+#	./ExampleMain.cpp
 
-ExampleInstrumentor_LDADD= $(top_builddir)/lib/libInstRO_example.a
-ExampleInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+#ExampleInstrumentor_LDADD= $(top_builddir)/lib/libInstRO_example.a
+#ExampleInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
 endif # USELIBTOOL
