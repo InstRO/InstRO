@@ -22,7 +22,7 @@ if USELIBTOOL
 # LIBTOOL RULE FOR LIBINSTRO
 lib_LTLIBRARIES= libInstRO_test.la
 
-bin_PROGRAMS= ConstructHierarchySelectionTest
+bin_PROGRAMS= ConstructHierarchySelectionTest MatcherUnitTest
 
 libInstRO_test_la_SOURCES= \
 	$(TEST_SFILES) \
@@ -30,6 +30,14 @@ libInstRO_test_la_SOURCES= \
 
 libInstRO_test_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
+# Tests independent of the used compiler
+MatcherUnitTest_SOURCES= \
+	./unittest/MatcherTest.cpp
+
+MatcherUnitTest_LDADD=$(top_builddir)/lib/libInstRO_core.la
+MatcherUnitTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+
+# Tests depending on the compiler infrastructure
 # This is the actual test executable
 ConstructHierarchySelectionTest_SOURCES= \
 	./ConstructHierarchySelectionTestMain.cpp
@@ -52,7 +60,7 @@ else #USELIBTOOL
 # STATIC LIBRARY FOR LIBINSTRO
 lib_LIBRARIES= libInstRO_test.a
 
-bin_PROGRAMS= ConstructHierarchySelectionTest
+bin_PROGRAMS= ConstructHierarchySelectionTest MatcherUnitTest
 
 libInstRO_test_a_SOURCES= \
 	$(TEST_SFILES) \
@@ -60,6 +68,14 @@ libInstRO_test_a_SOURCES= \
 
 libInstRO_test_a_CPPFLAGS=$(top_srcdir)/lib $(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
+# Tests independent of the used compiler
+MatcherUnitTest_SOURCES= \
+	./unittest/MatcherTest.cpp
+
+MatcherUnitTest_LDADD=$(top_builddir)/lib/libInstRO_core.a
+MatcherUnitTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+
+# Tests depending on the actual compiler infrastructure
 # This is the actual test executable
 ConstructHierarchySelectionTest_SOURCES= \
 	./ConstructHierarchySelectionTestMain.cpp
