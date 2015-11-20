@@ -28,7 +28,7 @@ void __instro_init() _INSTRO_WEAK_DECL;
  * Called before program exits.
  * Clean up code should be placed inside this function
  */
-void __instro_fini() __INSTRO_WEAK_DECL;
+void __instro_fini() _INSTRO_WEAK_DECL;
 
 /*
  * Resembles GNU __cyg_profile_enter function.
