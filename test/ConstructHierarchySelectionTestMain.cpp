@@ -51,7 +51,6 @@ int main(int argc, char **argv) {
  */
 #ifdef USE_ROSE
 	using InstrumentorType = RoseTest::RoseTestInstrumentor;
-#endif
 
 	InstrumentorType instrumentor(argc, argv);
 	auto factory = instrumentor.getFactory();
@@ -78,4 +77,11 @@ int main(int argc, char **argv) {
 
 	// Returns false if everything was fine, true otherwise
 	return instrumentor.testFailed();
+#endif
+
+#ifdef USE_CLANG
+	std::cerr << "THE TEST IS NOT YET IMPLEMENTED USING CLANG" << std::endl;
+	return 0;
+#endif
+
 }
