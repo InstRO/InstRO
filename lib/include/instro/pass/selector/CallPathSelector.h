@@ -1,3 +1,6 @@
+#ifndef INSTRO_PASS_SELECTOR_CALLPATHSELECTOR_H
+#define INSTRO_PASS_SELECTOR_CALLPATHSELECTOR_H
+
 #include "instro/core/PassImplementation.h"
 
 namespace InstRO {
@@ -25,3 +28,5 @@ public:
 
 }	// namespace Selector
 }	// namespace InstRO
+
+#endif	// INSTRO_PASS_SELECTOR_CALLPATHSELECTOR_H

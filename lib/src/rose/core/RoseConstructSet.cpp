@@ -8,6 +8,11 @@
 
 namespace InstRO {
 namespace Rose {
+
+std::shared_ptr<InstRO::Rose::Core::RoseConstruct> toRoseConstruct(std::shared_ptr<InstRO::Core::Construct> c) {
+	return std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(c);
+}
+
 namespace Core {
 
 namespace RoseConstructLevelPredicates {

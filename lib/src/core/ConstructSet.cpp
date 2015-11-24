@@ -123,7 +123,12 @@ bool ConstructSet::empty() const { return constructs.empty(); }
 size_t ConstructSet::size() const { return constructs.size(); }
 
 // this will be in the protected developer interface
-void ConstructSet::put(const std::shared_ptr<Construct>& construct) { constructs.insert(construct); }
+void ConstructSet::put(const std::shared_ptr<Construct>& construct) {
+	if (construct->getTraits().is(ConstructTraitType::CTNoTraits)) {
+		return;	// do not insert dummys
+	}
+	constructs.insert(construct);
+}
 void ConstructSet::erase(const std::shared_ptr<Construct>& construct) { constructs.erase(construct); }
 
 void ConstructSet::put(ConstructSet cs) { constructs.insert(cs.begin(), cs.end()); }
