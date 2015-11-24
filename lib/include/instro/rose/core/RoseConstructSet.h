@@ -74,6 +74,15 @@ struct CLExpressionPredicate : public CTPredicate {
 		}
 		if (isSgCastExp(n) != nullptr)
 			return false;
+
+		if (isSgAssignInitializer(n)) {
+			return false;
+		}
+
+		if (isSgNullExpression(n) && isSgReturnStmt(n->get_parent())) {
+			return false;		// null expression in empty return statement
+		}
+
 		return isSgExpression(n) != nullptr;
 	}
 };
@@ -124,8 +133,12 @@ struct CLStatementPredicate : public CTPredicate {
 			return false;
 		}
 
-		if (isSgReturnStmt(n) && isSgNullExpression(isSgReturnStmt(n)->get_expression()) ) {
-			return false;		// empty return statement
+		if (isSgForInitStatement(n)) {
+			return false;		// no equivalent in C/C++ semantics
+		}
+
+		if (isSgExprStatement(n) && isSgIfStmt(n->get_parent())) {
+			return false;		// if with an expression as conditional
 		}
 
 		if (isSgStatement(n)) {
@@ -241,8 +254,6 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 			generateError(node);
 		}
 	}
-
-
 
 	void visit(SgVariableDeclaration* node) {
 		// CI: an initialized variable declaration is OK,
