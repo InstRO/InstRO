@@ -16,7 +16,6 @@ loop2.cpp:6--SimpleStatement
 loop2.cpp:5--ScopeStatement
 
 +CTExpressionSelector
-loop2.cpp:4--Expression
 loop2.cpp:5--Expression
 loop2.cpp:5--Expression
 loop2.cpp:6--Expression
