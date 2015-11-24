@@ -21,20 +21,21 @@ int main(int argc, char** argv) {
 //		auto statements = aFactory->createConstructLoweringElevator(functions, InstRO::Core::ConstructTraitType::CTStatement);
 //		aFactory->createConstructPrinter(statements);
 
-		auto intersect = aFactory->createBooleanAndSelector(mainFunction, functions);
-		aFactory->createConstructPrinter(intersect);
-
-		intersect = aFactory->createBooleanOrSelector(mainFunction, functions);
-		aFactory->createConstructPrinter(intersect);
-
-		intersect = aFactory->createBooleanXorSelector(mainFunction, functions);
-		aFactory->createConstructPrinter(intersect);
-
-		intersect = aFactory->createBooleanMinusSelector(functions, mainFunction);
-		aFactory->createConstructPrinter(intersect);
+//		auto intersect = aFactory->createBooleanAndSelector(mainFunction, functions);
+//		aFactory->createConstructPrinter(intersect);
+//
+//		intersect = aFactory->createBooleanOrSelector(mainFunction, functions);
+//		aFactory->createConstructPrinter(intersect);
+//
+//		intersect = aFactory->createBooleanXorSelector(mainFunction, functions);
+//		aFactory->createConstructPrinter(intersect);
+//
+//		intersect = aFactory->createBooleanMinusSelector(functions, mainFunction);
+//		aFactory->createConstructPrinter(intersect);
 
 		auto paths = aFactory->createCallpathSelector(mainFunction, functions, "cps.dot");
 		aFactory->createConstructPrinter(paths);
+		aFactory->createDefaultInstrumentationAdapter(paths);
 
 //		aFactory->createMatthiasZoellnerLoopInstrumentationAdapter(functions);
 

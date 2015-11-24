@@ -46,12 +46,12 @@ void __instro_end_function(size_t construct_hash, void *callsite) _INSTRO_WEAK_D
 /*
  * Gets called before an instrumented statement is executed.
  */
-void __instro_start_statement(size_t construct_hash) _INSTRO_WEAK_DECL;
+void __instro_start_simple_statement(size_t construct_hash) _INSTRO_WEAK_DECL;
 
 /*
  * Gets called after an instrumentd statement was executed.
  */
-void __instro_end_statement(size_t construct_hash) _INSTRO_WEAK_DECL;
+void __instro_end_simple_statement(size_t construct_hash) _INSTRO_WEAK_DECL;
 
 /*
  * Gets called before an instrumented loop starts execution.

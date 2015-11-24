@@ -245,6 +245,25 @@ class Construct {
 
 };
 
+class DummyConstruct : public Construct {
+private:
+	DummyConstruct() : Construct(ConstructTraitType::CTNoTraits) {}
+	DummyConstruct(DummyConstruct const&) = delete;
+  void operator=(DummyConstruct const&) = delete;
+
+public:
+	static std::shared_ptr<DummyConstruct> getInstance() {
+		static std::shared_ptr<DummyConstruct> instance = std::shared_ptr<DummyConstruct>(new DummyConstruct());
+		return instance;
+	}
+
+	size_t getID() const { return 0; }
+	std::string getIdentifier() const { return std::string("DummyConstruct"); }
+
+	std::string toString() const { return std::string("DummyConstruct"); }
+	std::string toDotString() const { return std::string("DummyConstruct"); }
+};
+
 class ConstructSet {
 	friend class InstRO::InfrastructureInterface::ConstructSetCompilerInterface;
 	friend class InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface;

@@ -124,6 +124,10 @@ struct CLStatementPredicate : public CTPredicate {
 			return false;
 		}
 
+		if (isSgReturnStmt(n) && isSgNullExpression(isSgReturnStmt(n)->get_expression()) ) {
+			return false;		// empty return statement
+		}
+
 		if (isSgStatement(n)) {
 			return true;
 		}
@@ -238,6 +242,8 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 		}
 	}
 
+
+
 	void visit(SgVariableDeclaration* node) {
 		// CI: an initialized variable declaration is OK,
 		if (RoseConstructLevelPredicates::DefinedVariableDeclarationPredicate()(node)) {
@@ -267,6 +273,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	}
 
 	void generateError(SgNode* node) {
+		ct = InstRO::Core::ConstructTraitType::CTNoTraits;
 		logIt(ERROR) << "# Encountered error case in ConstructGenerator. " << node->class_name() << "\t"
 							<< node->unparseToString() << std::endl;
 	}
@@ -339,7 +346,7 @@ class RoseConstructProvider {
 		return instance;
 	}
 
-	std::shared_ptr<RoseConstruct> getFragment(SgNode* node, Sg_File_Info* fileInfo) {
+	std::shared_ptr<InstRO::Core::Construct> getFragment(SgNode* node, Sg_File_Info* fileInfo) {
 		if (node == nullptr || fileInfo == nullptr) {
 			throw std::string("RoseConstructProvider: attempted to getFragment for nullptr");
 		}
@@ -352,7 +359,7 @@ class RoseConstructProvider {
 	}
 
 	/** XXX this method does no checks on the SgNode! */
-	std::shared_ptr<RoseConstruct> getConstruct(SgNode* const node) {
+	std::shared_ptr<InstRO::Core::Construct> getConstruct(SgNode* const node) {
 		if (node == nullptr) {
 			throw std::string("RoseConstructProvider: attempted to getConstruct for nullptr");
 		}
@@ -362,21 +369,30 @@ class RoseConstructProvider {
 
 			ConstructGenerator gen;
 			node->accept(gen);
-			mapping[node] = std::make_shared<RoseConstruct>(RoseConstruct(node, gen.getConstructTraits()));
+
+			if (gen.getConstructTraits().is(InstRO::Core::ConstructTraitType::CTNoTraits)) {
+				mapping[node] = InstRO::Core::DummyConstruct::getInstance();
+			} else {
+				mapping[node] = std::make_shared<RoseConstruct>(RoseConstruct(node, gen.getConstructTraits()));
+			}
 		}
 		return mapping[node];
 	}
 
  private:
-	std::map<SgNode* const, std::shared_ptr<RoseConstruct> > mapping;
+	std::map<SgNode* const, std::shared_ptr<InstRO::Core::Construct> > mapping;
 
  private:
 	RoseConstructProvider(){};
 	RoseConstructProvider(RoseConstructProvider&) = delete;
 	void operator=(RoseConstructProvider const&) = delete;
 };
-}
-}
+
+}	// namespace Core
+
+std::shared_ptr<InstRO::Rose::Core::RoseConstruct> toRoseConstruct(std::shared_ptr<InstRO::Core::Construct> c);
+
+}	// namespace Rose
 }	// Namespace InstRO
 
 #endif /* LIB_INCLUDE_INSTRO_V5_PREVIEW_CONSTRUCTSET_H_ */
