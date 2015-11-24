@@ -36,6 +36,10 @@ def buildWithConfigureLine(configLine, baseDir):
     if retCode != 0:
         raise Exception("Building failed with err code " + str(retCode))
 
+    retCode = subprocess.call("make check -j4", shell=True)
+    if retCode != 0:
+        raise Exception("Make check failed with error code " + str(retCode))
+
 def buildWithRose(arguments, baseDir):
     numBuilds = 1
     if arguments.rapidjson != None:
