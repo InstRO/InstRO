@@ -285,7 +285,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	void generateError(SgNode* node) {
 		ct = InstRO::Core::ConstructTraitType::CTNoTraits;
-		logIt(ERROR) << "# Encountered error case in ConstructGenerator. " << node->class_name() << "\t"
+		logIt(INFO) << "ConstructGenerator: Skipped SgNode " << node->class_name() << "\t"
 							<< node->unparseToString() << std::endl;
 	}
 };
