@@ -26,6 +26,7 @@ void DefaultInstrumentationAdapter::execute() {
 									<< "\t" << construct->toString() << std::endl;
 		}
 		else if (!ct.is(ConstructTraitType::CTWrappableStatement)) {
+			// TODO 2015-11 RN: actually we should create an enclosing scope in this case
 			logIt(WARN) << "DefaultInstrumentationAdapter encountered unwrappable Statement" << std::endl
 									<< "\t" << construct->toString() << std::endl;
 		}

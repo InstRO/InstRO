@@ -18,7 +18,7 @@ class RoseCodeWrapper {
 public:
 	RoseCodeWrapper(SgProject* project) : project(project) {}
 
-	void wrapStatement(SgStatement* stmt, size_t id);
+	void wrapStatement(SgStatement* stmt, std::string postfix, size_t id);
 	void wrapExpression(SgExpression* expr, size_t id);
 	void instrumentFunction(SgFunctionDefinition* function, size_t id);
 
@@ -28,6 +28,7 @@ private:
 	std::set<SgSourceFile*> filesWithInclude;
 
 	bool insertHeaderIfSource(SgLocatedNode* node);
+	SgStatement* buildCallExpressionStatement(SgScopeStatement* context, std::string functionName, SgExprListExp* parameters);
 	SgStatement* buildCallExpressionStatement(SgScopeStatement* context, std::string functionName, size_t id);
 
 };
