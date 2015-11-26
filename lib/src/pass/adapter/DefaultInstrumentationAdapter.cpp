@@ -46,8 +46,6 @@ void DefaultInstrumentationAdapter::execute() {
 			instrumentStatement(construct);
 		}
 	}
-
-	insertRuntimeStartup();
 }
 
 }	// namespace Adapter

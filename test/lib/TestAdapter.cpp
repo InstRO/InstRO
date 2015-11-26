@@ -38,8 +38,7 @@ void InstRO::Test::TestAdapter::execute() {
 }
 
 void InstRO::Test::TestAdapter::checkIfConstructSetMatches(InstRO::Core::ConstructSet *cs) {
-	InstRO::Tooling::IdentifierProvider ip;
-	auto idMap = ip.getIdentifierMap(cs);
+	auto idMap = InstRO::Tooling::IdentifierProvider::getIdentifierMap(cs);
 
 	for (const auto idPair : idMap) {
 		std::string keyVal(idPair.second);

@@ -6,14 +6,14 @@
 #include "instro/tooling/NamedConstructAccess.h"
 
 #include <string>
-#include <list>
+#include <vector>
 
 namespace InstRO {
 namespace Selector {
 
 void ProgramEntrySelector::execute() {
-//	std::list<std::string> mainString = { std::string("main") };
-	InstRO::Tooling::NamedConstructAccess::WildcardedStringMatcher mainMatcher;
+	std::vector<std::string> mainString = { std::string("main") };
+	InstRO::Tooling::NamedConstructAccess::WildcardedStringMatcher mainMatcher(mainString);
 
 	auto analysisManager = getInstrumentorInstance()->getAnalysisManager();
 

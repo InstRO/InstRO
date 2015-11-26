@@ -20,8 +20,6 @@ class DefaultInstrumentationAdapter : public InstRO::Core::PassImplementation {
 	void execute() override;
 
  protected:
-	virtual void insertRuntimeStartup() = 0;
-
 	virtual void instrumentFunction(const std::shared_ptr<InstRO::Core::Construct> construct) = 0;
 	virtual void instrumentLoop(const std::shared_ptr<InstRO::Core::Construct> construct) = 0;
 	virtual void instrumentConditional(const std::shared_ptr<InstRO::Core::Construct> construct) = 0;
