@@ -18,7 +18,7 @@ void ProgramEntrySelector::execute() {
 	auto analysisManager = getInstrumentorInstance()->getAnalysisManager();
 
 	InstRO::Core::ConstructSet csByNameMain =
-			analysisManager->getNamedConstructAccessFacility()->getConstructsByIdentifyerName(mainMatcher);
+			analysisManager->getNamedConstructAccessFacility()->getConstructsByIdentifierName(mainMatcher);
 
 	auto allFunctions = analysisManager->getGrammarInterface()->getConstructsByClass(
 			InstRO::Core::ConstructTraitType::CTFunction);

@@ -1,9 +1,10 @@
 #ifndef INSTRO_TOOLING_NAMED_CONSTRUCT_ACCESS
 #define INSTRO_TOOLING_NAMED_CONSTRUCT_ACCESS
 
+#include <vector>
 #include <memory>	// We need shared pointers
-#include <list>		 // We use List in the GrammarInterface
 #include "instro/core/ConstructSet.h"
+#include "instro/utility/exception.h"
 
 namespace InstRO {
 namespace Tooling {
@@ -72,16 +73,13 @@ class NamedConstructAccess {
 	// flawed. In principle, a single selection is sufficient.
 
 	// a) any userdefined symbols, e.g. variable names, function / method names, labels
-	virtual InstRO::Core::ConstructSet getConstructsByIdentifyerName(Matcher &) = 0;
+	virtual InstRO::Core::ConstructSet getConstructsByIdentifierName(Matcher &) = 0;
 	// b) contents of strings
 	virtual InstRO::Core::ConstructSet getConstructsByUserTextStringMatch(Matcher &) = 0;
 	// c) raw source code. First all symbols, then the upward expressions, then the upward statement are matched. Last is
 	// the whole function matched.
 	virtual InstRO::Core::ConstructSet getConstructsByCodeMatch(Matcher &) {
-#ifdef __EXCEPTIONS
-		throw std::string("Not Implemented");
-#endif
-		return InstRO::Core::ConstructSet();
+		raise_exception("Not Implemented");
 	}
 };
 }

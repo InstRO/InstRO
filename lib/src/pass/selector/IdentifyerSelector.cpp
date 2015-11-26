@@ -13,7 +13,7 @@ void IdentifyerSelector::execute() {
 
 	Tooling::NamedConstructAccess::WildcardedStringMatcher stringMatcher(rules);
 	
-	outputSet = nca->getConstructsByIdentifyerName(stringMatcher);
+	outputSet = nca->getConstructsByIdentifierName(stringMatcher);
 }
 
 }
