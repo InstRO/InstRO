@@ -51,7 +51,7 @@ class NameMatchingASTTraversal : public AstPrePostProcessing {
 	InstRO::Core::ConstructSet cs;
 
  public:
-	NameMatchingASTTraversal() : csci(&cs), verbose(false) {}
+	NameMatchingASTTraversal() : csci(&cs) {}
 	bool relevantNode(SgNode* node);
 	// NameMatchingASTTraversal(InstRO::Tooling::NamedConstructAccess::Matcher & m):matchingObject(&m){}
 	void reset() {
@@ -111,13 +111,13 @@ class NameMatchingASTTraversal : public AstPrePostProcessing {
 		traverse(start);
 		//		this->selectionEnd(SageInterface::getEnclosingNode<SgProject>(start, true));
 	}
-	::InstRO::Core::ConstructSet getConstructs() { return cs; }
+	InstRO::Core::ConstructSet getConstructs() { return cs; }
 
 	/** This method can be used to generate Strings from SgNodes.
 	 * At the moment it will use only those SgNodes which are mentioned in the class documentation
 	 * \todo move to some utility namespace / entity
 	 */
-	std::string toString(SgNode* n);
+	std::string generateStringToMatch(SgNode* n);
 
  private:
 	std::stack<SgNode*> nodeTracker;
@@ -126,20 +126,13 @@ class NameMatchingASTTraversal : public AstPrePostProcessing {
 			continueDescend;
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci;
 	//	IN_enum nodetypeToMark;																						 // Where to save the ASTMarker
-	::InstRO::Tooling::NamedConstructAccess::Matcher* matchingObject;	// Which matcher object should be used
-	// std::list<std::string>* listToMatchAgainst; // List of strings to check against
-	//	std::vector<int> lastMatchIds; // The list ids of the last matching
-	bool verbose;				 // Is this object verbose?
+	InstRO::Tooling::NamedConstructAccess::Matcher* matchingObject;	// Which matcher object should be used
 	bool isInitialized;	// for checking if the user called init method.
 	void select(SgNode* node);
 
-	// Fixme 2013-10-08 JP: which node gets selection attribute? How could this NOW be implemented?
-	// Immediate, nextOuterExpression, nextOuterStatement, nextOuterFuncDef, parent, userdef (which is still missing atm)
-	// 2013-10-08 JP: At the moment the immediate node is used.
-	// SelectionASTMarker* createSelectionMarker();
 };
 
-class RoseNamedConstructAccess : public ::InstRO::Tooling::NamedConstructAccess::NamedConstructAccess {
+class RoseNamedConstructAccess : public InstRO::Tooling::NamedConstructAccess::NamedConstructAccess {
  protected:
 	NameMatchingASTTraversal traversal;
 	SgProject* project;
@@ -148,13 +141,13 @@ class RoseNamedConstructAccess : public ::InstRO::Tooling::NamedConstructAccess:
 	RoseNamedConstructAccess(SgProject* proj) : project(proj) {
 	};
 	InstRO::Core::ConstructSet getConstructsByIdentifyerName(
-			::InstRO::Tooling::NamedConstructAccess::Matcher& matcher) override {
+			InstRO::Tooling::NamedConstructAccess::Matcher& matcher) override {
 		traversal.reset();
 		traversal.setMatchMin();
 		return traversal.matchUserIdentifyer(&matcher, project);
 	};
 	InstRO::Core::ConstructSet getConstructsByUserTextStringMatch(
-			::InstRO::Tooling::NamedConstructAccess::Matcher& matcher) override {
+			InstRO::Tooling::NamedConstructAccess::Matcher& matcher) override {
 		traversal.reset();
 		traversal.setMatchMin();
 		return traversal.matchUserTextString(&matcher, project);

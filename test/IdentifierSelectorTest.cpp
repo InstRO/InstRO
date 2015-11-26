@@ -21,8 +21,8 @@ int main(int argc, char **argv) {
 
 	std::string filename = InstRO::Utility::getEnvironmentVariable("INSTRO_TEST_INPUT_FILENAME");
 
-	auto idSelector = factory->createIdentifierMatcherSelector({"foo"});
-	auto idSelector2 = factory->createIdentifierMatcherSelector({"f#"});
+	auto idSelector = factory->createIdentifierMatcherSelector({"::foo"});
+	auto idSelector2 = factory->createIdentifierMatcherSelector({"::f#"});
 
 	factory->createTestAdapter(idSelector, "IdSelector", filename);
 	factory->createTestAdapter(idSelector2, "IdSelector-f*", filename);
