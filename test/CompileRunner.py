@@ -28,16 +28,19 @@ def buildWithConfigureLine(configLine, baseDir):
     fullQualInvocLine = baseDir + "/" + configLine
     retCode = subprocess.call(fullQualInvocLine, shell=True)
     if retCode != 0:
+        print(fullQualInvocLine)
         raise Exception("The build failed while configure was run: " + fullQualInvocLine)
     
     # If configure succeeded we can now build InstRO
     print(os.getcwd())
     retCode = subprocess.call("make -j8", shell=True)
     if retCode != 0:
-        raise Exception("Building failed with err code " + str(retCode))
+        print(fullQualInvocLine)
+        raise Exception("Building failed with err code " + str(retCode) + fullQualInvocLine)
 
     retCode = subprocess.call("make check -j4", shell=True)
     if retCode != 0:
+        print(fullQualInvocLine)
         raise Exception("Make check failed with error code " + str(retCode))
 
 def buildWithRose(arguments, baseDir):

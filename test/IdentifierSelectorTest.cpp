@@ -6,6 +6,7 @@
 #include "lib/RoseTestSupport.h"
 #endif
 
+#include "instro/utility/Logger.h"
 #include "instro/utility/Environment.h"
 
 int main(int argc, char **argv) {
@@ -33,5 +34,10 @@ int main(int argc, char **argv) {
 	instrumentor.apply();
 
 	return instrumentor.testFailed();
+#endif
+
+#ifdef USE_CLANG
+	logIt(ERROR) << "Not implemented yet!" << std::endl;
+	return 0;
 #endif
 }

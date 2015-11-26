@@ -20,8 +20,3 @@
 #include "instro/llvmInstRO.h"
 #endif
 
-#ifdef USING_EXAMPLE
-#include "instro/example/ExampleInstrumentor.h"
-#include "instro/example/ExamplePass.h"
-#include "instro/example/ExamplePassFactory.h"
-#endif
