@@ -23,8 +23,10 @@ void RoseDefaultInstrumentationAdapter::instrumentConditional(
 }
 
 void RoseDefaultInstrumentationAdapter::instrumentScope(const std::shared_ptr<InstRO::Core::Construct> construct) {
-	// TODO implement me
-	logIt(ERROR) << "RoseDefaultInstrumentationAdapter: instrumentScope() is not implemented." << std::endl;
+	auto scope = isSgScopeStatement(InstRO::Rose::toRoseConstruct(construct)->getNode());
+	auto id = InstRO::Tooling::IdentifierProvider::getID(construct);
+
+	wrapper.instrumentScope(scope, id);
 }
 
 void RoseDefaultInstrumentationAdapter::instrumentStatement(const std::shared_ptr<InstRO::Core::Construct> construct) {

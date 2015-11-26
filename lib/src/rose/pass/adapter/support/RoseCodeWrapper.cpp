@@ -46,6 +46,17 @@ void RoseCodeWrapper::instrumentFunction(SgFunctionDefinition* function, size_t 
 	}
 }
 
+void RoseCodeWrapper::instrumentScope(SgScopeStatement* scope, size_t id) {
+	if (insertHeaderIfSource(scope)) {
+		SageInterface::prependStatement(buildCallExpressionStatement(scope, "__instro_start_scope", id), scope);
+
+		// TODO do not end after return statement
+		// TODO other possible exits from a scope: continue, break, return, goto
+
+		SageInterface::appendStatement(buildCallExpressionStatement(scope, "__instro_end_scope", id), scope);
+	}
+}
+
 bool RoseCodeWrapper::insertHeaderIfSource(SgLocatedNode* node) {
 	SgFile* file = SageInterface::getEnclosingFileNode(node);
 	SgSourceFile* sourceFile = isSgSourceFile(file);

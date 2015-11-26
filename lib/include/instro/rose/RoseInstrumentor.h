@@ -36,6 +36,7 @@ class RoseInstrumentor : public Instrumentor {
 	void finalize() {
 		// unparse instrumented source
 		project->unparse();
+//		project->compileOutput();
 	};
 
 	virtual Tooling::AnalysisManager* getAnalysisManager() { return ram; }
