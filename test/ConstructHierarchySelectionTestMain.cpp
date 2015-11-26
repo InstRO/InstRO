@@ -6,6 +6,7 @@
 #include "lib/RoseTestSupport.h"
 #endif
 
+#include "instro/utility/Environment.h"
 /**
  * This is the TestInstrumentor implementation.
  *
@@ -18,18 +19,6 @@
  *
  */
 
-// reads environment variable to return the filename
-std::string getInputFilename() {
-	std::string filename;
-	char *ev = getenv("INSTRO_TEST_INPUT_FILENAME");
-	if (ev != nullptr) {
-		filename = std::string(ev);
-	} else {
-		exit(-2);
-	}
-
-	return filename;
-}
 
 /**
  * Actual instrumentor
@@ -55,7 +44,7 @@ int main(int argc, char **argv) {
 	InstrumentorType instrumentor(argc, argv);
 	auto factory = instrumentor.getFactory();
 
-	std::string filename = getInputFilename();
+	std::string filename = InstRO::Utility::getEnvironmentVariable("INSTRO_TEST_INPUT_FILENAME");
 
 	auto ctFuncLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
 	auto ctLoopLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTLoopStatement);
@@ -64,6 +53,11 @@ int main(int argc, char **argv) {
 			factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTConditionalStatement);
 	auto ctScopeLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTScopeStatement);
 	auto ctExprLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTExpression);
+
+#ifdef DEBUG
+	factory->createConstructPrinter(ctStmtLvlSelector);
+	factory->createConstructPrinter(ctExprLvlSelector);
+#endif
 
 	// sink, so we ignore the returned Pass *
 	factory->createTestAdapter(ctFuncLvlSelector, "CTFunctionSelector", filename);

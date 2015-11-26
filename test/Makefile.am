@@ -22,7 +22,10 @@ if USELIBTOOL
 # LIBTOOL RULE FOR LIBINSTRO
 lib_LTLIBRARIES= libInstRO_test.la
 
-bin_PROGRAMS= ConstructHierarchySelectionTest MatcherUnitTest
+bin_PROGRAMS= \
+	ConstructHierarchySelectionTest \
+	IdentifyerSelectorTest \
+	MatcherUnitTest
 
 libInstRO_test_la_SOURCES= \
 	$(TEST_SFILES) \
@@ -45,9 +48,20 @@ ConstructHierarchySelectionTest_SOURCES= \
 ConstructHierarchySelectionTest_LDADD=libInstRO_test.la $(top_builddir)/lib/libInstRO_core.la
 ConstructHierarchySelectionTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
+
+IdentifyerSelectorTest_SOURCES= \
+	./IdentifyerSelectorTest.cpp
+
+IdentifyerSelectorTest_LDADD=libInstRO_test.la $(top_builddir)/lib/libInstRO_core.la
+IdentifyerSelectorTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+
+
 if USEROSE
 ConstructHierarchySelectionTest_CPPFLAGS+= -I$(top_srcdir)/../lib/include -I@ROSE_INCLUDEDIR@
 ConstructHierarchySelectionTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@
+
+IdentifyerSelectorTest_CPPFLAGS+= -I$(top_srcdir)/../lib/include -I@ROSE_INCLUDEDIR@
+IdentifyerSelectorTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@
 endif
 
 if USECLANG
@@ -60,7 +74,11 @@ else #USELIBTOOL
 # STATIC LIBRARY FOR LIBINSTRO
 lib_LIBRARIES= libInstRO_test.a
 
-bin_PROGRAMS= ConstructHierarchySelectionTest MatcherUnitTest
+bin_PROGRAMS= \
+	ConstructHierarchySelectionTest \
+	IdentifyerSelectorTest \
+	MatcherUnitTest
+
 
 libInstRO_test_a_SOURCES= \
 	$(TEST_SFILES) \
@@ -83,9 +101,20 @@ ConstructHierarchySelectionTest_SOURCES= \
 ConstructHierarchySelectionTest_LDADD=libInstRO_test.a $(top_builddir)/lib/libInstRO_core.a -L@BOOST_LIBDIR@
 ConstructHierarchySelectionTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
+IdentifyerSelectorTest_SOURCES= \
+	./IdentifyerSelectorTest.cpp
+
+IdentifyerSelectorTest_LDADD=libInstRO_test.la $(top_builddir)/lib/libInstRO_core.a
+IdentifyerSelectorTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+
+
+
 if USEROSE
 ConstructHierarchySelectionTest_CPPFLAGS+= -DUSE_ROSE -I$(top_srcdir)/lib -I@ROSE_INCLUDEDIR@
 ConstructHierarchySelectionTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.a @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
+
+IdentifyerSelectorTest_CPPFLAGS+= -DUSE_ROSE -I$(top_srcdir)/../lib/include -I@ROSE_INCLUDEDIR@
+IdentifyerSelectorTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.a @ROSE_LINK_LIBRARIES@
 endif
 
 check:

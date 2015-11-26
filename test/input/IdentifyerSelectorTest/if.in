@@ -1,0 +1,5 @@
++IdSelector
+if.cpp:2--Function-::foo
+
++IdSelector-f*
+if.cpp:2--Function-::foo

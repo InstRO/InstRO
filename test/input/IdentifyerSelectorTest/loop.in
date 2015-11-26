@@ -1,0 +1,5 @@
++IdSelector
+loop.cpp:4--Function-::foo
+
++IdSelector-f*
+loop.cpp:4--Function-::foo
