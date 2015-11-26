@@ -1,0 +1,5 @@
++CTFunctionSelector
+memfunc.cpp:5--Function-::A::foo
+
++CTStatementSelector
+memfunc.cpp:6--SimpleStatement

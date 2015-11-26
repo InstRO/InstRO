@@ -10,10 +10,10 @@ namespace Selector {
 void IdentifyerSelector::execute() {
 	Tooling::NamedConstructAccess::NamedConstructAccess *nca =
 			getInstrumentorInstance()->getAnalysisManager()->getNamedConstructAccessFacility();
-	std::list<std::string> matchingRules(rules.begin(), rules.end());
-	Tooling::NamedConstructAccess::WildcardedStringMatcher *stringMatcher =
-			new ::InstRO::Tooling::NamedConstructAccess::WildcardedStringMatcher(matchingRules);
-	outputSet = nca->getConstructsByIdentifyerName(*stringMatcher);
+
+	Tooling::NamedConstructAccess::WildcardedStringMatcher stringMatcher(rules);
+	
+	outputSet = nca->getConstructsByIdentifyerName(stringMatcher);
 }
 
 }

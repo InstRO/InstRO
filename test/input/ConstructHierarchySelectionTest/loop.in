@@ -1,6 +1,22 @@
 +CTFunctionSelector
-loop.cpp:2--Function-doSomething
-loop.cpp:4--Function-foo
+loop.cpp:2--Function-::doSomething
+loop.cpp:4--Function-::foo
 
 +CTLoopSelector
 loop.cpp:5--LoopStatement
+
++CTStatementSelector
+loop.cpp:5--LoopStatement
+loop.cpp:5--SimpleStatement
+loop.cpp:5--SimpleStatement
+loop.cpp:5--ScopeStatement
+loop.cpp:6--SimpleStatement
+
++CTScopeSelector
+loop.cpp:5--ScopeStatement
+
++CTExpressionSelector
+loop.cpp:5--Expression
+loop.cpp:5--Expression
+loop.cpp:6--Expression
+

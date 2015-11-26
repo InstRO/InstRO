@@ -22,7 +22,7 @@ if USELIBTOOL
 # LIBTOOL RULE FOR LIBINSTRO
 lib_LTLIBRARIES= libInstRO_test.la
 
-bin_PROGRAMS= ConstructHierarchySelectionTest
+bin_PROGRAMS= ConstructHierarchySelectionTest MatcherUnitTest
 
 libInstRO_test_la_SOURCES= \
 	$(TEST_SFILES) \
@@ -30,6 +30,14 @@ libInstRO_test_la_SOURCES= \
 
 libInstRO_test_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
+# Tests independent of the used compiler
+MatcherUnitTest_SOURCES= \
+	./unittest/MatcherTest.cpp
+
+MatcherUnitTest_LDADD=$(top_builddir)/lib/libInstRO_core.la
+MatcherUnitTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+
+# Tests depending on the compiler infrastructure
 # This is the actual test executable
 ConstructHierarchySelectionTest_SOURCES= \
 	./ConstructHierarchySelectionTestMain.cpp
@@ -40,13 +48,11 @@ ConstructHierarchySelectionTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INC
 if USEROSE
 ConstructHierarchySelectionTest_CPPFLAGS+= -I$(top_srcdir)/../lib/include -I@ROSE_INCLUDEDIR@
 ConstructHierarchySelectionTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@
-# TODO Add the library dependencies for ROSE
 endif
 
 if USECLANG
+# FIXME Untested so far.
 ConstructHierarchySelectionTest_LDADD+= $(top_builddir)/lib/libInstRO_clang.la
-# TODO Add the library dependencies for Clang
-# Maybe leave aside the Clang part for the moment?
 endif
 
 else #USELIBTOOL
@@ -54,7 +60,7 @@ else #USELIBTOOL
 # STATIC LIBRARY FOR LIBINSTRO
 lib_LIBRARIES= libInstRO_test.a
 
-bin_PROGRAMS= ConstructHierarchySelectionTest
+bin_PROGRAMS= ConstructHierarchySelectionTest MatcherUnitTest
 
 libInstRO_test_a_SOURCES= \
 	$(TEST_SFILES) \
@@ -62,6 +68,14 @@ libInstRO_test_a_SOURCES= \
 
 libInstRO_test_a_CPPFLAGS=$(top_srcdir)/lib $(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
+# Tests independent of the used compiler
+MatcherUnitTest_SOURCES= \
+	./unittest/MatcherTest.cpp
+
+MatcherUnitTest_LDADD=$(top_builddir)/lib/libInstRO_core.a
+MatcherUnitTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+
+# Tests depending on the actual compiler infrastructure
 # This is the actual test executable
 ConstructHierarchySelectionTest_SOURCES= \
 	./ConstructHierarchySelectionTestMain.cpp
@@ -72,10 +86,10 @@ ConstructHierarchySelectionTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INC
 if USEROSE
 ConstructHierarchySelectionTest_CPPFLAGS+= -DUSE_ROSE -I$(top_srcdir)/lib -I@ROSE_INCLUDEDIR@
 ConstructHierarchySelectionTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.a @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
-# TODO Add the library dependencies for ROSE
 endif
 
 check:
+	./MatcherUnitTest
 	python $(top_srcdir)/test/ApplyRunner.py $(top_srcdir) $(top_builddir)
 
 endif #USELIBTOOL

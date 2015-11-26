@@ -1,0 +1,13 @@
++CTFunctionSelector
+expressions.cpp:1--Function-::foo
+
++CTStatementSelector
+expressions.cpp:2--SimpleStatement
+expressions.cpp:3--SimpleStatement
+expressions.cpp:4--SimpleStatement
+expressions.cpp:6--SimpleStatement
+
++CTExpressionSelector
+expressions.cpp:3--Expression
+expressions.cpp:4--Expression
+expressions.cpp:6--Expression

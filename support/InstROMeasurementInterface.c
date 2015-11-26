@@ -1,13 +1,16 @@
 #include "InstROMeasurementInterface.h"
 
+void __instro_init() {}
+
+void __instro_fini() {}
 
 void __instro_start_function(size_t construct_hash, void *callsite) {}
 
 void __instro_end_function(size_t construct_hash, void *callsite) {}
 
-void __instro_start_statement(size_t construct_hash) {}
+void __instro_start_simple_statement(size_t construct_hash) {}
 
-void __instro_end_statement(size_t construct_hash) {}
+void __instro_end_simple_statement(size_t construct_hash) {}
 
 void __instro_start_loop(size_t construct_hash) {}
 

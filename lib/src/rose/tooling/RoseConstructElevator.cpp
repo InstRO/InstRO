@@ -16,7 +16,7 @@ namespace ConstructElevator {
 namespace ConstructElevatorHelper {
 
 template <class Predicate>
-std::shared_ptr<InstRO::Rose::Core::RoseConstruct> raiseConstruct(std::shared_ptr<InstRO::Rose::Core::RoseConstruct> src,
+std::shared_ptr<InstRO::Core::Construct> raiseConstruct(std::shared_ptr<InstRO::Rose::Core::RoseConstruct> src,
 																																	Predicate pred) {
 	SgNode *current = src->getNode();
 	// CI Walk the AST upwards, until the current node is either NULL or it is the desired construct type
@@ -35,9 +35,9 @@ std::shared_ptr<InstRO::Rose::Core::RoseConstruct> raiseConstruct(std::shared_pt
 }
 
 template <class Predicate>
-std::set<std::shared_ptr<InstRO::Rose::Core::RoseConstruct> > lowerConstruct(std::shared_ptr<InstRO::Rose::Core::RoseConstruct> src,
+std::set<std::shared_ptr<InstRO::Core::Construct> > lowerConstruct(std::shared_ptr<InstRO::Rose::Core::RoseConstruct> src,
 																																						 Predicate pred) {
-	std::set<std::shared_ptr<InstRO::Rose::Core::RoseConstruct> > retSet;
+	std::set<std::shared_ptr<InstRO::Core::Construct> > retSet;
 	// rose-query sub-tree with the right selectors
 	Rose_STL_Container<SgNode *> nodes = SageInterface::querySubTree<SgNode>(src->getNode(), V_SgNode);
 	for (auto node : nodes) {
@@ -63,7 +63,7 @@ InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::Construc
 	logIt(INFO) << "ConstructElevator::raise to " << traitType << ":\t Input-ConstructSet contains " << inputCS.size()
 						<< "elements " << std::endl;
 	for (auto construct : input) {
-		std::shared_ptr<InstRO::Rose::Core::RoseConstruct> newConstruct;
+		std::shared_ptr<InstRO::Core::Construct> newConstruct;
 		auto roseConstruct = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
 		if (roseConstruct == nullptr) {
 			throw std::string(
@@ -130,7 +130,7 @@ InstRO::Core::ConstructSet ConstructElevator::lower(const InstRO::Core::Construc
 	// CI: check each input construct separately
 	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface input(&inputCS);
 	for (auto construct : input) {
-		std::set<std::shared_ptr<InstRO::Rose::Core::RoseConstruct> > newConstructs;
+		std::set<std::shared_ptr<InstRO::Core::Construct> > newConstructs;
 		// CI: make sure it is a ROSE construct
 		auto roseConstruct = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
 		if (roseConstruct == nullptr) {

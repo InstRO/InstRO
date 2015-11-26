@@ -1,13 +1,36 @@
+//#define INSTRO_LOG_LEVEL DEBUG
+
 #include "TestAdapter.h"
 #include "instro/utility/Logger.h"
 #include "instro/tooling/IdentifierProvider.h"
 
-void InstRO::Test::TestAdapter::init(){
-	expectedItems = readExpectedItemsFile();
+
+void InstRO::Test::TestSummary::printResults(){
+
+	if (unfoundSet.size() > 0 || addMarked.size() > 0) {
+		logIt(ERROR) << "Adapter: " << lbl << std::endl;
+	}
+
+	if (unfoundSet.size() > 0) {
+		logIt(ERROR) << "UNFOUND items " << unfoundSet.size() << "\n";
+		for (const auto i : unfoundSet) {
+			logIt(ERROR) << i << "\n";
+		}
+	}
+
+	if (addMarked.size() > 0) {
+		logIt(ERROR) << "WRONGLY MARKED " << addMarked.size() << "\n";
+		for (const auto i : addMarked) {
+			logIt(ERROR) << i << "\n";
+		}
+	}
 }
 
+
+void InstRO::Test::TestAdapter::init() { expectedItems = readExpectedItemsFile(); }
+
 void InstRO::Test::TestAdapter::execute() {
-	logIt(INFO) << "Running TestAdapter with labeled \"" << label << "\"" << std::endl;
+	logIt(INFO) << "Running TestAdapter with label \"" << label << "\"" << std::endl;
 	auto cfg = getChannelConfig();
 	for (auto p : cfg.getPasses()) {
 		checkIfConstructSetMatches(getInput(p));
@@ -21,39 +44,40 @@ void InstRO::Test::TestAdapter::checkIfConstructSetMatches(InstRO::Core::Constru
 	for (const auto idPair : idMap) {
 		std::string keyVal(idPair.second);
 		std::string testString(keyVal.substr(keyVal.rfind("/") + 1));
-		// erase returns number of elements removed
-		if (expectedItems.erase(testString) > 0) {
+		markedItems.insert(testString);
+
+		logIt(DEBUG) << "Marking " << keyVal << " as selected" << std::endl;
+
+		if (expectedItems.find(testString) != expectedItems.end()) {
 		} else {
-			erroneouslyContainedInConstructSet.insert(idPair.second);
+			erroneouslyContainedInConstructSet.insert(testString);
 		}
 	}
 }
 
 void InstRO::Test::TestAdapter::finalize() {
-	if (expectedItems.size() > 0) {
-		logIt(ERROR) << "UNFOUND items " << expectedItems.size() << "\n";
-		for (const auto i : expectedItems) {
-			logIt(ERROR) << i << "\n";
-		}
-	}
+	/*
+	 * We want to have all nodes which were found but not expected as well as all nodes which were not found but expected.
+	 * The fun part is, we need to have them in the correct amount, as we are dealing with multisets here.
+	 */
+	std::multiset<std::string> unfoundSet;
+	std::set_difference(expectedItems.begin(), expectedItems.end(), markedItems.begin(), markedItems.end(),
+											std::inserter(unfoundSet, unfoundSet.begin()));
 
-	if (erroneouslyContainedInConstructSet.size() > 0) {
-		logIt(ERROR) << "WRONGLY MARKED " << erroneouslyContainedInConstructSet.size() << "\n";
-		for (const auto i : erroneouslyContainedInConstructSet) {
-			logIt(ERROR) << i << "\n";
-		}
-	}
+	std::multiset<std::string> tempAdditionals;
+	std::set_difference(markedItems.begin(), markedItems.end(), expectedItems.begin(), expectedItems.end(),
+											std::inserter(tempAdditionals, tempAdditionals.begin()));
 
-	// XXX Make this exit with different return codes for different errors
-	if (expectedItems.size() > 0 || erroneouslyContainedInConstructSet.size() > 0) {
-		exit(-1);
-	}
+	std::multiset<std::string> addNodes;
+	std::set_union(tempAdditionals.begin(), tempAdditionals.end(), erroneouslyContainedInConstructSet.begin(),
+								 erroneouslyContainedInConstructSet.end(), std::inserter(addNodes, addNodes.begin()));
+
+	summary->setTestResult(std::move(unfoundSet), std::move(addNodes));
 }
 
-
-// builds a set of expected items
-std::set<std::string> InstRO::Test::TestAdapter::readExpectedItemsFile() {
-	std::set<std::string> ei;
+/* builds a multiset of expected items */
+std::multiset<std::string> InstRO::Test::TestAdapter::readExpectedItemsFile() {
+	std::multiset<std::string> ei;
 
 	std::ifstream inFile(filename);
 
@@ -62,7 +86,7 @@ std::set<std::string> InstRO::Test::TestAdapter::readExpectedItemsFile() {
 		std::string line;
 		std::getline(inFile, line);
 
-		if(line.front() == '+'){
+		if (line.front() == '+') {
 			labelApplies = (label == line.substr(1));
 			continue;
 		}
