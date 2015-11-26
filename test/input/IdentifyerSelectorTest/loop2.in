@@ -1,0 +1,5 @@
++IdSelector
+loop2.cpp:3--Function-::foo
+
++IdSelector-f*
+loop2.cpp:3--Function-::foo
