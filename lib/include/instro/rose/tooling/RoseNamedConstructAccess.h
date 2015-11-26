@@ -52,8 +52,7 @@ class NameMatchingASTTraversal : public AstPrePostProcessing {
 
  public:
 	NameMatchingASTTraversal() : csci(&cs) {}
-	bool relevantNode(SgNode* node);
-	// NameMatchingASTTraversal(InstRO::Tooling::NamedConstructAccess::Matcher & m):matchingObject(&m){}
+
 	void reset() {
 		preOrderMatch = false;
 		postOrderMatch = false;
@@ -74,21 +73,21 @@ class NameMatchingASTTraversal : public AstPrePostProcessing {
 		postOrderMatch = false;
 	};
 
-	InstRO::Core::ConstructSet matchUserIdentifyer(
-			::InstRO::Tooling::NamedConstructAccess::Matcher* matcher, SgProject* proj) {
+	InstRO::Core::ConstructSet matchUserIdentifier(InstRO::Tooling::NamedConstructAccess::Matcher* matcher,
+																								 SgProject* proj) {
 		matchingObject = matcher;
 		cs.clear();
 		traverseAST(proj);
 		return cs;
 	}
-	InstRO::Core::ConstructSet matchUserTextString(
-			::InstRO::Tooling::NamedConstructAccess::Matcher* matcher, SgProject* proj) {
+	InstRO::Core::ConstructSet matchUserTextString(InstRO::Tooling::NamedConstructAccess::Matcher* matcher,
+																								 SgProject* proj) {
 		matchingObject = matcher;
 		cs.clear();
 		traverseAST(proj);
 		return cs;
 	}
-	InstRO::Core::ConstructSet matchCode(::InstRO::Tooling::NamedConstructAccess::Matcher* matcher, SgProject* proj) {
+	InstRO::Core::ConstructSet matchCode(InstRO::Tooling::NamedConstructAccess::Matcher* matcher, SgProject* proj) {
 		matchingObject = matcher;
 		cs.clear();
 		traverseAST(proj);
@@ -107,15 +106,13 @@ class NameMatchingASTTraversal : public AstPrePostProcessing {
 	virtual void postOrderVisit(SgNode* n);
 
 	void traverseAST(SgNode* start) { /**< \brief Starts the traversal of the AST. */
-																		//		this->selectionBegin(SageInterface::getEnclosingNode<SgProject>(start, true));
 		traverse(start);
-		//		this->selectionEnd(SageInterface::getEnclosingNode<SgProject>(start, true));
 	}
+
 	InstRO::Core::ConstructSet getConstructs() { return cs; }
 
-	/** This method can be used to generate Strings from SgNodes.
-	 * At the moment it will use only those SgNodes which are mentioned in the class documentation
-	 * \todo move to some utility namespace / entity
+	/**
+	 * retrieves a symbol-string for the entity (function, function-ref, var-ref).
 	 */
 	std::string generateStringToMatch(SgNode* n);
 
@@ -127,9 +124,8 @@ class NameMatchingASTTraversal : public AstPrePostProcessing {
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci;
 	//	IN_enum nodetypeToMark;																						 // Where to save the ASTMarker
 	InstRO::Tooling::NamedConstructAccess::Matcher* matchingObject;	// Which matcher object should be used
-	bool isInitialized;	// for checking if the user called init method.
+	bool isInitialized;																							 // for checking if the user called init method.
 	void select(SgNode* node);
-
 };
 
 class RoseNamedConstructAccess : public InstRO::Tooling::NamedConstructAccess::NamedConstructAccess {
@@ -138,13 +134,12 @@ class RoseNamedConstructAccess : public InstRO::Tooling::NamedConstructAccess::N
 	SgProject* project;
 
  public:
-	RoseNamedConstructAccess(SgProject* proj) : project(proj) {
-	};
-	InstRO::Core::ConstructSet getConstructsByIdentifyerName(
+	RoseNamedConstructAccess(SgProject* proj) : project(proj){};
+	InstRO::Core::ConstructSet getConstructsByIdentifierName(
 			InstRO::Tooling::NamedConstructAccess::Matcher& matcher) override {
 		traversal.reset();
 		traversal.setMatchMin();
-		return traversal.matchUserIdentifyer(&matcher, project);
+		return traversal.matchUserIdentifier(&matcher, project);
 	};
 	InstRO::Core::ConstructSet getConstructsByUserTextStringMatch(
 			InstRO::Tooling::NamedConstructAccess::Matcher& matcher) override {
@@ -152,12 +147,10 @@ class RoseNamedConstructAccess : public InstRO::Tooling::NamedConstructAccess::N
 		traversal.setMatchMin();
 		return traversal.matchUserTextString(&matcher, project);
 	};
-
 };
 }
 }
 }
 }
-
 
 #endif

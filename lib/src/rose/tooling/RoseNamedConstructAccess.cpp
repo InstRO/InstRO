@@ -17,7 +17,6 @@ namespace NamedConstructAccess {
 /*CI: The intend here is to match the smallest possible fragment that still qualifies.
 	If a user wants to have a "higher" construct, he can use construct elevation to get the next higher element
 */
-bool NameMatchingASTTraversal::relevantNode(SgNode* n) { return false; }
 
 void NameMatchingASTTraversal::select(SgNode* n) {
 	// if the node is directly an instrumentable node ...
