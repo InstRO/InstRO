@@ -5,7 +5,7 @@
 #include "lib/TestAdapter.h"
 
 namespace RoseTest {
-
+class RoseTestInstrumentor;
 /**
  * Extends the normal RosePassFactory with the possibility to create a TestAdapter instance
  */
@@ -15,12 +15,19 @@ class RoseTestFactory : public InstRO::Rose::RosePassFactory {
 			: InstRO::Rose::RosePassFactory(manager, project) {}
 
 	InstRO::Pass *createTestAdapter(InstRO::Pass *input, std::string label, std::string filename) {
-		auto pImpl = new InstRO::Test::TestAdapter(input, label, filename);
+		std::unique_ptr<InstRO::Test::TestSummary> tr(new InstRO::Test::TestSummary(label));
+		testSummaries.push_back(std::move(tr));
+
+		auto pImpl = new InstRO::Test::TestAdapter(input, label, filename, testSummaries.back().get());
 		InstRO::Pass *p = new InstRO::Pass(pImpl);
-		p->setPassName("TestAdapter");
+		p->setPassName("TestAdapter " + label);
 		passManager->registerPass(p);
 		return p;
 	}
+
+ private:
+	friend class RoseTestInstrumentor;
+	std::vector<std::unique_ptr<InstRO::Test::TestSummary>> testSummaries;
 };
 
 /**
@@ -32,8 +39,27 @@ class RoseTestInstrumentor : public InstRO::RoseInstrumentor {
 
 	RoseTestFactory *getFactory(
 			InstRO::Instrumentor::CompilationPhase phase = InstRO::Instrumentor::CompilationPhase::frontend) override {
-		return new RoseTestFactory(passManager, project);
+		if (fac == nullptr) {
+			fac.reset(new RoseTestFactory(passManager, project));
+		}
+		return fac.get();
 	}
+
+	bool testFailed() {
+		bool hasTestFailed(false);
+
+		for (std::unique_ptr<InstRO::Test::TestSummary> &tr : fac->testSummaries) {
+			tr->printResults();
+			if (tr->failed()) {
+				hasTestFailed = true;
+			}
+		}
+
+		return hasTestFailed;
+	}
+
+ private:
+	std::unique_ptr<RoseTestFactory> fac;
 };
 }
 

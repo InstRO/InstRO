@@ -12,8 +12,8 @@ namespace InstRO {
 namespace Selector {
 
 void ProgramEntrySelector::execute() {
-	std::list<std::string> mainString = { std::string("main") };
-	auto mainMatcher = InstRO::Tooling::NamedConstructAccess::WildcardedStringMatcher(mainString);
+//	std::list<std::string> mainString = { std::string("main") };
+	InstRO::Tooling::NamedConstructAccess::WildcardedStringMatcher mainMatcher;
 
 	auto analysisManager = getInstrumentorInstance()->getAnalysisManager();
 

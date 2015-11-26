@@ -69,7 +69,7 @@ For example would a Pass which is specialized to work with Rose be named RosePas
 InstRO is able to parse a configuration of connected passes from a JSON file using the `ConfigurationLoader` in the `InstRO::Utility` namespace if it was built with the rapidjson library. The JSON file must contain a global array of objects where each object represents a pass. Each pass object must specify the type name of the pass (without Rose or Clang specific prefixes) under the *type* key und a unique identifier using the *id* key. The *inputs* key may be used by a pass to specify multiple input passes via an array of pass identifiers. Passes may need additional arguments like a list of strings or a `ConstructTraitType`. For convenience, the *ConfigInstrumentor* is shipped as a simple application which reads in the JSON file specified by the environment variable *INSTRO_CONFIG* and runs the resulting setup.
 
 The following JSON is an example which marks occurences of *printf* and *exit* and feeds them to a `ConstructRaisingElevator` which outputs their file scope to a `ConstructPrinter`:
-```
+~~~
 [
   {
     "type":"IdentifyerSelector",
@@ -95,4 +95,4 @@ The following JSON is an example which marks occurences of *printf* and *exit* a
     "level":"fileScope"
   }
 ]
-```
+~~~
