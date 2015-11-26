@@ -31,7 +31,7 @@ class RoseDefaultInstrumentationAdapter : public InstRO::Adapter::DefaultInstrum
  private:
  	Support::RoseCodeWrapper wrapper;
 
- 	void instrumentAsStatement(const std::shared_ptr<InstRO::Core::Construct> construct);
+ 	void instrumentAsStatement(const std::shared_ptr<InstRO::Core::Construct> construct, std::string namePostfix);
 };
 
 }	// namespace Adapter

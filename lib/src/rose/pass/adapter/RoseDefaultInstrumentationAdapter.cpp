@@ -14,20 +14,21 @@ void RoseDefaultInstrumentationAdapter::instrumentFunction(const std::shared_ptr
 }
 
 void RoseDefaultInstrumentationAdapter::instrumentLoop(const std::shared_ptr<InstRO::Core::Construct> construct) {
-	instrumentAsStatement(construct);
+	instrumentAsStatement(construct, std::string("loop"));
 }
 
 void RoseDefaultInstrumentationAdapter::instrumentConditional(
 		const std::shared_ptr<InstRO::Core::Construct> construct) {
-	instrumentAsStatement(construct);
+	instrumentAsStatement(construct, std::string("conditional"));
 }
 
 void RoseDefaultInstrumentationAdapter::instrumentScope(const std::shared_ptr<InstRO::Core::Construct> construct) {
-	instrumentAsStatement(construct);
+	// TODO implement me
+	logIt(ERROR) << "RoseDefaultInstrumentationAdapter: instrumentScope() is not implemented." << std::endl;
 }
 
 void RoseDefaultInstrumentationAdapter::instrumentStatement(const std::shared_ptr<InstRO::Core::Construct> construct) {
-	instrumentAsStatement(construct);
+	instrumentAsStatement(construct, std::string("simple_statement"));
 }
 
 void RoseDefaultInstrumentationAdapter::instrumentExpression(const std::shared_ptr<InstRO::Core::Construct> construct) {
@@ -38,12 +39,12 @@ void RoseDefaultInstrumentationAdapter::instrumentExpression(const std::shared_p
 }
 
 void RoseDefaultInstrumentationAdapter::instrumentAsStatement(
-		const std::shared_ptr<InstRO::Core::Construct> construct) {
+		const std::shared_ptr<InstRO::Core::Construct> construct, std::string namePostfix) {
 
 	auto stmt = isSgStatement(InstRO::Rose::toRoseConstruct(construct)->getNode());
 	auto id = InstRO::Tooling::IdentifierProvider::getID(construct);
 
-	wrapper.wrapStatement(stmt, id);
+	wrapper.wrapStatement(stmt, namePostfix, id);
 }
 
 }	// namespace Adapter
