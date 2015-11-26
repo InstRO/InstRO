@@ -25,6 +25,11 @@ void DefaultInstrumentationAdapter::execute() {
 			logIt(WARN) << "DefaultInstrumentationAdapter encountered incompatible Construct" << std::endl
 									<< "\t" << construct->toString() << std::endl;
 		}
+
+		else if (ct.is(ConstructTraitType::CTScopeStatement)) {
+			instrumentScope(construct);
+		}
+
 		else if (!ct.is(ConstructTraitType::CTWrappableStatement)) {
 			// TODO 2015-11 RN: actually we should create an enclosing scope in this case
 			logIt(WARN) << "DefaultInstrumentationAdapter encountered unwrappable Statement" << std::endl
@@ -39,9 +44,6 @@ void DefaultInstrumentationAdapter::execute() {
 			instrumentConditional(construct);
 		}
 
-		else if (ct.is(ConstructTraitType::CTScopeStatement)) {
-			instrumentScope(construct);
-		}
 
 		else if (ct.is(ConstructTraitType::CTSimpleStatement)) {
 			instrumentStatement(construct);

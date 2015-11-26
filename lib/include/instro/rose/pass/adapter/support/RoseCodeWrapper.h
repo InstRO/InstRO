@@ -21,6 +21,7 @@ public:
 	void wrapStatement(SgStatement* stmt, std::string postfix, size_t id);
 	void wrapExpression(SgExpression* expr, size_t id);
 	void instrumentFunction(SgFunctionDefinition* function, size_t id);
+	void instrumentScope(SgScopeStatement* scope, size_t id);
 
 private:
 	SgProject* project;
