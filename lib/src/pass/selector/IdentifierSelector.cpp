@@ -1,6 +1,6 @@
 #include "instro/core/Instrumentor.h"
 #include "instro/tooling/NamedConstructAccess.h"
-#include "instro/pass/selector/IdentifyerSelector.h"
+#include "instro/pass/selector/IdentifierSelector.h"
 #include "instro/tooling/AnalysisInterface.h"
 #include "instro/core/Singleton.h"
 
@@ -12,9 +12,8 @@ void IdentifyerSelector::execute() {
 			getInstrumentorInstance()->getAnalysisManager()->getNamedConstructAccessFacility();
 
 	Tooling::NamedConstructAccess::WildcardedStringMatcher stringMatcher(rules);
-	
+
 	outputSet = nca->getConstructsByIdentifierName(stringMatcher);
 }
-
 }
 }
