@@ -1,7 +1,7 @@
 #include "instro/core/PassFactory.h"
 
 #include "instro/pass/selector/BooleanCompoundSelector.h"
-#include "instro/pass/selector/IdentifyerSelector.h"
+#include "instro/pass/selector/IdentifierSelector.h"
 #include "instro/pass/selector/ProgramEntrySelector.h"
 #include "instro/pass/selector/CallPathSelector.h"
 #include "instro/pass/selector/ConstructClassSelector.h"

@@ -31,7 +31,7 @@ class Matcher {
 /**
 * This class implements a wildcard string matching.
 * The '#' character is considered to be the Wildcard which can substitute 0,..,n characters.
-* \ingroup Util
+* 
 * \author Jan-Patrick Lehr
 */
 class WildcardedStringMatcher : public Matcher {
@@ -39,11 +39,13 @@ class WildcardedStringMatcher : public Matcher {
 	/** Initializes the wild card char to # */
 	WildcardedStringMatcher() : WILDCARDCHAR('#') {}
 
+	/** Initializes wild card char to '#' and used patterns-list with patternList */
 	WildcardedStringMatcher(std::vector<std::string> patternList) : patterns(patternList), WILDCARDCHAR('#') {}
 
+	/** Checks candidate against pattern */
 	virtual bool isMatch(std::string candidate, std::string pattern) override;
 
-	/** Uses internal list of patterns to match against, short circuits on first match */
+	/** Checks the candidate against all patterns, short-circuits on first match */
 	virtual bool isMatch(std::string candidate) override;
  
  protected:
@@ -80,6 +82,7 @@ class NamedConstructAccess {
 	// the whole function matched.
 	virtual InstRO::Core::ConstructSet getConstructsByCodeMatch(Matcher &) {
 		raise_exception("Not Implemented");
+		return InstRO::Core::ConstructSet();
 	}
 };
 }
