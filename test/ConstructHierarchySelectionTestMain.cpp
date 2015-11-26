@@ -6,6 +6,7 @@
 #include "lib/RoseTestSupport.h"
 #endif
 
+#include "instro/utility/Logger.h"
 #include "instro/utility/Environment.h"
 /**
  * This is the TestInstrumentor implementation.
@@ -74,7 +75,7 @@ int main(int argc, char **argv) {
 #endif
 
 #ifdef USE_CLANG
-	std::cerr << "THE TEST IS NOT YET IMPLEMENTED USING CLANG" << std::endl;
+	logIt(ERROR) << "Not implemented yet!" << std::endl;
 	return 0;
 #endif
 
