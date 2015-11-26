@@ -174,7 +174,12 @@ struct CLSimpleStatementPredicate : public CTPredicate {
 };
 
 struct CTWrappableStatementPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const { return (isSgBasicBlock(n->get_parent()) != nullptr); }
+	bool operator()(SgNode* n) const {
+		if (isSgReturnStmt(n)) {
+			return false;		// return stmts are not wrappable
+		}
+		return (isSgBasicBlock(n->get_parent()) != nullptr);
+	}
 };
 
 struct InstrumentableConstructPredicate : public CTPredicate {

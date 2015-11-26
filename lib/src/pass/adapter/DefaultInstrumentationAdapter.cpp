@@ -24,6 +24,7 @@ void DefaultInstrumentationAdapter::execute() {
 		else if (!ct.is(ConstructTraitType::CTStatement)) {
 			logIt(WARN) << "DefaultInstrumentationAdapter encountered incompatible Construct" << std::endl
 									<< "\t" << construct->toString() << std::endl;
+			continue;
 		}
 
 		else if (ct.is(ConstructTraitType::CTScopeStatement)) {
@@ -34,6 +35,7 @@ void DefaultInstrumentationAdapter::execute() {
 			// TODO 2015-11 RN: actually we should create an enclosing scope in this case
 			logIt(WARN) << "DefaultInstrumentationAdapter encountered unwrappable Statement" << std::endl
 									<< "\t" << construct->toString() << std::endl;
+			continue;
 		}
 
 		else if (ct.is(ConstructTraitType::CTLoopStatement)) {
