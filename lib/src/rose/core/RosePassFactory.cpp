@@ -13,7 +13,7 @@ namespace InstRO {
 namespace Rose {
 
 Pass* RosePassFactory::createDefaultInstrumentationAdapter(InstRO::Pass* input) {
-	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseDefaultInstrumentationAdapter(input));
+	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseDefaultInstrumentationAdapter(input, project));
 	newPass->setPassName("InstRO::Rose::Adapter::RoseDefaultInstrumentationAdapter");
 	passManager->registerPass(newPass);
 	return newPass;
