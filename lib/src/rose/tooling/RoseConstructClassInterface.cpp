@@ -1,14 +1,14 @@
 #include <memory>
 #include "instro/core/Helper.h"
 #include "instro/rose/core/RoseConstructSet.h"
-#include "instro/rose/tooling/RoseGrammarInterface.h"
+#include "instro/rose/tooling/RoseConstructClassInterface.h"
 
 namespace InstRO {
 namespace Rose {
 namespace Tooling {
-namespace GrammarInterface {
+namespace ConstructClassInterface {
 
-InstRO::Core::ConstructSet RoseGrammarInterface::getConstructsByClass(
+InstRO::Core::ConstructSet RoseConstructClassInterface::getConstructsByClass(
 		const InstRO::Core::ConstructTraitType constructClass) {
 
 	InstRO::Core::ConstructSet result;
@@ -26,7 +26,7 @@ InstRO::Core::ConstructSet RoseGrammarInterface::getConstructsByClass(
 	return result;
 }
 
-}	// GrammarInterface
+}	// ConstructClassInterface
 }	// Tooling
 }	// Rose
 }	// InstRO

@@ -2,7 +2,7 @@
 
 #include "instro/core/Instrumentor.h"
 #include "instro/core/Singleton.h"
-#include "instro/tooling/GrammarInterface.h"
+#include "instro/tooling/ConstructClassInterface.h"
 #include "instro/tooling/NamedConstructAccess.h"
 
 #include <string>

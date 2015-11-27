@@ -21,11 +21,11 @@ namespace Test {
  */
 class TestSummary {
  public:
-	 TestSummary(std::string adapterLabel) : lbl(adapterLabel){}
+	TestSummary(std::string adapterLabel) : lbl(adapterLabel) {}
 
 	void setTestResult(std::multiset<std::string> &&unFound, std::multiset<std::string> &&additionallyMarked) {
-		unfoundSet.insert(unFound.begin(), unFound.end());
-		addMarked.insert(additionallyMarked.begin(), additionallyMarked.end());
+		unfoundSet = std::move(unFound);
+		addMarked = std::move(additionallyMarked);
 	}
 
 	void printResults();
@@ -45,7 +45,10 @@ class TestSummary {
 class TestAdapter : public InstRO::Core::PassImplementation {
  public:
 	TestAdapter(InstRO::Pass *input, std::string lab, std::string filename, TestSummary *tr)
-			: InstRO::Core::PassImplementation(InstRO::Core::ChannelConfiguration(input)), label(lab), filename(filename), summary(tr) {}
+			: InstRO::Core::PassImplementation(InstRO::Core::ChannelConfiguration(input)),
+				label(lab),
+				filename(filename),
+				summary(tr) {}
 
 	void init() override;
 	void execute() override;

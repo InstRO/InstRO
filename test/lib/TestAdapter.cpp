@@ -1,12 +1,10 @@
-//#define INSTRO_LOG_LEVEL DEBUG
+#define INSTRO_LOG_LEVEL INFO
 
 #include "TestAdapter.h"
 #include "instro/utility/Logger.h"
 #include "instro/tooling/IdentifierProvider.h"
 
-
-void InstRO::Test::TestSummary::printResults(){
-
+void InstRO::Test::TestSummary::printResults() {
 	if (unfoundSet.size() > 0 || addMarked.size() > 0) {
 		logIt(ERROR) << "Adapter: " << lbl << std::endl;
 	}
@@ -24,8 +22,8 @@ void InstRO::Test::TestSummary::printResults(){
 			logIt(ERROR) << i << "\n";
 		}
 	}
-}
 
+}
 
 void InstRO::Test::TestAdapter::init() { expectedItems = readExpectedItemsFile(); }
 

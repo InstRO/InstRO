@@ -1,15 +1,15 @@
-#ifndef INSTRO_TOOLING_GRAMMARINTERFACE_H
-#define INSTRO_TOOLING_GRAMMARINTERFACE_H
+#ifndef INSTRO_TOOLING_CONSTRUCT_CLASS_INTERFACE_H
+#define INSTRO_TOOLING_CONSTRUCT_CLASS_INTERFACE_H
 
 #include "instro/core/ConstructSet.h"
 
 namespace InstRO {
 namespace Tooling {
-namespace GrammarInterface {
+namespace ConstructClassInterface {
 
-class GrammarInterface {
+class ConstructClassInterface {
 public:
-	virtual ~GrammarInterface() {
+	virtual ~ConstructClassInterface() {
 	}
 
 	virtual InstRO::Core::ConstructSet getConstructsByClass(const InstRO::Core::ConstructTraitType constructClass) = 0;
