@@ -8,7 +8,7 @@ namespace InstRO {
 namespace Selector {
 
 void ConstructClassSelector::execute() {
-	InstRO::Tooling::GrammarInterface::GrammarInterface* gi =
+	InstRO::Tooling::ConstructClassInterface::ConstructClassInterface* gi =
 			getInstrumentorInstance()->getAnalysisManager()->getGrammarInterface();
 
 	outputSet = gi->getConstructsByClass(constructClass);

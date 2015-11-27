@@ -41,7 +41,7 @@ CORE_HFILES= \
 ./include/instro/tooling/ConstructElevator.h \
 ./include/instro/tooling/ControlFlowGraph.h \
 ./include/instro/tooling/ExtendedCallGraph.h \
-./include/instro/tooling/GrammarInterface.h \
+./include/instro/tooling/ConstructClassInterface.h \
 ./include/instro/tooling/NamedConstructAccess.h \
 ./include/instro/tooling/TransformationInterface.h \
 ./include/instro/pass/selector/ProgramEntrySelector.h \
@@ -102,7 +102,7 @@ ROSE_HFILES= \
 ./include/instro/rose/tooling/RoseConstructElevator.h \
 ./include/instro/rose/tooling/RoseControlFlowGraph.h \
 ./include/instro/rose/tooling/RoseExtendedCallGraph.h \
-./include/instro/rose/tooling/RoseGrammarInterface.h \
+./include/instro/rose/tooling/RoseConstructClassInterface.h \
 ./include/instro/rose/tooling/RoseNamedConstructAccess.h \
 ./include/instro/rose/tooling/RoseTransformationInterface.h \
 ./include/instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h \
@@ -128,7 +128,7 @@ ROSE_SFILES= \
 ./src/rose/pass/adapter/RoseConstructPrinter.cpp \
 ./src/rose/tooling/RoseConstructElevator.cpp \
 ./src/rose/tooling/RoseNamedConstructAccess.cpp \
-./src/rose/tooling/RoseGrammarInterface.cpp \
+./src/rose/tooling/RoseConstructClassInterface.cpp \
 ./src/rose/pass/transformer/UniqueCallpathTransformer.cpp \
 ./src/rose/utility/FunctionRenamer.cpp \
 ./src/rose/utility/ASTHelper.cpp \

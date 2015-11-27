@@ -7,7 +7,7 @@
 #include "instro/rose/tooling/RoseNamedConstructAccess.h"
 #include "instro/rose/tooling/RoseControlFlowGraph.h"
 #include "instro/rose/tooling/RoseExtendedCallGraph.h"
-#include "instro/rose/tooling/RoseGrammarInterface.h"
+#include "instro/rose/tooling/RoseConstructClassInterface.h"
 #include "instro/rose/tooling/RoseConstructElevator.h"
 
 namespace InstRO {
@@ -19,7 +19,7 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 			: project(proj),
 				namedConstructAccessInstance(new NamedConstructAccess::RoseNamedConstructAccess(proj)),
 				ce(new ConstructElevator::ConstructElevator()),
-				gi(new GrammarInterface::RoseGrammarInterface(proj)),
+				gi(new ConstructClassInterface::RoseConstructClassInterface(proj)),
 				controlFlowGraph((new ControlFlowGraph::RoseCFGGenerator(proj))->getGraph()),
 				extendedCallGraph((new ExtendedCallGraph::RoseECGGenerator())->build(proj)) {}
 
@@ -35,7 +35,7 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 	virtual InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph *getECG() override { return extendedCallGraph; }
 	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraph *getCFG() override { return controlFlowGraph; }
 	virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override { return ce; }
-	virtual InstRO::Tooling::GrammarInterface::GrammarInterface *getGrammarInterface() override { return gi; }
+	virtual InstRO::Tooling::ConstructClassInterface::ConstructClassInterface *getGrammarInterface() override { return gi; }
 	virtual InstRO::Tooling::NamedConstructAccess::NamedConstructAccess *getNamedConstructAccessFacility() override {
 		return namedConstructAccessInstance;
 	}
@@ -44,7 +44,7 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 	SgProject *project;
 	NamedConstructAccess::RoseNamedConstructAccess *namedConstructAccessInstance;
 	ConstructElevator::ConstructElevator *ce;
-	GrammarInterface::RoseGrammarInterface *gi;
+	ConstructClassInterface::RoseConstructClassInterface *gi;
 	ControlFlowGraph::ControlFlowGraph *controlFlowGraph;
 	ExtendedCallGraph::ExtendedCallGraph *extendedCallGraph;
 };
