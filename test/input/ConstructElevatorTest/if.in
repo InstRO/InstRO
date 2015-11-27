@@ -1,0 +1,7 @@
++Func2StmtLevelSelector
+if.cpp:3--ConditionalStatement
+if.cpp:3--ScopeStatement
+if.cpp:4--SimpleStatement
+
++Stmt2FuncLevelSelector
+if.cpp:2--Function-::foo
