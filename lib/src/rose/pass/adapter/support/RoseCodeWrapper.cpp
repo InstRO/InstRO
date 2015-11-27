@@ -30,8 +30,7 @@ void RoseCodeWrapper::wrapExpression(SgExpression* expr, size_t id) {
 
 void RoseCodeWrapper::instrumentFunction(SgFunctionDefinition* function, size_t id) {
 	if (insertHeaderIfSource(function)) {
-
-		// START
+		// start
 		auto voidPointer = SageBuilder::buildCastExp(SageBuilder::buildIntVal(0),
 																								 SageBuilder::buildPointerType(SageBuilder::buildVoidType()));
 		auto parameters = SageBuilder::buildExprListExp(SageBuilder::buildUnsignedLongLongIntVal(id), voidPointer);
@@ -40,34 +39,31 @@ void RoseCodeWrapper::instrumentFunction(SgFunctionDefinition* function, size_t 
 				buildCallExpressionStatement(function->get_body(), "__instro_start_function", parameters),
 				function->get_body());
 
-		// END
-		SageInterface::instrumentEndOfFunction(
-				function->get_declaration(),
-				buildCallExpressionStatement(function, "__instro_end_function", parameters));
+		// end
+		SageInterface::instrumentEndOfFunction(function->get_declaration(),
+																					 buildCallExpressionStatement(function, "__instro_end_function", parameters));
 	}
 }
 
 void RoseCodeWrapper::instrumentScope(SgScopeStatement* scope, size_t id) {
 	if (insertHeaderIfSource(scope)) {
+		// start
 		SageInterface::prependStatement(buildCallExpressionStatement(scope, "__instro_start_scope", id), scope);
-
+		// continues and breaks
+		auto endFuncCall = buildCallExpressionStatement(scope, "__instro_end_scope", id);
 		auto potentialExits = SageInterface::querySubTree<SgStatement>(scope, V_SgBreakStmt);
 		auto continueStmts = SageInterface::querySubTree<SgStatement>(scope, V_SgContinueStmt);
 		potentialExits.insert(potentialExits.end(), continueStmts.begin(), continueStmts.end());
-
 		for (auto exit : potentialExits) {
-			auto endFuncCall = buildCallExpressionStatement(SageInterface::getScope(exit), "__instro_end_scope", id);
 			instrumentPossibleExit(scope, exit, endFuncCall);
 		}
-
-		auto returnStmts = SageInterface::querySubTree<SgStatement>(scope, V_SgReturnStmt);
+		// returns
+		auto returnStmts = SageInterface::querySubTree<SgReturnStmt>(scope, V_SgReturnStmt);
 		for (auto returnStmt : returnStmts) {
-			// TODO transformation of return stmts
-			SageInterface::insertStatementBefore(returnStmt,
-					buildCallExpressionStatement(SageInterface::getScope(returnStmt), "__instro_end_scope", id));
+			instrumentReturnStmt(scope, returnStmt, endFuncCall);
 		}
-
-		SageInterface::appendStatement(buildCallExpressionStatement(scope, "__instro_end_scope", id), scope);
+		// scope end
+		SageInterface::appendStatement(endFuncCall, scope);
 	}
 }
 
@@ -76,18 +72,27 @@ void RoseCodeWrapper::instrumentPossibleExit(SgScopeStatement* scope, SgStatemen
 	SgStatement* exitEnclosingLoop = InstRO::Rose::Utility::ASTHelper::getEnclosingLoop(exit);
 
 	if (scopeEnclosingLoop == exitEnclosingLoop) {
-		SageInterface::insertStatementBefore(exit, instrumentStmt);
+		SageInterface::insertStatementBefore(exit, SageInterface::copyStatement(instrumentStmt));
 	}
 }
 
-bool RoseCodeWrapper::insertHeaderIfSource(SgLocatedNode* node) {
+void RoseCodeWrapper::instrumentReturnStmt(SgScopeStatement* scope, SgReturnStmt* returnStmt,
+																					 SgStatement* instrumentStmt) {
+	auto returnExpr = returnStmt->get_expression();
+	if (returnExpr != nullptr && !(isSgValueExp(returnExpr)) && !(isSgVarRefExp(returnExpr))) {
+		SageInterface::splitExpression(returnExpr);	// return statement transformation
+	}
 
+	SageInterface::insertStatementBefore(returnStmt, SageInterface::copyStatement(instrumentStmt));
+}
+
+bool RoseCodeWrapper::insertHeaderIfSource(SgLocatedNode* node) {
 	SgSourceFile* sourceFile = isSgSourceFile(SageInterface::getEnclosingFileNode(node));
 	std::string fileInfoName = node->get_file_info()->get_filenameString();
 	std::string sourceFileName = sourceFile->getFileName();
 
 	// if the two names do not match, the construct originates from an include
-	if (sourceFile != nullptr && (fileInfoName == sourceFileName) ) {
+	if (sourceFile != nullptr && (fileInfoName == sourceFileName)) {
 		if (filesWithInclude.find(sourceFile) == filesWithInclude.end()) {
 			SageInterface::insertHeader("InstROMeasurementInterface.h", PreprocessingInfo::before, true,
 																	sourceFile->get_globalScope());
@@ -96,8 +101,7 @@ bool RoseCodeWrapper::insertHeaderIfSource(SgLocatedNode* node) {
 		}
 		return true;
 	}
-	logIt(WARN) << "RoseCodeWrapper: header instrumentation is not supported. "
-			<< fileInfoName << std::endl;
+	logIt(WARN) << "RoseCodeWrapper: header instrumentation is not supported. " << fileInfoName << std::endl;
 	return false;
 }
 
