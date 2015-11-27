@@ -137,6 +137,11 @@ struct CLStatementPredicate : public CTPredicate {
 			return false;		// no equivalent in C/C++ semantics
 		}
 
+		if (isSgNullStatement(n) && (isSgForStatement(n->get_parent()) || isSgForInitStatement(n->get_parent()))) {
+			isSgLocatedNode(n)->set_file_info(isSgLocatedNode(n->get_parent())->get_file_info());
+			return true;
+		}
+
 		if (isSgExprStatement(n) && isSgIfStmt(n->get_parent())) {
 			return false;		// if with an expression as conditional
 		}
