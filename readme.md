@@ -10,7 +10,7 @@ The following Passes are currently planned [ ] and implemented [x] in InstRO.
 - [x] CallpathSelector
 - [x] ConstructClassSelector
 - [x] ConstructElevator
-- [ ] IdentifierMatcherSelector
+- [x] IdentifierMatcherSelector
 - [x] ProgramEntrySelector
 
 #### Adapters
@@ -38,7 +38,7 @@ Internally we use the following version of compilers and libraries for building 
 - Python 2.7.10
 
 ### Building with Clang
-The support to build with Clang will soon be available
+Support for the Clang compiler is work in progress.
 
 
 ## Style guidelines
