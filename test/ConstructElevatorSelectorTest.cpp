@@ -30,6 +30,9 @@ int main(int argc, char **argv) {
 	auto stmtToFuncLvlSelector = factory->createConstructRaisingElevator(stmtLvlSelector, CTrait::CTFunction);
 	factory->createTestAdapter(stmtToFuncLvlSelector, "Stmt2FuncLevelSelector", filename);
 
+	auto funcToExprLvlSelector = factory->createConstructLoweringElevator(funcLvlSelector, CTrait::CTExpression);
+	factory->createTestAdapter(funcToExprLvlSelector, "Func2ExprLevelSelector", filename);
+
 #ifdef DEBUG
 	factory->createConstructPrinter(funcToStmtLvlSelector);
 	factory->creaeConstructPrinter(stmtToFuncLvlSelector);

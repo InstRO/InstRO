@@ -6,3 +6,8 @@ expressions.cpp:6--SimpleStatement
 
 +Stmt2FuncLevelSelector
 expressions.cpp:1--Function-::foo
+
++Func2ExprLevelSelector
+expressions.cpp:3--Expression
+expressions.cpp:4--Expression
+expressions.cpp:6--Expression
