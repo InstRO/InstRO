@@ -65,11 +65,6 @@ Pass* PassFactory::createConstructCroppingElevator(InstRO::Pass* pass, InstRO::C
 	return newPass;
 }
 
-Pass* PassFactory::createDefaultInstrumentationAdapter(InstRO::Pass* input) {
-	// TODO implement me
-	throw std::string("Not yet Implemented");
-}
-
 Pass* PassFactory::createProgramEntrySelector() {
 	Pass* newPass = new Pass(new Selector::ProgramEntrySelector());
 	newPass->setPassName("InstRO::Selector::ProgramEntrySelector");
