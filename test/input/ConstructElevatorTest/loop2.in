@@ -8,3 +8,8 @@ loop2.cpp:5--SimpleStatement
 
 +Stmt2FuncLevelSelector
 loop2.cpp:3--Function-::foo
+
++Func2ExprLevelSelector
+loop2.cpp:5--Expression
+loop2.cpp:5--Expression
+loop2.cpp:6--Expression

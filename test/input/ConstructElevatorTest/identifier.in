@@ -7,3 +7,8 @@ identifier.cpp:10--SimpleStatement
 +Stmt2FuncLevelSelector
 identifier.cpp:2--Function-::foobar
 identifier.cpp:7--Function-::bar
+
++Func2ExprLevelSelector
+identifier.cpp:4--Expression
+identifier.cpp:8--Expression
+identifier.cpp:10--Expression
