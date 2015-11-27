@@ -11,8 +11,9 @@ namespace Support {
 /**
  * \brief The entity that does the actual code instrumentation in Rose.
  * For now only the InstRO measurement interface is supported.
- * TODO RN: afaik we cannot unparse headers
- * \author Roman Ness
+ * XXX RN 2015-11: currently rose is not able to unparse headers. Therefore instrumentation in headers is not supported
+ * TODO RN: a bad order of instrumentations may lead to a corrupt nesting of instrumentation hooks
+ *  * \author Roman Ness
  */
 class RoseCodeWrapper {
 public:
@@ -28,6 +29,7 @@ private:
 
 	std::set<SgSourceFile*> filesWithInclude;
 
+	void instrumentPossibleExit(SgScopeStatement* scope, SgStatement* exit, SgStatement* instrumentStmt);
 	bool insertHeaderIfSource(SgLocatedNode* node);
 	SgStatement* buildCallExpressionStatement(SgScopeStatement* context, std::string functionName, SgExprListExp* parameters);
 	SgStatement* buildCallExpressionStatement(SgScopeStatement* context, std::string functionName, size_t id);
