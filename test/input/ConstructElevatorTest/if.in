@@ -5,3 +5,7 @@ if.cpp:4--SimpleStatement
 
 +Stmt2FuncLevelSelector
 if.cpp:2--Function-::foo
+
++Func2ExprLevelSelector
+if.cpp:3--Expression
+if.cpp:4--Expression
