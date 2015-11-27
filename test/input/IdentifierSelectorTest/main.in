@@ -1,2 +1,4 @@
-+IdSelector
-+IdSelector-f*
++IdSelector-::foo
++IdSelector-::f#
++IdSelector-#foo
++IdSelector-#f#

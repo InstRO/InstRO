@@ -23,9 +23,13 @@ int main(int argc, char **argv) {
 
 	auto idSelector = factory->createIdentifierMatcherSelector({"::foo"});
 	auto idSelector2 = factory->createIdentifierMatcherSelector({"::f#"});
+	auto idSelector3 = factory->createIdentifierMatcherSelector({"#foo"});
+	auto idSelector4 = factory->createIdentifierMatcherSelector({"#f#"});
 
-	factory->createTestAdapter(idSelector, "IdSelector", filename);
-	factory->createTestAdapter(idSelector2, "IdSelector-f*", filename);
+	factory->createTestAdapter(idSelector, "IdSelector-::foo", filename);
+	factory->createTestAdapter(idSelector2, "IdSelector-::f#", filename);
+	factory->createTestAdapter(idSelector3, "IdSelector-#foo", filename);
+	factory->createTestAdapter(idSelector4, "IdSelector-#f#", filename);
 
 #ifdef DEBUG
 	factory->createConstructPrinter(idSelector);
