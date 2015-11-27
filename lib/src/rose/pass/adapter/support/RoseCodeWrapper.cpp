@@ -1,5 +1,6 @@
 #include "instro/rose/pass/adapter/support/RoseCodeWrapper.h"
 
+#include "instro/rose/utility/ASTHelper.h"
 #include "instro/utility/Logger.h"
 
 /// XXX
@@ -50,25 +51,53 @@ void RoseCodeWrapper::instrumentScope(SgScopeStatement* scope, size_t id) {
 	if (insertHeaderIfSource(scope)) {
 		SageInterface::prependStatement(buildCallExpressionStatement(scope, "__instro_start_scope", id), scope);
 
-		// TODO do not end after return statement
-		// TODO other possible exits from a scope: continue, break, return, goto
+		auto potentialExits = SageInterface::querySubTree<SgStatement>(scope, V_SgBreakStmt);
+		auto continueStmts = SageInterface::querySubTree<SgStatement>(scope, V_SgContinueStmt);
+		potentialExits.insert(potentialExits.end(), continueStmts.begin(), continueStmts.end());
+
+		for (auto exit : potentialExits) {
+			auto endFuncCall = buildCallExpressionStatement(SageInterface::getScope(exit), "__instro_end_scope", id);
+			instrumentPossibleExit(scope, exit, endFuncCall);
+		}
+
+		auto returnStmts = SageInterface::querySubTree<SgStatement>(scope, V_SgReturnStmt);
+		for (auto returnStmt : returnStmts) {
+			// TODO transformation of return stmts
+			SageInterface::insertStatementBefore(returnStmt,
+					buildCallExpressionStatement(SageInterface::getScope(returnStmt), "__instro_end_scope", id));
+		}
 
 		SageInterface::appendStatement(buildCallExpressionStatement(scope, "__instro_end_scope", id), scope);
 	}
 }
 
-bool RoseCodeWrapper::insertHeaderIfSource(SgLocatedNode* node) {
-	SgFile* file = SageInterface::getEnclosingFileNode(node);
-	SgSourceFile* sourceFile = isSgSourceFile(file);
+void RoseCodeWrapper::instrumentPossibleExit(SgScopeStatement* scope, SgStatement* exit, SgStatement* instrumentStmt) {
+	SgStatement* scopeEnclosingLoop = InstRO::Rose::Utility::ASTHelper::getEnclosingLoop(scope);
+	SgStatement* exitEnclosingLoop = InstRO::Rose::Utility::ASTHelper::getEnclosingLoop(exit);
 
-	if (sourceFile != nullptr) {
+	if (scopeEnclosingLoop == exitEnclosingLoop) {
+		SageInterface::insertStatementBefore(exit, instrumentStmt);
+	}
+}
+
+bool RoseCodeWrapper::insertHeaderIfSource(SgLocatedNode* node) {
+
+	SgSourceFile* sourceFile = isSgSourceFile(SageInterface::getEnclosingFileNode(node));
+	std::string fileInfoName = node->get_file_info()->get_filenameString();
+	std::string sourceFileName = sourceFile->getFileName();
+
+	// if the two names do not match, the construct originates from an include
+	if (sourceFile != nullptr && (fileInfoName == sourceFileName) ) {
 		if (filesWithInclude.find(sourceFile) == filesWithInclude.end()) {
 			SageInterface::insertHeader("InstROMeasurementInterface.h", PreprocessingInfo::before, true,
 																	sourceFile->get_globalScope());
 			filesWithInclude.insert(sourceFile);
+			logIt(INFO) << "RoseCodeWrapper: inserted header in " << sourceFileName << std::endl;
 		}
 		return true;
 	}
+	logIt(WARN) << "RoseCodeWrapper: header instrumentation is not supported. "
+			<< fileInfoName << std::endl;
 	return false;
 }
 
