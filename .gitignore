@@ -9,6 +9,8 @@ lib/**/*.a
 config/*
 config/m4
 !config/m4/ax_boost*
+# whatever this is
+lib/include/instro/config.h
 
 ./config*
 #!configure.ac
