@@ -9,6 +9,7 @@ loop2.cpp:5--LoopStatement
 loop2.cpp:4--SimpleStatement
 loop2.cpp:5--LoopStatement
 loop2.cpp:5--SimpleStatement
+loop2.cpp:5--SimpleStatement
 loop2.cpp:5--ScopeStatement
 loop2.cpp:6--SimpleStatement
 
