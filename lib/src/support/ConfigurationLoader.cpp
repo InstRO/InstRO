@@ -51,7 +51,7 @@ void ConfigurationParser::parseFile(const std::string &filename) {
 
 	if (doc.HasParseError()) {
 		logIt(ERROR) << "An error occurred while parsing the JSON document at position " << doc.GetErrorOffset() << ": "
-							<< rapidjson::GetParseError_En(doc.GetParseError()) << std::endl;
+								 << rapidjson::GetParseError_En(doc.GetParseError()) << std::endl;
 	}
 
 	// parse the individual passes which are specified inside the top level array
@@ -180,6 +180,16 @@ std::vector<std::string> ConfigurationParsingContext::getStringArguments(const c
 	return arguments;
 }
 
+int ConfigurationParsingContext::getIntegerArgument(const char *memberName) const {
+	auto memberIter = passValue.FindMember(memberName);
+
+	if (memberIter != passValue.MemberEnd()) {
+		return memberIter->value.GetInt();
+	} else {
+		InstRO::raise_exception(getId() + ": Cannot find member '" + std::string(memberName) + "'");
+	}
+}
+
 InstRO::Core::ConstructTraitType ConfigurationParsingContext::getConstructTraitType(const char *memberName) const {
 	auto memberIter = passValue.FindMember(memberName);
 
@@ -272,6 +282,65 @@ void ConfigurationParsingContext::expectInputPasses(std::initializer_list<unsign
 
 // BaseConfigurationPassRegistry
 
+BaseConfigurationPassRegistry::BaseConfigurationPassRegistry(PassFactory *factory) : factory(factory) {
+	// TODO SR: merge these into one with an argument
+	registerPass("BooleanOrSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
+		context.expectInputPasses({2});
+		return factory->createBooleanOrSelector(context.inputPasses[0], context.inputPasses[1]);
+	});
+	registerPass("BooleanAndSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
+		context.expectInputPasses({2});
+		return factory->createBooleanAndSelector(context.inputPasses[0], context.inputPasses[1]);
+	});
+	registerPass("BooleanXorSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
+		context.expectInputPasses({2});
+		return factory->createBooleanXorSelector(context.inputPasses[0], context.inputPasses[1]);
+	});
+	registerPass("BooleanMinusSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
+		context.expectInputPasses({2});
+		return factory->createBooleanMinusSelector(context.inputPasses[0], context.inputPasses[1]);
+	});
+
+	registerPass("ProgramEntrySelector", [factory](ConfigurationParsingContext &context) {
+		context.expectInputPasses({1});
+		return factory->createProgramEntrySelector();
+	});
+	registerPass("IdentifyerSelector", [factory](ConfigurationParsingContext &context) {
+		return factory->createIdentifierMatcherSelector(context.getStringArguments());
+	});
+	registerPass("CallpathSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
+		context.expectInputPasses({2});
+		return factory->createCallpathSelector(context.inputPasses[0], context.inputPasses[1]);
+	});
+	registerPass("ConstructClassSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
+		context.expectInputPasses({0});
+		return factory->createConstructClassSelector(context.getConstructTraitType("class"));
+	});
+	registerPass("AggregationStatementCountSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
+		context.expectInputPasses({0});
+		return factory->createAggregationStatementCountSelector(context.getIntegerArgument("threshold"));
+	});
+
+	registerPass("ConstructLoweringElevator", [factory](ConfigurationParsingContext &context) -> Pass *{
+		context.expectInputPasses({1});
+		return factory->createConstructLoweringElevator(context.inputPasses[0], context.getConstructTraitType("level"));
+	});
+	registerPass("ConstructRaisingElevator", [factory](ConfigurationParsingContext &context) -> Pass *{
+		context.expectInputPasses({1});
+		return factory->createConstructRaisingElevator(context.inputPasses[0], context.getConstructTraitType("level"));
+	});
+	registerPass("ConstructCroppingElevator", [factory](ConfigurationParsingContext &context) -> Pass *{
+		context.expectInputPasses({1});
+		return factory->createConstructCroppingElevator(context.inputPasses[0], context.getConstructTraitType("minLevel"),
+																										context.getConstructTraitType("maxLevel"));
+	});
+
+	registerPass("DefaultInstrumentationAdapter", [factory](ConfigurationParsingContext &context) -> Pass *{
+		context.expectInputPasses({1});
+		return factory->createDefaultInstrumentationAdapter(context.inputPasses[0]);
+	});
+}
+
 ConfigurationPassRegistry::PassParser BaseConfigurationPassRegistry::lookup(const std::string &passType) {
 	auto passRegistryIter = passRegistry.find(passType);
 	if (passRegistryIter == passRegistry.end()) {
@@ -286,8 +355,7 @@ PassFactory *BaseConfigurationPassRegistry::getFactory() { return factory; }
 void BaseConfigurationPassRegistry::registerPass(const std::string &typeName, const PassParser &parser) {
 	// print a warning if a parser has already been registered for the specified id
 	if (passRegistry.find(typeName) != passRegistry.end()) {
-		logIt(WARN) << "A parser has already been registered for type '" << typeName << "'. Skipping..."
-							<< std::endl;
+		logIt(WARN) << "A parser has already been registered for type '" << typeName << "'. Skipping..." << std::endl;
 		return;
 	}
 

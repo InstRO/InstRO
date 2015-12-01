@@ -42,6 +42,8 @@ struct ConfigurationParsingContext {
 	std::string getStringArgumentOrDefault(const char *memberName, const std::string &defaultArg) const;
 	std::vector<std::string> getStringArguments(const char *memberName = "args") const;
 
+	int getIntegerArgument(const char *memberName) const;
+
 	/// \brief Gets the InstRO::Core::ConstructTraitType of the specified member.
 	///
 	/// The value may be either an integer or a textual name (e.g. 'function', 'fileScope').
@@ -71,39 +73,11 @@ class ConfigurationPassRegistry {
 	virtual PassParser lookup(const std::string &passType) = 0;
 };
 
-/// \brief An abstract ConfigurationPassRegistry that stores its PassParser instances in a map
+/// \brief A ConfigurationPassRegistry that stores its PassParser instances in a map
 /// and uses a PassFactory to create the Pass instances.
 class BaseConfigurationPassRegistry : public ConfigurationPassRegistry {
  public:
-	BaseConfigurationPassRegistry(PassFactory *factory) : factory(factory) {
-
-		// TODO RN 2015-11: which factory methods are still missing here?
-
-		registerPass("BooleanOrSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
-			context.expectInputPasses( {1});
-			return factory->createBooleanOrSelector(context.inputPasses[0], context.inputPasses[1]);
-		});
-
-		registerPass("ProgramEntrySelector",
-				[factory](ConfigurationParsingContext &context) {return factory->createProgramEntrySelector();});
-		registerPass("IdentifyerSelector", [factory](ConfigurationParsingContext &context) {
-			return factory->createIdentifierMatcherSelector(context.getStringArguments());
-		});
-		registerPass("CallPathSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
-			context.expectInputPasses( {2});
-			return factory->createCallpathSelector(context.inputPasses[0], context.inputPasses[1]);
-		});
-
-		registerPass("ConstructLoweringElevator", [factory](ConfigurationParsingContext &context) -> Pass * {
-			context.expectInputPasses( {1});
-			return factory->createConstructLoweringElevator(context.inputPasses[0], context.getConstructTraitType("level"));
-		});
-		registerPass("ConstructRaisingElevator", [factory](ConfigurationParsingContext &context) -> Pass * {
-			context.expectInputPasses( {1});
-			return factory->createConstructRaisingElevator(context.inputPasses[0], context.getConstructTraitType("level"));
-		});
-
-	}
+	BaseConfigurationPassRegistry(PassFactory *factory);
 
 	virtual ~BaseConfigurationPassRegistry() {}
 
