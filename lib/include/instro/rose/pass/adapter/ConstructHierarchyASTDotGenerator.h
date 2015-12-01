@@ -1,5 +1,5 @@
-#ifndef INSTRO_ROSE_RoseConstructHierarchyASTDotGenerator
-#define INSTRO_ROSE_RoseConstructHierarchyASTDotGenerator
+#ifndef INSTRO_ROSE_PASS_CONSTRUCT_HIERARCHY_AST_DOT_GENERATOR_H
+#define INSTRO_ROSE_PASS_CONSTRUCT_HIERARCHY_AST_DOT_GENERATOR_H
 
 #include <fstream>
 #include <algorithm>

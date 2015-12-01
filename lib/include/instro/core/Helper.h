@@ -1,5 +1,5 @@
-#ifndef INSTRO_STD_HELPER
-#define INSTRO_STD_HELPER
+#ifndef INSTRO_CORE_HELPER_H
+#define INSTRO_CORE_HELPER_H
 namespace std {
 
 #ifdef PROVIDE_MAKE_UNIQUE

@@ -1,5 +1,5 @@
-#ifndef ASTHELPER_H
-#define ASTHELPER_H
+#ifndef INSTRO_ROSE_UTILITY_ASTHELPER_H
+#define INSTRO_ROSE_UTILITY_ASTHELPER_H
 
 #include "rose.h"
 

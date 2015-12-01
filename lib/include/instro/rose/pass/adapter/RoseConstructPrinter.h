@@ -1,5 +1,6 @@
-#ifndef INSTRO_ROSE_RoseConstructPrinter
-#define INSTRO_ROSE_RoseConstructPrinter
+#ifndef INSTRO_ROSE_ROSE_CONSTRUCT_PRINTER_H
+#define INSTRO_ROSE_ROSE_CONSTRUCT_PRINTER_H
+
 #include "instro/core/Pass.h"
 #include "instro/rose/core/RosePassImplementation.h"
 

@@ -1,5 +1,5 @@
-#ifndef INSTRO_TOOLING_EXTENDED_CALLGRAPH
-#define INSTRO_TOOLING_EXTENDED_CALLGRAPH
+#ifndef INSTRO_TOOLING_EXTENDED_CALLGRAPH_H
+#define INSTRO_TOOLING_EXTENDED_CALLGRAPH_H
 
 #include "instro/core/ConstructSet.h"
 #include "instro/utility/Logger.h"
