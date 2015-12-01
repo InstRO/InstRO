@@ -115,44 +115,6 @@ struct CLScopeStatementPredicate : public CTPredicate {
 	}
 };
 
-struct CLStatementPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const {
-		if (isSgDeclarationStatement(n)) {
-			if (isSgVariableDeclaration(n) && DefinedVariableDeclarationPredicate()(n)) {
-				return true;	// only variable declarations with initializer
-			}
-			return false;
-		}
-		if (isSgIfStmt(n) || isSgSwitchStatement(n) || isSgDoWhileStmt(n) || isSgWhileStmt(n) || isSgForStatement(n))
-			return true;
-
-		if (isSgScopeStatement(n)) {
-			if (CLScopeStatementPredicate()(n)) {
-				return true;	// only scope statements
-			}
-			return false;
-		}
-
-		if (isSgForInitStatement(n)) {
-			return false;		// no equivalent in C/C++ semantics
-		}
-
-		if (isSgNullStatement(n) && (isSgForStatement(n->get_parent()) || isSgForInitStatement(n->get_parent()))) {
-			isSgLocatedNode(n)->set_file_info(isSgLocatedNode(n->get_parent())->get_file_info());
-			return true;
-		}
-
-		if (isSgExprStatement(n) && isSgIfStmt(n->get_parent())) {
-			return false;		// if with an expression as conditional
-		}
-
-		if (isSgStatement(n)) {
-			return true;
-		}
-		return false;
-	}
-};
-
 struct CLFunctionPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const { return isSgFunctionDefinition(n) != nullptr; }
 };
@@ -167,12 +129,44 @@ struct CLGlobalScopePredicate : public CTPredicate {
 
 struct CLSimpleStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
-		if (CLStatementPredicate()(n)) {
-			if (CLScopeStatementPredicate()(n) || CLConditionalPredicate()(n) || CLLoopPredicate()(n)) {
-				return false;
-			} else {
-				return true;
+
+		if (isSgDeclarationStatement(n)) {
+			if (isSgVariableDeclaration(n) && DefinedVariableDeclarationPredicate()(n)) {
+				return true;	// only variable declarations with initializer
 			}
+			return false;
+		}
+
+		if (isSgForInitStatement(n)) {
+			return false;		// no equivalent in C/C++ semantics
+		}
+
+		if (isSgNullStatement(n) && (isSgForStatement(n->get_parent()) || isSgForInitStatement(n->get_parent()))) {
+			// allow null statements in loop header, but set file info
+			isSgLocatedNode(n)->set_file_info(isSgLocatedNode(n->get_parent())->get_file_info());
+			return true;
+		}
+
+		if (isSgExprStatement(n) && isSgIfStmt(n->get_parent())) {
+			return false;		// if with an expression as conditional
+		}
+
+		if (isSgScopeStatement(n)) {
+			return false;
+		}
+
+		if (isSgStatement(n)) {
+			return !CLConditionalPredicate()(n) && !CLLoopPredicate()(n) && !CLFileScopePredicate()(n);
+		}
+		return false;
+	}
+};
+
+struct CLStatementPredicate : public CTPredicate {
+	bool operator()(SgNode* n) const {
+
+		if (CLConditionalPredicate()(n) || CLLoopPredicate()(n) || CLScopeStatementPredicate()(n) || CLSimpleStatementPredicate()(n)) {
+			return true;
 		}
 		return false;
 	}
@@ -276,7 +270,13 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	}
 
 	// expressions
-	void visit(SgExpression* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTExpression); }
+	void visit(SgExpression* node) {
+		if (RoseConstructLevelPredicates::CLExpressionPredicate()(node)) {
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTExpression);
+		} else {
+			generateError(node);
+		}
+	}
 
 	// this should be an error
 	void visit(SgScopeStatement* node) { generateError(node); }
