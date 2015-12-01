@@ -2,9 +2,7 @@
 #define INSTRO_TOOLING_NAMED_CONSTRUCT_ACCESS_H
 
 #include <vector>
-#include <memory>	// We need shared pointers
 #include "instro/core/ConstructSet.h"
-#include "instro/utility/exception.h"
 
 namespace InstRO {
 namespace Tooling {
@@ -56,36 +54,29 @@ class WildcardedStringMatcher : public Matcher {
 	char WILDCARDCHAR;														// The used wild card character
 };
 
+/**
+ * Every matching construct is returned. Results can be either function definitions or expressions.
+ */
 class NamedConstructAccess {
  public:
 	virtual ~NamedConstructAccess() {}
-	// CI: what could we match against
-	// a) any userdefined identifyer, e.g. variable names, function / method names, labels
-	// b) user supplied text, e.g. identifyer, but also contents of strings and comments
-	// c) raw source code
-	//
-	// There is also a difference between
-	//    1) topDown - maximal match  (i.e. the first match in a  given AST tree is only reported)
-	//    2) bottomUp - minimal match (i.e. the smallest possible match is only reported)
-	//    3) every match, i.e. every construct that matches is reported. This WILL result in one match resulting in
-	//    multiple constructs
-
-	// After fooling around with the implementation and testing some potential scenarious I consider the top-down, bottom
-	// up schematic
-	// flawed. In principle, a single selection is sufficient.
 
 	// a) any userdefined symbols, e.g. variable names, function / method names, labels
 	virtual InstRO::Core::ConstructSet getConstructsByIdentifierName(Matcher &) = 0;
-	// b) contents of strings
-	virtual InstRO::Core::ConstructSet getConstructsByUserTextStringMatch(Matcher &) = 0;
-	// c) raw source code. First all symbols, then the upward expressions, then the upward statement are matched. Last is
-	// the whole function matched.
+
+	// b) + contents of strings and comments
+	virtual InstRO::Core::ConstructSet getConstructsByUserTextStringMatch(Matcher &) {
+		throw std::string("NamedConstructAccess::getConstructsByUserTextStringMatch() is not implemented.");
+	}
+
+	// c) raw source code
 	virtual InstRO::Core::ConstructSet getConstructsByCodeMatch(Matcher &) {
-		raise_exception("Not Implemented");
-		return InstRO::Core::ConstructSet();
+		throw std::string("NamedConstructAccess::getConstructsByCodeMatch() is not implemented.");
 	}
 };
+
 }
 }
 }
+
 #endif
