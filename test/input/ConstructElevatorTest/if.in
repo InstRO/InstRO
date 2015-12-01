@@ -9,3 +9,15 @@ if.cpp:2--Function-::foo
 +Func2ExprLevelSelector
 if.cpp:3--Expression
 if.cpp:4--Expression
+
++wpToExprStmtSelector
+if.cpp:3--Expression
+if.cpp:3--ConditionalStatement
+if.cpp:4--Expression
+if.cpp:4--SimpleStatement
+if.cpp:3--ScopeStatement
+
++wpToStmtFuncSelector
+if.cpp:3--ConditionalStatement
+if.cpp:3--ScopeStatement
+if.cpp:4--SimpleStatement
