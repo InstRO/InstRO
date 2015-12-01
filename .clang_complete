@@ -1,6 +1,7 @@
 -std=c++11
 -Ilib/include
 -I/lib/include/instro
-`/work/scratch/j_lehr/_install/instro-clang-rtti/bin/llvm-config --cxxflags`
--I/home/j_lehr/all_repos/instro-llvm-clang/repo/include
+-I/test/lib
+`$CLANG_INSTALL_PATH/bin/llvm-config --cxxflags`
+-I$LLVM_SOURCE
 -I/shared/apps/boost/1.57.0/include
