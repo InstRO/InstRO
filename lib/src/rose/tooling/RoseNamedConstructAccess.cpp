@@ -1,10 +1,5 @@
-#include "rose.h"
-
-#include <memory>	// We need shared pointers
-#include <list>		 // We use List in the GrammarInterface
 #include <string>
-#include <iostream>	// The development version uses cout for debugging...
-#include "instro/core/ConstructSet.h"
+
 #include "instro/rose/core/RoseConstructSet.h"
 #include "instro/rose/tooling/RoseNamedConstructAccess.h"
 #include "instro/utility/Logger.h"
@@ -14,55 +9,49 @@ namespace Rose {
 namespace Tooling {
 namespace NamedConstructAccess {
 
-/*CI: The intend here is to match the smallest possible fragment that still qualifies.
-	If a user wants to have a "higher" construct, he can use construct elevation to get the next higher element
-*/
+InstRO::Core::ConstructSet NameMatchingASTTraversal::getResultingCS() {
+		return cs;
+	}
 
-void NameMatchingASTTraversal::select(SgNode* n) {
-	// if the node is directly an instrumentable node ...
-	if (isSgFunctionDefinition(n) || isSgVarRefExp(n) || isSgFunctionRefExp(n) || isSgMemberFunctionRefExp(n)) {
-		// get the corresponding constructset (roseProvider) and put it to the building output construct set
+void NameMatchingASTTraversal::visit(SgFunctionDefinition* n) {
+	auto candidate = n->get_declaration()->get_qualified_name().getString();
+	if (matchingObject->isMatch(candidate)) {
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(n));
 	}
 }
-
-void NameMatchingASTTraversal::preOrderVisit(SgNode* n) {
-	
-	std::string stringToMatch = generateStringToMatch(n);
-
-	// If we found a node with the right text, and the text is not zero
-	if (stringToMatch.length() > 0) {
-		logIt(DEBUG) << "NameMatchingASTTraversal::preOrderVisit:\t >" << stringToMatch << "<" << std::endl;
-
-		if (this->matchingObject->isMatch(stringToMatch)) {
-			logIt(DEBUG) << "NameMatchingASTTraversal::preOrderVisit:\t found match" << std::endl;
-			this->select(n);
+void NameMatchingASTTraversal::visit(SgVarRefExp* n) {
+	auto candidate = n->get_symbol()->get_name();
+	if (matchingObject->isMatch(candidate)) {
+		SgNode* current = n;
+		while (current!=nullptr && !isSgStatement(current)) {
+			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(current));
+			current = current->get_parent();
 		}
 	}
 }
-
-void NameMatchingASTTraversal::postOrderVisit(SgNode* n) {
-	if (preOrderMatch) {
-		if (n == nodeTracker.top())
-			nodeTracker.pop();
-	}
+void NameMatchingASTTraversal::visit(SgFunctionRefExp* n) {
+	handleFunctionRef(n->getAssociatedFunctionDeclaration(), n);
+}
+void NameMatchingASTTraversal::visit(SgTemplateFunctionRefExp* n) {
+	handleFunctionRef(n->getAssociatedFunctionDeclaration(), n);
+}
+void NameMatchingASTTraversal::visit(SgMemberFunctionRefExp* n) {
+	handleFunctionRef(n->getAssociatedMemberFunctionDeclaration(), n);
+}
+void NameMatchingASTTraversal::visit(SgTemplateMemberFunctionRefExp* n) {
+	handleFunctionRef(n->getAssociatedMemberFunctionDeclaration(), n);
+}
+void NameMatchingASTTraversal::visit(SgNode* n) {
+	// default case: nothing to do here
 }
 
-std::string NameMatchingASTTraversal::generateStringToMatch(SgNode* n) {
-	// generates a string representation of n
-	if (isSgFunctionDefinition(n)) {
-		return isSgFunctionDefinition(n)->get_declaration()->get_qualified_name().getString();
-	} else if (isSgFunctionRefExp(n)) {
-		return isSgFunctionRefExp(n)->getAssociatedFunctionDeclaration()->get_qualified_name().getString();
-	} else if (isSgMemberFunctionRefExp(n)) {
-		return isSgMemberFunctionRefExp(n)->getAssociatedMemberFunctionDeclaration()->get_qualified_name().getString();
-	} else if (isSgVarRefExp(n)) {
-		return isSgVarRefExp(n)->get_symbol()->get_name();
-	}
-
-	// If we reach this statement we know, that this node is not supported.
-	return std::string("");
+void NameMatchingASTTraversal::handleFunctionRef(SgFunctionDeclaration* associatedDecl, SgExpression* funcRef) {
+	auto candidate = associatedDecl->get_qualified_name().getString();
+		if (matchingObject->isMatch(candidate)) {
+			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(funcRef->get_parent()));
+		}
 }
+
 }
 }
 }

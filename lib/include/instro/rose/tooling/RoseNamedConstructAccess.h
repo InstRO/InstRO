@@ -1,156 +1,72 @@
 #ifndef INSTRO_ROSE_TOOLING_ROSE_NAMED_CONSTRUCT_ACCESS_H
 #define INSTRO_ROSE_TOOLING_ROSE_NAMED_CONSTRUCT_ACCESS_H
 
-#include <memory>	// We need shared pointers
-#include <list>		 // We use List in the GrammarInterface
-#include <stack>
-
-#include "instro/core/Helper.h"
-
-#include "instro/core/ConstructSet.h"
 #include "instro/tooling/NamedConstructAccess.h"
+#include "instro/core/ConstructSet.h"
 
-#include "rose.h"
+#include <rose.h>
 
 namespace InstRO {
 namespace Rose {
 namespace Tooling {
 namespace NamedConstructAccess {
-/**
-* The enum represents to which node the NamedMatcher should traverse upwards if it encounters
-* a match. Immediate say do not traverse upwards at all (XXX If we match SgName nodes, this doesn't
-* make sense at all!).
-* NextOuterExpression traverses the AST upwards until it finds the next outer SgExpression.
-* NextOuterFunctionDefinition traverses the AST upwards until the next SgFunctionDefinition node.
-* NextOuterStatement traverses upwards until the next statement node is encountered.
-* Parent simply traverses upwards one layer.
-* It is vital to keep in mind, that all subclasses of the mentioned (Expression, Statement) do
-* match this criterion, too.
-* \attention Please note that at the moment only IN_Immediate is supported
-*/
-enum IN_enum { IN_Immediate, IN_NextOuterExpression, IN_NextOuterFunctionDefinition, IN_NextOuterStatement, IN_Parent };
 
 /**
-* \brief This class matches named entities of the AST against a list of specified strings.
-*
+* \brief This class matches named entities of the AST with a given Matcher
 *
 * In this context it is crucial to know which nodes are regarded to have a meaningful name.
 * We regard these nodes as named nodes:
-* - A variable or function defining definition node (this includes member functions)
-* - A function reference expression, a member function reference expression and a variable
-*   reference expression
-* - A label statement (as labels do have names)
+* - A variable and its reference
+* - A function defining definition node (this includes member functions)
+* - A function reference contained in a function call
 *
-* \throws InstroException if traversal is started before calling init()
-*
-* \ingroup Selector
-* \author Jan-Patrick Lehr, Christian Iwainsky
+* \author Jan-Patrick Lehr, Christian Iwainsky, Roman Ness
 */
-class NameMatchingASTTraversal : public AstPrePostProcessing {
- protected:
-	InstRO::Core::ConstructSet cs;
-
+class NameMatchingASTTraversal : public ROSE_VisitorPatternDefaultBase {
  public:
-	NameMatchingASTTraversal() : csci(&cs) {}
+	NameMatchingASTTraversal(InstRO::Tooling::NamedConstructAccess::Matcher* matcher)
+			: matchingObject(matcher), cs(), csci(&cs) {}
+	~NameMatchingASTTraversal() {}
 
-	void reset() {
-		preOrderMatch = false;
-		postOrderMatch = false;
-	}
+	InstRO::Core::ConstructSet getResultingCS();
 
-	void setMatchMax() {
-		continueDescend = false;
-		preOrderMatch = true;
-		postOrderMatch = false;
-	};
-	void setMatchMin() {
-		postOrderMatch = true;
-		preOrderMatch = false;	// continueDescend does not apply
-	};
-	void setMatchAll() {
-		continueDescend = true;
-		preOrderMatch = true;
-		postOrderMatch = false;
-	};
-
-	InstRO::Core::ConstructSet matchUserIdentifier(InstRO::Tooling::NamedConstructAccess::Matcher* matcher,
-																								 SgProject* proj) {
-		matchingObject = matcher;
-		cs.clear();
-		traverseAST(proj);
-		return cs;
-	}
-	InstRO::Core::ConstructSet matchUserTextString(InstRO::Tooling::NamedConstructAccess::Matcher* matcher,
-																								 SgProject* proj) {
-		matchingObject = matcher;
-		cs.clear();
-		traverseAST(proj);
-		return cs;
-	}
-	InstRO::Core::ConstructSet matchCode(InstRO::Tooling::NamedConstructAccess::Matcher* matcher, SgProject* proj) {
-		matchingObject = matcher;
-		cs.clear();
-		traverseAST(proj);
-		return cs;
-	}
-
-	//	virtual void selectionBegin( 			SgProject*					project); /**< \brief Gets called before the selection
-	// process starts. Might be used for initialization */
-	//	virtual void selectionEnd(			SgProject*					project); /**< \brief Gets called after the selection process
-	// has finished. Might be used for cleaning up */
-	/** \brief Gets called before visiting the children of a node. Either this or postOrderVisit should be implemented.
-	 * Otherwise the selector is useless */
-	virtual void preOrderVisit(SgNode* n);
-	/** \brief Gets called after visiting the children of a node. Either this or preOrderVisit should be implemented.
-	 * Otherwise the selector is useless */
-	virtual void postOrderVisit(SgNode* n);
-
-	void traverseAST(SgNode* start) { /**< \brief Starts the traversal of the AST. */
-		traverse(start);
-	}
-
-	InstRO::Core::ConstructSet getConstructs() { return cs; }
-
-	/**
-	 * retrieves a symbol-string for the entity (function, function-ref, var-ref).
-	 */
-	std::string generateStringToMatch(SgNode* n);
+	void visit(SgFunctionDefinition* n);
+	void visit(SgVarRefExp* n);
+	void visit(SgFunctionRefExp* n);
+	void visit(SgTemplateFunctionRefExp* n);
+	void visit(SgMemberFunctionRefExp* n);
+	void visit(SgTemplateMemberFunctionRefExp* n);
+	void visit(SgNode* n);
 
  private:
-	std::stack<SgNode*> nodeTracker;
-	bool preOrderMatch,	// match first, if unsuccessfull decend afterwards
-			postOrderMatch,	// descend first, match afterwards
-			continueDescend;
+	InstRO::Core::ConstructSet cs;
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci;
-	//	IN_enum nodetypeToMark;																						 // Where to save the ASTMarker
-	InstRO::Tooling::NamedConstructAccess::Matcher* matchingObject;	// Which matcher object should be used
-	bool isInitialized;																							 // for checking if the user called init method.
-	void select(SgNode* node);
+	InstRO::Tooling::NamedConstructAccess::Matcher* matchingObject;
+
+	void handleFunctionRef(SgFunctionDeclaration* associatedDecl, SgExpression* funcRef);
 };
 
 class RoseNamedConstructAccess : public InstRO::Tooling::NamedConstructAccess::NamedConstructAccess {
- protected:
-	NameMatchingASTTraversal traversal;
-	SgProject* project;
-
  public:
-	RoseNamedConstructAccess(SgProject* proj) : project(proj){};
+	RoseNamedConstructAccess(SgProject* proj) : project(proj) {}
+
 	InstRO::Core::ConstructSet getConstructsByIdentifierName(
 			InstRO::Tooling::NamedConstructAccess::Matcher& matcher) override {
-		traversal.reset();
-		traversal.setMatchMin();
-		return traversal.matchUserIdentifier(&matcher, project);
-	};
-	InstRO::Core::ConstructSet getConstructsByUserTextStringMatch(
-			InstRO::Tooling::NamedConstructAccess::Matcher& matcher) override {
-		traversal.reset();
-		traversal.setMatchMin();
-		return traversal.matchUserTextString(&matcher, project);
-	};
+
+		NameMatchingASTTraversal gen(&matcher);
+		for (auto n : SageInterface::querySubTree<SgLocatedNode>(project, V_SgLocatedNode)) {
+			n->accept(gen);
+		}
+		return gen.getResultingCS();
+	}
+
+ private:
+	SgProject* project;
 };
-}
-}
-}
-}
+
+}	// namespace NamedConstructAccess
+}	// namespace Tooling
+}	// namespace Rose
+}	// namespace InstRO
 
 #endif
