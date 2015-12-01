@@ -6,10 +6,9 @@
 using namespace InstRO;
 using namespace InstRO::Utility;
 
-// TODO RN 2015-11: which factory methods are still missing here?
 RoseConfigurationPassRegistry::RoseConfigurationPassRegistry(InstRO::Rose::RosePassFactory *factory)
 		: BaseConfigurationPassRegistry(factory) {
-
+	// Transformers
 	registerPass("UniqueCallpathTransformer", [factory](ConfigurationParsingContext &context) -> Pass *{
 		context.expectInputPasses({1, 3});
 		if (context.inputPasses.size() == 1) {
