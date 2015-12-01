@@ -1,0 +1,5 @@
++FunctionAndStatementSelector
+
++FunctionOrStatementSelector
+foo.cpp:2--Function-::bar
+foo.cpp:4--Function-::foo

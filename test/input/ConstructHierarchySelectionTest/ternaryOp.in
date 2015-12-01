@@ -1,0 +1,9 @@
++CTFunctionSelector
+ternaryOp.cpp:1--Function-::foo
+
++CTStatementSelector
+ternaryOp.cpp:2--SimpleStatement
+
++CTExpressionSelector
+ternaryOp.cpp:2--Expression
+ternaryOp.cpp:2--Expression

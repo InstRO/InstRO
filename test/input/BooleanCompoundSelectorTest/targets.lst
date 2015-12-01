@@ -1,6 +1,6 @@
-foo
-loop2
 expressions
-if
+foo
 identifier
-ternaryOp
+if
+loop
+scopes

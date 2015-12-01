@@ -1,0 +1,9 @@
++FunctionAndStatementSelector
+
++FunctionOrStatementSelector
+identifier.cpp:2--Function-::foobar
+identifier.cpp:4--SimpleStatement
+identifier.cpp:7--Function-::bar
+identifier.cpp:8--SimpleStatement
+identifier.cpp:9--SimpleStatement
+identifier.cpp:10--SimpleStatement
