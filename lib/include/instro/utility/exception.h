@@ -1,5 +1,5 @@
-#ifndef INSTRO_UTILITY_EXCEPTION
-#define INSTRO_UTILITY_EXCEPTION
+#ifndef INSTRO_UTILITY_EXCEPTION_H
+#define INSTRO_UTILITY_EXCEPTION_H
 
 #include "instro/config.h"
 

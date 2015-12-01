@@ -1,5 +1,5 @@
-#ifndef LIB_INCLUDE_INSTRO_ROSE_CORE_CONSTRUCTSET_H_
-#define LIB_INCLUDE_INSTRO_ROSE_CORE_CONSTRUCTSET_H_
+#ifndef INSTRO_ROSE_CORE_CONSTRUCTSET_H_
+#define INSTRO_ROSE_CORE_CONSTRUCTSET_H_
 /* Base Implementation of the Construct for ROSE.
 	 The RoseConstructProvider produces constructs based on the AST.
 */

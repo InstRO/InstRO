@@ -53,7 +53,7 @@ def runApply(arguments):
         for fr in failedRuns:
             print("|--- " + fr[0] + "\t" + fr[1])
         print("|=== End report ===\n")
-
+        return -1
 
 # we use two command line parameters to get build and source directory
 args = cmdParser.parse_args()

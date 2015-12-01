@@ -1,5 +1,5 @@
-#ifndef INSTRO_TOOLING_ControlFlowGraphNode
-#define INSTRO_TOOLING_ControlFlowGraphNode
+#ifndef INSTRO_TOOLING_CONTROLFLOWGRAPH_H
+#define INSTRO_TOOLING_CONTROLFLOWGRAPH_H
 
 #include <vector>
 

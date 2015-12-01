@@ -1,5 +1,5 @@
-#ifndef INSTRO_ROSE_PASSFACTORY_H
-#define INSTRO_ROSE_PASSFACTORY_H
+#ifndef INSTRO_ROSE_ROSEPASSFACTORY_H
+#define INSTRO_ROSE_ROSEPASSFACTORY_H
 
 #include "instro/core/Pass.h"
 #include "instro/core/PassFactory.h"

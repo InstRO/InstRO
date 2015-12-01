@@ -1,5 +1,5 @@
-#ifndef INSTRO_SINGLETON_H
-#define INSTRO_SINGLETON_H
+#ifndef INSTRO_CORE_SINGLETON_H
+#define INSTRO_CORE_SINGLETON_H
 
 
 namespace InstRO {

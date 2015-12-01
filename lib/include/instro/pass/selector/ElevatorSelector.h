@@ -1,3 +1,5 @@
+#ifndef INSTRO_PASS_SELECTOR_ELEVATORSELECTOR_H
+#define INSTRO_PASS_SELECTOR_ELEVATORSELECTOR_H
 
 #include "instro/core/ConstructSet.h"
 #include "instro/core/PassImplementation.h"
@@ -53,3 +55,5 @@ public:
 
 }
 }
+
+#endif
