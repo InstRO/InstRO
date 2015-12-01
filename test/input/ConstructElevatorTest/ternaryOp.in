@@ -1,0 +1,17 @@
++Func2StmtLevelSelector
+ternaryOp.cpp:2--SimpleStatement
+
++Stmt2FuncLevelSelector
+ternaryOp.cpp:1--Function-::foo
+
++Func2ExprLevelSelector
+ternaryOp.cpp:2--Expression
+ternaryOp.cpp:2--Expression
+
++wpToExprStmtSelector
+ternaryOp.cpp:2--Expression
+ternaryOp.cpp:2--Expression
+ternaryOp.cpp:2--SimpleStatement
+
++wpToStmtFuncSelector
+ternaryOp.cpp:2--SimpleStatement

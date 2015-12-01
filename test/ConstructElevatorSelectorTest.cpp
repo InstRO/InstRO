@@ -33,6 +33,18 @@ int main(int argc, char **argv) {
 	auto funcToExprLvlSelector = factory->createConstructLoweringElevator(funcLvlSelector, CTrait::CTExpression);
 	factory->createTestAdapter(funcToExprLvlSelector, "Func2ExprLevelSelector", filename);
 
+	auto stmtClassSelector = factory->createConstructClassSelector(CTrait::CTStatement);
+	auto exprClassSelector = factory->createConstructClassSelector(CTrait::CTExpression);
+	auto booleanOrSelector = factory->createBooleanOrSelector(stmtClassSelector, exprClassSelector);
+
+	auto wpToExprStmtSelector =
+			factory->createConstructCroppingElevator(booleanOrSelector, CTrait::CTExpression, CTrait::CTStatement);
+	auto wpToStmtFuncSelector =
+			factory->createConstructCroppingElevator(booleanOrSelector, CTrait::CTStatement, CTrait::CTFunction);
+
+	factory->createTestAdapter(wpToExprStmtSelector, "wpToExprStmtSelector", filename);
+	factory->createTestAdapter(wpToStmtFuncSelector, "wpToStmtFuncSelector", filename);
+
 #ifdef DEBUG
 	factory->createConstructPrinter(funcToStmtLvlSelector);
 	factory->creaeConstructPrinter(stmtToFuncLvlSelector);
