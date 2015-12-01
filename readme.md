@@ -22,20 +22,26 @@ The following Passes are currently planned [ ] and implemented [x] in InstRO.
 - [x] ConstructPrinter (Adapter)
 - [x] RoseStrategyBasedAdapter
 
-## Dependencies
-
+## Building InstRO
+### Dependencies
 Internally we use the following version of compilers and libraries for building InstRO and ROSE.
-
-### Building InstRO
 - GCC 4.8.5
 - Boost 1.57.0
 - automake 1.14
 - autoconf 2.69
 - libtool 2.4
 - RapidJSON (github master head)
+- Rose (preferably obtained from the InstRO/rose fork)
+- Python 2.7.10
+
+### Build Steps
+To build InstRO, first build and install Rose. Secondly, build and install Boost.
+Run the 'make-config' script located in the top level directory, which builds the configure file.
+Then, configure with providing the Boost and the Rose paths.
+Finally, run 'make'.
 
 ### Testing InstRO
-- Python 2.7.10
+Run 'make check' in the top level build directory.
 
 ### Building with Clang
 Support for the Clang compiler is work in progress.
