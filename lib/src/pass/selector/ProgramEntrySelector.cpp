@@ -12,7 +12,7 @@ namespace InstRO {
 namespace Selector {
 
 void ProgramEntrySelector::execute() {
-	std::vector<std::string> mainString = { std::string("main") };
+	std::vector<std::string> mainString = { std::string("main"), std::string("::main")};
 	InstRO::Tooling::NamedConstructAccess::WildcardedStringMatcher mainMatcher(mainString);
 
 	auto analysisManager = getInstrumentorInstance()->getAnalysisManager();
@@ -23,7 +23,7 @@ void ProgramEntrySelector::execute() {
 	auto allFunctions = analysisManager->getGrammarInterface()->getConstructsByClass(
 			InstRO::Core::ConstructTraitType::CTFunction);
 
-	// intersect everything called "main" with all functions
+	// intersect everything called "*main" with all functions
 	outputSet = allFunctions.intersect(csByNameMain);
 }
 
