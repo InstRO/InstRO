@@ -51,6 +51,7 @@ CORE_HFILES= \
 ./include/instro/pass/selector/ElevatorSelector.h \
 ./include/instro/pass/selector/BooleanCompoundSelector.h \
 ./include/instro/pass/adapter/DefaultInstrumentationAdapter.h \
+./include/instro/pass/adapter/ConstructHierarchyASTDotGenerator.h \
 ./include/instro/utility/Logger.h
 
 CORE_SFILES= \
@@ -106,7 +107,6 @@ ROSE_HFILES= \
 ./include/instro/rose/tooling/RoseConstructClassInterface.h \
 ./include/instro/rose/tooling/RoseNamedConstructAccess.h \
 ./include/instro/rose/tooling/RoseTransformationInterface.h \
-./include/instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h \
 ./include/instro/rose/utility/FunctionRenamer.h \
 ./include/instro/rose/utility/ScopeStackGuard.hpp \
 ./include/instro/rose/utility/ASTHelper.h \

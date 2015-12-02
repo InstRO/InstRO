@@ -6,9 +6,7 @@
 #include <memory>	// Shared pointers
 #include <vector>
 #include <set>
-#include <functional>// std::less
-
-
+#include <functional>	// std::less
 
 namespace InstRO {
 namespace Core {
@@ -16,7 +14,6 @@ class Construct;
 class ConstructSet;
 }	// namespace Core
 }	// namespace InstRO
-
 
 /*
  * RN: 2015-11
@@ -26,13 +23,12 @@ class ConstructSet;
  * XXX algorithms using other function object classes (e.g. std::equal_to, std::greater) will not work on ConstructSets
  */
 namespace std {
-template<>
+template <>
 struct less<std::shared_ptr<InstRO::Core::Construct> > {
 	bool operator()(const std::shared_ptr<InstRO::Core::Construct>& a,
 									const std::shared_ptr<InstRO::Core::Construct>& b) const;
 };
 }	// namespace std
-
 
 namespace InstRO {
 
@@ -242,16 +238,15 @@ class Construct {
 	friend bool operator==(const std::shared_ptr<Construct>& a, const std::shared_ptr<Construct>& b) {
 		return a->getID() == b->getID();
 	}
-
 };
 
 class DummyConstruct : public Construct {
-private:
+ private:
 	DummyConstruct() : Construct(ConstructTraitType::CTNoTraits) {}
 	DummyConstruct(DummyConstruct const&) = delete;
-  void operator=(DummyConstruct const&) = delete;
+	void operator=(DummyConstruct const&) = delete;
 
-public:
+ public:
 	static std::shared_ptr<DummyConstruct> getInstance() {
 		static std::shared_ptr<DummyConstruct> instance = std::shared_ptr<DummyConstruct>(new DummyConstruct());
 		return instance;
@@ -298,9 +293,7 @@ class ConstructSet {
 
  private:
 	// for std::inserter. the alternative would have been to provide an inserter in the compiler interface
-	iterator insert(iterator it, const value_type& val) {
-		return constructs.insert(it, val);
-	}
+	iterator insert(iterator it, const value_type& val) { return constructs.insert(it, val); }
 
  private:
 	void put(const value_type& construct);
@@ -331,17 +324,13 @@ class ConstructSet {
 	}
 };
 
-
-template<typename T>
+template <typename T>
 struct ConstructHasher {
-	size_t operator()(T const &c){
-		return c.getID();
-	}
+	size_t operator()(T const& c) { return c.getID(); }
 };
 
 }	// End Namespace Core
 }	// End namespace InstRO
-
 
 InstRO::Core::ConstructTraitType& operator++(InstRO::Core::ConstructTraitType& f);
 InstRO::Core::ConstructTraitType& operator--(InstRO::Core::ConstructTraitType& f);

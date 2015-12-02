@@ -1,7 +1,6 @@
 #include "instro/rose/RosePassFactory.h"
 
 #include "instro/rose/pass/transformer/UniqueCallpathTransformer.h"
-#include "instro/rose/pass/adapter/ConstructHierarchyASTDotGenerator.h"
 #include "instro/rose/pass/adapter/RoseStrategyBasedAdapter.h"
 #include "instro/rose/pass/adapter/RoseConstructPrinter.h"
 #include "instro/rose/pass/adapter/RoseDefaultInstrumentationAdapter.h"
@@ -43,15 +42,6 @@ InstRO::Pass* RosePassFactory::createMatthiasZoellnerLoopInstrumentationAdapter(
 	passManager->registerPass(newPass);
 	return newPass;
 }
-
-InstRO::Pass* RosePassFactory::createConstructHierarchyASTDotGenerator(InstRO::Pass* pass, std::string fileName) {
-	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructHierarchyASTDotGenerator(pass, fileName));
-	newPass->setPassName("InstRO::Rose::Adapter::ConstructHierarchyASTDotGenerator.h");
-	passManager->registerPass(newPass);
-	return newPass;
-}
-
-
 
 InstRO::Pass* RosePassFactory::createUniqueCallpathTransformer(InstRO::Pass* input) {
 	InstRO::Pass* newPass = new InstRO::Pass(new Transformer::UniqueCallpathTransformer(input));
