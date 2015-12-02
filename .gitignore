@@ -1,9 +1,14 @@
 # objects
-lib/src/**/*.o
-lib/**/*.a
+*.o
+*.a
+*.la
+*.lo
 
 .deps
 .dirstamp
+
+#tests
+test/*Test
 
 # all those magic
 config/*
@@ -14,7 +19,9 @@ lib/include/instro/config.h
 
 ./config*
 #!configure.ac
-#!lib/include/instro/config.h.in
+config.h.in
+configure
+configure.scan
 
 # whatever all of these do
 aclocal.m4
@@ -38,6 +45,7 @@ rose_*.*
 # eclipse
 .project
 .cproject
+.settings/
 
 # generated documentation
 !docs/Makefile
