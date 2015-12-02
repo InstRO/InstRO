@@ -1,5 +1,5 @@
-#ifndef INSTRO_ROSE_FUNCTION_WRAPPER_H
-#define INSTRO_ROSE_FUNCTION_WRAPPER_H
+#ifndef INSTRO_ROSE_ADAPTER_ROSE_FUNCTION_WRAPPER_H
+#define INSTRO_ROSE_ADAPTER_ROSE_FUNCTION_WRAPPER_H
 
 #include "instro/core/Pass.h"
 #include "instro/rose/core/RosePassImplementation.h"
@@ -66,7 +66,7 @@ namespace Transformer {
 /// function!
 ///
 /// \author Simon Reuß
-class FunctionWrapper : public RosePassImplementation {
+class RoseFunctionWrapper : public RosePassImplementation {
  public:
 	/// Alias for the functor type used to generate the name of the function called inside the wrapper.
 	typedef std::function<std::string(const std::string &)> NameTransformer;
@@ -82,7 +82,7 @@ class FunctionWrapper : public RosePassImplementation {
 	/// \arg input A pass which specifies the functions for which wrappers are created
 	/// \arg nameTransformer A functor which determines the name of the function which is called in the wrapper depending
 	/// on the name of the original function
-	FunctionWrapper(InstRO::Pass *input, NameTransformer nameTransformer);
+	RoseFunctionWrapper(InstRO::Pass *input, NameTransformer nameTransformer);
 
 	/// Constructs a new FunctionWrapper instance which generates wrappers that call a function specified by the
 	/// NameTransformer.
@@ -93,10 +93,10 @@ class FunctionWrapper : public RosePassImplementation {
 	/// on the name of the original function
 	/// \arg definitionPrefix The original function definition will be renamed according to this prefix
 	/// \arg wrapperPrefix The prefix which gets applied to the name of every generated wrapper
-	FunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, NameTransformer nameTransformer,
-									const std::string &definitionPrefix, const std::string &wrapperPrefix);
+	RoseFunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, NameTransformer nameTransformer,
+											const std::string &definitionPrefix, const std::string &wrapperPrefix);
 
-	virtual ~FunctionWrapper();
+	virtual ~RoseFunctionWrapper();
 
 	virtual void init() override;
 	virtual void execute() override;
@@ -161,13 +161,13 @@ class FunctionWrapper : public RosePassImplementation {
 	SgExprListExp *buildFunctionCallArguments(const SgInitializedNamePtrList *argList);
 };
 
-/// \brief FunctionWrapper which wraps MPI functions by calling the corresponding PMPI function inside the wrapper.
+/// \brief RoseFunctionWrapper which wraps MPI functions by calling the corresponding PMPI function inside the wrapper.
 /// \author Simon Reuß
-class MPIFunctionWrapper : public FunctionWrapper {
+class RoseMPIFunctionWrapper : public RoseFunctionWrapper {
  public:
-	MPIFunctionWrapper(InstRO::Pass *input);
-	MPIFunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, const std::string &definitionPrefix,
-										 const std::string &wrapperPrefix);
+	RoseMPIFunctionWrapper(InstRO::Pass *input);
+	RoseMPIFunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, const std::string &definitionPrefix,
+												 const std::string &wrapperPrefix);
 
 	/// \brief Functor which transforms MPI function names to their corresponding PMPI name
 	/// by prepending a 'P' to the original name.
@@ -183,4 +183,4 @@ class MPIFunctionWrapper : public FunctionWrapper {
 }
 }
 }
-#endif	// INSTRO_ROSE_FUNCTION_WRAPPER_H
+#endif	// INSTRO_ROSE_ADAPTER_ROSE_FUNCTION_WRAPPER_H

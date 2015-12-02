@@ -5,8 +5,7 @@
 #include "instro/core/PassFactory.h"
 #include "instro/core/PassManager.h"
 #include "instro/rose/core/RosePassImplementation.h"
-
-#include "instro/rose/pass/transformer/FunctionWrapper.h"
+#include "instro/rose/pass/transformer/RoseFunctionWrapper.h"
 
 #include <rose.h>
 
@@ -25,21 +24,22 @@ class RosePassFactory : public InstRO::PassFactory {
 
 	/* ROSE ONLY */
 
-	// UniqueCallpathTransformer
-	InstRO::Pass* createUniqueCallpathTransformer(Pass* input);
-	InstRO::Pass* createUniqueCallpathTransformer(Pass* input, Pass* root, Pass* active);
+	// RoseUniqueCallpathTransformer
+	InstRO::Pass* createRoseUniqueCallpathTransformer(Pass* input);
+	InstRO::Pass* createRoseUniqueCallpathTransformer(Pass* input, Pass* root, Pass* active);
 
-	// FunctionWrapper
-	InstRO::Pass* createFunctionWrapper(InstRO::Pass* input,
-																			InstRO::Rose::Transformer::FunctionWrapper::NameTransformer nameTransformer);
-	InstRO::Pass* createFunctionWrapper(InstRO::Pass* input, InstRO::Pass* renaming,
-																			InstRO::Rose::Transformer::FunctionWrapper::NameTransformer nameTransformer,
-																			const std::string& definitionPrefix, const std::string& wrapperPrefix);
-	InstRO::Pass* createMPIFunctionWrapper(InstRO::Pass* input);
-	InstRO::Pass* createMPIFunctionWrapper(InstRO::Pass* input, InstRO::Pass* renaming,
-																				 const std::string& definitionPrefix, const std::string& wrapperPrefix);
+	// RoseFunctionWrapper
+	InstRO::Pass* createRoseFunctionWrapper(
+			InstRO::Pass* input, InstRO::Rose::Transformer::RoseFunctionWrapper::NameTransformer nameTransformer);
+	InstRO::Pass* createRoseFunctionWrapper(
+			InstRO::Pass* input, InstRO::Pass* renaming,
+			InstRO::Rose::Transformer::RoseFunctionWrapper::NameTransformer nameTransformer,
+			const std::string& definitionPrefix, const std::string& wrapperPrefix);
+	InstRO::Pass* createRoseMPIFunctionWrapper(InstRO::Pass* input);
+	InstRO::Pass* createRoseMPIFunctionWrapper(InstRO::Pass* input, InstRO::Pass* renaming,
+																						 const std::string& definitionPrefix, const std::string& wrapperPrefix);
 
-	InstRO::Pass* createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass* pass);
+	InstRO::Pass* createRoseMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass* pass);
 };
 }	// namespace Rose
 }	// namespace InstRO
