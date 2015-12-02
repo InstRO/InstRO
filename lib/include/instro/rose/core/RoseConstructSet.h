@@ -1,23 +1,15 @@
 #ifndef INSTRO_ROSE_CORE_CONSTRUCTSET_H_
 #define INSTRO_ROSE_CORE_CONSTRUCTSET_H_
-/* Base Implementation of the Construct for ROSE.
-	 The RoseConstructProvider produces constructs based on the AST.
-*/
 
-#include <iostream>
-#include <map>
-#include <boost/algorithm/string.hpp>
-
-#include <cassert>
+#include "instro/core/ConstructSet.h"
+#include "instro/utility/Logger.h"
 
 #include "rose.h"
 
-#include "instro/core/ConstructSet.h"
-#include "instro/utility/exception.h"
-
-//#define INSTRO_LOG_LEVEL DEBUG
-
-#include "instro/utility/Logger.h"
+#include <boost/algorithm/string.hpp>
+#include <map>
+#include <iostream>
+#include <cassert>
 
 namespace InstRO {
 namespace Rose {
@@ -33,7 +25,7 @@ struct CTPredicate {
 };
 
 struct DefinedVariableDeclarationPredicate {
-	///XXX that is so dumb, there has to be an easier way
+	/// XXX that is so dumb, there has to be an easier way
 	bool operator()(SgNode* n) const {
 		auto initNames = isSgVariableDeclaration(n)->get_variables();
 		return initNames[0]->get_initptr() != nullptr;
@@ -129,7 +121,6 @@ struct CLGlobalScopePredicate : public CTPredicate {
 
 struct CLSimpleStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
-
 		if (isSgDeclarationStatement(n)) {
 			if (isSgVariableDeclaration(n) && DefinedVariableDeclarationPredicate()(n)) {
 				return true;	// only variable declarations with initializer
@@ -138,7 +129,7 @@ struct CLSimpleStatementPredicate : public CTPredicate {
 		}
 
 		if (isSgForInitStatement(n)) {
-			return false;		// no equivalent in C/C++ semantics
+			return false;	// no equivalent in C/C++ semantics
 		}
 
 		if (isSgNullStatement(n) && (isSgForStatement(n->get_parent()) || isSgForInitStatement(n->get_parent()))) {
@@ -148,7 +139,7 @@ struct CLSimpleStatementPredicate : public CTPredicate {
 		}
 
 		if (isSgExprStatement(n) && isSgIfStmt(n->get_parent())) {
-			return false;		// if with an expression as conditional
+			return false;	// if with an expression as conditional
 		}
 
 		if (isSgScopeStatement(n)) {
@@ -164,8 +155,8 @@ struct CLSimpleStatementPredicate : public CTPredicate {
 
 struct CLStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
-
-		if (CLConditionalPredicate()(n) || CLLoopPredicate()(n) || CLScopeStatementPredicate()(n) || CLSimpleStatementPredicate()(n)) {
+		if (CLConditionalPredicate()(n) || CLLoopPredicate()(n) || CLScopeStatementPredicate()(n) ||
+				CLSimpleStatementPredicate()(n)) {
 			return true;
 		}
 		return false;
@@ -175,7 +166,7 @@ struct CLStatementPredicate : public CTPredicate {
 struct CTWrappableStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		if (isSgReturnStmt(n)) {
-			return false;		// return stmts are not wrappable
+			return false;	// return stmts are not wrappable
 		}
 		return (isSgBasicBlock(n->get_parent()) != nullptr);
 	}
@@ -192,7 +183,6 @@ struct ConstructPredicate : public CTPredicate {
 					 CLStatementPredicate()(n) || CLExpressionPredicate()(n);
 	}
 };
-
 
 //// TODO actually use that mechanism
 CTPredicate getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType);
@@ -295,14 +285,15 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	void generateError(SgNode* node) {
 		ct = InstRO::Core::ConstructTraitType::CTNoTraits;
-		logIt(INFO) << "ConstructGenerator: Skipped SgNode " << node->class_name() << "\t"
-							<< node->unparseToString() << std::endl;
+		logIt(INFO) << "ConstructGenerator: Skipped SgNode " << node->class_name() << "\t" << node->unparseToString()
+								<< std::endl;
 	}
 };
 
 class RoseConstruct : public InstRO::Core::Construct {
  public:
-	RoseConstruct(SgNode* const sgnode, InstRO::Core::ConstructTrait traits) : InstRO::Core::Construct(traits), node(sgnode) {}
+	RoseConstruct(SgNode* const sgnode, InstRO::Core::ConstructTrait traits)
+			: InstRO::Core::Construct(traits), node(sgnode) {}
 	virtual ~RoseConstruct() {}
 
 	virtual size_t getID() const override { return reinterpret_cast<size_t>(node); }
@@ -311,7 +302,7 @@ class RoseConstruct : public InstRO::Core::Construct {
 	// we construct the identification as follows:
 	// filename:startline--ConstructTrait[-functionName]
 	std::string getIdentifier() const;
-	std::string generateConstructIdentifier() const;
+	std::string generateIntelligentConstructClass() const;
 
 	virtual std::string toString() const override {
 		return "RoseConstruct: " + node->class_name() + ": " + node->unparseToString();
@@ -379,7 +370,10 @@ class RoseConstructProvider {
 		return mapping[fileInfo];
 	}
 
-	/** XXX this method does no checks on the SgNode! */
+	/**
+	 * If there is no construct for a node a dummy construct is returned.
+	 * It can be safely inserted into construct sets without effect.
+	 */
 	std::shared_ptr<InstRO::Core::Construct> getConstruct(SgNode* const node) {
 		if (node == nullptr) {
 			throw std::string("RoseConstructProvider: attempted to getConstruct for nullptr");
@@ -416,4 +410,4 @@ std::shared_ptr<InstRO::Rose::Core::RoseConstruct> toRoseConstruct(std::shared_p
 }	// namespace Rose
 }	// Namespace InstRO
 
-#endif /* LIB_INCLUDE_INSTRO_V5_PREVIEW_CONSTRUCTSET_H_ */
+#endif /* INSTRO_ROSE_CORE_CONSTRUCTSET_H_ */

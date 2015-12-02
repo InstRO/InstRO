@@ -1,17 +1,15 @@
-#include <string>
-
-#include "instro/rose/core/RoseConstructSet.h"
 #include "instro/rose/tooling/RoseNamedConstructAccess.h"
+#include "instro/rose/core/RoseConstructSet.h"
 #include "instro/utility/Logger.h"
+
+#include <string>
 
 namespace InstRO {
 namespace Rose {
 namespace Tooling {
 namespace NamedConstructAccess {
 
-InstRO::Core::ConstructSet NameMatchingASTTraversal::getResultingCS() {
-		return cs;
-	}
+InstRO::Core::ConstructSet NameMatchingASTTraversal::getResultingCS() { return cs; }
 
 void NameMatchingASTTraversal::visit(SgFunctionDefinition* n) {
 	auto candidate = n->get_declaration()->get_qualified_name().getString();
@@ -22,8 +20,9 @@ void NameMatchingASTTraversal::visit(SgFunctionDefinition* n) {
 void NameMatchingASTTraversal::visit(SgVarRefExp* n) {
 	auto candidate = n->get_symbol()->get_name();
 	if (matchingObject->isMatch(candidate)) {
+		// insert all enclosing expressions until you encounter the first enclosing statement
 		SgNode* current = n;
-		while (current!=nullptr && !isSgStatement(current)) {
+		while (current != nullptr && !isSgStatement(current)) {
 			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(current));
 			current = current->get_parent();
 		}
@@ -47,12 +46,12 @@ void NameMatchingASTTraversal::visit(SgNode* n) {
 
 void NameMatchingASTTraversal::handleFunctionRef(SgFunctionDeclaration* associatedDecl, SgExpression* funcRef) {
 	auto candidate = associatedDecl->get_qualified_name().getString();
-		if (matchingObject->isMatch(candidate)) {
-			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(funcRef->get_parent()));
-		}
+	if (matchingObject->isMatch(candidate)) {
+		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(funcRef->get_parent()));
+	}
 }
 
-}
-}
-}
-}	// Cose the namespaces
+}	// namespace NamedConstructAccess
+}	// namespace Tooling
+}	// namespace Rose
+}	// namespace InstRO
