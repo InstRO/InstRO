@@ -1,5 +1,4 @@
-#include "instro/rose/pass/transformer/UniqueCallpathTransformer.h"
-
+#include "../../../../include/instro/rose/pass/transformer/RoseUniqueCallpathTransformer.h"
 #include "instro/rose/utility/FunctionRenamer.h"
 
 #include "instro/core/Instrumentor.h"
@@ -29,21 +28,22 @@ using namespace InstRO::Core;
 using namespace InstRO::Rose;
 using namespace InstRO::Rose::Transformer;
 
-UniqueCallpathTransformer::UniqueCallpathTransformer(InstRO::Pass *pass)
-		: UniqueCallpathTransformer(pass, nullptr, nullptr) {}
+RoseUniqueCallpathTransformer::RoseUniqueCallpathTransformer(InstRO::Pass *pass)
+		: RoseUniqueCallpathTransformer(pass, nullptr, nullptr) {}
 
-UniqueCallpathTransformer::UniqueCallpathTransformer(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active)
+RoseUniqueCallpathTransformer::RoseUniqueCallpathTransformer(InstRO::Pass *pass, InstRO::Pass *root,
+																														 InstRO::Pass *active)
 		: RosePassImplementation(createChannelConfig(pass, root, active)),
 			inputPass(pass),
 			rootPass(root),
 			activePass(active),
 			callGraph(nullptr) {}
 
-UniqueCallpathTransformer::~UniqueCallpathTransformer() {}
+RoseUniqueCallpathTransformer::~RoseUniqueCallpathTransformer() {}
 
-InstRO::Core::ChannelConfiguration UniqueCallpathTransformer::createChannelConfig(InstRO::Pass *pass,
-																																									InstRO::Pass *root,
-																																									InstRO::Pass *active) {
+InstRO::Core::ChannelConfiguration RoseUniqueCallpathTransformer::createChannelConfig(InstRO::Pass *pass,
+																																											InstRO::Pass *root,
+																																											InstRO::Pass *active) {
 	std::vector<InstRO::Pass *> passes{pass};
 	if (root) {
 		passes.push_back(root);
@@ -56,7 +56,7 @@ InstRO::Core::ChannelConfiguration UniqueCallpathTransformer::createChannelConfi
 																						::InstRO::Core::ConstructTraitType::CTFunction);
 }
 
-UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::retrieveInputNodes(InstRO::Pass *pass) {
+RoseUniqueCallpathTransformer::NodeSet RoseUniqueCallpathTransformer::retrieveInputNodes(InstRO::Pass *pass) {
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(pass->getOutput());
 	NodeSet nodes;
 	nodes.reserve(cs.size());
@@ -66,14 +66,14 @@ UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::retrieveInputNodes
 		} else {
 			auto rc = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
 			logIt(ERROR) << "Failed to get call graph node for " << SageInterface::get_name(rc->getNode()) << " ("
-								<< rc->getNode()->class_name() << ")" << std::endl;
+									 << rc->getNode()->class_name() << ")" << std::endl;
 		}
 	}
 
 	return nodes;
 }
 
-InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *UniqueCallpathTransformer::getMainFunctionNode() {
+InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *RoseUniqueCallpathTransformer::getMainFunctionNode() {
 	if (SgFunctionDeclaration *mainDecl = SageInterface::findMain(SageInterface::getProject())) {
 		if (SgFunctionDefinition *mainDef = mainDecl->get_definition()) {
 			ConstructSet mainCS(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(mainDef));
@@ -90,7 +90,8 @@ InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *UniqueCallpathTransfo
 	}
 }
 
-UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::getSuccessorFunctions(ExtendedCallGraphNode *node) {
+RoseUniqueCallpathTransformer::NodeSet RoseUniqueCallpathTransformer::getSuccessorFunctions(
+		ExtendedCallGraphNode *node) {
 	NodeSet result;
 	auto successors = callGraph->getSuccessors(node);
 	result.reserve(successors.size());
@@ -111,7 +112,7 @@ UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::getSuccessorFuncti
 	return result;
 }
 
-UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::getPredecessorFunctions(
+RoseUniqueCallpathTransformer::NodeSet RoseUniqueCallpathTransformer::getPredecessorFunctions(
 		InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *node) {
 	NodeSet result;
 	auto predecessors = callGraph->getPredecessors(node);
@@ -133,7 +134,7 @@ UniqueCallpathTransformer::NodeSet UniqueCallpathTransformer::getPredecessorFunc
 	return result;
 }
 
-SgFunctionDeclaration *UniqueCallpathTransformer::getFunDeclFromNode(ExtendedCallGraphNode *node) {
+SgFunctionDeclaration *RoseUniqueCallpathTransformer::getFunDeclFromNode(ExtendedCallGraphNode *node) {
 	ConstructSet cs = node->getAssociatedConstructSet();
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci(&cs);
 	for (auto construct : csci) {
@@ -150,7 +151,7 @@ SgFunctionDeclaration *UniqueCallpathTransformer::getFunDeclFromNode(ExtendedCal
 	throw std::string("Failed to extract function declaration from call graph node");
 }
 
-void UniqueCallpathTransformer::execute() {
+void RoseUniqueCallpathTransformer::execute() {
 	// get the call graph
 	callGraph = getInstrumentorInstance()->getAnalysisManager()->getECG();
 
@@ -209,7 +210,7 @@ void UniqueCallpathTransformer::execute() {
 		// only active nodes may be transformed (if enabled)
 		if (!activeNodes.empty() && activeNodes.find(entry.first) == activeNodes.end()) {
 			logIt(WARN) << "Cannot create unique call path because function " << SageInterface::get_name(funDecl)
-								<< " is not considered 'active'" << std::endl;
+									<< " is not considered 'active'" << std::endl;
 			continue;
 		}
 
@@ -218,7 +219,7 @@ void UniqueCallpathTransformer::execute() {
 		if (!funDecl || !funDecl->get_definition()) {
 			funDecl = getFunDeclFromNode(entry.first);
 			logIt(WARN) << "Cannot duplicate function " << SageInterface::get_name(funDecl)
-								<< " because no definition is available" << std::endl;
+									<< " because no definition is available" << std::endl;
 			continue;
 		}
 
@@ -235,8 +236,8 @@ void UniqueCallpathTransformer::execute() {
 	callGraph = nullptr;
 }
 
-void UniqueCallpathTransformer::findCandidates(const NodeSet &markedNodes, NodeDepthMap &candidates,
-																							 NodeSet &cycleNodes) {
+void RoseUniqueCallpathTransformer::findCandidates(const NodeSet &markedNodes, NodeDepthMap &candidates,
+																									 NodeSet &cycleNodes) {
 	NodeList localPath;
 
 	// start a depth first search starting at each root and update candidates if a marked node appears
@@ -307,7 +308,7 @@ void UniqueCallpathTransformer::findCandidates(const NodeSet &markedNodes, NodeD
 	}
 }
 
-void UniqueCallpathTransformer::updateCandidates(NodeDepthMap &candidates, const NodeList &path) {
+void RoseUniqueCallpathTransformer::updateCandidates(NodeDepthMap &candidates, const NodeList &path) {
 	logIt(DEBUG) << "Found path: ";
 	for (NodeDepthMap::mapped_type i = 0; i < path.size(); ++i) {
 		// check whether node is a candidate (has more than one predecessor)
@@ -327,16 +328,18 @@ void UniqueCallpathTransformer::updateCandidates(NodeDepthMap &candidates, const
 	logIt(DEBUG) << std::endl;
 }
 
-std::string UniqueCallpathTransformer::generateCloneName(SgFunctionDeclaration *caller, SgFunctionDeclaration *callee) {
+std::string RoseUniqueCallpathTransformer::generateCloneName(SgFunctionDeclaration *caller,
+																														 SgFunctionDeclaration *callee) {
 	return callee->get_name().getString() + "_ucp_" + caller->get_name().getString();
 }
 
-void UniqueCallpathTransformer::addNodeToCS(InstRO::InfrastructureInterface::ConstructSetCompilerInterface &csci,
-																						SgNode *node) {
+void RoseUniqueCallpathTransformer::addNodeToCS(InstRO::InfrastructureInterface::ConstructSetCompilerInterface &csci,
+																								SgNode *node) {
 	csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
 }
 
-void UniqueCallpathTransformer::duplicate(ExtendedCallGraphNode *node, NodeFunctionDeclarationMap &duplicatedNodes) {
+void RoseUniqueCallpathTransformer::duplicate(ExtendedCallGraphNode *node,
+																							NodeFunctionDeclarationMap &duplicatedNodes) {
 	// retrieve the defining function declaration for the node
 	SgFunctionDeclaration *funDecl = isSgFunctionDeclaration(getFunDeclFromNode(node)->get_definingDeclaration());
 
@@ -393,8 +396,9 @@ void UniqueCallpathTransformer::duplicate(ExtendedCallGraphNode *node, NodeFunct
 	}
 }
 
-SgFunctionDeclaration *UniqueCallpathTransformer::cloneFunction(SgFunctionDeclaration *originalFunction,
-																																const std::string &cloneName, SgScopeStatement *scope) {
+SgFunctionDeclaration *RoseUniqueCallpathTransformer::cloneFunction(SgFunctionDeclaration *originalFunction,
+																																		const std::string &cloneName,
+																																		SgScopeStatement *scope) {
 	// build the list of function parameters
 	const SgInitializedNamePtrList &originalArgs = originalFunction->get_args();
 	SgFunctionParameterList *parameterList = SageBuilder::buildFunctionParameterList();

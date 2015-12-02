@@ -16,12 +16,12 @@ The following Passes are currently planned [ ] and implemented [x] in InstRO.
 - [x] ProgramEntrySelector
 
 #### Adapters
-- [ ] DefaultInstrumentationAdapter
+- [x] DefaultInstrumentationAdapter
+- [x] ConstructPrinterAdapter
 
 #### Rose only Implementations
-- [x] FunctionWrapper (transformer)
-- [x] UniqueCallpathTransformer
-- [x] ConstructPrinter (Adapter)
+- [x] RoseFunctionWrapper (transformer)
+- [x] RoseUniqueCallpathTransformer
 - [x] RoseStrategyBasedAdapter
 
 

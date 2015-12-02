@@ -100,7 +100,7 @@ ROSE_HFILES= \
 ./include/instro/rose/core/RoseConstructSet.h  \
 ./include/instro/rose/core/RosePass.h  \
 ./include/instro/rose/core/RoseLegacySelector.h \
-./include/instro/rose/pass/transformer/UniqueCallpathTransformer.h \
+./include/instro/rose/pass/transformer/RoseUniqueCallpathTransformer.h \
 ./include/instro/rose/tooling/RoseAnalysisInterface.h  \
 ./include/instro/rose/tooling/RoseConstructElevator.h \
 ./include/instro/rose/tooling/RoseControlFlowGraph.h \
@@ -123,8 +123,8 @@ ROSE_HFILES= \
 ./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/instrobuilder.h \
 ./include/instro/rose/pass/adapter/RoseDefaultInstrumentationAdapter.h \
 ./include/instro/rose/pass/adapter/support/RoseCodeWrapper.h \
-./include/instro/rose/pass/transformer/UniqueCallpathTransformer.h \
-./include/instro/rose/pass/transformer/FunctionWrapper.h
+./include/instro/rose/pass/transformer/RoseUniqueCallpathTransformer.h \
+./include/instro/rose/pass/transformer/RoseFunctionWrapper.h
 
 ROSE_SFILES= \
 ./src/rose/core/RoseConstructSet.cpp \
@@ -132,7 +132,6 @@ ROSE_SFILES= \
 ./src/rose/tooling/RoseConstructElevator.cpp \
 ./src/rose/tooling/RoseNamedConstructAccess.cpp \
 ./src/rose/tooling/RoseConstructClassInterface.cpp \
-./src/rose/pass/transformer/UniqueCallpathTransformer.cpp \
 ./src/rose/utility/FunctionRenamer.cpp \
 ./src/rose/utility/ASTHelper.cpp \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionHelper.cpp \
@@ -147,8 +146,8 @@ ROSE_SFILES= \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/instrobuilder.cpp \
 ./src/rose/pass/adapter/RoseDefaultInstrumentationAdapter.cpp \
 ./src/rose/pass/adapter/support/RoseCodeWrapper.cpp \
-./src/rose/pass/transformer/UniqueCallpathTransformer.cpp \
-./src/rose/pass/transformer/FunctionWrapper.cpp
+./src/rose/pass/transformer/RoseUniqueCallpathTransformer.cpp \
+./src/rose/pass/transformer/RoseFunctionWrapper.cpp
 
 
 if HAVERAPIDJSON

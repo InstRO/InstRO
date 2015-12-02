@@ -1,4 +1,4 @@
-#include "instro/rose/pass/transformer/FunctionWrapper.h"
+#include "instro/rose/pass/transformer/RoseFunctionWrapper.h"
 
 #include "instro/rose/core/RoseConstructSet.h"
 
@@ -16,8 +16,8 @@ using namespace InstRO;
 using namespace InstRO::Rose;
 using namespace InstRO::Rose::Transformer;
 
-FunctionWrapper::FunctionWrapper(InstRO::Pass *input, NameTransformer nameTransformer)
-		: RosePassImplementation(FunctionWrapper::createChannelConfig(input, nullptr)),
+RoseFunctionWrapper::RoseFunctionWrapper(InstRO::Pass *input, NameTransformer nameTransformer)
+		: RosePassImplementation(RoseFunctionWrapper::createChannelConfig(input, nullptr)),
 			nameTrafo(nameTransformer),
 			defPrefix(),
 			wrapPrefix(),
@@ -27,9 +27,9 @@ FunctionWrapper::FunctionWrapper(InstRO::Pass *input, NameTransformer nameTransf
 
 {}
 
-FunctionWrapper::FunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, NameTransformer nameTransformer,
-																 const std::string &definitionPrefix, const std::string &wrapperPrefix)
-		: RosePassImplementation(FunctionWrapper::createChannelConfig(input, renaming)),
+RoseFunctionWrapper::RoseFunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, NameTransformer nameTransformer,
+																				 const std::string &definitionPrefix, const std::string &wrapperPrefix)
+		: RosePassImplementation(RoseFunctionWrapper::createChannelConfig(input, renaming)),
 			nameTrafo(nameTransformer),
 			defPrefix(definitionPrefix),
 			wrapPrefix(wrapperPrefix),
@@ -37,16 +37,16 @@ FunctionWrapper::FunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, Na
 			inputPass(input),
 			renamingPass(renaming) {}
 
-FunctionWrapper::~FunctionWrapper() {}
+RoseFunctionWrapper::~RoseFunctionWrapper() {}
 
-void FunctionWrapper::init() {
+void RoseFunctionWrapper::init() {
 	findMainScope();
 	if (mainScope) {
 		initMainScope(mainScope);
 	}
 }
 
-void FunctionWrapper::execute() {
+void RoseFunctionWrapper::execute() {
 	// determine the nodes which are used as starting points for the search of function calls
 	RoseNodeList funCallSearchSP;
 	if (renamingPass) {
@@ -78,7 +78,8 @@ void FunctionWrapper::execute() {
 	}
 }
 
-InstRO::Core::ChannelConfiguration FunctionWrapper::createChannelConfig(InstRO::Pass *input, InstRO::Pass *renaming) {
+InstRO::Core::ChannelConfiguration RoseFunctionWrapper::createChannelConfig(InstRO::Pass *input,
+																																						InstRO::Pass *renaming) {
 	std::vector<InstRO::Pass *> passes{input};
 
 	auto channelConfig =
@@ -92,7 +93,7 @@ InstRO::Core::ChannelConfiguration FunctionWrapper::createChannelConfig(InstRO::
 	return channelConfig;
 }
 
-FunctionWrapper::RoseNodeSet FunctionWrapper::retrieveNodes(InstRO::Pass *pass) {
+RoseFunctionWrapper::RoseNodeSet RoseFunctionWrapper::retrieveNodes(InstRO::Pass *pass) {
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(pass->getOutput());
 	RoseNodeSet nodes;
 	nodes.reserve(cs.size());
@@ -105,7 +106,7 @@ FunctionWrapper::RoseNodeSet FunctionWrapper::retrieveNodes(InstRO::Pass *pass) 
 	return nodes;
 }
 
-void FunctionWrapper::findMainScope() {
+void RoseFunctionWrapper::findMainScope() {
 	mainScope = nullptr;
 
 	if (SgProject *project = SageInterface::getProject()) {
@@ -116,24 +117,25 @@ void FunctionWrapper::findMainScope() {
 
 	if (!mainScope) {
 		logIt(ERROR) << "Failed to find main function, wrappers are placed inside the respective translation unit"
-							<< std::endl;
+								 << std::endl;
 	}
 }
 
-void FunctionWrapper::initMainScope(SgScopeStatement *scope) {
+void RoseFunctionWrapper::initMainScope(SgScopeStatement *scope) {
 	// Subclasses should provide meaningful initialization logic
 }
 
-std::string FunctionWrapper::getDefinitionPrefix() const { return defPrefix; }
-void FunctionWrapper::setDefinitionPrefix(const std::string &prefix) { defPrefix = prefix; }
+std::string RoseFunctionWrapper::getDefinitionPrefix() const { return defPrefix; }
+void RoseFunctionWrapper::setDefinitionPrefix(const std::string &prefix) { defPrefix = prefix; }
 
-std::string FunctionWrapper::getWrapperPrefix() const { return wrapPrefix; }
-void FunctionWrapper::setWrapperPrefix(const std::string &prefix) { wrapPrefix = prefix; }
+std::string RoseFunctionWrapper::getWrapperPrefix() const { return wrapPrefix; }
+void RoseFunctionWrapper::setWrapperPrefix(const std::string &prefix) { wrapPrefix = prefix; }
 
-void FunctionWrapper::wrapFunction(SgFunctionDeclaration *fDecl, const RoseNodeList &funCallSearchStartPoints) {
+void RoseFunctionWrapper::wrapFunction(SgFunctionDeclaration *fDecl, const RoseNodeList &funCallSearchStartPoints) {
 	if (isSgMemberFunctionDeclaration(fDecl)) {
 		logIt(WARN) << "Creating wrappers for class member functions has not yet been explicitly implemented and "
-								 "will probably not work..." << std::endl;
+									 "will probably not work..."
+								<< std::endl;
 	}
 
 	// attempt to get the function definition if one is available
@@ -174,7 +176,7 @@ void FunctionWrapper::wrapFunction(SgFunctionDeclaration *fDecl, const RoseNodeL
 		bool foundNone = funcRenamer.findFunctionCalls(funCallSearchStartPoints).empty();
 		if (foundNone) {
 			logIt(WARN) << "Wrapper '" << wrapperName
-								<< "' is not used since there are no function calls which have to be renamed" << std::endl;
+									<< "' is not used since there are no function calls which have to be renamed" << std::endl;
 		}
 	}
 
@@ -230,7 +232,7 @@ void FunctionWrapper::wrapFunction(SgFunctionDeclaration *fDecl, const RoseNodeL
 	}
 }
 
-SgFunctionDeclaration *FunctionWrapper::findInputDeclaration(SgNode *node) {
+SgFunctionDeclaration *RoseFunctionWrapper::findInputDeclaration(SgNode *node) {
 	switch (node->variantT()) {
 		case V_SgFunctionCallExp: {
 			SgFunctionCallExp *fCallExp = isSgFunctionCallExp(node);
@@ -264,7 +266,7 @@ SgFunctionDeclaration *FunctionWrapper::findInputDeclaration(SgNode *node) {
 	}
 }
 
-std::string FunctionWrapper::generatePostfix(SgFunctionDeclaration *fDecl) {
+std::string RoseFunctionWrapper::generatePostfix(SgFunctionDeclaration *fDecl) {
 	boost::hash<std::string> sHash;
 	std::stringstream sstream;
 	sstream << "_";
@@ -277,7 +279,7 @@ std::string FunctionWrapper::generatePostfix(SgFunctionDeclaration *fDecl) {
 	return sstream.str();
 }
 
-SgExprListExp *FunctionWrapper::buildFunctionCallArguments(const SgInitializedNamePtrList *argList) {
+SgExprListExp *RoseFunctionWrapper::buildFunctionCallArguments(const SgInitializedNamePtrList *argList) {
 	SgExprListExp *fCallArgs = buildExprListExp();
 
 	for (SgInitializedNamePtrList::const_iterator argIt = argList->begin(); argIt != argList->end(); ++argIt) {
@@ -287,7 +289,7 @@ SgExprListExp *FunctionWrapper::buildFunctionCallArguments(const SgInitializedNa
 	return fCallArgs;
 }
 
-SgFunctionParameterList *FunctionWrapper::cloneFunctionParameterList(const SgFunctionDeclaration *fDec) {
+SgFunctionParameterList *RoseFunctionWrapper::cloneFunctionParameterList(const SgFunctionDeclaration *fDec) {
 	const SgInitializedNamePtrList &fArgs = fDec->get_args();
 	SgFunctionParameterList *reDecPList = buildFunctionParameterList();
 
@@ -298,8 +300,8 @@ SgFunctionParameterList *FunctionWrapper::cloneFunctionParameterList(const SgFun
 	return reDecPList;
 }
 
-void FunctionWrapper::buildWrapperBody(SgFunctionDeclaration *fDec, SgFunctionDeclaration *wrapperDec,
-																			 const std::string &functionToCall) {
+void RoseFunctionWrapper::buildWrapperBody(SgFunctionDeclaration *fDec, SgFunctionDeclaration *wrapperDec,
+																					 const std::string &functionToCall) {
 	// place the following statements in the body of the wrapper definition
 	InstRO::Rose::Utility::ScopeStackGuard wrapperBodyGuard(wrapperDec->get_definition()->get_body());
 
@@ -317,19 +319,22 @@ void FunctionWrapper::buildWrapperBody(SgFunctionDeclaration *fDec, SgFunctionDe
 	}
 }
 
-std::string FunctionWrapper::IdentityNameTransformer::operator()(const std::string &name) { return name; }
+std::string RoseFunctionWrapper::IdentityNameTransformer::operator()(const std::string &name) { return name; }
 
 // MPIFunctionWrapper
 
-MPIFunctionWrapper::MPIFunctionWrapper(InstRO::Pass *input) : FunctionWrapper(input, PMPINameTransformer()) {}
+RoseMPIFunctionWrapper::RoseMPIFunctionWrapper(InstRO::Pass *input)
+		: RoseFunctionWrapper(input, PMPINameTransformer()) {}
 
-MPIFunctionWrapper::MPIFunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, const std::string &definitionPrefix,
-																			 const std::string &wrapperPrefix)
-		: FunctionWrapper(input, renaming, PMPINameTransformer(), definitionPrefix, wrapperPrefix) {}
+RoseMPIFunctionWrapper::RoseMPIFunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming,
+																							 const std::string &definitionPrefix, const std::string &wrapperPrefix)
+		: RoseFunctionWrapper(input, renaming, PMPINameTransformer(), definitionPrefix, wrapperPrefix) {}
 
-std::string MPIFunctionWrapper::PMPINameTransformer::operator()(const std::string &mpiName) { return "P" + mpiName; }
+std::string RoseMPIFunctionWrapper::PMPINameTransformer::operator()(const std::string &mpiName) {
+	return "P" + mpiName;
+}
 
-void MPIFunctionWrapper::initMainScope(SgScopeStatement *scope) {
+void RoseMPIFunctionWrapper::initMainScope(SgScopeStatement *scope) {
 	// look for MPI_Comm to determine if MPI declarations are available
 	if (!lookupTypedefSymbolInParentScopes("MPI_Comm", scope)) {
 		insertHeader("mpi.h", PreprocessingInfo::after, false, scope);

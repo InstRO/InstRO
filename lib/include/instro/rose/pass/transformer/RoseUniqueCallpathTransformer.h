@@ -43,19 +43,19 @@ namespace Transformer {
 /// \note This transformation relies on the availability of function definitions for almost all inspected functions.
 ///
 /// \author Simon Reuß
-class UniqueCallpathTransformer : public RosePassImplementation {
+class RoseUniqueCallpathTransformer : public RosePassImplementation {
  public:
 	/// \brief Constructs a new UniqueCallpathTransformer without any explicit passes for the roots and active functions.
 	/// The main function will be used as the root of the call graph and all functions will be assumed to be duplicatable.
 	/// \arg pass The pass specifying the marked functions for which a unique call path should be created
-	UniqueCallpathTransformer(InstRO::Pass *pass);
+	RoseUniqueCallpathTransformer(InstRO::Pass *pass);
 	/// \brief Constructs a new UniqueCallpathTransformer with explicit passes for the roots and active functions.
 	/// \arg pass The pass which specifies the marked functions for which a unique call path should be created
 	/// \arg root The pass which specifies the roots the the call graph
 	/// \arg active The pass which specifies the active functions
-	UniqueCallpathTransformer(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active);
+	RoseUniqueCallpathTransformer(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active);
 
-	virtual ~UniqueCallpathTransformer();
+	virtual ~RoseUniqueCallpathTransformer();
 
 	virtual void execute() override;
 
