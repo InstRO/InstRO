@@ -339,6 +339,12 @@ BaseConfigurationPassRegistry::BaseConfigurationPassRegistry(PassFactory *factor
 		context.expectInputPasses({1});
 		return factory->createDefaultInstrumentationAdapter(context.inputPasses[0]);
 	});
+
+	registerPass("ConstructHierarchyASTDotGenerator", [factory](ConfigurationParsingContext &context) -> Pass *{
+		context.expectInputPasses({1});
+		return factory->createConstructHierarchyASTDotGenerator(context.inputPasses[0],
+																														context.getStringArgument("filename"));
+	});
 }
 
 ConfigurationPassRegistry::PassParser BaseConfigurationPassRegistry::lookup(const std::string &passType) {

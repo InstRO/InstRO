@@ -45,8 +45,6 @@ class RosePassFactory : public InstRO::PassFactory {
 
 	InstRO::Pass* createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass* pass);
 
-	InstRO::Pass* createConstructHierarchyASTDotGenerator(InstRO::Pass* pass, std::string fileName);
-
 };
 
 }

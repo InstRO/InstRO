@@ -309,15 +309,24 @@ class RoseConstruct : public InstRO::Core::Construct {
 	}
 
 	virtual std::string toDotString() const override {
-		if (isSgFunctionDefinition(node)) {	// don't print whole function
-			return isSgFunctionDefinition(node)->get_declaration()->get_qualified_name().getString();
+		std::string className = node->class_name();
+		std::string unparse;
+
+		if (getTraits().is(InstRO::Core::ConstructTraitType::CTFunction)) {
+			// get only name of function
+			unparse = isSgFunctionDefinition(node)->get_declaration()->get_qualified_name().getString();
+		} else if (getTraits().is(InstRO::Core::ConstructTraitType::CTFileScope)) {
+			// get only name of file
+			unparse = isSgSourceFile(node)->getFileName();
+		} else if (getTraits().is(InstRO::Core::ConstructTraitType::CTGlobalScope)) {
+			unparse = std::string("GlobalScope");
 		} else {
-			std::string dotString(node->unparseToString());
+			unparse = node->unparseToString();
 			// escape " and \n (e.g. in string literals)
-			boost::replace_all(dotString, "\n", "\\n");
-			boost::replace_all(dotString, "\"", "\\\"");
-			return dotString;
 		}
+		boost::replace_all(unparse, "\n", "\\n");
+		boost::replace_all(unparse, "\"", "\\\"");
+		return className + std::string(" : ") + unparse;
 	}
 
  private:

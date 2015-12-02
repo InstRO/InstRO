@@ -37,9 +37,4 @@ RoseConfigurationPassRegistry::RoseConfigurationPassRegistry(InstRO::Rose::RoseP
 		return factory->createConstructPrinter(context.inputPasses[0]);
 
 	});
-	registerPass("ConstructHierarchyASTDotGenerator", [factory](ConfigurationParsingContext &context) -> Pass *{
-		context.expectInputPasses({1});
-		return factory->createConstructHierarchyASTDotGenerator(context.inputPasses[0],
-																														context.getStringArgument("filename"));
-	});
 }
