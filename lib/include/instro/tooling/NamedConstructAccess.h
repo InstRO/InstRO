@@ -23,13 +23,12 @@ class Matcher {
 	virtual bool isMatch(std::string candidate, std::string pattern) = 0;
 
 	virtual bool isMatch(std::string candidate) = 0;
-
 };
 
 /**
 * This class implements a wildcard string matching.
 * The '#' character is considered to be the Wildcard which can substitute 0,..,n characters.
-* 
+*
 * \author Jan-Patrick Lehr
 */
 class WildcardedStringMatcher : public Matcher {
@@ -45,17 +44,17 @@ class WildcardedStringMatcher : public Matcher {
 
 	/** Checks the candidate against all patterns, short-circuits on first match */
 	virtual bool isMatch(std::string candidate) override;
- 
+
  protected:
 	bool bMatch(std::string str, std::string pattern);
 
  private:
 	std::vector<std::string> patterns;
-	char WILDCARDCHAR;														// The used wild card character
+	const char WILDCARDCHAR;	// The used wild card character
 };
 
 /**
- * Every matching construct is returned. Results can be either function definitions or expressions.
+ * \brief Get all constructs that satisfy the given name matcher
  */
 class NamedConstructAccess {
  public:
@@ -74,7 +73,6 @@ class NamedConstructAccess {
 		throw std::string("NamedConstructAccess::getConstructsByCodeMatch() is not implemented.");
 	}
 };
-
 }
 }
 }

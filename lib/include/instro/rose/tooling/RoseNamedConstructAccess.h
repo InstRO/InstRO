@@ -14,13 +14,12 @@ namespace NamedConstructAccess {
 /**
 * \brief This class matches named entities of the AST with a given Matcher
 *
-* In this context it is crucial to know which nodes are regarded to have a meaningful name.
-* We regard these nodes as named nodes:
-* - A variable and its reference
-* - A function defining definition node (this includes member functions)
-* - A function reference contained in a function call
+* Named nodes can be
+* - A variable reference -> collect all enclosing expressions
+* - A function definition node -> collect the definition
+* - A function reference -> collect the function call expression
 *
-* \author Jan-Patrick Lehr, Christian Iwainsky, Roman Ness
+* \author Roman Ness
 */
 class NameMatchingASTTraversal : public ROSE_VisitorPatternDefaultBase {
  public:
@@ -30,8 +29,8 @@ class NameMatchingASTTraversal : public ROSE_VisitorPatternDefaultBase {
 
 	InstRO::Core::ConstructSet getResultingCS();
 
-	void visit(SgFunctionDefinition* n);
-	void visit(SgVarRefExp* n);
+	void visit(SgFunctionDefinition* n) override;
+	void visit(SgVarRefExp* n) override;
 	void visit(SgFunctionRefExp* n);
 	void visit(SgTemplateFunctionRefExp* n);
 	void visit(SgMemberFunctionRefExp* n);
@@ -46,18 +45,21 @@ class NameMatchingASTTraversal : public ROSE_VisitorPatternDefaultBase {
 	void handleFunctionRef(SgFunctionDeclaration* associatedDecl, SgExpression* funcRef);
 };
 
+/**
+ * \author Roman Ness
+ * XXX The visitor traversal is a bit awkward. There has to be an easier way in rose
+ */
 class RoseNamedConstructAccess : public InstRO::Tooling::NamedConstructAccess::NamedConstructAccess {
  public:
 	RoseNamedConstructAccess(SgProject* proj) : project(proj) {}
 
 	InstRO::Core::ConstructSet getConstructsByIdentifierName(
 			InstRO::Tooling::NamedConstructAccess::Matcher& matcher) override {
-
-		NameMatchingASTTraversal gen(&matcher);
+		NameMatchingASTTraversal visitor(&matcher);
 		for (auto n : SageInterface::querySubTree<SgLocatedNode>(project, V_SgLocatedNode)) {
-			n->accept(gen);
+			n->accept(visitor);
 		}
-		return gen.getResultingCS();
+		return visitor.getResultingCS();
 	}
 
  private:
