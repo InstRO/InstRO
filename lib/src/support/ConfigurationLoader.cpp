@@ -284,19 +284,19 @@ void ConfigurationParsingContext::expectInputPasses(std::initializer_list<unsign
 
 BaseConfigurationPassRegistry::BaseConfigurationPassRegistry(PassFactory *factory) : factory(factory) {
 	// TODO SR: merge these into one with an argument
-	registerPass("BooleanOrSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
+	registerPass("BooleanOrSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
 		context.expectInputPasses({2});
 		return factory->createBooleanOrSelector(context.inputPasses[0], context.inputPasses[1]);
 	});
-	registerPass("BooleanAndSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
+	registerPass("BooleanAndSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
 		context.expectInputPasses({2});
 		return factory->createBooleanAndSelector(context.inputPasses[0], context.inputPasses[1]);
 	});
-	registerPass("BooleanXorSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
+	registerPass("BooleanXorSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
 		context.expectInputPasses({2});
 		return factory->createBooleanXorSelector(context.inputPasses[0], context.inputPasses[1]);
 	});
-	registerPass("BooleanMinusSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
+	registerPass("BooleanMinusSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
 		context.expectInputPasses({2});
 		return factory->createBooleanMinusSelector(context.inputPasses[0], context.inputPasses[1]);
 	});
@@ -308,42 +308,49 @@ BaseConfigurationPassRegistry::BaseConfigurationPassRegistry(PassFactory *factor
 	registerPass("IdentifyerSelector", [factory](ConfigurationParsingContext &context) {
 		return factory->createIdentifierMatcherSelector(context.getStringArguments());
 	});
-	registerPass("CallpathSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
+	registerPass("CallpathSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
 		context.expectInputPasses({2});
 		return factory->createCallpathSelector(context.inputPasses[0], context.inputPasses[1]);
 	});
-	registerPass("ConstructClassSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
+	registerPass("ConstructClassSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
 		context.expectInputPasses({0});
 		return factory->createConstructClassSelector(context.getConstructTraitType("class"));
 	});
-	registerPass("AggregationStatementCountSelector", [factory](ConfigurationParsingContext &context) -> Pass *{
+	registerPass("AggregationStatementCountSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
 		context.expectInputPasses({0});
 		return factory->createAggregationStatementCountSelector(context.getIntegerArgument("threshold"));
 	});
 
-	registerPass("ConstructLoweringElevator", [factory](ConfigurationParsingContext &context) -> Pass *{
+	registerPass("ConstructLoweringElevator", [factory](ConfigurationParsingContext &context) -> Pass * {
 		context.expectInputPasses({1});
 		return factory->createConstructLoweringElevator(context.inputPasses[0], context.getConstructTraitType("level"));
 	});
-	registerPass("ConstructRaisingElevator", [factory](ConfigurationParsingContext &context) -> Pass *{
+	registerPass("ConstructRaisingElevator", [factory](ConfigurationParsingContext &context) -> Pass * {
 		context.expectInputPasses({1});
 		return factory->createConstructRaisingElevator(context.inputPasses[0], context.getConstructTraitType("level"));
 	});
-	registerPass("ConstructCroppingElevator", [factory](ConfigurationParsingContext &context) -> Pass *{
+	registerPass("ConstructCroppingElevator", [factory](ConfigurationParsingContext &context) -> Pass * {
 		context.expectInputPasses({1});
 		return factory->createConstructCroppingElevator(context.inputPasses[0], context.getConstructTraitType("minLevel"),
 																										context.getConstructTraitType("maxLevel"));
 	});
 
-	registerPass("DefaultInstrumentationAdapter", [factory](ConfigurationParsingContext &context) -> Pass *{
+	// Adapters
+	registerPass("DefaultInstrumentationAdapter", [factory](ConfigurationParsingContext &context) -> Pass * {
 		context.expectInputPasses({1});
 		return factory->createDefaultInstrumentationAdapter(context.inputPasses[0]);
 	});
 
-	registerPass("ConstructHierarchyASTDotGenerator", [factory](ConfigurationParsingContext &context) -> Pass *{
+	registerPass("ConstructHierarchyASTDotGenerator", [factory](ConfigurationParsingContext &context) -> Pass * {
 		context.expectInputPasses({1});
 		return factory->createConstructHierarchyASTDotGenerator(context.inputPasses[0],
 																														context.getStringArgument("filename"));
+	});
+
+	registerPass("ConstructPrinterAdapter", [factory](ConfigurationParsingContext &context) -> Pass * {
+		context.expectInputPasses({1});
+		return factory->createConstructPrinterAdapter(context.inputPasses[0]);
+
 	});
 }
 

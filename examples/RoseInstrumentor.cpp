@@ -5,39 +5,20 @@
 #include <string>
 #include <iostream>
 
-// using namespace InstRO;
-
 int main(int argc, char** argv) {
 	try {
 		auto instro = new InstRO::RoseInstrumentor(argc, argv);
-		auto aFactory = instro->getFactory();
+		auto factory = instro->getFactory();
 
-		auto mainFunction = aFactory->createProgramEntrySelector();
-		aFactory->createConstructPrinter(mainFunction);
+		auto mainFunction = factory->createProgramEntrySelector();
+		factory->createConstructPrinterAdapter(mainFunction);
 
-		auto functions = aFactory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
-		aFactory->createConstructPrinter(functions);
+		auto functions = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
+		factory->createConstructPrinterAdapter(functions);
 
-//		auto statements = aFactory->createConstructLoweringElevator(functions, InstRO::Core::ConstructTraitType::CTStatement);
-//		aFactory->createConstructPrinter(statements);
-
-//		auto intersect = aFactory->createBooleanAndSelector(mainFunction, functions);
-//		aFactory->createConstructPrinter(intersect);
-//
-//		intersect = aFactory->createBooleanOrSelector(mainFunction, functions);
-//		aFactory->createConstructPrinter(intersect);
-//
-//		intersect = aFactory->createBooleanXorSelector(mainFunction, functions);
-//		aFactory->createConstructPrinter(intersect);
-//
-//		intersect = aFactory->createBooleanMinusSelector(functions, mainFunction);
-//		aFactory->createConstructPrinter(intersect);
-
-		auto paths = aFactory->createCallpathSelector(mainFunction, functions, "cps.dot");
-		aFactory->createConstructPrinter(paths);
-		aFactory->createDefaultInstrumentationAdapter(paths);
-
-//		aFactory->createMatthiasZoellnerLoopInstrumentationAdapter(functions);
+		auto callpaths = factory->createCallpathSelector(mainFunction, functions, "callpaths.dot");
+		factory->createConstructPrinterAdapter(callpaths);
+		factory->createDefaultInstrumentationAdapter(callpaths);
 
 		instro->init();
 		instro->apply();

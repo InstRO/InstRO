@@ -2,7 +2,6 @@
 
 #include "instro/rose/pass/transformer/UniqueCallpathTransformer.h"
 #include "instro/rose/pass/adapter/RoseStrategyBasedAdapter.h"
-#include "instro/rose/pass/adapter/RoseConstructPrinter.h"
 #include "instro/rose/pass/adapter/RoseDefaultInstrumentationAdapter.h"
 
 #include <string>
@@ -19,13 +18,6 @@ Pass* RosePassFactory::createDefaultInstrumentationAdapter(InstRO::Pass* input) 
 }
 
 /* ROSE ONLY */
-
-Pass* RosePassFactory::createConstructPrinter(InstRO::Pass* pass) {
-	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseConstructPrinter(pass));
-	newPass->setPassName("InstRO::Rose::Adapter::RoseConstructPrinter");
-	passManager->registerPass(newPass);
-	return newPass;
-}
 
 InstRO::Pass* RosePassFactory::createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass* pass) {
 	auto initializer = std::make_shared<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePInitializer>();
@@ -57,7 +49,6 @@ InstRO::Pass* RosePassFactory::createUniqueCallpathTransformer(Pass* input, Pass
 	return newPass;
 }
 
-
 InstRO::Pass* RosePassFactory::createFunctionWrapper(
 		InstRO::Pass* input, InstRO::Rose::Transformer::FunctionWrapper::NameTransformer nameTransformer) {
 	InstRO::Pass* newPass = new InstRO::Pass(new Transformer::FunctionWrapper(input, nameTransformer));
@@ -65,7 +56,8 @@ InstRO::Pass* RosePassFactory::createFunctionWrapper(
 	passManager->registerPass(newPass);
 	return newPass;
 }
-InstRO::Pass* RosePassFactory::createFunctionWrapper(InstRO::Pass* input, InstRO::Pass* renaming,
+InstRO::Pass* RosePassFactory::createFunctionWrapper(
+		InstRO::Pass* input, InstRO::Pass* renaming,
 		InstRO::Rose::Transformer::FunctionWrapper::NameTransformer nameTransformer, const std::string& definitionPrefix,
 		const std::string& wrapperPrefix) {
 	InstRO::Pass* newPass = new InstRO::Pass(
@@ -91,7 +83,6 @@ InstRO::Pass* RosePassFactory::createMPIFunctionWrapper(InstRO::Pass* input, Ins
 	passManager->registerPass(newPass);
 	return newPass;
 }
-
 
 }	// Rose
 }	// InstRO

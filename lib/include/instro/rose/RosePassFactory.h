@@ -30,23 +30,18 @@ class RosePassFactory : public InstRO::PassFactory {
 	InstRO::Pass* createUniqueCallpathTransformer(Pass* input, Pass* root, Pass* active);
 
 	// FunctionWrapper
-	InstRO::Pass* createFunctionWrapper(
-			InstRO::Pass* input, InstRO::Rose::Transformer::FunctionWrapper::NameTransformer nameTransformer);
-	InstRO::Pass* createFunctionWrapper(
-			InstRO::Pass* input, InstRO::Pass* renaming,
-			InstRO::Rose::Transformer::FunctionWrapper::NameTransformer nameTransformer, const std::string& definitionPrefix,
-			const std::string& wrapperPrefix);
+	InstRO::Pass* createFunctionWrapper(InstRO::Pass* input,
+																			InstRO::Rose::Transformer::FunctionWrapper::NameTransformer nameTransformer);
+	InstRO::Pass* createFunctionWrapper(InstRO::Pass* input, InstRO::Pass* renaming,
+																			InstRO::Rose::Transformer::FunctionWrapper::NameTransformer nameTransformer,
+																			const std::string& definitionPrefix, const std::string& wrapperPrefix);
 	InstRO::Pass* createMPIFunctionWrapper(InstRO::Pass* input);
 	InstRO::Pass* createMPIFunctionWrapper(InstRO::Pass* input, InstRO::Pass* renaming,
-																								 const std::string& definitionPrefix, const std::string& wrapperPrefix);
-
-
-	InstRO::Pass* createConstructPrinter(InstRO::Pass* pass);
+																				 const std::string& definitionPrefix, const std::string& wrapperPrefix);
 
 	InstRO::Pass* createMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass* pass);
-
 };
+}	// namespace Rose
+}	// namespace InstRO
 
-}
-}
 #endif

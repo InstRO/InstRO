@@ -15,6 +15,7 @@ class PassFactory {
 
 	Pass* createProgramEntrySelector();
 	Pass* createConstructHierarchyASTDotGenerator(Pass* pass, std::string fileName);
+	Pass* createConstructPrinterAdapter(Pass* pass);
 
 	/*
 	 * According to our minimal InstRO compliance file this is the list of components we need to provide.

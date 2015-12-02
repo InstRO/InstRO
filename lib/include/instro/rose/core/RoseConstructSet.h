@@ -305,10 +305,6 @@ class RoseConstruct : public InstRO::Core::Construct {
 	std::string generateIntelligentConstructClass() const;
 
 	virtual std::string toString() const override {
-		return "RoseConstruct: " + node->class_name() + ": " + node->unparseToString();
-	}
-
-	virtual std::string toDotString() const override {
 		std::string className = node->class_name();
 		std::string unparse;
 
@@ -324,9 +320,14 @@ class RoseConstruct : public InstRO::Core::Construct {
 			unparse = node->unparseToString();
 			// escape " and \n (e.g. in string literals)
 		}
-		boost::replace_all(unparse, "\n", "\\n");
-		boost::replace_all(unparse, "\"", "\\\"");
-		return className + std::string(" : ") + unparse;
+		return className + std::string(" | ") + unparse;
+	}
+
+	virtual std::string toDotString() const override {
+		std::string resultString = this->toString();
+		boost::replace_all(resultString, "\n", "\\n");
+		boost::replace_all(resultString, "\"", "\\\"");
+		return resultString;
 	}
 
  private:

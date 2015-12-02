@@ -56,8 +56,8 @@ int main(int argc, char **argv) {
 	auto ctExprLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTExpression);
 
 #ifdef DEBUG
-	factory->createConstructPrinter(ctStmtLvlSelector);
-	factory->createConstructPrinter(ctExprLvlSelector);
+	factory->createConstructPrinterAdapter(ctStmtLvlSelector);
+	factory->createConstructPrinterAdapter(ctExprLvlSelector);
 #endif
 
 	// sink, so we ignore the returned Pass *

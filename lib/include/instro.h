@@ -11,7 +11,6 @@
 #include "instro/rose/core/RosePassImplementation.h"
 #include "instro/rose/RosePassFactory.h"
 #include "instro/rose/RoseInstrumentor.h"
-#include "instro/rose/pass/adapter/RoseConstructPrinter.h"
 #endif
 
 #ifdef USING_LLVM

@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
 	factory->createTestAdapter(idSelector4, "IdSelector-#f#", filename);
 
 #ifdef DEBUG
-	factory->createConstructPrinter(idSelector);
+	factory->createConstructPrinterAdapter(idSelector);
 #endif
 
 	instrumentor.apply();
