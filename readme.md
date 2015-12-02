@@ -28,24 +28,36 @@ The following Passes are currently planned [ ] and implemented [x] in InstRO.
 ## Building InstRO
 ### Dependencies
 We use the following version of compilers and libraries for building InstRO and ROSE.
+- Rose (obtained from our fork [InstRO/InstRO-ROSE](https://github.com/InstRO/InstRO-ROSE))
 - GCC 4.8.5
 - Boost 1.57.0
 - automake 1.14
 - autoconf 2.69
 - libtool 2.4
-- [https://github.com/miloyip/rapidjson](https://github.com/miloyip/rapidjson) (HEAD)
-- Rose (preferably obtained from our fork [InstRO/InstRO-ROSE](https://github.com/InstRO/InstRO-ROSE))
-- Python 2.7.10
+- [https://github.com/miloyip/rapidjson](https://github.com/miloyip/rapidjson) (only for the json config feature)
+- Python 2.7.10 (only required for testing)
 
 ### Build Steps
-In order to build InstRO, one first builds and installs Rose. We recommend using the InstRO/rose fork, as we add functionalityt which may not be merged back into the rose main repository. Secondly, one builds and installs Boost.
-After these prerequisites are fulfilled one runs the 'make-config' script located in the top level directory, which builds the configure file. 'configure' with providing the Boost (--with-boost) and the Rose (--with-rose) paths. InstRO comes with an examples directory, which includes show-cases. In order to build these examples, invoke configure with additional --enable-examples. Finally, run 'make'.
+Install the required dependencies. We highly recommend to use our [InstRO/InstRO-ROSE](https://github.com/InstRO/InstRO-ROSE), fork as we added functionality and fixes that are not merged back to the original repository (yet).
+
+```bash
+$ ./make-config
+>> generates the configure script
+$ ./configure --with-boost=/PATH/TO/BOOST/BASE --with-rose=/PATH/TO/ROSE/BASE \
+  [--with-rapidjson=/PATH/TO/RAPIDJSON/BASE] [--enable-examples]
+>> generates the Makefiles
+$ make
+```
+
+InstRO comes with an examples directory, which includes some show-cases. In order to build these examples, invoke configure with additional `--enable-examples`.
+
+To use the JSON configuration feature use the optional flag `--with-rapidjson`.
 
 ### Testing InstRO
-Run 'make check' in the top level build directory. More about how we test InstRO can be found in the test directory.
+Run `make check` in the top level build directory. More information can be found in the test directory.
 
 ### Building with Clang
-Support for building the InstRO framework with the Clang compiler infrastructure is work in progress.
+Support for building the InstRO framework with the Clang compiler infrastructure is currently work in progress.
 
 
 ## JSON Configuration
