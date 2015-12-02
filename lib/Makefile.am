@@ -51,6 +51,7 @@ CORE_HFILES= \
 ./include/instro/pass/selector/ElevatorSelector.h \
 ./include/instro/pass/selector/BooleanCompoundSelector.h \
 ./include/instro/pass/adapter/DefaultInstrumentationAdapter.h \
+./include/instro/pass/adapter/ConstructPrinterAdapter.h \
 ./include/instro/pass/adapter/ConstructHierarchyASTDotGenerator.h \
 ./include/instro/utility/Logger.h
 
@@ -75,6 +76,7 @@ CORE_SFILES= \
 ./src/pass/selector/ElevatorSelector.cpp \
 ./src/pass/selector/BooleanCompoundSelector.cpp  \
 ./src/pass/adapter/DefaultInstrumentationAdapter.cpp  \
+./src/pass/adapter/ConstructPrinterAdapter.cpp \
 ./src/utility/Logger.cpp
 
 CLANG_HFILES= \
@@ -98,7 +100,6 @@ ROSE_HFILES= \
 ./include/instro/rose/core/RoseConstructSet.h  \
 ./include/instro/rose/core/RosePass.h  \
 ./include/instro/rose/core/RoseLegacySelector.h \
-./include/instro/rose/pass/adapter/RoseConstructPrinter.h \
 ./include/instro/rose/pass/transformer/UniqueCallpathTransformer.h \
 ./include/instro/rose/tooling/RoseAnalysisInterface.h  \
 ./include/instro/rose/tooling/RoseConstructElevator.h \
@@ -128,7 +129,6 @@ ROSE_HFILES= \
 ROSE_SFILES= \
 ./src/rose/core/RoseConstructSet.cpp \
 ./src/rose/core/RosePassFactory.cpp \
-./src/rose/pass/adapter/RoseConstructPrinter.cpp \
 ./src/rose/tooling/RoseConstructElevator.cpp \
 ./src/rose/tooling/RoseNamedConstructAccess.cpp \
 ./src/rose/tooling/RoseConstructClassInterface.cpp \

@@ -8,6 +8,7 @@
 #include "instro/pass/selector/ElevatorSelector.h"
 
 #include "instro/pass/adapter/ConstructHierarchyASTDotGenerator.h"
+#include "instro/pass/adapter/ConstructPrinterAdapter.h"
 
 #include <string>
 
@@ -103,6 +104,13 @@ Pass* PassFactory::createAggregationStatementCountSelector(int threshold) {
 Pass* PassFactory::createConstructHierarchyASTDotGenerator(Pass* pass, std::string fileName) {
 	Pass* newPass = new Pass(new InstRO::Adapter::ConstructHierarchyASTDotGenerator(pass, fileName));
 	newPass->setPassName("InstRO::Adapter::ConstructHierarchyASTDotGenerator");
+	passManager->registerPass(newPass);
+	return newPass;
+}
+
+Pass* PassFactory::createConstructPrinterAdapter(Pass* pass) {
+	Pass* newPass = new Pass(new InstRO::Adapter::ConstructPrinterAdapter(pass));
+	newPass->setPassName("InstRO::Adapter::ConstructPrinterAdapter");
 	passManager->registerPass(newPass);
 	return newPass;
 }
