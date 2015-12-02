@@ -33,8 +33,8 @@ We use the following version of compilers and libraries for building InstRO and 
 - automake 1.14
 - autoconf 2.69
 - libtool 2.4
-- RapidJSON (github master head)
-- Rose (preferably obtained from the InstRO/rose fork)
+- [https://github.com/miloyip/rapidjson](https://github.com/miloyip/rapidjson) (HEAD)
+- Rose (preferably obtained from our fork [InstRO/InstRO-ROSE](https://github.com/InstRO/InstRO-ROSE))
 - Python 2.7.10
 
 ### Build Steps
