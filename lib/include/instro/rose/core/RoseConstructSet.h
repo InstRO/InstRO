@@ -336,8 +336,8 @@ class RoseConstruct : public InstRO::Core::Construct {
 
  protected:
 	std::string specificConstructClassToString() const;
-	int determineCorrectLineInfo() const;
-	int determineCorrectColumnInformation() const;
+	virtual int determineCorrectLineInfo() const;
+	virtual int determineCorrectColumnInformation() const;
 	std::string determineCorrectFilename() const;
 
  private:
@@ -366,6 +366,11 @@ class RoseFragment : public RoseConstruct {
 		ss << "line:" << info->get_line() << " col:" << info->get_col();
 		return ss.str();
 	}
+
+ protected:
+	virtual int determineCorrectLineInfo() const override;
+	virtual int determineCorrectColumnInformation() const override;
+
 
  private:
 	Sg_File_Info* const info;

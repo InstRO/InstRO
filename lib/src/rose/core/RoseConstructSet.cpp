@@ -165,6 +165,14 @@ std::string RoseConstruct::specificConstructClassToString() const {
 	return constructLevelToString(cts.max());
 }
 
+int RoseFragment::determineCorrectLineInfo() const {
+	return info->get_line();
+}
+
+int RoseFragment::determineCorrectColumnInformation() const {
+	return info->get_col();
+}
+
 }	// namespace Core
 }	// namespace Rose
 }	// namespace InstRO
