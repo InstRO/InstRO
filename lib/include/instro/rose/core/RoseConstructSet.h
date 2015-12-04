@@ -34,37 +34,42 @@ struct DefinedVariableDeclarationPredicate {
 
 struct CLExpressionPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
-		if (isSgExprListExp(n) != nullptr)
-			return false;
-		if (isSgFunctionRefExp(n) != nullptr)
-			return false;
-		if (isSgFunctionCallExp(n) != nullptr)
-			return true;
-		// for variables and values, we only accept as instrumentable, if the expression itself has an observable effect,
-		// e.g. as conditional in an if or for
-		if (isSgValueExp(n) != nullptr || isSgVarRefExp(n) != nullptr) {
-			// In Rose this is TRUE !!if!! the parent of the stmt is an SgExprStatement and the parent(parent) is either the for loops
-			// conditional or the conditional of an if or while
-			SgNode* parent = n->get_parent();
-			if (parent == nullptr)
-				return false;
-			if (isSgExprStatement(parent) == nullptr)
-				return false;
-			SgNode* grandParent = parent->get_parent();
-			if (grandParent == nullptr)
-				return false;
-			if (isSgIfStmt(grandParent) != nullptr && isSgIfStmt(grandParent)->get_conditional() == parent)
-				return true;
-			else if (isSgForStatement(grandParent) != nullptr && isSgForStatement(grandParent)->get_test() == parent)
-				return true;
-			else if (isSgDoWhileStmt(grandParent) && isSgDoWhileStmt(grandParent)->get_condition() == parent)
-				return true;
-			else if (isSgWhileStmt(grandParent) && isSgWhileStmt(grandParent)->get_condition() == parent)
-				return true;
-			else
-				return false;
+		if (isSgExprListExp(n) || isSgFunctionRefExp(n)) {
+			return false;	// never accept these
 		}
-		if (isSgCastExp(n) != nullptr)
+		if (isSgFunctionCallExp(n) != nullptr) {
+			return true;	// always accept these
+		}
+
+		// accept simple vals or refs only if they are in the header of a loop or conditional
+		if (isSgValueExp(n) != nullptr || isSgVarRefExp(n) != nullptr) {
+
+			SgNode* parent = n->get_parent();
+			if (parent == nullptr || isSgExprStatement(parent) == nullptr) {
+				return false;
+			}
+			SgNode* grandParent = parent->get_parent();
+			if (grandParent == nullptr) {
+				return false;
+			}
+
+			if (isSgIfStmt(grandParent) != nullptr && isSgIfStmt(grandParent)->get_conditional() == parent) {
+				return true;
+			} else if (isSgSwitchStatement(grandParent) &&
+								 (isSgSwitchStatement(grandParent)->get_item_selector() == parent)) {
+				return true;
+			} else if (isSgForStatement(grandParent) != nullptr && isSgForStatement(grandParent)->get_test() == parent) {
+				return true;
+			} else if (isSgDoWhileStmt(grandParent) && isSgDoWhileStmt(grandParent)->get_condition() == parent) {
+				return true;
+			} else if (isSgWhileStmt(grandParent) && isSgWhileStmt(grandParent)->get_condition() == parent) {
+				return true;
+			}
+
+			return false;
+		}
+
+		if (isSgCastExp(n))
 			return false;
 
 		if (isSgAssignInitializer(n)) {
@@ -73,7 +78,7 @@ struct CLExpressionPredicate : public CTPredicate {
 
 		// null expression only allowed in for loop increment position
 		if (isSgNullExpression(n)) {
-			if(isSgForStatement(n->get_parent())){
+			if (isSgForStatement(n->get_parent())) {
 				return true;
 			}
 			return false;
@@ -103,11 +108,19 @@ struct CLConditionalPredicate : public CTPredicate {
 
 struct CLScopeStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
-		// ignore function scopes
-		if (isSgBasicBlock(n) && !isSgFunctionDefinition(n->get_parent())) {
-			return true;
+
+		if (!isSgBasicBlock(n)) {
+			return false;
 		}
-		return false;
+
+		SgNode* parent = n->get_parent();
+		if (isSgFunctionDefinition(parent)) {
+			return false;	// ignore function scopes
+		}
+		if (isSgCaseOptionStmt(parent) && isSgLocatedNode(n)->isCompilerGenerated()) {
+			return false;	// ignore compiler generated scopes around case statements
+		}
+		return true;
 	}
 };
 
