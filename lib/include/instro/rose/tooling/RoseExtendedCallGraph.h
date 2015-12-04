@@ -49,7 +49,7 @@ public:
 		nodeType = ECGNodeType::FUNCTION_CALL;
 	}
 	void visit(SgIfStmt* node) {
-		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node->get_conditional()));
+		addConditionStmtOrExpr(node->get_conditional());
 		nodeType = ECGNodeType::CONDITIONAL;
 	}
 	void visit(SgSwitchStatement* node) {
@@ -66,11 +66,12 @@ public:
 		nodeType = ECGNodeType::LOOP;
 	}
 	void visit(SgWhileStmt* node) {
-		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node->get_condition()));
+		addConditionStmtOrExpr(node->get_condition());
 		nodeType = ECGNodeType::LOOP;
 	}
 	void visit(SgDoWhileStmt* node) {
-		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node->get_condition()));
+		SgExpression* conditionExpr = isSgExprStatement(node->get_condition())->get_expression();
+		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(conditionExpr));
 		nodeType = ECGNodeType::LOOP;
 	}
 	void visit(SgBasicBlock* node) {
@@ -87,6 +88,15 @@ public:
 	}
 
 private:
+	void addConditionStmtOrExpr(SgStatement* conditionStmt) {
+		if (InstRO::Rose::Core::RoseConstructLevelPredicates::CLSimpleStatementPredicate()(conditionStmt)) {
+			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(conditionStmt));
+		} else {
+			SgExpression* conditionalExpr = isSgExprStatement(conditionStmt)->get_expression();
+			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(conditionalExpr));
+		}
+	}
+
 	InstRO::Core::ConstructSet cs;
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci;
 
