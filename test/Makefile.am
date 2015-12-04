@@ -105,6 +105,7 @@ bin_PROGRAMS= \
 	IdentifierSelectorTest \
 	ConstructElevatorTest \
 	BooleanCompoundSelectorTest \
+	CallpathSelectorTest \
 	MatcherUnitTest
 
 ####
@@ -151,6 +152,12 @@ BooleanCompoundSelectorTest_SOURCES= \
 BooleanCompoundSelectorTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
 BooleanCompoundSelectorTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
+# Test
+CallpathSelectorTest_SOURCES= \
+	./CallpathSelectorTest.cpp
+CallpathSelectorTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
+CallpathSelectorTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS)
+
 # Dependent on the compiler platform we build differently
 if USEROSE
 INSTRO_WITH_ROSE_CPPFLAGS=-DUSE_ROSE -I$(top_srcdir)/lib -I@ROSE_INCLUDEDIR@
@@ -167,6 +174,9 @@ ConstructElevatorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
 BooleanCompoundSelectorTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 BooleanCompoundSelectorTest_LDADD+=  $(INSTRO_WITH_ROSE_LDADD)
+
+CallpathSelectorTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
+CallpathSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 endif
 
 # In order to run 'make check'

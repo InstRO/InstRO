@@ -7,7 +7,7 @@ cmdParser.add_argument('src', type=str, help="/path/to/instro/repo")
 cmdParser.add_argument('build', type=str, help="/path/to/instro/repo")
 
 # This is the list of test programs which should be applied.
-testPrograms = ["ConstructHierarchySelectionTest", "IdentifierSelectorTest", "ConstructElevatorTest", "BooleanCompoundSelectorTest"]
+testPrograms = ["ConstructHierarchySelectionTest", "IdentifierSelectorTest", "ConstructElevatorTest", "BooleanCompoundSelectorTest", "CallpathSelectorTest"]
 
 # The list of targets is read from a targets.lst which resides in a test/input/BinaryName directory
 def readTargetFileSpecification(tInstrumentor, directory):
