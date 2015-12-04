@@ -144,7 +144,8 @@ struct CLSimpleStatementPredicate : public CTPredicate {
 
 		if (isSgExprStatement(n)) {
 			SgNode* parent = n->get_parent();
-			if (isSgIfStmt(parent) || isSgWhileStmt(parent) || isSgDoWhileStmt(parent)) {	// TODO other cases?
+			if (isSgIfStmt(parent) || isSgWhileStmt(parent)
+					|| isSgDoWhileStmt(parent) || isSgSwitchStatement(parent)) {	// TODO other cases?
 				return false;	// if with an expression as conditional
 			}
 			return true;
