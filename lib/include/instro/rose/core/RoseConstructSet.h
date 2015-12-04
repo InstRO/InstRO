@@ -142,8 +142,12 @@ struct CLSimpleStatementPredicate : public CTPredicate {
 			return true;
 		}
 
-		if (isSgExprStatement(n) && isSgIfStmt(n->get_parent())) {	// TODO
-			return false;	// if with an expression as conditional
+		if (isSgExprStatement(n)) {
+			SgNode* parent = n->get_parent();
+			if (isSgIfStmt(parent) || isSgWhileStmt(parent) || isSgDoWhileStmt(parent)) {	// TODO other cases?
+				return false;	// if with an expression as conditional
+			}
+			return true;
 		}
 
 		if (isSgScopeStatement(n)) {
