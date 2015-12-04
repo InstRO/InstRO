@@ -58,4 +58,6 @@ Logger& logIt(enum LogLevel level, enum LogLevel localThreshold = INSTRO_LOG_LEV
 
 } // namespace InstRO
 
+#undef INSTRO_LOG_LEVEL
+
 #endif // INSTRO_UTILITY_LOG_H_
