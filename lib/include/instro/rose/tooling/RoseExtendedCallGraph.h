@@ -53,7 +53,7 @@ public:
 		nodeType = ECGNodeType::CONDITIONAL;
 	}
 	void visit(SgSwitchStatement* node) {
-		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node->get_item_selector()));
+		addConditionStmtOrExpr(node->get_item_selector());
 		nodeType = ECGNodeType::CONDITIONAL;
 	}
 	void visit(SgForStatement* node) {
