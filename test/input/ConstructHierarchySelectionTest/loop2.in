@@ -1,22 +1,22 @@
 +CTFunctionSelector
-loop2.cpp:1--Function-::doSomething
-loop2.cpp:3--Function-::foo
+loop2.cpp:1:1--Function-::doSomething
+loop2.cpp:3:1--Function-::foo
 
 +CTLoopSelector
-loop2.cpp:5--LoopStatement
+loop2.cpp:5:2--LoopStatement
 
 +CTStatementSelector
-loop2.cpp:4--SimpleStatement
-loop2.cpp:5--LoopStatement
-loop2.cpp:5--SimpleStatement
-loop2.cpp:5--SimpleStatement
-loop2.cpp:5--ScopeStatement
-loop2.cpp:6--SimpleStatement
+loop2.cpp:4:2--SimpleStatement
+loop2.cpp:5:2--LoopStatement
+loop2.cpp:5:2--SimpleStatement
+loop2.cpp:5:8--SimpleStatement
+loop2.cpp:5:21--ScopeStatement
+loop2.cpp:6:3--SimpleStatement
 
 +CTScopeSelector
-loop2.cpp:5--ScopeStatement
+loop2.cpp:5:21--ScopeStatement
 
 +CTExpressionSelector
-loop2.cpp:5--Expression
-loop2.cpp:5--Expression
-loop2.cpp:6--Expression
+loop2.cpp:5:8--Expression
+loop2.cpp:5:17--Expression
+loop2.cpp:6:3--Expression

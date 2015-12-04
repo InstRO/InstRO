@@ -71,8 +71,12 @@ struct CLExpressionPredicate : public CTPredicate {
 			return false;
 		}
 
-		if (isSgNullExpression(n) && isSgReturnStmt(n->get_parent())) {
-			return false;		// null expression in empty return statement
+		// null expression only allowed in for loop increment position
+		if (isSgNullExpression(n)) {
+			if(isSgForStatement(n->get_parent())){
+				return true;
+			}
+			return false;
 		}
 
 		return isSgExpression(n) != nullptr;
@@ -302,7 +306,6 @@ class RoseConstruct : public InstRO::Core::Construct {
 	// we construct the identification as follows:
 	// filename:startline--ConstructTrait[-functionName]
 	std::string getIdentifier() const;
-	std::string generateIntelligentConstructClass() const;
 
 	virtual std::string toString() const override {
 		std::string className = node->class_name();
@@ -329,6 +332,13 @@ class RoseConstruct : public InstRO::Core::Construct {
 		boost::replace_all(resultString, "\"", "\\\"");
 		return resultString;
 	}
+
+
+ protected:
+	std::string specificConstructClassToString() const;
+	int determineCorrectLineInfo() const;
+	int determineCorrectColumnInformation() const;
+	std::string determineCorrectFilename() const;
 
  private:
 	SgNode* const node;

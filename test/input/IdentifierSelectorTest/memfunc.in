@@ -3,7 +3,7 @@
 +IdSelector-::f#
 
 +IdSelector-#foo
-memfunc.cpp:5--Function-::A::foo
+memfunc.cpp:5:1--Function-::A::foo
 
 +IdSelector-#f#
-memfunc.cpp:5--Function-::A::foo
+memfunc.cpp:5:1--Function-::A::foo
