@@ -1,0 +1,11 @@
++EntrySelector
+callpath2.cpp:3:1--Function-::main
+
++CallpathSelector
+callpath2.cpp:3:1--Function-::main
+callpath2.cpp:1:1--Function-::leaf
+callpath2.cpp:6:3--Expression
+callpath2.cpp:5:21--Fragment
+callpath2.cpp:7:2--Fragment
+callpath2.cpp:5:17--Expression
+callpath2.cpp:5:8--SimpleStatement
