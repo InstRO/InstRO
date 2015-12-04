@@ -57,7 +57,10 @@ public:
 		nodeType = ECGNodeType::CONDITIONAL;
 	}
 	void visit(SgForStatement* node) {
-		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node->get_for_init_stmt()));
+		auto initStmts = node->get_for_init_stmt()->get_init_stmt();
+		for (auto initStmt : initStmts) {
+			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(initStmt));
+		}
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node->get_test()));
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node->get_increment()));
 		nodeType = ECGNodeType::LOOP;
