@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
 	auto ctScopeLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTScopeStatement);
 	auto ctExprLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTExpression);
 
-#ifdef DEBUG
+#ifdef CDEBUG
 	factory->createConstructPrinterAdapter(ctStmtLvlSelector);
 	factory->createConstructPrinterAdapter(ctExprLvlSelector);
 #endif

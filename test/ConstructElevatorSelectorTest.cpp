@@ -45,9 +45,8 @@ int main(int argc, char **argv) {
 	factory->createTestAdapter(wpToExprStmtSelector, "wpToExprStmtSelector", filename);
 	factory->createTestAdapter(wpToStmtFuncSelector, "wpToStmtFuncSelector", filename);
 
-#ifdef DEBUG
-	factory->createConstructPrinterAdapter(funcToStmtLvlSelector);
-	factory->createConstructPrinterAdapter(stmtToFuncLvlSelector);
+#ifdef CDEBUG
+	factory->createConstructPrinterAdapter(funcToExprLvlSelector);
 #endif
 
 	instrumentor.apply();
