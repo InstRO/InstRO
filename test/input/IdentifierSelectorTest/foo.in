@@ -1,11 +1,11 @@
 +IdSelector-::foo
-foo.cpp:4--Function-::foo
+foo.cpp:4:1--Function-::foo
 
 +IdSelector-::f#
-foo.cpp:4--Function-::foo
+foo.cpp:4:1--Function-::foo
 
 +IdSelector-#foo
-foo.cpp:4--Function-::foo
+foo.cpp:4:1--Function-::foo
 
 +IdSelector-#f#
-foo.cpp:4--Function-::foo
+foo.cpp:4:1--Function-::foo

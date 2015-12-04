@@ -1,0 +1,16 @@
++CTFunctionSelector
+loop3.cpp:1:1--Function-::foo
+
++CTLoopSelector
+loop3.cpp:2:2--LoopStatement
+
++CTStatementSelector
+loop3.cpp:2:2--LoopStatement
+loop3.cpp:2:2--SimpleStatement
+loop3.cpp:2:2--SimpleStatement
+loop3.cpp:2:11--SimpleStatement
+
++CTConditionalSelector
++CTScopeSelector
++CTExpressionSelector
+loop3.cpp:2:2--Expression

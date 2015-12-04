@@ -1,10 +1,10 @@
 +FunctionAndStatementSelector
 
 +FunctionOrStatementSelector
-scopes.cpp:1--Function-::foo
-scopes.cpp:2--ScopeStatement
-scopes.cpp:3--ConditionalStatement
-scopes.cpp:3--ScopeStatement
-scopes.cpp:4--SimpleStatement
-scopes.cpp:5--ScopeStatement
-scopes.cpp:6--SimpleStatement
+scopes.cpp:1:1--Function-::foo
+scopes.cpp:2:2--ScopeStatement
+scopes.cpp:3:3--ConditionalStatement
+scopes.cpp:3:12--ScopeStatement
+scopes.cpp:4:4--SimpleStatement
+scopes.cpp:5:10--ScopeStatement
+scopes.cpp:6:4--SimpleStatement

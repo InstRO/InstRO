@@ -1,11 +1,11 @@
 +IdSelector-::foo
-scopes.cpp:1--Function-::foo
+scopes.cpp:1:1--Function-::foo
 
 +IdSelector-::f#
-scopes.cpp:1--Function-::foo
+scopes.cpp:1:1--Function-::foo
 
 +IdSelector-#foo
-scopes.cpp:1--Function-::foo
+scopes.cpp:1:1--Function-::foo
 
 +IdSelector-#f#
-scopes.cpp:1--Function-::foo
+scopes.cpp:1:1--Function-::foo
