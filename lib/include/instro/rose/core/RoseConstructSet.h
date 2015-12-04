@@ -142,7 +142,7 @@ struct CLSimpleStatementPredicate : public CTPredicate {
 			return true;
 		}
 
-		if (isSgExprStatement(n) && isSgIfStmt(n->get_parent())) {
+		if (isSgExprStatement(n) && isSgIfStmt(n->get_parent())) {	// TODO
 			return false;	// if with an expression as conditional
 		}
 
