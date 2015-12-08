@@ -42,8 +42,6 @@ private:
 	static clang::ASTContext& getASTContext();
 	static clang::SourceManager& getSourceManager();
 
-	std::string print(bool typeName) const;
-
 };
 
 }
