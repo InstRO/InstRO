@@ -143,28 +143,6 @@ int RoseConstruct::determineCorrectColumnInformation() const {
 	return colInfo;
 }
 
-std::string RoseConstruct::specificConstructClassToString() const {
-	using CTLvl = InstRO::Core::ConstructTraitType;
-	auto cts = getTraits();
-	if (cts.is(CTLvl::CTConditionalStatement)) {
-		return "ConditionalStatement";
-	}
-	if (cts.is(CTLvl::CTLoopStatement)) {
-		return "LoopStatement";
-	}
-	if (cts.is(CTLvl::CTScopeStatement)) {
-		return "ScopeStatement";
-	}
-	if (cts.is(CTLvl::CTSimpleStatement)) {
-		return "SimpleStatement";
-	}
-	if (cts.is(CTLvl::CTWrappableStatement)) {
-		return "WrappableStatement";
-	}
-
-	return constructLevelToString(cts.max());
-}
-
 int RoseFragment::determineCorrectLineInfo() const {
 	return info->get_line();
 }
