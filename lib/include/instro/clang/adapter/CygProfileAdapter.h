@@ -7,7 +7,6 @@
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Tooling/Core/Replacement.h"
 
-#include "instro/clang/core/ConstructSet.h"
 #include "instro/clang/core/Pass.h"
 #include "instro/clang/core/ClangPassImplBase.h"
 
@@ -19,10 +18,6 @@ class CygProfileAdapter : public InstRO::Clang::ClangPassImplBase<CygProfileAdap
 	CygProfileAdapter(InstRO::Pass *pId, clang::tooling::Replacements &replacements, clang::SourceManager *sm);
 
 	bool VisitFunctionDecl(clang::FunctionDecl *decl);
-
-	void releaseOutput();
-
-	InstRO::Clang::ClangConstructSet *getOutput();
 
 	void dispatch(clang::Decl *c);
 
@@ -46,7 +41,6 @@ class CygProfileAdapter : public InstRO::Clang::ClangPassImplBase<CygProfileAdap
 
  private:
 	Pass *decidingSelector;
-	ClangConstructSet cs;
 	clang::SourceManager *sm;
 	clang::tooling::Replacements &replacements;
 	int labelCount;
