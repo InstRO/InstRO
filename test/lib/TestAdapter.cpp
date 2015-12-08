@@ -1,4 +1,4 @@
-#define INSTRO_LOG_LEVEL DEBUG
+#define INSTRO_LOG_LEVEL INFO
 
 #include "TestAdapter.h"
 #include "instro/utility/Logger.h"
@@ -21,13 +21,13 @@ void InstRO::Test::TestSummary::printResults() {
 		for (const auto i : addMarked) {
 			logIt(ERROR) << i << "\n";
 		}
-		logIt(DEBUG) << "=== DEBUG ===\n== Dumping the wrongly marked constructs using \"toString\" ==\n=== ===== ===" << std::endl;
-		for(const auto pC : addMarkedConstructs){
+		logIt(DEBUG) << "=== DEBUG ===\n== Dumping the wrongly marked constructs using \"toString\" ==\n=== ===== ==="
+								 << std::endl;
+		for (const auto pC : addMarkedConstructs) {
 			logIt(DEBUG) << pC->toString() << "\n";
 		}
 		logIt(DEBUG) << "=====\n== Done ==\n=====" << std::endl;
 	}
-
 }
 
 void InstRO::Test::TestAdapter::init() { expectedItems = readExpectedItemsFile(); }
@@ -54,8 +54,9 @@ void InstRO::Test::TestAdapter::checkIfConstructSetMatches(InstRO::Core::Constru
 		if (expectedItems.find(testString) != expectedItems.end()) {
 		} else {
 			InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface roci(cs);
-			auto cPos = std::find_if(roci.begin(), roci.end(),
-									 [&](const std::shared_ptr<InstRO::Core::Construct> c) { return c->getID() == idPair.first; });
+			auto cPos = std::find_if(roci.begin(), roci.end(), [&](const std::shared_ptr<InstRO::Core::Construct> c) {
+				return c->getID() == idPair.first;
+			});
 
 			addMarkedConstructs.insert(*cPos);
 			erroneouslyContainedInConstructSet.insert(testString);
