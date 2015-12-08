@@ -6,7 +6,6 @@
 
 // InstRO includes
 #include "instro/clang/core/ClangPassImplBase.h"
-#include "instro/clang/core/ConstructSet.h"
 
 namespace InstRO {
 namespace Clang {
@@ -19,11 +18,6 @@ class FunctionDefinitionSelector : public InstRO::Clang::ClangPassImplBase<Funct
 	FunctionDefinitionSelector();
 	bool VisitFunctionDecl(clang::FunctionDecl *fDecl);
 
-	void releaseOutput(){};
-	InstRO::Clang::ClangConstructSet *getOutput();
-
- private:
-	ClangConstructSet cs;
 };
 }	// Clang
 }	// InstRO

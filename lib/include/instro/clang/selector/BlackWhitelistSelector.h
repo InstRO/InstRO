@@ -3,7 +3,6 @@
 
 #include "clang/AST/RecursiveASTVisitor.h"
 
-#include "instro/clang/core/ConstructSet.h"
 #include "instro/utility/BWLFileReader.h"
 #include "instro/clang/core/ClangPassImplBase.h"
 
@@ -20,9 +19,6 @@ class BlackWhitelistSelector : public InstRO::Clang::ClangPassImplBase<BlackWhit
 
 	void readFilterFile(std::string filename);
 
-	void releaseOutput() override;
-	InstRO::Clang::ClangConstructSet *getOutput() override;
-
 	bool isOnList(std::string functionName, std::vector<std::string> &list);
 
 	void addBlacklistEntry(std::string functionName);
@@ -31,7 +27,7 @@ class BlackWhitelistSelector : public InstRO::Clang::ClangPassImplBase<BlackWhit
  private:
 	std::vector<std::string> blacklist;
 	std::vector<std::string> whitelist;
-	InstRO::Clang::ClangConstructSet cs;
+
 };
 }	// Clang
 }	// InstRO

@@ -3,7 +3,6 @@
 
 #include <fstream>
 
-#include "instro/clang/core/ConstructSet.h"
 #include "instro/clang/core/ClangPassImplBase.h"
 
 namespace InstRO {
@@ -14,14 +13,14 @@ class LLVMInputAdapter : public InstRO::Clang::ClangPassImplBase<LLVMInputAdapte
 
 	bool VisitFunctionDecl(clang::FunctionDecl *fDecl);
 
-	void releaseOutput() override;
-	InstRO::Clang::ClangConstructSet *getOutput() override;
-
 	void exec() override;
 
  private:
 	InstRO::Pass *decidingSelector;
 	const std::string outfileName;
+
+	void print(std::ostream &outStream, InstRO::Core::ConstructSet *cs, clang::ASTContext *astContext);
+
 };
 }
 }

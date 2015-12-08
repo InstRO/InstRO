@@ -1,4 +1,6 @@
 #include "instro/clang/adapter/CygProfileAdapter.h"
+
+#include "instro/clang/core/ClangConstruct.h"
 #include "instro/utility/Logger.h"
 
 InstRO::Clang::CygProfileAdapter::CygProfileAdapter(InstRO::Pass *pId, clang::tooling::Replacements &reps,
@@ -19,14 +21,12 @@ bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *de
 	// The context is in ClangPassImplementation
 	sm = &context->getSourceManager();
 
-	// since we are in a Clang Adapter, we cast. I KNOW THIS IS UGLY
 	InstRO::Core::ConstructSet *c = getInput(decidingSelector);
-	// FIXME Use dynamic cast instead
-	cs = *(reinterpret_cast<InstRO::Clang::ClangConstructSet *>(c));
+	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface rcsci(c);
 
-	for (auto &construct : cs.getConstructSet()) {
-		if (InstRO::Clang::getAsDecl(construct) == decl) {
-			// the function declaration we are visitting has actually been selected
+	for (auto &construct : rcsci) {
+		if (std::dynamic_pointer_cast<InstRO::Clang::Core::ClangConstruct>(construct)->getAsDecl() == decl) {
+			// the function declaration we are visiting has actually been selected
 			dispatch(decl);
 		}
 	}
@@ -34,10 +34,6 @@ bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *de
 	labelCount++;
 	return true;
 }
-
-void InstRO::Clang::CygProfileAdapter::releaseOutput() {}
-
-InstRO::Clang::ClangConstructSet *InstRO::Clang::CygProfileAdapter::getOutput() { return nullptr; }
 
 void InstRO::Clang::CygProfileAdapter::dispatch(clang::Decl *c) {
 	logIt(DEBUG) << "Dispatching..." << std::endl;
