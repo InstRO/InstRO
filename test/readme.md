@@ -22,11 +22,11 @@ Within this directory a file specifying which test-case source files the respect
 All test-case source files reside in the `test/input` directory and are reference from the `targets.lst` file simply by name.
 The specification allows for multiple adapters, which are identified using labels.
 Inside the .in file this is reflected with labels of the form `+labelname`.
-Every line following a label will be used as an expected element for the `TestAdapter` instance identified by `+labelname`.
+Every line following a label will be used as an expected element for the `TestAdapter` instance identified by `+labelname` unless the line is left blank.
 So a valid .in file for some file main.cpp with `int main(...){...}` in line one, would look like
 ~~~
 +CTFunctionSelector
-main.cpp:1--Function-main
+main.cpp:1:1--Function-main
 ~~~
 And a valid `targets.lst` file which references solely the `main.cpp` test-case source file would look like
 ~~~
