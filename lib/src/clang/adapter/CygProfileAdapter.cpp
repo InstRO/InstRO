@@ -156,7 +156,7 @@ void InstRO::Clang::CygProfileAdapter::instrumentReturnStatements(clang::Compoun
 			replacements.insert(clang::tooling::Replacement(*sm, rSt->getLocStart(), 0, exitStr));
 		} else if (st == body->body_back()) {
 			// instrument end of function without return stmt
-			replacements.insert(clang::tooling::Replacement(*sm, st->getLocStart(), 0, exitStr));
+			replacements.insert(clang::tooling::Replacement(*sm, body->getRBracLoc(), 0, exitStr));
 		}
 	}
 }
