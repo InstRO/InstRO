@@ -16,25 +16,23 @@
 namespace InstRO {
 namespace Clang {
 
-	/*
- * The PassFactory exposes a handle to the created pass by a raw pointer.
- * This does _not_ transfer ownership.
- **/
+/*
+* The PassFactory exposes a handle to the created pass by a raw pointer.
+* This does _not_ transfer ownership.
+**/
 class ClangPassFactory : public InstRO::PassFactory {
  public:
 	ClangPassFactory(InstRO::PassManagement::PassManager* manager, clang::tooling::Replacements& reps)
 			: InstRO::PassFactory(manager), replacements(reps){};
 
-	InstRO::Pass* createDefaultInstrumentationAdapter(InstRO::Pass* input) {
-		return nullptr;
-	}
+	InstRO::Pass* createDefaultInstrumentationAdapter(InstRO::Pass* input) { return nullptr; }
 
 	Pass* createBlackAndWhiteListSelector(std::vector<std::string> blacklist, std::vector<std::string> whitelist);
 	Pass* createFunctionDefinitionSelector();
 	Pass* createCygProfileAdapter(InstRO::Pass* input);
 	Pass* createLLVMInputAdapter(InstRO::Pass* input);
 
-		/* We need this in order to lazily initialize the AST Context within the passes */
+	/* We need this in order to lazily initialize the AST Context within the passes */
 	void finishConstruction(clang::ASTContext* context) {
 		for (auto p : lazyContextProvidingMap) {
 			p->setASTContext(context);

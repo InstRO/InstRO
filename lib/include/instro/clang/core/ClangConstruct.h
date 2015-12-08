@@ -11,13 +11,12 @@ namespace Clang {
 namespace Core {
 
 enum class ConstructKind {
-  CK_Declaration = 1,
-  CK_Stmt = 2,
+	CK_Declaration = 1,
+	CK_Stmt = 2,
 };
 
 class ClangConstruct : public InstRO::Core::Construct {
-
-public:
+ public:
 	ClangConstruct(clang::Decl* decl);
 	ClangConstruct(clang::Stmt* stmt);
 
@@ -30,24 +29,19 @@ public:
 	clang::Decl* getAsDecl() const;
 	clang::Stmt* getAsStmt() const;
 
-	static void setASTContext(clang::ASTContext &context);
+	static void setASTContext(clang::ASTContext& context);
 
-
-private:
+ private:
 	ConstructKind kind;
 	void* construct;
 
-	static clang::ASTContext *astContext;
+	static clang::ASTContext* astContext;
 
 	static clang::ASTContext& getASTContext();
 	static clang::SourceManager& getSourceManager();
-
 };
-
-}
-
 }
 }
+}
 
-
-#endif // INSTRO_CLANG_CORE_CLANGCONSTRUCT_H
+#endif	// INSTRO_CLANG_CORE_CLANGCONSTRUCT_H

@@ -19,41 +19,37 @@ using namespace InstRO::Clang::Core;
 namespace {
 
 class DeclConstructTraitVisitor : public clang::DeclVisitor<DeclConstructTraitVisitor> {
-
-public:
+ public:
 	DeclConstructTraitVisitor() : ct(ConstructTraitType::CTNoTraits) {}
-	ConstructTrait getConstructTrait() {return ct;}
+	ConstructTrait getConstructTrait() { return ct; }
 
 	void VisitFunctionDecl(clang::FunctionDecl *decl) {
-    if (decl->isThisDeclarationADefinition()) {
+		if (decl->isThisDeclarationADefinition()) {
 			ct = ConstructTrait(ConstructTraitType::CTFunction);
-    } else {
-    	generateError(decl);
-    }
+		} else {
+			generateError(decl);
+		}
 	}
 
 	void VisitTranslationUnitDecl(clang::TranslationUnitDecl *decl) {
 		ct = ConstructTrait(ConstructTraitType::CTFileScope);
 	}
 
-	void VisitDecl(clang::Decl *decl) {
-		generateError(decl);
-	}
+	void VisitDecl(clang::Decl *decl) { generateError(decl); }
 
-private:
+ private:
 	ConstructTrait ct;
 
 	void generateError(clang::Decl *decl) {
-		InstRO::logIt(InstRO::INFO) << "Skipping declaration " << decl->getDeclKindName() << "(" << decl << ")" << std::endl;
+		InstRO::logIt(InstRO::INFO) << "Skipping declaration " << decl->getDeclKindName() << "(" << decl << ")"
+																<< std::endl;
 	}
-
 };
 
 class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVisitor> {
-
-public:
+ public:
 	StmtConstructTraitVisitor(clang::ASTContext &context) : context(context), ct(ConstructTraitType::CTNoTraits) {}
-	ConstructTrait getContructTrait() {return ct;}
+	ConstructTrait getContructTrait() { return ct; }
 
 	void VisitIfStmt(clang::IfStmt *stmt) {
 		ct = ConstructTrait(ConstructTraitType::CTConditionalStatement);
@@ -81,23 +77,23 @@ public:
 	}
 
 	void VisitCompoundStmt(clang::CompoundStmt *stmt) {
-    // ignore the top level compound statement of a function
-    auto matcher = clang::ast_matchers::stmt(clang::ast_matchers::hasParent(clang::ast_matchers::functionDecl()));
-    auto matches = clang::ast_matchers::match(matcher, *stmt, context);
-    if (matches.empty()) {
+		// ignore the top level compound statement of a function
+		auto matcher = clang::ast_matchers::stmt(clang::ast_matchers::hasParent(clang::ast_matchers::functionDecl()));
+		auto matches = clang::ast_matchers::match(matcher, *stmt, context);
+		if (matches.empty()) {
 			InstRO::logIt(InstRO::DEBUG) << "found ScopeStatement" << std::endl;
 			ct = ConstructTrait(ConstructTraitType::CTScopeStatement);
 			handleStatementWithWrappableCheck(stmt);
-    } else {
-    	InstRO::logIt(InstRO::DEBUG) << "found CompoundStatement of a function body" << std::endl;
-    	generateError(stmt);
-    }
+		} else {
+			InstRO::logIt(InstRO::DEBUG) << "found CompoundStatement of a function body" << std::endl;
+			generateError(stmt);
+		}
 	}
 
 	void VisitDeclStmt(clang::DeclStmt *stmt) {
 		// check whether all declarations are initialized variables
 		bool allInitVarDecls = false;
-    for (clang::Decl *decl : stmt->getDeclGroup()) {
+		for (clang::Decl *decl : stmt->getDeclGroup()) {
 			if (clang::VarDecl *varDecl = llvm::dyn_cast<clang::VarDecl>(decl)) {
 				if (varDecl->hasInit()) {
 					allInitVarDecls = true;
@@ -107,18 +103,19 @@ public:
 			} else {
 				allInitVarDecls = false;
 			}
-    }
+		}
 
-    if (allInitVarDecls) {
+		if (allInitVarDecls) {
 			ct = ConstructTrait(ConstructTraitType::CTSimpleStatement);
 			handleStatementWithWrappableCheck(stmt);
-    } else {
-    	generateError(stmt);
-    }
+		} else {
+			generateError(stmt);
+		}
 	}
 
 	void VisitExpr(clang::Expr *stmt) {
-		// in Clang every Expr is also a Stmt, therefore we treat expressions which do not have another expression as parent as a SimpleStatement and expressions which do as Expression
+		// in Clang every Expr is also a Stmt, therefore we treat expressions which do not have another expression as parent
+		// as a SimpleStatement and expressions which do as Expression
 		auto matcher = clang::ast_matchers::expr(clang::ast_matchers::hasParent(clang::ast_matchers::expr()));
 		auto matches = clang::ast_matchers::match(matcher, *stmt, context);
 		if (matches.empty()) {
@@ -133,15 +130,13 @@ public:
 		handleStatementWithWrappableCheck(stmt);
 	}
 
-	void VisitStmt(clang::Stmt *stmt) {
-		generateError(stmt);
-	}
+	void VisitStmt(clang::Stmt *stmt) { generateError(stmt); }
 
-private:
+ private:
 	clang::ASTContext &context;
 	ConstructTrait ct;
 
-	void handleStatementWithWrappableCheck(clang::Stmt* stmt) {
+	void handleStatementWithWrappableCheck(clang::Stmt *stmt) {
 		ct.add(ConstructTraitType::CTStatement);
 		auto matcher = clang::ast_matchers::stmt(clang::ast_matchers::hasParent(clang::ast_matchers::stmt()));
 		auto matches = clang::ast_matchers::match(matcher, *stmt, context);
@@ -154,7 +149,6 @@ private:
 	void generateError(clang::Stmt *stmt) {
 		InstRO::logIt(InstRO::INFO) << "Skipping statement " << stmt->getStmtClassName() << "(" << stmt << ")" << std::endl;
 	}
-
 };
 
 ConstructTrait getConstructTrait(clang::Decl *decl) {
@@ -168,14 +162,11 @@ ConstructTrait getConstructTrait(clang::ASTContext &context, clang::Stmt *stmt) 
 	visitor.Visit(stmt);
 	return visitor.getContructTrait();
 }
-
-
 }
 
+clang::ASTContext *ClangConstruct::astContext = nullptr;
 
-clang::ASTContext* ClangConstruct::astContext = nullptr;
-
-clang::ASTContext& ClangConstruct::getASTContext() {
+clang::ASTContext &ClangConstruct::getASTContext() {
 	if (astContext) {
 		return *astContext;
 	} else {
@@ -183,28 +174,17 @@ clang::ASTContext& ClangConstruct::getASTContext() {
 	}
 }
 
-clang::SourceManager& ClangConstruct::getSourceManager() {
-	return getASTContext().getSourceManager();
-}
+clang::SourceManager &ClangConstruct::getSourceManager() { return getASTContext().getSourceManager(); }
 
-void ClangConstruct::setASTContext(clang::ASTContext &context) {
-	ClangConstruct::astContext = &context;
-}
-
+void ClangConstruct::setASTContext(clang::ASTContext &context) { ClangConstruct::astContext = &context; }
 
 ClangConstruct::ClangConstruct(clang::Decl *decl)
-	: Construct(getConstructTrait(decl)), kind(ConstructKind::CK_Declaration), construct(decl) {
-
-}
+		: Construct(getConstructTrait(decl)), kind(ConstructKind::CK_Declaration), construct(decl) {}
 
 ClangConstruct::ClangConstruct(clang::Stmt *stmt)
-	: Construct(getConstructTrait(getASTContext(), stmt)), kind(ConstructKind::CK_Stmt), construct(stmt) {
+		: Construct(getConstructTrait(getASTContext(), stmt)), kind(ConstructKind::CK_Stmt), construct(stmt) {}
 
-}
-
-size_t ClangConstruct::getID() const {
-	return reinterpret_cast<size_t>(construct);
-}
+size_t ClangConstruct::getID() const { return reinterpret_cast<size_t>(construct); }
 
 std::string ClangConstruct::toString() const {
 	std::string className;
@@ -236,11 +216,11 @@ std::string ClangConstruct::toString() const {
 		if (clang::Decl *decl = getAsDecl()) {
 			decl->print(rso, getASTContext().getPrintingPolicy());
 		} else if (clang::Stmt *stmt = getAsStmt()) {
-      stmt->printPretty(rso, nullptr, getASTContext().getPrintingPolicy());
+			stmt->printPretty(rso, nullptr, getASTContext().getPrintingPolicy());
 		}
 	}
 
-  return className + " | " + rso.str();
+	return className + " | " + rso.str();
 }
 
 std::string ClangConstruct::toDotString() const {
@@ -265,7 +245,8 @@ std::string ClangConstruct::getIdentifier() const {
 		InstRO::raise_exception("Unknown type in ClangConstruct");
 	}
 
-	identifier = (sourceManager.getFilename(location) + ":" + llvm::Twine((sourceManager.getSpellingLineNumber(location)))).str();
+	identifier =
+			(sourceManager.getFilename(location) + ":" + llvm::Twine((sourceManager.getSpellingLineNumber(location)))).str();
 	identifier += ":" + std::to_string(sourceManager.getSpellingColumnNumber(location));
 	identifier += "--" + specificConstructClassToString();
 
@@ -280,10 +261,10 @@ std::string ClangConstruct::getIdentifier() const {
 	return identifier;
 }
 
-clang::Decl* ClangConstruct::getAsDecl() const {
-	return (kind == ConstructKind::CK_Declaration) ? static_cast<clang::Decl*>(construct) : nullptr;
+clang::Decl *ClangConstruct::getAsDecl() const {
+	return (kind == ConstructKind::CK_Declaration) ? static_cast<clang::Decl *>(construct) : nullptr;
 }
 
-clang::Stmt* ClangConstruct::getAsStmt() const {
-	return (kind == ConstructKind::CK_Stmt) ? static_cast<clang::Stmt*>(construct) : nullptr;
+clang::Stmt *ClangConstruct::getAsStmt() const {
+	return (kind == ConstructKind::CK_Stmt) ? static_cast<clang::Stmt *>(construct) : nullptr;
 }

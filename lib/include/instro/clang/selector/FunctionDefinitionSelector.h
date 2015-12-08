@@ -17,7 +17,6 @@ class FunctionDefinitionSelector : public InstRO::Clang::ClangPassImplBase<Funct
  public:
 	FunctionDefinitionSelector();
 	bool VisitFunctionDecl(clang::FunctionDecl *fDecl);
-
 };
 }	// Clang
 }	// InstRO
