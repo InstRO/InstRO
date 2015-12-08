@@ -20,7 +20,6 @@ class LLVMInputAdapter : public InstRO::Clang::ClangPassImplBase<LLVMInputAdapte
 	const std::string outfileName;
 
 	void print(std::ostream &outStream, InstRO::Core::ConstructSet *cs, clang::ASTContext *astContext);
-
 };
 }
 }

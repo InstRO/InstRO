@@ -3,7 +3,7 @@
 #include "instro/clang/core/ClangConstruct.h"
 #include "instro/utility/Logger.h"
 
-#include "clang/AST/Mangle.h" // clang::MangleContext
+#include "clang/AST/Mangle.h"	// clang::MangleContext
 
 using namespace InstRO::Clang;
 
@@ -37,8 +37,7 @@ void LLVMInputAdapter::exec() {
 	outStream.close();
 }
 
-void LLVMInputAdapter::print(std::ostream &outStream, InstRO::Core::ConstructSet *cs,
-													clang::ASTContext *astContext) {
+void LLVMInputAdapter::print(std::ostream &outStream, InstRO::Core::ConstructSet *cs, clang::ASTContext *astContext) {
 	outStream << "Printing ConstructSet " << cs << "\n";
 	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface rcsci(cs);
 	for (auto &c : rcsci) {
