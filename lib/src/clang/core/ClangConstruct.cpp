@@ -251,27 +251,6 @@ std::string ClangConstruct::toDotString() const {
 	return dotString;
 }
 
-std::string ClangConstruct::print(bool typeName) const {
-	std::string buffer;
-	llvm::raw_string_ostream rso(buffer);
-
-	if (clang::Decl *decl = getAsDecl()) {
-		if (typeName) {
-			rso << "Decl: ";
-		}
-		decl->print(rso);
-	} else if (clang::Stmt *stmt = getAsStmt()) {
-		if (typeName) {
-			rso << "Stmt: ";
-		}
-		stmt->printPretty(rso, nullptr, getASTContext().getPrintingPolicy());
-	} else {
-		InstRO::raise_exception("Unknown type in ClangConstruct");
-	}
-
-	return rso.str();
-}
-
 std::string ClangConstruct::getIdentifier() const {
 	std::string identifier;
 
@@ -287,6 +266,7 @@ std::string ClangConstruct::getIdentifier() const {
 	}
 
 	identifier = (sourceManager.getFilename(location) + ":" + llvm::Twine((sourceManager.getSpellingLineNumber(location)))).str();
+	identifier += ":" + std::to_string(sourceManager.getSpellingColumnNumber(location));
 	identifier += "--" + specificConstructClassToString();
 
 	if (clang::Decl *decl = getAsDecl()) {
