@@ -23,9 +23,11 @@ class TestSummary {
  public:
 	TestSummary(std::string adapterLabel) : lbl(adapterLabel) {}
 
-	void setTestResult(std::multiset<std::string> &&unFound, std::multiset<std::string> &&additionallyMarked) {
+	void setTestResult(std::multiset<std::string> &&unFound, std::multiset<std::string> &&additionallyMarked,
+										 std::set<std::shared_ptr<InstRO::Core::Construct>> &&additionallyMarkedConstructs) {
 		unfoundSet = std::move(unFound);
 		addMarked = std::move(additionallyMarked);
+		addMarkedConstructs = std::move(additionallyMarkedConstructs);
 	}
 
 	void printResults();
@@ -36,6 +38,7 @@ class TestSummary {
 	std::string lbl;
 	std::multiset<std::string> unfoundSet;
 	std::multiset<std::string> addMarked;
+	std::set<std::shared_ptr<InstRO::Core::Construct>> addMarkedConstructs;
 };
 
 /*
@@ -66,6 +69,7 @@ class TestAdapter : public InstRO::Core::PassImplementation {
 	std::multiset<std::string> expectedItems;
 	std::multiset<std::string> markedItems;
 	std::multiset<std::string> erroneouslyContainedInConstructSet;
+	std::set<std::shared_ptr<InstRO::Core::Construct>> addMarkedConstructs;
 };
 }
 }

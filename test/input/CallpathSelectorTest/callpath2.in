@@ -10,3 +10,5 @@ callpath2.cpp:7:2--Fragment
 callpath2.cpp:5:17--Expression
 callpath2.cpp:5:8--SimpleStatement
 callpath2.cpp:5:2--SimpleStatement
+
++EmptyCallpathSelector
