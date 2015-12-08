@@ -16,3 +16,5 @@ callpath.cpp:17:2--Expression
 callpath.cpp:21:2--Expression
 callpath.cpp:22:2--Expression
 callpath.cpp:23:2--Expression
+
++EmptyCallpathSelector

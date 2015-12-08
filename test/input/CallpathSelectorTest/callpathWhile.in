@@ -8,3 +8,5 @@ callpathWhile.cpp:5:13--Fragment
 callpathWhile.cpp:7:2--Fragment
 callpathWhile.cpp:6:3--Expression
 callpathWhile.cpp:5:8--Expression
+
++EmptyCallpathSelector

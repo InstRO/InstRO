@@ -10,3 +10,13 @@ callpath3.cpp:9:5--Expression
 callpath3.cpp:9:10--Fragment
 callpath3.cpp:11:2--Fragment
 callpath3.cpp:10:3--Expression
+
++EmptyCallpathSelector
+
++PathToBarSelector
+callpath3.cpp:3:1--Function-::bar
+callpath3.cpp:7:1--Function-::main
+callpath3.cpp:9:5--Expression
+callpath3.cpp:9:10--Fragment
+callpath3.cpp:10:3--Expression
+callpath3.cpp:11:2--Fragment

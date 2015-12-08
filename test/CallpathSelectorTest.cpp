@@ -25,12 +25,24 @@ int main(int argc, char **argv) {
 
 	std::string filename = InstRO::Utility::getEnvironmentVariable("INSTRO_TEST_INPUT_FILENAME");
 
+	// From main to all functions
 	auto programEntrySelector = factory->createProgramEntrySelector();
 	auto functionSelector = factory->createConstructClassSelector(CTrait::CTFunction);
 	auto cpSelector = factory->createCallpathSelector(programEntrySelector, functionSelector);
 
 	factory->createTestAdapter(programEntrySelector, "EntrySelector", filename);
 	factory->createTestAdapter(cpSelector, "CallpathSelector", filename);
+
+	// from main to nothing
+	auto identifierSelector = factory->createIdentifierMatcherSelector({"foo"}); // should match nothing
+	auto cpSelector2 = factory->createCallpathSelector(programEntrySelector, identifierSelector);
+	factory->createTestAdapter(cpSelector2, "EmptyCallpathSelector", filename);
+
+	// from main to anything called ::bar
+	auto idSelector2 = factory->createIdentifierMatcherSelector({"::bar"});
+	auto cpSelector3 = factory->createCallpathSelector(programEntrySelector, idSelector2);
+	factory->createTestAdapter(cpSelector3, "PathToBarSelector", filename);
+
 
 #ifdef CDEBUG
 #endif
