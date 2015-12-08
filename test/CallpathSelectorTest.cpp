@@ -54,6 +54,6 @@ int main(int argc, char **argv) {
 
 #ifdef USE_CLANG
 	logIt(ERROR) << "Not implemented yet!" << std::endl;
-	return 0;
+	return -1;
 #endif
 }
