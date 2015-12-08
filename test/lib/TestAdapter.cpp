@@ -1,4 +1,4 @@
-#define INSTRO_LOG_LEVEL INFO
+#define INSTRO_LOG_LEVEL DEBUG
 
 #include "TestAdapter.h"
 #include "instro/utility/Logger.h"
@@ -21,6 +21,11 @@ void InstRO::Test::TestSummary::printResults() {
 		for (const auto i : addMarked) {
 			logIt(ERROR) << i << "\n";
 		}
+		logIt(DEBUG) << "=== DEBUG ===\n== Dumping the wrongly marked constructs using \"toString\" ==\n=== ===== ===" << std::endl;
+		for(const auto pC : addMarkedConstructs){
+			logIt(DEBUG) << pC->toString() << "\n";
+		}
+		logIt(DEBUG) << "=====\n== Done ==\n=====" << std::endl;
 	}
 
 }
@@ -41,12 +46,18 @@ void InstRO::Test::TestAdapter::checkIfConstructSetMatches(InstRO::Core::Constru
 	for (const auto idPair : idMap) {
 		std::string keyVal(idPair.second);
 		std::string testString(keyVal.substr(keyVal.rfind("/") + 1));
+
 		markedItems.insert(testString);
 
 		logIt(DEBUG) << "Marking " << keyVal << " as selected" << std::endl;
 
 		if (expectedItems.find(testString) != expectedItems.end()) {
 		} else {
+			InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface roci(cs);
+			auto cPos = std::find_if(roci.begin(), roci.end(),
+									 [&](const std::shared_ptr<InstRO::Core::Construct> c) { return c->getID() == idPair.first; });
+
+			addMarkedConstructs.insert(*cPos);
 			erroneouslyContainedInConstructSet.insert(testString);
 		}
 	}
@@ -69,7 +80,7 @@ void InstRO::Test::TestAdapter::finalize() {
 	std::set_union(tempAdditionals.begin(), tempAdditionals.end(), erroneouslyContainedInConstructSet.begin(),
 								 erroneouslyContainedInConstructSet.end(), std::inserter(addNodes, addNodes.begin()));
 
-	summary->setTestResult(std::move(unfoundSet), std::move(addNodes));
+	summary->setTestResult(std::move(unfoundSet), std::move(addNodes), std::move(addMarkedConstructs));
 }
 
 /* builds a multiset of expected items */
