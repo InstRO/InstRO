@@ -9,12 +9,14 @@ InstRO::Clang::FunctionDefinitionSelector::FunctionDefinitionSelector()
 }
 
 bool InstRO::Clang::FunctionDefinitionSelector::VisitFunctionDecl(clang::FunctionDecl *fDecl) {
-	logIt(DEBUG) << "InstRO::Clang::FunctionDefinitionSelector::VisitFunctionDecl" << std::endl;
-	if (fDecl->hasBody()) {
-		// we want to select
-		logIt(DEBUG) << "selecting node" << fDecl << std::endl;
-		InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci(&outputSet);
-		csci.put(std::make_shared<InstRO::Clang::Core::ClangConstruct>(fDecl));
+	if (fDecl->isThisDeclarationADefinition()) {
+		auto construct = std::make_shared<InstRO::Clang::Core::ClangConstruct>(fDecl);
+		if (construct->getTraits().is(InstRO::Core::ConstructTraitType::CTFunction)) {
+			logIt(DEBUG) << "Selecting " << construct->getIdentifier() << std::endl;
+			InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci(&outputSet);
+			csci.put(construct);
+		}
 	}
+
 	return true;
 }
