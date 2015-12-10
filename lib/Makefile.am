@@ -80,6 +80,8 @@ CLANG_HFILES= \
 ./include/instro/clang/selector/BlackWhitelistSelector.h \
 ./include/instro/clang/selector/FunctionDefinitionSelector.h \
 ./include/instro/clang/support/InstROASTConsumer.h \
+./include/instro/clang/tooling/ClangAnalysisInterface.h \
+./include/instro/clang/tooling/ClangConstructClassInterface.h \
 ./include/instro/support/BWLFileReader.h
 
 CLANG_SFILES= \
@@ -92,6 +94,7 @@ CLANG_SFILES= \
 ./src/clang/selector/FunctionDefinitionSelector.cpp \
 ./src/clang/support/ClangConsumerFactory.cpp \
 ./src/clang/support/InstROASTConsumer.cpp \
+./src/clang/tooling/ClangConstructClassInterface.cpp \
 ./src/support/BWLFileReader.cpp
 
 ROSE_HFILES= \
