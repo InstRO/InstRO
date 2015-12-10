@@ -14,6 +14,8 @@
 #include "instro/clang/core/ClangConsumerFactory.h"
 #include "instro/clang/core/ClangPassFactory.h"
 
+#include "instro/clang/tooling/ClangAnalysisInterface.h"
+
 namespace InstRO {
 namespace Clang {
 
@@ -33,11 +35,14 @@ class ClangInstrumentor : public InstRO::Instrumentor {
 	 * instrumentor with */
 	InstRO::Clang::ClangPassFactory* getFactory(CompilationPhase phase = frontend);
 	/** Accessor function for the (in general) compiler independent analysis layer */
-	virtual Tooling::AnalysisManager* getAnalysisManager() override { return nullptr; };
+	virtual InstRO::Tooling::AnalysisManager* getAnalysisManager() override;
 
 	void init();
 	void apply();
 	void finalize();
+
+	/// Initialize the AnalysisManager using the provided clang::ASTContext.
+	void initializeAnalysisManager(clang::ASTContext &context);
 
  private:
 	int argc;
@@ -45,6 +50,7 @@ class ClangInstrumentor : public InstRO::Instrumentor {
 	clang::tooling::CommonOptionsParser cop;
 	clang::tooling::RefactoringTool tool;
 	std::unique_ptr<InstRO::Clang::ClangPassFactory> fac;
+	std::unique_ptr<InstRO::Clang::Tooling::ClangAnalysisManager> cam;
 };
 }	// Clang
 }	// InstRO
