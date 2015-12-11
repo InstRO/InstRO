@@ -27,7 +27,6 @@ int main(int argc, char** argv) {
 	} catch (std::string& stringBasedException) {
 		std::cerr << "Caught Exception:" << std::endl;
 		std::cerr << stringBasedException << std::endl;
-		std::cerr.flush();
 	}
 
 	return 0;
