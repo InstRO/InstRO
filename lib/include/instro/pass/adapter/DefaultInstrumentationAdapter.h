@@ -15,7 +15,7 @@ namespace Adapter {
 class DefaultInstrumentationAdapter : public InstRO::Core::PassImplementation {
  public:
 	DefaultInstrumentationAdapter(InstRO::Pass* input)
-			: PassImplementation(InstRO::Core::ChannelConfiguration(input)), inputCS(input->getOutput()) {}
+			: PassImplementation(InstRO::Core::ChannelConfiguration(input)), inputPass(input) {}
 
 	void execute() override;
 
@@ -28,7 +28,7 @@ class DefaultInstrumentationAdapter : public InstRO::Core::PassImplementation {
 	virtual void instrumentExpression(const std::shared_ptr<InstRO::Core::Construct> construct) = 0;
 
  protected:
-	InstRO::Core::ConstructSet* inputCS;
+	Pass* inputPass;
 };
 
 }	// namespace Adapter

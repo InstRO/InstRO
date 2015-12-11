@@ -18,15 +18,15 @@ class BooleanCompoundSelector : public InstRO::Core::PassImplementation {
 
 	BooleanCompoundSelector(Pass* inputLeft, Pass* inputRight, CompoundOperationType operationType)
 			: PassImplementation(InstRO::Core::ChannelConfiguration(inputLeft, inputRight)),
-				csLeft(inputLeft->getOutput()),
-				csRight(inputRight->getOutput()),
+				passLeft(inputLeft),
+				passRight(inputRight),
 				operationType(operationType) {}
 
 	void execute() override;
 
  private:
-	Core::ConstructSet* csLeft;
-	Core::ConstructSet* csRight;
+	Pass* passLeft;
+	Pass* passRight;
 
 	enum CompoundOperationType operationType;
 
