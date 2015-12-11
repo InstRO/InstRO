@@ -40,7 +40,9 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 			for (auto construct : csci) {
 				auto child = construct;
 				auto parent = child;
-				auto childCS = InstRO::Core::ConstructSet(construct);
+
+				InstRO::Core::ConstructSet childCS;
+				InstRO::InfrastructureInterface::ConstructSetCompilerInterface(&childCS).put(construct);
 
 				std::vector<InstRO::Core::ConstructTraitType> traitList;
 

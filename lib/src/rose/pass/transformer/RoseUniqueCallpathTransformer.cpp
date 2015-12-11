@@ -57,26 +57,23 @@ InstRO::Core::ChannelConfiguration RoseUniqueCallpathTransformer::createChannelC
 }
 
 RoseUniqueCallpathTransformer::NodeSet RoseUniqueCallpathTransformer::retrieveInputNodes(InstRO::Pass *pass) {
-	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(pass->getOutput());
-	NodeSet nodes;
-	nodes.reserve(cs.size());
-	for (auto construct : cs) {
-		if (ExtendedCallGraphNode *node = callGraph->getNodeWithExactConstructSet(ConstructSet(construct))) {
-			nodes.insert(node);
-		} else {
-			auto rc = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
-			logIt(ERROR) << "Failed to get call graph node for " << SageInterface::get_name(rc->getNode()) << " ("
-									 << rc->getNode()->class_name() << ")" << std::endl;
-		}
-	}
 
-	return nodes;
+	auto graphNodes = callGraph->getNodeSetByCS(pass->getOutput());
+	NodeSet graphNodesUnordered;
+	graphNodesUnordered.reserve(graphNodes.size());
+	graphNodesUnordered.insert(graphNodes.begin(), graphNodes.end());
+
+	return graphNodesUnordered;
 }
 
 InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *RoseUniqueCallpathTransformer::getMainFunctionNode() {
 	if (SgFunctionDeclaration *mainDecl = SageInterface::findMain(SageInterface::getProject())) {
 		if (SgFunctionDefinition *mainDef = mainDecl->get_definition()) {
-			ConstructSet mainCS(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(mainDef));
+
+			auto mainConstruct = InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(mainDef);
+			ConstructSet mainCS;
+			InstRO::InfrastructureInterface::ConstructSetCompilerInterface(&mainCS).put(mainConstruct);
+
 			if (ExtendedCallGraphNode *node = callGraph->getNodeWithExactConstructSet(mainCS)) {
 				return node;
 			} else {
