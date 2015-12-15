@@ -43,6 +43,8 @@ class ClangInstrumentor : public InstRO::Instrumentor {
 
 	/// Initialize the AnalysisManager using the provided clang::ASTContext.
 	void initializeAnalysisManager(clang::ASTContext &context);
+ protected:
+	clang::tooling::RefactoringTool& getTool();
 
  private:
 	int argc;
