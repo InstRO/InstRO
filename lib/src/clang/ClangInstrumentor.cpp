@@ -15,6 +15,10 @@ InstRO::Clang::ClangPassFactory* InstRO::Clang::ClangInstrumentor::getFactory(Co
 	return fac.get();
 }
 
+clang::tooling::RefactoringTool& InstRO::Clang::ClangInstrumentor::getTool() {
+	return tool;
+}
+
 void InstRO::Clang::ClangInstrumentor::init() {}
 
 void InstRO::Clang::ClangInstrumentor::apply() {

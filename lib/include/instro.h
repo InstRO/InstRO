@@ -7,10 +7,15 @@
 #include "instro/core/PassFactory.h"
 #include "instro/core/Instrumentor.h"
 
-#ifdef USE_ROSE
+#if INSTRO_USE_ROSE
 #include "instro/rose/core/RosePassImplementation.h"
 #include "instro/rose/RosePassFactory.h"
 #include "instro/rose/RoseInstrumentor.h"
+#endif
+
+#if INSTRO_USE_CLANG
+#include "instro/clang/core/ClangPassFactory.h"
+#include "instro/clang/ClangInstrumentor.h"
 #endif
 
 #ifdef USING_LLVM

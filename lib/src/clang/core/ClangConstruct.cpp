@@ -12,6 +12,7 @@
 #include "clang/AST/StmtVisitor.h"
 
 #include "boost/algorithm/string/replace.hpp"
+#include "boost/algorithm/string/trim.hpp"
 
 using namespace InstRO::Core;
 using namespace InstRO::Clang::Core;
@@ -127,7 +128,8 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 
 	void VisitReturnStmt(clang::ReturnStmt *stmt) {
 		ct = ConstructTrait(ConstructTraitType::CTSimpleStatement);
-		handleStatementWithWrappableCheck(stmt);
+		ct.add(ConstructTraitType::CTStatement);
+		// return statements are not wrappable
 	}
 
 	void VisitStmt(clang::Stmt *stmt) { generateError(stmt); }
@@ -220,7 +222,11 @@ std::string ClangConstruct::toString() const {
 		}
 	}
 
-	return className + " | " + rso.str();
+	rso.str();
+	// remove trailing newline from unparsed construct
+	boost::trim_right(unparse);
+
+	return className + " | " + unparse;
 }
 
 std::string ClangConstruct::toDotString() const {
