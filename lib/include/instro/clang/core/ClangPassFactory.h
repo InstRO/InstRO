@@ -38,10 +38,12 @@ class ClangPassFactory : public InstRO::PassFactory {
 			p->setASTContext(context);
 		}
 	}
+ protected:
+	std::set<InstRO::Clang::ASTContextProvider*> lazyContextProvidingMap;
 
  private:
 	clang::tooling::Replacements& replacements;
-	std::set<InstRO::Clang::ASTContextProvider*> lazyContextProvidingMap;
+
 };
 }	// Clang
 }	// INstRO

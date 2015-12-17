@@ -100,6 +100,7 @@ libInstRO_test_a_CPPFLAGS=$(top_srcdir)/lib $(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_
 
 # The different test-executables.
 # The choice which tests to implement was guided by the "InstRO-mandatory-component-sheet"
+if USEROSE
 bin_PROGRAMS= \
 	ConstructHierarchySelectionTest \
 	IdentifierSelectorTest \
@@ -107,6 +108,12 @@ bin_PROGRAMS= \
 	BooleanCompoundSelectorTest \
 	CallpathSelectorTest \
 	MatcherUnitTest
+endif
+# Once all tests are supported by both ROSE and Clang, remove the two conditionals
+if USECLANG
+bin_PROGRAMS= \
+	ConstructHierarchySelectionTest
+endif
 
 ####
 # Tests independent of the used compiler
@@ -173,10 +180,16 @@ ConstructElevatorTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 ConstructElevatorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
 BooleanCompoundSelectorTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
-BooleanCompoundSelectorTest_LDADD+=  $(INSTRO_WITH_ROSE_LDADD)
+BooleanCompoundSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
 CallpathSelectorTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 CallpathSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
+endif
+
+if USECLANG
+# use manual targets for clang because autotools have problems with the link commands / library order
+ConstructHierarchySelectionTest: libInstRO_test.a ConstructHierarchySelectionTestMain.cpp $(top_builddir)/lib/libInstRO_clang.a $(top_builddir)/lib/libInstRO_core.a
+	$(CXX) $(LLVM_CXXFLAGS_FLAGS) -I$(LLVM_SRC_INCLUDE_PATH) -I$(CLANG_SRC_INCLUDE_PATH) -I$(BOOST_INCLUDEDIR) $(AM_CPPFLAGS) -DCDEBUG -I. ConstructHierarchySelectionTestMain.cpp libInstRO_test.a $(top_builddir)/lib/libInstRO_clang.a $(top_builddir)/lib/libInstRO_core.a $(CLANG_LIBS_LIST) $(LLVM_LDFLAGS) -o $@
 endif
 
 # In order to run 'make check'
