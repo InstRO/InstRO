@@ -33,7 +33,7 @@ class ClangInstrumentor : public InstRO::Instrumentor {
 	clang::tooling::ToolAction* getClangAction();
 	/** Returns the factory used to create the passes a user builds the
 	 * instrumentor with */
-	InstRO::Clang::ClangPassFactory* getFactory(CompilationPhase phase = frontend);
+	virtual InstRO::Clang::ClangPassFactory* getFactory(CompilationPhase phase = frontend) override;
 	/** Accessor function for the (in general) compiler independent analysis layer */
 	virtual InstRO::Tooling::AnalysisManager* getAnalysisManager() override;
 
@@ -43,6 +43,7 @@ class ClangInstrumentor : public InstRO::Instrumentor {
 
 	/// Initialize the AnalysisManager using the provided clang::ASTContext.
 	void initializeAnalysisManager(clang::ASTContext &context);
+
  protected:
 	clang::tooling::RefactoringTool& getTool();
 

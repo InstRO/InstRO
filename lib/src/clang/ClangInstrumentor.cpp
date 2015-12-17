@@ -23,7 +23,8 @@ void InstRO::Clang::ClangInstrumentor::init() {}
 
 void InstRO::Clang::ClangInstrumentor::apply() {
 	std::cout << "Preparing to run Clang tool" << std::endl;
-	InstRO::Clang::Support::ClangConsumerFactory f(getPassManager(), tool.getReplacements(), fac.get());
+
+	InstRO::Clang::Support::ClangConsumerFactory f(getPassManager(), tool.getReplacements(), getFactory());
 	tool.runAndSave(clang::tooling::newFrontendActionFactory<InstRO::Clang::Support::ClangConsumerFactory>(&f).get());
 }
 
