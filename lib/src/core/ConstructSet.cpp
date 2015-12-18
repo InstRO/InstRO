@@ -192,15 +192,6 @@ bool ConstructSet::intersects(const ConstructSet& other) const {
 	return !(this->intersect(other).empty());
 }
 
-std::vector<ConstructSet> ConstructSet::split() const {
-	std::vector<ConstructSet> retVec;
-	retVec.reserve(constructs.size());
-	for (auto construct : constructs) {
-		retVec.push_back(ConstructSet(construct));
-	}
-	return retVec;
-}
-
 std::string ConstructSet::toString() const {
       std::string str;
       auto constructIter = begin();
