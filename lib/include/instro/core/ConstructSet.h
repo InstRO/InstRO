@@ -271,7 +271,6 @@ class ConstructSet {
 	typedef std::set<value_type>::const_iterator const_iterator;
 
 	ConstructSet(){};
-	ConstructSet(const value_type& construct) { constructs.insert(construct); };
 
 	ConstructTraitType getMaxConstructLevel() const;
 	ConstructTraitType getMinConstructLevel() const;
@@ -284,7 +283,6 @@ class ConstructSet {
 	ConstructSet intersect(const ConstructSet&) const;
 	ConstructSet relativeComplement(const ConstructSet&) const;
 	ConstructSet symmertricDifference(const ConstructSet&) const;
-	std::vector<ConstructSet> split() const;
 
 	bool intersects(const ConstructSet&) const;
 
