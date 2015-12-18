@@ -76,7 +76,7 @@ class ReadOnlyConstructSetCompilerInterface {
 namespace Core {
 
 enum class ConstructTraitType {
-	CTNoTraits = 0,	// TODO this should no longer be necessary?
+	CTNoTraits = 0,	// XXX how to avoid this?
 	CTMin = 1,
 	// Please do not use fragments. They may become deprecated
 	CTFragment = 2,

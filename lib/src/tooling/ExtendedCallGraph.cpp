@@ -10,11 +10,9 @@ namespace ExtendedCallGraph {
 
 
 ExtendedCallGraph::ExtendedCallGraph() {
-	// TODO
 }
 
 ExtendedCallGraph::~ExtendedCallGraph() {
-	// TODO
 }
 
 ExtendedCallGraphNode* ExtendedCallGraph::addNode(ExtendedCallGraphNode* node) {
@@ -153,7 +151,6 @@ InstRO::Core::ConstructSet ExtendedCallGraph::getConstructSet(std::set<ExtendedC
 	return returnSet;
 }
 
-// TODO: swapping is now more complicated
 void ExtendedCallGraph::swapConstructSet(InstRO::Core::ConstructSet oldCS, InstRO::Core::ConstructSet newCS) {
 
 	if (csToGraphNode.find(oldCS) == csToGraphNode.end()) {

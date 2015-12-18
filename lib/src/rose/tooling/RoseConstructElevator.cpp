@@ -20,7 +20,7 @@ std::shared_ptr<InstRO::Core::Construct> raiseConstruct(std::shared_ptr<InstRO::
 																																	Predicate pred) {
 	SgNode *current = src->getNode();
 	// CI Walk the AST upwards, until the current node is either NULL or it is the desired construct type
-	while (current != nullptr && !pred(current)) {
+	while (current != nullptr && !pred->operator()(current)) {
 		logIt(INFO) << " --> " << current->class_name();
 		current = current->get_parent();
 	}
@@ -42,7 +42,7 @@ std::set<std::shared_ptr<InstRO::Core::Construct> > lowerConstruct(std::shared_p
 	Rose_STL_Container<SgNode *> nodes = SageInterface::querySubTree<SgNode>(src->getNode(), V_SgNode);
 	for (auto node : nodes) {
 		// check if the node is of the desired type ... and add it to the outputset
-		if (pred(node)) {
+		if (pred->operator()(node)) {
 			retSet.insert(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
 		}
 	}
@@ -58,60 +58,25 @@ using namespace InstRO::Rose::Core::RoseConstructLevelPredicates;
 InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::ConstructSet &inputCS,
 																										InstRO::Core::ConstructTraitType traitType) {
 	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface input(&inputCS);
-	std::unique_ptr<InstRO::Core::ConstructSet> newConstructSet = std::make_unique<InstRO::Core::ConstructSet>();
-	InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(newConstructSet.get());
+	InstRO::Core::ConstructSet newConstructSet;
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(&newConstructSet);
 	logIt(INFO) << "ConstructElevator::raise to " << traitType << ":\t Input-ConstructSet contains " << inputCS.size()
 						<< "elements " << std::endl;
 	for (auto construct : input) {
-		std::shared_ptr<InstRO::Core::Construct> newConstruct;
-		auto roseConstruct = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
-		if (roseConstruct == nullptr) {
-			throw std::string(
-					"A non InstRO::Rose::Core::RoseConstruct in the ROSE interface. Either multiple compiler interfaces are used, "
-					"or programming error");
-		}
+		auto roseConstruct = InstRO::Rose::toRoseConstruct(construct);
 
-		switch (traitType) {
-			case InstRO::Core::ConstructTraitType::CTExpression:
-				newConstruct = raiseConstruct(roseConstruct, CLExpressionPredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTStatement:
-				newConstruct = raiseConstruct(roseConstruct, CLStatementPredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTLoopStatement:
-				newConstruct = raiseConstruct(roseConstruct, CLLoopPredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTConditionalStatement:
-				newConstruct = raiseConstruct(roseConstruct, CLConditionalPredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTScopeStatement:
-				newConstruct = raiseConstruct(roseConstruct, CLScopeStatementPredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTSimpleStatement:
-				newConstruct = raiseConstruct(roseConstruct, CLSimpleStatementPredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTWrappableStatement:
-				newConstruct = raiseConstruct(roseConstruct, CTWrappableStatementPredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTFunction:
-				newConstruct = raiseConstruct(roseConstruct, CLFunctionPredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTFileScope:
-				newConstruct = raiseConstruct(roseConstruct, CLFileScopePredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTGlobalScope:
-				newConstruct = raiseConstruct(roseConstruct, CLGlobalScopePredicate());
-				break;
-		}
+		auto predicate = InstRO::Rose::Core::RoseConstructLevelPredicates::getPredicateForTraitType(traitType);
+		std::shared_ptr<InstRO::Core::Construct> newConstruct = raiseConstruct(roseConstruct, std::move(predicate));
 
 		if (newConstruct != nullptr) {
 			output.put(newConstruct);
 		}
 	}
-	logIt(INFO) << "ConstructElevator::raise:\t ConstructSet contains " << newConstructSet->size() << " elements "
+	logIt(INFO) << "ConstructElevator::raise:\t ConstructSet contains " << newConstructSet.size() << " elements "
 						<< std::endl;
-	return *newConstructSet;
-};
+	return newConstructSet;
+}
+
 InstRO::Core::ConstructSet ConstructElevator::lower(const InstRO::Core::ConstructSet *inputCS,
 																										InstRO::Core::ConstructTraitType traitType) {
 	return lower(*inputCS, traitType);
@@ -124,57 +89,22 @@ InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::Construc
 // This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
 InstRO::Core::ConstructSet ConstructElevator::lower(const InstRO::Core::ConstructSet &inputCS,
 																										InstRO::Core::ConstructTraitType traitType) {
-	std::unique_ptr<InstRO::Core::ConstructSet> newConstructSet = std::make_unique<InstRO::Core::ConstructSet>();
-	InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(newConstructSet.get());
+	InstRO::Core::ConstructSet newConstructSet;
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(&newConstructSet);
 
 	// CI: check each input construct separately
 	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface input(&inputCS);
 	for (auto construct : input) {
-		std::set<std::shared_ptr<InstRO::Core::Construct> > newConstructs;
 		// CI: make sure it is a ROSE construct
-		auto roseConstruct = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(construct);
-		if (roseConstruct == nullptr) {
-			throw std::string(
-					"A non InstRO::Rose::Core::RoseConstruct in the ROSE interface. Either multiple compiler interfaces are used, "
-					"or programming error");
-		}
-
-		// Use different target predicate, depending on the input level
-		switch (traitType) {
-			case InstRO::Core::ConstructTraitType::CTExpression:
-				newConstructs = lowerConstruct(roseConstruct, CLExpressionPredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTStatement:
-				newConstructs = lowerConstruct(roseConstruct, CLStatementPredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTLoopStatement:
-				newConstructs = lowerConstruct(roseConstruct, CLLoopPredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTConditionalStatement:
-				newConstructs = lowerConstruct(roseConstruct, CLConditionalPredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTScopeStatement:
-				newConstructs = lowerConstruct(roseConstruct, CLScopeStatementPredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTSimpleStatement:
-				newConstructs = lowerConstruct(roseConstruct, CLSimpleStatementPredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTFunction:
-				newConstructs = lowerConstruct(roseConstruct, CLFunctionPredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTFileScope:
-				newConstructs = lowerConstruct(roseConstruct, CLFileScopePredicate());
-				break;
-			case InstRO::Core::ConstructTraitType::CTGlobalScope:
-				newConstructs = lowerConstruct(roseConstruct, CLGlobalScopePredicate());
-				break;
-		}
+		auto roseConstruct = InstRO::Rose::toRoseConstruct(construct);
+		auto predicate = InstRO::Rose::Core::RoseConstructLevelPredicates::getPredicateForTraitType(traitType);
+		auto newConstructs = lowerConstruct(roseConstruct, std::move(predicate));
 
 		for (auto newConstruct : newConstructs) {
 			output.put(newConstruct);
 		}
 	}
-	return *newConstructSet;
+	return newConstructSet;
 }
 }
 }

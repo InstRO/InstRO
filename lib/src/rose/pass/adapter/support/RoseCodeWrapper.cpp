@@ -3,9 +3,6 @@
 #include "instro/rose/utility/ASTHelper.h"
 #include "instro/utility/Logger.h"
 
-/// XXX
-#include <cassert>
-
 namespace InstRO {
 namespace Rose {
 namespace Adapter {
