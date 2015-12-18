@@ -16,8 +16,6 @@
  * Construct's identifier) but only the filename. 
  * Fully qualified path to the input file is strongly preferred.
  *
- * TODO Have the selection graph runtime configurable (JSON?)
- *
  */
 
 

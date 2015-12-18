@@ -17,10 +17,7 @@ namespace Core {
 
 namespace RoseConstructLevelPredicates {
 struct CTPredicate {
-	virtual bool operator()(SgNode* n) const {
-		// RN: TODO will this actually work with a base implementation?
-		return false;
-	}
+	virtual bool operator()(SgNode* n) const = 0;
 	virtual ~CTPredicate() {}
 };
 
@@ -33,7 +30,7 @@ struct DefinedVariableDeclarationPredicate {
 };
 
 struct CLExpressionPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const {
+	bool operator()(SgNode* n) const override {
 		if (isSgExprListExp(n) || isSgFunctionRefExp(n)) {
 			return false;	// never accept these
 		}
@@ -194,11 +191,6 @@ struct CTWrappableStatementPredicate : public CTPredicate {
 	}
 };
 
-struct InstrumentableConstructPredicate : public CTPredicate {
-	// TODO: how exactly is this defined?
-	bool operator()(SgNode* n) const;
-};
-
 struct ConstructPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		return CLGlobalScopePredicate()(n) || CLFileScopePredicate()(n) || CLFunctionPredicate()(n) ||
@@ -207,7 +199,7 @@ struct ConstructPredicate : public CTPredicate {
 };
 
 //// TODO actually use that mechanism
-CTPredicate getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType);
+std::unique_ptr<CTPredicate> getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType);
 
 }	// namespace RoseConstructLevelPredicates
 

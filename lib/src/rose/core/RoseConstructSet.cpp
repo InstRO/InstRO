@@ -1,12 +1,17 @@
 #include "instro/rose/core/RoseConstructSet.h"
 
+#include "instro/core/Helper.h"
 #include "rose.h"
 
 namespace InstRO {
 namespace Rose {
 
 std::shared_ptr<InstRO::Rose::Core::RoseConstruct> toRoseConstruct(std::shared_ptr<InstRO::Core::Construct> c) {
-	return std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(c);
+	auto roseConstruct = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(c);
+	if (roseConstruct == nullptr) {
+		throw std::string("Error: Could not cast to RoseConstruct");
+	}
+	return roseConstruct;
 }
 
 namespace Core {
@@ -14,28 +19,30 @@ namespace Core {
 namespace RoseConstructLevelPredicates {
 
 using namespace RoseConstructLevelPredicates;
-CTPredicate getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType) {
+std::unique_ptr<CTPredicate> getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType) {
 	switch (traitType) {
 		case InstRO::Core::ConstructTraitType::CTExpression:
-			return CLExpressionPredicate();
+			return std::make_unique<CLExpressionPredicate>(CLExpressionPredicate());
 		case InstRO::Core::ConstructTraitType::CTStatement:
-			return CLStatementPredicate();
+			return std::make_unique<CLStatementPredicate>(CLStatementPredicate());
 		case InstRO::Core::ConstructTraitType::CTLoopStatement:
-			return CLLoopPredicate();
+			return std::make_unique<CLLoopPredicate>(CLLoopPredicate());
 		case InstRO::Core::ConstructTraitType::CTConditionalStatement:
-			return CLConditionalPredicate();
+			return std::make_unique<CLConditionalPredicate>(CLConditionalPredicate());
 		case InstRO::Core::ConstructTraitType::CTScopeStatement:
-			return CLScopeStatementPredicate();
+			return std::make_unique<CLScopeStatementPredicate>(CLScopeStatementPredicate());
 		case InstRO::Core::ConstructTraitType::CTSimpleStatement:
-			return CLSimpleStatementPredicate();
+			return std::make_unique<CLSimpleStatementPredicate>(CLSimpleStatementPredicate());
 		case InstRO::Core::ConstructTraitType::CTWrappableStatement:
-			return CTWrappableStatementPredicate();
+			return std::make_unique<CTWrappableStatementPredicate>(CTWrappableStatementPredicate());
 		case InstRO::Core::ConstructTraitType::CTFunction:
-			return CLFunctionPredicate();
+			return std::make_unique<CLFunctionPredicate>(CLFunctionPredicate());
 		case InstRO::Core::ConstructTraitType::CTFileScope:
-			return CLFileScopePredicate();
+			return std::make_unique<CLFileScopePredicate>(CLFileScopePredicate());
 		case InstRO::Core::ConstructTraitType::CTGlobalScope:
-			return CLGlobalScopePredicate();
+			return std::make_unique<CLGlobalScopePredicate>(CLGlobalScopePredicate());
+		default:
+			throw std::string("RoseConstructLevelPredicates: unknown trait type");
 	}
 }
 

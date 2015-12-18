@@ -14,7 +14,6 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 	// Enable the Pass Manager to query the pass for its dependencies
 	void registerPass(Pass *currentPass) override;
 
-	// TODO: FIX
 	void addDependency(Pass *input, Pass *currentPass) {
 		// TODO(CI): implement storing of construct level graph
 		getEnvelope(currentPass)->predecessors.push_back(input);
@@ -34,10 +33,6 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 	// Flatten the configuration graph to a sequence preserving input-ouput order
 	bool createPassTraversalOder();
  
-	InstRO::Core::ConstructSet *elevate(Core::ConstructTraitType inputLevel) {
-		// TODO(CI): Implement Elevation
-		return NULL;
-	}
 	bool isElevationRequired() { return false; };
 	PassEnvelope *getEnvelope(Pass *pass) {
 		for (auto &i : passList) {

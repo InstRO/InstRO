@@ -10,7 +10,6 @@ namespace Adapter {
 /**
  * \brief Instruments incoming Constructs with the InstRO Measurement Interface.
  * \author Roman Ness
- * TODO implement me
  */
 class DefaultInstrumentationAdapter : public InstRO::Core::PassImplementation {
  public:

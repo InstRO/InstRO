@@ -69,7 +69,6 @@ class ExtendedCallGraph {
 	std::set<ExtendedCallGraphNode*> getNodeSet(T& predicate);
 	std::set<ExtendedCallGraphNode*> getNodeSet();
 
-	/* Construction XXX maybe move these to a Builder object? */
 	ExtendedCallGraphNode* getNodeWithExactConstructSet(InstRO::Core::ConstructSet cs);
 	void addEdge(ExtendedCallGraphNode* from, ExtendedCallGraphNode* to);
 	ExtendedCallGraphNode* addNode(ExtendedCallGraphNode* node);
