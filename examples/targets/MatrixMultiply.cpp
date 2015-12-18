@@ -6,7 +6,7 @@ void matrixMultiply(const float *A, const int sizeA, const float *B, const int s
 	for(int i = 0; i < sizeA; ++i){
 		for(int j = 0; j < sizeB; ++j){
 			for(int k = 0; k < sizeC; ++k){
-				C[i*sizeC + j] += A[i*sizeA + k] * B[k*sizeB + i];
+				C[i*sizeC + j] += A[i*sizeA + k] * B[k*sizeB + j];
 			}
 		}
 	}
@@ -30,7 +30,7 @@ void print(const float *matrix, const int size){
 
 int main(int argc, char **argv){
 
-	const int sizeA = 5;
+	const int sizeA = 2;
 	const int sizeB = sizeA;
 	const int sizeC = sizeB;
 	const int allocSizeA = sizeA * sizeA;
@@ -46,12 +46,14 @@ int main(int argc, char **argv){
 	initMatrix(matrixB, sizeB);
 	initMatrix(matrixC, sizeC);
 
-	matrixMultiply(matrixA, sizeA, matrixB, sizeB, matrixC, sizeC);
-
 	print(matrixA, sizeA);
 	printf("\n");
 	print(matrixB, sizeB);
 	printf("\n");
+	print(matrixC, sizeC);
+
+	matrixMultiply(matrixA, sizeA, matrixB, sizeB, matrixC, sizeC);
+
 	print(matrixC, sizeC);
 
 	free(matrixA);
