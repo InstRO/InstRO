@@ -209,14 +209,30 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	InstRO::Core::ConstructTrait getConstructTraits() { return ct; }
 
 	// global scope
-	void visit(SgProject* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTGlobalScope); }
+	void visit(SgProject* node) {
+		if (RoseConstructLevelPredicates::CLGlobalScopePredicate()(node)) {
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTGlobalScope);
+		} else {
+			generateError(node);
+		}
+	}
 
 	// file scope
-	void visit(SgSourceFile* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFileScope); }
+	void visit(SgSourceFile* node) {
+		if (RoseConstructLevelPredicates::CLFileScopePredicate()(node)) {
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFileScope);
+		} else {
+			generateError(node);
+		}
+	}
 
 	// function
 	void visit(SgFunctionDefinition* node) {
-		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFunction);
+		if (RoseConstructLevelPredicates::CLFunctionPredicate()(node)) {
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFunction);
+		} else {
+			generateError(node);
+		}
 	}
 
 	// conditionals
