@@ -53,9 +53,8 @@ std::string RoseConstruct::getIdentifier() const {
 
 	if (isSgLocatedNode(node) != nullptr) {
 		auto locatedNode = isSgLocatedNode(node);
-		logIt(DEBUG) << "getIdentifier(): \nNode type: " << locatedNode->class_name() << std::endl;
+		logIt(DEBUG) << "getIdentifier(): \nNode type: " << locatedNode->class_name() << ":= ";
 
-		Sg_File_Info *fInfo = locatedNode->get_startOfConstruct();
 		std::string filename(determineCorrectFilename());
 		std::string lineInfo(std::to_string(determineCorrectLineInfo()));
 		std::string constructString(specificConstructClassToString());
@@ -78,9 +77,15 @@ std::string RoseConstruct::getIdentifier() const {
 }
 
 int RoseConstruct::determineCorrectLineInfo() const {
-
+	// If code comes from template instantiation
+	if (Utility::ASTHelper::isContainedInTemplateInstantiation(node)){
+		logIt(DEBUG) << "Handling line info inside template instantiation for node " << node->class_name() << std::endl;
+		return Utility::ASTHelper::applyConsumerToTemplateInstantiationDecl(
+				[](Sg_File_Info *info) { return info->get_line(); }, node);
+	}
+	
 	// Empty increment expression in for loop gets correct line info
-	if(isSgNullExpression(node) && isSgForStatement(node->get_parent())){
+	if (isSgNullExpression(node) && isSgForStatement(node->get_parent())) {
 		return isSgLocatedNode(node->get_parent())->get_startOfConstruct()->get_line();
 	}
 
@@ -88,6 +93,12 @@ int RoseConstruct::determineCorrectLineInfo() const {
 }
 
 std::string RoseConstruct::determineCorrectFilename() const {
+	// If code comes from template instantiation
+	if (Utility::ASTHelper::isContainedInTemplateInstantiation(node)){
+		logIt(DEBUG) << "Handling filename info inside template instantiation for node " << node->class_name() << std::endl;
+		return Utility::ASTHelper::applyConsumerToTemplateInstantiationDecl(
+				[](Sg_File_Info *info) { return info->get_filenameString(); }, node);
+	}
 
 	// empty increment expression in for loop gets correct file name
 	if(isSgNullExpression(node) && isSgForStatement(node->get_parent())){
@@ -104,6 +115,13 @@ std::string RoseConstruct::determineCorrectFilename() const {
  * If something happens we do not account for, the returned column info is -1.
  */
 int RoseConstruct::determineCorrectColumnInformation() const {
+	// If code comes from template instantiation
+	if (Utility::ASTHelper::isContainedInTemplateInstantiation(node)) {
+		logIt(DEBUG) << "Handling column info inside template instantiation for node " << node->class_name() << std::endl;
+		return Utility::ASTHelper::applyConsumerToTemplateInstantiationDecl(
+				[](Sg_File_Info *info) { return info->get_col(); }, node);
+	}
+
 	int colInfo = -1;
 	SgNode *n = node;
 	if (isSgNullStatement(n)) {
