@@ -1,0 +1,22 @@
++CTFunctionSelector
+templContainer.cpp:6:2--Function-::container < double > ::container
+templContainer.cpp:8:2--Function-::container < double > ::insert
+templContainer.cpp:13:2--Function-::container < double > ::get
+templContainer.cpp:18:1--Function-::main
+
++CTStatementSelector
+templContainer.cpp:8:2--SimpleStatement
+templContainer.cpp:8:2--SimpleStatement
+templContainer.cpp:13:2--SimpleStatement
+templContainer.cpp:19:2--SimpleStatement
+templContainer.cpp:20:2--SimpleStatement
+templContainer.cpp:21:2--SimpleStatement
+templContainer.cpp:23:2--SimpleStatement
+
++CTExpressionSelector
+templContainer.cpp:8:2--Expression
+templContainer.cpp:8:2--Expression
+templContainer.cpp:8:2--Expression
+templContainer.cpp:13:2--Expression
+templContainer.cpp:20:2--Expression
+templContainer.cpp:21:13--Expression

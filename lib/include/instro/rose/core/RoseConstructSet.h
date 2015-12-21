@@ -2,6 +2,7 @@
 #define INSTRO_ROSE_CORE_CONSTRUCTSET_H_
 
 #include "instro/core/ConstructSet.h"
+#include "instro/rose/utility/ASTHelper.h"
 #include "instro/utility/Logger.h"
 
 #include "rose.h"
@@ -31,7 +32,7 @@ struct DefinedVariableDeclarationPredicate {
 
 struct CLExpressionPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const override {
-		if (isSgExprListExp(n) || isSgFunctionRefExp(n)) {
+		if (isSgExprListExp(n) || isSgFunctionRefExp(n) || isSgMemberFunctionRefExp(n)) {
 			return false;	// never accept these
 		}
 		if (isSgFunctionCallExp(n) != nullptr) {
@@ -66,10 +67,21 @@ struct CLExpressionPredicate : public CTPredicate {
 			return false;
 		}
 
-		if (isSgCastExp(n))
+		if (isSgCastExp(n)){
 			return false;
+		}
 
 		if (isSgAssignInitializer(n)) {
+			return false;
+		}
+
+		// do not allow initializers to show up in construct sets
+		if(isSgConstructorInitializer(n)){
+			return false;
+		}
+
+		// function call expressions won't be affected
+		if(isSgDotExp(n) || isSgThisExp(n) || isSgArrowExp(n)){
 			return false;
 		}
 

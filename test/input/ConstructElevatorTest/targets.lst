@@ -4,3 +4,4 @@ expressions
 if
 identifier
 ternaryOp
+templFunc
