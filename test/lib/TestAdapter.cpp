@@ -1,4 +1,4 @@
-#define INSTRO_LOG_LEVEL INFO
+#define INSTRO_LOG_LEVEL ERROR
 
 #include "TestAdapter.h"
 #include "instro/utility/Logger.h"

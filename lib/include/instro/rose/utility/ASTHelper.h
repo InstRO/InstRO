@@ -57,6 +57,7 @@ typename std::result_of<CallableFileInfoConsumer(Sg_File_Info*)>::type applyCons
 	if (funcDecl != nullptr) {
 		// FIXME It seems ROSE is unable to resolve the template in this situation
 		auto templDecl = funcDecl->get_templateDeclaration();
+		templDecl = isSgTemplateFunctionDeclaration(templDecl->get_definingDeclaration());
 		retVal = cr(templDecl->get_startOfConstruct());
 	}
 	if (memDecl != nullptr) {
@@ -65,6 +66,24 @@ typename std::result_of<CallableFileInfoConsumer(Sg_File_Info*)>::type applyCons
 	}
 
 	return retVal;
+}
+
+template <typename CallableFileInfoConsumer>
+typename std::result_of<CallableFileInfoConsumer(Sg_File_Info*)>::type applyConsumerToAssignInitializer(
+		CallableFileInfoConsumer cr, SgAssignInitializer* node) {
+	auto decl = isSgDeclarationStatement(node->get_parent()->get_parent());
+	if (decl) {
+		if (decl->isCompilerGenerated()) {
+			auto n = decl->get_parent();
+			auto ln = isSgLocatedNode(n);
+			if (ln == nullptr) {
+				throw std::string("The Assign initializer was in a weird position!");
+			}
+			return cr(ln->get_startOfConstruct());
+		}
+		return cr(decl->get_startOfConstruct());
+	}
+	throw std::string("The Assign initializer was in a weird position!");
 }
 }
 
