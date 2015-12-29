@@ -1,23 +1,29 @@
 +Func2StmtLevelSelector
 templFunc.cpp:4:1--SimpleStatement
+templFunc.cpp:5:2--SimpleStatement
 templFunc.cpp:9:2--SimpleStatement
 
 +Stmt2FuncLevelSelector
-templFunc.cpp:4:1--Function-::eq < 2 , 2 >
+templFunc.cpp:4:1--Function-::eq < 2 , 2 > 
 templFunc.cpp:8:1--Function-::test
+templFunc.cpp:4:1--Function-::eq
 
 +Func2ExprLevelSelector
 templFunc.cpp:4:1--Expression
+templFunc.cpp:5:9--Expression
+templFunc.cpp:9:2--Expression
 templFunc.cpp:9:11--Expression
-templFunc.cpp:9:7--Expression
 
 +wpToExprStmtSelector
+templFunc.cpp:4:1--SimpleStatement
 templFunc.cpp:5:2--SimpleStatement
 templFunc.cpp:9:2--SimpleStatement
+templFunc.cpp:4:1--Expression
+templFunc.cpp:9:2--Expression
 templFunc.cpp:5:9--Expression
-templFunc.cpp:9:7--Expression
 templFunc.cpp:9:11--Expression
 
 +wpToStmtFuncSelector
+templFunc.cpp:4:1--SimpleStatement
 templFunc.cpp:5:2--SimpleStatement
 templFunc.cpp:9:2--SimpleStatement

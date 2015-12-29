@@ -89,13 +89,25 @@ int RoseConstruct::determineCorrectLineInfo() const {
 		return isSgLocatedNode(node->get_parent())->get_startOfConstruct()->get_line();
 	}
 
+	// Assign initializers are marked as compiler generated -> retrieve correct position information
+	if (isSgAssignInitializer(node)) {
+		return Utility::ASTHelper::applyConsumerToAssignInitializer([](Sg_File_Info *info) { return info->get_line(); },
+																																isSgAssignInitializer(node));
+	}
+
+	// if the declaration is inside an if statement, then it is marked compiler generated
+	if(isSgVariableDeclaration(node) && isSgIfStmt(node->get_parent())){
+		return isSgIfStmt(node->get_parent())->get_startOfConstruct()->get_line();
+	}
+
 	return isSgLocatedNode(node)->get_startOfConstruct()->get_line();
 }
 
 std::string RoseConstruct::determineCorrectFilename() const {
 	// If code comes from template instantiation
 	if (Utility::ASTHelper::isContainedInTemplateInstantiation(node)){
-		logIt(DEBUG) << "Handling filename info inside template instantiation for node " << node->class_name() << std::endl;
+		logIt(DEBUG) << "=== ROSE CONSTRUCT ===\nHandling filename info inside template instantiation for node " << node->class_name() << std::endl;
+		logIt(DEBUG) << "====\n" << toString() << "\n ====" << std::endl;
 		return Utility::ASTHelper::applyConsumerToTemplateInstantiationDecl(
 				[](Sg_File_Info *info) { return info->get_filenameString(); }, node);
 	}
@@ -103,6 +115,17 @@ std::string RoseConstruct::determineCorrectFilename() const {
 	// empty increment expression in for loop gets correct file name
 	if(isSgNullExpression(node) && isSgForStatement(node->get_parent())){
 		return isSgLocatedNode(node->get_parent())->get_startOfConstruct()->get_filenameString();
+	}
+
+	// if the declaration is inside an if statement, then it is marked compiler generated
+	if(isSgVariableDeclaration(node) && isSgIfStmt(node->get_parent())){
+		return isSgIfStmt(node->get_parent())->get_startOfConstruct()->get_filenameString();
+	}
+	
+	// Assign initializers are marked as compiler generated, s.a.
+	if (isSgAssignInitializer(node)) {
+		return Utility::ASTHelper::applyConsumerToAssignInitializer(
+				[](Sg_File_Info *info) { return info->get_filenameString(); }, isSgAssignInitializer(node));
 	}
 
 	return isSgLocatedNode(node)->get_startOfConstruct()->get_filenameString();
@@ -120,6 +143,17 @@ int RoseConstruct::determineCorrectColumnInformation() const {
 		logIt(DEBUG) << "Handling column info inside template instantiation for node " << node->class_name() << std::endl;
 		return Utility::ASTHelper::applyConsumerToTemplateInstantiationDecl(
 				[](Sg_File_Info *info) { return info->get_col(); }, node);
+	}
+
+	// if the declaration is inside an if statement, then it is marked compiler generated
+	if(isSgVariableDeclaration(node) && isSgIfStmt(node->get_parent())){
+		return isSgIfStmt(node->get_parent())->get_startOfConstruct()->get_col();
+	}
+	
+	// Assign initializers are marked as compiler generated, s.a.
+	if (isSgAssignInitializer(node)) {
+		return Utility::ASTHelper::applyConsumerToAssignInitializer([](Sg_File_Info *info) { return info->get_col(); },
+																																isSgAssignInitializer(node));
 	}
 
 	int colInfo = -1;

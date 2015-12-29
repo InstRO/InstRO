@@ -72,16 +72,19 @@ struct CLExpressionPredicate : public CTPredicate {
 		}
 
 		if (isSgAssignInitializer(n)) {
-			return false;
+			if (isSgCtorInitializerList(n->get_parent()->get_parent())) {
+				return false;
+			}
+			return true;
 		}
 
 		// do not allow initializers to show up in construct sets
-		if(isSgConstructorInitializer(n)){
+		if (isSgConstructorInitializer(n)) {
 			return false;
 		}
 
 		// function call expressions won't be affected
-		if(isSgDotExp(n) || isSgThisExp(n) || isSgArrowExp(n)){
+		if (isSgDotExp(n) || isSgThisExp(n) || isSgArrowExp(n)) {
 			return false;
 		}
 
