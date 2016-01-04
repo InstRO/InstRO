@@ -96,8 +96,13 @@ int RoseConstruct::determineCorrectLineInfo() const {
 	}
 
 	// if the declaration is inside an if statement, then it is marked compiler generated
-	if(isSgVariableDeclaration(node) && isSgIfStmt(node->get_parent())){
-		return isSgIfStmt(node->get_parent())->get_startOfConstruct()->get_line();
+	if (isSgVariableDeclaration(node)) {
+		if (isSgIfStmt(node->get_parent())) {
+			return isSgIfStmt(node->get_parent())->get_startOfConstruct()->get_line();
+		}
+		if (isSgWhileStmt(node->get_parent())) {
+			return isSgWhileStmt(node->get_parent())->get_startOfConstruct()->get_line();
+		}
 	}
 
 	return isSgLocatedNode(node)->get_startOfConstruct()->get_line();
@@ -118,10 +123,15 @@ std::string RoseConstruct::determineCorrectFilename() const {
 	}
 
 	// if the declaration is inside an if statement, then it is marked compiler generated
-	if(isSgVariableDeclaration(node) && isSgIfStmt(node->get_parent())){
-		return isSgIfStmt(node->get_parent())->get_startOfConstruct()->get_filenameString();
+	if (isSgVariableDeclaration(node)) {
+		if (isSgIfStmt(node->get_parent())) {
+			return isSgIfStmt(node->get_parent())->get_startOfConstruct()->get_filenameString();
+		}
+		if (isSgWhileStmt(node->get_parent())) {
+			return isSgWhileStmt(node->get_parent())->get_startOfConstruct()->get_filenameString();
+		}
 	}
-	
+
 	// Assign initializers are marked as compiler generated, s.a.
 	if (isSgAssignInitializer(node)) {
 		return Utility::ASTHelper::applyConsumerToAssignInitializer(
@@ -146,10 +156,15 @@ int RoseConstruct::determineCorrectColumnInformation() const {
 	}
 
 	// if the declaration is inside an if statement, then it is marked compiler generated
-	if(isSgVariableDeclaration(node) && isSgIfStmt(node->get_parent())){
-		return isSgIfStmt(node->get_parent())->get_startOfConstruct()->get_col();
+	if (isSgVariableDeclaration(node)) {
+		if (isSgIfStmt(node->get_parent())) {
+			return isSgIfStmt(node->get_parent())->get_startOfConstruct()->get_col();
+		}
+		if (isSgWhileStmt(node->get_parent())) {
+			return isSgWhileStmt(node->get_parent())->get_startOfConstruct()->get_col();
+		}
 	}
-	
+
 	// Assign initializers are marked as compiler generated, s.a.
 	if (isSgAssignInitializer(node)) {
 		return Utility::ASTHelper::applyConsumerToAssignInitializer([](Sg_File_Info *info) { return info->get_col(); },

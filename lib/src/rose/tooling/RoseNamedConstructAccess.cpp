@@ -1,5 +1,6 @@
 #include "instro/rose/tooling/RoseNamedConstructAccess.h"
 #include "instro/rose/core/RoseConstructSet.h"
+
 #include "instro/utility/Logger.h"
 
 #include <string>
@@ -13,7 +14,9 @@ InstRO::Core::ConstructSet NameMatchingASTTraversal::getResultingCS() { return c
 
 void NameMatchingASTTraversal::visit(SgFunctionDefinition* n) {
 	auto candidate = n->get_declaration()->get_qualified_name().getString();
+	logIt(DEBUG) << "Visiting FunctionDefinition for qualified_name: " << candidate << std::endl;
 	if (matchingObject->isMatch(candidate)) {
+		logIt(DEBUG) << "Matched pattern." << std::endl;
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(n));
 	}
 }
@@ -35,6 +38,7 @@ void NameMatchingASTTraversal::visit(SgTemplateFunctionRefExp* n) {
 	handleFunctionRef(n->getAssociatedFunctionDeclaration(), n);
 }
 void NameMatchingASTTraversal::visit(SgMemberFunctionRefExp* n) {
+	logIt(DEBUG) << "Visiting MemberFunctionRefExp" << std::endl;
 	handleFunctionRef(n->getAssociatedMemberFunctionDeclaration(), n);
 }
 void NameMatchingASTTraversal::visit(SgTemplateMemberFunctionRefExp* n) {
@@ -46,8 +50,14 @@ void NameMatchingASTTraversal::visit(SgNode* n) {
 
 void NameMatchingASTTraversal::handleFunctionRef(SgFunctionDeclaration* associatedDecl, SgExpression* funcRef) {
 	auto candidate = associatedDecl->get_qualified_name().getString();
+	logIt(DEBUG) << "Handling FunctionDeclaration for call with qualified_name: " << candidate << std::endl;
 	if (matchingObject->isMatch(candidate)) {
-		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(funcRef->get_parent()));
+			logIt(DEBUG) << "Matched pattern." << std::endl;
+			auto parent = funcRef->get_parent();
+			if(isSgDotExp(parent) || isSgArrowExp(parent)){
+				parent = parent->get_parent();
+			}
+			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(parent));
 	}
 }
 

@@ -4,7 +4,7 @@
 #include "instro/core/ConstructSet.h"
 #include "instro/tooling/NamedConstructAccess.h"
 
-#define INSTRO_LOG_LEVEL WARN
+#define INSTRO_LOG_LEVEL ERROR
 #include "instro/utility/Logger.h"
 
 
