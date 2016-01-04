@@ -6,7 +6,7 @@
 // - Pass
 // #include "instro/core/Pass.h"
 #include "instro/core/ConstructSet.h"
-#include "instro/core/Helper.h"
+#include "instro/utility/MemoryManagement.h"
 
 namespace InstRO {
 // We need a forward declaration of Pass, since Pass and PassImplementation are circular

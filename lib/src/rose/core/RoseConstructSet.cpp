@@ -1,6 +1,6 @@
 #include "instro/rose/core/RoseConstructSet.h"
 
-#include "instro/core/Helper.h"
+#include "instro/utility/MemoryManagement.h"
 #include "rose.h"
 
 namespace InstRO {
