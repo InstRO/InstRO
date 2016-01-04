@@ -1,0 +1,14 @@
++CTFunctionSelector
+overloadedFunctions.cpp:2:1--Function-::foo
+overloadedFunctions.cpp:6:1--Function-::foo
+overloadedFunctions.cpp:10:1--Function-::foo
+
++CTStatementSelector
+overloadedFunctions.cpp:3:2--SimpleStatement
+overloadedFunctions.cpp:7:2--SimpleStatement
+overloadedFunctions.cpp:11:2--SimpleStatement
+
++CTExpressionSelector
+overloadedFunctions.cpp:3:2--Expression
+overloadedFunctions.cpp:7:2--Expression
+overloadedFunctions.cpp:11:2--Expression
