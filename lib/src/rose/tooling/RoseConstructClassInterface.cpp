@@ -1,5 +1,5 @@
 #include <memory>
-#include "instro/core/Helper.h"
+#include "instro/utility/MemoryManagement.h"
 #include "instro/rose/core/RoseConstructSet.h"
 #include "instro/rose/tooling/RoseConstructClassInterface.h"
 
