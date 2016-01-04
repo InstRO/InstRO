@@ -61,7 +61,20 @@ typename std::result_of<CallableFileInfoConsumer(Sg_File_Info*)>::type applyCons
 		retVal = cr(templDecl->get_startOfConstruct());
 	}
 	if (memDecl != nullptr) {
-		auto templDecl = memDecl->get_templateDeclaration();
+		auto templDecl = isSgTemplateMemberFunctionDeclaration(memDecl->get_templateDeclaration());
+//		std::cout << templDecl->get_startOfConstruct()->get_filenameString() << std::endl;
+		if (memDecl->isCompilerGenerated()) {
+			/* Since ROSE handles templates _very_ inconsistently we use the check on the file id to guide
+			 * which Sg_File_Info object we want to use.
+			 * -2 indicates a "compiler generated" filename
+			 * -4 indicates a "NULL FILE" filename
+			 */
+			if ((templDecl->get_startOfConstruct()->get_file_id() == -2) ||
+					(templDecl->get_startOfConstruct()->get_file_id() == -4)) {
+				templDecl = isSgTemplateMemberFunctionDeclaration(templDecl->get_definingDeclaration());
+//				std::cout << templDecl->get_startOfConstruct()->get_filenameString() << std::endl;
+			}
+		}
 		retVal = cr(templDecl->get_startOfConstruct());
 	}
 
