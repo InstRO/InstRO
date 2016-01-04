@@ -1,0 +1,15 @@
++Func2StmtLevelSelector
+dotCall.cpp:7:2--SimpleStatement
+
++Stmt2FuncLevelSelector
+dotCall.cpp:5:1--Function-::foo
+
++Func2ExprLevelSelector
+dotCall.cpp:7:2--Expression
+
++wpToExprStmtSelector
+dotCall.cpp:7:2--SimpleStatement
+dotCall.cpp:7:2--Expression
+
++wpToStmtFuncSelector
+dotCall.cpp:7:2--SimpleStatement

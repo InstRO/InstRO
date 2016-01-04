@@ -12,3 +12,7 @@ recursion
 templContainer
 controlConstructs
 whiletest
+dotCall
+arrowCall
+overloadedFunctions
+callInTemplateCode
