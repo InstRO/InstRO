@@ -49,21 +49,6 @@ class ChannelConfiguration {
 		}
 	}
 
-	struct PassMinMaxSequenceHelper {
-		InstRO::Pass *pass;
-		InstRO::Core::ConstructTraitType min;
-		InstRO::Core::ConstructTraitType max;
-	};
-
-	template <class... PassList>
-	ChannelConfiguration(std::initializer_list<PassMinMaxSequenceHelper> passes) {
-		for (auto tripel : passes) {
-			inputChannelPasses.push_back(tripel.pass);
-			inputChannelMin[tripel.pass] = tripel.min;
-			inputChannelMax[tripel.pass] = tripel.max;
-		}
-	}
-
 	void setConstructLevel(Pass *inputPass, InstRO::Core::ConstructTraitType minLevel,
 												 InstRO::Core::ConstructTraitType maxLevel) {
 		inputChannelMin[inputPass] = minLevel;
@@ -100,7 +85,6 @@ class PassImplementation {
 	ChannelConfiguration getChannelConfig() { return channelConfig; }
 
 	virtual ConstructSet *getOutput() { return &outputSet; };
-	ConstructSet *getInput(Pass *pId);
 
 	const ConstructSet *cgetCollisionSet() { return &collisionSet; };
 
@@ -108,6 +92,9 @@ class PassImplementation {
 	ConstructSet outputSet;
 
 	ChannelConfiguration &getChannelCFG() { return channelConfig; }
+
+	// Accessor method to retrieve the ConstructSet for channel pId
+	ConstructSet *getInput(Pass *pId);
 
 	// This set is used to track alterations to the AST and notify which nodes have been invalidated
 	ConstructSet collisionSet;
