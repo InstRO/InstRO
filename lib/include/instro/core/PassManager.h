@@ -11,21 +11,6 @@ class ConstructSet;
 
 namespace PassManagement {
 
-class PassEnvelope {
-	friend class SimplePassManager;
-
- public:
-	PassEnvelope(Pass *newPass) {
-		pass = newPass;
-		existingOuputDependency = false;
-	}
-
- protected:
-	bool existingOuputDependency;
-	Pass *pass;
-	std::vector<Pass *> predecessors;
-};
-
 class PassManager {
  protected:
 	// Since the PassManager is an Interface and its children will not be able to access the collisionSet, the following
