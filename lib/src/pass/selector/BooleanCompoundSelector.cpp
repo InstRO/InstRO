@@ -5,8 +5,8 @@ namespace Selector {
 
 void BooleanCompoundSelector::execute() {
 
-	auto csLeft = passLeft->getOutput();
-	auto csRight = passRight->getOutput();
+	auto csLeft = getInput(passLeft);
+	auto csRight = getInput(passRight);
 
 	if (operationType == CO_AND) {
 		outputSet = csLeft->intersect(*csRight);
