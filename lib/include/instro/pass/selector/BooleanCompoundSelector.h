@@ -2,6 +2,7 @@
 #define INSTRO_PASS_SELECTOR_BOOLEANCOMPOUNDSELECTOR_H
 
 #include "instro/core/PassImplementation.h"
+#include "instro/core/Pass.h"
 
 namespace InstRO {
 namespace Selector {

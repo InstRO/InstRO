@@ -4,7 +4,6 @@
 #include <unordered_map>
 // Pass.h is included at the End of this file. We use forward declarations to break the circle Pass - PassImplementation
 // - Pass
-// #include "instro/core/Pass.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/utility/MemoryManagement.h"
 
@@ -122,5 +121,3 @@ public:
 }	// namespace InstRO
 
 #endif
-
-#include "instro/core/Pass.h"

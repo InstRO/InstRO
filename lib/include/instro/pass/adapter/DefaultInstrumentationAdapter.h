@@ -2,6 +2,7 @@
 #define LIB_INCLUDE_INSTRO_PASS_ADAPTER_DEFAULTINSTRUMENTATIONADAPTER_H_
 
 #include "instro/core/PassImplementation.h"
+#include "instro/core/Pass.h"
 #include "instro/core/ConstructSet.h"
 
 namespace InstRO {
