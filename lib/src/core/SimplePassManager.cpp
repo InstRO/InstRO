@@ -12,10 +12,11 @@ void InstRO::PassManagement::SimplePassManager::registerPass(Pass *currentPass) 
 
 	// for all predecessors inquired the pass dependencies
 	for (auto &i : inputs) {
-		if (i == nullptr)
+		if (i == nullptr){
 			continue;
-		Core::ConstructTraitType maxInputLevel = currentPass->getMaxInputLevelRequirement(i);
+		}
 
+		Core::ConstructTraitType maxInputLevel = currentPass->getMaxInputLevelRequirement(i);
 		addDependency(i, currentPass);
 	}
 }

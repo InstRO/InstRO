@@ -11,6 +11,13 @@ namespace PassManagement {
 class SimplePassManager : public InstRO::PassManagement::PassManager {
  public:
 	SimplePassManager(){};
+
+	virtual ~SimplePassManager() {
+		for (PassEnvelope *pe : passList) {
+			delete pe;
+		}
+	}
+
 	// Enable the Pass Manager to query the pass for its dependencies
 	void registerPass(Pass *currentPass) override;
 
@@ -19,6 +26,7 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 		getEnvelope(currentPass)->predecessors.push_back(input);
 		getEnvelope(input)->existingOuputDependency = true;
 	};
+
 	int execute() override;
 
 	virtual bool hasOutputDependencies(Pass *pass) { return getEnvelope(pass)->existingOuputDependency; };
@@ -33,7 +41,6 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 	// Flatten the configuration graph to a sequence preserving input-ouput order
 	bool createPassTraversalOder();
  
-	bool isElevationRequired() { return false; };
 	PassEnvelope *getEnvelope(Pass *pass) {
 		for (auto &i : passList) {
 			if (i->pass == pass)
@@ -42,9 +49,8 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 		return NULL;
 	};
 	std::vector<Pass *> getPredecessors(PassEnvelope *envelope) { return envelope->predecessors; };
+	
 	Pass *getPass(PassEnvelope *env) { return env->pass; };
-
-	typedef std::vector<PassEnvelope *> PassEnvelopeListType;
 
 	std::vector<PassEnvelope *> passList;
 };

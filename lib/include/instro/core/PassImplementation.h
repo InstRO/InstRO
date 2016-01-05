@@ -69,6 +69,7 @@ class ChannelConfiguration {
 		inputChannelMin[inputPass] = minLevel;
 		inputChannelMax[inputPass] = maxLevel;
 	}
+
 	InstRO::Core::ConstructTraitType getMinConstructLevel(Pass *inputPass) { return inputChannelMin[inputPass]; }
 	InstRO::Core::ConstructTraitType getMaxConstructLevel(Pass *inputPass) { return inputChannelMax[inputPass]; }
 	std::vector<::InstRO::Pass *> const getPasses() { return inputChannelPasses; };
