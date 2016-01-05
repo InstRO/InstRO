@@ -77,15 +77,6 @@ InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::Construc
 	return newConstructSet;
 }
 
-InstRO::Core::ConstructSet ConstructElevator::lower(const InstRO::Core::ConstructSet *inputCS,
-																										InstRO::Core::ConstructTraitType traitType) {
-	return lower(*inputCS, traitType);
-}
-InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::ConstructSet *inputCS,
-																										InstRO::Core::ConstructTraitType traitType) {
-	return raise(*inputCS, traitType);
-}
-
 // This is an explicit function used in very rare circumstances by e.g. a specialized selection pass (if at all)
 InstRO::Core::ConstructSet ConstructElevator::lower(const InstRO::Core::ConstructSet &inputCS,
 																										InstRO::Core::ConstructTraitType traitType) {
