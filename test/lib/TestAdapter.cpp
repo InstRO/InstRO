@@ -36,7 +36,7 @@ void InstRO::Test::TestAdapter::execute() {
 	logIt(INFO) << "Running TestAdapter with label \"" << label << "\"" << std::endl;
 	auto cfg = getChannelConfig();
 	for (auto p : cfg.getPasses()) {
-		checkIfConstructSetMatches(getInput(p));
+		checkIfConstructSetMatches(getInput(0));
 	}
 }
 

@@ -11,8 +11,9 @@ namespace PassManagement {
 class SimplePassManager : public InstRO::PassManagement::PassManager {
  public:
 	SimplePassManager(){};
-	virtual ~SimplePassManager(){
-		for(Pass *p : passList){
+
+	virtual ~SimplePassManager() {
+		for (Pass *p : passList) {
 			delete p;
 		}
 	}
@@ -22,8 +23,11 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 
 	int execute() override;
 
-	virtual void setDependence(Pass *pred, Pass *pass){}
-	virtual bool hasOutputDependencies(Pass *pass){ return true;}
+	virtual void setDependence(Pass *pred, Pass *pass) {
+		// FIXME what is the actual semantic of an explicit dependence?
+	}
+
+	virtual bool hasOutputDependencies(Pass *pass) { return true; }
 	virtual bool hasInputDependencies(Pass *pass) { return getPredecessors(pass).size() > 0; };
 
  protected:
@@ -31,9 +35,8 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 	bool createPassTraversalOder();
 
 	std::vector<Pass *> getPredecessors(Pass *p) { return p->getInputPasses(); };
-	
 
-	// XXX After refactoring this is an owning vector!
+	// We own the passes
 	std::vector<Pass *> passList;
 };
 }	// PassManagement

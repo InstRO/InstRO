@@ -10,17 +10,17 @@ namespace Selector {
 
 void ConstructRaisingElevator::execute() {
 	auto constructElevator = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator();
-	outputSet = constructElevator->raise(inputPass->getOutput(), targetLevel);
+	outputSet = constructElevator->raise(getInput(0), targetLevel);
 }
 
 void ConstructLoweringElevator::execute() {
 	auto constructElevator = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator();
-	outputSet = constructElevator->lower(inputPass->getOutput(), targetLevel);
+	outputSet = constructElevator->lower(getInput(0), targetLevel);
 }
 
 void ConstructCroppingElevator::execute() {
 	auto constructElevator = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator();
-	outputSet =  constructElevator->crop(inputPass->getOutput(), targetLevel, maxLevel);	// targetLevel is minLevel
+	outputSet =  constructElevator->crop(getInput(0), targetLevel, maxLevel);	// targetLevel is minLevel
 }
 
 }
