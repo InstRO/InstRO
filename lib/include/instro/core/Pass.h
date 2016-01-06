@@ -30,7 +30,9 @@ class Pass {
 	// from the ToolingSpace
 	Pass() = delete;
 	Pass(Core::PassImplementation *pImpl)
-			: passInitialized(false), passExecuted(false), passFinalized(false), passImplementation(pImpl){};
+			: passInitialized(false), passExecuted(false), passFinalized(false), passImplementation(pImpl) {
+		const_cast<InstRO::Core::ChannelConfiguration &>(pImpl->getChannelConfig()).setManagingPass(this);
+	}
 
 	Core::PassImplementation *getPassImplementation() { return passImplementation; };
 	virtual ~Pass() {

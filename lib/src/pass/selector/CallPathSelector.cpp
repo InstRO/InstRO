@@ -14,8 +14,8 @@ namespace Selector {
 void CallPathSelector::execute() {
 
 	Tooling::ExtendedCallGraph::ExtendedCallGraph *ecg = getInstrumentorInstance()->getAnalysisManager()->getECG();
-	auto fromNodes = ecg->getNodeSetByCS(fromPass->getOutput());
-	auto toNodes = ecg->getNodeSetByCS(toPass->getOutput());
+	auto fromNodes = ecg->getNodeSetByCS(getInput(0));
+	auto toNodes = ecg->getNodeSetByCS(getInput(1));
 
 	logIt(DEBUG) << "ECG - fromNodes:" << fromNodes.size() << " and toNodes: " << toNodes.size() << std::endl;
 

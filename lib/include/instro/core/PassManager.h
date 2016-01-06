@@ -19,7 +19,7 @@ class PassManager {
  public:
 	friend Pass;
 
-	virtual ~PassManager() { }
+	virtual ~PassManager() {}
 
 	// Enable the Pass Manager to query the pass for its dependencies
 	virtual void registerPass(Pass *currentPass) = 0;
@@ -27,10 +27,10 @@ class PassManager {
 	virtual bool hasOutputDependencies(Pass *) = 0;
 	virtual bool hasInputDependencies(Pass *) = 0;
 
-	// To allow explicit sequencing the user can use this call to establish an explicit before-after relationship between passes.
+	// To allow explicit sequencing the user can use this call to establish an explicit before-after relationship between
+	// passes.
 	// This sequencing is overruled, by the input-dependencies.
-	virtual void setDependence(Pass * predecessor, Pass * pass) = 0;
-
+	virtual void setDependence(Pass *predecessor, Pass *pass) = 0;
 };
 
 }	// End namespace PassManagement
