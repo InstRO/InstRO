@@ -8,15 +8,14 @@ namespace Selector {
 
 class IdentifyerSelector : public InstRO::Core::PassImplementation {
  protected:
-	Pass *filterChannel;
 	std::vector<std::string> rules;
 	IdentifyerSelector() = delete;
 
  public:
 	IdentifyerSelector(std::vector<std::string> matchRules, Pass *filter)
-			: PassImplementation(Core::ChannelConfiguration(filter)), filterChannel(filter), rules(matchRules){};
+			: PassImplementation(Core::ChannelConfiguration(filter)), rules(matchRules){};
 	IdentifyerSelector(std::vector<std::string> matchRules)
-			: PassImplementation(Core::ChannelConfiguration()), filterChannel(NULL), rules(matchRules){};
+			: PassImplementation(Core::ChannelConfiguration()), rules(matchRules){};
 	virtual void execute() override;
 
  protected:

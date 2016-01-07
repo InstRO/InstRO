@@ -14,14 +14,11 @@ class CallPathSelector: public InstRO::Core::PassImplementation {
 public:
 	CallPathSelector(Pass *from, Pass *to, std::string dotName) :
 			InstRO::Core::PassImplementation(Core::ChannelConfiguration(from, to)),
-			fromPass(from),
-			toPass(to),
 			dotName(dotName) {}
 
 	virtual void execute() override;
 
  private:
-	Pass *fromPass, *toPass;
 	std::string dotName;
 
 };

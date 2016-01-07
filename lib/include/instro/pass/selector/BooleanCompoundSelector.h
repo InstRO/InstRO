@@ -8,7 +8,7 @@ namespace Selector {
 
 /**
  * \brief Provides boolean operations on the streams of two input selectors
- * \author Roman Ness
+ * \author Roman Ness, Jan-Patrick Lehr
  * XXX RN: do we need inverted inputs?
  */
 class BooleanCompoundSelector : public InstRO::Core::PassImplementation {
@@ -18,16 +18,11 @@ class BooleanCompoundSelector : public InstRO::Core::PassImplementation {
 
 	BooleanCompoundSelector(Pass* inputLeft, Pass* inputRight, CompoundOperationType operationType)
 			: PassImplementation(InstRO::Core::ChannelConfiguration(inputLeft, inputRight)),
-				passLeft(inputLeft),
-				passRight(inputRight),
 				operationType(operationType) {}
 
 	void execute() override;
 
  private:
-	Pass* passLeft;
-	Pass* passRight;
-
 	enum CompoundOperationType operationType;
 
 };

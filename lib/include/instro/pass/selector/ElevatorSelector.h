@@ -9,15 +9,12 @@ namespace Selector {
 
 class ConstructElevatorSelector : public InstRO::Core::PassImplementation {
 public:
-	ConstructElevatorSelector(Pass* inputPass, InstRO::Core::ConstructTraitType targetLevel) :
-			InstRO::Core::PassImplementation(InstRO::Core::ChannelConfiguration(inputPass)),
-					inputPass(inputPass), targetLevel(targetLevel) {
-	}
+ ConstructElevatorSelector(Pass* inputPass, InstRO::Core::ConstructTraitType targetLevel)
+		 : InstRO::Core::PassImplementation(InstRO::Core::ChannelConfiguration(inputPass)), targetLevel(targetLevel) {}
 
 	~ConstructElevatorSelector() {}
 
  protected:
-	Pass* inputPass;
 	InstRO::Core::ConstructTraitType targetLevel;
 };
 
