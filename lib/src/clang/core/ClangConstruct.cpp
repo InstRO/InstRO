@@ -117,13 +117,54 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 	void VisitExpr(clang::Expr *stmt) {
 		// in Clang every Expr is also a Stmt, therefore we treat expressions which do not have another expression as parent
 		// as a SimpleStatement and expressions which do as Expression
-		auto matcher = clang::ast_matchers::expr(clang::ast_matchers::hasParent(clang::ast_matchers::expr()));
-		auto matches = clang::ast_matchers::match(matcher, *stmt, context);
-		if (matches.empty()) {
-			ct = ConstructTrait(ConstructTraitType::CTSimpleStatement);
-		} else {
-			ct = ConstructTrait(ConstructTraitType::CTExpression);
+
+		clang::SourceLocation location = stmt->getExprLoc();
+		const clang::SourceManager &sm = context.getSourceManager();
+		std::string strLoc = "(" + std::to_string(sm.getSpellingLineNumber(location)) + "," +
+												 std::to_string(sm.getSpellingColumnNumber(location)) + ")";
+
+		bool isNotAStatement = false;
+		auto parents = context.getParents(*stmt);
+		if (parents.size() == 1) {
+			if (const clang::Stmt *parent = parents.front().get<clang::Stmt>()) {
+				isNotAStatement = llvm::isa<clang::Expr>(*parent);
+			} else if (const clang::Decl *parent = parents.front().get<clang::Decl>()) {
+				isNotAStatement = true;
+			}
 		}
+
+		std::string nodeTypeName = stmt->getStmtClassName();
+		ct = ConstructTrait(ConstructTraitType::CTExpression);
+		if (!isNotAStatement) {
+			InstRO::logIt(InstRO::DEBUG) << nodeTypeName << " is a SimpleStatement " << strLoc << std::endl;
+			ct = ConstructTrait(ConstructTraitType::CTSimpleStatement);
+			handleStatementWithWrappableCheck(stmt);
+		}
+	}
+
+	void VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr *stmt) {
+		// literals are not considered interesting
+		generateError(stmt);
+	}
+
+	void VisitIntegerLiteral(clang::IntegerLiteral *stmt) {
+		// literals are not considered interesting
+		generateError(stmt);
+	}
+
+	void VisitFloatingLiteral(clang::FloatingLiteral *stmt) {
+		// literals are not considered interesting
+		generateError(stmt);
+	}
+
+	void VisitDeclRefExpr(clang::DeclRefExpr *stmt) {
+		// references to declarations (variables) are not considered interesting
+		generateError(stmt);
+	}
+
+	void VisitImplicitCastExpr(clang::ImplicitCastExpr *stmt) {
+		// not considered interesting
+		generateError(stmt);
 	}
 
 	void VisitReturnStmt(clang::ReturnStmt *stmt) {
@@ -259,7 +300,7 @@ std::string ClangConstruct::getIdentifier() const {
 	if (clang::Decl *decl = getAsDecl()) {
 		if (clang::FunctionDecl *funDecl = llvm::dyn_cast<clang::FunctionDecl>(decl)) {
 			if (funDecl->isThisDeclarationADefinition()) {
-				identifier += "-" + funDecl->getNameAsString();
+				identifier += "-" + funDecl->getQualifiedNameAsString();
 			}
 		}
 	}
