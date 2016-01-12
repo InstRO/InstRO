@@ -21,7 +21,7 @@ class RoseECGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 public:
 	RoseECGConstructSetGenerator() : nodeType(ECGNodeType::DEFAULT), csci(&cs) {}
 
-	// TODO RN: memory leak anyone?
+	// XXX this is smelly
 	ExtendedCallGraphNode* getECGNode() {
 		return new ExtendedCallGraphNode(cs, nodeType);
 	}
@@ -129,19 +129,19 @@ private:
 	ExtendedCallGraphNode* getDefiningECGNode(SgFunctionDefinition* node) {
 		RoseECGConstructSetGenerator genCS;
 		node->accept(genCS);
-		auto ecgNode = genCS.getECGNode();
 
 		std::string mangledName = node->get_declaration()->get_mangled_name();
 		if (uniqueDecls.find(mangledName) != uniqueDecls.end()) {
 
 			if (uniqueDecls[mangledName]->get_definition() == nullptr) {
+				auto ecgNode = genCS.getECGNode();
 				callgraph->swapConstructSet(uniqueNodes[mangledName]->getAssociatedConstructSet(), ecgNode->getAssociatedConstructSet());
-			} else {
-				delete ecgNode;
 			}
 
 		} else {
 			// add node so it is not missing, if it has no children
+			auto ecgNode = genCS.getECGNode();
+
 			callgraph->addNode(ecgNode);
 			uniqueDecls[mangledName] = node->get_declaration();
 			uniqueNodes[mangledName] = ecgNode;
@@ -153,17 +153,17 @@ private:
 
 	/** this method is only called if the definition cannot be found */
 	ExtendedCallGraphNode* getDefiningECGNode(SgFunctionDeclaration* node) {
-		RoseECGConstructSetGenerator genCS;
-		node->accept(genCS);
-		auto ecgNode = genCS.getECGNode();
 
 		std::string mangledName = node->get_mangled_name();
 		if (uniqueDecls.find(mangledName) == uniqueDecls.end()) {
+
+			RoseECGConstructSetGenerator genCS;
+			node->accept(genCS);
+			auto ecgNode = genCS.getECGNode();
+
 			callgraph->addNode(ecgNode);
 			uniqueDecls[mangledName] = node;
 			uniqueNodes[mangledName] = ecgNode;
-		} else {
-			delete ecgNode;
 		}
 		return uniqueNodes[mangledName];
 	}

@@ -84,6 +84,8 @@ int main(int argc, char **argv) {
 
 	TEST(foo20, m.isMatch("foo", "f#########o"), true)
 
+	TEST(foo21, m.isMatch("f o o ", "#f#"), true);
+
 	printSummary();
 	return hasPassed();
 }

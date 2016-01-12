@@ -1,0 +1,9 @@
++CTFunctionSelector
+dotCall.cpp:2:2--Function-::A::b
+dotCall.cpp:5:1--Function-::foo
+
++CTStatementSelector
+dotCall.cpp:7:2--SimpleStatement
+
++CTExpressionSelector
+dotCall.cpp:7:2--Expression

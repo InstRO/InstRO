@@ -18,7 +18,6 @@ class RosePassFactory;
 class RoseInstrumentor : public Instrumentor {
  public:
 	RoseInstrumentor(int argc, char** argv) {
-		// TODO: Initialize Rose here
 		project = ::frontend(argc, argv);
 		ram = new InstRO::Rose::Tooling::RoseAnalysisManager(project);
 		InstRO::setInstrumentorInstance(this);

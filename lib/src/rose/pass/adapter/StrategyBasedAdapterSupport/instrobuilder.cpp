@@ -105,96 +105,6 @@ namespace InstRO {
 
 				/** \} */
 
-				/** \name Build templates */
-				/** \{ */
-				SgTemplateInstantiationFunctionDecl* InstROBuilder::buildForwardDeclaration(SgTemplateInstantiationFunctionDecl* originalDeclaration) {
-					std::cerr << "INSTRO ERROR: CALL TO OUTDATED FUNCTION...." << std::endl;
-					return NULL;
-				}
-
-				SgTemplateInstantiationMemberFunctionDecl* InstROBuilder::buildForwardDeclaration(SgTemplateInstantiationMemberFunctionDecl* originalDeclaration) {
-					SgTemplateInstantiationMemberFunctionDecl* forwardDeclaration = NULL;
-					if (originalDeclaration == originalDeclaration->get_definingDeclaration()) {
-						SgFunctionDefinition* def = originalDeclaration->get_definition();
-						originalDeclaration->set_definition(NULL);
-						forwardDeclaration = SageInterface::buildForwardFunctionDeclaration(originalDeclaration);
-						originalDeclaration->set_definition(def);
-					}
-					else {
-						forwardDeclaration = SageInterface::buildForwardFunctionDeclaration(originalDeclaration);
-					}
-
-					forwardDeclaration->setOutputInCodeGeneration();
-					return forwardDeclaration;
-				}
-
-				SgTemplateInstantiationFunctionDecl* InstROBuilder::buildForwardDeclaration(SgTemplateInstantiationFunctionDecl* originalDeclaration, SgScopeStatement* futureScope) {
-					// We build the copied declaration as above, but here we know the future scope.
-					SgTemplateInstantiationFunctionDecl* copyDeclaration = 0;
-					ROSE_ASSERT(futureScope != NULL);
-
-					// Get the function name without the template things and build a SgName
-					std::string functionNameWithoutTemplateArguments = originalDeclaration->get_name().getString().substr(0, originalDeclaration->get_name().getString().find("<"));
-					SgName functionNameWithoutTemplateArgumentsName = SgName(functionNameWithoutTemplateArguments);
-
-					// Use new Rose SageBuilder ability to create template instantiations
-					copyDeclaration = isSgTemplateInstantiationFunctionDecl(SageBuilder::buildNondefiningFunctionDeclaration(functionNameWithoutTemplateArgumentsName, originalDeclaration->get_type(), originalDeclaration->get_parameterList(), futureScope, originalDeclaration->get_decoratorList(), true, &(originalDeclaration->get_templateArguments())));
-					copyDeclaration->set_type(originalDeclaration->get_type());
-					return copyDeclaration;
-				}
-
-				//		static SgTemplateInstantiationMemberFunctionDecl* buildForwardDeclaration(SgTemplateInstantiationMemberFunctionDecl* originalDeclaration, SgScopeStatement* futureScope);
-				/** \} */
-
-				/** \name Build unions */
-				/** \{ */
-				SgClassDeclaration* InstROBuilder::buildUnion(SgFunctionDefinition* functionDefinition, SgVariableDeclaration*& unionMemberfunctionPointer, SgVariableDeclaration*& unionVoidPointer) {
-					std::cout << "INSTRO IMPLEMENTATION IN PROGRESS ERROR!" << std::endl;
-					// TODO 2013-10-23 JP: Needs to be implemented
-
-					// function is not a member function, nothing to do
-					if (isSgMemberFunctionDeclaration(functionDefinition->get_declaration()) == NULL)
-						return NULL;
-
-					std::string unionName = "instrumentation_union";
-					std::string unionPointernName = "instrumentation_union_void_pointer";
-
-					std::cout << "Getting currentScope()" << std::endl;
-					SgScopeStatement *currentScope = SgType::getCurrentScope();
-					if (currentScope != NULL){
-						std::cout << "Current Scope: " << currentScope << std::endl;
-					}
-					//	SageBuilder::pushScopeStack(functionDefinition->get_body());
-					// declare a union declaration and definition
-					SgClassDeclaration* unionDecl = SageBuilder::buildNondefiningClassDeclaration(unionName, functionDefinition->get_body());
-					unionDecl->set_class_type(SgClassDeclaration::e_union);
-
-					SgClassDefinition* unionDef = SageBuilder::buildClassDefinition(unionDecl);
-					unionDecl->set_definition(unionDef);
-
-					return NULL;
-				}
-
-				SgVariableDeclaration* InstROBuilder::buildUnionVariableDeclaration(SgScopeStatement* scope, SgClassDeclaration* unionDeclaration) {
-					std::cout << "INSTRO NOT implemented YET ERROR!" << std::endl;
-					// TODO 2013-10-23 JP: Needs to be implemented
-
-					return NULL;
-				}
-
-				SgExprStatement* InstROBuilder::buildMemberfunctionPointerAssignment(SgScopeStatement* scope, SgScopeStatement* functionDefinition, SgClassDeclaration* unionDeclaration, SgVariableDeclaration* unionMemberfunctionPointer, SgVariableDeclaration* unionVariableDeclaration) {
-					std::cout << "INSTRO NOT implemented YET ERROR!" << std::endl;
-					// TODO 2013-10-23 JP: Needs to be implemented
-					return NULL;
-				}
-
-				SgExpression* InstROBuilder::buildMemberVariableReferenceExpression(SgVariableDeclaration* unionVariableDeclaration, SgVariableDeclaration* memberVariableDeclaration) {
-					std::cout << "INSTRO NOT implemented YET ERROR!" << std::endl;
-					// TODO 2013-10-23 JP: Needs to be implemented
-					return NULL;
-				}
-				/** \} */
-
 				SgTryStmt* InstROBuilder::buildTryCatchStmt(SgStatement* content) {
 					/* Build the ellipsis catching all variables */
 					SgVariableDeclaration* condition = SageBuilder::buildVariableDeclaration(" ", new SgTypeEllipse(), 0, 0);
@@ -251,38 +161,6 @@ namespace InstRO {
 				}
 				/** \} */
 
-				/**
-				 * \brief Builds a pointer to the given function and casts it to void*
-				 * \param functionDefinition The definition of the function a pointer is to be built to
-				 * \return A void* pointing to the function
-				 */
-				SgExpression* InstROBuilder::buildFunctionPointerCastToVoid(SgFunctionDefinition* functionDefinition) {
-					std::cout << "INSTRO NOT implemented YET ERROR!" << std::endl;
-					// TODO 2013-10-23 JP: Needs to be implemented
-					return NULL;
-				}
-				/**
-				 * \brief Builds a simple null pointer
-				 * XXX 2013-10-22 JP: This basically builds an int value of 0.
-				 * \return A null pointer
-				 */
-				SgExpression* InstROBuilder::buildNullPointer(void) {
-					return SageBuilder::buildIntVal(0);
-				}
-
-				/**
-				 * \brief Builds a basic block containing the given statement
-				 * \param content The content for the new block. If zero, an empty block is returned
-				 * \return The newly built block
-				 */
-				SgBasicBlock* InstROBuilder::buildBlock(SgStatement* content) {
-					if (content != 0) {
-						return SageBuilder::buildBasicBlock(content);
-					}
-					else {
-						return SageBuilder::buildBasicBlock();
-					}
-				}
 
 				SgVariableDeclaration* InstROBuilder::buildTemporaryVariable(SgScopeStatement* scope, SgReturnStmt* returnStatement) {
 					std::string tempReturnVarName = "instro_return_var_";

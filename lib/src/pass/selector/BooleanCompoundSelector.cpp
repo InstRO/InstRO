@@ -5,6 +5,9 @@ namespace Selector {
 
 void BooleanCompoundSelector::execute() {
 
+	auto csLeft = getInput(0);
+	auto csRight = getInput(1);
+
 	if (operationType == CO_AND) {
 		outputSet = csLeft->intersect(*csRight);
 

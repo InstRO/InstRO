@@ -11,47 +11,33 @@ namespace PassManagement {
 class SimplePassManager : public InstRO::PassManagement::PassManager {
  public:
 	SimplePassManager(){};
+
+	virtual ~SimplePassManager() {
+		for (Pass *p : passList) {
+			delete p;
+		}
+	}
+
 	// Enable the Pass Manager to query the pass for its dependencies
 	void registerPass(Pass *currentPass) override;
 
-	// TODO: FIX
-	void addDependency(Pass *input, Pass *currentPass) {
-		// TODO(CI): implement storing of construct level graph
-		getEnvelope(currentPass)->predecessors.push_back(input);
-		getEnvelope(input)->existingOuputDependency = true;
-	};
 	int execute() override;
 
-	virtual bool hasOutputDependencies(Pass *pass) { return getEnvelope(pass)->existingOuputDependency; };
-	virtual bool hasInputDependencies(Pass *pass) { return getPredecessors(getEnvelope(pass)).size() > 0; };
-
-	virtual void setDependence(Pass * predecessor, Pass * pass) {
-		// TODO CI valudate functionality
-		addDependency(predecessor,pass);		
+	virtual void setDependence(Pass *pred, Pass *pass) {
+		// FIXME what is the actual semantic of an explicit dependence?
 	}
+
+	virtual bool hasOutputDependencies(Pass *pass) { return true; }
+	virtual bool hasInputDependencies(Pass *pass) { return getPredecessors(pass).size() > 0; };
 
  protected:
 	// Flatten the configuration graph to a sequence preserving input-ouput order
 	bool createPassTraversalOder();
- 
-	InstRO::Core::ConstructSet *elevate(Core::ConstructTraitType inputLevel) {
-		// TODO(CI): Implement Elevation
-		return NULL;
-	}
-	bool isElevationRequired() { return false; };
-	PassEnvelope *getEnvelope(Pass *pass) {
-		for (auto &i : passList) {
-			if (i->pass == pass)
-				return i;
-		}
-		return NULL;
-	};
-	std::vector<Pass *> getPredecessors(PassEnvelope *envelope) { return envelope->predecessors; };
-	Pass *getPass(PassEnvelope *env) { return env->pass; };
 
-	typedef std::vector<PassEnvelope *> PassEnvelopeListType;
+	std::vector<Pass *> getPredecessors(Pass *p) { return p->getInputPasses(); };
 
-	std::vector<PassEnvelope *> passList;
+	// We own the passes
+	std::vector<Pass *> passList;
 };
 }	// PassManagement
 }	// InstRO

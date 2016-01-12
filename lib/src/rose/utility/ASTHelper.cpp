@@ -136,3 +136,12 @@ std::string ASTHelper::getFunctionSignature(SgFunctionDefinition* funcDef) {
 
 	return ss.str();
 }
+
+bool ASTHelper::isContainedInTemplateInstantiation(SgNode* node) {
+	SgTemplateInstantiationFunctionDecl* templFuncDecl =
+			SageInterface::getEnclosingNode<SgTemplateInstantiationFunctionDecl>(node, true);
+	SgTemplateInstantiationMemberFunctionDecl* templMemFuncDecl =
+			SageInterface::getEnclosingNode<SgTemplateInstantiationMemberFunctionDecl>(node, true);
+
+	return (templFuncDecl != nullptr) || (templMemFuncDecl != nullptr);
+}

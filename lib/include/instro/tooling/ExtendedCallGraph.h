@@ -60,16 +60,15 @@ class ExtendedCallGraphNode {
 class ExtendedCallGraph {
  public:
 	ExtendedCallGraph();
-	virtual ~ExtendedCallGraph();
+	~ExtendedCallGraph();
 
-	virtual std::set<ExtendedCallGraphNode*> getNodeSet(Core::ConstructSet *cs);
+	std::set<ExtendedCallGraphNode*> getNodeSetByCS(Core::ConstructSet *cs);
 
 	/** predicate is a functional with parameters(ExtendedCallGraphNode*, ExtendedCallGraph*) */
 	template <typename T>
 	std::set<ExtendedCallGraphNode*> getNodeSet(T& predicate);
 	std::set<ExtendedCallGraphNode*> getNodeSet();
 
-	/* Construction XXX maybe move these to a Builder object? */
 	ExtendedCallGraphNode* getNodeWithExactConstructSet(InstRO::Core::ConstructSet cs);
 	void addEdge(ExtendedCallGraphNode* from, ExtendedCallGraphNode* to);
 	ExtendedCallGraphNode* addNode(ExtendedCallGraphNode* node);

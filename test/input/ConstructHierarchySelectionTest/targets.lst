@@ -8,3 +8,11 @@ loop2
 expressions
 ternaryOp
 loop3
+recursion
+templContainer
+controlConstructs
+whiletest
+dotCall
+arrowCall
+overloadedFunctions
+callInTemplateCode

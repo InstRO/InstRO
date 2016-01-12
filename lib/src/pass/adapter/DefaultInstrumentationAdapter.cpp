@@ -9,7 +9,7 @@ using InstRO::Core::ConstructTraitType;
 
 void DefaultInstrumentationAdapter::execute() {
 
-	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface csci(inputCS);
+	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface csci(getInput(0));
 	for (auto construct : csci) {
 		auto ct = construct->getTraits();
 

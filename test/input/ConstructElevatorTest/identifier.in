@@ -10,12 +10,16 @@ identifier.cpp:7:1--Function-::bar
 
 +Func2ExprLevelSelector
 identifier.cpp:4:2--Expression
+identifier.cpp:8:2--Expression
 identifier.cpp:8:14--Expression
+identifier.cpp:9:2--Expression
 identifier.cpp:10:2--Expression
 
 +wpToExprStmtSelector
 identifier.cpp:4:2--Expression
+identifier.cpp:8:2--Expression
 identifier.cpp:8:14--Expression
+identifier.cpp:9:2--Expression
 identifier.cpp:10:2--Expression
 identifier.cpp:4:2--SimpleStatement
 identifier.cpp:10:2--SimpleStatement

@@ -32,7 +32,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 		outFile << "digraph InstROAST{" << std::endl;
 		auto elevator = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator();
 		InstRO::Core::ConstructSet csAggregation, workList;
-		workList = *(inputPass->getOutput());
+		workList = *getInput(0);
 
 		while (workList.size()){
 			InstRO::Core::ConstructSet  toDoList;
@@ -40,7 +40,9 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 			for (auto construct : csci) {
 				auto child = construct;
 				auto parent = child;
-				auto childCS = InstRO::Core::ConstructSet(construct);
+
+				InstRO::Core::ConstructSet childCS;
+				InstRO::InfrastructureInterface::ConstructSetCompilerInterface(&childCS).put(construct);
 
 				std::vector<InstRO::Core::ConstructTraitType> traitList;
 
@@ -81,7 +83,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 			}
 			workList = toDoList;
 		}
-		csAggregation = csAggregation.combine(*inputPass->getOutput());
+		csAggregation = csAggregation.combine(*getInput(0));
 		auto csci = InstRO::InfrastructureInterface::ConstructSetCompilerInterface(&csAggregation);
 		for (auto construct : csci) {
 			outFile << "\t" << construct->getID() << std::string("[label=\"") << construct->toDotString()

@@ -5,19 +5,7 @@
 #include "instro/utility/Logger.h"
 
 void InstRO::PassManagement::SimplePassManager::registerPass(Pass *currentPass) {
-	// CI: Create a new pass envelope to store the dependencies of this pass.
-	PassEnvelope *newPass = new PassEnvelope(currentPass);
-	std::vector<Pass *> inputs = currentPass->getInputPasses();
-	passList.push_back(newPass);
-
-	// for all predecessors inquired the pass dependencies
-	for (auto &i : inputs) {
-		if (i == nullptr)
-			continue;
-		Core::ConstructTraitType maxInputLevel = currentPass->getMaxInputLevelRequirement(i);
-
-		addDependency(i, currentPass);
-	}
+	passList.push_back(currentPass);
 }
 
 bool InstRO::PassManagement::SimplePassManager::createPassTraversalOder() { return true; }
@@ -25,25 +13,25 @@ bool InstRO::PassManagement::SimplePassManager::createPassTraversalOder() { retu
 int InstRO::PassManagement::SimplePassManager::execute() {
 	logIt(INFO) << "InstRO::PassManagement::SimplePassManager::execute()" << std::endl;
 
-	for (PassEnvelope *passContainer : passList) {
+	for (Pass *pass : passList) {
 		// Allow the Pass to Initialize iself. E.g. start reading input data from
 		// files, allocated named input fields, etc.
-		passContainer->pass->initPass();
+		pass->initPass();
 	}
 
 	int passCount = 1;
 
-	for (PassEnvelope *passEnvelope : passList) {
-		logIt(INFO) << "Executing pass (" << passCount << "):\t" << passEnvelope->pass->passName() << std::endl;
+	for (Pass *pass : passList) {
+		logIt(INFO) << "Executing pass (" << passCount << "):\t" << pass->passName() << std::endl;
 
-		for (auto &i : getPredecessors(passEnvelope)) {
+		for (auto &i : getPredecessors(pass)) {
 			// CI: do we have to perform some form of elevation
-			if (i->getOutput()->getMinConstructLevel() < passEnvelope->pass->getMinInputLevelRequirement(i) ||
-					i->getOutput()->getMaxConstructLevel() > passEnvelope->pass->getMaxInputLevelRequirement(i)) {
+			if (i->getOutput()->getMinConstructLevel() < pass->getMinInputLevelRequirement(i) ||
+					i->getOutput()->getMaxConstructLevel() > pass->getMaxInputLevelRequirement(i)) {
 
 				logIt(WARN) << " [WARN] construct level mismatch "
-						<< "\texpected " << passEnvelope->pass->getMinInputLevelRequirement(i) << " - "
-						<< passEnvelope->pass->getMaxInputLevelRequirement(i) << std::endl
+						<< "\texpected " << pass->getMinInputLevelRequirement(i) << " - "
+						<< pass->getMaxInputLevelRequirement(i) << std::endl
 						<< "\tprovided " << i->getOutput()->getMinConstructLevel() << " - "
 						<< i->getOutput()->getMaxConstructLevel() << std::endl;
 
@@ -53,36 +41,36 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 				Core::ConstructTraitType cropMax = Core::ConstructTraitType::CTMax;
 
 				if (InstRO::getInstrumentorInstance()->getConstructLoweringPolicyCrop()) {
-					cropMax = passEnvelope->pass->getMaxInputLevelRequirement(i);
+					cropMax = pass->getMaxInputLevelRequirement(i);
 				}
 
 				if (InstRO::getInstrumentorInstance()->getConstructRaisingPolicyCrop()) {
-					cropMin = passEnvelope->pass->getMinInputLevelRequirement(i);
+					cropMin = pass->getMinInputLevelRequirement(i);
 				}
 				
 				auto copy = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->crop(originalConstructSet,
 																																																	 cropMin, cropMax);
 				if (InstRO::getInstrumentorInstance()->getConstructRaisingPolicyElevate()) {
 					copy = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->raise(
-							copy, passEnvelope->pass->getMinInputLevelRequirement(i));
+							copy, pass->getMinInputLevelRequirement(i));
 				}
 
 				if (InstRO::getInstrumentorInstance()->getConstructLoweringPolicyElevate()) {
 					copy = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->lower(
-							copy, passEnvelope->pass->getMinInputLevelRequirement(i));
+							copy, pass->getMinInputLevelRequirement(i));
 				}
 
 				auto newCS = std::make_unique<Core::ConstructSet>(copy);
-				passEnvelope->pass->overrideInput(i, std::move(newCS));
+				pass->overrideInput(i, std::move(newCS));
 			}
 		}
-		passEnvelope->pass->executePass();
+		pass->executePass();
 	}
 
-	for (PassEnvelope *passContainer : passList) {
+	for (Pass *pass : passList) {
 		// disable output for all passes. This allows to release the output
 		// construct set
-		passContainer->pass->finalizePass();
+		pass->finalizePass();
 	}
 
 	return 0;

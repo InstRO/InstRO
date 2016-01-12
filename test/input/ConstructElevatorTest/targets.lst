@@ -4,3 +4,6 @@ expressions
 if
 identifier
 ternaryOp
+templFunc
+templContainer
+dotCall

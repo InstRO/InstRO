@@ -9,10 +9,10 @@ namespace InstRO {
 namespace Adapter {
 
 void ConstructPrinterAdapter::execute() {
-	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(inputPass->getOutput());
+	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(getInput(0));
 
-	auto minLevel = inputPass->getOutput()->getMinConstructLevel();
-	auto maxLevel = inputPass->getOutput()->getMaxConstructLevel();
+	auto minLevel = getInput(0)->getMinConstructLevel();
+	auto maxLevel = getInput(0)->getMaxConstructLevel();
 
 	std::cout << "=ConstructPrinter= ConstructSet contains " << cs.size() << " constructs";
 	if (!cs.empty()) {

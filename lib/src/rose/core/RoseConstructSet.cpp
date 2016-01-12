@@ -1,12 +1,17 @@
 #include "instro/rose/core/RoseConstructSet.h"
 
+#include "instro/utility/MemoryManagement.h"
 #include "rose.h"
 
 namespace InstRO {
 namespace Rose {
 
 std::shared_ptr<InstRO::Rose::Core::RoseConstruct> toRoseConstruct(std::shared_ptr<InstRO::Core::Construct> c) {
-	return std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(c);
+	auto roseConstruct = std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(c);
+	if (roseConstruct == nullptr) {
+		throw std::string("Error: Could not cast to RoseConstruct");
+	}
+	return roseConstruct;
 }
 
 namespace Core {
@@ -14,28 +19,30 @@ namespace Core {
 namespace RoseConstructLevelPredicates {
 
 using namespace RoseConstructLevelPredicates;
-CTPredicate getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType) {
+std::unique_ptr<CTPredicate> getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType) {
 	switch (traitType) {
 		case InstRO::Core::ConstructTraitType::CTExpression:
-			return CLExpressionPredicate();
+			return std::make_unique<CLExpressionPredicate>(CLExpressionPredicate());
 		case InstRO::Core::ConstructTraitType::CTStatement:
-			return CLStatementPredicate();
+			return std::make_unique<CLStatementPredicate>(CLStatementPredicate());
 		case InstRO::Core::ConstructTraitType::CTLoopStatement:
-			return CLLoopPredicate();
+			return std::make_unique<CLLoopPredicate>(CLLoopPredicate());
 		case InstRO::Core::ConstructTraitType::CTConditionalStatement:
-			return CLConditionalPredicate();
+			return std::make_unique<CLConditionalPredicate>(CLConditionalPredicate());
 		case InstRO::Core::ConstructTraitType::CTScopeStatement:
-			return CLScopeStatementPredicate();
+			return std::make_unique<CLScopeStatementPredicate>(CLScopeStatementPredicate());
 		case InstRO::Core::ConstructTraitType::CTSimpleStatement:
-			return CLSimpleStatementPredicate();
+			return std::make_unique<CLSimpleStatementPredicate>(CLSimpleStatementPredicate());
 		case InstRO::Core::ConstructTraitType::CTWrappableStatement:
-			return CTWrappableStatementPredicate();
+			return std::make_unique<CTWrappableStatementPredicate>(CTWrappableStatementPredicate());
 		case InstRO::Core::ConstructTraitType::CTFunction:
-			return CLFunctionPredicate();
+			return std::make_unique<CLFunctionPredicate>(CLFunctionPredicate());
 		case InstRO::Core::ConstructTraitType::CTFileScope:
-			return CLFileScopePredicate();
+			return std::make_unique<CLFileScopePredicate>(CLFileScopePredicate());
 		case InstRO::Core::ConstructTraitType::CTGlobalScope:
-			return CLGlobalScopePredicate();
+			return std::make_unique<CLGlobalScopePredicate>(CLGlobalScopePredicate());
+		default:
+			throw std::string("RoseConstructLevelPredicates: unknown trait type");
 	}
 }
 
@@ -46,9 +53,8 @@ std::string RoseConstruct::getIdentifier() const {
 
 	if (isSgLocatedNode(node) != nullptr) {
 		auto locatedNode = isSgLocatedNode(node);
-		logIt(DEBUG) << "getIdentifier(): \nNode type: " << locatedNode->class_name() << std::endl;
+		logIt(DEBUG) << "getIdentifier(): \nNode type: " << locatedNode->class_name() << ":= ";
 
-		Sg_File_Info *fInfo = locatedNode->get_startOfConstruct();
 		std::string filename(determineCorrectFilename());
 		std::string lineInfo(std::to_string(determineCorrectLineInfo()));
 		std::string constructString(specificConstructClassToString());
@@ -71,20 +77,65 @@ std::string RoseConstruct::getIdentifier() const {
 }
 
 int RoseConstruct::determineCorrectLineInfo() const {
-
+	// If code comes from template instantiation
+	if (Utility::ASTHelper::isContainedInTemplateInstantiation(node)){
+		logIt(DEBUG) << "Handling line info inside template instantiation for node " << node->class_name() << std::endl;
+		return Utility::ASTHelper::applyConsumerToTemplateInstantiationDecl(
+				[](Sg_File_Info *info) { return info->get_line(); }, node);
+	}
+	
 	// Empty increment expression in for loop gets correct line info
-	if(isSgNullExpression(node) && isSgForStatement(node->get_parent())){
+	if (isSgNullExpression(node) && isSgForStatement(node->get_parent())) {
 		return isSgLocatedNode(node->get_parent())->get_startOfConstruct()->get_line();
+	}
+
+	// Assign initializers are marked as compiler generated -> retrieve correct position information
+	if (isSgAssignInitializer(node)) {
+		return Utility::ASTHelper::applyConsumerToAssignInitializer([](Sg_File_Info *info) { return info->get_line(); },
+																																isSgAssignInitializer(node));
+	}
+
+	// if the declaration is inside an if statement, then it is marked compiler generated
+	if (isSgVariableDeclaration(node)) {
+		if (isSgIfStmt(node->get_parent())) {
+			return isSgIfStmt(node->get_parent())->get_startOfConstruct()->get_line();
+		}
+		if (isSgWhileStmt(node->get_parent())) {
+			return isSgWhileStmt(node->get_parent())->get_startOfConstruct()->get_line();
+		}
 	}
 
 	return isSgLocatedNode(node)->get_startOfConstruct()->get_line();
 }
 
 std::string RoseConstruct::determineCorrectFilename() const {
+	// If code comes from template instantiation
+	if (Utility::ASTHelper::isContainedInTemplateInstantiation(node)){
+		logIt(DEBUG) << "=== ROSE CONSTRUCT ===\nHandling filename info inside template instantiation for node " << node->class_name() << std::endl;
+		logIt(DEBUG) << "====\n" << toString() << "\n ====" << std::endl;
+		return Utility::ASTHelper::applyConsumerToTemplateInstantiationDecl(
+				[](Sg_File_Info *info) { return info->get_filenameString(); }, node);
+	}
 
 	// empty increment expression in for loop gets correct file name
 	if(isSgNullExpression(node) && isSgForStatement(node->get_parent())){
 		return isSgLocatedNode(node->get_parent())->get_startOfConstruct()->get_filenameString();
+	}
+
+	// if the declaration is inside an if statement, then it is marked compiler generated
+	if (isSgVariableDeclaration(node)) {
+		if (isSgIfStmt(node->get_parent())) {
+			return isSgIfStmt(node->get_parent())->get_startOfConstruct()->get_filenameString();
+		}
+		if (isSgWhileStmt(node->get_parent())) {
+			return isSgWhileStmt(node->get_parent())->get_startOfConstruct()->get_filenameString();
+		}
+	}
+
+	// Assign initializers are marked as compiler generated, s.a.
+	if (isSgAssignInitializer(node)) {
+		return Utility::ASTHelper::applyConsumerToAssignInitializer(
+				[](Sg_File_Info *info) { return info->get_filenameString(); }, isSgAssignInitializer(node));
 	}
 
 	return isSgLocatedNode(node)->get_startOfConstruct()->get_filenameString();
@@ -97,6 +148,29 @@ std::string RoseConstruct::determineCorrectFilename() const {
  * If something happens we do not account for, the returned column info is -1.
  */
 int RoseConstruct::determineCorrectColumnInformation() const {
+	// If code comes from template instantiation
+	if (Utility::ASTHelper::isContainedInTemplateInstantiation(node)) {
+		logIt(DEBUG) << "Handling column info inside template instantiation for node " << node->class_name() << std::endl;
+		return Utility::ASTHelper::applyConsumerToTemplateInstantiationDecl(
+				[](Sg_File_Info *info) { return info->get_col(); }, node);
+	}
+
+	// if the declaration is inside an if statement, then it is marked compiler generated
+	if (isSgVariableDeclaration(node)) {
+		if (isSgIfStmt(node->get_parent())) {
+			return isSgIfStmt(node->get_parent())->get_startOfConstruct()->get_col();
+		}
+		if (isSgWhileStmt(node->get_parent())) {
+			return isSgWhileStmt(node->get_parent())->get_startOfConstruct()->get_col();
+		}
+	}
+
+	// Assign initializers are marked as compiler generated, s.a.
+	if (isSgAssignInitializer(node)) {
+		return Utility::ASTHelper::applyConsumerToAssignInitializer([](Sg_File_Info *info) { return info->get_col(); },
+																																isSgAssignInitializer(node));
+	}
+
 	int colInfo = -1;
 	SgNode *n = node;
 	if (isSgNullStatement(n)) {

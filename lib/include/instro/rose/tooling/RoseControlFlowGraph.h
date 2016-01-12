@@ -134,8 +134,8 @@ class RoseSingleFunctionCFGGenerator {
 	RoseSingleFunctionCFGGenerator(SgFunctionDefinition* funcDef) {
 
 		//XXX generate whole virtualcfg
-//		std::string name = funcDef->get_declaration()->get_name().getString();
-//		VirtualCFG::cfgToDot(funcDef, "virtualcfg-"+name+".dot");
+		std::string name = funcDef->get_declaration()->get_name().getString();
+		VirtualCFG::cfgToDot(funcDef, "virtualcfg-"+name+".dot");
 
 		auto cfgStartNode = aquireControlFlowGraphNode(funcDef->cfgForBeginning());
 		cfg.setStartNode(cfgStartNode);
@@ -152,8 +152,8 @@ class RoseSingleFunctionCFGGenerator {
 
 		///XXX dump cfg
 //		cfg.print(name+".dot");
-		logIt(INFO) << "RoseControlFlowGraph: " << boost::num_vertices(cfg.getGraph()) << " vertices and "
-				<< boost::num_edges(cfg.getGraph()) << " edges" << std::endl;
+//		logIt(INFO) << "RoseControlFlowGraph: " << boost::num_vertices(cfg.getGraph()) << " vertices and "
+//				<< boost::num_edges(cfg.getGraph()) << " edges" << std::endl;
 	}
 
 	BoostCFG getCFG() { return std::move(cfg); }
@@ -170,11 +170,6 @@ class RoseSingleFunctionCFGGenerator {
 			auto currentNodeCS = currentNode.getAssociatedConstructSet();
 			if (currentNodeCS != nullptr) {
 				lastValidConstructSet = currentNodeCS;
-
-				/// XXX
-//				std::cout << std::endl
-//									<< "visit: " << vcfgNode.getNode()->class_name() << std::endl
-//									<< vcfgNode.toString() << std::endl;
 
 				cfg.addNode(currentNode);
 				cfg.addEdge(*previousNode, *currentNodeCS);
