@@ -10,11 +10,9 @@ namespace ExtendedCallGraph {
 
 
 ExtendedCallGraph::ExtendedCallGraph() {
-	// TODO
 }
 
 ExtendedCallGraph::~ExtendedCallGraph() {
-	// TODO
 }
 
 ExtendedCallGraphNode* ExtendedCallGraph::addNode(ExtendedCallGraphNode* node) {
@@ -64,7 +62,7 @@ void ExtendedCallGraph::removeNode(ExtendedCallGraphNode* node, bool redirectEdg
 	successors.erase(node);
 }
 
-std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getNodeSet(Core::ConstructSet *cs) {
+std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getNodeSetByCS(Core::ConstructSet *cs) {
 	std::set<ExtendedCallGraphNode*> returnSet;
 	for (auto node : getNodeSet()) {
 		if (node->getAssociatedConstructSet().intersects(*cs)) {
@@ -153,7 +151,6 @@ InstRO::Core::ConstructSet ExtendedCallGraph::getConstructSet(std::set<ExtendedC
 	return returnSet;
 }
 
-// TODO: swapping is now more complicated
 void ExtendedCallGraph::swapConstructSet(InstRO::Core::ConstructSet oldCS, InstRO::Core::ConstructSet newCS) {
 
 	if (csToGraphNode.find(oldCS) == csToGraphNode.end()) {

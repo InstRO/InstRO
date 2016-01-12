@@ -1,0 +1,11 @@
++IdSelector-::foo
+
++IdSelector-::f#
+
++IdSelector-#foo
+templFuncInContainer.cpp:5:2--Function-::Base::foo
+
++IdSelector-#f#
+templFuncInContainer.cpp:5:2--Function-::Base::foo
+templFuncInContainer.cpp:5:2--Function-::Base::foo < int > 
+templFuncInContainer.cpp:13:2--Expression

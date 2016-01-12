@@ -2,7 +2,7 @@
 #define INSTRO_ROSE_STRATEGYBASEDADAPTER
 #include <memory>
 #include <utility>
-#include "include/instro/core/Helper.h"
+#include "include/instro/utility/MemoryManagement.h"
 #include "instro/core/Pass.h"
 #include "instro/rose/core/RosePassImplementation.h"
 

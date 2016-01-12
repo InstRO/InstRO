@@ -76,7 +76,7 @@ class ReadOnlyConstructSetCompilerInterface {
 namespace Core {
 
 enum class ConstructTraitType {
-	CTNoTraits = 0,	// TODO this should no longer be necessary?
+	CTNoTraits = 0,	// XXX how to avoid this?
 	CTMin = 1,
 	// Please do not use fragments. They may become deprecated
 	CTFragment = 2,
@@ -274,7 +274,6 @@ class ConstructSet {
 	typedef std::set<value_type>::const_iterator const_iterator;
 
 	ConstructSet(){};
-	ConstructSet(const value_type& construct) { constructs.insert(construct); };
 
 	ConstructTraitType getMaxConstructLevel() const;
 	ConstructTraitType getMinConstructLevel() const;
@@ -287,7 +286,6 @@ class ConstructSet {
 	ConstructSet intersect(const ConstructSet&) const;
 	ConstructSet relativeComplement(const ConstructSet&) const;
 	ConstructSet symmertricDifference(const ConstructSet&) const;
-	std::vector<ConstructSet> split() const;
 
 	bool intersects(const ConstructSet&) const;
 

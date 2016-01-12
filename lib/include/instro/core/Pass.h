@@ -21,7 +21,6 @@ class PassManager;
  * The Pass class is the administration class used within the pass manager.
  * It holds information necessary in order to singalize the pass implementation
  * whether it can be run or not.
- * Also it exposes a clear interface to the PassManager
  */
 class Pass {
 	friend InstRO::PassManagement::PassManager;
@@ -31,7 +30,9 @@ class Pass {
 	// from the ToolingSpace
 	Pass() = delete;
 	Pass(Core::PassImplementation *pImpl)
-			: passInitialized(false), passExecuted(false), passFinalized(false), passImplementation(pImpl){};
+			: passInitialized(false), passExecuted(false), passFinalized(false), passImplementation(pImpl) {
+		const_cast<InstRO::Core::ChannelConfiguration &>(pImpl->getChannelConfig()).setManagingPass(this);
+	}
 
 	Core::PassImplementation *getPassImplementation() { return passImplementation; };
 	virtual ~Pass() {
@@ -44,24 +45,21 @@ class Pass {
 	void executePass();
 	void finalizePass();
 
-	/*-------------------------------------------------------------*/
-	/* management of passes: enumerate inputs, query output, etc   */
-	/*-------------------------------------------------------------*/
-	std::unordered_map<Pass *, std::shared_ptr<Core::ConstructSet> > inputOverride;
-
 	// Query the proxy pass for its output
 	Core::ConstructSet *getOutput() { return passImplementation->getOutput(); };
 
+	// returns the ConstructSet for the input channel from
 	Core::ConstructSet *getInput(Pass *from) {
-		if (inputOverride.find(from) == inputOverride.end())
+		if (inputOverride.find(from) == inputOverride.end()) {
 			return from->getOutput();
-		else
+		} else {
 			return inputOverride.find(from)->second.get();
+		}
 	}
 
+	// Allows to inject a ConstructSet which is returned for the pass with id from
 	void overrideInput(Pass *from, std::unique_ptr<Core::ConstructSet> overrideSet) {
-		std::unique_ptr<Core::ConstructSet> ovrdSet = std::move(overrideSet);
-		std::shared_ptr<Core::ConstructSet> sharedSet = std::move(ovrdSet);
+		std::shared_ptr<Core::ConstructSet> sharedSet(std::move(overrideSet));
 		inputOverride[from] = sharedSet;
 	}
 
@@ -71,17 +69,18 @@ class Pass {
 	void setPassName(std::string passName) { passNameString = passName; };
 
 	std::vector<Pass *> const getInputPasses() { return passImplementation->getChannelConfig().getPasses(); };
+	
 	Core::ConstructTraitType getMinInputLevelRequirement(Pass *pass) {
 		return passImplementation->getChannelConfig().getMinConstructLevel(pass);
 	};
+	
 	Core::ConstructTraitType getMaxInputLevelRequirement(Pass *pass) {
 		return passImplementation->getChannelConfig().getMaxConstructLevel(pass);
 	};
-	// level; }
+ 
  protected:
 	// Get the number of altered, invalidated or changed constructs. We expect the next higher construct that dominates
 	// the altered or deleted constructs
-	// alternate name getInvalidationSet()
 	const Core::ConstructSet *getCollisionSet() { return passImplementation->cgetCollisionSet(); }
 
  private:
@@ -90,9 +89,10 @@ class Pass {
 
 	std::string passNameString;
 
+	std::unordered_map<Pass *, std::shared_ptr<Core::ConstructSet> > inputOverride;
+
 	// A Pointer to the compiler-specific implementation
 	InstRO::Core::PassImplementation *passImplementation;
 };
-//}// Core
 }	// InstRO
 #endif

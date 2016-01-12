@@ -41,7 +41,8 @@ CORE_HFILES= \
 ./include/instro/pass/adapter/DefaultInstrumentationAdapter.h \
 ./include/instro/pass/adapter/ConstructPrinterAdapter.h \
 ./include/instro/pass/adapter/ConstructHierarchyASTDotGenerator.h \
-./include/instro/utility/Logger.h
+./include/instro/utility/Logger.h \
+./include/instro/utility/MemoryManagement.h
 
 CORE_SFILES= \
 ./src/core/ConstructSet.cpp \
@@ -50,7 +51,6 @@ CORE_SFILES= \
 ./src/core/PassImplementation.cpp \
 ./src/core/SimplePassManager.cpp \
 ./src/core/Singleton.cpp \
-./src/core/Helper.cpp \
 ./src/tooling/AnalysisInterface.cpp \
 ./src/tooling/NamedConstructAccess.cpp \
 ./src/tooling/ConstructElevator.cpp \

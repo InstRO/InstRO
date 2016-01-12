@@ -6,3 +6,6 @@ scopes
 memfunc
 expressions
 identifier
+whiletest
+templFuncInContainer
+callInTemplateCode

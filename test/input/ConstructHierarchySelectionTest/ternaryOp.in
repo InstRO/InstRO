@@ -5,5 +5,6 @@ ternaryOp.cpp:1:1--Function-::foo
 ternaryOp.cpp:2:2--SimpleStatement
 
 +CTExpressionSelector
+ternaryOp.cpp:2:2--Expression
 ternaryOp.cpp:2:10--Expression
 ternaryOp.cpp:2:10--Expression

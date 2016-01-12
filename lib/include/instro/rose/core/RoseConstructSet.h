@@ -2,6 +2,7 @@
 #define INSTRO_ROSE_CORE_CONSTRUCTSET_H_
 
 #include "instro/core/ConstructSet.h"
+#include "instro/rose/utility/ASTHelper.h"
 #include "instro/utility/Logger.h"
 
 #include "rose.h"
@@ -17,10 +18,7 @@ namespace Core {
 
 namespace RoseConstructLevelPredicates {
 struct CTPredicate {
-	virtual bool operator()(SgNode* n) const {
-		// RN: TODO will this actually work with a base implementation?
-		return false;
-	}
+	virtual bool operator()(SgNode* n) const = 0;
 	virtual ~CTPredicate() {}
 };
 
@@ -33,8 +31,8 @@ struct DefinedVariableDeclarationPredicate {
 };
 
 struct CLExpressionPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const {
-		if (isSgExprListExp(n) || isSgFunctionRefExp(n)) {
+	bool operator()(SgNode* n) const override {
+		if (isSgExprListExp(n) || isSgFunctionRefExp(n) || isSgMemberFunctionRefExp(n)) {
 			return false;	// never accept these
 		}
 		if (isSgFunctionCallExp(n) != nullptr) {
@@ -69,10 +67,24 @@ struct CLExpressionPredicate : public CTPredicate {
 			return false;
 		}
 
-		if (isSgCastExp(n))
+		if (isSgCastExp(n)){
 			return false;
+		}
 
 		if (isSgAssignInitializer(n)) {
+			if (isSgCtorInitializerList(n->get_parent()->get_parent())) {
+				return false;
+			}
+			return true;
+		}
+
+		// do not allow initializers to show up in construct sets
+		if (isSgConstructorInitializer(n)) {
+			return false;
+		}
+
+		// function call expressions won't be affected
+		if (isSgDotExp(n) || isSgThisExp(n) || isSgArrowExp(n)) {
 			return false;
 		}
 
@@ -194,11 +206,6 @@ struct CTWrappableStatementPredicate : public CTPredicate {
 	}
 };
 
-struct InstrumentableConstructPredicate : public CTPredicate {
-	// TODO: how exactly is this defined?
-	bool operator()(SgNode* n) const;
-};
-
 struct ConstructPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		return CLGlobalScopePredicate()(n) || CLFileScopePredicate()(n) || CLFunctionPredicate()(n) ||
@@ -207,7 +214,7 @@ struct ConstructPredicate : public CTPredicate {
 };
 
 //// TODO actually use that mechanism
-CTPredicate getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType);
+std::unique_ptr<CTPredicate> getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType);
 
 }	// namespace RoseConstructLevelPredicates
 
@@ -217,14 +224,30 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	InstRO::Core::ConstructTrait getConstructTraits() { return ct; }
 
 	// global scope
-	void visit(SgProject* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTGlobalScope); }
+	void visit(SgProject* node) {
+		if (RoseConstructLevelPredicates::CLGlobalScopePredicate()(node)) {
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTGlobalScope);
+		} else {
+			generateError(node);
+		}
+	}
 
 	// file scope
-	void visit(SgSourceFile* node) { ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFileScope); }
+	void visit(SgSourceFile* node) {
+		if (RoseConstructLevelPredicates::CLFileScopePredicate()(node)) {
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFileScope);
+		} else {
+			generateError(node);
+		}
+	}
 
 	// function
 	void visit(SgFunctionDefinition* node) {
-		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFunction);
+		if (RoseConstructLevelPredicates::CLFunctionPredicate()(node)) {
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFunction);
+		} else {
+			generateError(node);
+		}
 	}
 
 	// conditionals

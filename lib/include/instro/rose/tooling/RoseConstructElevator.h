@@ -13,12 +13,8 @@ class ConstructElevator : public InstRO::Tooling::ConstructElevator::ConstructEl
  public:
 	virtual InstRO::Core::ConstructSet raise(const InstRO::Core::ConstructSet &input,
 																					 InstRO::Core::ConstructTraitType cl) override;
-	virtual InstRO::Core::ConstructSet raise(const InstRO::Core::ConstructSet *input,
-																					 InstRO::Core::ConstructTraitType cl) override;
 
 	virtual InstRO::Core::ConstructSet lower(const InstRO::Core::ConstructSet &input,
-																					 InstRO::Core::ConstructTraitType cl) override;
-	virtual InstRO::Core::ConstructSet lower(const InstRO::Core::ConstructSet *input,
 																					 InstRO::Core::ConstructTraitType cl) override;
 };
 }
