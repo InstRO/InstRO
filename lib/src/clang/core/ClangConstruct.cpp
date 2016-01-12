@@ -5,7 +5,6 @@
 #include "instro/utility/Logger.h"
 
 #include "llvm/Support/raw_ostream.h"
-//#include "clang/AST/ParentMap.h"
 #include "clang/ASTMatchers/ASTMatchers.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
 #include "clang/AST/DeclVisitor.h"
@@ -82,11 +81,9 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		auto matcher = clang::ast_matchers::stmt(clang::ast_matchers::hasParent(clang::ast_matchers::functionDecl()));
 		auto matches = clang::ast_matchers::match(matcher, *stmt, context);
 		if (matches.empty()) {
-			InstRO::logIt(InstRO::DEBUG) << "found ScopeStatement" << std::endl;
 			ct = ConstructTrait(ConstructTraitType::CTScopeStatement);
 			handleStatementWithWrappableCheck(stmt);
 		} else {
-			InstRO::logIt(InstRO::DEBUG) << "found CompoundStatement of a function body" << std::endl;
 			generateError(stmt);
 		}
 	}
@@ -115,10 +112,9 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 	}
 
 	void VisitExpr(clang::Expr *stmt) {
-		// in Clang every Expr is also a Stmt, therefore we treat expressions which do not have another expression as parent
-		// as a SimpleStatement and expressions which do as Expression
+		// in Clang every Expr is also a Stmt, therefore Expressions might also be SimpleStatements
 
-		clang::SourceLocation location = stmt->getExprLoc();
+		clang::SourceLocation location = stmt->getLocStart();
 		const clang::SourceManager &sm = context.getSourceManager();
 		std::string strLoc = "(" + std::to_string(sm.getSpellingLineNumber(location)) + "," +
 												 std::to_string(sm.getSpellingColumnNumber(location)) + ")";
@@ -128,6 +124,17 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		if (parents.size() == 1) {
 			if (const clang::Stmt *parent = parents.front().get<clang::Stmt>()) {
 				isNotAStatement = llvm::isa<clang::Expr>(*parent);
+				if (!isNotAStatement) {
+					if (const clang::IfStmt *ifStmt = llvm::dyn_cast<clang::IfStmt>(parent)) {
+						// the conditional expression of a if statement is no statement
+						// the 'then' and 'else' statements can be expressions, so we cannot just check the type of the parent
+						isNotAStatement = stmt == ifStmt->getCond();
+					} else if (const clang::ForStmt *forStmt = llvm::dyn_cast<clang::ForStmt>(parent)) {
+						// the 'init' and 'cond' parts are considered to be statements according to the C++ grammar, the 'inc' part
+						// is just an expression
+						isNotAStatement = stmt == forStmt->getInc();
+					}
+				}
 			} else if (const clang::Decl *parent = parents.front().get<clang::Decl>()) {
 				isNotAStatement = true;
 			}
@@ -137,7 +144,7 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		ct = ConstructTrait(ConstructTraitType::CTExpression);
 		if (!isNotAStatement) {
 			InstRO::logIt(InstRO::DEBUG) << nodeTypeName << " is a SimpleStatement " << strLoc << std::endl;
-			ct = ConstructTrait(ConstructTraitType::CTSimpleStatement);
+			ct.add(ConstructTraitType::CTSimpleStatement);
 			handleStatementWithWrappableCheck(stmt);
 		}
 	}
@@ -157,6 +164,21 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		generateError(stmt);
 	}
 
+	void VisitCharacterLiteral(clang::CharacterLiteral *stmt) {
+		// literals are not considered interesting
+		generateError(stmt);
+	}
+
+	void VisitStringLiteral(clang::StringLiteral *stmt) {
+		// literals are not considered interesting
+		generateError(stmt);
+	}
+
+	void VisitCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralExpr *stmt) {
+		// literals are not considered interesting
+		generateError(stmt);
+	}
+
 	void VisitDeclRefExpr(clang::DeclRefExpr *stmt) {
 		// references to declarations (variables) are not considered interesting
 		generateError(stmt);
@@ -165,6 +187,17 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 	void VisitImplicitCastExpr(clang::ImplicitCastExpr *stmt) {
 		// not considered interesting
 		generateError(stmt);
+	}
+
+	void VisitArraySubscriptExpr(clang::ArraySubscriptExpr *stmt) {
+		// array subscript operator has no observable behavior
+		// overloading the operator in a class should instead lead to a 'CXXOperatorCallExpr'
+		generateError(stmt);
+	}
+
+	void VisitCXXOperatorCallExpr(clang::CXXOperatorCallExpr *stmt) {
+		ct = ConstructTrait(ConstructTraitType::CTSimpleStatement);
+		handleStatementWithWrappableCheck(stmt);
 	}
 
 	void VisitReturnStmt(clang::ReturnStmt *stmt) {
@@ -181,7 +214,7 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 
 	void handleStatementWithWrappableCheck(clang::Stmt *stmt) {
 		ct.add(ConstructTraitType::CTStatement);
-		auto matcher = clang::ast_matchers::stmt(clang::ast_matchers::hasParent(clang::ast_matchers::stmt()));
+		auto matcher = clang::ast_matchers::stmt(clang::ast_matchers::hasParent(clang::ast_matchers::compoundStmt()));
 		auto matches = clang::ast_matchers::match(matcher, *stmt, context);
 		if (!matches.empty()) {
 			InstRO::logIt(InstRO::DEBUG) << "Matched a wrappable statement" << std::endl;
