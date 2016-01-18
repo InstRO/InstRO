@@ -15,9 +15,7 @@ InstRO::Clang::ClangPassFactory* InstRO::Clang::ClangInstrumentor::getFactory(Co
 	return fac.get();
 }
 
-clang::tooling::RefactoringTool& InstRO::Clang::ClangInstrumentor::getTool() {
-	return tool;
-}
+clang::tooling::RefactoringTool& InstRO::Clang::ClangInstrumentor::getTool() { return tool; }
 
 void InstRO::Clang::ClangInstrumentor::init() {}
 
@@ -30,7 +28,7 @@ void InstRO::Clang::ClangInstrumentor::apply() {
 
 void InstRO::Clang::ClangInstrumentor::finalize() {}
 
-void InstRO::Clang::ClangInstrumentor::initializeAnalysisManager(clang::ASTContext &context) {
+void InstRO::Clang::ClangInstrumentor::initializeAnalysisManager(clang::ASTContext& context) {
 	cam = std::make_unique<InstRO::Clang::Tooling::ClangAnalysisManager>(context);
 }
 
