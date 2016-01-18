@@ -1,5 +1,7 @@
 #include "instro/clang/selector/BlackWhitelistSelector.h"
 
+#include "instro/clang/core/ClangConstruct.h"
+
 InstRO::Clang::BlackWhitelistSelector::BlackWhitelistSelector(std::vector<std::string> blacklist,
 																															std::vector<std::string> whitelist)
 		: ClangPassImplBase<BlackWhitelistSelector>(InstRO::Core::ChannelConfiguration(),
@@ -29,7 +31,8 @@ bool InstRO::Clang::BlackWhitelistSelector::VisitFunctionDecl(clang::FunctionDec
 					(!isOnList(decl->getNameInfo().getAsString(), blacklist))) {
 				std::cout << "BW Selector: Selecting node" << std::endl;
 				// select node
-				cs.put(decl);
+				InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci(&outputSet);
+				csci.put(std::make_shared<InstRO::Clang::Core::ClangConstruct>(decl));
 			}
 		}
 	}
@@ -42,10 +45,6 @@ void InstRO::Clang::BlackWhitelistSelector::readFilterFile(std::string filename)
 	blacklist = lists.first;
 	whitelist = lists.second;
 }
-
-void InstRO::Clang::BlackWhitelistSelector::releaseOutput() {}
-
-InstRO::Clang::ClangConstructSet *InstRO::Clang::BlackWhitelistSelector::getOutput() { return &cs; }
 
 bool InstRO::Clang::BlackWhitelistSelector::isOnList(std::string functionName, std::vector<std::string> &list) {
 	return std::find(list.begin(), list.end(), functionName) != list.end();

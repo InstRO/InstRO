@@ -98,6 +98,30 @@ std::string operator+(const std::string& lhs, const ConstructTraitType& type) {
 	return std::string(lhs).append(constructLevelToString(type));
 }
 
+
+std::string Construct::specificConstructClassToString() const {
+	using CTLvl = InstRO::Core::ConstructTraitType;
+	auto cts = getTraits();
+	if (cts.is(CTLvl::CTConditionalStatement)) {
+		return "ConditionalStatement";
+	}
+	if (cts.is(CTLvl::CTLoopStatement)) {
+		return "LoopStatement";
+	}
+	if (cts.is(CTLvl::CTScopeStatement)) {
+		return "ScopeStatement";
+	}
+	if (cts.is(CTLvl::CTSimpleStatement)) {
+		return "SimpleStatement";
+	}
+	if (cts.is(CTLvl::CTWrappableStatement)) {
+		return "WrappableStatement";
+	}
+
+	return constructLevelToString(cts.max());
+}
+
+
 ConstructTraitType ConstructSet::getMaxConstructLevel() const {
 	ConstructTraitType max = ConstructTraitType::CTMin;
 	for (auto construct : constructs) {

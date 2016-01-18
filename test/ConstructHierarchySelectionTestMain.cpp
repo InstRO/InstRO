@@ -2,8 +2,13 @@
 #include "instro.h"
 #include <iostream>
 
-#ifdef USE_ROSE
+#if INSTRO_USE_ROSE
 #include "lib/RoseTestSupport.h"
+#endif
+
+#if INSTRO_USE_CLANG
+#include "lib/ClangTestSupport.h"
+static llvm::cl::OptionCategory instroTool("InstRO Clang Test");
 #endif
 
 #include "instro/utility/Logger.h"
@@ -33,14 +38,20 @@
  * the result to the TestSummary object.
  * If all selectors produce the expected ConstructSet the app returns 0.
  */
+
 int main(int argc, char **argv) {
 /*
  * We want to use the same binary for both Rose and Clang
  */
-#ifdef USE_ROSE
+#if INSTRO_USE_ROSE
 	using InstrumentorType = RoseTest::RoseTestInstrumentor;
-
 	InstrumentorType instrumentor(argc, argv);
+#endif
+#if INSTRO_USE_CLANG
+	using InstrumentorType = ClangTest::ClangTestInstrumentor;
+	InstrumentorType instrumentor(argc, argv, instroTool);
+#endif
+
 	auto factory = instrumentor.getFactory();
 
 	std::string filename = InstRO::Utility::getEnvironmentVariable("INSTRO_TEST_INPUT_FILENAME");
@@ -70,11 +81,4 @@ int main(int argc, char **argv) {
 
 	// Returns false if everything was fine, true otherwise
 	return instrumentor.testFailed();
-#endif
-
-#ifdef USE_CLANG
-	logIt(ERROR) << "Not implemented yet!" << std::endl;
-	return -1;
-#endif
-
 }

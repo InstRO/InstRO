@@ -1,7 +1,7 @@
 #include "instro/clang/core/ClangPassFactory.h"
 
 InstRO::Pass *InstRO::Clang::ClangPassFactory::createBlackAndWhiteListSelector(std::vector<std::string> blacklist,
-																																					std::vector<std::string> whitelist) {
+																																							 std::vector<std::string> whitelist) {
 	auto pImpl = new InstRO::Clang::BlackWhitelistSelector(blacklist, whitelist);
 	lazyContextProvidingMap.insert(pImpl);
 	InstRO::Pass *p = new InstRO::Pass(pImpl);
