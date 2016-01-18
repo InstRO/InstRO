@@ -1,4 +1,3 @@
-#define INSTRO_LOG_LEVEL DEBUG
 #include "instro/clang/core/ClangConstruct.h"
 
 #include "instro/utility/exception.h"
