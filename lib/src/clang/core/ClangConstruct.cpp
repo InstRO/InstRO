@@ -358,7 +358,7 @@ std::string ClangConstruct::getFunctionName(clang::FunctionDecl *decl) const {
 		for (unsigned i = 0; i < argList->size(); ++i) {
 			argList->get(i).print(getASTContext().getPrintingPolicy(), rso);
 			if (i < argList->size() - 1) {
-				rso << ','
+				rso << ',';
 			}
 			rso << ' ';
 		}
