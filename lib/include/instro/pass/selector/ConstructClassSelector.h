@@ -14,7 +14,7 @@ namespace Selector {
 class ConstructClassSelector : public InstRO::Core::PassImplementation {
  public:
 	ConstructClassSelector(InstRO::Core::ConstructTraitType constructClass) :
-			InstRO::Core::PassImplementation(InstRO::Core::ChannelConfiguration()),
+			InstRO::Core::PassImplementation(),
 			constructClass(constructClass) {
 	}
 

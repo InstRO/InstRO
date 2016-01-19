@@ -16,8 +16,8 @@ namespace Adapter {
  */
 class RoseDefaultInstrumentationAdapter : public InstRO::Adapter::DefaultInstrumentationAdapter {
  public:
-	RoseDefaultInstrumentationAdapter(InstRO::Pass* input, SgProject* project) : 
-			DefaultInstrumentationAdapter(input), 
+	RoseDefaultInstrumentationAdapter(SgProject* project) : 
+			DefaultInstrumentationAdapter(), 
 			wrapper(project) {}
 
  protected:

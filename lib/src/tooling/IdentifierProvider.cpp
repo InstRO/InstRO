@@ -13,7 +13,7 @@ namespace IdentifierProvider {
 	}
 
 	// Create and return a mapping from a ConstructSet to human readable identifiers.
-	std::map<size_t, std::string> getIdentifierMap(Core::ConstructSet *cs) {
+	std::map<size_t, std::string> getIdentifierMap(const Core::ConstructSet *cs) {
 		// we want to have access to single constructs
 		using ROCompI = InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface;
 		ROCompI roci(cs);

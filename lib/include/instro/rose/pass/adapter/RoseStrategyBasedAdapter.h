@@ -24,7 +24,7 @@ namespace InstRO {
 				typedef std::multimap<int, InstRO::Rose::Adapter::StrategyBasedAdapterSupport::GenericInstrumentationStrategy*, std::greater<int> >::iterator strat_iterator;
 
 			protected:
-				InstRO::Pass *input;
+//				InstRO::Pass *input;
 				template<class... stratList> void ctorStrategyInserter(std::unique_ptr<InstRO
 						::Rose::Adapter::StrategyBasedAdapterSupport::GenericInstrumentationStrategy> && strat1, stratList&&... strategyArgs){
 					strategyUniqPtrs.push_back(std::move(strat1));
@@ -36,8 +36,8 @@ namespace InstRO {
 }
 			public:
 				RoseStrategyBasedAdapter() = delete;
-				template<class... stratList> RoseStrategyBasedAdapter(InstRO::Pass *inputFunctions, std::unique_ptr<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::GenericInstrumentationStrategy> && strat1, stratList&&... strategyArgs)
-					: RosePassImplementation(InstRO::Core::ChannelConfiguration(inputFunctions)), input(inputFunctions)
+				template<class... stratList> RoseStrategyBasedAdapter(std::unique_ptr<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::GenericInstrumentationStrategy> && strat1, stratList&&... strategyArgs)
+					: RosePassImplementation()
 				{
 					ctorStrategyInserter(std::move(strat1),std::forward<stratList>(strategyArgs)...);
 //					strategyUniqPtrs.push_back(std::move(strat1));

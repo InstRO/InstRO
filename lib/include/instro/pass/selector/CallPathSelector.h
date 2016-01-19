@@ -12,8 +12,8 @@ namespace Selector {
  * */
 class CallPathSelector: public InstRO::Core::PassImplementation {
 public:
-	CallPathSelector(Pass *from, Pass *to, std::string dotName) :
-			InstRO::Core::PassImplementation(Core::ChannelConfiguration(from, to)),
+	CallPathSelector(std::string dotName) :
+			InstRO::Core::PassImplementation(),
 			dotName(dotName) {}
 
 	virtual void execute() override;

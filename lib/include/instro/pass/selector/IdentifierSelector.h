@@ -12,10 +12,8 @@ class IdentifyerSelector : public InstRO::Core::PassImplementation {
 	IdentifyerSelector() = delete;
 
  public:
-	IdentifyerSelector(std::vector<std::string> matchRules, Pass *filter)
-			: PassImplementation(Core::ChannelConfiguration(filter)), rules(matchRules){};
 	IdentifyerSelector(std::vector<std::string> matchRules)
-			: PassImplementation(Core::ChannelConfiguration()), rules(matchRules){};
+			: PassImplementation(), rules(matchRules){};
 	virtual void execute() override;
 
  protected:

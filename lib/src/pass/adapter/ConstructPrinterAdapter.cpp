@@ -9,7 +9,7 @@ namespace InstRO {
 namespace Adapter {
 
 void ConstructPrinterAdapter::execute() {
-	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(getInput(0));
+	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface cs(getInput(0));
 
 	auto minLevel = getInput(0)->getMinConstructLevel();
 	auto maxLevel = getInput(0)->getMaxConstructLevel();

@@ -6,6 +6,8 @@
 
 #include "instro/core/ConstructSet.h"
 #include "instro/utility/MemoryManagement.h"
+#include "instro/core/ChannelConfiguration.h"
+
 
 #include <cassert>
 
@@ -14,75 +16,6 @@ namespace InstRO {
 class Pass;
 
 namespace Core {
-
-/*
- * The class serves as interface between Pass and PassImplementation to make them independent of the actual input
- * channel
- */
-class ChannelConfiguration {
-	public:
-	ChannelConfiguration() : managingPass(nullptr) {};
-
-	ChannelConfiguration(Pass *p1) : managingPass(nullptr) {
-		inputChannelPasses.push_back(p1);
-		inputChannelMin[p1] = InstRO::Core::ConstructTraitType::CTMin;
-		inputChannelMax[p1] = InstRO::Core::ConstructTraitType::CTMax;
-	}
-
-	template <class... PassList>
-	ChannelConfiguration(Pass *p1, PassList... passes) : managingPass(nullptr) {
-		inputChannelPasses.insert(inputChannelPasses.begin(), {p1, passes...});
-
-		std::vector<Pass *> allPasses = {p1, passes...};
-		for (auto pass : allPasses) {
-			inputChannelMin[pass] = InstRO::Core::ConstructTraitType::CTMin;
-			inputChannelMax[pass] = InstRO::Core::ConstructTraitType::CTMax;
-		}
-	}
-
-	template <class Iterator>
-	ChannelConfiguration(Iterator begin, Iterator end, InstRO::Core::ConstructTraitType minLevel,
-											 InstRO::Core::ConstructTraitType maxLevel) : managingPass(nullptr) {
-		for (Iterator iter = begin; iter != end; ++iter) {
-			inputChannelPasses.push_back(*iter);
-			inputChannelMin[*iter] = minLevel;
-			inputChannelMax[*iter] = maxLevel;
-		}
-	}
-
-	void setConstructLevel(Pass *inputPass, InstRO::Core::ConstructTraitType minLevel,
-												 InstRO::Core::ConstructTraitType maxLevel) {
-		inputChannelMin[inputPass] = minLevel;
-		inputChannelMax[inputPass] = maxLevel;
-	}
-
-	const InstRO::Core::ConstructTraitType getMinConstructLevel(Pass *inputPass) const {
-		assert(managingPass != nullptr && "The managing pass must be set!");
-		return inputChannelMin.at(inputPass);
-	}
-	const InstRO::Core::ConstructTraitType getMaxConstructLevel(Pass *inputPass) const {
-		assert(managingPass != nullptr && "The managing pass must be set!");
-		return inputChannelMax.at(inputPass);
-	}
-	std::vector<InstRO::Pass *> const getPasses() const {
-		assert(managingPass != nullptr && "The managing pass must be set!");
-		return inputChannelPasses;
-	}
-
-
-	void setManagingPass(Pass *mPass) {
-		managingPass = mPass;
-	}
-
-	InstRO::Core::ConstructSet *operator[](int pos);
-
- private:
-	Pass *managingPass;
-	std::vector<Pass *> inputChannelPasses;
-	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMin;
-	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMax;
-};
-
 /*
  * This class is the user-interface to create his own pass.
  * One needs to inherit from this class and implement a compiler dependent pass.
@@ -90,9 +23,10 @@ class ChannelConfiguration {
  * predecessors.
  */
 class PassImplementation {
+	friend class InstRO::Pass;
  public:
-	PassImplementation(ChannelConfiguration channelConfig) : channelConfig(channelConfig) {}
-	PassImplementation() = delete;
+	/** Since the Pass Implementation no longer knows of this ChannelConfiguration object, it can now be default constructed */
+	PassImplementation() {}
 	virtual ~PassImplementation() {}
 
 	virtual void init() {}	// provide default impl because this is the default case
@@ -107,7 +41,7 @@ class PassImplementation {
 	/** returns a set of constructs, which haven been altered by this pass */
 	const ConstructSet *cgetCollisionSet() { return &collisionSet; };
 
-	const ChannelConfiguration &getChannelConfig() { return channelConfig; }
+//	const ChannelConfiguration &getChannelConfig() { return channelConfig; }
 
  protected:
 	// The generated set of constructs the entity selected
@@ -120,12 +54,12 @@ class PassImplementation {
 	[[deprecated]] ConstructSet *getInput(Pass *pId);
 
 	// Accessor method for the ConstructSet retrieved from input channel (counting from 0)
-	ConstructSet *getInput(int channel);
+	const ConstructSet *getInput(int channel);
 
 	ConstructSet *getCollisionSet() { return &collisionSet; }
 
  private:
-	ChannelConfiguration channelConfig;
+	Pass *managingPass;
 };
 
 }	// namespace Core

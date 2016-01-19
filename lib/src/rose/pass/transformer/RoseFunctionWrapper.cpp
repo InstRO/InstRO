@@ -16,26 +16,26 @@ using namespace InstRO;
 using namespace InstRO::Rose;
 using namespace InstRO::Rose::Transformer;
 
-RoseFunctionWrapper::RoseFunctionWrapper(InstRO::Pass *input, NameTransformer nameTransformer)
-		: RosePassImplementation(RoseFunctionWrapper::createChannelConfig(input, nullptr)),
+RoseFunctionWrapper::RoseFunctionWrapper(NameTransformer nameTransformer)
+		: RosePassImplementation(),
 			nameTrafo(nameTransformer),
 			defPrefix(),
 			wrapPrefix(),
 			mainScope(nullptr),
-			inputPass(input),
+/*			inputPass(input),*/
 			renamingPass(nullptr)
 
 {}
 
-RoseFunctionWrapper::RoseFunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, NameTransformer nameTransformer,
+RoseFunctionWrapper::RoseFunctionWrapper(NameTransformer nameTransformer,
 																				 const std::string &definitionPrefix, const std::string &wrapperPrefix)
-		: RosePassImplementation(RoseFunctionWrapper::createChannelConfig(input, renaming)),
+		: RosePassImplementation(),
 			nameTrafo(nameTransformer),
 			defPrefix(definitionPrefix),
 			wrapPrefix(wrapperPrefix),
-			mainScope(nullptr),
-			inputPass(input),
-			renamingPass(renaming) {}
+			mainScope(nullptr)
+/*			inputPass(input),
+			renamingPass(renaming) */{}
 
 RoseFunctionWrapper::~RoseFunctionWrapper() {}
 
@@ -50,7 +50,8 @@ void RoseFunctionWrapper::execute() {
 	// determine the nodes which are used as starting points for the search of function calls
 	RoseNodeList funCallSearchSP;
 	if (renamingPass) {
-		auto nodeSet = retrieveNodes(renamingPass);
+		auto nodeSet = retrieveNodes(1);
+//		auto nodeSet = getInput(1);
 		funCallSearchSP.insert(funCallSearchSP.end(), nodeSet.begin(), nodeSet.end());
 	} else {
 		// search the whole project if no renaming pass has been specified
@@ -62,7 +63,9 @@ void RoseFunctionWrapper::execute() {
 	}
 
 	// process input into function declarations which are to be wrapped
-	auto inputNodes = retrieveNodes(inputPass);
+	auto inputNodes = retrieveNodes(0);
+//	auto inputNodes = getInput(0);
+
 	std::unordered_set<SgFunctionDeclaration *> inputFunctions;
 	inputFunctions.reserve(inputNodes.size());
 	for (SgNode *node : inputNodes) {
@@ -93,8 +96,8 @@ InstRO::Core::ChannelConfiguration RoseFunctionWrapper::createChannelConfig(Inst
 	return channelConfig;
 }
 
-RoseFunctionWrapper::RoseNodeSet RoseFunctionWrapper::retrieveNodes(InstRO::Pass *pass) {
-	InstRO::InfrastructureInterface::ConstructSetCompilerInterface cs(pass->getOutput());
+RoseFunctionWrapper::RoseNodeSet RoseFunctionWrapper::retrieveNodes(int channel) {
+	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface cs(getInput(channel));
 	RoseNodeSet nodes;
 	nodes.reserve(cs.size());
 
@@ -323,12 +326,11 @@ std::string RoseFunctionWrapper::IdentityNameTransformer::operator()(const std::
 
 // MPIFunctionWrapper
 
-RoseMPIFunctionWrapper::RoseMPIFunctionWrapper(InstRO::Pass *input)
-		: RoseFunctionWrapper(input, PMPINameTransformer()) {}
+RoseMPIFunctionWrapper::RoseMPIFunctionWrapper()
+		: RoseFunctionWrapper(PMPINameTransformer()) {}
 
-RoseMPIFunctionWrapper::RoseMPIFunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming,
-																							 const std::string &definitionPrefix, const std::string &wrapperPrefix)
-		: RoseFunctionWrapper(input, renaming, PMPINameTransformer(), definitionPrefix, wrapperPrefix) {}
+RoseMPIFunctionWrapper::RoseMPIFunctionWrapper(const std::string &definitionPrefix, const std::string &wrapperPrefix)
+		: RoseFunctionWrapper(PMPINameTransformer(), definitionPrefix, wrapperPrefix) {}
 
 std::string RoseMPIFunctionWrapper::PMPINameTransformer::operator()(const std::string &mpiName) {
 	return "P" + mpiName;

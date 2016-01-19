@@ -28,9 +28,9 @@ using namespace InstRO::Core;
 using namespace InstRO::Rose;
 using namespace InstRO::Rose::Transformer;
 
-RoseUniqueCallpathTransformer::RoseUniqueCallpathTransformer(InstRO::Pass *pass)
-		: RoseUniqueCallpathTransformer(pass, nullptr, nullptr) {}
-
+RoseUniqueCallpathTransformer::RoseUniqueCallpathTransformer(RoseUniqueCallpathTransformer::Mode m)
+		: RosePassImplementation(), mode(m), callGraph(nullptr) {}
+#if 0
 RoseUniqueCallpathTransformer::RoseUniqueCallpathTransformer(InstRO::Pass *pass, InstRO::Pass *root,
 																														 InstRO::Pass *active)
 		: RosePassImplementation(createChannelConfig(pass, root, active)),
@@ -38,6 +38,7 @@ RoseUniqueCallpathTransformer::RoseUniqueCallpathTransformer(InstRO::Pass *pass,
 			rootPass(root),
 			activePass(active),
 			callGraph(nullptr) {}
+#endif
 
 RoseUniqueCallpathTransformer::~RoseUniqueCallpathTransformer() {}
 
@@ -56,9 +57,9 @@ InstRO::Core::ChannelConfiguration RoseUniqueCallpathTransformer::createChannelC
 																						::InstRO::Core::ConstructTraitType::CTFunction);
 }
 
-RoseUniqueCallpathTransformer::NodeSet RoseUniqueCallpathTransformer::retrieveInputNodes(InstRO::Pass *pass) {
+RoseUniqueCallpathTransformer::NodeSet RoseUniqueCallpathTransformer::retrieveInputNodes(int channel) {
 
-	auto graphNodes = callGraph->getNodeSetByCS(pass->getOutput());
+	auto graphNodes = callGraph->getNodeSetByCS(getInput(channel));
 	NodeSet graphNodesUnordered;
 	graphNodesUnordered.reserve(graphNodes.size());
 	graphNodesUnordered.insert(graphNodes.begin(), graphNodes.end());
@@ -153,20 +154,26 @@ void RoseUniqueCallpathTransformer::execute() {
 	callGraph = getInstrumentorInstance()->getAnalysisManager()->getECG();
 
 	// use the main function as default root if none have been specified manually
-	if (!rootPass) {
+//	if (!rootPass) {
+	if(mode != Mode::rMode || mode != Mode::raMode) {
 		rootNodes.clear();
 		rootNodes.insert(getMainFunctionNode());
 	} else {
-		rootNodes = retrieveInputNodes(rootPass);
+		rootNodes = retrieveInputNodes(1);
 	}
 
 	// convert marked functions to call graph nodes
-	NodeSet markedNodes = retrieveInputNodes(inputPass);
+	NodeSet markedNodes = retrieveInputNodes(0);
 
 	// initialize active nodes
 	activeNodes.clear();
-	if (activePass) {
-		activeNodes = retrieveInputNodes(activePass);
+//	if (activePass) {
+//		activeNodes = retrieveInputNodes(activePass);
+	if(mode == Mode::aMode) {
+		activeNodes = retrieveInputNodes(1);
+	}
+	if(mode == Mode::raMode) {
+		activeNodes = retrieveInputNodes(2);
 	}
 
 	// find candidates for duplication and nodes which are targeted by a backwards directed edge

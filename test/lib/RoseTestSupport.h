@@ -18,8 +18,8 @@ class RoseTestFactory : public InstRO::Rose::RosePassFactory {
 		std::unique_ptr<InstRO::Test::TestSummary> tr(new InstRO::Test::TestSummary(label));
 		testSummaries.push_back(std::move(tr));
 
-		auto pImpl = new InstRO::Test::TestAdapter(input, label, filename, testSummaries.back().get());
-		InstRO::Pass *p = new InstRO::Pass(pImpl);
+		auto pImpl = new InstRO::Test::TestAdapter(label, filename, testSummaries.back().get());
+		InstRO::Pass *p = new InstRO::Pass(pImpl, InstRO::Core::ChannelConfiguration(input));
 		p->setPassName("TestAdapter " + label);
 		passManager->registerPass(p);
 		return p;

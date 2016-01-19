@@ -19,7 +19,7 @@ namespace IdentifierProvider {
 
 	std::string getIdentifier(std::shared_ptr<Core::Construct> construct);
 	// Create and return a mapping from a ConstructSet to human readable identifiers.
-	std::map<size_t, std::string> getIdentifierMap(Core::ConstructSet *cs);
+	std::map<size_t, std::string> getIdentifierMap(const Core::ConstructSet *cs);
 }
 }
 }

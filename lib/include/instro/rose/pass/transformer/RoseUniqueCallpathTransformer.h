@@ -45,21 +45,28 @@ namespace Transformer {
 /// \author Simon Reuß
 class RoseUniqueCallpathTransformer : public RosePassImplementation {
  public:
+	 // FIXME This serves as a temporary work around.
+	 // nMode = a single input channel is used
+	 // rMode = only the root (former input channel 1) is set
+	 // aMode = only the active (former input channel 2) is set
+	 // raMode =  both root and active (former input channels 1 and 2) are set.
+	 enum class Mode {nMode, rMode, aMode, raMode};
 	/// \brief Constructs a new UniqueCallpathTransformer without any explicit passes for the roots and active functions.
 	/// The main function will be used as the root of the call graph and all functions will be assumed to be duplicatable.
 	/// \arg pass The pass specifying the marked functions for which a unique call path should be created
-	RoseUniqueCallpathTransformer(InstRO::Pass *pass);
+	RoseUniqueCallpathTransformer(Mode m);
 	/// \brief Constructs a new UniqueCallpathTransformer with explicit passes for the roots and active functions.
 	/// \arg pass The pass which specifies the marked functions for which a unique call path should be created
 	/// \arg root The pass which specifies the roots the the call graph
 	/// \arg active The pass which specifies the active functions
-	RoseUniqueCallpathTransformer(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active);
+	[[deprecated]] RoseUniqueCallpathTransformer(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active);
 
 	virtual ~RoseUniqueCallpathTransformer();
 
 	virtual void execute() override;
 
  protected:
+	Mode mode;
 	InstRO::Pass *inputPass;
 	InstRO::Pass *rootPass;
 	InstRO::Pass *activePass;
@@ -84,7 +91,7 @@ class RoseUniqueCallpathTransformer : public RosePassImplementation {
 
 	InstRO::Core::ChannelConfiguration createChannelConfig(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active);
 
-	NodeSet retrieveInputNodes(InstRO::Pass *pass);
+	NodeSet retrieveInputNodes(int channel);
 	InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *getMainFunctionNode();
 
 	NodeSet getSuccessorFunctions(InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *node);

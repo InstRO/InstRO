@@ -10,6 +10,7 @@
 #include <unordered_map>
 
 #include "instro/core/ConstructSet.h"
+#include "instro/core/ChannelConfiguration.h"
 #include "instro/core/PassImplementation.h"
 
 namespace InstRO {
@@ -29,12 +30,13 @@ class Pass {
 	// CI empty pass construction disallowed. Each Pass is an container for the corresponding PassImplementation Object
 	// from the ToolingSpace
 	Pass() = delete;
-	Pass(Core::PassImplementation *pImpl)
-			: passInitialized(false), passExecuted(false), passFinalized(false), passImplementation(pImpl) {
-		const_cast<InstRO::Core::ChannelConfiguration &>(pImpl->getChannelConfig()).setManagingPass(this);
+	Pass(Core::PassImplementation *pImpl, InstRO::Core::ChannelConfiguration cfg)
+			: passInitialized(false), passExecuted(false), passFinalized(false), channelCFG(cfg), passImplementation(pImpl) {
+			pImpl->managingPass = this;
 	}
 
 	Core::PassImplementation *getPassImplementation() { return passImplementation; };
+
 	virtual ~Pass() {
 		delete (passImplementation);
 		passImplementation = nullptr;
@@ -57,6 +59,10 @@ class Pass {
 		}
 	}
 
+	const Core::ConstructSet *getInput(int channel) const {
+		return channelCFG[channel];
+	}
+
 	// Allows to inject a ConstructSet which is returned for the pass with id from
 	void overrideInput(Pass *from, std::unique_ptr<Core::ConstructSet> overrideSet) {
 		std::shared_ptr<Core::ConstructSet> sharedSet(std::move(overrideSet));
@@ -68,14 +74,14 @@ class Pass {
 	virtual std::string passName() { return passNameString; };
 	void setPassName(std::string passName) { passNameString = passName; };
 
-	std::vector<Pass *> const getInputPasses() { return passImplementation->getChannelConfig().getPasses(); };
+	std::vector<Pass *> const getInputPasses() { return channelCFG.getPasses(); };
 	
 	Core::ConstructTraitType getMinInputLevelRequirement(Pass *pass) {
-		return passImplementation->getChannelConfig().getMinConstructLevel(pass);
+		return channelCFG.getMinConstructLevel(pass);
 	};
 	
 	Core::ConstructTraitType getMaxInputLevelRequirement(Pass *pass) {
-		return passImplementation->getChannelConfig().getMaxConstructLevel(pass);
+		return channelCFG.getMaxConstructLevel(pass);
 	};
  
  protected:
@@ -90,6 +96,9 @@ class Pass {
 	std::string passNameString;
 
 	std::unordered_map<Pass *, std::shared_ptr<Core::ConstructSet> > inputOverride;
+
+	/* Tells the pass which input passes it needs to know of */
+	InstRO::Core::ChannelConfiguration channelCFG;
 
 	// A Pointer to the compiler-specific implementation
 	InstRO::Core::PassImplementation *passImplementation;

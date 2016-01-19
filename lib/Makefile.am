@@ -1,5 +1,6 @@
 AM_CPPFLAGS=-I$(top_srcdir)/lib/include -I$(top_builddir)/lib/include -DPROVIDE_MAKE_UNIQUE
 
+AM_CPPFLAGS+= -Werror=return-type
 AM_CXXFLAGS=-std=c++11
 AM_CFLAGS=
 
@@ -23,6 +24,7 @@ CORE_HFILES= \
 ./include/instro/core/PassFactory.h \
 ./include/instro/core/PassManager.h \
 ./include/instro/core/PassImplementation.h \
+./include/instro/core/ChannelConfiguration.h \
 ./include/instro/core/Singleton.h \
 ./include/instro/tooling/IdentifierProvider.h \
 ./include/instro/tooling/AnalysisInterface.h \

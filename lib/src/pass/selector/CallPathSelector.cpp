@@ -29,6 +29,8 @@ void CallPathSelector::execute() {
 
 	outputSet = predecessorsOfTo.intersect(successorsOfFrom);
 
+	logIt(DEBUG) << "Output set contains: " << outputSet.size() << " elements" << std::endl;
+
 	if (!dotName.empty()) {
 		ecg->print(dotName, ecg->getNodeSetByCS(&outputSet));
 	}

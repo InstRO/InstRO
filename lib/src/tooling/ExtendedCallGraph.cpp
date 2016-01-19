@@ -62,7 +62,7 @@ void ExtendedCallGraph::removeNode(ExtendedCallGraphNode* node, bool redirectEdg
 	successors.erase(node);
 }
 
-std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getNodeSetByCS(Core::ConstructSet *cs) {
+std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getNodeSetByCS(const Core::ConstructSet *cs) {
 	std::set<ExtendedCallGraphNode*> returnSet;
 	for (auto node : getNodeSet()) {
 		if (node->getAssociatedConstructSet().intersects(*cs)) {

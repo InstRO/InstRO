@@ -82,7 +82,7 @@ class RoseFunctionWrapper : public RosePassImplementation {
 	/// \arg input A pass which specifies the functions for which wrappers are created
 	/// \arg nameTransformer A functor which determines the name of the function which is called in the wrapper depending
 	/// on the name of the original function
-	RoseFunctionWrapper(InstRO::Pass *input, NameTransformer nameTransformer);
+	RoseFunctionWrapper(NameTransformer nameTransformer);
 
 	/// Constructs a new FunctionWrapper instance which generates wrappers that call a function specified by the
 	/// NameTransformer.
@@ -93,7 +93,7 @@ class RoseFunctionWrapper : public RosePassImplementation {
 	/// on the name of the original function
 	/// \arg definitionPrefix The original function definition will be renamed according to this prefix
 	/// \arg wrapperPrefix The prefix which gets applied to the name of every generated wrapper
-	RoseFunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, NameTransformer nameTransformer,
+	RoseFunctionWrapper(NameTransformer nameTransformer,
 											const std::string &definitionPrefix, const std::string &wrapperPrefix);
 
 	virtual ~RoseFunctionWrapper();
@@ -140,7 +140,7 @@ class RoseFunctionWrapper : public RosePassImplementation {
 	typedef std::vector<SgNode *> RoseNodeList;
 
 	static InstRO::Core::ChannelConfiguration createChannelConfig(InstRO::Pass *input, InstRO::Pass *renaming);
-	RoseNodeSet retrieveNodes(InstRO::Pass *pass);
+	RoseNodeSet retrieveNodes(int channel);
 
 	void findMainScope();
 
@@ -165,8 +165,8 @@ class RoseFunctionWrapper : public RosePassImplementation {
 /// \author Simon Reuß
 class RoseMPIFunctionWrapper : public RoseFunctionWrapper {
  public:
-	RoseMPIFunctionWrapper(InstRO::Pass *input);
-	RoseMPIFunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming, const std::string &definitionPrefix,
+	RoseMPIFunctionWrapper();
+	RoseMPIFunctionWrapper(const std::string &definitionPrefix,
 												 const std::string &wrapperPrefix);
 
 	/// \brief Functor which transforms MPI function names to their corresponding PMPI name

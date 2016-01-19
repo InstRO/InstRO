@@ -10,8 +10,8 @@ namespace Adapter {
 class ConstructPrinterAdapter : public InstRO::Core::PassImplementation {
 
  public:
-	ConstructPrinterAdapter(InstRO::Pass *pass)
-			: PassImplementation(InstRO::Core::ChannelConfiguration(pass)) {}
+	ConstructPrinterAdapter()
+			: PassImplementation() {}
 	void execute() override;
 };
 }

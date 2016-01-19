@@ -47,8 +47,8 @@ class TestSummary {
  */
 class TestAdapter : public InstRO::Core::PassImplementation {
  public:
-	TestAdapter(InstRO::Pass *input, std::string lab, std::string filename, TestSummary *tr)
-			: InstRO::Core::PassImplementation(InstRO::Core::ChannelConfiguration(input)),
+	TestAdapter(std::string lab, std::string filename, TestSummary *tr)
+			: InstRO::Core::PassImplementation(),
 				label(lab),
 				filename(filename),
 				summary(tr) {}
@@ -58,7 +58,7 @@ class TestAdapter : public InstRO::Core::PassImplementation {
 	void finalize() override;
 
  private:
-	void checkIfConstructSetMatches(InstRO::Core::ConstructSet *cs);
+	void checkIfConstructSetMatches(const InstRO::Core::ConstructSet *cs);
 
 	std::multiset<std::string> readExpectedItemsFile();
 

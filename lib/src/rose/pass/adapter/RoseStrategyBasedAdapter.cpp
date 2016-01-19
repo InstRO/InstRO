@@ -14,7 +14,7 @@ namespace Adapter {
 	}
 
 void RoseStrategyBasedAdapter::execute() {
-	auto rocsci = InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface(input->getOutput());
+	auto rocsci = InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface(getInput(0));
 	for (auto construct : rocsci)
 	{
 		auto rC= isRoseConstruct(construct);

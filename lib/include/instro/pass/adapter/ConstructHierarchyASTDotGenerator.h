@@ -25,8 +25,8 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 	virtual std::string constructToString(std::shared_ptr<InstRO::Core::Construct> construct) { return std::string(""); }
 
  public:
-	ConstructHierarchyASTDotGenerator(InstRO::Pass *pass, std::string filename)
-			: PassImplementation(InstRO::Core::ChannelConfiguration(pass)), /*inputPass(pass),*/ fileName(filename) {}
+	ConstructHierarchyASTDotGenerator(std::string filename)
+			: PassImplementation(), fileName(filename) {}
 	virtual void init() override { outFile.open(fileName, std::ios_base::out); };
 	virtual void execute() {
 		outFile << "digraph InstROAST{" << std::endl;
