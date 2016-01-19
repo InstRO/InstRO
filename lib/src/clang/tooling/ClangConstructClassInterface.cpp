@@ -9,9 +9,11 @@ using namespace InstRO::Core;
 namespace {
 
 class ConstructCollector : public clang::RecursiveASTVisitor<ConstructCollector> {
+ public:
+	ConstructCollector(ConstructTraitType constructClass, ConstructSet *constructs)
+			: constructClass(constructClass), csci(constructs) {}
 
-public:
-	ConstructCollector(ConstructTraitType constructClass, ConstructSet *constructs) : constructClass(constructClass), csci(constructs) {}
+	bool shouldVisitTemplateInstantiations() { return true; }
 
 	bool VisitDecl(clang::Decl *decl) {
 		auto construct = std::make_shared<InstRO::Clang::Core::ClangConstruct>(decl);
@@ -27,7 +29,7 @@ public:
 		return true;
 	}
 
-private:
+ private:
 	ConstructTraitType constructClass;
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci;
 
@@ -36,9 +38,7 @@ private:
 			csci.put(construct);
 		}
 	}
-
 };
-
 }
 
 using namespace InstRO::Clang::Tooling;
