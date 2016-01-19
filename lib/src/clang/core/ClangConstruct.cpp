@@ -132,12 +132,12 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 						// the 'init' and 'cond' parts are considered to be statements according to the C++ grammar, the 'inc' part
 						// is just an expression
 						isNotAStatement = stmt == forStmt->getInc();
+					} else if (const clang::DoStmt *doStmt = llvm::dyn_cast<clang::DoStmt>(parent)) {
+						isNotAStatement = stmt == doStmt->getCond();
+					} else if (const clang::WhileStmt *whileStmt = llvm::dyn_cast<clang::WhileStmt>(parent)) {
+						isNotAStatement = stmt == whileStmt->getCond();
 					}
 				}
-			} else if (const clang::DoStmt *doStmt = llvm::dyn_cast<clang::DoStmt>(parent)) {
-				isNotAStatement = stmt == doStmt->getCond();
-			} else if (const clang::WhileStmt *whileStmt = llvm::dyn_cast<clang::WhileStmt>(parent)) {
-				isNotAStatement = stmt == whileStmt->getCond();
 			} else if (const clang::Decl *parent = parents.front().get<clang::Decl>()) {
 				isNotAStatement = true;
 			}
