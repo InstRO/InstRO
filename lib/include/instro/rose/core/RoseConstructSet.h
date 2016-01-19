@@ -376,7 +376,6 @@ class RoseConstruct : public InstRO::Core::Construct {
 
 
  protected:
-	std::string specificConstructClassToString() const;
 	virtual int determineCorrectLineInfo() const;
 	virtual int determineCorrectColumnInformation() const;
 	std::string determineCorrectFilename() const;
