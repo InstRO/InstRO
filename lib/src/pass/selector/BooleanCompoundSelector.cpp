@@ -4,7 +4,6 @@ namespace InstRO {
 namespace Selector {
 
 void BooleanCompoundSelector::execute() {
-
 	auto csLeft = getInput(0);
 	auto csRight = getInput(1);
 
@@ -20,7 +19,6 @@ void BooleanCompoundSelector::execute() {
 	} else if (operationType == CO_MINUS) {
 		outputSet = csLeft->relativeComplement(*csRight);
 	}
-
 }
 
 }	// namespace Selector

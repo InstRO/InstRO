@@ -10,7 +10,7 @@
 #include "instro/utility/Logger.h"
 
 namespace InstRO {
-	class Pass;
+class Pass;
 namespace Core {
 
 /*
@@ -18,9 +18,8 @@ namespace Core {
  * channel
  */
 class ChannelConfiguration {
-	public:
-
-		typedef std::pair<int, Pass *> configTuple;
+ public:
+	typedef std::pair<int, Pass *> configTuple;
 
 	ChannelConfiguration() {}
 
@@ -63,9 +62,7 @@ class ChannelConfiguration {
 	const InstRO::Core::ConstructTraitType getMaxConstructLevel(Pass *inputPass) const {
 		return inputChannelMax.at(inputPass);
 	}
-	std::vector<InstRO::Pass *> const getPasses() const {
-		return inputChannelPasses;
-	}
+	std::vector<InstRO::Pass *> const getPasses() const { return inputChannelPasses; }
 
 	InstRO::Core::ConstructSet *operator[](int pos) const;
 
@@ -74,7 +71,6 @@ class ChannelConfiguration {
 	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMin;
 	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMax;
 };
-
 }
 }
 

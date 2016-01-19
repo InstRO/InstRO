@@ -93,8 +93,8 @@ class RoseFunctionWrapper : public RosePassImplementation {
 	/// on the name of the original function
 	/// \arg definitionPrefix The original function definition will be renamed according to this prefix
 	/// \arg wrapperPrefix The prefix which gets applied to the name of every generated wrapper
-	RoseFunctionWrapper(NameTransformer nameTransformer,
-											const std::string &definitionPrefix, const std::string &wrapperPrefix);
+	RoseFunctionWrapper(NameTransformer nameTransformer, const std::string &definitionPrefix,
+											const std::string &wrapperPrefix);
 
 	virtual ~RoseFunctionWrapper();
 
@@ -166,8 +166,7 @@ class RoseFunctionWrapper : public RosePassImplementation {
 class RoseMPIFunctionWrapper : public RoseFunctionWrapper {
  public:
 	RoseMPIFunctionWrapper();
-	RoseMPIFunctionWrapper(const std::string &definitionPrefix,
-												 const std::string &wrapperPrefix);
+	RoseMPIFunctionWrapper(const std::string &definitionPrefix, const std::string &wrapperPrefix);
 
 	/// \brief Functor which transforms MPI function names to their corresponding PMPI name
 	/// by prepending a 'P' to the original name.

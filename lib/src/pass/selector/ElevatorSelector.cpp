@@ -20,8 +20,7 @@ void ConstructLoweringElevator::execute() {
 
 void ConstructCroppingElevator::execute() {
 	auto constructElevator = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator();
-	outputSet =  constructElevator->crop(getInput(0), targetLevel, maxLevel);	// targetLevel is minLevel
+	outputSet = constructElevator->crop(getInput(0), targetLevel, maxLevel);	// targetLevel is minLevel
 }
-
 }
 }

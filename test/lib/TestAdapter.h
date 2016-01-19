@@ -48,10 +48,7 @@ class TestSummary {
 class TestAdapter : public InstRO::Core::PassImplementation {
  public:
 	TestAdapter(std::string lab, std::string filename, TestSummary *tr)
-			: InstRO::Core::PassImplementation(),
-				label(lab),
-				filename(filename),
-				summary(tr) {}
+			: InstRO::Core::PassImplementation(), label(lab), filename(filename), summary(tr) {}
 
 	void init() override;
 	void execute() override;

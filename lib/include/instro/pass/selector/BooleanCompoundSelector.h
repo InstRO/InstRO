@@ -12,18 +12,15 @@ namespace Selector {
  * XXX RN: do we need inverted inputs?
  */
 class BooleanCompoundSelector : public InstRO::Core::PassImplementation {
-
  public:
 	enum CompoundOperationType { CO_OR, CO_AND, CO_XOR, CO_MINUS };
 
-	BooleanCompoundSelector(CompoundOperationType operationType)
-			: operationType(operationType) {}
+	BooleanCompoundSelector(CompoundOperationType operationType) : operationType(operationType) {}
 
 	void execute() override;
 
  private:
 	enum CompoundOperationType operationType;
-
 };
 
 }	// namespace Selector

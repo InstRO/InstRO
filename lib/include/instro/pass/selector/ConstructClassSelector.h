@@ -13,15 +13,13 @@ namespace Selector {
  */
 class ConstructClassSelector : public InstRO::Core::PassImplementation {
  public:
-	ConstructClassSelector(InstRO::Core::ConstructTraitType constructClass) :
-			InstRO::Core::PassImplementation(),
-			constructClass(constructClass) {
-	}
+	ConstructClassSelector(InstRO::Core::ConstructTraitType constructClass)
+			: InstRO::Core::PassImplementation(), constructClass(constructClass) {}
 
- 	void execute() override;
+	void execute() override;
 
  private:
- 	InstRO::Core::ConstructTraitType constructClass;
+	InstRO::Core::ConstructTraitType constructClass;
 };
 
 }	// namespace Selector

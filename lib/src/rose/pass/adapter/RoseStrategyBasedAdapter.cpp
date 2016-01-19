@@ -1,4 +1,4 @@
-#include <memory> // Need shared PTR
+#include <memory>	// Need shared PTR
 #include "instro/core/Pass.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/rose/core/RoseConstructSet.h"
@@ -8,16 +8,14 @@
 namespace InstRO {
 namespace Rose {
 namespace Adapter {
-	std::shared_ptr<InstRO::Rose::Core::RoseConstruct> isRoseConstruct(std::shared_ptr<InstRO::Core::Construct> c)
-	{
-		return std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(c);
-	}
+std::shared_ptr<InstRO::Rose::Core::RoseConstruct> isRoseConstruct(std::shared_ptr<InstRO::Core::Construct> c) {
+	return std::dynamic_pointer_cast<InstRO::Rose::Core::RoseConstruct>(c);
+}
 
 void RoseStrategyBasedAdapter::execute() {
 	auto rocsci = InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface(getInput(0));
-	for (auto construct : rocsci)
-	{
-		auto rC= isRoseConstruct(construct);
+	for (auto construct : rocsci) {
+		auto rC = isRoseConstruct(construct);
 		strat_iterator i;
 
 		for (i = strategies.begin(); i != strategies.end(); ++i) {

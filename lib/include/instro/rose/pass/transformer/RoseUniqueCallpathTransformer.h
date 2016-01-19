@@ -67,9 +67,6 @@ class RoseUniqueCallpathTransformer : public RosePassImplementation {
 
  protected:
 	Mode mode;
-	InstRO::Pass *inputPass;
-	InstRO::Pass *rootPass;
-	InstRO::Pass *activePass;
 
 	/// Generates the new name for the cloned function.
 	/// \arg caller The function calling the duplicate

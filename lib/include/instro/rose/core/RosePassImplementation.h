@@ -10,7 +10,6 @@ class RosePassImplementation : public InstRO::Core::PassImplementation {
  public:
 	RosePassImplementation() : PassImplementation() {}
 };
-
 }
 }
 #endif

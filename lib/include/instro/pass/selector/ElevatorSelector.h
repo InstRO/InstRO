@@ -8,9 +8,8 @@ namespace InstRO {
 namespace Selector {
 
 class ConstructElevatorSelector : public InstRO::Core::PassImplementation {
-public:
- ConstructElevatorSelector(InstRO::Core::ConstructTraitType targetLevel)
-		 : targetLevel(targetLevel) {}
+ public:
+	ConstructElevatorSelector(InstRO::Core::ConstructTraitType targetLevel) : targetLevel(targetLevel) {}
 
 	~ConstructElevatorSelector() {}
 
@@ -19,37 +18,31 @@ public:
 };
 
 class ConstructRaisingElevator : public ConstructElevatorSelector {
-public:
-	ConstructRaisingElevator(InstRO::Core::ConstructTraitType targetLevel) :
-			ConstructElevatorSelector(targetLevel) {
-	}
+ public:
+	ConstructRaisingElevator(InstRO::Core::ConstructTraitType targetLevel) : ConstructElevatorSelector(targetLevel) {}
 
 	virtual void execute() override;
 };
 
-class ConstructLoweringElevator: public ConstructElevatorSelector {
-public:
-	ConstructLoweringElevator(InstRO::Core::ConstructTraitType targetLevel) :
-			ConstructElevatorSelector(targetLevel) {
-	}
+class ConstructLoweringElevator : public ConstructElevatorSelector {
+ public:
+	ConstructLoweringElevator(InstRO::Core::ConstructTraitType targetLevel) : ConstructElevatorSelector(targetLevel) {}
 
 	void execute() override;
 };
 
-
-class ConstructCroppingElevator: public ConstructElevatorSelector {
-public:
-	ConstructCroppingElevator(InstRO::Core::ConstructTraitType minLevel, InstRO::Core::ConstructTraitType maxLevel) :
-			// uses targetLevel as minLevel
-			ConstructElevatorSelector(minLevel), maxLevel(maxLevel) {
-	}
+class ConstructCroppingElevator : public ConstructElevatorSelector {
+ public:
+	ConstructCroppingElevator(InstRO::Core::ConstructTraitType minLevel, InstRO::Core::ConstructTraitType maxLevel)
+			:	// uses targetLevel as minLevel
+				ConstructElevatorSelector(minLevel),
+				maxLevel(maxLevel) {}
 
 	void execute() override;
 
  private:
 	InstRO::Core::ConstructTraitType maxLevel;
 };
-
 }
 }
 

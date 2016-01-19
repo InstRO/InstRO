@@ -12,8 +12,7 @@ class IdentifyerSelector : public InstRO::Core::PassImplementation {
 	IdentifyerSelector() = delete;
 
  public:
-	IdentifyerSelector(std::vector<std::string> matchRules)
-			: PassImplementation(), rules(matchRules){};
+	IdentifyerSelector(std::vector<std::string> matchRules) : PassImplementation(), rules(matchRules){};
 	virtual void execute() override;
 
  protected:

@@ -31,8 +31,8 @@ class Pass {
 	// from the ToolingSpace
 	Pass() = delete;
 	Pass(Core::PassImplementation *pImpl, InstRO::Core::ChannelConfiguration cfg)
-			: passInitialized(false), passExecuted(false), passFinalized(false), channelCFG(cfg), passImplementation(pImpl) {
-			pImpl->managingPass = this;
+			: passInitialized(false), passExecuted(false), passFinalized(false), channelConfig(cfg), passImplementation(pImpl) {
+		pImpl->managingPass = this;
 	}
 
 	Core::PassImplementation *getPassImplementation() { return passImplementation; };
@@ -59,9 +59,7 @@ class Pass {
 		}
 	}
 
-	const Core::ConstructSet *getInput(int channel) const {
-		return channelCFG[channel];
-	}
+	const Core::ConstructSet *getInput(int channel) const { return channelConfig[channel]; }
 
 	// Allows to inject a ConstructSet which is returned for the pass with id from
 	void overrideInput(Pass *from, std::unique_ptr<Core::ConstructSet> overrideSet) {
@@ -74,16 +72,12 @@ class Pass {
 	virtual std::string passName() { return passNameString; };
 	void setPassName(std::string passName) { passNameString = passName; };
 
-	std::vector<Pass *> const getInputPasses() { return channelCFG.getPasses(); };
-	
-	Core::ConstructTraitType getMinInputLevelRequirement(Pass *pass) {
-		return channelCFG.getMinConstructLevel(pass);
-	};
-	
-	Core::ConstructTraitType getMaxInputLevelRequirement(Pass *pass) {
-		return channelCFG.getMaxConstructLevel(pass);
-	};
- 
+	std::vector<Pass *> const getInputPasses() { return channelConfig.getPasses(); };
+
+	Core::ConstructTraitType getMinInputLevelRequirement(Pass *pass) { return channelConfig.getMinConstructLevel(pass); };
+
+	Core::ConstructTraitType getMaxInputLevelRequirement(Pass *pass) { return channelConfig.getMaxConstructLevel(pass); };
+
  protected:
 	// Get the number of altered, invalidated or changed constructs. We expect the next higher construct that dominates
 	// the altered or deleted constructs
@@ -98,7 +92,7 @@ class Pass {
 	std::unordered_map<Pass *, std::shared_ptr<Core::ConstructSet> > inputOverride;
 
 	/* Tells the pass which input passes it needs to know of */
-	InstRO::Core::ChannelConfiguration channelCFG;
+	InstRO::Core::ChannelConfiguration channelConfig;
 
 	// A Pointer to the compiler-specific implementation
 	InstRO::Core::PassImplementation *passImplementation;

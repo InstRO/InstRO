@@ -40,9 +40,8 @@ void RoseDefaultInstrumentationAdapter::instrumentExpression(const std::shared_p
 	wrapper.wrapExpression(expr, id);
 }
 
-void RoseDefaultInstrumentationAdapter::instrumentAsStatement(
-		const std::shared_ptr<InstRO::Core::Construct> construct, std::string namePostfix) {
-
+void RoseDefaultInstrumentationAdapter::instrumentAsStatement(const std::shared_ptr<InstRO::Core::Construct> construct,
+																															std::string namePostfix) {
 	auto stmt = isSgStatement(InstRO::Rose::toRoseConstruct(construct)->getNode());
 	auto id = InstRO::Tooling::IdentifierProvider::getID(construct);
 
