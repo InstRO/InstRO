@@ -1,6 +1,7 @@
 #ifndef INSTRO_CORE_CHANNEL_CONFIGURATION_H
 #define INSTRO_CORE_CHANNEL_CONFIGURATION_H
 
+#include <algorithm>
 #include <vector>
 #include <unordered_map>
 #include <cassert>
@@ -51,20 +52,27 @@ class ChannelConfiguration {
 		inputChannelMax[inputPass] = maxLevel;
 	}
 
+	/** Sets the minimal Construct level the Pass expects in the input set for inputPass */
 	const InstRO::Core::ConstructTraitType getMinConstructLevel(Pass *inputPass) const {
 		return inputChannelMin.at(inputPass);
 	}
 
+	/** Sets the maximal Construct level the Pass expects in the input set for inputPass */
 	const InstRO::Core::ConstructTraitType getMaxConstructLevel(Pass *inputPass) const {
 		return inputChannelMax.at(inputPass);
 	}
 
-	[[deprecated]] std::vector<InstRO::Pass *> const getPasses() const { return inputChannelPasses; }
-
-	InstRO::Core::ConstructSet *operator[](int pos) const;
+	/** Generates a list of Passes the pass depends on */
+	std::vector<InstRO::Pass *> const getPasses() const {
+		std::vector<Pass *> res(inputChannelMap.size());
+		std::transform(inputChannelMap.begin(), inputChannelMap.end(), res.begin(),
+									 [](std::pair<int, Pass *> p) { return p.second; });
+		return res;
+	}
+	
+	[[deprecated]] InstRO::Core::ConstructSet *operator[](int pos) const;
 
  private:
-	[[deprecated]] std::vector<Pass *> inputChannelPasses;
 	std::map<int, Pass *> inputChannelMap;
 	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMin;
 	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMax;
