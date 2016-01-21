@@ -5,6 +5,7 @@ import argparse
 cmdParser = argparse.ArgumentParser(description='Runs the test instrumentor executable on all input files.')
 cmdParser.add_argument('src', type=str, help="/path/to/instro/repo")
 cmdParser.add_argument('build', type=str, help="/path/to/instro/repo")
+cmdParser.add_argument('compilerIndication', type=str, help="Which compiler is running? [rose/clang]")
 
 # This is the list of test programs which should be applied.
 testPrograms = ["ConstructHierarchySelectionTest", "IdentifierSelectorTest", "ConstructElevatorTest", "BooleanCompoundSelectorTest", "CallpathSelectorTest"]
@@ -33,8 +34,12 @@ def runApply(arguments):
 
             os.environ["INSTRO_TEST_INPUT_FILENAME"] = inputDirectory + '/' + b + '/' + specFile
             invocationString = "./" + b + " " + inputDirectory + '/' + srcFile
+            print("compilerIndication " + arguments.compilerIndication)
+            if arguments.compilerIndication == 'clang':
+                invocationString += ' --'
             
             print("\n[Running]\n" + b + " " + srcFile)
+            print("Invocation line: " + invocationString)
 
             errCode = subprocess.call(invocationString, shell=True)
             print("[Done]")

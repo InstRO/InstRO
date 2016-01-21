@@ -112,7 +112,8 @@ endif
 # Once all tests are supported by both ROSE and Clang, remove the two conditionals
 if USECLANG
 bin_PROGRAMS= \
-	ConstructHierarchySelectionTest
+	ConstructHierarchySelectionTest \
+	MatcherUnitTest
 endif
 
 ####
@@ -134,6 +135,9 @@ MatcherUnitTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 DEFAULT_INSTRO_TEST_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 DEFAULT_INSTRO_TEST_LDADD=libInstRO_test.a $(top_builddir)/lib/libInstRO_core.a -L@BOOST_LIBDIR@
 
+# FIXME: I have no clue, why it does not work, if I put here something like "none" and simply set this further down the line.
+# This workds fine for the ROSE based targets, however, for Clang this Variable is not set again.
+INSTRO_COMPILER_INDICATION="clang"
 
 # Test
 ConstructHierarchySelectionTest_SOURCES= \
@@ -184,18 +188,23 @@ BooleanCompoundSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
 CallpathSelectorTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 CallpathSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
+
+INSTRO_COMPILER_INDICATION="rose"
 endif
 
 if USECLANG
+INSTRO_COMPILER_INDICATION="clang"
+
 # use manual targets for clang because autotools have problems with the link commands / library order
-ConstructHierarchySelectionTest: libInstRO_test.a ConstructHierarchySelectionTestMain.cpp $(top_builddir)/lib/libInstRO_clang.a $(top_builddir)/lib/libInstRO_core.a
-	$(CXX) $(LLVM_CXXFLAGS_FLAGS) -I$(LLVM_SRC_INCLUDE_PATH) -I$(CLANG_SRC_INCLUDE_PATH) -I$(BOOST_INCLUDEDIR) $(AM_CPPFLAGS) -DCDEBUG -I. ConstructHierarchySelectionTestMain.cpp libInstRO_test.a $(top_builddir)/lib/libInstRO_clang.a $(top_builddir)/lib/libInstRO_core.a $(CLANG_LIBS_LIST) $(LLVM_LDFLAGS) -o $@
+ConstructHierarchySelectionTest: libInstRO_test.a $(top_srcdir)/test/ConstructHierarchySelectionTestMain.cpp $(top_builddir)/lib/libInstRO_clang.a $(top_builddir)/lib/libInstRO_core.a
+	$(CXX) $(LLVM_CXXFLAGS_FLAGS) -I$(LLVM_SRC_INCLUDE_PATH) -I$(CLANG_SRC_INCLUDE_PATH) -I$(BOOST_INCLUDEDIR) $(AM_CPPFLAGS) -DCDEBUG -I$(top_srcdir)/test $(top_srcdir)/test/ConstructHierarchySelectionTestMain.cpp libInstRO_test.a $(top_builddir)/lib/libInstRO_clang.a $(top_builddir)/lib/libInstRO_core.a $(CLANG_LIBS_LIST) $(LLVM_LDFLAGS) -o $@
+
 endif
 
 # In order to run 'make check'
 check:
 	./MatcherUnitTest
-	python $(top_srcdir)/test/ApplyRunner.py $(top_srcdir) $(top_builddir)
+	python $(top_srcdir)/test/ApplyRunner.py $(top_srcdir) $(top_builddir) $(INSTRO_COMPILER_INDICATION)
 
 endif #USELIBTOOL
 
