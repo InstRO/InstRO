@@ -5,7 +5,7 @@
 
 InstRO::Core::ConstructSet *InstRO::Core::ChannelConfiguration::operator[](int pos) const {
 	logIt(DEBUG) << "requesting input for channel " << pos << std::endl;
-	auto p = inputChannelPasses.at(pos);
+	auto p = inputChannelMap.at(pos);
 	return p->getOutput();
 }
 

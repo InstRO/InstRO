@@ -80,7 +80,7 @@ void RoseFunctionWrapper::execute() {
 		wrapFunction(funDecl, funCallSearchSP);
 	}
 }
-
+#if 0
 InstRO::Core::ChannelConfiguration RoseFunctionWrapper::createChannelConfig(InstRO::Pass *input,
 																																						InstRO::Pass *renaming) {
 	std::vector<InstRO::Pass *> passes{input};
@@ -95,6 +95,7 @@ InstRO::Core::ChannelConfiguration RoseFunctionWrapper::createChannelConfig(Inst
 
 	return channelConfig;
 }
+#endif
 
 RoseFunctionWrapper::RoseNodeSet RoseFunctionWrapper::retrieveNodes(int channel) {
 	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface cs(getInput(channel));

@@ -42,6 +42,7 @@ RoseUniqueCallpathTransformer::RoseUniqueCallpathTransformer(InstRO::Pass *pass,
 
 RoseUniqueCallpathTransformer::~RoseUniqueCallpathTransformer() {}
 
+#if 0
 InstRO::Core::ChannelConfiguration RoseUniqueCallpathTransformer::createChannelConfig(InstRO::Pass *pass,
 																																											InstRO::Pass *root,
 																																											InstRO::Pass *active) {
@@ -56,6 +57,7 @@ InstRO::Core::ChannelConfiguration RoseUniqueCallpathTransformer::createChannelC
 																						::InstRO::Core::ConstructTraitType::CTFunction,
 																						::InstRO::Core::ConstructTraitType::CTFunction);
 }
+#endif
 
 RoseUniqueCallpathTransformer::NodeSet RoseUniqueCallpathTransformer::retrieveInputNodes(int channel) {
 
