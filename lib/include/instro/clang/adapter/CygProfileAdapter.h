@@ -15,7 +15,7 @@ namespace Clang {
 
 class CygProfileAdapter : public InstRO::Clang::ClangPassImplBase<CygProfileAdapter> {
  public:
-	CygProfileAdapter(InstRO::Pass *pId, clang::tooling::Replacements &replacements, clang::SourceManager *sm);
+	CygProfileAdapter(clang::tooling::Replacements &replacements, clang::SourceManager *sm);
 
 	bool VisitFunctionDecl(clang::FunctionDecl *decl);
 
@@ -40,7 +40,6 @@ class CygProfileAdapter : public InstRO::Clang::ClangPassImplBase<CygProfileAdap
 	void transformReturnStmt(clang::ReturnStmt *retStmt);
 
  private:
-	Pass *decidingSelector;
 	clang::SourceManager *sm;
 	clang::tooling::Replacements &replacements;
 	int labelCount;

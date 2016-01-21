@@ -4,8 +4,7 @@
 
 InstRO::Clang::BlackWhitelistSelector::BlackWhitelistSelector(std::vector<std::string> blacklist,
 																															std::vector<std::string> whitelist)
-		: ClangPassImplBase<BlackWhitelistSelector>(InstRO::Core::ChannelConfiguration(),
-																								new InstRO::Clang::VisitingPassExecuter<BlackWhitelistSelector>()),
+		: ClangPassImplBase<BlackWhitelistSelector>(new InstRO::Clang::VisitingPassExecuter<BlackWhitelistSelector>()),
 			blacklist(blacklist),
 			whitelist(whitelist) {
 	std::cout << "Creating BW Selector with blacklist(-) and whitelist (+):\n";

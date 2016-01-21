@@ -9,17 +9,16 @@ namespace InstRO {
 namespace Clang {
 class LLVMInputAdapter : public InstRO::Clang::ClangPassImplBase<LLVMInputAdapter> {
  public:
-	LLVMInputAdapter(InstRO::Pass *pId);
+	LLVMInputAdapter();
 
 	bool VisitFunctionDecl(clang::FunctionDecl *fDecl);
 
 	void exec() override;
 
  private:
-	InstRO::Pass *decidingSelector;
 	const std::string outfileName;
 
-	void print(std::ostream &outStream, InstRO::Core::ConstructSet *cs, clang::ASTContext *astContext);
+	void print(std::ostream &outStream, const InstRO::Core::ConstructSet *cs, clang::ASTContext *astContext);
 };
 }
 }
