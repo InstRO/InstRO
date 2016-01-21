@@ -132,6 +132,10 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 						// the 'init' and 'cond' parts are considered to be statements according to the C++ grammar, the 'inc' part
 						// is just an expression
 						isNotAStatement = stmt == forStmt->getInc();
+					} else if (const clang::DoStmt *doStmt = llvm::dyn_cast<clang::DoStmt>(parent)) {
+						isNotAStatement = stmt == doStmt->getCond();
+					} else if (const clang::WhileStmt *whileStmt = llvm::dyn_cast<clang::WhileStmt>(parent)) {
+						isNotAStatement = stmt == whileStmt->getCond();
 					}
 				}
 			} else if (const clang::Decl *parent = parents.front().get<clang::Decl>()) {
@@ -187,6 +191,8 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		// not considered interesting
 		generateError(stmt);
 	}
+
+	void VisitUnresolvedLookupExpr(clang::UnresolvedLookupExpr *stmt) { generateError(stmt); }
 
 	void VisitArraySubscriptExpr(clang::ArraySubscriptExpr *stmt) {
 		// array subscript operator has no observable behavior
@@ -332,12 +338,34 @@ std::string ClangConstruct::getIdentifier() const {
 	if (clang::Decl *decl = getAsDecl()) {
 		if (clang::FunctionDecl *funDecl = llvm::dyn_cast<clang::FunctionDecl>(decl)) {
 			if (funDecl->isThisDeclarationADefinition()) {
-				identifier += "-" + funDecl->getQualifiedNameAsString();
+				identifier += "-" + getFunctionName(funDecl);
 			}
 		}
 	}
 
 	return identifier;
+}
+
+std::string ClangConstruct::getFunctionName(clang::FunctionDecl *decl) const {
+	std::string buffer;
+	llvm::raw_string_ostream rso(buffer);
+
+	decl->printQualifiedName(rso);
+	clang::FunctionTemplateSpecializationInfo *templateSpecInfo = decl->getTemplateSpecializationInfo();
+	if (templateSpecInfo) {
+		rso << " < ";
+		const clang::TemplateArgumentList *argList = templateSpecInfo->TemplateArguments;
+		for (unsigned i = 0; i < argList->size(); ++i) {
+			argList->get(i).print(getASTContext().getPrintingPolicy(), rso);
+			if (i < argList->size() - 1) {
+				rso << ',';
+			}
+			rso << ' ';
+		}
+		rso << '>';
+	}
+
+	return rso.str();
 }
 
 clang::Decl *ClangConstruct::getAsDecl() const {

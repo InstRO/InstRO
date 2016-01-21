@@ -35,6 +35,8 @@ class ClangConstruct : public InstRO::Core::Construct {
 	ConstructKind kind;
 	void* construct;
 
+	std::string getFunctionName(clang::FunctionDecl* decl) const;
+
 	static clang::ASTContext* astContext;
 
 	static clang::ASTContext& getASTContext();
