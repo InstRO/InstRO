@@ -30,21 +30,27 @@ class Pass {
 	// CI empty pass construction disallowed. Each Pass is an container for the corresponding PassImplementation Object
 	// from the ToolingSpace
 	Pass() = delete;
-	Pass(Core::PassImplementation *pImpl, InstRO::Core::ChannelConfiguration cfg)
-			: passInitialized(false), passExecuted(false), passFinalized(false), channelConfig(cfg), passImplementation(pImpl) {
+	Pass(Core::PassImplementation *pImpl, InstRO::Core::ChannelConfiguration cfg, const std::string passName)
+			: passInitialized(false),
+				passExecuted(false),
+				passFinalized(false),
+				passNameString(passName),
+				channelConfig(cfg),
+				passImplementation(pImpl) {
 		pImpl->managingPass = this;
 	}
-
-	Core::PassImplementation *getPassImplementation() { return passImplementation; };
 
 	virtual ~Pass() {
 		delete (passImplementation);
 		passImplementation = nullptr;
 	}
+	
 	// CI: Tell the pass, that is is allowed to initialize itself
 	void initPass();
+	
 	// CI: Execute the pass, this generates the output-constructset
 	void executePass();
+	
 	void finalizePass();
 
 	// Query the proxy pass for its output
@@ -70,7 +76,9 @@ class Pass {
 	// This allows for passes to have a unique name defined by the PassFactory. I.e. if the pass is used in different
 	// instances
 	virtual std::string passName() { return passNameString; };
-	void setPassName(std::string passName) { passNameString = passName; };
+
+	// XXX move this to the ctor, as it should be read only
+//	void setPassName(std::string passName) { passNameString = passName; };
 
 	std::vector<Pass *> const getInputPasses() { return channelConfig.getPasses(); };
 
@@ -87,7 +95,7 @@ class Pass {
 	// These flags are solely used to ensure proper sequences of initialization, execution and finalization
 	bool passInitialized, passExecuted, passFinalized;
 
-	std::string passNameString;
+	const std::string passNameString; // XXX make const
 
 	std::unordered_map<Pass *, std::shared_ptr<Core::ConstructSet> > inputOverride;
 
