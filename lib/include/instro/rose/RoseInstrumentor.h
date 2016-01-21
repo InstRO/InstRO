@@ -11,7 +11,6 @@
 
 namespace InstRO {
 namespace Rose {
-// Forward Declaration of the RosePassFactory
 class RosePassFactory;
 }
 
@@ -27,7 +26,6 @@ class RoseInstrumentor : public Instrumentor {
 
 	virtual Rose::RosePassFactory* getFactory(
 			Instrumentor::CompilationPhase phase = Instrumentor::CompilationPhase::frontend) override {
-		//		lockPassManager();
 		return new Rose::RosePassFactory(passManager, project);
 	}
 	void init() {}

@@ -12,6 +12,7 @@ namespace Tooling {
 /**
  * Provides an interface to retrieve a mapping from a unique identifier to a human readable representation of the
  * contents in a ConstructSet
+ * This is to have an abstract interface, which invokes the respective compiler-specific implementation.
  * */
 namespace IdentifierProvider {
 

@@ -15,8 +15,10 @@ class Pass;
 namespace Core {
 
 /*
- * The class serves as interface between Pass and PassImplementation to make them independent of the actual input
- * channel
+ * A channel configuration maps a channel number to an actual Pass.
+ * That is, at construction time, the factory wires the respective input channel to the corresponding channel number.
+ * Thus, the user retrieves the input for a given channel within a PassImplementation using the getInput(int) method.
+ * The class also models the _requirements_ regarding the Construct levels of the Pass's inputs which it imposes.
  */
 class ChannelConfiguration {
  public:
@@ -31,6 +33,7 @@ class ChannelConfiguration {
 		inputChannelMax[p] = InstRO::Core::ConstructTraitType::CTMax;
 	}
 
+	/** Must use the ConfigTuple when using this constructor */
 	template <class... PassTuplesT>
 	ChannelConfiguration(ConfigTuple ct, PassTuplesT... tuples) {
 		inputChannelMap.insert({ct, tuples...});
@@ -41,23 +44,7 @@ class ChannelConfiguration {
 		}
 	}
 
-	/** The user needs to make sure, that the iterator iterates in a sensible way. That is, the elements will be
-	 * enumerated ascendingly in the order the iterator iterates over its elements. */
-#if 0
-	template <class Iterator>
-	ChannelConfiguration(Iterator begin, Iterator end, InstRO::Core::ConstructTraitType minLevel,
-											 InstRO::Core::ConstructTraitType maxLevel) {
-		int count = 0;
-		for (Iterator iter = begin; iter != end; ++iter) {
-			inputChannelPasses.push_back(*iter);
-			inputChannelMap.insert({count, *iter});
-			inputChannelMin[*iter] = minLevel;
-			inputChannelMax[*iter] = maxLevel;
-			++count;
-		}
-	}
-#endif
-
+	/** Explicitly set the level of a given Pass to the min and max Construct levels */
 	void setConstructLevel(Pass *inputPass, InstRO::Core::ConstructTraitType minLevel,
 												 InstRO::Core::ConstructTraitType maxLevel) {
 		inputChannelMin[inputPass] = minLevel;
@@ -77,7 +64,7 @@ class ChannelConfiguration {
 	InstRO::Core::ConstructSet *operator[](int pos) const;
 
  private:
-	std::vector<Pass *> inputChannelPasses;
+	[[deprecated]] std::vector<Pass *> inputChannelPasses;
 	std::map<int, Pass *> inputChannelMap;
 	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMin;
 	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMax;

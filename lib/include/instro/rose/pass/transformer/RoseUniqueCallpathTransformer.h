@@ -86,8 +86,6 @@ class RoseUniqueCallpathTransformer : public RosePassImplementation {
 	NodeSet rootNodes;
 	NodeSet activeNodes;
 
-//	InstRO::Core::ChannelConfiguration createChannelConfig(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active);
-
 	NodeSet retrieveInputNodes(int channel);
 	InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *getMainFunctionNode();
 

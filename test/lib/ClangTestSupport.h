@@ -37,7 +37,8 @@ class ClangTestFactory : public InstRO::Clang::ClangPassFactory {
  */
 class ClangTestInstrumentor : public InstRO::Clang::ClangInstrumentor {
  public:
-	ClangTestInstrumentor(int argc, char **argv, llvm::cl::OptionCategory& llvmThing) : InstRO::Clang::ClangInstrumentor(argc, const_cast<const char **>(argv), llvmThing) {}
+	ClangTestInstrumentor(int argc, char **argv, llvm::cl::OptionCategory &llvmThing)
+			: InstRO::Clang::ClangInstrumentor(argc, const_cast<const char **>(argv), llvmThing) {}
 
 	ClangTestFactory* getFactory (
 			InstRO::Instrumentor::CompilationPhase phase = InstRO::Instrumentor::CompilationPhase::frontend) override {

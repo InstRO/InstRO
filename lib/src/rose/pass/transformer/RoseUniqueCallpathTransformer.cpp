@@ -30,34 +30,8 @@ using namespace InstRO::Rose::Transformer;
 
 RoseUniqueCallpathTransformer::RoseUniqueCallpathTransformer(RoseUniqueCallpathTransformer::Mode m)
 		: RosePassImplementation(), mode(m), callGraph(nullptr) {}
-#if 0
-RoseUniqueCallpathTransformer::RoseUniqueCallpathTransformer(InstRO::Pass *pass, InstRO::Pass *root,
-																														 InstRO::Pass *active)
-		: RosePassImplementation(createChannelConfig(pass, root, active)),
-			inputPass(pass),
-			rootPass(root),
-			activePass(active),
-			callGraph(nullptr) {}
-#endif
 
-RoseUniqueCallpathTransformer::~RoseUniqueCallpathTransformer() {}
-
-#if 0
-InstRO::Core::ChannelConfiguration RoseUniqueCallpathTransformer::createChannelConfig(InstRO::Pass *pass,
-																																											InstRO::Pass *root,
-																																											InstRO::Pass *active) {
-	std::vector<InstRO::Pass *> passes{pass};
-	if (root) {
-		passes.push_back(root);
-	}
-	if (active) {
-		passes.push_back(active);
-	}
-	return InstRO::Core::ChannelConfiguration(passes.begin(), passes.end(),
-																						::InstRO::Core::ConstructTraitType::CTFunction,
-																						::InstRO::Core::ConstructTraitType::CTFunction);
-}
-#endif
+		RoseUniqueCallpathTransformer::~RoseUniqueCallpathTransformer() {}
 
 RoseUniqueCallpathTransformer::NodeSet RoseUniqueCallpathTransformer::retrieveInputNodes(int channel) {
 

@@ -139,7 +139,6 @@ class RoseFunctionWrapper : public RosePassImplementation {
 	typedef std::unordered_set<SgNode *> RoseNodeSet;
 	typedef std::vector<SgNode *> RoseNodeList;
 
-	static InstRO::Core::ChannelConfiguration createChannelConfig(InstRO::Pass *input, InstRO::Pass *renaming);
 	RoseNodeSet retrieveNodes(int channel);
 
 	void findMainScope();

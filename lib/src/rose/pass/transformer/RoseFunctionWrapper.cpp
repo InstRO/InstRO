@@ -51,7 +51,6 @@ void RoseFunctionWrapper::execute() {
 	RoseNodeList funCallSearchSP;
 	if (renamingPass) {
 		auto nodeSet = retrieveNodes(1);
-//		auto nodeSet = getInput(1);
 		funCallSearchSP.insert(funCallSearchSP.end(), nodeSet.begin(), nodeSet.end());
 	} else {
 		// search the whole project if no renaming pass has been specified
@@ -64,7 +63,6 @@ void RoseFunctionWrapper::execute() {
 
 	// process input into function declarations which are to be wrapped
 	auto inputNodes = retrieveNodes(0);
-//	auto inputNodes = getInput(0);
 
 	std::unordered_set<SgFunctionDeclaration *> inputFunctions;
 	inputFunctions.reserve(inputNodes.size());
@@ -80,22 +78,6 @@ void RoseFunctionWrapper::execute() {
 		wrapFunction(funDecl, funCallSearchSP);
 	}
 }
-#if 0
-InstRO::Core::ChannelConfiguration RoseFunctionWrapper::createChannelConfig(InstRO::Pass *input,
-																																						InstRO::Pass *renaming) {
-	std::vector<InstRO::Pass *> passes{input};
-
-	auto channelConfig =
-			InstRO::Core::ChannelConfiguration(passes.begin(), passes.end(), ::InstRO::Core::ConstructTraitType::CTExpression,
-																				 ::InstRO::Core::ConstructTraitType::CTFunction);
-	if (renaming) {
-		channelConfig.setConstructLevel(renaming, ::InstRO::Core::ConstructTraitType::CTExpression,
-																		::InstRO::Core::ConstructTraitType::CTGlobalScope);
-	}
-
-	return channelConfig;
-}
-#endif
 
 RoseFunctionWrapper::RoseNodeSet RoseFunctionWrapper::retrieveNodes(int channel) {
 	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface cs(getInput(channel));

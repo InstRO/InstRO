@@ -13,8 +13,7 @@ namespace Adapter {
  */
 class DefaultInstrumentationAdapter : public InstRO::Core::PassImplementation {
  public:
-	DefaultInstrumentationAdapter()
-			: PassImplementation() {}
+	DefaultInstrumentationAdapter() : PassImplementation() {}
 
 	void execute() override;
 

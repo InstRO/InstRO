@@ -17,7 +17,6 @@ namespace Adapter {
  */
 class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementation {
  protected:
-//	InstRO::Pass *inputPass;
 	std::string fileName;
 	std::fstream outFile;
 
@@ -28,6 +27,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 	ConstructHierarchyASTDotGenerator(std::string filename)
 			: PassImplementation(), fileName(filename) {}
 	virtual void init() override { outFile.open(fileName, std::ios_base::out); };
+
 	virtual void execute() {
 		outFile << "digraph InstROAST{" << std::endl;
 		auto elevator = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator();
@@ -92,6 +92,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 
 		outFile << "}" << std::endl;
 	}
+
 	virtual void finalize() override { outFile.close(); };
 };
 
