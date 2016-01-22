@@ -36,6 +36,7 @@ void InstRO::Pass::executePass() {
 
 void InstRO::Pass::finalizePass() {
 	if (passInitialized && passExecuted) {
+		passImplementation->releaseOutput();
 		passImplementation->finalize();
 	} else {
 		raise_exception("Must initialize pass first.");

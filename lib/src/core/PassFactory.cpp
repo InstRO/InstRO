@@ -77,14 +77,14 @@ Pass* PassFactory::createProgramEntrySelector() {
 													 "InstRO::Selector::ProgramEntrySelector");
 	passManager->registerPass(newPass);
 	return newPass;
-};
+}
 
 Pass* PassFactory::createIdentifierMatcherSelector(std::vector<std::string> matchList) {
 	Pass* newPass = new Pass(new Selector::IdentifyerSelector(matchList), InstRO::Core::ChannelConfiguration(),
 													 "InstRO::Rose::IdentifyerSelector");
 	passManager->registerPass(newPass);
 	return newPass;
-};
+}
 
 Pass* PassFactory::createCallpathSelector(Pass* callee, Pass* caller, std::string dotName) {
 	using ConfigTuple = InstRO::Core::ChannelConfiguration::ConfigTuple;

@@ -77,8 +77,6 @@ class Pass {
 		inputOverride[from] = sharedSet;
 	}
 
-	// This allows for passes to have a unique name defined by the PassFactory. I.e. if the pass is used in different
-	// instances
 	const std::string passName() const { return passNameString; };
 
 	const std::vector<Pass *> getInputPasses() const { return channelConfig.getPasses(); };
@@ -90,7 +88,7 @@ class Pass {
  protected:
 	// Get the number of altered, invalidated or changed constructs. We expect the next higher construct that dominates
 	// the altered or deleted constructs
-	const Core::ConstructSet *getCollisionSet() const { return passImplementation->cgetCollisionSet(); }
+	const Core::ConstructSet *getCollisionSet() const { return passImplementation->getCollisionSet(); }
 
  private:
 	// These flags are solely used to ensure proper sequences of initialization, execution and finalization

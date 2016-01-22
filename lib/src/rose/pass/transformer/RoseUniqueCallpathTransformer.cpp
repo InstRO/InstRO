@@ -358,7 +358,7 @@ void RoseUniqueCallpathTransformer::duplicate(ExtendedCallGraphNode *node,
 		duplicatedNodes.insert(std::make_pair(node, clonedFunction));
 
 		InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(&outputSet);
-		InstRO::InfrastructureInterface::ConstructSetCompilerInterface collisions(getCollisionSet());
+		InstRO::InfrastructureInterface::ConstructSetCompilerInterface collisions(&collisionSet);
 		// add the duplicate to the output of the transformer and its files scope to the collision set
 		addNodeToCS(output, clonedFunction->get_definition());
 		addNodeToCS(collisions, SageInterface::getEnclosingFileNode(clonedFunction));

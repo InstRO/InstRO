@@ -21,7 +21,7 @@ void RoseStrategyBasedAdapter::execute() {
 		for (i = strategies.begin(); i != strategies.end(); ++i) {
 			if (i->second->isImplementedFor(rC->getNode())) {
 				i->second->applyInstrumentationFor(rC->getNode());
-				InstRO::InfrastructureInterface::ConstructSetCompilerInterface(getCollisionSet()).put(rC);
+				InstRO::InfrastructureInterface::ConstructSetCompilerInterface(&collisionSet).put(rC);
 				InstRO::InfrastructureInterface::ConstructSetCompilerInterface(&outputSet).put(rC);
 				// optional: break to avoid multiple strategies on a single node
 			}
