@@ -16,32 +16,39 @@ class RosePassFactory;
 
 class RoseInstrumentor : public Instrumentor {
  public:
-	RoseInstrumentor(int argc, char** argv) {
+	RoseInstrumentor(int argc, char** argv) : passFactory(nullptr) {
 		project = ::frontend(argc, argv);
 		ram = new InstRO::Rose::Tooling::RoseAnalysisManager(project);
 		InstRO::setInstrumentorInstance(this);
-	};
+	}
 
-	~RoseInstrumentor() { delete (project); }
+	~RoseInstrumentor() {
+		delete project;
+		delete passFactory;
+	}
 
 	virtual Rose::RosePassFactory* getFactory(
 			Instrumentor::CompilationPhase phase = Instrumentor::CompilationPhase::frontend) override {
-		return new Rose::RosePassFactory(passManager, project);
+		if (!passFactory) {
+			passFactory = new Rose::RosePassFactory(passManager, project);
+		}
+
+		return passFactory;
 	}
-	void init() {}
-	void apply() { passManager->execute(); };
-	void finalize() {
-		// unparse instrumented source
+
+	void apply() {
+		passManager->execute();
 		project->unparse();
 		project->compileOutput();
-	};
+	}
 
 	virtual Tooling::AnalysisManager* getAnalysisManager() { return ram; }
 
  protected:
 	// Store the Project. It is required for all passes later on ..
-	SgProject* project;
-	InstRO::Rose::Tooling::RoseAnalysisManager* ram;
+	SgProject *project;
+	InstRO::Rose::Tooling::RoseAnalysisManager *ram;
+	Rose::RosePassFactory *passFactory;
 };
-};
+}
 #endif

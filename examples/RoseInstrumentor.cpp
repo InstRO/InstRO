@@ -20,9 +20,7 @@ int main(int argc, char** argv) {
 		factory->createConstructPrinterAdapter(callpaths);
 		factory->createDefaultInstrumentationAdapter(callpaths);
 
-		instro->init();
 		instro->apply();
-		instro->finalize();
 
 	} catch (std::string& stringBasedException) {
 		std::cerr << "Caught Exception:" << std::endl;

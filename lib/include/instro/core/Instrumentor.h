@@ -31,35 +31,24 @@ class Instrumentor {
 		//		lastPhase
 	} CompilationPhase;
 
-	Instrumentor() {
-		passManagerLocked = false;
-		setPassManager(new InstRO::PassManagement::SimplePassManager());
-	}
+	/** 
+	 * Constructs an Instrumentor instance using the supplied PassManager.
+	 * If nothing is supplied it constructs an instance of SimplePassManager.
+	 * The instrumentor takes ownership of the PassManager
+	 */
+	Instrumentor(InstRO::PassManagement::PassManager* pm = new InstRO::PassManagement::SimplePassManager())
+			: passManager(pm) {}
 
 	virtual ~Instrumentor() { delete passManager; }
 	
-	virtual void init() = 0;
 	virtual void apply() = 0;
-	virtual void finalize() = 0;
 
 	// Get a instance of the PassFactory. The PassFactory is internally managed and deconstructed.
 	// This method must be overridden by a platform specific implementation to return that platforms factory
 	virtual InstRO::PassFactory* getFactory(CompilationPhase phase = frontend) = 0;
 
 	// Get a instance of the PassManager. The PassManager is internally managed and deconstructed.
-	virtual InstRO::PassManagement::PassManager* getPassManager() { return passManager; }
-
- public:
-	// We allow to replace the passmangager with a different version or implementation.
-	// This can only be done before the first pass is created from the factory, as the manager tracks all
-	// passes, dependencies and invoces the passes accordingly
-	void setPassManager(InstRO::PassManagement::PassManager* manager) {
-		if (passManagerLocked) {
-			std::cerr << "PassManager already in use and locked" << std::endl;
-		} else {
-			passManager = manager;
-		}
-	}
+	virtual const InstRO::PassManagement::PassManager* getPassManager() const { return passManager; }
 
  public:
 	void setConstructRaisingPolicyCrop() { constructRaisingPolicyElevate = false; };
@@ -67,10 +56,10 @@ class Instrumentor {
 	void setConstructLoweringPolicyCrop() { constructLoweringPolicyElevate = false; }
 	void setConstructLoweringPolicyElevate() { constructLoweringPolicyElevate = true; }
 
-	bool getConstructRaisingPolicyCrop() { return constructRaisingPolicyElevate; }
-	bool getConstructRaisingPolicyElevate() { return constructRaisingPolicyElevate; }
-	bool getConstructLoweringPolicyCrop() { return constructLoweringPolicyElevate; }
-	bool getConstructLoweringPolicyElevate() { return constructLoweringPolicyElevate; }
+	bool getConstructRaisingPolicyCrop() const { return constructRaisingPolicyElevate; }
+	bool getConstructRaisingPolicyElevate() const { return constructRaisingPolicyElevate; }
+	bool getConstructLoweringPolicyCrop() const { return constructLoweringPolicyElevate; }
+	bool getConstructLoweringPolicyElevate() const { return constructLoweringPolicyElevate; }
 
 	// Interface to access the implementation specific Analysis Layer Container
 	virtual Tooling::AnalysisManager* getAnalysisManager() = 0;
@@ -78,8 +67,6 @@ class Instrumentor {
  protected:
 	InstRO::PassManagement::PassManager* passManager;
 	InstRO::Tooling::AnalysisManager* analysisManager;
-
-	bool passManagerLocked;
 
 	bool constructRaisingPolicyElevate, constructLoweringPolicyElevate;
 

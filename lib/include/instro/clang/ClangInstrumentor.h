@@ -37,12 +37,10 @@ class ClangInstrumentor : public InstRO::Instrumentor {
 	/** Accessor function for the (in general) compiler independent analysis layer */
 	virtual InstRO::Tooling::AnalysisManager* getAnalysisManager() override;
 
-	void virtual init() override;
 	/// \brief Runs the Instrumentor and its associated passes.
 	/// \note At the moment, ClangConstruct instances are only valid during execution of this method because the AST nodes
 	/// are automatically deallocated after the specified source code file has been processed.
 	void virtual apply() override;
-	void virtual finalize() override;
 
 	/// Initialize the AnalysisManager using the provided clang::ASTContext.
 	void initializeAnalysisManager(clang::ASTContext& context);
