@@ -65,7 +65,7 @@ class Pass {
 		}
 	}
 
-	const Core::ConstructSet *getInput(int channel) const { return channelConfig[channel]; }
+	const Core::ConstructSet *getInput(int channel) const { return channelConfig.getConstructSetForChannel(channel); }
 
 	// Allows to inject a ConstructSet which is returned for the pass with id from
 	void overrideInput(Pass *from, std::unique_ptr<Core::ConstructSet> overrideSet) {

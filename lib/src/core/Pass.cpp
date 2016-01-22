@@ -3,11 +3,16 @@
 #include "instro/utility/Logger.h"
 #include "instro/core/ChannelConfiguration.h"
 
-InstRO::Core::ConstructSet *InstRO::Core::ChannelConfiguration::operator[](int pos) const {
-	logIt(DEBUG) << "requesting input for channel " << pos << std::endl;
-	auto p = inputChannelMap.at(pos);
+//// ChannelConfiguration
+
+InstRO::Core::ConstructSet *InstRO::Core::ChannelConfiguration::getConstructSetForChannel(int channel) const {
+	logIt(DEBUG) << "Requesting construct set for input channel " << channel << std::endl;
+	auto p = inputChannelMap.at(channel);
 	return p->getOutput();
 }
+
+
+//// Pass
 
 void InstRO::Pass::initPass() {
 	if (!passInitialized && !passFinalized) {

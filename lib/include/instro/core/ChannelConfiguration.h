@@ -69,8 +69,9 @@ class ChannelConfiguration {
 									 [](std::pair<int, Pass *> p) { return p.second; });
 		return res;
 	}
-	
-	[[deprecated]] InstRO::Core::ConstructSet *operator[](int pos) const;
+
+	/** Returns the output fetched from the preceeding pass connected to channel */
+	InstRO::Core::ConstructSet *getConstructSetForChannel(int channel) const;
 
  private:
 	std::map<int, Pass *> inputChannelMap;
