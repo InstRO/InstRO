@@ -6,7 +6,7 @@
 namespace InstRO {
 namespace Clang {
 
-[[deprecated]] class PassImplementation : public InstRO::Core::PassImplementation {
+class [[deprecated]] PassImplementation : public InstRO::Core::PassImplementation {
  public:
 	void run();
 };

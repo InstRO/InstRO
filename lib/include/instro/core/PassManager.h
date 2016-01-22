@@ -21,10 +21,16 @@ class PassManager {
 
 	virtual ~PassManager() {}
 
-	// Enable the Pass Manager to query the pass for its dependencies
+	/** A Pass must be registered to the PassManager when it is constructed.
+	 * The PassManager can implement this method to do whatever wiring is necessary in its specific implementation.
+	 */
 	virtual void registerPass(Pass *currentPass) = 0;
+	
+	/** Runs the configuration using whatever features the PassManager implementation provides */
 	virtual int execute() = 0;
+
 	virtual bool hasOutputDependencies(Pass *) = 0;
+
 	virtual bool hasInputDependencies(Pass *) = 0;
 
 	// To allow explicit sequencing the user can use this call to establish an explicit before-after relationship between

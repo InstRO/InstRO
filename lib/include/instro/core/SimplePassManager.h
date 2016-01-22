@@ -8,6 +8,13 @@
 namespace InstRO {
 namespace PassManagement {
 
+/**
+ * The SimplePassManager does not generate depence graphs.
+ * It runs the registered passes in the order they have been registered.
+ * First, it invokes the init() method on all passes in the order they have been registered.
+ * Secondly, all passes are executed in the order they haven been registered.
+ * Lastly, the finalize() method is called an all passes in the order they have been registered.
+ */
 class SimplePassManager : public InstRO::PassManagement::PassManager {
  public:
 	SimplePassManager(){};
@@ -25,9 +32,11 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 
 	virtual void setDependence(Pass *pred, Pass *pass) {
 		// FIXME what is the actual semantic of an explicit dependence?
+		throw std::string("Not implemented in SimplePassManager");
 	}
 
 	virtual bool hasOutputDependencies(Pass *pass) { return true; }
+
 	virtual bool hasInputDependencies(Pass *pass) { return getPredecessors(pass).size() > 0; };
 
  protected:
