@@ -42,7 +42,7 @@ namespace Transformer {
 ///
 /// \note This transformation relies on the availability of function definitions for almost all inspected functions.
 ///
-/// \author Simon Reuß
+/// \author Simon Reuß, Jan-Patrick Lehr
 class RoseUniqueCallpathTransformer : public RosePassImplementation {
  public:
 	 // FIXME This serves as a temporary work around.
@@ -51,15 +51,18 @@ class RoseUniqueCallpathTransformer : public RosePassImplementation {
 	 // aMode = only the active (former input channel 2) is set
 	 // raMode =  both root and active (former input channels 1 and 2) are set.
 	 enum class Mode {nMode, rMode, aMode, raMode};
-	/// \brief Constructs a new UniqueCallpathTransformer without any explicit passes for the roots and active functions.
-	/// The main function will be used as the root of the call graph and all functions will be assumed to be duplicatable.
-	/// \arg pass The pass specifying the marked functions for which a unique call path should be created
-	RoseUniqueCallpathTransformer(Mode m);
-	/// \brief Constructs a new UniqueCallpathTransformer with explicit passes for the roots and active functions.
-	/// \arg pass The pass which specifies the marked functions for which a unique call path should be created
-	/// \arg root The pass which specifies the roots the the call graph
-	/// \arg active The pass which specifies the active functions
-	[[deprecated]] RoseUniqueCallpathTransformer(InstRO::Pass *pass, InstRO::Pass *root, InstRO::Pass *active);
+	 /// \brief Constructs a new UniqueCallpathTransformer executing in the specified mode.
+	 /// When run in nMode, the main function will be used as the root of the call graph and all functions will be assumed
+	 /// to be duplicatable.
+	 /// When run in aMode, the main function will be used as the root of the call graph and only those nodes returned by
+	 /// the pass connected to input channel 2 are used as the active functions
+	 /// When run in rMode, only those nodes returned by the pass connected to input channel 1 will be used as the root of
+	 /// the call graph
+	 /// When run in raMode, the node sets output by passes connected to channel 1 and connected to channel 2 will be used
+	 /// as the root and the active nodes, respectively.
+	 /// \arg m Mode specifying the mode of operation. Input channel 0 holds the functions for which a unique call path
+	 /// should be created
+	 RoseUniqueCallpathTransformer(Mode m);
 
 	virtual ~RoseUniqueCallpathTransformer();
 

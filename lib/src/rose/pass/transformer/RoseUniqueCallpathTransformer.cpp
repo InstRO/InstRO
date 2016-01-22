@@ -31,7 +31,7 @@ using namespace InstRO::Rose::Transformer;
 RoseUniqueCallpathTransformer::RoseUniqueCallpathTransformer(RoseUniqueCallpathTransformer::Mode m)
 		: RosePassImplementation(), mode(m), callGraph(nullptr) {}
 
-		RoseUniqueCallpathTransformer::~RoseUniqueCallpathTransformer() {}
+RoseUniqueCallpathTransformer::~RoseUniqueCallpathTransformer() {}
 
 RoseUniqueCallpathTransformer::NodeSet RoseUniqueCallpathTransformer::retrieveInputNodes(int channel) {
 
@@ -130,7 +130,6 @@ void RoseUniqueCallpathTransformer::execute() {
 	callGraph = getInstrumentorInstance()->getAnalysisManager()->getECG();
 
 	// use the main function as default root if none have been specified manually
-//	if (!rootPass) {
 	if(mode != Mode::rMode || mode != Mode::raMode) {
 		rootNodes.clear();
 		rootNodes.insert(getMainFunctionNode());
@@ -143,12 +142,7 @@ void RoseUniqueCallpathTransformer::execute() {
 
 	// initialize active nodes
 	activeNodes.clear();
-//	if (activePass) {
-//		activeNodes = retrieveInputNodes(activePass);
-	if(mode == Mode::aMode) {
-		activeNodes = retrieveInputNodes(1);
-	}
-	if(mode == Mode::raMode) {
+	if(mode == Mode::aMode || mode == Mode::raMode) {
 		activeNodes = retrieveInputNodes(2);
 	}
 
