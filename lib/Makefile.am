@@ -213,6 +213,7 @@ if USEROSE
 lib_LIBRARIES += libInstRO_rose.a
 endif
 
+INSTRO_CORE_CPPFLAGS= -Wall -pedantic
 
 libInstRO_rose_a_SOURCES= \
 	$(CORE_SFILES) \
@@ -236,7 +237,7 @@ libInstRO_clang_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) @LLVM_CXXFLAGS_FLAGS@ -I@L
 # We use LDFLAGS for this list according to https://www.gnu.org/software/automake/manual/html_node/Libtool-Flags.html#Libtool-Flags
 libInstRO_clang_a_LDFLAGS=@CLANG_LIBS_LIST@ @LLVM_LDFLAGS@
 
-libInstRO_core_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+libInstRO_core_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ $(INSTRO_CORE_CPPFLAGS)
 
 if HAVERAPIDJSON
 libInstRO_core_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
