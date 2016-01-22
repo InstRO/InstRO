@@ -22,20 +22,16 @@ RoseFunctionWrapper::RoseFunctionWrapper(NameTransformer nameTransformer)
 			defPrefix(),
 			wrapPrefix(),
 			mainScope(nullptr),
-/*			inputPass(input),*/
-			renamingPass(nullptr)
+			useRenamingPass(false) {}
 
-{}
-
-RoseFunctionWrapper::RoseFunctionWrapper(NameTransformer nameTransformer,
-																				 const std::string &definitionPrefix, const std::string &wrapperPrefix)
+RoseFunctionWrapper::RoseFunctionWrapper(NameTransformer nameTransformer, const std::string &definitionPrefix,
+																				 const std::string &wrapperPrefix, bool useRenamePass)
 		: RosePassImplementation(),
 			nameTrafo(nameTransformer),
 			defPrefix(definitionPrefix),
 			wrapPrefix(wrapperPrefix),
-			mainScope(nullptr)
-/*			inputPass(input),
-			renamingPass(renaming) */{}
+			mainScope(nullptr),
+			useRenamingPass(useRenamePass) {}
 
 RoseFunctionWrapper::~RoseFunctionWrapper() {}
 
@@ -49,7 +45,7 @@ void RoseFunctionWrapper::init() {
 void RoseFunctionWrapper::execute() {
 	// determine the nodes which are used as starting points for the search of function calls
 	RoseNodeList funCallSearchSP;
-	if (renamingPass) {
+	if (useRenamingPass) {
 		auto nodeSet = retrieveNodes(1);
 		funCallSearchSP.insert(funCallSearchSP.end(), nodeSet.begin(), nodeSet.end());
 	} else {
@@ -313,7 +309,7 @@ RoseMPIFunctionWrapper::RoseMPIFunctionWrapper()
 		: RoseFunctionWrapper(PMPINameTransformer()) {}
 
 RoseMPIFunctionWrapper::RoseMPIFunctionWrapper(const std::string &definitionPrefix, const std::string &wrapperPrefix)
-		: RoseFunctionWrapper(PMPINameTransformer(), definitionPrefix, wrapperPrefix) {}
+		: RoseFunctionWrapper(PMPINameTransformer(), definitionPrefix, wrapperPrefix, true) {}
 
 std::string RoseMPIFunctionWrapper::PMPINameTransformer::operator()(const std::string &mpiName) {
 	return "P" + mpiName;

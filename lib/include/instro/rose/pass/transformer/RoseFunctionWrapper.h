@@ -94,7 +94,7 @@ class RoseFunctionWrapper : public RosePassImplementation {
 	/// \arg definitionPrefix The original function definition will be renamed according to this prefix
 	/// \arg wrapperPrefix The prefix which gets applied to the name of every generated wrapper
 	RoseFunctionWrapper(NameTransformer nameTransformer, const std::string &definitionPrefix,
-											const std::string &wrapperPrefix);
+											const std::string &wrapperPrefix, bool useRenamePass);
 
 	virtual ~RoseFunctionWrapper();
 
@@ -133,8 +133,7 @@ class RoseFunctionWrapper : public RosePassImplementation {
 
 	SgScopeStatement *mainScope;
 
-	InstRO::Pass *inputPass;
-	InstRO::Pass *renamingPass;
+	bool useRenamingPass;
 
 	typedef std::unordered_set<SgNode *> RoseNodeSet;
 	typedef std::vector<SgNode *> RoseNodeList;

@@ -92,9 +92,10 @@ InstRO::Pass* RosePassFactory::createRoseFunctionWrapper(
 												InstRO::Core::ConstructTraitType::CTFunction);
 	cfg.setConstructLevel(renaming, InstRO::Core::ConstructTraitType::CTExpression,
 												InstRO::Core::ConstructTraitType::CTGlobalScope);
-	InstRO::Pass* newPass =
-			new InstRO::Pass(new Transformer::RoseFunctionWrapper(nameTransformer, definitionPrefix, wrapperPrefix), cfg,
-											 "InstRO::Rose::Transformer::RoseFunctionWrapper");
+	bool useRenamingPass = true;
+	InstRO::Pass* newPass = new InstRO::Pass(
+			new Transformer::RoseFunctionWrapper(nameTransformer, definitionPrefix, wrapperPrefix, useRenamingPass), cfg,
+			"InstRO::Rose::Transformer::RoseFunctionWrapper");
 	passManager->registerPass(newPass);
 	return newPass;
 }
