@@ -34,12 +34,14 @@ def runApply(arguments):
 
             os.environ["INSTRO_TEST_INPUT_FILENAME"] = inputDirectory + '/' + b + '/' + specFile
             invocationString = "./" + b + " " + inputDirectory + '/' + srcFile
-            print("compilerIndication " + arguments.compilerIndication)
+
+            # we need to add the "--" to the invocation as we do not have JSON compilation databases
             if arguments.compilerIndication == 'clang':
                 invocationString += ' --'
             
             print("\n[Running]\n" + b + " " + srcFile)
-            print("Invocation line: " + invocationString)
+            if False:
+                print("Detailed invocation info: " + invocationString)
 
             errCode = subprocess.call(invocationString, shell=True)
             print("[Done]")
