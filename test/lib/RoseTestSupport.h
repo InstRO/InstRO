@@ -20,7 +20,6 @@ class RoseTestFactory : public InstRO::Rose::RosePassFactory {
 
 		auto pImpl = new InstRO::Test::TestAdapter(label, filename, testSummaries.back().get());
 		InstRO::Pass *p = new InstRO::Pass(pImpl, InstRO::Core::ChannelConfiguration(input), "TestAdapter");
-//		p->setPassName("TestAdapter " + label);
 		passManager->registerPass(p);
 		return p;
 	}

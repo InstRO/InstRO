@@ -75,10 +75,7 @@ class Pass {
 
 	// This allows for passes to have a unique name defined by the PassFactory. I.e. if the pass is used in different
 	// instances
-	virtual std::string passName() { return passNameString; };
-
-	// XXX move this to the ctor, as it should be read only
-//	void setPassName(std::string passName) { passNameString = passName; };
+	const std::string passName() { return passNameString; };
 
 	std::vector<Pass *> const getInputPasses() { return channelConfig.getPasses(); };
 
@@ -95,7 +92,7 @@ class Pass {
 	// These flags are solely used to ensure proper sequences of initialization, execution and finalization
 	bool passInitialized, passExecuted, passFinalized;
 
-	const std::string passNameString; // XXX make const
+	const std::string passNameString;
 
 	std::unordered_map<Pass *, std::shared_ptr<Core::ConstructSet> > inputOverride;
 
