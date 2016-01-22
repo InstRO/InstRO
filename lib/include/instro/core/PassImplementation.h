@@ -51,9 +51,6 @@ class PassImplementation {
 	// This set is used to track alterations to the AST and notify which nodes have been invalidated
 	ConstructSet collisionSet;
 
-	// Accessor method to retrieve the ConstructSet for channel pId
-	[[deprecated]] ConstructSet *getInput(Pass *pId);
-
 	// Accessor method for the ConstructSet retrieved from input channel (counting from 0)
 	const ConstructSet *getInput(int channel);
 
