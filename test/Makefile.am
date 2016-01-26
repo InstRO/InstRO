@@ -14,9 +14,13 @@ endif
 
 TEST_SFILES= \
 						 ./lib/TestAdapter.cpp
-
 TEST_HFILES= \
 						 ./lib/TestAdapter.h
+
+RT_SUPPORT_HFILES= \
+						../support/InstROMeasurementInterface.h
+RT_SUPPORT_SFILES= \
+						./IMITestInfrastructure.c
 
 if USELIBTOOL
 # LIBTOOL RULE FOR LIBINSTRO
@@ -92,11 +96,16 @@ else #USELIBTOOL
 
 # Static test-library.
 # The library provides additional functionality in the instrumentor and the pass factory
-lib_LIBRARIES= libInstRO_test.a
+lib_LIBRARIES= libInstRO_test.a libInstRO_rtsupport.a
 libInstRO_test_a_SOURCES= \
 	$(TEST_SFILES) \
 	$(TEST_HFILES) 
-libInstRO_test_a_CPPFLAGS=$(top_srcdir)/lib $(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+libInstRO_test_a_CPPFLAGS=-I$(top_srcdir)/lib $(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+
+libInstRO_rtsupport_a_SOURCES= \
+	$(RT_SUPPORT_SFILES) \
+	$(RT_SUPPORT_HFILES)
+libInstRO_rtsupport_a_CFLAGS=-I$(top_srcdir)/support $(AM_CPPFLAGS)
 
 # The different test-executables.
 # The choice which tests to implement was guided by the "InstRO-mandatory-component-sheet"
