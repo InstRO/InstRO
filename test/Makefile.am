@@ -116,6 +116,7 @@ bin_PROGRAMS= \
 	ConstructElevatorTest \
 	BooleanCompoundSelectorTest \
 	CallpathSelectorTest \
+	DefaultInstrumentationAdapterTest \
 	MatcherUnitTest
 endif
 # Once all tests are supported by both ROSE and Clang, remove the two conditionals
@@ -178,9 +179,14 @@ CallpathSelectorTest_SOURCES= \
 CallpathSelectorTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
 CallpathSelectorTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
+DefaultInstrumentationAdapterTest_SOURCES= \
+	./DefaultInstrumentationAdapterTest.cpp
+DefaultInstrumentationAdapterTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
+DefaultInstrumentationAdapterTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS)
+
 # Dependent on the compiler platform we build differently
 if USEROSE
-INSTRO_WITH_ROSE_CPPFLAGS=-DUSE_ROSE -I$(top_srcdir)/lib -I@ROSE_INCLUDEDIR@
+INSTRO_WITH_ROSE_CPPFLAGS=-DINSTRO_USE_ROSE -I$(top_srcdir)/lib -I@ROSE_INCLUDEDIR@
 INSTRO_WITH_ROSE_LDADD=$(top_builddir)/lib/libInstRO_rose.a @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
 
 ConstructHierarchySelectionTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
@@ -197,6 +203,9 @@ BooleanCompoundSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
 CallpathSelectorTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 CallpathSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
+
+DefaultInstrumentationAdapterTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
+DefaultInstrumentationAdapterTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
 INSTRO_COMPILER_INDICATION="rose"
 endif

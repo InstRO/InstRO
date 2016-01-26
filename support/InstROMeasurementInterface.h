@@ -13,7 +13,7 @@
  * Check for GNU compiler to use GNU attributes
  */
 #ifdef __GNUC__
-#define _INSTRO_WEAK_DECL
+#define _INSTRO_WEAK_DECL __attribute__((weak))
 #else
 #define _INSTRO_WEAK_DECL
 #endif
