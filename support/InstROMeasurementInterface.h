@@ -13,9 +13,13 @@
  * Check for GNU compiler to use GNU attributes
  */
 #ifdef __GNUC__
-#define _INSTRO_WEAK_DECL __attribute__((weak))
+#define _INSTRO_WEAK_DECL
 #else
 #define _INSTRO_WEAK_DECL
+#endif
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 /*
@@ -93,4 +97,6 @@ void __instro_start_expression(size_t construct_hash) _INSTRO_WEAK_DECL;
  */
 void __instro_end_expression(size_t construct_hash) _INSTRO_WEAK_DECL;
 
-
+#ifdef __cplusplus
+}
+#endif
