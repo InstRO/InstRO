@@ -31,7 +31,8 @@ bin_PROGRAMS= \
 	IdentifierSelectorTest \
 	ConstructElevatorTest \
 	BooleanCompoundSelectorTest \
-	MatcherUnitTest
+	MatcherUnitTest \
+	UniqueCallpathTransformerTest
 
 libInstRO_test_la_SOURCES= \
 	$(TEST_SFILES) \
@@ -73,6 +74,10 @@ BooleanCompoundSelectorTest_SOURCES= \
 BooleanCompoundSelectorTest_LDADD=libInstRO_test.la $(top_builddir)/lib/libInstRO_core.la
 BooleanCompoundSelectorTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
+UniqueCallpathTransformerTest_SOURCES=./UniqueCallpathTransformerTestMain.cpp
+UniqueCallpathTransformerTest_LDADD=libInstRO_test.la $(top_builddir)/lib/libInstRO_core.la
+UniqueCallpathTransformerTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+
 if USEROSE
 ConstructHierarchySelectionTest_CPPFLAGS+= -DUSE_ROSE -I$(top_srcdir)/../lib/include -I@ROSE_INCLUDEDIR@
 ConstructHierarchySelectionTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
@@ -85,6 +90,9 @@ ConstructElevatorTest_LDADD+=  $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_
 
 BooleanCompoundSelectorTest_CPPFLAGS+= -DUSE_ROSE -I$(top_srcdir)/../lib/include -I@ROSE_INCLUDEDIR@
 BooleanCompoundSelectorTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
+
+UniqueCallpathTransformerTest_CPPFLAGS+= -I$(top_srcdir)/../lib/include -I@ROSE_INCLUDEDIR@
+UniqueCallpathTransformerTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
 endif
 
 if USECLANG
@@ -117,7 +125,8 @@ bin_PROGRAMS= \
 	BooleanCompoundSelectorTest \
 	CallpathSelectorTest \
 	DefaultInstrumentationAdapterTest \
-	MatcherUnitTest
+	MatcherUnitTest \
+	UniqueCallpathTransformerTest
 endif
 # Once all tests are supported by both ROSE and Clang, remove the two conditionals
 if USECLANG
@@ -179,6 +188,11 @@ CallpathSelectorTest_SOURCES= \
 CallpathSelectorTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
 CallpathSelectorTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
+# Test
+UniqueCallpathTransformerTest_SOURCES=./UniqueCallpathTransformerTestMain.cpp
+UniqueCallpathTransformerTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
+UniqueCallpathTransformerTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS)
+
 DefaultInstrumentationAdapterTest_SOURCES= \
 	./DefaultInstrumentationAdapterTest.cpp
 DefaultInstrumentationAdapterTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
@@ -207,7 +221,11 @@ CallpathSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 DefaultInstrumentationAdapterTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 DefaultInstrumentationAdapterTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
+UniqueCallpathTransformerTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
+UniqueCallpathTransformerTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
+
 INSTRO_COMPILER_INDICATION="rose"
+
 endif
 
 if USECLANG
