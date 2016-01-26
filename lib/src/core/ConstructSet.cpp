@@ -242,44 +242,44 @@ std::string ConstructSet::toDotString() const {
 }	// namespace Core
 
 namespace InfrastructureInterface {
-ConstructSetCompilerInterface::ConstructSetCompilerInterface(Core::ConstructSet* pcs) : csPtr(pcs){};
+ConstructSetCompilerInterface::ConstructSetCompilerInterface(Core::ConstructSet* pcs) : csPtr(pcs){}
 
-void ConstructSetCompilerInterface::put(const std::shared_ptr<Core::Construct>& construct) { csPtr->put(construct); };
+void ConstructSetCompilerInterface::put(const std::shared_ptr<Core::Construct>& construct) { csPtr->put(construct); }
 void ConstructSetCompilerInterface::erase(const std::shared_ptr<Core::Construct>& construct) {
 	csPtr->erase(construct);
-};
-void ConstructSetCompilerInterface::put(Core::ConstructSet cs) { csPtr->put(cs); };
-void ConstructSetCompilerInterface::erase(Core::ConstructSet cs) { csPtr->erase(cs); };
+}
+void ConstructSetCompilerInterface::put(Core::ConstructSet cs) { csPtr->put(cs); }
+void ConstructSetCompilerInterface::erase(Core::ConstructSet cs) { csPtr->erase(cs); }
 bool ConstructSetCompilerInterface::contains(const std::shared_ptr<Core::Construct>& construct) {
 	return csPtr->contains(construct);
-};
+}
 
-std::set<std::shared_ptr<Core::Construct> >::iterator ConstructSetCompilerInterface::begin() { return csPtr->begin(); };
-std::set<std::shared_ptr<Core::Construct> >::iterator ConstructSetCompilerInterface::end() { return csPtr->end(); };
+std::set<std::shared_ptr<Core::Construct> >::iterator ConstructSetCompilerInterface::begin() { return csPtr->begin(); }
+std::set<std::shared_ptr<Core::Construct> >::iterator ConstructSetCompilerInterface::end() { return csPtr->end(); }
 std::set<std::shared_ptr<Core::Construct> >::const_iterator ConstructSetCompilerInterface::cbegin() const {
 	return csPtr->cbegin();
-};
+}
 std::set<std::shared_ptr<Core::Construct> >::const_iterator ConstructSetCompilerInterface::cend() const {
 	return csPtr->cend();
-};
+}
 
 void ConstructSetCompilerInterface::clear() { csPtr->clear(); }
 bool ConstructSetCompilerInterface::empty() { return csPtr->empty(); }
 size_t ConstructSetCompilerInterface::size() { return csPtr->size(); }
 
 ReadOnlyConstructSetCompilerInterface::ReadOnlyConstructSetCompilerInterface(const Core::ConstructSet* pcs)
-		: csPtr(pcs){};
+		: csPtr(pcs){}
 
 bool ReadOnlyConstructSetCompilerInterface::contains(const std::shared_ptr<Core::Construct>& construct) const {
 	return csPtr->contains(construct);
-};
+}
 
 std::set<std::shared_ptr<Core::Construct> >::const_iterator ReadOnlyConstructSetCompilerInterface::begin() const {
 	return csPtr->cbegin();
-};
+}
 std::set<std::shared_ptr<Core::Construct> >::const_iterator ReadOnlyConstructSetCompilerInterface::end() const {
 	return csPtr->cend();
-};
+}
 
 bool ReadOnlyConstructSetCompilerInterface::empty() const { return csPtr->empty(); }
 size_t ReadOnlyConstructSetCompilerInterface::size() const { return csPtr->size(); }

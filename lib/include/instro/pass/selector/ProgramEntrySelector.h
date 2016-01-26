@@ -9,7 +9,7 @@ namespace Selector {
 /** \brief Get the main function */
 class ProgramEntrySelector : public InstRO::Core::PassImplementation {
  public:
-	ProgramEntrySelector() : PassImplementation(Core::ChannelConfiguration()){};
+	ProgramEntrySelector() : PassImplementation(){};
 	virtual void execute() override;
 };
 

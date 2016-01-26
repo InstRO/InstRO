@@ -5,8 +5,7 @@
 
 InstRO::Clang::FunctionDefinitionSelector::FunctionDefinitionSelector()
 		: ClangPassImplBase<FunctionDefinitionSelector>(
-					InstRO::Core::ChannelConfiguration(), new InstRO::Clang::VisitingPassExecuter<FunctionDefinitionSelector>()) {
-}
+					new InstRO::Clang::VisitingPassExecuter<FunctionDefinitionSelector>()) {}
 
 bool InstRO::Clang::FunctionDefinitionSelector::VisitFunctionDecl(clang::FunctionDecl *fDecl) {
 	if (fDecl->isThisDeclarationADefinition()) {

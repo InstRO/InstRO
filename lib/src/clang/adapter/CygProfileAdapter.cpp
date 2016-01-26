@@ -3,11 +3,8 @@
 #include "instro/clang/core/ClangConstruct.h"
 #include "instro/utility/Logger.h"
 
-InstRO::Clang::CygProfileAdapter::CygProfileAdapter(InstRO::Pass *pId, clang::tooling::Replacements &reps,
-																										clang::SourceManager *sm)
-		: ClangPassImplBase(InstRO::Core::ChannelConfiguration(pId),
-												new InstRO::Clang::VisitingPassExecuter<CygProfileAdapter>()),
-			decidingSelector(pId),
+InstRO::Clang::CygProfileAdapter::CygProfileAdapter(clang::tooling::Replacements &reps, clang::SourceManager *sm)
+		: ClangPassImplBase(new InstRO::Clang::VisitingPassExecuter<CygProfileAdapter>()),
 			sm(sm),
 			replacements(reps),
 			labelCount(0),
@@ -21,7 +18,7 @@ bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *de
 	// The context is in ClangPassImplementation
 	sm = &context->getSourceManager();
 
-	InstRO::Core::ConstructSet *c = getInput(decidingSelector);
+	const InstRO::Core::ConstructSet *c = getInput(0);
 	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface rcsci(c);
 
 	for (auto &construct : rcsci) {

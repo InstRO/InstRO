@@ -28,37 +28,14 @@ using namespace InstRO::Core;
 using namespace InstRO::Rose;
 using namespace InstRO::Rose::Transformer;
 
-RoseUniqueCallpathTransformer::RoseUniqueCallpathTransformer(InstRO::Pass *pass)
-		: RoseUniqueCallpathTransformer(pass, nullptr, nullptr) {}
-
-RoseUniqueCallpathTransformer::RoseUniqueCallpathTransformer(InstRO::Pass *pass, InstRO::Pass *root,
-																														 InstRO::Pass *active)
-		: RosePassImplementation(createChannelConfig(pass, root, active)),
-			inputPass(pass),
-			rootPass(root),
-			activePass(active),
-			callGraph(nullptr) {}
+RoseUniqueCallpathTransformer::RoseUniqueCallpathTransformer(RoseUniqueCallpathTransformer::Mode m)
+		: RosePassImplementation(), mode(m), callGraph(nullptr) {}
 
 RoseUniqueCallpathTransformer::~RoseUniqueCallpathTransformer() {}
 
-InstRO::Core::ChannelConfiguration RoseUniqueCallpathTransformer::createChannelConfig(InstRO::Pass *pass,
-																																											InstRO::Pass *root,
-																																											InstRO::Pass *active) {
-	std::vector<InstRO::Pass *> passes{pass};
-	if (root) {
-		passes.push_back(root);
-	}
-	if (active) {
-		passes.push_back(active);
-	}
-	return InstRO::Core::ChannelConfiguration(passes.begin(), passes.end(),
-																						::InstRO::Core::ConstructTraitType::CTFunction,
-																						::InstRO::Core::ConstructTraitType::CTFunction);
-}
+RoseUniqueCallpathTransformer::NodeSet RoseUniqueCallpathTransformer::retrieveInputNodes(int channel) {
 
-RoseUniqueCallpathTransformer::NodeSet RoseUniqueCallpathTransformer::retrieveInputNodes(InstRO::Pass *pass) {
-
-	auto graphNodes = callGraph->getNodeSetByCS(pass->getOutput());
+	auto graphNodes = callGraph->getNodeSetByCS(getInput(channel));
 	NodeSet graphNodesUnordered;
 	graphNodesUnordered.reserve(graphNodes.size());
 	graphNodesUnordered.insert(graphNodes.begin(), graphNodes.end());
@@ -153,20 +130,20 @@ void RoseUniqueCallpathTransformer::execute() {
 	callGraph = getInstrumentorInstance()->getAnalysisManager()->getECG();
 
 	// use the main function as default root if none have been specified manually
-	if (!rootPass) {
+	if(mode != Mode::rMode || mode != Mode::raMode) {
 		rootNodes.clear();
 		rootNodes.insert(getMainFunctionNode());
 	} else {
-		rootNodes = retrieveInputNodes(rootPass);
+		rootNodes = retrieveInputNodes(1);
 	}
 
 	// convert marked functions to call graph nodes
-	NodeSet markedNodes = retrieveInputNodes(inputPass);
+	NodeSet markedNodes = retrieveInputNodes(0);
 
 	// initialize active nodes
 	activeNodes.clear();
-	if (activePass) {
-		activeNodes = retrieveInputNodes(activePass);
+	if(mode == Mode::aMode || mode == Mode::raMode) {
+		activeNodes = retrieveInputNodes(2);
 	}
 
 	// find candidates for duplication and nodes which are targeted by a backwards directed edge
@@ -381,7 +358,7 @@ void RoseUniqueCallpathTransformer::duplicate(ExtendedCallGraphNode *node,
 		duplicatedNodes.insert(std::make_pair(node, clonedFunction));
 
 		InstRO::InfrastructureInterface::ConstructSetCompilerInterface output(&outputSet);
-		InstRO::InfrastructureInterface::ConstructSetCompilerInterface collisions(getCollisionSet());
+		InstRO::InfrastructureInterface::ConstructSetCompilerInterface collisions(&collisionSet);
 		// add the duplicate to the output of the transformer and its files scope to the collision set
 		addNodeToCS(output, clonedFunction->get_definition());
 		addNodeToCS(collisions, SageInterface::getEnclosingFileNode(clonedFunction));

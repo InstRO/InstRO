@@ -20,9 +20,8 @@ class ClangTestFactory : public InstRO::Clang::ClangPassFactory {
 		std::unique_ptr<InstRO::Test::TestSummary> tr(new InstRO::Test::TestSummary(label));
 		testSummaries.push_back(std::move(tr));
 
-		auto pImpl = new InstRO::Test::TestAdapter(input, label, filename, testSummaries.back().get());
-		InstRO::Pass *p = new InstRO::Pass(pImpl);
-		p->setPassName("TestAdapter " + label);
+		auto pImpl = new InstRO::Test::TestAdapter(label, filename, testSummaries.back().get());
+		InstRO::Pass *p = new InstRO::Pass(pImpl, InstRO::Core::ChannelConfiguration(input), "TestAdapter");
 		passManager->registerPass(p);
 		return p;
 	}
@@ -37,7 +36,8 @@ class ClangTestFactory : public InstRO::Clang::ClangPassFactory {
  */
 class ClangTestInstrumentor : public InstRO::Clang::ClangInstrumentor {
  public:
-	ClangTestInstrumentor(int argc, char **argv, llvm::cl::OptionCategory& llvmThing) : InstRO::Clang::ClangInstrumentor(argc, const_cast<const char **>(argv), llvmThing) {}
+	ClangTestInstrumentor(int argc, char **argv, llvm::cl::OptionCategory &llvmThing)
+			: InstRO::Clang::ClangInstrumentor(argc, const_cast<const char **>(argv), llvmThing) {}
 
 	ClangTestFactory* getFactory (
 			InstRO::Instrumentor::CompilationPhase phase = InstRO::Instrumentor::CompilationPhase::frontend) override {

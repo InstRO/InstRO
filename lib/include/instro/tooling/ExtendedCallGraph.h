@@ -62,7 +62,7 @@ class ExtendedCallGraph {
 	ExtendedCallGraph();
 	~ExtendedCallGraph();
 
-	std::set<ExtendedCallGraphNode*> getNodeSetByCS(Core::ConstructSet *cs);
+	std::set<ExtendedCallGraphNode*> getNodeSetByCS(const Core::ConstructSet *cs);
 
 	/** predicate is a functional with parameters(ExtendedCallGraphNode*, ExtendedCallGraph*) */
 	template <typename T>

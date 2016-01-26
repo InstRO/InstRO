@@ -12,7 +12,6 @@ namespace InstRO {
 namespace Selector {
 
 void CallPathSelector::execute() {
-
 	Tooling::ExtendedCallGraph::ExtendedCallGraph *ecg = getInstrumentorInstance()->getAnalysisManager()->getECG();
 	auto fromNodes = ecg->getNodeSetByCS(getInput(0));
 	auto toNodes = ecg->getNodeSetByCS(getInput(1));
@@ -28,6 +27,8 @@ void CallPathSelector::execute() {
 	logIt(DEBUG) << "successorsOfFrom elements: " << successorsOfFrom.size() << std::endl;
 
 	outputSet = predecessorsOfTo.intersect(successorsOfFrom);
+
+	logIt(DEBUG) << "Output set contains: " << outputSet.size() << " elements" << std::endl;
 
 	if (!dotName.empty()) {
 		ecg->print(dotName, ecg->getNodeSetByCS(&outputSet));

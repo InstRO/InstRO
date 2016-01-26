@@ -1,6 +1,18 @@
 #include "instro/core/Pass.h"
 #include "instro/utility/exception.h"
 #include "instro/utility/Logger.h"
+#include "instro/core/ChannelConfiguration.h"
+
+//// ChannelConfiguration
+
+InstRO::Core::ConstructSet *InstRO::Core::ChannelConfiguration::getConstructSetForChannel(int channel) const {
+	logIt(DEBUG) << "Requesting construct set for input channel " << channel << std::endl;
+	auto p = inputChannelMap.at(channel);
+	return p->getOutput();
+}
+
+
+//// Pass
 
 void InstRO::Pass::initPass() {
 	if (!passInitialized && !passFinalized) {
@@ -24,6 +36,7 @@ void InstRO::Pass::executePass() {
 
 void InstRO::Pass::finalizePass() {
 	if (passInitialized && passExecuted) {
+		passImplementation->releaseOutput();
 		passImplementation->finalize();
 	} else {
 		raise_exception("Must initialize pass first.");

@@ -34,13 +34,10 @@ void InstRO::Test::TestAdapter::init() { expectedItems = readExpectedItemsFile()
 
 void InstRO::Test::TestAdapter::execute() {
 	logIt(INFO) << "Running TestAdapter with label \"" << label << "\"" << std::endl;
-	auto cfg = getChannelConfig();
-	for (auto p : cfg.getPasses()) {
-		checkIfConstructSetMatches(getInput(0));
-	}
+	checkIfConstructSetMatches(getInput(0));
 }
 
-void InstRO::Test::TestAdapter::checkIfConstructSetMatches(InstRO::Core::ConstructSet *cs) {
+void InstRO::Test::TestAdapter::checkIfConstructSetMatches(const InstRO::Core::ConstructSet *cs) {
 	auto idMap = InstRO::Tooling::IdentifierProvider::getIdentifierMap(cs);
 
 	for (const auto idPair : idMap) {

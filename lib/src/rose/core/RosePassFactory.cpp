@@ -11,8 +11,9 @@ namespace InstRO {
 namespace Rose {
 
 Pass* RosePassFactory::createDefaultInstrumentationAdapter(InstRO::Pass* input) {
-	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseDefaultInstrumentationAdapter(input, project));
-	newPass->setPassName("InstRO::Rose::Adapter::RoseDefaultInstrumentationAdapter");
+	Pass* newPass =
+			new Pass(new InstRO::Rose::Adapter::RoseDefaultInstrumentationAdapter(project),
+							 InstRO::Core::ChannelConfiguration(input), "InstRO::Rose::Adapter::RoseDefaultInstrumentationAdapter");
 	passManager->registerPass(newPass);
 	return newPass;
 }
@@ -29,57 +30,92 @@ InstRO::Pass* RosePassFactory::createRoseMatthiasZoellnerLoopInstrumentationAdap
 			std::make_unique<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePFunctionScopeStrategy>(initializer);
 
 	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseStrategyBasedAdapter(
-			pass, std::move(my_strategy), std::move(my_strategy2), std::move(my_strategy3)));
-	newPass->setPassName("InstRO::Rose::Adapter::MatthiasZoellnerLoopInstrumentationAdapter");
+															 std::move(my_strategy), std::move(my_strategy2), std::move(my_strategy3)),
+													 InstRO::Core::ChannelConfiguration(pass),
+													 "InstRO::Rose::Adapter::MatthiasZoellnerLoopInstrumentationAdapter");
 	passManager->registerPass(newPass);
 	return newPass;
 }
 
 InstRO::Pass* RosePassFactory::createRoseUniqueCallpathTransformer(InstRO::Pass* input) {
-	InstRO::Pass* newPass = new InstRO::Pass(new Transformer::RoseUniqueCallpathTransformer(input));
-	newPass->setPassName("InstRO::Rose::Transformer::RoseUniqueCallpathTransformer");
+	InstRO::Core::ChannelConfiguration cfg(input);
+	cfg.setConstructLevel(input, InstRO::Core::ConstructTraitType::CTFunction,
+												InstRO::Core::ConstructTraitType::CTFunction);
+
+	InstRO::Pass* newPass = new InstRO::Pass(
+			new Transformer::RoseUniqueCallpathTransformer(Transformer::RoseUniqueCallpathTransformer::Mode::nMode), cfg,
+			"InstRO::Rose::Transformer::RoseUniqueCallpathTransformer");
 	passManager->registerPass(newPass);
 	return newPass;
 }
 
 InstRO::Pass* RosePassFactory::createRoseUniqueCallpathTransformer(Pass* input, Pass* root, Pass* active) {
-	InstRO::Pass* newPass = new InstRO::Pass(new Transformer::RoseUniqueCallpathTransformer(input, root, active));
-	newPass->setPassName("InstRO::Rose::Transformer::RoseUniqueCallpathTransformer");
+	Transformer::RoseUniqueCallpathTransformer::Mode m = Transformer::RoseUniqueCallpathTransformer::Mode::nMode;
+	if (root == nullptr) {
+		if (active != nullptr) {
+			m = Transformer::RoseUniqueCallpathTransformer::Mode::aMode;
+		}
+	} else {
+		if (active == nullptr) {
+			m = Transformer::RoseUniqueCallpathTransformer::Mode::rMode;
+		} else {
+			m = Transformer::RoseUniqueCallpathTransformer::Mode::raMode;
+		}
+	}
+	using ConfigTuple = InstRO::Core::ChannelConfiguration::ConfigTuple;
+	InstRO::Pass* newPass = new InstRO::Pass(
+			new Transformer::RoseUniqueCallpathTransformer(m),
+			InstRO::Core::ChannelConfiguration(ConfigTuple(0, input), ConfigTuple(1, root), ConfigTuple(2, active)),
+			"InstRO::Rose::Transformer::RoseUniqueCallpathTransformer");
 	passManager->registerPass(newPass);
 	return newPass;
 }
 
 InstRO::Pass* RosePassFactory::createRoseFunctionWrapper(
 		InstRO::Pass* input, InstRO::Rose::Transformer::RoseFunctionWrapper::NameTransformer nameTransformer) {
-	InstRO::Pass* newPass = new InstRO::Pass(new Transformer::RoseFunctionWrapper(input, nameTransformer));
-	newPass->setPassName("InstRO::Rose::Transformer::RoseFunctionWrapper");
+	InstRO::Core::ChannelConfiguration cfg(input);
+	cfg.setConstructLevel(input, InstRO::Core::ConstructTraitType::CTExpression,
+												InstRO::Core::ConstructTraitType::CTFunction);
+
+	InstRO::Pass* newPass = new InstRO::Pass(new Transformer::RoseFunctionWrapper(nameTransformer), cfg,
+																					 "InstRO::Rose::Transformer::RoseFunctionWrapper");
 	passManager->registerPass(newPass);
 	return newPass;
 }
 InstRO::Pass* RosePassFactory::createRoseFunctionWrapper(
 		InstRO::Pass* input, InstRO::Pass* renaming,
-		InstRO::Rose::Transformer::RoseFunctionWrapper::NameTransformer nameTransformer, const std::string& definitionPrefix,
-		const std::string& wrapperPrefix) {
+		InstRO::Rose::Transformer::RoseFunctionWrapper::NameTransformer nameTransformer,
+		const std::string& definitionPrefix, const std::string& wrapperPrefix) {
+	using ConfigTuple = InstRO::Core::ChannelConfiguration::ConfigTuple;
+	InstRO::Core::ChannelConfiguration cfg(ConfigTuple(0,input), ConfigTuple(1,renaming));
+	cfg.setConstructLevel(input, InstRO::Core::ConstructTraitType::CTExpression,
+												InstRO::Core::ConstructTraitType::CTFunction);
+	cfg.setConstructLevel(renaming, InstRO::Core::ConstructTraitType::CTExpression,
+												InstRO::Core::ConstructTraitType::CTGlobalScope);
+	bool useRenamingPass = true;
 	InstRO::Pass* newPass = new InstRO::Pass(
-			new Transformer::RoseFunctionWrapper(input, renaming, nameTransformer, definitionPrefix, wrapperPrefix));
-	newPass->setPassName("InstRO::Rose::Transformer::RoseFunctionWrapper");
+			new Transformer::RoseFunctionWrapper(nameTransformer, definitionPrefix, wrapperPrefix, useRenamingPass), cfg,
+			"InstRO::Rose::Transformer::RoseFunctionWrapper");
 	passManager->registerPass(newPass);
 	return newPass;
 }
 
 InstRO::Pass* RosePassFactory::createRoseMPIFunctionWrapper(InstRO::Pass* input) {
-	InstRO::Pass* newPass = new InstRO::Pass(new Transformer::RoseMPIFunctionWrapper(input));
-	newPass->setPassName("InstRO::Rose::Transformer::RoseMPIFunctionWrapper");
+	InstRO::Pass* newPass =
+			new InstRO::Pass(new Transformer::RoseMPIFunctionWrapper(), InstRO::Core::ChannelConfiguration(input),
+											 "InstRO::Rose::Transformer::RoseMPIFunctionWrapper");
 	passManager->registerPass(newPass);
 	return newPass;
 }
 
 InstRO::Pass* RosePassFactory::createRoseMPIFunctionWrapper(InstRO::Pass* input, InstRO::Pass* renaming,
-																												const std::string& definitionPrefix,
-																												const std::string& wrapperPrefix) {
+																														const std::string& definitionPrefix,
+																														const std::string& wrapperPrefix) {
+	using ConfigTuple = InstRO::Core::ChannelConfiguration::ConfigTuple;
 	InstRO::Pass* newPass =
-			new InstRO::Pass(new Transformer::RoseMPIFunctionWrapper(input, renaming, definitionPrefix, wrapperPrefix));
-	newPass->setPassName("InstRO::Rose::Transformer::RoseMPIFunctionWrapper");
+			new InstRO::Pass(new Transformer::RoseMPIFunctionWrapper(definitionPrefix, wrapperPrefix),
+											 InstRO::Core::ChannelConfiguration(ConfigTuple(0, input), ConfigTuple(1, renaming)),
+											 "InstRO::Rose::Transformer::RoseMPIFunctionWrapper");
 	passManager->registerPass(newPass);
 	return newPass;
 }

@@ -7,10 +7,9 @@
 
 using namespace InstRO::Clang;
 
-LLVMInputAdapter::LLVMInputAdapter(InstRO::Pass *pId)
+LLVMInputAdapter::LLVMInputAdapter()
 		: InstRO::Clang::ClangPassImplBase<LLVMInputAdapter>(
-					InstRO::Core::ChannelConfiguration(pId), new InstRO::Clang::NonVisitingPassExecuter<LLVMInputAdapter>()),
-			decidingSelector(pId),
+					new InstRO::Clang::NonVisitingPassExecuter<LLVMInputAdapter>()),
 			outfileName("instro-temp-file") {}
 
 bool LLVMInputAdapter::VisitFunctionDecl(clang::FunctionDecl *fDecl) { return true; }
@@ -18,14 +17,13 @@ bool LLVMInputAdapter::VisitFunctionDecl(clang::FunctionDecl *fDecl) { return tr
 void LLVMInputAdapter::exec() {
 	if (context == nullptr) {
 		logIt(ERROR) << "ASTContext was null" << std::endl;
-		;
 		exit(-1);
 	}
 	std::ofstream outStream;
 	outStream.open(outfileName.c_str());
 
 	if (outStream) {
-		auto inputSet = getInput(decidingSelector);
+		auto inputSet = getInput(0);
 		if (inputSet == nullptr) {
 			logIt(ERROR) << "inputSet was nullptr" << std::endl;
 			exit(-1);
@@ -37,7 +35,7 @@ void LLVMInputAdapter::exec() {
 	outStream.close();
 }
 
-void LLVMInputAdapter::print(std::ostream &outStream, InstRO::Core::ConstructSet *cs, clang::ASTContext *astContext) {
+void LLVMInputAdapter::print(std::ostream &outStream, const InstRO::Core::ConstructSet *cs, clang::ASTContext *astContext) {
 	outStream << "Printing ConstructSet " << cs << "\n";
 	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface rcsci(cs);
 	for (auto &c : rcsci) {

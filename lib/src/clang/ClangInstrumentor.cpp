@@ -10,23 +10,19 @@ InstRO::Clang::ClangInstrumentor::ClangInstrumentor(int argc, const char** argv,
 
 InstRO::Clang::ClangPassFactory* InstRO::Clang::ClangInstrumentor::getFactory(CompilationPhase phase) {
 	if (fac == nullptr) {
-		fac.reset(new InstRO::Clang::ClangPassFactory(getPassManager(), tool.getReplacements()));
+		fac.reset(new InstRO::Clang::ClangPassFactory(passManager, tool.getReplacements()));
 	}
 	return fac.get();
 }
 
 clang::tooling::RefactoringTool& InstRO::Clang::ClangInstrumentor::getTool() { return tool; }
 
-void InstRO::Clang::ClangInstrumentor::init() {}
-
 void InstRO::Clang::ClangInstrumentor::apply() {
 	std::cout << "Preparing to run Clang tool" << std::endl;
 
-	InstRO::Clang::Support::ClangConsumerFactory f(getPassManager(), tool.getReplacements(), getFactory());
+	InstRO::Clang::Support::ClangConsumerFactory f(passManager, tool.getReplacements(), getFactory());
 	tool.runAndSave(clang::tooling::newFrontendActionFactory<InstRO::Clang::Support::ClangConsumerFactory>(&f).get());
 }
-
-void InstRO::Clang::ClangInstrumentor::finalize() {}
 
 void InstRO::Clang::ClangInstrumentor::initializeAnalysisManager(clang::ASTContext& context) {
 	cam = std::make_unique<InstRO::Clang::Tooling::ClangAnalysisManager>(context);

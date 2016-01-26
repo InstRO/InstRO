@@ -8,21 +8,19 @@ void InstRO::PassManagement::SimplePassManager::registerPass(Pass *currentPass) 
 	passList.push_back(currentPass);
 }
 
-bool InstRO::PassManagement::SimplePassManager::createPassTraversalOder() { return true; }
-
 int InstRO::PassManagement::SimplePassManager::execute() {
 	logIt(INFO) << "InstRO::PassManagement::SimplePassManager::execute()" << std::endl;
 
 	for (Pass *pass : passList) {
-		// Allow the Pass to Initialize iself. E.g. start reading input data from
-		// files, allocated named input fields, etc.
 		pass->initPass();
 	}
 
 	int passCount = 1;
 
 	for (Pass *pass : passList) {
-		logIt(INFO) << "Executing pass (" << passCount << "):\t" << pass->passName() << std::endl;
+		logIt(INFO) << "Executing pass [" << passCount << "]:\t" << pass->passName() << std::endl;
+		logIt(DEBUG) << "\tInput dependencies:\t" << hasInputDependencies(pass) << "\n\tOutput dependencies:\t"
+								 << hasOutputDependencies(pass) << std::endl;
 
 		for (auto &i : getPredecessors(pass)) {
 			// CI: do we have to perform some form of elevation
@@ -67,9 +65,8 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 		pass->executePass();
 	}
 
+	// release ConstructSet and finalize
 	for (Pass *pass : passList) {
-		// disable output for all passes. This allows to release the output
-		// construct set
 		pass->finalizePass();
 	}
 

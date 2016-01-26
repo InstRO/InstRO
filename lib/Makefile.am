@@ -1,5 +1,6 @@
 AM_CPPFLAGS=-I$(top_srcdir)/lib/include -I$(top_builddir)/lib/include -DPROVIDE_MAKE_UNIQUE
 
+AM_CPPFLAGS+= -Werror=return-type
 AM_CXXFLAGS=-std=c++11
 AM_CFLAGS=
 
@@ -23,6 +24,7 @@ CORE_HFILES= \
 ./include/instro/core/PassFactory.h \
 ./include/instro/core/PassManager.h \
 ./include/instro/core/PassImplementation.h \
+./include/instro/core/ChannelConfiguration.h \
 ./include/instro/core/Singleton.h \
 ./include/instro/tooling/IdentifierProvider.h \
 ./include/instro/tooling/AnalysisInterface.h \
@@ -211,6 +213,7 @@ if USEROSE
 lib_LIBRARIES += libInstRO_rose.a
 endif
 
+INSTRO_CORE_CPPFLAGS= -Wall -pedantic
 
 libInstRO_rose_a_SOURCES= \
 	$(CORE_SFILES) \
@@ -234,7 +237,7 @@ libInstRO_clang_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) @LLVM_CXXFLAGS_FLAGS@ -I@L
 # We use LDFLAGS for this list according to https://www.gnu.org/software/automake/manual/html_node/Libtool-Flags.html#Libtool-Flags
 libInstRO_clang_a_LDFLAGS=@CLANG_LIBS_LIST@ @LLVM_LDFLAGS@
 
-libInstRO_core_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+libInstRO_core_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ $(INSTRO_CORE_CPPFLAGS)
 
 if HAVERAPIDJSON
 libInstRO_core_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@

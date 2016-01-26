@@ -33,7 +33,7 @@ def buildWithConfigureLine(configLine, baseDir):
     
     # If configure succeeded we can now build InstRO
     print(os.getcwd())
-    retCode = subprocess.call("make -j8", shell=True)
+    retCode = subprocess.call("make -j20", shell=True)
     if retCode != 0:
         print(fullQualInvocLine)
         raise Exception("Building failed with err code " + str(retCode) + fullQualInvocLine)

@@ -36,8 +36,7 @@ class ClangPassImplBase : public InstRO::Clang::ASTContextProvider,
 													public InstRO::Core::PassImplementation,
 													public clang::RecursiveASTVisitor<T> {
  public:
-	ClangPassImplBase(Core::ChannelConfiguration ccfg, PassExecuter<T> *pexec)
-			: InstRO::Core::PassImplementation(ccfg), executer(pexec) {}
+	ClangPassImplBase(PassExecuter<T> *pexec) : InstRO::Core::PassImplementation(), executer(pexec) {}
 	ClangPassImplBase() = delete;
 
 	virtual void execute() final override {

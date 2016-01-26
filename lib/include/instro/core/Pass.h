@@ -10,6 +10,7 @@
 #include <unordered_map>
 
 #include "instro/core/ConstructSet.h"
+#include "instro/core/ChannelConfiguration.h"
 #include "instro/core/PassImplementation.h"
 
 namespace InstRO {
@@ -29,24 +30,34 @@ class Pass {
 	// CI empty pass construction disallowed. Each Pass is an container for the corresponding PassImplementation Object
 	// from the ToolingSpace
 	Pass() = delete;
-	Pass(Core::PassImplementation *pImpl)
-			: passInitialized(false), passExecuted(false), passFinalized(false), passImplementation(pImpl) {
-		const_cast<InstRO::Core::ChannelConfiguration &>(pImpl->getChannelConfig()).setManagingPass(this);
+
+	/** Constructs a Pass, taking ownership of the PassImplementation and its configuration */
+	Pass(Core::PassImplementation *pImpl, InstRO::Core::ChannelConfiguration cfg, const std::string passName)
+			: passInitialized(false),
+				passExecuted(false),
+				passFinalized(false),
+				passNameString(passName),
+				channelConfig(cfg),
+				passImplementation(pImpl) {
+		pImpl->managingPass = this;
 	}
 
-	Core::PassImplementation *getPassImplementation() { return passImplementation; };
 	virtual ~Pass() {
 		delete (passImplementation);
 		passImplementation = nullptr;
 	}
+	
 	// CI: Tell the pass, that is is allowed to initialize itself
 	void initPass();
+	
 	// CI: Execute the pass, this generates the output-constructset
 	void executePass();
+
+	// Finalizes the pass, ie close files etcpp
 	void finalizePass();
 
 	// Query the proxy pass for its output
-	Core::ConstructSet *getOutput() { return passImplementation->getOutput(); };
+	Core::ConstructSet *getOutput() const { return passImplementation->getOutput(); };
 
 	// returns the ConstructSet for the input channel from
 	Core::ConstructSet *getInput(Pass *from) {
@@ -57,39 +68,38 @@ class Pass {
 		}
 	}
 
+	/** returns the ConstructSet for input channel */
+	const Core::ConstructSet *getInput(int channel) const { return channelConfig.getConstructSetForChannel(channel); }
+
 	// Allows to inject a ConstructSet which is returned for the pass with id from
 	void overrideInput(Pass *from, std::unique_ptr<Core::ConstructSet> overrideSet) {
 		std::shared_ptr<Core::ConstructSet> sharedSet(std::move(overrideSet));
 		inputOverride[from] = sharedSet;
 	}
 
-	// This allows for passes to have a unique name defined by the PassFactory. I.e. if the pass is used in different
-	// instances
-	virtual std::string passName() { return passNameString; };
-	void setPassName(std::string passName) { passNameString = passName; };
+	const std::string passName() const { return passNameString; };
 
-	std::vector<Pass *> const getInputPasses() { return passImplementation->getChannelConfig().getPasses(); };
-	
-	Core::ConstructTraitType getMinInputLevelRequirement(Pass *pass) {
-		return passImplementation->getChannelConfig().getMinConstructLevel(pass);
-	};
-	
-	Core::ConstructTraitType getMaxInputLevelRequirement(Pass *pass) {
-		return passImplementation->getChannelConfig().getMaxConstructLevel(pass);
-	};
- 
+	const std::vector<Pass *> getInputPasses() const { return channelConfig.getPasses(); };
+
+	Core::ConstructTraitType getMinInputLevelRequirement(Pass *pass) const { return channelConfig.getMinConstructLevel(pass); };
+
+	Core::ConstructTraitType getMaxInputLevelRequirement(Pass *pass) const { return channelConfig.getMaxConstructLevel(pass); };
+
  protected:
 	// Get the number of altered, invalidated or changed constructs. We expect the next higher construct that dominates
 	// the altered or deleted constructs
-	const Core::ConstructSet *getCollisionSet() { return passImplementation->cgetCollisionSet(); }
+	const Core::ConstructSet *getCollisionSet() const { return passImplementation->getCollisionSet(); }
 
  private:
 	// These flags are solely used to ensure proper sequences of initialization, execution and finalization
 	bool passInitialized, passExecuted, passFinalized;
 
-	std::string passNameString;
+	const std::string passNameString;
 
 	std::unordered_map<Pass *, std::shared_ptr<Core::ConstructSet> > inputOverride;
+
+	/* Tells the pass which input passes it needs to know of */
+	InstRO::Core::ChannelConfiguration channelConfig;
 
 	// A Pointer to the compiler-specific implementation
 	InstRO::Core::PassImplementation *passImplementation;
