@@ -29,6 +29,9 @@ class ChannelConfiguration {
 
 	/* Implicitly sets the channel that p corresponds to to zero */
 	ChannelConfiguration(Pass *p) {
+		if (p == nullptr) {
+			throw std::string("Empty pass as argument in Channel Configuration disallowed.");
+		}
 		inputChannelMap.insert({0, p});
 		inputChannelMin[p] = InstRO::Core::ConstructTraitType::CTMin;
 		inputChannelMax[p] = InstRO::Core::ConstructTraitType::CTMax;
@@ -37,7 +40,11 @@ class ChannelConfiguration {
 	/** Must use the ConfigTuple when using this constructor */
 	template <class... PassTuplesT>
 	ChannelConfiguration(ConfigTuple ct, PassTuplesT... tuples) {
-		inputChannelMap.insert({ct, tuples...});
+		if (ct.second == nullptr) {
+			throw std::string("Empty pass in channel configuration disallowed.");
+		}
+		inputChannelMap.insert(ct);
+		insertionHelper(tuples...);
 
 		for (const auto &t : inputChannelMap) {
 			inputChannelMin[t.second] = InstRO::Core::ConstructTraitType::CTMin;
@@ -77,6 +84,23 @@ class ChannelConfiguration {
 	std::map<int, Pass *> inputChannelMap;
 	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMin;
 	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMax;
+
+	/** Helpers to get the insertion and nullptr checking working */
+	template <class PT, class... PassTuplesT>
+	void insertionHelper(PT ct, PassTuplesT... tuples) {
+		if (ct.second == nullptr) {
+			throw std::string("Empty pass as argument in Channel Configuration disallowed.");
+		}
+		inputChannelMap.insert(ct);
+		insertionHelper(tuples...);
+	}
+	void insertionHelper(ConfigTuple ct){
+		if (ct.second == nullptr) {
+			throw std::string("Empty pass as argument in Channel Configuration disallowed.");
+		}
+		inputChannelMap.insert(ct);
+	}
+
 };
 }
 }
