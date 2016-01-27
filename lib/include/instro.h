@@ -7,6 +7,10 @@
 #include "instro/core/PassFactory.h"
 #include "instro/core/Instrumentor.h"
 
+#if INSTRO_USE_DUMMYCOMPILER
+#include "instro/dummy/DummyPassFactory.h"
+#endif
+
 #if INSTRO_USE_ROSE
 #include "instro/rose/core/RosePassImplementation.h"
 #include "instro/rose/RosePassFactory.h"
