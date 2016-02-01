@@ -1,11 +1,11 @@
-#include "instro/clang/adapter/LLVMInputAdapter.h"
+#include "instro/clang/pass/adapter/LLVMInputAdapter.h"
 
 #include "instro/clang/core/ClangConstruct.h"
 #include "instro/utility/Logger.h"
 
 #include "clang/AST/Mangle.h"	// clang::MangleContext
 
-using namespace InstRO::Clang;
+using namespace InstRO::Clang::Adapter;
 
 LLVMInputAdapter::LLVMInputAdapter()
 		: InstRO::Clang::ClangPassImplBase<LLVMInputAdapter>(

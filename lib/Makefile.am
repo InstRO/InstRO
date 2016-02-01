@@ -70,8 +70,8 @@ CORE_SFILES= \
 ./src/utility/Logger.cpp
 
 CLANG_HFILES= \
-./include/instro/clang/adapter/CygProfileAdapter.h \
-./include/instro/clang/adapter/LLVMInputAdapter.h \
+./include/instro/clang/pass/adapter/ClangCygProfileAdapter.h \
+./include/instro/clang/pass/adapter/LLVMInputAdapter.h \
 ./include/instro/clang/ClangInstrumentor.h \
 ./include/instro/clang/core/ClangPassImplBase.h \
 ./include/instro/clang/core/ClangConsumerFactory.h \
@@ -79,21 +79,19 @@ CLANG_HFILES= \
 ./include/instro/clang/core/ClangConstruct.h \
 ./include/instro/clang/core/ClangPassFactory.h \
 ./include/instro/clang/core/Pass.h \
-./include/instro/clang/selector/BlackWhitelistSelector.h \
-./include/instro/clang/selector/FunctionDefinitionSelector.h \
+./include/instro/clang/pass/selector/ClangBlackWhitelistSelector.h \
 ./include/instro/clang/support/InstROASTConsumer.h \
 ./include/instro/clang/tooling/ClangAnalysisInterface.h \
 ./include/instro/clang/tooling/ClangConstructClassInterface.h \
 ./include/instro/support/BWLFileReader.h
 
 CLANG_SFILES= \
-./src/clang/adapter/CygProfileAdapter.cpp \
-./src/clang/adapter/LLVMInputAdapter.cpp \
+./src/clang/pass/adapter/ClangCygProfileAdapter.cpp \
+./src/clang/pass/adapter/LLVMInputAdapter.cpp \
 ./src/clang/ClangInstrumentor.cpp \
 ./src/clang/core/ClangConstruct.cpp \
 ./src/clang/core/ClangPassFactory.cpp \
-./src/clang/selector/BlackWhitelistSelector.cpp \
-./src/clang/selector/FunctionDefinitionSelector.cpp \
+./src/clang/pass/selector/ClangBlackWhitelistSelector.cpp \
 ./src/clang/support/ClangConsumerFactory.cpp \
 ./src/clang/support/InstROASTConsumer.cpp \
 ./src/clang/tooling/ClangConstructClassInterface.cpp \

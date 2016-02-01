@@ -1,5 +1,5 @@
-#ifndef INSTRO_CLANG_LLVMINPUTADAPTER_H
-#define INSTRO_CLANG_LLVMINPUTADAPTER_H
+#ifndef INSTRO_CLANG_PASS_ADAPTER_LLVMINPUTADAPTER_H
+#define INSTRO_CLANG_PASS_ADAPTER_LLVMINPUTADAPTER_H
 
 #include <fstream>
 
@@ -7,6 +7,8 @@
 
 namespace InstRO {
 namespace Clang {
+namespace Adapter {
+
 class LLVMInputAdapter : public InstRO::Clang::ClangPassImplBase<LLVMInputAdapter> {
  public:
 	LLVMInputAdapter();
@@ -20,6 +22,7 @@ class LLVMInputAdapter : public InstRO::Clang::ClangPassImplBase<LLVMInputAdapte
 
 	void print(std::ostream &outStream, const InstRO::Core::ConstructSet *cs, clang::ASTContext *astContext);
 };
+}
 }
 }
 

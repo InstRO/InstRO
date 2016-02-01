@@ -1,8 +1,13 @@
 #include "instro/clang/core/ClangPassFactory.h"
 
-InstRO::Pass *InstRO::Clang::ClangPassFactory::createBlackAndWhiteListSelector(std::vector<std::string> blacklist,
+#include "instro/clang/pass/selector/ClangBlackWhitelistSelector.h"
+
+#include "instro/clang/pass/adapter/ClangCygProfileAdapter.h"
+#include "instro/clang/pass/adapter/LLVMInputAdapter.h"
+
+InstRO::Pass *InstRO::Clang::ClangPassFactory::createClangBlackAndWhiteListSelector(std::vector<std::string> blacklist,
 																																							 std::vector<std::string> whitelist) {
-	auto pImpl = new InstRO::Clang::BlackWhitelistSelector(blacklist, whitelist);
+	auto pImpl = new InstRO::Clang::Selector::ClangBlackWhitelistSelector(blacklist, whitelist);
 	lazyContextProvidingMap.insert(pImpl);
 	InstRO::Pass *p = new InstRO::Pass(pImpl, InstRO::Core::ChannelConfiguration(), "InstRO::Clang::BlackWhitelistSelector");
 //	p->setPassName("BlackWhitelist Selector");
@@ -10,18 +15,9 @@ InstRO::Pass *InstRO::Clang::ClangPassFactory::createBlackAndWhiteListSelector(s
 	return p;
 }
 
-InstRO::Pass *InstRO::Clang::ClangPassFactory::createFunctionDefinitionSelector() {
-	auto pImpl = new InstRO::Clang::FunctionDefinitionSelector();
-	lazyContextProvidingMap.insert(pImpl);
-	InstRO::Pass *p = new InstRO::Pass(pImpl, InstRO::Core::ChannelConfiguration(), "InstRO::Clang::FunctionDefinitionSelector");
-//	p->setPassName(std::string("Function Definition Selector"));
-	passManager->registerPass(p);
-	return p;
-}
-
-InstRO::Pass *InstRO::Clang::ClangPassFactory::createCygProfileAdapter(InstRO::Pass *input) {
+InstRO::Pass *InstRO::Clang::ClangPassFactory::createClangCygProfileAdapter(InstRO::Pass *input) {
 	using ConfigTuple = InstRO::Core::ChannelConfiguration::ConfigTuple;
-	auto pImpl = new InstRO::Clang::CygProfileAdapter(replacements, nullptr);
+	auto pImpl = new InstRO::Clang::Adapter::ClangCygProfileAdapter(replacements, nullptr);
 	lazyContextProvidingMap.insert(pImpl);
 	InstRO::Pass *p = new InstRO::Pass(pImpl, InstRO::Core::ChannelConfiguration(input), "InstRO::Clang::CygProfileAdapter");
 //	p->setPassName(std::string("CygProfile Adapter"));
@@ -31,7 +27,7 @@ InstRO::Pass *InstRO::Clang::ClangPassFactory::createCygProfileAdapter(InstRO::P
 
 InstRO::Pass *InstRO::Clang::ClangPassFactory::createLLVMInputAdapter(InstRO::Pass *input) {
 	using ConfigTuple = InstRO::Core::ChannelConfiguration::ConfigTuple;
-	auto pImpl = new InstRO::Clang::LLVMInputAdapter();
+	auto pImpl = new InstRO::Clang::Adapter::LLVMInputAdapter();
 	lazyContextProvidingMap.insert(pImpl);
 	InstRO::Pass *p = new InstRO::Pass(pImpl, InstRO::Core::ChannelConfiguration(input), "InstRO::Clang::LLVMInputAdapter");
 //	p->setPassName(std::string("LLVM Input Adapter"));

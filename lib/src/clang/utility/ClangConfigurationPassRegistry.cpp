@@ -10,12 +10,8 @@ ClangConfigurationPassRegistry::ClangConfigurationPassRegistry(InstRO::Clang::Cl
 	// Selectors / Filters
 	registerPass("BlackAndWhiteListSelector", [factory](ConfigurationParsingContext &context) {
 		context.expectInputPasses({0});
-		return factory->createBlackAndWhiteListSelector(context.getStringArguments("blacklist"),
+		return factory->createClangBlackAndWhiteListSelector(context.getStringArguments("blacklist"),
 																										context.getStringArguments("whitelist"));
-	});
-	registerPass("FunctionDefinitionSelector", [factory](ConfigurationParsingContext &context) {
-		context.expectInputPasses({0});
-		return factory->createFunctionDefinitionSelector();
 	});
 
 	// Transformers
@@ -23,7 +19,7 @@ ClangConfigurationPassRegistry::ClangConfigurationPassRegistry(InstRO::Clang::Cl
 	// Adapters
 	registerPass("CygProfileAdapter", [factory](ConfigurationParsingContext &context) {
 		context.expectInputPasses({1});
-		return factory->createCygProfileAdapter(context.inputPasses[0]);
+		return factory->createClangCygProfileAdapter(context.inputPasses[0]);
 	});
 	registerPass("LLVMInputAdapter", [factory](ConfigurationParsingContext &context) {
 		context.expectInputPasses({1});

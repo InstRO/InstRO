@@ -1,16 +1,18 @@
-#include "instro/clang/adapter/CygProfileAdapter.h"
+#include "instro/clang/pass/adapter/ClangCygProfileAdapter.h"
 
 #include "instro/clang/core/ClangConstruct.h"
 #include "instro/utility/Logger.h"
 
-InstRO::Clang::CygProfileAdapter::CygProfileAdapter(clang::tooling::Replacements &reps, clang::SourceManager *sm)
-		: ClangPassImplBase(new InstRO::Clang::VisitingPassExecuter<CygProfileAdapter>()),
+using namespace InstRO::Clang::Adapter;
+
+ClangCygProfileAdapter::ClangCygProfileAdapter(clang::tooling::Replacements &reps, clang::SourceManager *sm)
+		: ClangPassImplBase(new InstRO::Clang::VisitingPassExecuter<ClangCygProfileAdapter>()),
 			sm(sm),
 			replacements(reps),
 			labelCount(0),
 			cygProfFuncPtrName("__instro_func_ptr") {}
 
-bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *decl) {
+bool ClangCygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *decl) {
 	if (context == nullptr) {
 		logIt(ERROR) << "Context NULL, stopping adapter pass." << std::endl;
 		return false;
@@ -32,7 +34,7 @@ bool InstRO::Clang::CygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *de
 	return true;
 }
 
-void InstRO::Clang::CygProfileAdapter::dispatch(clang::Decl *c) {
+void ClangCygProfileAdapter::dispatch(clang::Decl *c) {
 	logIt(DEBUG) << "Dispatching..." << std::endl;
 	clang::CXXMethodDecl *mDef = llvm::dyn_cast<clang::CXXMethodDecl>(c);
 	if (mDef != nullptr) {
@@ -47,7 +49,7 @@ void InstRO::Clang::CygProfileAdapter::dispatch(clang::Decl *c) {
 	}
 }
 
-void InstRO::Clang::CygProfileAdapter::transform(clang::SourceManager *sm, clang::FunctionDecl *decl) {
+void ClangCygProfileAdapter::transform(clang::SourceManager *sm, clang::FunctionDecl *decl) {
 	// We are assuming we are only instrumenting function definitions!
 	clang::FunctionDecl *fDef = llvm::dyn_cast<clang::FunctionDecl>(decl);
 
@@ -65,7 +67,7 @@ void InstRO::Clang::CygProfileAdapter::transform(clang::SourceManager *sm, clang
 	instrumentFunctionBody(fBody, entryReplaceStr, exitReplaceStr);
 }
 
-bool InstRO::Clang::CygProfileAdapter::isOverloadedFunction(clang::FunctionDecl *decl) {
+bool ClangCygProfileAdapter::isOverloadedFunction(clang::FunctionDecl *decl) {
 	auto funcLookUp = decl->getEnclosingNamespaceContext()->lookup(decl->getNameInfo().getName());
 	int overloadCount = 0;
 	for (auto &res : funcLookUp) {
@@ -96,7 +98,7 @@ bool InstRO::Clang::CygProfileAdapter::isOverloadedFunction(clang::FunctionDecl 
 	return (overloadCount > 0);
 }
 
-void InstRO::Clang::CygProfileAdapter::transform(clang::SourceManager *sm, clang::CXXMethodDecl *decl) {
+void ClangCygProfileAdapter::transform(clang::SourceManager *sm, clang::CXXMethodDecl *decl) {
 	clang::CXXMethodDecl *fDef = llvm::dyn_cast<clang::CXXMethodDecl>(decl);
 
 	std::string entryReplaceStr = generateMethodEntry(fDef);
@@ -110,7 +112,7 @@ void InstRO::Clang::CygProfileAdapter::transform(clang::SourceManager *sm, clang
 	instrumentFunctionBody(fBody, entryReplaceStr, exitReplaceStr);
 }
 
-void InstRO::Clang::CygProfileAdapter::instrumentFunctionBody(clang::CompoundStmt *body, std::string &entryStr,
+void ClangCygProfileAdapter::instrumentFunctionBody(clang::CompoundStmt *body, std::string &entryStr,
 																															std::string &exitStr) {
 	// If the function body is empty, we need to insert calls in reverse order
 	if (body->size() == 0) {
@@ -125,7 +127,7 @@ void InstRO::Clang::CygProfileAdapter::instrumentFunctionBody(clang::CompoundStm
 	replacements.insert(repMent);
 }
 
-void InstRO::Clang::CygProfileAdapter::handleEmptyBody(clang::CompoundStmt *body, std::string &entryStr,
+void ClangCygProfileAdapter::handleEmptyBody(clang::CompoundStmt *body, std::string &entryStr,
 																											 std::string &exitStr) {
 	/*
 	 * If this is an empty body we insert the exit function at the end and replace
@@ -136,7 +138,7 @@ void InstRO::Clang::CygProfileAdapter::handleEmptyBody(clang::CompoundStmt *body
 	replacements.insert(clang::tooling::Replacement(*sm, body->getLBracLoc(), 1, std::string("{" + entryStr)));
 }
 
-void InstRO::Clang::CygProfileAdapter::instrumentReturnStatements(clang::CompoundStmt *body, std::string &entryStr,
+void ClangCygProfileAdapter::instrumentReturnStatements(clang::CompoundStmt *body, std::string &entryStr,
 																																	std::string &exitStr) {
 	for (auto &st : body->body()) {
 		clang::ReturnStmt *rSt = llvm::dyn_cast<clang::ReturnStmt>(st);
@@ -157,7 +159,7 @@ void InstRO::Clang::CygProfileAdapter::instrumentReturnStatements(clang::Compoun
 		}
 	}
 }
-void InstRO::Clang::CygProfileAdapter::transformReturnStmt(clang::ReturnStmt *retStmt) {
+void ClangCygProfileAdapter::transformReturnStmt(clang::ReturnStmt *retStmt) {
 	/*
 	 * create temporary variable to store the expression hidden in the return stmt
 	 */
@@ -180,7 +182,7 @@ void InstRO::Clang::CygProfileAdapter::transformReturnStmt(clang::ReturnStmt *re
 	replacements.insert(clang::tooling::Replacement(*sm, retStmt->getLocStart(), 0, tVar));
 }
 
-std::string InstRO::Clang::CygProfileAdapter::generateFunctionEntry(clang::FunctionDecl *d) {
+std::string ClangCygProfileAdapter::generateFunctionEntry(clang::FunctionDecl *d) {
 	if (isOverloadedFunction(d)) {
 		std::string declStr = generateFunctionPointerDecl(cygProfFuncPtrName, d);
 		std::string callStr = generateCallTo("enter", cygProfFuncPtrName);
@@ -190,7 +192,7 @@ std::string InstRO::Clang::CygProfileAdapter::generateFunctionEntry(clang::Funct
 	}
 }
 
-std::string InstRO::Clang::CygProfileAdapter::generateFunctionExit(clang::FunctionDecl *d) {
+std::string ClangCygProfileAdapter::generateFunctionExit(clang::FunctionDecl *d) {
 	if (isOverloadedFunction(d)) {
 		return generateCallTo("exit", cygProfFuncPtrName);
 	} else {
@@ -198,7 +200,7 @@ std::string InstRO::Clang::CygProfileAdapter::generateFunctionExit(clang::Functi
 	}
 }
 
-std::string InstRO::Clang::CygProfileAdapter::generateFunctionPointerDecl(std::string declName,
+std::string ClangCygProfileAdapter::generateFunctionPointerDecl(std::string declName,
 																																					clang::FunctionDecl *d) {
 	std::string funcRefSnippet("");
 	// we need to create something like
@@ -217,7 +219,7 @@ std::string InstRO::Clang::CygProfileAdapter::generateFunctionPointerDecl(std::s
 	return funcRefSnippet;
 }
 
-std::string InstRO::Clang::CygProfileAdapter::generateCallTo(std::string fName, std::string newDecl) {
+std::string ClangCygProfileAdapter::generateCallTo(std::string fName, std::string newDecl) {
 	std::string snippet("__cyg_profile_func_");
 	snippet += fName;
 	snippet += "((void*) ";
@@ -229,7 +231,7 @@ std::string InstRO::Clang::CygProfileAdapter::generateCallTo(std::string fName, 
 	return snippet;
 }
 
-std::string InstRO::Clang::CygProfileAdapter::generateCallTo(std::string fName, clang::FunctionDecl *d) {
+std::string ClangCygProfileAdapter::generateCallTo(std::string fName, clang::FunctionDecl *d) {
 	std::string snippet("__cyg_profile_func_");
 	snippet += fName;
 	snippet += "((void*) ";
@@ -241,7 +243,7 @@ std::string InstRO::Clang::CygProfileAdapter::generateCallTo(std::string fName, 
 	return snippet;
 }
 
-std::string InstRO::Clang::CygProfileAdapter::generateMethodEntry(clang::CXXMethodDecl *d) {
+std::string ClangCygProfileAdapter::generateMethodEntry(clang::CXXMethodDecl *d) {
 	/*
 	 * For member function we insert inline assembly since, we are not allowed to take a function pointer
 	 * for member functions
@@ -256,7 +258,7 @@ std::string InstRO::Clang::CygProfileAdapter::generateMethodEntry(clang::CXXMeth
 	return asmString;
 }
 
-std::string InstRO::Clang::CygProfileAdapter::generateMethodExit(clang::CXXMethodDecl *d) {
+std::string ClangCygProfileAdapter::generateMethodExit(clang::CXXMethodDecl *d) {
 	/*
 	 * For member function we insert inline assembly since, we are not allowed to take a function pointer
 	 * for member functions
@@ -270,7 +272,7 @@ std::string InstRO::Clang::CygProfileAdapter::generateMethodExit(clang::CXXMetho
 	return asmString;
 }
 
-bool InstRO::Clang::CygProfileAdapter::retStmtNeedsTransformation(clang::ReturnStmt *st) {
+bool ClangCygProfileAdapter::retStmtNeedsTransformation(clang::ReturnStmt *st) {
 	/*
 	 * We want to check whether the expression within the Return statement is of
 	 * type
