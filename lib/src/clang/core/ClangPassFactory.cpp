@@ -1,4 +1,4 @@
-#include "instro/clang/core/ClangPassFactory.h"
+#include "instro/clang/ClangPassFactory.h"
 
 #include "instro/clang/pass/selector/ClangBlackWhitelistSelector.h"
 

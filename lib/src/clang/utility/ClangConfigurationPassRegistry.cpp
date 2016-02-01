@@ -1,6 +1,6 @@
 #include "instro/utility/ConfigurationLoader.h"
 
-#include "instro/clang/core/ClangPassFactory.h"
+#include "instro/clang/ClangPassFactory.h"
 
 using namespace InstRO;
 using namespace InstRO::Utility;
