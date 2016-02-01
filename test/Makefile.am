@@ -14,9 +14,13 @@ endif
 
 TEST_SFILES= \
 						 ./lib/TestAdapter.cpp
-
 TEST_HFILES= \
 						 ./lib/TestAdapter.h
+
+RT_SUPPORT_HFILES= \
+						../support/InstROMeasurementInterface.h
+RT_SUPPORT_SFILES= \
+						./IMITestInfrastructure.c
 
 if USELIBTOOL
 # LIBTOOL RULE FOR LIBINSTRO
@@ -100,11 +104,16 @@ else #USELIBTOOL
 
 # Static test-library.
 # The library provides additional functionality in the instrumentor and the pass factory
-lib_LIBRARIES= libInstRO_test.a
+lib_LIBRARIES= libInstRO_test.a libInstRO_rtsupport.a
 libInstRO_test_a_SOURCES= \
 	$(TEST_SFILES) \
 	$(TEST_HFILES) 
-libInstRO_test_a_CPPFLAGS=$(top_srcdir)/lib $(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+libInstRO_test_a_CPPFLAGS=-I$(top_srcdir)/lib $(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+
+libInstRO_rtsupport_a_SOURCES= \
+	$(RT_SUPPORT_SFILES) \
+	$(RT_SUPPORT_HFILES)
+libInstRO_rtsupport_a_CFLAGS=-I$(top_srcdir)/support $(AM_CPPFLAGS)
 
 # The different test-executables.
 # The choice which tests to implement was guided by the "InstRO-mandatory-component-sheet"
@@ -115,6 +124,7 @@ bin_PROGRAMS= \
 	ConstructElevatorTest \
 	BooleanCompoundSelectorTest \
 	CallpathSelectorTest \
+	DefaultInstrumentationAdapterTest \
 	MatcherUnitTest \
 	UniqueCallpathTransformerTest
 endif
@@ -183,9 +193,14 @@ UniqueCallpathTransformerTest_SOURCES=./UniqueCallpathTransformerTestMain.cpp
 UniqueCallpathTransformerTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
 UniqueCallpathTransformerTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
+DefaultInstrumentationAdapterTest_SOURCES= \
+	./DefaultInstrumentationAdapterTest.cpp
+DefaultInstrumentationAdapterTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
+DefaultInstrumentationAdapterTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS)
+
 # Dependent on the compiler platform we build differently
 if USEROSE
-INSTRO_WITH_ROSE_CPPFLAGS=-DUSE_ROSE -I$(top_srcdir)/lib -I@ROSE_INCLUDEDIR@
+INSTRO_WITH_ROSE_CPPFLAGS=-DINSTRO_USE_ROSE -I$(top_srcdir)/lib -I@ROSE_INCLUDEDIR@
 INSTRO_WITH_ROSE_LDADD=$(top_builddir)/lib/libInstRO_rose.a @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
 
 ConstructHierarchySelectionTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
@@ -202,6 +217,9 @@ BooleanCompoundSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
 CallpathSelectorTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 CallpathSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
+
+DefaultInstrumentationAdapterTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
+DefaultInstrumentationAdapterTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
 UniqueCallpathTransformerTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 UniqueCallpathTransformerTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)

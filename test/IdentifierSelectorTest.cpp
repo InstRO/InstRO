@@ -2,7 +2,7 @@
 #include "instro.h"
 #include <iostream>
 
-#ifdef USE_ROSE
+#ifdef INSTRO_USE_ROSE
 #include "lib/RoseTestSupport.h"
 #endif
 
@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
 /*
  * We want to use the same binary for both Rose and Clang
  */
-#ifdef USE_ROSE
+#ifdef INSTRO_USE_ROSE
 	using InstrumentorType = RoseTest::RoseTestInstrumentor;
 
 	InstrumentorType instrumentor(argc, argv);

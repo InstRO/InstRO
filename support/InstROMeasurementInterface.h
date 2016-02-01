@@ -18,6 +18,10 @@
 #define _INSTRO_WEAK_DECL
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * Called before any hook is called.
  * If construction needs to take place things go here.
@@ -93,4 +97,6 @@ void __instro_start_expression(size_t construct_hash) _INSTRO_WEAK_DECL;
  */
 void __instro_end_expression(size_t construct_hash) _INSTRO_WEAK_DECL;
 
-
+#ifdef __cplusplus
+}
+#endif
