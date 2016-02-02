@@ -44,6 +44,7 @@ CORE_HFILES= \
 ./include/instro/pass/adapter/ConstructPrinterAdapter.h \
 ./include/instro/pass/adapter/ConstructHierarchyASTDotGenerator.h \
 ./include/instro/utility/Logger.h \
+./include/instro/utility/CommandlineHandling.h \
 ./include/instro/utility/MemoryManagement.h
 
 CORE_SFILES= \

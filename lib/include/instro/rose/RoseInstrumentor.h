@@ -7,6 +7,8 @@
 
 #include "instro/core/Singleton.h"
 
+#include "instro/utility/CommandlineHandling.h"
+
 #include "rose.h"
 
 namespace InstRO {
@@ -16,8 +18,13 @@ class RosePassFactory;
 
 class RoseInstrumentor : public Instrumentor {
  public:
-	RoseInstrumentor(int argc, char** argv) : passFactory(nullptr) {
-		project = ::frontend(argc, argv);
+	RoseInstrumentor(int argc, char **argv) : passFactory(nullptr) {
+		InstRO::Utility::GCCLikeCommandLinePreparationStrategy prepStrat(&argc, &argv);
+
+		std::vector<std::string> argVec = prepStrat.getCommandLine();
+
+		project = ::frontend(argVec);
+
 		ram = new InstRO::Rose::Tooling::RoseAnalysisManager(project);
 		InstRO::setInstrumentorInstance(this);
 	}
@@ -27,7 +34,7 @@ class RoseInstrumentor : public Instrumentor {
 		delete passFactory;
 	}
 
-	virtual Rose::RosePassFactory* getFactory(
+	virtual Rose::RosePassFactory *getFactory(
 			Instrumentor::CompilationPhase phase = Instrumentor::CompilationPhase::frontend) override {
 		if (!passFactory) {
 			passFactory = new Rose::RosePassFactory(passManager, project);
@@ -42,7 +49,7 @@ class RoseInstrumentor : public Instrumentor {
 		project->compileOutput();
 	}
 
-	virtual Tooling::AnalysisManager* getAnalysisManager() { return ram; }
+	virtual Tooling::AnalysisManager *getAnalysisManager() { return ram; }
 
  protected:
 	// Store the Project. It is required for all passes later on ..

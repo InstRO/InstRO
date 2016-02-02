@@ -50,7 +50,6 @@ class Instrumentor {
 	// Get a instance of the PassManager. The PassManager is internally managed and deconstructed.
 	virtual const InstRO::PassManagement::PassManager* getPassManager() const { return passManager; }
 
- public:
 	void setConstructRaisingPolicyCrop() { constructRaisingPolicyElevate = false; };
 	void setConstructRaisingPolicyElevate() { constructRaisingPolicyElevate = true; }
 	void setConstructLoweringPolicyCrop() { constructLoweringPolicyElevate = false; }
