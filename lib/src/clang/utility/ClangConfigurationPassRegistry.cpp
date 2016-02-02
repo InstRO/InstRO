@@ -21,8 +21,8 @@ ClangConfigurationPassRegistry::ClangConfigurationPassRegistry(InstRO::Clang::Cl
 		context.expectInputPasses({1});
 		return factory->createClangCygProfileAdapter(context.inputPasses[0]);
 	});
-	registerPass("LLVMInputAdapter", [factory](ConfigurationParsingContext &context) {
+	registerPass("ClangMangledNameOutputAdapter", [factory](ConfigurationParsingContext &context) {
 		context.expectInputPasses({1});
-		return factory->createLLVMInputAdapter(context.inputPasses[0]);
+		return factory->createClangMangledNameOutputAdapter(context.inputPasses[0]);
 	});
 }

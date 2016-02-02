@@ -27,7 +27,7 @@ class ClangPassFactory : public InstRO::PassFactory {
 
 	Pass* createClangBlackAndWhiteListSelector(std::vector<std::string> blacklist, std::vector<std::string> whitelist);
 	Pass* createClangCygProfileAdapter(InstRO::Pass* input);
-	Pass* createLLVMInputAdapter(InstRO::Pass* input);
+	Pass* createClangMangledNameOutputAdapter(InstRO::Pass* input);
 
 	/* We need this in order to lazily initialize the AST Context within the passes */
 	void finishConstruction(clang::ASTContext* context) {
