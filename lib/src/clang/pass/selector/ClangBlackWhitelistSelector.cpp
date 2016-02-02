@@ -1,10 +1,12 @@
-#include "instro/clang/selector/BlackWhitelistSelector.h"
+#include "instro/clang/pass/selector/ClangBlackWhitelistSelector.h"
 
 #include "instro/clang/core/ClangConstruct.h"
 
-InstRO::Clang::BlackWhitelistSelector::BlackWhitelistSelector(std::vector<std::string> blacklist,
+using namespace InstRO::Clang::Selector;
+
+ClangBlackWhitelistSelector::ClangBlackWhitelistSelector(std::vector<std::string> blacklist,
 																															std::vector<std::string> whitelist)
-		: ClangPassImplBase<BlackWhitelistSelector>(new InstRO::Clang::VisitingPassExecuter<BlackWhitelistSelector>()),
+		: ClangPassImplBase<ClangBlackWhitelistSelector>(new InstRO::Clang::VisitingPassExecuter<ClangBlackWhitelistSelector>()),
 			blacklist(blacklist),
 			whitelist(whitelist) {
 	std::cout << "Creating BW Selector with blacklist(-) and whitelist (+):\n";
@@ -17,7 +19,7 @@ InstRO::Clang::BlackWhitelistSelector::BlackWhitelistSelector(std::vector<std::s
 	std::cout << std::endl;
 }
 
-bool InstRO::Clang::BlackWhitelistSelector::VisitFunctionDecl(clang::FunctionDecl *decl) {
+bool ClangBlackWhitelistSelector::VisitFunctionDecl(clang::FunctionDecl *decl) {
 	/*
 	 * We match the black and white list entries against the function name
 	 */
@@ -38,21 +40,21 @@ bool InstRO::Clang::BlackWhitelistSelector::VisitFunctionDecl(clang::FunctionDec
 	return true;
 }
 
-void InstRO::Clang::BlackWhitelistSelector::readFilterFile(std::string filename) {
+void ClangBlackWhitelistSelector::readFilterFile(std::string filename) {
 	Utility::BWLFileReader reader(filename);
 	auto lists = reader.getBWList();
 	blacklist = lists.first;
 	whitelist = lists.second;
 }
 
-bool InstRO::Clang::BlackWhitelistSelector::isOnList(std::string functionName, std::vector<std::string> &list) {
+bool ClangBlackWhitelistSelector::isOnList(std::string functionName, std::vector<std::string> &list) {
 	return std::find(list.begin(), list.end(), functionName) != list.end();
 }
 
-void InstRO::Clang::BlackWhitelistSelector::addBlacklistEntry(std::string functionName) {
+void ClangBlackWhitelistSelector::addBlacklistEntry(std::string functionName) {
 	blacklist.push_back(functionName);
 }
 
-void InstRO::Clang::BlackWhitelistSelector::addWhitelistEntry(std::string functionName) {
+void ClangBlackWhitelistSelector::addWhitelistEntry(std::string functionName) {
 	whitelist.push_back(functionName);
 }

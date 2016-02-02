@@ -35,7 +35,7 @@ CORE_HFILES= \
 ./include/instro/tooling/NamedConstructAccess.h \
 ./include/instro/tooling/TransformationInterface.h \
 ./include/instro/pass/selector/ProgramEntrySelector.h \
-./include/instro/pass/selector/IdentifierSelector.h \
+./include/instro/pass/selector/IdentifierMatcherSelector.h \
 ./include/instro/pass/selector/CallPathSelector.h \
 ./include/instro/pass/selector/ConstructClassSelector.h \
 ./include/instro/pass/selector/ElevatorSelector.h \
@@ -61,7 +61,7 @@ CORE_SFILES= \
 ./src/tooling/ControlFlowGraph.cpp \
 ./src/tooling/IdentifierProvider.cpp \
 ./src/pass/selector/ProgramEntrySelector.cpp \
-./src/pass/selector/IdentifierSelector.cpp \
+./src/pass/selector/IdentifierMatcherSelector.cpp \
 ./src/pass/selector/CallPathSelector.cpp \
 ./src/pass/selector/ConstructClassSelector.cpp \
 ./src/pass/selector/ElevatorSelector.cpp \
@@ -71,30 +71,28 @@ CORE_SFILES= \
 ./src/utility/Logger.cpp
 
 CLANG_HFILES= \
-./include/instro/clang/adapter/CygProfileAdapter.h \
-./include/instro/clang/adapter/LLVMInputAdapter.h \
+./include/instro/clang/pass/selector/ClangBlackWhitelistSelector.h \
+./include/instro/clang/pass/adapter/ClangCygProfileAdapter.h \
+./include/instro/clang/pass/adapter/ClangMangledNameOutputAdapter.h \
 ./include/instro/clang/ClangInstrumentor.h \
+./include/instro/clang/ClangPassFactory.h \
 ./include/instro/clang/core/ClangPassImplBase.h \
 ./include/instro/clang/core/ClangConsumerFactory.h \
 ./include/instro/clang/core/ClangPassExecuter.h \
 ./include/instro/clang/core/ClangConstruct.h \
-./include/instro/clang/core/ClangPassFactory.h \
 ./include/instro/clang/core/Pass.h \
-./include/instro/clang/selector/BlackWhitelistSelector.h \
-./include/instro/clang/selector/FunctionDefinitionSelector.h \
 ./include/instro/clang/support/InstROASTConsumer.h \
 ./include/instro/clang/tooling/ClangAnalysisInterface.h \
 ./include/instro/clang/tooling/ClangConstructClassInterface.h \
 ./include/instro/support/BWLFileReader.h
 
 CLANG_SFILES= \
-./src/clang/adapter/CygProfileAdapter.cpp \
-./src/clang/adapter/LLVMInputAdapter.cpp \
+./src/clang/pass/selector/ClangBlackWhitelistSelector.cpp \
+./src/clang/pass/adapter/ClangCygProfileAdapter.cpp \
+./src/clang/pass/adapter/ClangMangledNameOutputAdapter.cpp \
 ./src/clang/ClangInstrumentor.cpp \
 ./src/clang/core/ClangConstruct.cpp \
 ./src/clang/core/ClangPassFactory.cpp \
-./src/clang/selector/BlackWhitelistSelector.cpp \
-./src/clang/selector/FunctionDefinitionSelector.cpp \
 ./src/clang/support/ClangConsumerFactory.cpp \
 ./src/clang/support/InstROASTConsumer.cpp \
 ./src/clang/tooling/ClangConstructClassInterface.cpp \
@@ -106,7 +104,6 @@ ROSE_HFILES= \
 ./include/instro/rose/core/RoseConstructSet.h  \
 ./include/instro/rose/core/RosePass.h  \
 ./include/instro/rose/core/RoseLegacySelector.h \
-./include/instro/rose/pass/transformer/RoseUniqueCallpathTransformer.h \
 ./include/instro/rose/tooling/RoseAnalysisInterface.h  \
 ./include/instro/rose/tooling/RoseConstructElevator.h \
 ./include/instro/rose/tooling/RoseControlFlowGraph.h \

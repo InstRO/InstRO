@@ -12,7 +12,7 @@
 #include "instro/core/SimplePassManager.h"
 #include "instro/core/Instrumentor.h"
 #include "instro/clang/core/ClangConsumerFactory.h"
-#include "instro/clang/core/ClangPassFactory.h"
+#include "instro/clang/ClangPassFactory.h"
 
 #include "instro/clang/tooling/ClangAnalysisInterface.h"
 

@@ -1,20 +1,20 @@
-#include "instro/clang/adapter/LLVMInputAdapter.h"
+#include "instro/clang/pass/adapter/ClangMangledNameOutputAdapter.h"
 
 #include "instro/clang/core/ClangConstruct.h"
 #include "instro/utility/Logger.h"
 
 #include "clang/AST/Mangle.h"	// clang::MangleContext
 
-using namespace InstRO::Clang;
+using namespace InstRO::Clang::Adapter;
 
-LLVMInputAdapter::LLVMInputAdapter()
-		: InstRO::Clang::ClangPassImplBase<LLVMInputAdapter>(
-					new InstRO::Clang::NonVisitingPassExecuter<LLVMInputAdapter>()),
+ClangMangledNameOutputAdapter::ClangMangledNameOutputAdapter()
+		: InstRO::Clang::ClangPassImplBase<ClangMangledNameOutputAdapter>(
+					new InstRO::Clang::NonVisitingPassExecuter<ClangMangledNameOutputAdapter>()),
 			outfileName("instro-temp-file") {}
 
-bool LLVMInputAdapter::VisitFunctionDecl(clang::FunctionDecl *fDecl) { return true; }
+bool ClangMangledNameOutputAdapter::VisitFunctionDecl(clang::FunctionDecl *fDecl) { return true; }
 
-void LLVMInputAdapter::exec() {
+void ClangMangledNameOutputAdapter::exec() {
 	if (context == nullptr) {
 		logIt(ERROR) << "ASTContext was null" << std::endl;
 		exit(-1);
@@ -35,7 +35,7 @@ void LLVMInputAdapter::exec() {
 	outStream.close();
 }
 
-void LLVMInputAdapter::print(std::ostream &outStream, const InstRO::Core::ConstructSet *cs, clang::ASTContext *astContext) {
+void ClangMangledNameOutputAdapter::print(std::ostream &outStream, const InstRO::Core::ConstructSet *cs, clang::ASTContext *astContext) {
 	outStream << "Printing ConstructSet " << cs << "\n";
 	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface rcsci(cs);
 	for (auto &c : rcsci) {

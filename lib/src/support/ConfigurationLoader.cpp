@@ -305,7 +305,7 @@ BaseConfigurationPassRegistry::BaseConfigurationPassRegistry(PassFactory *factor
 		context.expectInputPasses({1});
 		return factory->createProgramEntrySelector();
 	});
-	registerPass("IdentifyerSelector", [factory](ConfigurationParsingContext &context) {
+	registerPass("IdentifierMatcherSelector", [factory](ConfigurationParsingContext &context) {
 		return factory->createIdentifierMatcherSelector(context.getStringArguments());
 	});
 	registerPass("CallpathSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
