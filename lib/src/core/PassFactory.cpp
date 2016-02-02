@@ -1,7 +1,7 @@
 #include "instro/core/PassFactory.h"
 
 #include "instro/pass/selector/BooleanCompoundSelector.h"
-#include "instro/pass/selector/IdentifierSelector.h"
+#include "instro/pass/selector/IdentifierMatcherSelector.h"
 #include "instro/pass/selector/ProgramEntrySelector.h"
 #include "instro/pass/selector/CallPathSelector.h"
 #include "instro/pass/selector/ConstructClassSelector.h"
@@ -80,8 +80,8 @@ Pass* PassFactory::createProgramEntrySelector() {
 }
 
 Pass* PassFactory::createIdentifierMatcherSelector(std::vector<std::string> matchList) {
-	Pass* newPass = new Pass(new Selector::IdentifyerSelector(matchList), InstRO::Core::ChannelConfiguration(),
-													 "InstRO::Rose::IdentifyerSelector");
+	Pass* newPass = new Pass(new Selector::IdentifierMatcherSelector(matchList), InstRO::Core::ChannelConfiguration(),
+													 "InstRO::Selector::IdentifierMatcherSelector");
 	passManager->registerPass(newPass);
 	return newPass;
 }

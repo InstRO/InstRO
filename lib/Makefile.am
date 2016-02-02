@@ -35,7 +35,7 @@ CORE_HFILES= \
 ./include/instro/tooling/NamedConstructAccess.h \
 ./include/instro/tooling/TransformationInterface.h \
 ./include/instro/pass/selector/ProgramEntrySelector.h \
-./include/instro/pass/selector/IdentifierSelector.h \
+./include/instro/pass/selector/IdentifierMatcherSelector.h \
 ./include/instro/pass/selector/CallPathSelector.h \
 ./include/instro/pass/selector/ConstructClassSelector.h \
 ./include/instro/pass/selector/ElevatorSelector.h \
@@ -60,7 +60,7 @@ CORE_SFILES= \
 ./src/tooling/ControlFlowGraph.cpp \
 ./src/tooling/IdentifierProvider.cpp \
 ./src/pass/selector/ProgramEntrySelector.cpp \
-./src/pass/selector/IdentifierSelector.cpp \
+./src/pass/selector/IdentifierMatcherSelector.cpp \
 ./src/pass/selector/CallPathSelector.cpp \
 ./src/pass/selector/ConstructClassSelector.cpp \
 ./src/pass/selector/ElevatorSelector.cpp \
@@ -103,7 +103,6 @@ ROSE_HFILES= \
 ./include/instro/rose/core/RoseConstructSet.h  \
 ./include/instro/rose/core/RosePass.h  \
 ./include/instro/rose/core/RoseLegacySelector.h \
-./include/instro/rose/pass/transformer/RoseUniqueCallpathTransformer.h \
 ./include/instro/rose/tooling/RoseAnalysisInterface.h  \
 ./include/instro/rose/tooling/RoseConstructElevator.h \
 ./include/instro/rose/tooling/RoseControlFlowGraph.h \

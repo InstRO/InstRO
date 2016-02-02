@@ -1,13 +1,13 @@
 #include "instro/core/Instrumentor.h"
 #include "instro/tooling/NamedConstructAccess.h"
-#include "instro/pass/selector/IdentifierSelector.h"
+#include "instro/pass/selector/IdentifierMatcherSelector.h"
 #include "instro/tooling/AnalysisInterface.h"
 #include "instro/core/Singleton.h"
 
 namespace InstRO {
 namespace Selector {
 
-void IdentifyerSelector::execute() {
+void IdentifierMatcherSelector::execute() {
 	Tooling::NamedConstructAccess::NamedConstructAccess *nca =
 			getInstrumentorInstance()->getAnalysisManager()->getNamedConstructAccessFacility();
 
