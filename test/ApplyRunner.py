@@ -32,8 +32,14 @@ def runApply(arguments):
             srcFile = k + ".cpp"
             specFile = k + ".in"
 
+            roseExtraArg = " "
+            if arguments.compilerIndication == 'rose':
+                roseExtraArg += ' --instro-library-path=' + arguments.build + '/test'
+                roseExtraArg += ' --instro-library-name=InstRO_rtsupport'
+                roseExtraArg += ' --instro-include=' + arguments.src + '/support'
+
             os.environ["INSTRO_TEST_INPUT_FILENAME"] = inputDirectory + '/' + b + '/' + specFile
-            invocationString = "./" + b + " " + inputDirectory + '/' + srcFile
+            invocationString = "./" + b + " " + roseExtraArg + ' ' + inputDirectory + '/' + srcFile
 
             # we need to add the "--" to the invocation as we do not have JSON compilation databases
             if arguments.compilerIndication == 'clang':

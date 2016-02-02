@@ -1,11 +1,15 @@
 +IdSelector-::foo
 scopes.cpp:1:1--Function-::foo
+scopes.cpp:12:2--Expression
 
 +IdSelector-::f#
 scopes.cpp:1:1--Function-::foo
+scopes.cpp:12:2--Expression
 
 +IdSelector-#foo
 scopes.cpp:1:1--Function-::foo
+scopes.cpp:12:2--Expression
 
 +IdSelector-#f#
 scopes.cpp:1:1--Function-::foo
+scopes.cpp:12:2--Expression

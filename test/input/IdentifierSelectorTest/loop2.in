@@ -1,11 +1,15 @@
 +IdSelector-::foo
 loop2.cpp:3:1--Function-::foo
+loop2.cpp:11:2--Expression
 
 +IdSelector-::f#
 loop2.cpp:3:1--Function-::foo
+loop2.cpp:11:2--Expression
 
 +IdSelector-#foo
 loop2.cpp:3:1--Function-::foo
+loop2.cpp:11:2--Expression
 
 +IdSelector-#f#
 loop2.cpp:3:1--Function-::foo
+loop2.cpp:11:2--Expression

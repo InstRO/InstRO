@@ -6,3 +6,8 @@ void foo(){
 		doSomething();
 	}
 }
+
+int main(int argc, char **){
+	foo();
+	return 0;
+}

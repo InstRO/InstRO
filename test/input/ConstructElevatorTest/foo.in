@@ -1,9 +1,23 @@
 +Func2StmtLevelSelector
+foo.cpp:7:2--SimpleStatement
+foo.cpp:8:2--SimpleStatement
+foo.cpp:9:2--SimpleStatement
 
 +Stmt2FuncLevelSelector
+foo.cpp:6:1--Function-::main
 
 +Func2ExprLevelSelector
+foo.cpp:7:2--Expression
+foo.cpp:8:2--Expression
 
 +wpToExprStmtSelector
+foo.cpp:7:2--SimpleStatement
+foo.cpp:7:2--Expression
+foo.cpp:8:2--SimpleStatement
+foo.cpp:8:2--Expression
+foo.cpp:9:2--SimpleStatement
 
 +wpToStmtFuncSelector
+foo.cpp:7:2--SimpleStatement
+foo.cpp:8:2--SimpleStatement
+foo.cpp:9:2--SimpleStatement

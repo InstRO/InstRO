@@ -1,10 +1,12 @@
 +CTFunctionSelector
 arrowCall.cpp:2:2--Function-::A::b
 arrowCall.cpp:5:1--Function-::foo
+arrowCall.cpp:11:1--Function-::main
 
 +CTStatementSelector
 arrowCall.cpp:7:2--SimpleStatement
 arrowCall.cpp:8:2--SimpleStatement
+arrowCall.cpp:12:2--SimpleStatement
 
 +CTExpressionSelector
 arrowCall.cpp:7:2--Expression

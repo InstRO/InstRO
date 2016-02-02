@@ -2,13 +2,21 @@
 overloadedFunctions.cpp:2:1--Function-::foo
 overloadedFunctions.cpp:6:1--Function-::foo
 overloadedFunctions.cpp:10:1--Function-::foo
+overloadedFunctions.cpp:15:1--Function-::main
 
 +CTStatementSelector
 overloadedFunctions.cpp:3:2--SimpleStatement
 overloadedFunctions.cpp:7:2--SimpleStatement
 overloadedFunctions.cpp:11:2--SimpleStatement
+overloadedFunctions.cpp:16:2--SimpleStatement
+overloadedFunctions.cpp:17:2--SimpleStatement
+overloadedFunctions.cpp:18:2--SimpleStatement
+overloadedFunctions.cpp:19:2--SimpleStatement
 
 +CTExpressionSelector
 overloadedFunctions.cpp:3:2--Expression
 overloadedFunctions.cpp:7:2--Expression
 overloadedFunctions.cpp:11:2--Expression
+overloadedFunctions.cpp:16:2--Expression
+overloadedFunctions.cpp:17:2--Expression
+overloadedFunctions.cpp:18:2--Expression

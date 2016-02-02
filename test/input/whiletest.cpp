@@ -5,3 +5,8 @@ void foo() {
 			break;
 	}
 }
+
+int main(int argc, char **){
+	foo();
+	return 0;
+}

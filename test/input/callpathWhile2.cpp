@@ -7,6 +7,6 @@ void forever(){
 }
 
 int main(int argc, char **argv){
-	foo();	
+	forever();
 	return 0;
 }

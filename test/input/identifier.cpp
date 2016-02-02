@@ -9,3 +9,8 @@ void bar(){
 	float foo = 21;
 	foobar();
 }
+
+int main(int argc, char **){
+	bar();
+	return 0;
+}

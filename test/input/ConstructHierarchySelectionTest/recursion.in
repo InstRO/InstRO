@@ -1,11 +1,14 @@
 +CTFunctionSelector
 recursion.cpp:2:1--Function-::factorial
+recursion.cpp:10:1--Function-::main
 
 +CTStatementSelector
 recursion.cpp:3:2--ConditionalStatement
 recursion.cpp:3:12--ScopeStatement
 recursion.cpp:4:3--SimpleStatement
 recursion.cpp:7:2--SimpleStatement
+recursion.cpp:11:2--SimpleStatement
+recursion.cpp:12:2--SimpleStatement
 
 +CTScopeSelector
 recursion.cpp:3:12--ScopeStatement
@@ -18,3 +21,4 @@ recursion.cpp:3:5--Expression
 recursion.cpp:7:9--Expression
 recursion.cpp:7:19--Expression
 recursion.cpp:7:9--Expression
+recursion.cpp:11:2--Expression

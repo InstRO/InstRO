@@ -1,0 +1,14 @@
++EntrySelector
+callpathWhile2.cpp:9:1--Function-::main
+
++CallpathSelector
+callpathWhile2.cpp:1:1--Function-::foo
+callpathWhile2.cpp:9:1--Function-::main
+callpathWhile2.cpp:3:1--Function-::forever
+callpathWhile2.cpp:4:8--Expression
+callpathWhile2.cpp:5:3--Expression
+callpathWhile2.cpp:10:2--Expression
+callpathWhile2.cpp:4:13--Fragment
+callpathWhile2.cpp:6:2--Fragment
+
++EmptyCallpathSelector

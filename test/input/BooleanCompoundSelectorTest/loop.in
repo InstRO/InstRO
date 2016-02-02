@@ -8,3 +8,6 @@ loop.cpp:5:7--SimpleStatement
 loop.cpp:5:18--SimpleStatement
 loop.cpp:5:32--ScopeStatement
 loop.cpp:6:3--SimpleStatement
+loop.cpp:10:1--Function-::main
+loop.cpp:11:2--SimpleStatement
+loop.cpp:12:2--SimpleStatement

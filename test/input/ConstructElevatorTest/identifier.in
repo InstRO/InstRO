@@ -3,10 +3,13 @@ identifier.cpp:4:2--SimpleStatement
 identifier.cpp:8:2--SimpleStatement
 identifier.cpp:9:2--SimpleStatement
 identifier.cpp:10:2--SimpleStatement
+identifier.cpp:14:2--SimpleStatement
+identifier.cpp:15:2--SimpleStatement
 
 +Stmt2FuncLevelSelector
 identifier.cpp:2:1--Function-::foobar
 identifier.cpp:7:1--Function-::bar
+identifier.cpp:13:1--Function-::main
 
 +Func2ExprLevelSelector
 identifier.cpp:4:2--Expression
@@ -14,6 +17,7 @@ identifier.cpp:8:2--Expression
 identifier.cpp:8:14--Expression
 identifier.cpp:9:2--Expression
 identifier.cpp:10:2--Expression
+identifier.cpp:14:2--Expression
 
 +wpToExprStmtSelector
 identifier.cpp:4:2--Expression
@@ -25,9 +29,14 @@ identifier.cpp:4:2--SimpleStatement
 identifier.cpp:10:2--SimpleStatement
 identifier.cpp:8:2--SimpleStatement
 identifier.cpp:9:2--SimpleStatement
+identifier.cpp:14:2--Expression
+identifier.cpp:14:2--SimpleStatement
+identifier.cpp:15:2--SimpleStatement
 
 +wpToStmtFuncSelector
 identifier.cpp:4:2--SimpleStatement
 identifier.cpp:8:2--SimpleStatement
 identifier.cpp:9:2--SimpleStatement
 identifier.cpp:10:2--SimpleStatement
+identifier.cpp:14:2--SimpleStatement
+identifier.cpp:15:2--SimpleStatement

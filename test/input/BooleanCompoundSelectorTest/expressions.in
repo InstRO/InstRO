@@ -1,8 +1,11 @@
 +FunctionOrStatementSelector
 expressions.cpp:1:1--Function-::foo
+expressions.cpp:9:1--Function-::main
 expressions.cpp:2:2--SimpleStatement
 expressions.cpp:3:2--SimpleStatement
 expressions.cpp:4:2--SimpleStatement
 expressions.cpp:6:2--SimpleStatement
+expressions.cpp:10:2--SimpleStatement
+expressions.cpp:11:2--SimpleStatement
 
 +FunctionAndStatementSelector

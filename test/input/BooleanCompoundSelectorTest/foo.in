@@ -3,3 +3,7 @@
 +FunctionOrStatementSelector
 foo.cpp:2:1--Function-::bar
 foo.cpp:4:1--Function-::foo
+foo.cpp:6:1--Function-::main
+foo.cpp:7:2--SimpleStatement
+foo.cpp:8:2--SimpleStatement
+foo.cpp:9:2--SimpleStatement

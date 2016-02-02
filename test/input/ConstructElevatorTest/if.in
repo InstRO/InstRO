@@ -2,13 +2,17 @@
 if.cpp:3:2--ConditionalStatement
 if.cpp:3:15--ScopeStatement
 if.cpp:4:3--SimpleStatement
+if.cpp:9:2--SimpleStatement
+if.cpp:10:2--SimpleStatement
 
 +Stmt2FuncLevelSelector
 if.cpp:2:1--Function-::foo
+if.cpp:8:1--Function-::main
 
 +Func2ExprLevelSelector
 if.cpp:3:6--Expression
 if.cpp:4:3--Expression
+if.cpp:9:2--Expression
 
 +wpToExprStmtSelector
 if.cpp:3:6--Expression
@@ -16,8 +20,13 @@ if.cpp:3:2--ConditionalStatement
 if.cpp:4:3--Expression
 if.cpp:4:3--SimpleStatement
 if.cpp:3:15--ScopeStatement
+if.cpp:9:2--SimpleStatement
+if.cpp:9:2--Expression
+if.cpp:10:2--SimpleStatement
 
 +wpToStmtFuncSelector
 if.cpp:3:2--ConditionalStatement
 if.cpp:3:15--ScopeStatement
 if.cpp:4:3--SimpleStatement
+if.cpp:9:2--SimpleStatement
+if.cpp:10:2--SimpleStatement

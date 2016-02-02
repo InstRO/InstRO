@@ -5,3 +5,8 @@ void foo(){
 	float f;
 	f = 21;
 }
+
+int main(int argc, char **){
+	foo();
+	return 0;
+}

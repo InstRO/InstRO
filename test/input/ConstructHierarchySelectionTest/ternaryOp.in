@@ -1,10 +1,14 @@
 +CTFunctionSelector
 ternaryOp.cpp:1:1--Function-::foo
+ternaryOp.cpp:5:1--Function-::main
 
 +CTStatementSelector
 ternaryOp.cpp:2:2--SimpleStatement
+ternaryOp.cpp:6:2--SimpleStatement
+ternaryOp.cpp:7:2--SimpleStatement
 
 +CTExpressionSelector
 ternaryOp.cpp:2:2--Expression
 ternaryOp.cpp:2:10--Expression
 ternaryOp.cpp:2:10--Expression
+ternaryOp.cpp:6:2--Expression

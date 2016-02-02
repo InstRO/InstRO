@@ -8,3 +8,6 @@ scopes.cpp:3:12--ScopeStatement
 scopes.cpp:4:4--SimpleStatement
 scopes.cpp:5:10--ScopeStatement
 scopes.cpp:6:4--SimpleStatement
+scopes.cpp:11:1--Function-::main
+scopes.cpp:12:2--SimpleStatement
+scopes.cpp:13:2--SimpleStatement

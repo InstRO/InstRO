@@ -4,6 +4,7 @@ callInTemplateCode.cpp:5:1--Function-::foo
 callInTemplateCode.cpp:5:1--Function-::foo < double > 
 callInTemplateCode.cpp:5:1--Function-::foo < int > 
 callInTemplateCode.cpp:9:1--Function-::bar
+callInTemplateCode.cpp:14:1--Function-::main
 
 +CTStatementSelector
 callInTemplateCode.cpp:6:2--SimpleStatement
@@ -11,6 +12,7 @@ callInTemplateCode.cpp:5:1--SimpleStatement
 callInTemplateCode.cpp:5:1--SimpleStatement
 callInTemplateCode.cpp:10:2--SimpleStatement
 callInTemplateCode.cpp:12:2--SimpleStatement
+callInTemplateCode.cpp:15:2--SimpleStatement
 
 +CTExpressionSelector
 callInTemplateCode.cpp:6:2--Expression

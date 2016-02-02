@@ -8,3 +8,8 @@ bool eq(){
 void test(){
 	bool b = eq<2, 2>();
 }
+
+int main(int argc, char **){
+	test();
+	return 0;
+}

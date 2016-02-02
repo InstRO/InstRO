@@ -22,9 +22,23 @@ RT_SUPPORT_HFILES= \
 RT_SUPPORT_SFILES= \
 						./IMITestInfrastructure.c
 
+lib_LTLIBRARIES= libInstRO_test.la libInstRO_rtsupport.la
+
+libInstRO_test_la_SOURCES= \
+	$(TEST_SFILES) \
+	$(TEST_HFILES)
+libInstRO_test_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+
+libInstRO_rtsupport_la_SOURCES= \
+	$(RT_SUPPORT_SFILES) \
+	$(RT_SUPPORT_HFILES)
+libInstRO_rtsupport_la_CFLAGS=-I$(top_srcdir)/support $(AM_CPPFLAGS)
+
+
+
 if USELIBTOOL
 # LIBTOOL RULE FOR LIBINSTRO
-lib_LTLIBRARIES= libInstRO_test.la
+
 
 bin_PROGRAMS= \
 	ConstructHierarchySelectionTest \
@@ -34,11 +48,6 @@ bin_PROGRAMS= \
 	MatcherUnitTest \
 	UniqueCallpathTransformerTest
 
-libInstRO_test_la_SOURCES= \
-	$(TEST_SFILES) \
-	$(TEST_HFILES)
-
-libInstRO_test_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
 # Tests independent of the used compiler
 MatcherUnitTest_SOURCES= \
