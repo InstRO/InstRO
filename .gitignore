@@ -9,6 +9,8 @@
 
 #tests
 test/*Test
+test/.libs/
+test/*.ti
 
 # all those magic
 config/*
