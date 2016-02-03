@@ -134,7 +134,7 @@ class RoseSingleFunctionCFGGenerator {
 
 		//XXX generate whole virtualcfg
 		std::string name = funcDef->get_declaration()->get_name().getString();
-		VirtualCFG::cfgToDot(funcDef, "virtualcfg-"+name+".dot");
+//		VirtualCFG::cfgToDot(funcDef, "virtualcfg-"+name+".dot");
 
 		auto cfgStartNode = aquireControlFlowGraphNode(funcDef->cfgForBeginning());
 		cfg.setStartNode(cfgStartNode);
@@ -150,7 +150,7 @@ class RoseSingleFunctionCFGGenerator {
 		}
 
 		///XXX dump cfg
-		cfg.print(name+".dot");
+//		cfg.print(name+".dot");
 //		logIt(INFO) << "RoseControlFlowGraph: " << boost::num_vertices(cfg.getGraph()) << " vertices and "
 //				<< boost::num_edges(cfg.getGraph()) << " edges" << std::endl;
 	}
