@@ -16,3 +16,4 @@ dotCall
 arrowCall
 overloadedFunctions
 callInTemplateCode
+emptyBodies

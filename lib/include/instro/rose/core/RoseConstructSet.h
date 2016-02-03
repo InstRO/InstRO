@@ -99,6 +99,7 @@ struct CLExpressionPredicate : public CTPredicate {
 		}
 
 		if (ExpressionInLoopOrConditionalHeader()(n)) {
+
 			return true;
 		} else if (isSgValueExp(n) || isSgVarRefExp(n) || isSgNullExpression(n)) {
 			return false;
@@ -158,7 +159,7 @@ struct CLScopeStatementPredicate : public CTPredicate {
 		if (isSgFunctionDefinition(parent)) {
 			return false;	// ignore function scopes
 		}
-		if (isSgCaseOptionStmt(parent) && isSgLocatedNode(n)->isCompilerGenerated()) {
+		if ((isSgCaseOptionStmt(parent) || isSgSwitchStatement(parent)) && isSgLocatedNode(n)->isCompilerGenerated()) {
 			return false;	// ignore compiler generated scopes around case statements
 		}
 		return true;
