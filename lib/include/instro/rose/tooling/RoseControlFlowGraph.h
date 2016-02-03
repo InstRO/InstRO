@@ -105,8 +105,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// expressions
 	void visit(SgExpression* node) {
-		auto parentNode = node->get_parent();
-		if (parentNode!=nullptr && Core::RoseConstructLevelPredicates::CLLoopPredicate()(parentNode)) {
+		if (Core::RoseConstructLevelPredicates::ExpressionInLoopOrConditionalHeader()(node)) {
 			nodeType = EXPR;
 			InfrastructureInterface::ConstructSetCompilerInterface csci(cs);
 			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
@@ -151,7 +150,7 @@ class RoseSingleFunctionCFGGenerator {
 		}
 
 		///XXX dump cfg
-//		cfg.print(name+".dot");
+		cfg.print(name+".dot");
 //		logIt(INFO) << "RoseControlFlowGraph: " << boost::num_vertices(cfg.getGraph()) << " vertices and "
 //				<< boost::num_edges(cfg.getGraph()) << " edges" << std::endl;
 	}
@@ -168,7 +167,7 @@ class RoseSingleFunctionCFGGenerator {
 		if (vcfgNode.isInteresting() || isSgBasicBlock(vcfgNode.getNode())) {
 			auto currentNode = aquireControlFlowGraphNode(vcfgNode);
 			auto currentNodeCS = currentNode.getAssociatedConstructSet();
-			if (currentNodeCS != nullptr) {
+			if (currentNodeCS != nullptr && !currentNodeCS->empty()) {
 				lastValidConstructSet = currentNodeCS;
 
 				cfg.addNode(currentNode);
