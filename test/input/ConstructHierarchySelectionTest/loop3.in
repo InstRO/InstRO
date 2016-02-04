@@ -9,7 +9,6 @@ loop3.cpp:2:2--LoopStatement
 loop3.cpp:2:2--LoopStatement
 loop3.cpp:2:2--SimpleStatement
 loop3.cpp:2:2--SimpleStatement
-loop3.cpp:2:11--SimpleStatement
 loop3.cpp:6:2--SimpleStatement
 
 +CTConditionalSelector

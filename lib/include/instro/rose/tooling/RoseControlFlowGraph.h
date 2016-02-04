@@ -105,8 +105,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// expressions
 	void visit(SgExpression* node) {
-		auto parentNode = node->get_parent();
-		if (parentNode!=nullptr && Core::RoseConstructLevelPredicates::CLLoopPredicate()(parentNode)) {
+		if (Core::RoseConstructLevelPredicates::ExpressionInLoopOrConditionalHeader()(node)) {
 			nodeType = EXPR;
 			InfrastructureInterface::ConstructSetCompilerInterface csci(cs);
 			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
@@ -135,7 +134,7 @@ class RoseSingleFunctionCFGGenerator {
 
 		//XXX generate whole virtualcfg
 		std::string name = funcDef->get_declaration()->get_name().getString();
-		VirtualCFG::cfgToDot(funcDef, "virtualcfg-"+name+".dot");
+//		VirtualCFG::cfgToDot(funcDef, "virtualcfg-"+name+".dot");
 
 		auto cfgStartNode = aquireControlFlowGraphNode(funcDef->cfgForBeginning());
 		cfg.setStartNode(cfgStartNode);
@@ -168,7 +167,7 @@ class RoseSingleFunctionCFGGenerator {
 		if (vcfgNode.isInteresting() || isSgBasicBlock(vcfgNode.getNode())) {
 			auto currentNode = aquireControlFlowGraphNode(vcfgNode);
 			auto currentNodeCS = currentNode.getAssociatedConstructSet();
-			if (currentNodeCS != nullptr) {
+			if (currentNodeCS != nullptr && !currentNodeCS->empty()) {
 				lastValidConstructSet = currentNodeCS;
 
 				cfg.addNode(currentNode);

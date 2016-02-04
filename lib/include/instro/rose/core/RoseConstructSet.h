@@ -30,6 +30,65 @@ struct DefinedVariableDeclarationPredicate {
 	}
 };
 
+struct ExpressionInLoopOrConditionalHeader {
+	// either condition of IF or SWITCH
+	// or condition of WHILE, DO-WHILE
+	// also increment of FOR
+	bool operator()(SgNode* n) const {
+		if (isSgExpression(n)) {
+			SgNode* parent = n->get_parent();
+			if (parent == nullptr) {
+				return false;
+			}
+
+			// null expression only allowed in for loop increment position
+			if (isSgForStatement(n->get_parent()) && isSgForStatement(n->get_parent())->get_increment() == n) {
+				return true;
+			}
+			if (isSgNullExpression(n)) {
+				return false;
+			}
+
+			SgNode* grandParent = parent->get_parent();
+			if (grandParent == nullptr) {
+				return false;
+			}
+
+			if (isSgIfStmt(grandParent) && isSgIfStmt(grandParent)->get_conditional() == parent) {
+				return true;
+
+			} else if (isSgSwitchStatement(grandParent) &&
+								 (isSgSwitchStatement(grandParent)->get_item_selector() == parent)) {
+				return true;
+
+			} else if (isSgDoWhileStmt(grandParent) && isSgDoWhileStmt(grandParent)->get_condition() == parent) {
+				return true;
+
+			} else if (isSgWhileStmt(grandParent) && isSgWhileStmt(grandParent)->get_condition() == parent) {
+				return true;
+			}
+		}
+		return false;
+	}
+};
+
+struct IsStatementInForLoop {
+	bool operator()(SgNode* n) const {
+		SgNode* parent = n->get_parent();
+		if (parent == nullptr) {
+			return false;
+		}
+
+		if (isSgForStatement(parent) && isSgForStatement(parent)->get_test() == n) {
+			return true;
+		} else if (isSgForInitStatement(parent)) {
+			return true;
+		}
+
+		return false;
+	}
+};
+
 struct CLExpressionPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const override {
 		if (isSgExprListExp(n) || isSgFunctionRefExp(n) || isSgMemberFunctionRefExp(n)) {
@@ -39,35 +98,14 @@ struct CLExpressionPredicate : public CTPredicate {
 			return true;	// always accept these
 		}
 
-		// accept simple vals or refs only if they are in the header of a loop or conditional
-		if (isSgValueExp(n) != nullptr || isSgVarRefExp(n) != nullptr) {
+		if (ExpressionInLoopOrConditionalHeader()(n)) {
 
-			SgNode* parent = n->get_parent();
-			if (parent == nullptr || isSgExprStatement(parent) == nullptr) {
-				return false;
-			}
-			SgNode* grandParent = parent->get_parent();
-			if (grandParent == nullptr) {
-				return false;
-			}
-
-			if (isSgIfStmt(grandParent) != nullptr && isSgIfStmt(grandParent)->get_conditional() == parent) {
-				return true;
-			} else if (isSgSwitchStatement(grandParent) &&
-								 (isSgSwitchStatement(grandParent)->get_item_selector() == parent)) {
-				return true;
-			} else if (isSgForStatement(grandParent) != nullptr && isSgForStatement(grandParent)->get_test() == parent) {
-				return true;
-			} else if (isSgDoWhileStmt(grandParent) && isSgDoWhileStmt(grandParent)->get_condition() == parent) {
-				return true;
-			} else if (isSgWhileStmt(grandParent) && isSgWhileStmt(grandParent)->get_condition() == parent) {
-				return true;
-			}
-
+			return true;
+		} else if (isSgValueExp(n) || isSgVarRefExp(n) || isSgNullExpression(n)) {
 			return false;
 		}
 
-		if (isSgCastExp(n)){
+		if (isSgCastExp(n)) {
 			return false;
 		}
 
@@ -85,14 +123,6 @@ struct CLExpressionPredicate : public CTPredicate {
 
 		// function call expressions won't be affected
 		if (isSgDotExp(n) || isSgThisExp(n) || isSgArrowExp(n)) {
-			return false;
-		}
-
-		// null expression only allowed in for loop increment position
-		if (isSgNullExpression(n)) {
-			if (isSgForStatement(n->get_parent())) {
-				return true;
-			}
 			return false;
 		}
 
@@ -129,7 +159,7 @@ struct CLScopeStatementPredicate : public CTPredicate {
 		if (isSgFunctionDefinition(parent)) {
 			return false;	// ignore function scopes
 		}
-		if (isSgCaseOptionStmt(parent) && isSgLocatedNode(n)->isCompilerGenerated()) {
+		if ((isSgCaseOptionStmt(parent) || isSgSwitchStatement(parent)) && isSgLocatedNode(n)->isCompilerGenerated()) {
 			return false;	// ignore compiler generated scopes around case statements
 		}
 		return true;
@@ -161,18 +191,25 @@ struct CLSimpleStatementPredicate : public CTPredicate {
 			return false;	// no equivalent in C/C++ semantics
 		}
 
-		if (isSgNullStatement(n) && (isSgForStatement(n->get_parent()) || isSgForInitStatement(n->get_parent()))) {
+		if (IsStatementInForLoop()(n)) {
 			// allow null statements in loop header, but set file info
-			isSgLocatedNode(n)->set_file_info(isSgLocatedNode(n->get_parent())->get_file_info());
+			if (isSgNullStatement(n)) {
+				isSgLocatedNode(n)->set_file_info(isSgLocatedNode(n->get_parent())->get_file_info());
+			}
 			return true;
 		}
 
 		if (isSgExprStatement(n)) {
-			SgNode* parent = n->get_parent();
-			if (isSgIfStmt(parent) || isSgWhileStmt(parent)
-					|| isSgDoWhileStmt(parent) || isSgSwitchStatement(parent)) {	// TODO other cases?
+			SgExpression* expr = isSgExprStatement(n)->get_expression();
+
+			if (ExpressionInLoopOrConditionalHeader()(expr)) {
 				return false;	// if with an expression as conditional
 			}
+
+			if (isSgNullExpression(expr) ) {
+				return false;	// statement consisting only of semicolon
+			}
+
 			return true;
 		}
 
