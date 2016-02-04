@@ -36,12 +36,23 @@ class GCCLikeCommandLinePreparationStrategy {
 
 		if (vm.count(instroIncludeOptionName)) {
 			logIt(DEBUG) << "InstRO Include set to: " << vm[instroIncludeOptionName].as<std::string>() << std::endl;
+			instroIncludePathOption = vm[instroIncludeOptionName].as<std::string>();
+		} else {
+			instroIncludePathOption = "../include";
 		}
+
 		if (vm.count(instroLibPathOptionName)) {
 			logIt(DEBUG) << "InstRO Library path set to: " << vm[instroLibPathOptionName].as<std::string>() << std::endl;
+			instroLibPathOption = vm[instroLibPathOptionName].as<std::string>();
+		} else {
+			instroLibPathOption = "../lib";
 		}
+
 		if (vm.count(instroLibNameOptionName)) {
 			logIt(DEBUG) << "InstRO Library name set to: " << vm[instroLibNameOptionName].as<std::string>() << std::endl;
+			instroLibNameOption = vm[instroLibNameOptionName].as<std::string>();
+		} else {
+			instroLibNameOption = "imi";
 		}
 	}
 
@@ -75,11 +86,11 @@ class GCCLikeCommandLinePreparationStrategy {
 		return argVec;
 	}
 
-	std::string getInstroLibPath() { return vm[instroLibPathOptionName].as<std::string>(); }
+	std::string getInstroLibPath() { return instroLibPathOption; }
 
-	std::string getInstroLibName() { return vm[instroLibNameOptionName].as<std::string>(); }
+	std::string getInstroLibName() { return instroLibNameOption; }
 
-	std::string getInstroIncludePath() { return vm[instroIncludeOptionName].as<std::string>(); }
+	std::string getInstroIncludePath() { return instroIncludePathOption; }
 
  private:
 	int *argcP;
@@ -90,6 +101,10 @@ class GCCLikeCommandLinePreparationStrategy {
 	const std::string instroIncludeOptionName;
 	const std::string instroLibPathOptionName;
 	const std::string instroLibNameOptionName;
+
+	std::string instroIncludePathOption;
+	std::string instroLibPathOption;
+	std::string instroLibNameOption;
 };
 }
 }
