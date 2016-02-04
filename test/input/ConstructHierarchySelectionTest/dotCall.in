@@ -1,9 +1,13 @@
 +CTFunctionSelector
 dotCall.cpp:2:2--Function-::A::b
 dotCall.cpp:5:1--Function-::foo
+dotCall.cpp:10:1--Function-::main
 
 +CTStatementSelector
 dotCall.cpp:7:2--SimpleStatement
+dotCall.cpp:11:2--SimpleStatement
+dotCall.cpp:12:2--SimpleStatement
 
 +CTExpressionSelector
 dotCall.cpp:7:2--Expression
+dotCall.cpp:11:2--Expression

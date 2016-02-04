@@ -1,19 +1,28 @@
 +Func2StmtLevelSelector
 ternaryOp.cpp:2:2--SimpleStatement
+ternaryOp.cpp:6:2--SimpleStatement
+ternaryOp.cpp:7:2--SimpleStatement
 
 +Stmt2FuncLevelSelector
 ternaryOp.cpp:1:1--Function-::foo
+ternaryOp.cpp:5:1--Function-::main
 
 +Func2ExprLevelSelector
 ternaryOp.cpp:2:2--Expression
 ternaryOp.cpp:2:10--Expression
 ternaryOp.cpp:2:10--Expression
+ternaryOp.cpp:6:2--Expression
 
 +wpToExprStmtSelector
 ternaryOp.cpp:2:2--Expression
 ternaryOp.cpp:2:10--Expression
 ternaryOp.cpp:2:10--Expression
 ternaryOp.cpp:2:2--SimpleStatement
+ternaryOp.cpp:6:2--SimpleStatement
+ternaryOp.cpp:7:2--SimpleStatement
+ternaryOp.cpp:6:2--Expression
 
 +wpToStmtFuncSelector
 ternaryOp.cpp:2:2--SimpleStatement
+ternaryOp.cpp:6:2--SimpleStatement
+ternaryOp.cpp:7:2--SimpleStatement

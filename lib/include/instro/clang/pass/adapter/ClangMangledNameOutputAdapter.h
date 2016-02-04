@@ -1,5 +1,5 @@
-#ifndef INSTRO_CLANG_LLVMINPUTADAPTER_H
-#define INSTRO_CLANG_LLVMINPUTADAPTER_H
+#ifndef INSTRO_CLANG_PASS_ADAPTER_CLANGMANGLEDNAMEOUTPUTADAPTER_H
+#define INSTRO_CLANG_PASS_ADAPTER_CLANGMANGLEDNAMEOUTPUTADAPTER_H
 
 #include <fstream>
 
@@ -7,9 +7,11 @@
 
 namespace InstRO {
 namespace Clang {
-class LLVMInputAdapter : public InstRO::Clang::ClangPassImplBase<LLVMInputAdapter> {
+namespace Adapter {
+
+class ClangMangledNameOutputAdapter : public InstRO::Clang::ClangPassImplBase<ClangMangledNameOutputAdapter> {
  public:
-	LLVMInputAdapter();
+	ClangMangledNameOutputAdapter();
 
 	bool VisitFunctionDecl(clang::FunctionDecl *fDecl);
 
@@ -20,6 +22,7 @@ class LLVMInputAdapter : public InstRO::Clang::ClangPassImplBase<LLVMInputAdapte
 
 	void print(std::ostream &outStream, const InstRO::Core::ConstructSet *cs, clang::ASTContext *astContext);
 };
+}
 }
 }
 

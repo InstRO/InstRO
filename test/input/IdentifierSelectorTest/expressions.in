@@ -1,12 +1,16 @@
 +IdSelector-::foo
 expressions.cpp:1:1--Function-::foo
+expressions.cpp:10:2--Expression
 
 +IdSelector-::f#
 expressions.cpp:1:1--Function-::foo
+expressions.cpp:10:2--Expression
 
 +IdSelector-#foo
 expressions.cpp:1:1--Function-::foo
+expressions.cpp:10:2--Expression
 
 +IdSelector-#f#
 expressions.cpp:1:1--Function-::foo
 expressions.cpp:6:2--Expression
+expressions.cpp:10:2--Expression

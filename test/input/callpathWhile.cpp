@@ -1,10 +1,12 @@
 void foo(){}
 
-int main(int argc, char **argv){
-
+void forever(){
 	while(true){
 		foo();
 	}
+}
 
+int main(int argc, char **argv){
+	foo();	
 	return 0;
 }

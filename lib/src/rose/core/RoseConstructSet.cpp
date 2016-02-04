@@ -105,6 +105,10 @@ int RoseConstruct::determineCorrectLineInfo() const {
 		}
 	}
 
+	if (isSgCastExp(node) && isSgCastExp(node)->isCompilerGenerated()) {
+		return isSgLocatedNode(node->get_parent())->get_startOfConstruct()->get_line();
+	}
+
 	return isSgLocatedNode(node)->get_startOfConstruct()->get_line();
 }
 
@@ -137,6 +141,11 @@ std::string RoseConstruct::determineCorrectFilename() const {
 		return Utility::ASTHelper::applyConsumerToAssignInitializer(
 				[](Sg_File_Info *info) { return info->get_filenameString(); }, isSgAssignInitializer(node));
 	}
+
+	if (isSgCastExp(node) && isSgCastExp(node)->isCompilerGenerated()) {
+		return isSgLocatedNode(node->get_parent())->get_startOfConstruct()->get_filenameString();
+	}
+
 
 	return isSgLocatedNode(node)->get_startOfConstruct()->get_filenameString();
 }
@@ -212,6 +221,10 @@ int RoseConstruct::determineCorrectColumnInformation() const {
 
 	if (isSgFunctionDefinition(n)) {
 		colInfo = isSgFunctionDeclaration(isSgFunctionDefinition(n)->get_parent())->get_startOfConstruct()->get_col();
+	}
+
+	if (isSgCastExp(node) && isSgCastExp(node)->isCompilerGenerated()) {
+		colInfo = isSgLocatedNode(node->get_parent())->get_startOfConstruct()->get_col();
 	}
 
 	return colInfo;

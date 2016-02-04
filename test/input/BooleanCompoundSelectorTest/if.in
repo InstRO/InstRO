@@ -6,3 +6,6 @@ if.cpp:2:1--Function-::foo
 if.cpp:3:2--ConditionalStatement
 if.cpp:3:15--ScopeStatement
 if.cpp:4:3--SimpleStatement
+if.cpp:8:1--Function-::main
+if.cpp:9:2--SimpleStatement
+if.cpp:10:2--SimpleStatement

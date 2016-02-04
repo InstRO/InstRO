@@ -2,7 +2,7 @@ void leaf() {}
 void foo() {}
 
 bool onPath() {
-	while (true)
+	while (false)
 		leaf();
 	return true;
 }

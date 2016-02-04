@@ -2,16 +2,14 @@
 #define INSTRO_CLANG_PASSFACTORY_H
 
 #include <set>
+
+#include "clang/Tooling/Core/Replacement.h"
+
 #include "instro/core/PassFactory.h"
 #include "instro/core/PassManager.h"
 #include "instro/clang/core/Pass.h"
 #include "instro/clang/core/ClangPassExecuter.h"
-
-#include "instro/clang/selector/FunctionDefinitionSelector.h"
-#include "instro/clang/selector/BlackWhitelistSelector.h"
-
-#include "instro/clang/adapter/CygProfileAdapter.h"
-#include "instro/clang/adapter/LLVMInputAdapter.h"
+#include "instro/clang/core/ClangPassImplBase.h" // ASTContextProvider
 
 namespace InstRO {
 namespace Clang {
@@ -27,10 +25,9 @@ class ClangPassFactory : public InstRO::PassFactory {
 
 	InstRO::Pass* createDefaultInstrumentationAdapter(InstRO::Pass* input) { return nullptr; }
 
-	Pass* createBlackAndWhiteListSelector(std::vector<std::string> blacklist, std::vector<std::string> whitelist);
-	Pass* createFunctionDefinitionSelector();
-	Pass* createCygProfileAdapter(InstRO::Pass* input);
-	Pass* createLLVMInputAdapter(InstRO::Pass* input);
+	Pass* createClangBlackAndWhiteListSelector(std::vector<std::string> blacklist, std::vector<std::string> whitelist);
+	Pass* createClangCygProfileAdapter(InstRO::Pass* input);
+	Pass* createClangMangledNameOutputAdapter(InstRO::Pass* input);
 
 	/* We need this in order to lazily initialize the AST Context within the passes */
 	void finishConstruction(clang::ASTContext* context) {

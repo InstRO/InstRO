@@ -1,5 +1,6 @@
 +CTFunctionSelector
 whiletest.cpp:1:1--Function-::foo
+whiletest.cpp:9:1--Function-::main
 
 +CTStatementSelector
 whiletest.cpp:2:2--LoopStatement
@@ -8,6 +9,7 @@ whiletest.cpp:2:21--ScopeStatement
 whiletest.cpp:3:3--SimpleStatement
 whiletest.cpp:4:3--ConditionalStatement
 whiletest.cpp:5:4--SimpleStatement
+whiletest.cpp:10:2--SimpleStatement
 
 +CTConditionalSelector
 whiletest.cpp:4:3--ConditionalStatement

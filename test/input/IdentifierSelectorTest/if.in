@@ -1,11 +1,15 @@
 +IdSelector-::foo
 if.cpp:2:1--Function-::foo
+if.cpp:9:2--Expression
 
 +IdSelector-::f#
 if.cpp:2:1--Function-::foo
+if.cpp:9:2--Expression
 
 +IdSelector-#foo
 if.cpp:2:1--Function-::foo
+if.cpp:9:2--Expression
 
 +IdSelector-#f#
 if.cpp:2:1--Function-::foo
+if.cpp:9:2--Expression

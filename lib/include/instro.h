@@ -19,7 +19,7 @@
 #endif
 
 #if INSTRO_USE_CLANG
-#include "instro/clang/core/ClangPassFactory.h"
+#include "instro/clang/ClangPassFactory.h"
 #include "instro/clang/ClangInstrumentor.h"
 #endif
 

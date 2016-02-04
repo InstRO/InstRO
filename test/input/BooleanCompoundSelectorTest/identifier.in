@@ -7,3 +7,6 @@ identifier.cpp:7:1--Function-::bar
 identifier.cpp:8:2--SimpleStatement
 identifier.cpp:9:2--SimpleStatement
 identifier.cpp:10:2--SimpleStatement
+identifier.cpp:13:1--Function-::main
+identifier.cpp:14:2--SimpleStatement
+identifier.cpp:15:2--SimpleStatement

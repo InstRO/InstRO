@@ -6,3 +6,8 @@ int factorial(int n){
 
 	return factorial(n-1) * n;
 }
+
+int main(int argc, char **){
+	factorial(3);
+	return 0;
+}

@@ -1,15 +1,24 @@
 +Func2StmtLevelSelector
 dotCall.cpp:7:2--SimpleStatement
+dotCall.cpp:11:2--SimpleStatement
+dotCall.cpp:12:2--SimpleStatement
 
 +Stmt2FuncLevelSelector
 dotCall.cpp:5:1--Function-::foo
+dotCall.cpp:10:1--Function-::main
 
 +Func2ExprLevelSelector
 dotCall.cpp:7:2--Expression
+dotCall.cpp:11:2--Expression
 
 +wpToExprStmtSelector
 dotCall.cpp:7:2--SimpleStatement
 dotCall.cpp:7:2--Expression
+dotCall.cpp:11:2--SimpleStatement
+dotCall.cpp:11:2--Expression
+dotCall.cpp:12:2--SimpleStatement
 
 +wpToStmtFuncSelector
 dotCall.cpp:7:2--SimpleStatement
+dotCall.cpp:11:2--SimpleStatement
+dotCall.cpp:12:2--SimpleStatement

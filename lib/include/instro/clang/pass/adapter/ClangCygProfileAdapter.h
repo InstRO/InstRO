@@ -1,5 +1,5 @@
-#ifndef INSTRO_CLANG_CYGPROFILEADAPTER_H
-#define INSTRO_CLANG_CYGPROFILEADAPTER_H
+#ifndef INSTRO_CLANG_PASS_ADAPTER_CLANGCYGPROFILEADAPTER_H
+#define INSTRO_CLANG_PASS_ADAPTER_CLANGCYGPROFILEADAPTER_H
 
 #include <cassert>
 
@@ -12,10 +12,11 @@
 
 namespace InstRO {
 namespace Clang {
+namespace Adapter {
 
-class CygProfileAdapter : public InstRO::Clang::ClangPassImplBase<CygProfileAdapter> {
+class ClangCygProfileAdapter : public InstRO::Clang::ClangPassImplBase<ClangCygProfileAdapter> {
  public:
-	CygProfileAdapter(clang::tooling::Replacements &replacements, clang::SourceManager *sm);
+	ClangCygProfileAdapter(clang::tooling::Replacements &replacements, clang::SourceManager *sm);
 
 	bool VisitFunctionDecl(clang::FunctionDecl *decl);
 
@@ -46,6 +47,7 @@ class CygProfileAdapter : public InstRO::Clang::ClangPassImplBase<CygProfileAdap
 	const std::string cygProfFuncPtrName;
 };
 
+}	// Adapter
 }	// Clang
 }	// INstrO
 
