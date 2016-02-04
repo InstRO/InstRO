@@ -59,8 +59,37 @@ Run `make check` in the top level build directory. More information can be found
 ### Building with Clang
 Support for building the InstRO framework with the Clang compiler infrastructure is currently work in progress.
 
+##Using InstRO
+InstRO comes with a few examples which demonstrate some of its components.
+These examples can be found either in `$(builddir)/examples` or, if InstRO was installed in `$(installdir)/bin`.
+When installed, invoking an example is as easy as changing into the `bin` directory and invoking an example translator on a source file.
+```
+$ ./RoseInstrumentor myInputFile.cpp
+```
+The above command will create a simple `a.out` file, just like GCC would do.
+However, in order to run the transformed program one needs to add `$(installdir)/lib` to the system's `LD_LIBRARY_PATH` environment variable.
 
-## JSON Configuration
+### Using InstRO with a measurement library
+InstRO comes with two implementation of the InstRO Measurement Interface.
+The default library (libimi) does not provide any measurement functionality and is implemented with empty function bodies.
+In addition a test support library is provided, which does generate console output of the construct identifier for enter/exits.
+
+### Command line interface
+In order to change the library implementation that InstRO should link the transformed program with, it does accept its own command line arguments.
+
+`--instro-library-path` tells the translator which directory it should add to the search list in order to find the desired lib.
+
+`--instro-library-name` tells the translator which library is should link. NOTE: it expects solely the library name without the preceeding lib or succeeding .so.
+
+`--instro-include` tells the translator where to look for headers which need to be included to declare inserted function signatures. This is only sensible to change, if an adapter does not use the InstRO Measurement Interface functions.
+
+Thus, an invocation of a translator in the install directory, which uses the provided support library is as follows:
+```
+$ ./RoseInstrumentor --instro-library-path=../lib --instro-library-name=InstRO_rtsupport myTarget.cpp
+```
+Please note, that this will default the value for the `--instro-include` flag to `$(installdir)/include` directory.
+
+### JSON Configuration
 
 InstRO is able to parse a configuration of connected passes from a JSON file using the `ConfigurationLoader` in the `InstRO::Utility` namespace if it was built with the rapidjson library. The JSON file must contain a global array of objects where each object represents a pass. Each pass object must specify the type name of the pass (without Rose or Clang specific prefixes) under the *type* key und a unique identifier using the *id* key. The *inputs* key may be used by a pass to specify multiple input passes via an array of pass identifiers. Passes may need additional arguments like a list of strings or a `ConstructTraitType`. For convenience, the *ConfigInstrumentor* is shipped as a simple application which reads in the JSON file specified by the environment variable *INSTRO_CONFIG* and runs the resulting setup.
 
