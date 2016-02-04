@@ -52,7 +52,8 @@ def runApply(arguments):
                 print("Detailed invocation info: " + invocationString)
 
             errCode = subprocess.call(invocationString, shell=True)
-            if errCode == 0:
+
+            if errCode == 0 and b == "DefaultInstrumentationAdapterTest":
                 errCode += subprocess.call("./a.out", shell=True)
 
             print("[Done]")
