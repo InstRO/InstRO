@@ -1,6 +1,7 @@
 #ifndef INSTRO_UTILITY_LOG_H_
 #define INSTRO_UTILITY_LOG_H_
 
+//#include <stdio>
 #include <iostream>
 
 namespace InstRO {
@@ -21,8 +22,12 @@ enum LogLevel {
  * \brief The visible logLevel is configurable per translation unit.
  * \author Roman Ness
  */
-class Logger: public std::ostream {
+class Logger : public std::ostream {
 public:
+	// CI: note that Visual Studio requires a move here. I don't know if that is the case for all compilers and std-libraries
+	Logger():std::ostream(std::move(std::cout)){};
+	Logger(std::ostream && outfile) :std::ostream(std::move(outfile)){};
+	
 	void setLevel(enum LogLevel level) {
 		this->level = level;
 	}

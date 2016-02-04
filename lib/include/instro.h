@@ -7,8 +7,9 @@
 #include "instro/core/PassFactory.h"
 #include "instro/core/Instrumentor.h"
 
-#if INSTRO_USE_DUMMYCOMPILER
-#include "instro/dummy/DummyPassFactory.h"
+#if INSTRO_USE_MOCKUP
+#include "instro/mockup/MockupInstrumentor.h"
+//#include "instro/dummy/DummyPassFactory.h"
 #endif
 
 #if INSTRO_USE_ROSE
@@ -22,7 +23,7 @@
 #include "instro/clang/ClangInstrumentor.h"
 #endif
 
-#ifdef USING_LLVM
+#if INSTRO_USE_LLVM
 #include "instro/llvmInstRO.h"
 #endif
 
