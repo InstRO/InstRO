@@ -1,7 +1,11 @@
 #ifndef INSTRO_UTILITY_ENVIRONMENT_H
 #define INSTRO_UTILITY_ENVIRONMENT_H
 
+#include "instro/config.h"
+
 #include <string>
+
+#include "boost/filesystem.hpp"
 
 namespace InstRO {
 namespace Utility {
@@ -14,6 +18,11 @@ std::string getEnvironmentVariable(std::string envVar) {
 	} else {
 		throw std::string("The environment variable " + envVar + " was empty");
 	}
+}
+
+/** Returns the configure-time installation directory of the instro library */
+std::string getInstroInstallationPathname(){
+	return std::string(instroInstallIncludePath);
 }
 
 }

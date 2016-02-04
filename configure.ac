@@ -272,7 +272,7 @@ AM_CONDITIONAL(USECLANG, test x"$with_llvm_src" != xno)
 AC_SUBST(CONFIG_DISABLEEXCEPTIONS, [$found_llvm])
 AC_SUBST(CONFIG_USE_ROSE, [$found_rose])
 AC_SUBST(CONFIG_USE_CLANG, [$found_llvm])
-
+AC_SUBST(CONFIG_INSTALL_DIR, [$prefix])
 
 # -------------------------------
 # 4) Checks for libraries.

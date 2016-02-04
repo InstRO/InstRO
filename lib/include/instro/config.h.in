@@ -6,4 +6,8 @@
 #define INSTRO_USE_ROSE @CONFIG_USE_ROSE@
 #define INSTRO_USE_CLANG @CONFIG_USE_CLANG@
 
+
+#define INSTRO_INSTALL_DIR "@CONFIG_INSTALL_DIR@"
+const char * const instroInstallIncludePath = INSTRO_INSTALL_DIR;
+
 #endif

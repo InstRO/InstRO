@@ -6,6 +6,7 @@
 #include "boost/program_options/parsers.hpp"
 
 #include "instro/utility/Logger.h"
+#include "instro/utility/Environment.h"
 
 namespace InstRO {
 namespace Utility {
@@ -26,6 +27,7 @@ class GCCLikeCommandLinePreparationStrategy {
 				instroIncludeOptionName("instro-include"),
 				instroLibPathOptionName("instro-library-path"),
 				instroLibNameOptionName("instro-library-name") {
+
 		desc.add_options()(instroIncludeOptionName.c_str(), bpo::value<std::string>(),
 											 "sets where InstRO finds its supporting includes")(
 				instroLibPathOptionName.c_str(), bpo::value<std::string>(), "where InstRO finds the measurement library")(
@@ -38,14 +40,14 @@ class GCCLikeCommandLinePreparationStrategy {
 			logIt(DEBUG) << "InstRO Include set to: " << vm[instroIncludeOptionName].as<std::string>() << std::endl;
 			instroIncludePathOption = vm[instroIncludeOptionName].as<std::string>();
 		} else {
-			instroIncludePathOption = "../include";
+			instroIncludePathOption = getInstroInstallationPathname() + "/include";
 		}
 
 		if (vm.count(instroLibPathOptionName)) {
 			logIt(DEBUG) << "InstRO Library path set to: " << vm[instroLibPathOptionName].as<std::string>() << std::endl;
 			instroLibPathOption = vm[instroLibPathOptionName].as<std::string>();
 		} else {
-			instroLibPathOption = "../lib";
+			instroLibPathOption = getInstroInstallationPathname() + "/lib";
 		}
 
 		if (vm.count(instroLibNameOptionName)) {
