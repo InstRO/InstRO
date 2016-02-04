@@ -1,7 +1,7 @@
 void foo(){}
 
 void forever(){
-	while(true){
+	while(false){
 		foo();
 	}
 }

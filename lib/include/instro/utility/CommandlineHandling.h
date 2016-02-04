@@ -68,6 +68,10 @@ class GCCLikeCommandLinePreparationStrategy {
 		std::string library = std::string("-l" + getInstroLibName());
 		argVec.push_back(library);
 
+		for (auto arg : argVec) {
+			logIt(DEBUG) << arg << " ";
+		}
+
 		return argVec;
 	}
 

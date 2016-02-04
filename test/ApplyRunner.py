@@ -8,7 +8,7 @@ cmdParser.add_argument('build', type=str, help="/path/to/instro/repo")
 cmdParser.add_argument('compilerIndication', type=str, help="Which compiler is running? [rose/clang]")
 
 # This is the list of test programs which should be applied.
-testPrograms = ["ConstructHierarchySelectionTest", "IdentifierSelectorTest", "ConstructElevatorTest", "BooleanCompoundSelectorTest", "CallpathSelectorTest", "UniqueCallpathTransformerTest"]
+testPrograms = ["ConstructHierarchySelectionTest", "IdentifierSelectorTest", "ConstructElevatorTest", "BooleanCompoundSelectorTest", "CallpathSelectorTest", "UniqueCallpathTransformerTest", "DefaultInstrumentationAdapterTest"]
 
 # The list of targets is read from a targets.lst which resides in a test/input/BinaryName directory
 def readTargetFileSpecification(tInstrumentor, directory):
@@ -24,6 +24,8 @@ def runApply(arguments):
     baseDir = os.getcwd()[0:os.getcwd().rfind('/')]
     
     inputDirectory = arguments.src + "/test/input"
+
+    os.environ['LD_LIBRARY_PATH'] = arguments.build+'/test/.libs:'+os.environ['LD_LIBRARY_PATH']
     
     failedRuns = []
     for b in testPrograms:
@@ -34,7 +36,7 @@ def runApply(arguments):
 
             roseExtraArg = " "
             if arguments.compilerIndication == 'rose':
-                roseExtraArg += ' --instro-library-path=' + arguments.build + '/test'
+                roseExtraArg += ' --instro-library-path=' + arguments.build + '/test/.libs'
                 roseExtraArg += ' --instro-library-name=InstRO_rtsupport'
                 roseExtraArg += ' --instro-include=' + arguments.src + '/support'
 
@@ -50,6 +52,9 @@ def runApply(arguments):
                 print("Detailed invocation info: " + invocationString)
 
             errCode = subprocess.call(invocationString, shell=True)
+            if errCode == 0:
+                errCode += subprocess.call("./a.out", shell=True)
+
             print("[Done]")
             if errCode != 0:
                 failedRuns.append((b, srcFile))

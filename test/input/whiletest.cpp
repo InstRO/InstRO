@@ -7,6 +7,5 @@ void foo() {
 }
 
 int main(int argc, char **){
-	foo();
 	return 0;
 }

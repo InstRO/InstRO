@@ -1,15 +1,11 @@
 +IdSelector-::foo
 whiletest.cpp:1:1--Function-::foo
-whiletest.cpp:10:2--Expression
 
 +IdSelector-::f#
 whiletest.cpp:1:1--Function-::foo
-whiletest.cpp:10:2--Expression
 
 +IdSelector-#foo
 whiletest.cpp:1:1--Function-::foo
-whiletest.cpp:10:2--Expression
 
 +IdSelector-#f#
 whiletest.cpp:1:1--Function-::foo
-whiletest.cpp:10:2--Expression
