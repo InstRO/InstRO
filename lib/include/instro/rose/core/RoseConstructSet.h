@@ -126,9 +126,11 @@ struct CLExpressionPredicate : public CTPredicate {
 			if (isSgCastExp(n) || isSgAddressOfOp(n)) {
 				return false;
 			}
-			if (isSgValueExp(isSgUnaryOp(n)->get_operand())) {
-				return false;	// unary operators on literals are no expressions (-42)
+			if (!SageInterface::querySubTree<SgVarRefExp>(n, V_SgVarRefExp).empty() ||
+					!SageInterface::querySubTree<SgFunctionCallExp>(n, V_SgFunctionCallExp).empty()) {
+				return true;
 			}
+			return false;	// unary operators only containing literals are no expressions (-42)
 		}
 
 		return isSgExpression(n) != nullptr;
@@ -249,6 +251,9 @@ struct CTWrappableStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		if (isSgReturnStmt(n)) {
 			return false;	// return stmts are not wrappable
+		}
+		if (isSgBreakStmt(n) || isSgContinueStmt(n)) {
+			return false;
 		}
 		return (isSgBasicBlock(n->get_parent()) != nullptr);
 	}
