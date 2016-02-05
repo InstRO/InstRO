@@ -33,7 +33,7 @@ class GCCLikeCommandLinePreparationStrategy {
 				instroLibPathOptionName.c_str(), bpo::value<std::string>(), "where InstRO finds the measurement library")(
 				instroLibNameOptionName.c_str(), bpo::value<std::string>(),
 				"the name of the shared library to link (without the preceding \"lib\")");
-		bpo::store(bpo::parse_command_line(*argcP, *argvP, desc), vm);
+		bpo::command_line_parser(*argcP, *argvP).options(desc).allow_unregistered().run();
 		bpo::notify(vm);
 
 		if (vm.count(instroIncludeOptionName)) {
