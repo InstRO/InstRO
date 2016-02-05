@@ -15,4 +15,7 @@ int root() {
 	return --res;
 }
 
-int main(int arc, char **argv) { return 0; }
+int main(int arc, char **argv) { 
+	int a = (-(-(42)));
+	return 0; 
+}

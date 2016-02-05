@@ -13,7 +13,8 @@ unaryOperators.cpp:9:2--SimpleStatement
 unaryOperators.cpp:10:2--SimpleStatement
 unaryOperators.cpp:14:2--SimpleStatement
 unaryOperators.cpp:15:2--SimpleStatement
-unaryOperators.cpp:18:34--SimpleStatement
+unaryOperators.cpp:20:2--SimpleStatement
+unaryOperators.cpp:19:2--SimpleStatement
 
 +CTExpressionSelector
 unaryOperators.cpp:2:2--Expression
@@ -29,3 +30,4 @@ unaryOperators.cpp:14:2--Expression
 unaryOperators.cpp:14:12--Expression
 unaryOperators.cpp:14:13--Expression
 unaryOperators.cpp:15:9--Expression
+unaryOperators.cpp:19:2--Expression

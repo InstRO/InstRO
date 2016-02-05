@@ -46,7 +46,7 @@ class GCCLikeCommandLinePreparationStrategy {
 		}
 
 		if (vm.count(instroLibPathOptionName)) {
-			std::cout << "InstRO Library path set to: " << vm[instroLibPathOptionName].as<std::string>() << std::endl;
+			logIt(DEBUG) << "InstRO Library path set to: " << vm[instroLibPathOptionName].as<std::string>() << std::endl;
 			instroLibPathOption = vm[instroLibPathOptionName].as<std::string>();
 		} else {
 			instroLibPathOption = getInstroInstallationPathname() + "/lib";
