@@ -193,6 +193,10 @@ struct CLSimpleStatementPredicate : public CTPredicate {
 			return false;	// no equivalent in C/C++ semantics
 		}
 
+		if (isSgCaseOptionStmt(n) || isSgDefaultOptionStmt(n)) {
+			return false;	// these are only labels
+		}
+
 		if (IsStatementInForLoop()(n)) {
 			// allow null statements in loop header, but set file info
 			if (isSgNullStatement(n)) {
