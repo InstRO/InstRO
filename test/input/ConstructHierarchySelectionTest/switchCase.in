@@ -5,7 +5,6 @@ switchCase.cpp:5:1--Function-::main
 
 +CTStatementSelector
 switchCase.cpp:6:2--ConditionalStatement
-switchCase.cpp:6:16--ScopeStatement
 switchCase.cpp:8:4--SimpleStatement
 switchCase.cpp:9:4--SimpleStatement
 switchCase.cpp:11:4--SimpleStatement
