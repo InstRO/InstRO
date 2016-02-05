@@ -1,6 +1,7 @@
 import os
 import subprocess
 import argparse
+from multiprocessing import Pool
 
 cmdParser = argparse.ArgumentParser(description='Runs the test instrumentor executable on all input files.')
 cmdParser.add_argument('src', type=str, help="/path/to/instro/repo")
@@ -19,6 +20,42 @@ def readTargetFileSpecification(tInstrumentor, directory):
 
     return targets
 
+def runTestBinary(arguments, binary, inputDirectory):
+    targets = readTargetFileSpecification(binary, inputDirectory);
+
+    failedRuns = []
+    for k in targets:
+        srcFile = k + ".cpp"
+        specFile = k + ".in"
+
+        roseExtraArg = " --edg:no_warnings "
+        if arguments.compilerIndication == 'rose':
+            roseExtraArg += ' --instro-library-path=' + arguments.build + '/test/.libs'
+            roseExtraArg += ' --instro-library-name=InstRO_rtsupport'
+            roseExtraArg += ' --instro-include=' + arguments.src + '/support'
+
+        os.environ["INSTRO_TEST_INPUT_FILENAME"] = inputDirectory + '/' + binary + '/' + specFile
+        invocationString = "./" + binary + " "  + roseExtraArg + ' ' + inputDirectory + '/' + srcFile
+
+            # we need to add the "--" to the invocation as we do not have JSON compilation databases
+        if arguments.compilerIndication == 'clang':
+            invocationString += ' --'
+            
+        print("\n[Running]\n" + binary + " " + srcFile)
+        if False:
+            print("Detailed invocation info: " + invocationString)
+
+        errCode = subprocess.call(invocationString, shell=True)
+
+        if errCode == 0 and binary == "DefaultInstrumentationAdapterTest":
+            errCode += subprocess.call("./a.out", shell=True)
+
+        print("[Done]")
+        if errCode != 0:
+            failedRuns.append((binary, srcFile))
+
+    return failedRuns
+
 # Runs each TestInstrumentor on the given target list
 def runApply(arguments):
     baseDir = os.getcwd()[0:os.getcwd().rfind('/')]
@@ -29,36 +66,7 @@ def runApply(arguments):
     
     failedRuns = []
     for b in testPrograms:
-        targets = readTargetFileSpecification(b, inputDirectory);
-        for k in targets:
-            srcFile = k + ".cpp"
-            specFile = k + ".in"
-
-            roseExtraArg = " "
-            if arguments.compilerIndication == 'rose':
-                roseExtraArg += ' --instro-library-path=' + arguments.build + '/test/.libs'
-                roseExtraArg += ' --instro-library-name=InstRO_rtsupport'
-                roseExtraArg += ' --instro-include=' + arguments.src + '/support'
-
-            os.environ["INSTRO_TEST_INPUT_FILENAME"] = inputDirectory + '/' + b + '/' + specFile
-            invocationString = "./" + b + " " + roseExtraArg + ' ' + inputDirectory + '/' + srcFile
-
-            # we need to add the "--" to the invocation as we do not have JSON compilation databases
-            if arguments.compilerIndication == 'clang':
-                invocationString += ' --'
-            
-            print("\n[Running]\n" + b + " " + srcFile)
-            if False:
-                print("Detailed invocation info: " + invocationString)
-
-            errCode = subprocess.call(invocationString, shell=True)
-
-            if errCode == 0 and b == "DefaultInstrumentationAdapterTest":
-                errCode += subprocess.call("./a.out", shell=True)
-
-            print("[Done]")
-            if errCode != 0:
-                failedRuns.append((b, srcFile))
+        failedRuns += runTestBinary(arguments, b, inputDirectory)
 
     if len(failedRuns) == 0:
         print("\n=================================")

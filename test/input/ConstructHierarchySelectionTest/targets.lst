@@ -18,3 +18,4 @@ overloadedFunctions
 callInTemplateCode
 emptyBodies
 switchCase
+unaryOperators
