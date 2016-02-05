@@ -122,15 +122,15 @@ struct CLExpressionPredicate : public CTPredicate {
 			return false;
 		}
 
-		if (isSgUnaryOp(n)) {
-			if (isSgCastExp(n) || isSgAddressOfOp(n)) {
-				return false;
-			}
+		if (isSgCastExp(n) || isSgAddressOfOp(n)) {
+			return false;
+		}
+		if (isSgUnaryOp(n) || isSgBinaryOp(n)) {
 			if (!SageInterface::querySubTree<SgVarRefExp>(n, V_SgVarRefExp).empty() ||
 					!SageInterface::querySubTree<SgFunctionCallExp>(n, V_SgFunctionCallExp).empty()) {
 				return true;
 			}
-			return false;	// unary operators only containing literals are no expressions (-42)
+			return false;	// operators only containing literals of templateParameterVals are no expressions (-42)
 		}
 
 		return isSgExpression(n) != nullptr;
