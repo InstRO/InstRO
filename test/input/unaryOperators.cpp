@@ -17,5 +17,6 @@ int root() {
 
 int main(int arc, char **argv) { 
 	int a = (-(-(42)));
+	float f = - (3 + 2.0f);
 	return 0; 
 }
