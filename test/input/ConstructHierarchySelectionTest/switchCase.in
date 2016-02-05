@@ -16,7 +16,6 @@ switchCase.cpp:17:2--SimpleStatement
 switchCase.cpp:6:2--ConditionalStatement
 
 +CTScopeSelector
-switchCase.cpp:6:16--ScopeStatement
 
 +CTExpressionSelector
 switchCase.cpp:6:10--Expression
