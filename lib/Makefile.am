@@ -53,7 +53,6 @@ CORE_SFILES= \
 ./src/core/Pass.cpp \
 ./src/core/PassFactory.cpp \
 ./src/core/PassImplementation.cpp \
-./src/core/SimplePassManager.cpp \
 ./src/core/OrderOfRegistrationBasedPassManager.cpp \
 ./src/core/Singleton.cpp \
 ./src/tooling/AnalysisInterface.cpp \
