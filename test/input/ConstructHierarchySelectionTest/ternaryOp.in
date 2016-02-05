@@ -10,5 +10,4 @@ ternaryOp.cpp:7:2--SimpleStatement
 +CTExpressionSelector
 ternaryOp.cpp:2:2--Expression
 ternaryOp.cpp:2:10--Expression
-ternaryOp.cpp:2:10--Expression
 ternaryOp.cpp:6:2--Expression

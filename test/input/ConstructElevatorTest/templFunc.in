@@ -12,8 +12,6 @@ templFunc.cpp:4:1--Function-::eq
 templFunc.cpp:12:1--Function-::main
 
 +Func2ExprLevelSelector
-templFunc.cpp:4:1--Expression
-templFunc.cpp:5:9--Expression
 templFunc.cpp:9:2--Expression
 templFunc.cpp:9:11--Expression
 templFunc.cpp:13:2--Expression
@@ -22,9 +20,7 @@ templFunc.cpp:13:2--Expression
 templFunc.cpp:4:1--SimpleStatement
 templFunc.cpp:5:2--SimpleStatement
 templFunc.cpp:9:2--SimpleStatement
-templFunc.cpp:4:1--Expression
 templFunc.cpp:9:2--Expression
-templFunc.cpp:5:9--Expression
 templFunc.cpp:9:11--Expression
 templFunc.cpp:13:2--Expression
 templFunc.cpp:13:2--SimpleStatement
