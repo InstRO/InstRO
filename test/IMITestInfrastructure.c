@@ -9,18 +9,30 @@
 #define ENTERS(x) ENTER(0, x)
 #define EXITS(x) EXIT(0, x)
 
+#ifdef CDEBUG
 #define ENTER(id, x)   \
 	printf("Entering "); \
 	push(id);            \
 	PRINT(#x);
+
 #define EXIT(id, x)   \
 	printf("Exiting "); \
 	pop(id);            \
 	PRINT(#x);
+
 #define PRINT(x) \
 	printf(x);     \
 	printf("\n");
 
+#else // CDEBUG
+
+#define ENTER(id, x)   \
+	push(id);            \
+
+#define EXIT(id, x)   \
+	pop(id);            \
+
+#endif // CDEBUG
 /**
  * We use this as a tracking stack for the identifiers pused and pop while running an instrumented version of a piece of
  * code.
