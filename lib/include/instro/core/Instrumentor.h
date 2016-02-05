@@ -9,7 +9,7 @@
 #include "instro/core/Singleton.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/core/PassManager.h"
-#include "instro/core/SimplePassManager.h"
+#include "instro/core/OrderOfRegistrationBasedPassManager.h"
 #include "instro/core/PassFactory.h"
 #include "instro/tooling/AnalysisInterface.h"
 
@@ -36,7 +36,7 @@ class Instrumentor {
 	 * If nothing is supplied it constructs an instance of SimplePassManager.
 	 * The instrumentor takes ownership of the PassManager
 	 */
-	Instrumentor(InstRO::PassManagement::PassManager* pm = new InstRO::PassManagement::SimplePassManager())
+	Instrumentor(InstRO::PassManagement::PassManager* pm = new InstRO::PassManagement::OrderOfRegistrationBasedPassManager())
 			: passManager(pm) {}
 
 	virtual ~Instrumentor() { delete passManager; }

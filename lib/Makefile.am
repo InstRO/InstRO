@@ -25,6 +25,7 @@ CORE_HFILES= \
 ./include/instro/core/PassManager.h \
 ./include/instro/core/PassImplementation.h \
 ./include/instro/core/ChannelConfiguration.h \
+./include/instro/core/OrderOfRegistrationBasedPassManager.h \
 ./include/instro/core/Singleton.h \
 ./include/instro/tooling/IdentifierProvider.h \
 ./include/instro/tooling/AnalysisInterface.h \
@@ -53,6 +54,7 @@ CORE_SFILES= \
 ./src/core/PassFactory.cpp \
 ./src/core/PassImplementation.cpp \
 ./src/core/SimplePassManager.cpp \
+./src/core/OrderOfRegistrationBasedPassManager.cpp \
 ./src/core/Singleton.cpp \
 ./src/tooling/AnalysisInterface.cpp \
 ./src/tooling/NamedConstructAccess.cpp \
