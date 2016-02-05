@@ -105,10 +105,6 @@ struct CLExpressionPredicate : public CTPredicate {
 			return false;
 		}
 
-		if (isSgCastExp(n)) {
-			return false;
-		}
-
 		if (isSgAssignInitializer(n)) {
 			if (isSgCtorInitializerList(n->get_parent()->get_parent())) {
 				return false;
@@ -124,6 +120,15 @@ struct CLExpressionPredicate : public CTPredicate {
 		// function call expressions won't be affected
 		if (isSgDotExp(n) || isSgThisExp(n) || isSgArrowExp(n)) {
 			return false;
+		}
+
+		if (isSgUnaryOp(n)) {
+			if (isSgCastExp(n) || isSgAddressOfOp(n)) {
+				return false;
+			}
+			if (isSgValueExp(isSgUnaryOp(n)->get_operand())) {
+				return false;	// unary operators on literals are no expressions (-42)
+			}
 		}
 
 		return isSgExpression(n) != nullptr;

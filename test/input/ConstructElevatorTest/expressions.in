@@ -15,7 +15,6 @@ expressions.cpp:2:2--Expression
 expressions.cpp:3:2--Expression
 expressions.cpp:4:2--Expression
 expressions.cpp:3:13--Expression
-expressions.cpp:4:11--Expression
 expressions.cpp:6:2--Expression
 expressions.cpp:10:2--Expression
 
@@ -25,7 +24,6 @@ expressions.cpp:2:2--Expression
 expressions.cpp:3:13--Expression
 expressions.cpp:3:2--Expression
 expressions.cpp:3:2--SimpleStatement
-expressions.cpp:4:11--Expression
 expressions.cpp:4:2--Expression
 expressions.cpp:4:2--SimpleStatement
 expressions.cpp:6:2--Expression
