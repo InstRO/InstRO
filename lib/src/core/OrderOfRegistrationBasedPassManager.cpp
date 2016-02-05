@@ -23,7 +23,7 @@ int InstRO::PassManagement::OrderOfRegistrationBasedPassManager::execute() {
 								 << hasOutputDependencies(pass) << std::endl;
 
 		for (auto &i : getPredecessors(pass)) {
-			// CI: do we have to perform some form of elevation
+			// CI: check if we have to perform some form of elevation
 			if (i->getOutput()->getMinConstructLevel() < pass->getMinInputLevelRequirement(i) ||
 					i->getOutput()->getMaxConstructLevel() > pass->getMaxInputLevelRequirement(i)) {
 
@@ -46,8 +46,8 @@ int InstRO::PassManagement::OrderOfRegistrationBasedPassManager::execute() {
 					cropMin = pass->getMinInputLevelRequirement(i);
 				}
 				
-				auto copy = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->crop(originalConstructSet,
-																																																	 cropMin, cropMax);
+				auto copy = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->crop(originalConstructSet, cropMin, cropMax);
+
 				if (InstRO::getInstrumentorInstance()->getConstructRaisingPolicyElevate()) {
 					copy = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->raise(
 							copy, pass->getMinInputLevelRequirement(i));
