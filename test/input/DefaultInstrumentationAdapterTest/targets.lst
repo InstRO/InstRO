@@ -5,3 +5,5 @@ controlConstructs
 switchCase
 loop
 scopes
+matchingIdentifiers
+identifierNesting
