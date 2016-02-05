@@ -1,0 +1,17 @@
++IdSelector-::foo
+matchingIdentifiers.cpp:1:1--Function-::foo
+matchingIdentifiers.cpp:10:12--Expression
+
++IdSelector-::f#
+matchingIdentifiers.cpp:1:1--Function-::foo
+matchingIdentifiers.cpp:10:12--Expression
+
++IdSelector-#foo
+matchingIdentifiers.cpp:1:1--Function-::foo
+matchingIdentifiers.cpp:10:12--Expression
+
++IdSelector-#f#
+matchingIdentifiers.cpp:1:1--Function-::foo
+matchingIdentifiers.cpp:7:1--Function-::yaf
+matchingIdentifiers.cpp:10:12--Expression
+matchingIdentifiers.cpp:10:28--Expression
