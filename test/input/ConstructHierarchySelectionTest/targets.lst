@@ -17,3 +17,4 @@ arrowCall
 overloadedFunctions
 callInTemplateCode
 emptyBodies
+switchCase
