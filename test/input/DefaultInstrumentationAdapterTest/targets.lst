@@ -3,3 +3,5 @@ recursion
 callpath2
 controlConstructs
 switchCase
+loop
+scopes

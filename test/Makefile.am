@@ -22,7 +22,8 @@ RT_SUPPORT_HFILES= \
 RT_SUPPORT_SFILES= \
 						./IMITestInfrastructure.c
 
-lib_LTLIBRARIES= libInstRO_test.la libInstRO_rtsupport.la
+lib_LTLIBRARIES= libInstRO_test.la libInstRO_rtsupport.la libInstRO_rtsupport_dbg.la
+
 
 libInstRO_test_la_SOURCES= \
 	$(TEST_SFILES) \
@@ -33,6 +34,11 @@ libInstRO_rtsupport_la_SOURCES= \
 	$(RT_SUPPORT_SFILES) \
 	$(RT_SUPPORT_HFILES)
 libInstRO_rtsupport_la_CFLAGS=-I$(top_srcdir)/support $(AM_CPPFLAGS)
+
+libInstRO_rtsupport_dbg_la_SOURCES= \
+	$(RT_SUPPORT_SFILES) \
+	$(RT_SUPPORT_HFILES)
+libInstRO_rtsupport_dbg_la_CFLAGS=-I$(top_srcdir)/support $(AM_CPPFLAGS) -DCDEBUG
 
 
 

@@ -46,7 +46,10 @@ class RoseInstrumentor : public Instrumentor {
 	void apply() {
 		passManager->execute();
 		project->unparse();
-		project->compileOutput();
+		int err = project->compileOutput();
+		if (err) {
+			throw std::string("There was an error compiling the unparsed sources");
+		}
 	}
 
 	virtual Tooling::AnalysisManager *getAnalysisManager() { return ram; }

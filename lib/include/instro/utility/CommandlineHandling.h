@@ -35,7 +35,6 @@ class GCCLikeCommandLinePreparationStrategy {
 				"the name of the shared library to link (without the preceding \"lib\")");
 
 		bpo::store(bpo::command_line_parser(*argcP, *argvP).options(desc).allow_unregistered().run(), vm);
-		
 		bpo::notify(vm);
 
 		if (vm.count(instroIncludeOptionName)) {

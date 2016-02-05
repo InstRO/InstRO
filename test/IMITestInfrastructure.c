@@ -13,16 +13,17 @@
 #define ENTER(id, x)   \
 	printf("Entering "); \
 	push(id);            \
-	PRINT(#x);
+	PRINT(#x);		\
+	printf(" construct id %zu\n", id);
 
 #define EXIT(id, x)   \
 	printf("Exiting "); \
 	pop(id);            \
-	PRINT(#x);
+	PRINT(#x);			\
+	printf(" construct id %zu\n", id);
 
 #define PRINT(x) \
-	printf(x);     \
-	printf("\n");
+	printf(x);     
 
 #else // CDEBUG
 
@@ -38,7 +39,7 @@
  * code.
  * Right now, this solely checks whether the order is right.
  */
-#define MAX_STACK_SIZE 1024
+#define MAX_STACK_SIZE 100000
 size_t globalStack[MAX_STACK_SIZE];
 int cur = 0;
 
@@ -49,9 +50,10 @@ void push(size_t id) {
 	globalStack[cur] = id;
 	cur++;
 }
+
 void pop(size_t id) {
 	if (globalStack[cur-1] != id) {
-		printf("Identifier: %zu\n");
+		fprintf(stderr, "Awaited Identifier %zu but got Identifier %zu\n", globalStack[cur-1], id);
 		exit(-1);
 	}
 	cur--;
@@ -107,12 +109,12 @@ void __instro_end_scope(size_t construct_hash) {
 	EXIT(construct_hash, instro_end_scope)
 }
 
-void __instro_start_condition(size_t construct_hash) {
+void __instro_start_conditional(size_t construct_hash) {
 	ENTER(construct_hash, instro_start_condition)
 	EXIT(construct_hash, instro_start_condition)
 }
 
-void __instro_end_condition(size_t construct_hash) {
+void __instro_end_conditional(size_t construct_hash) {
 	ENTER(construct_hash, instro_end_condition)
 	EXIT(construct_hash, instro_end_condition)
 }
