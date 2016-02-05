@@ -159,8 +159,10 @@ struct CLScopeStatementPredicate : public CTPredicate {
 		if (isSgFunctionDefinition(parent)) {
 			return false;	// ignore function scopes
 		}
-		if ((isSgCaseOptionStmt(parent) || isSgSwitchStatement(parent)) && isSgLocatedNode(n)->isCompilerGenerated()) {
-			return false;	// ignore compiler generated scopes around case statements
+		if (isSgSwitchStatement(parent) || (isSgCaseOptionStmt(parent) && isSgLocatedNode(n)->isCompilerGenerated())) {
+			// always ignore scopes of Switch-stmts
+			// ignore compiler generated scopes around case-option-stmts
+			return false;
 		}
 		return true;
 	}
