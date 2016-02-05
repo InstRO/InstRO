@@ -15,7 +15,11 @@ int main(int argc, char **argv){
 	auto factory = instrumentor.getFactory();
 
 	auto fDefSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
-	auto defaultAdapter = factory->createDefaultInstrumentationAdapter(fDefSelector);
+	auto stmtSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTStatement);
+
+	auto combinedSelector = factory->createBooleanOrSelector(fDefSelector, stmtSelector);
+
+	auto defaultAdapter = factory->createDefaultInstrumentationAdapter(combinedSelector);
 
 	instrumentor.apply();
 
