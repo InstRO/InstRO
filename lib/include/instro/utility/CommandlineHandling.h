@@ -33,7 +33,9 @@ class GCCLikeCommandLinePreparationStrategy {
 				instroLibPathOptionName.c_str(), bpo::value<std::string>(), "where InstRO finds the measurement library")(
 				instroLibNameOptionName.c_str(), bpo::value<std::string>(),
 				"the name of the shared library to link (without the preceding \"lib\")");
-		bpo::command_line_parser(*argcP, *argvP).options(desc).allow_unregistered().run();
+
+		bpo::store(bpo::command_line_parser(*argcP, *argvP).options(desc).allow_unregistered().run(), vm);
+		
 		bpo::notify(vm);
 
 		if (vm.count(instroIncludeOptionName)) {
@@ -44,7 +46,7 @@ class GCCLikeCommandLinePreparationStrategy {
 		}
 
 		if (vm.count(instroLibPathOptionName)) {
-			logIt(DEBUG) << "InstRO Library path set to: " << vm[instroLibPathOptionName].as<std::string>() << std::endl;
+			std::cout << "InstRO Library path set to: " << vm[instroLibPathOptionName].as<std::string>() << std::endl;
 			instroLibPathOption = vm[instroLibPathOptionName].as<std::string>();
 		} else {
 			instroLibPathOption = getInstroInstallationPathname() + "/lib";
