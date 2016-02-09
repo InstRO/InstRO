@@ -73,7 +73,9 @@ int main(int argc, char **argv) {
 	}
 #endif
 
+#if 0
 	factory->createConstructPrinterAdapter(ucpTransformer);
+#endif
 
 	factory->createTestAdapter(ucpTransformer, "UCPTransformations", filename);
 

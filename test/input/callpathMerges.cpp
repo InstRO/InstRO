@@ -1,4 +1,4 @@
-extern void printf(const char*, ...);
+#include <cstdio>
 
 void markMe(int x) {
 	printf("x=%d\n", x);
