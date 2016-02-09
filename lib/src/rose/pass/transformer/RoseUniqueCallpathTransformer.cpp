@@ -28,13 +28,24 @@ using namespace InstRO::Core;
 using namespace InstRO::Rose;
 using namespace InstRO::Rose::Transformer;
 
-RoseUniqueCallpathTransformer::RoseUniqueCallpathTransformer(RoseUniqueCallpathTransformer::Mode m)
-		: RosePassImplementation(), mode(m), callGraph(nullptr) {}
+RoseUniqueCallpathTransformer::RoseUniqueCallpathTransformer()
+		: RosePassImplementation(), mapping({std::make_pair(PassType::InputPT, 0)}), callGraph(nullptr) {}
+
+RoseUniqueCallpathTransformer::RoseUniqueCallpathTransformer(InputMapping mapping)
+		: RosePassImplementation(), mapping(std::move(mapping)), callGraph(nullptr) {}
 
 RoseUniqueCallpathTransformer::~RoseUniqueCallpathTransformer() {}
 
-RoseUniqueCallpathTransformer::NodeSet RoseUniqueCallpathTransformer::retrieveInputNodes(int channel) {
+RoseUniqueCallpathTransformer::NodeSet RoseUniqueCallpathTransformer::retrieveInputNodes(PassType passType) {
+	auto channelIter = mapping.find(passType);
+	if (channelIter != mapping.end()) {
+		return retrieveInputNodes(channelIter->second);
+	} else {
+		return NodeSet();
+	}
+}
 
+RoseUniqueCallpathTransformer::NodeSet RoseUniqueCallpathTransformer::retrieveInputNodes(int channel) {
 	auto graphNodes = callGraph->getNodeSetByCS(getInput(channel));
 	NodeSet graphNodesUnordered;
 	graphNodesUnordered.reserve(graphNodes.size());
@@ -46,7 +57,6 @@ RoseUniqueCallpathTransformer::NodeSet RoseUniqueCallpathTransformer::retrieveIn
 InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *RoseUniqueCallpathTransformer::getMainFunctionNode() {
 	if (SgFunctionDeclaration *mainDecl = SageInterface::findMain(SageInterface::getProject())) {
 		if (SgFunctionDefinition *mainDef = mainDecl->get_definition()) {
-
 			auto mainConstruct = InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(mainDef);
 			ConstructSet mainCS;
 			InstRO::InfrastructureInterface::ConstructSetCompilerInterface(&mainCS).put(mainConstruct);
@@ -130,21 +140,18 @@ void RoseUniqueCallpathTransformer::execute() {
 	callGraph = getInstrumentorInstance()->getAnalysisManager()->getECG();
 
 	// use the main function as default root if none have been specified manually
-	if(mode != Mode::rMode || mode != Mode::raMode) {
+	if (mapping.find(PassType::RootPT) == mapping.end()) {
 		rootNodes.clear();
 		rootNodes.insert(getMainFunctionNode());
 	} else {
-		rootNodes = retrieveInputNodes(1);
+		rootNodes = retrieveInputNodes(PassType::RootPT);
 	}
 
 	// convert marked functions to call graph nodes
 	NodeSet markedNodes = retrieveInputNodes(0);
 
 	// initialize active nodes
-	activeNodes.clear();
-	if(mode == Mode::aMode || mode == Mode::raMode) {
-		activeNodes = retrieveInputNodes(2);
-	}
+	activeNodes = retrieveInputNodes(PassType::ActivePT);
 
 	// find candidates for duplication and nodes which are targeted by a backwards directed edge
 	NodeDepthMap candidates;

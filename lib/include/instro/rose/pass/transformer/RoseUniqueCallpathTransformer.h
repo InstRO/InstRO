@@ -45,31 +45,23 @@ namespace Transformer {
 /// \author Simon Reuß, Jan-Patrick Lehr
 class RoseUniqueCallpathTransformer : public RosePassImplementation {
  public:
-	 // FIXME This serves as a temporary work around.
-	 // nMode = a single input channel is used
-	 // rMode = only the root (former input channel 1) is set
-	 // aMode = only the active (former input channel 2) is set
-	 // raMode =  both root and active (former input channels 1 and 2) are set.
-	 enum class Mode {nMode, rMode, aMode, raMode};
-	 /// \brief Constructs a new UniqueCallpathTransformer executing in the specified mode.
-	 /// When run in nMode, the main function will be used as the root of the call graph and all functions will be assumed
-	 /// to be duplicatable.
-	 /// When run in aMode, the main function will be used as the root of the call graph and only those nodes returned by
-	 /// the pass connected to input channel 2 are used as the active functions
-	 /// When run in rMode, only those nodes returned by the pass connected to input channel 1 will be used as the root of
-	 /// the call graph
-	 /// When run in raMode, the node sets output by passes connected to channel 1 and connected to channel 2 will be used
-	 /// as the root and the active nodes, respectively.
-	 /// \arg m Mode specifying the mode of operation. Input channel 0 holds the functions for which a unique call path
-	 /// should be created
-	 RoseUniqueCallpathTransformer(Mode m);
+	enum class PassType { InputPT, RootPT, ActivePT };
+	typedef std::map<PassType, int> InputMapping;
+
+	/// \brief Constructs a new UniqueCallpathTransformer that expects only a single input channel specifying the
+	/// functions for which a unique call path should be created.
+	RoseUniqueCallpathTransformer();
+
+	/// \brief Constructs a new UniqueCallpathTransformer with an explicit mapping of the expected input channels.
+	/// \arg mapping Maps the pass type to the expected input channel
+	RoseUniqueCallpathTransformer(InputMapping mapping);
 
 	virtual ~RoseUniqueCallpathTransformer();
 
 	virtual void execute() override;
 
  protected:
-	Mode mode;
+	InputMapping mapping;
 
 	/// Generates the new name for the cloned function.
 	/// \arg caller The function calling the duplicate
@@ -89,6 +81,7 @@ class RoseUniqueCallpathTransformer : public RosePassImplementation {
 	NodeSet rootNodes;
 	NodeSet activeNodes;
 
+	NodeSet retrieveInputNodes(PassType passType);
 	NodeSet retrieveInputNodes(int channel);
 	InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode *getMainFunctionNode();
 

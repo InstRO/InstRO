@@ -42,31 +42,39 @@ InstRO::Pass* RosePassFactory::createRoseUniqueCallpathTransformer(InstRO::Pass*
 	cfg.setConstructLevel(input, InstRO::Core::ConstructTraitType::CTFunction,
 												InstRO::Core::ConstructTraitType::CTFunction);
 
-	InstRO::Pass* newPass = new InstRO::Pass(
-			new Transformer::RoseUniqueCallpathTransformer(Transformer::RoseUniqueCallpathTransformer::Mode::nMode), cfg,
-			"InstRO::Rose::Transformer::RoseUniqueCallpathTransformer");
+	InstRO::Pass* newPass = new InstRO::Pass(new Transformer::RoseUniqueCallpathTransformer(), cfg,
+																					 "InstRO::Rose::Transformer::RoseUniqueCallpathTransformer");
 	passManager->registerPass(newPass);
 	return newPass;
 }
 
 InstRO::Pass* RosePassFactory::createRoseUniqueCallpathTransformer(Pass* input, Pass* root, Pass* active) {
-	Transformer::RoseUniqueCallpathTransformer::Mode m = Transformer::RoseUniqueCallpathTransformer::Mode::nMode;
-	if (root == nullptr) {
-		if (active != nullptr) {
-			m = Transformer::RoseUniqueCallpathTransformer::Mode::aMode;
+	using ChannelConfiguration = InstRO::Core::ChannelConfiguration;
+	using ConfigTuple = InstRO::Core::ChannelConfiguration::ConfigTuple;
+	using PassType = InstRO::Rose::Transformer::RoseUniqueCallpathTransformer::PassType;
+
+	Transformer::RoseUniqueCallpathTransformer::InputMapping mapping{std::make_pair(PassType::InputPT, 0)};
+	ChannelConfiguration channelConfig;
+
+	if (root) {
+		mapping.insert(std::make_pair(PassType::RootPT, 1));
+		if (active) {
+			mapping.insert(std::make_pair(PassType::ActivePT, 2));
+			channelConfig = ChannelConfiguration(ConfigTuple(0, input), ConfigTuple(1, root), ConfigTuple(2, active));
+		} else {
+			channelConfig = ChannelConfiguration(ConfigTuple(0, input), ConfigTuple(1, root));
 		}
 	} else {
-		if (active == nullptr) {
-			m = Transformer::RoseUniqueCallpathTransformer::Mode::rMode;
+		if (active) {
+			mapping.insert(std::make_pair(PassType::ActivePT, 1));
+			channelConfig = ChannelConfiguration(ConfigTuple(0, input), ConfigTuple(1, active));
 		} else {
-			m = Transformer::RoseUniqueCallpathTransformer::Mode::raMode;
+			channelConfig = ChannelConfiguration(input);
 		}
 	}
-	using ConfigTuple = InstRO::Core::ChannelConfiguration::ConfigTuple;
-	InstRO::Pass* newPass = new InstRO::Pass(
-			new Transformer::RoseUniqueCallpathTransformer(m),
-			InstRO::Core::ChannelConfiguration(ConfigTuple(0, input), ConfigTuple(1, root), ConfigTuple(2, active)),
-			"InstRO::Rose::Transformer::RoseUniqueCallpathTransformer");
+
+	InstRO::Pass* newPass = new InstRO::Pass(new Transformer::RoseUniqueCallpathTransformer(mapping), channelConfig,
+																					 "InstRO::Rose::Transformer::RoseUniqueCallpathTransformer");
 	passManager->registerPass(newPass);
 	return newPass;
 }
@@ -87,7 +95,7 @@ InstRO::Pass* RosePassFactory::createRoseFunctionWrapper(
 		InstRO::Rose::Transformer::RoseFunctionWrapper::NameTransformer nameTransformer,
 		const std::string& definitionPrefix, const std::string& wrapperPrefix) {
 	using ConfigTuple = InstRO::Core::ChannelConfiguration::ConfigTuple;
-	InstRO::Core::ChannelConfiguration cfg(ConfigTuple(0,input), ConfigTuple(1,renaming));
+	InstRO::Core::ChannelConfiguration cfg(ConfigTuple(0, input), ConfigTuple(1, renaming));
 	cfg.setConstructLevel(input, InstRO::Core::ConstructTraitType::CTExpression,
 												InstRO::Core::ConstructTraitType::CTFunction);
 	cfg.setConstructLevel(renaming, InstRO::Core::ConstructTraitType::CTExpression,
