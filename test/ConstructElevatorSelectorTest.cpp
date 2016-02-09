@@ -22,19 +22,19 @@ int main(int argc, char **argv) {
 
 	std::string filename = InstRO::Utility::getEnvironmentVariable("INSTRO_TEST_INPUT_FILENAME");
 
-	auto funcLvlSelector = factory->createConstructClassSelector(CTrait::CTFunction);
+	auto funcLvlSelector = factory->createConstructTraitSelector(CTrait::CTFunction);
 	auto funcToStmtLvlSelector = factory->createConstructLoweringElevator(funcLvlSelector, CTrait::CTStatement);
 	factory->createTestAdapter(funcToStmtLvlSelector, "Func2StmtLevelSelector", filename);
 
-	auto stmtLvlSelector = factory->createConstructClassSelector(CTrait::CTStatement);
+	auto stmtLvlSelector = factory->createConstructTraitSelector(CTrait::CTStatement);
 	auto stmtToFuncLvlSelector = factory->createConstructRaisingElevator(stmtLvlSelector, CTrait::CTFunction);
 	factory->createTestAdapter(stmtToFuncLvlSelector, "Stmt2FuncLevelSelector", filename);
 
 	auto funcToExprLvlSelector = factory->createConstructLoweringElevator(funcLvlSelector, CTrait::CTExpression);
 	factory->createTestAdapter(funcToExprLvlSelector, "Func2ExprLevelSelector", filename);
 
-	auto stmtClassSelector = factory->createConstructClassSelector(CTrait::CTStatement);
-	auto exprClassSelector = factory->createConstructClassSelector(CTrait::CTExpression);
+	auto stmtClassSelector = factory->createConstructTraitSelector(CTrait::CTStatement);
+	auto exprClassSelector = factory->createConstructTraitSelector(CTrait::CTExpression);
 	auto booleanOrSelector = factory->createBooleanOrSelector(stmtClassSelector, exprClassSelector);
 
 	auto wpToExprStmtSelector =

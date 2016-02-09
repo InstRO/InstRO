@@ -1,4 +1,4 @@
-#include "instro/pass/selector/ConstructClassSelector.h"
+#include "instro/pass/selector/ConstructTraitSelector.h"
 
 #include "instro/tooling/AnalysisInterface.h"
 #include "instro/core/Instrumentor.h"
@@ -7,11 +7,11 @@
 namespace InstRO {
 namespace Selector {
 
-void ConstructClassSelector::execute() {
-	InstRO::Tooling::ConstructClassInterface::ConstructClassInterface* gi =
-			getInstrumentorInstance()->getAnalysisManager()->getGrammarInterface();
+void ConstructTraitSelector::execute() {
+	InstRO::Tooling::ConstructTraitInterface::ConstructTraitInterface* cti =
+			getInstrumentorInstance()->getAnalysisManager()->getConstructTraitInterface();
 
-	outputSet = gi->getConstructsByClass(constructClass);
+	outputSet = cti->getConstructsByTrait(constructTrait);
 }
 
 }	// namespace Selector

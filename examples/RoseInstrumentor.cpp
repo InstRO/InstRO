@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
 		auto mainFunction = factory->createProgramEntrySelector();
 		factory->createConstructPrinterAdapter(mainFunction);
 
-		auto functions = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
+		auto functions = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTFunction);
 		factory->createConstructPrinterAdapter(functions);
 
 		auto callpaths = factory->createCallpathSelector(mainFunction, functions, "callpaths.dot");

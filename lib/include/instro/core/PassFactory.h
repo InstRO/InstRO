@@ -27,7 +27,7 @@ class PassFactory {
 
 	Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList);
 	Pass* createCallpathSelector(Pass* passA, Pass* passB, std::string dotName = std::string(""));
-	Pass* createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass);
+	Pass* createConstructTraitSelector(InstRO::Core::ConstructTraitType constructTrait);
 	Pass* createAggregationStatementCountSelector(int threshold);
 
 	Pass* createConstructRaisingElevator(Pass* pass, InstRO::Core::ConstructTraitType level);

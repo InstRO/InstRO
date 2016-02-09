@@ -333,7 +333,7 @@ std::string ClangConstruct::getIdentifier() const {
 	identifier =
 			(sourceManager.getFilename(location) + ":" + llvm::Twine((sourceManager.getSpellingLineNumber(location)))).str();
 	identifier += ":" + std::to_string(sourceManager.getSpellingColumnNumber(location));
-	identifier += "--" + specificConstructClassToString();
+	identifier += "--" + specificConstructTraitToString();
 
 	if (clang::Decl *decl = getAsDecl()) {
 		if (clang::FunctionDecl *funDecl = llvm::dyn_cast<clang::FunctionDecl>(decl)) {

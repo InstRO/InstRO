@@ -27,7 +27,7 @@ static llvm::cl::OptionCategory instroTool("InstRO Clang Test");
 /**
  * Actual instrumentor
  *
- * This instrumentor uses the ConstructClassSelector to select each of
+ * This instrumentor uses the ConstructTraitSelector to select each of
  * - expressions
  * - scope statements
  * - conditional statements
@@ -56,13 +56,13 @@ int main(int argc, char **argv) {
 
 	std::string filename = InstRO::Utility::getEnvironmentVariable("INSTRO_TEST_INPUT_FILENAME");
 
-	auto ctFuncLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
-	auto ctLoopLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTLoopStatement);
-	auto ctStmtLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTStatement);
+	auto ctFuncLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTFunction);
+	auto ctLoopLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTLoopStatement);
+	auto ctStmtLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTStatement);
 	auto ctCondLvlSelector =
-			factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTConditionalStatement);
-	auto ctScopeLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTScopeStatement);
-	auto ctExprLvlSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTExpression);
+			factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTConditionalStatement);
+	auto ctScopeLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTScopeStatement);
+	auto ctExprLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTExpression);
 
 #ifdef CDEBUG
 	factory->createConstructPrinterAdapter(ctStmtLvlSelector);

@@ -10,7 +10,7 @@ The following Passes are currently planned [ ] and implemented [x] in InstRO.
 - [ ] AggregationStatementSelector
 - [x] BooleanCompoundSelector 
 - [x] CallpathSelector
-- [x] ConstructClassSelector
+- [x] ConstructTraitSelector
 - [x] ConstructElevator
 - [x] IdentifierMatcherSelector
 - [x] ProgramEntrySelector

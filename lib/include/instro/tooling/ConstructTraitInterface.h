@@ -5,14 +5,14 @@
 
 namespace InstRO {
 namespace Tooling {
-namespace ConstructClassInterface {
+namespace ConstructTraitInterface {
 
-class ConstructClassInterface {
+class ConstructTraitInterface {
 public:
-	virtual ~ConstructClassInterface() {
+	virtual ~ConstructTraitInterface() {
 	}
 
-	virtual InstRO::Core::ConstructSet getConstructsByClass(const InstRO::Core::ConstructTraitType constructClass) = 0;
+	virtual InstRO::Core::ConstructSet getConstructsByTrait(const InstRO::Core::ConstructTraitType constructTrait) = 0;
 };
 
 }	// GrammarInterface

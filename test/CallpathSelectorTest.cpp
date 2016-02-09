@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
 
 	// From main to all functions
 	auto programEntrySelector = factory->createProgramEntrySelector();
-	auto functionSelector = factory->createConstructClassSelector(CTrait::CTFunction);
+	auto functionSelector = factory->createConstructTraitSelector(CTrait::CTFunction);
 	auto cpSelector = factory->createCallpathSelector(programEntrySelector, functionSelector);
 
 	factory->createTestAdapter(programEntrySelector, "EntrySelector", filename);

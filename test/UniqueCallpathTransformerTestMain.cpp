@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
 	if (activeIdentifiers.empty()) {
 		ucpTransformer = factory->createRoseUniqueCallpathTransformer(identifierSelector);
 	} else {
-		auto functionSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
+		auto functionSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTFunction);
 		auto activeIdentifierSelector = factory->createIdentifierMatcherSelector(activeIdentifiers);
 		auto activeSelector = factory->createBooleanAndSelector(activeIdentifierSelector, functionSelector);
 		ucpTransformer = factory->createRoseUniqueCallpathTransformer(identifierSelector, nullptr, activeSelector);

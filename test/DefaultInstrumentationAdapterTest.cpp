@@ -14,8 +14,8 @@ int main(int argc, char **argv){
 
 	auto factory = instrumentor.getFactory();
 
-	auto fDefSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
-	auto stmtSelector = factory->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTStatement);
+	auto fDefSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTFunction);
+	auto stmtSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTStatement);
 
 	auto combinedSelector = factory->createBooleanOrSelector(fDefSelector, stmtSelector);
 

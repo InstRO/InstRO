@@ -1,4 +1,4 @@
-#include "instro/clang/tooling/ClangConstructClassInterface.h"
+#include "instro/clang/tooling/ClangConstructTraitInterface.h"
 
 #include "instro/clang/core/ClangConstruct.h"
 
@@ -10,8 +10,8 @@ namespace {
 
 class ConstructCollector : public clang::RecursiveASTVisitor<ConstructCollector> {
  public:
-	ConstructCollector(ConstructTraitType constructClass, ConstructSet *constructs)
-			: constructClass(constructClass), csci(constructs) {}
+	ConstructCollector(ConstructTraitType constructTrait, ConstructSet *constructs)
+			: constructTrait(constructTrait), csci(constructs) {}
 
 	bool shouldVisitTemplateInstantiations() { return true; }
 
@@ -30,11 +30,11 @@ class ConstructCollector : public clang::RecursiveASTVisitor<ConstructCollector>
 	}
 
  private:
-	ConstructTraitType constructClass;
+	ConstructTraitType constructTrait;
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci;
 
 	void processConstruct(std::shared_ptr<InstRO::Clang::Core::ClangConstruct> construct) {
-		if (construct->getTraits().is(constructClass)) {
+		if (construct->getTraits().is(constructTrait)) {
 			csci.put(construct);
 		}
 	}
@@ -42,11 +42,11 @@ class ConstructCollector : public clang::RecursiveASTVisitor<ConstructCollector>
 }
 
 using namespace InstRO::Clang::Tooling;
-using namespace InstRO::Clang::Tooling::ConstructClassInterface;
+using namespace InstRO::Clang::Tooling::ConstructTraitInterface;
 
-ConstructSet ClangConstructClassInterface::getConstructsByClass(const ConstructTraitType constructClass) {
+ConstructSet ClangConstructTraitInterface::getConstructsByTrait(const ConstructTraitType constructTrait) {
 	ConstructSet constructs;
-	ConstructCollector collector(constructClass, &constructs);
+	ConstructCollector collector(constructTrait, &constructs);
 	collector.TraverseDecl(context.getTranslationUnitDecl());
 
 	return constructs;

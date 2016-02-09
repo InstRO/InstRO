@@ -8,18 +8,18 @@ namespace InstRO {
 namespace Selector {
 
 /**
- * \brief Selects all constructs with a given ConstructClass.
+ * \brief Selects all constructs with a given ConstructTrait.
  * \author Roman Ness
  */
-class ConstructClassSelector : public InstRO::Core::PassImplementation {
+class ConstructTraitSelector : public InstRO::Core::PassImplementation {
  public:
-	ConstructClassSelector(InstRO::Core::ConstructTraitType constructClass)
-			: InstRO::Core::PassImplementation(), constructClass(constructClass) {}
+	ConstructTraitSelector(InstRO::Core::ConstructTraitType constructTrait)
+			: InstRO::Core::PassImplementation(), constructTrait(constructTrait) {}
 
 	void execute() override;
 
  private:
-	InstRO::Core::ConstructTraitType constructClass;
+	InstRO::Core::ConstructTraitType constructTrait;
 };
 
 }	// namespace Selector

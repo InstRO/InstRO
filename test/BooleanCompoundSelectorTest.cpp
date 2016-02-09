@@ -22,8 +22,8 @@ int main(int argc, char **argv) {
 
 	std::string filename = InstRO::Utility::getEnvironmentVariable("INSTRO_TEST_INPUT_FILENAME");
 
-	auto selA = factory->createConstructClassSelector(CTrait::CTFunction);
-	auto selB = factory->createConstructClassSelector(CTrait::CTStatement);
+	auto selA = factory->createConstructTraitSelector(CTrait::CTFunction);
+	auto selB = factory->createConstructTraitSelector(CTrait::CTStatement);
 
 	auto andSelector = factory->createBooleanAndSelector(selA, selB);
 	auto orSelector = factory->createBooleanOrSelector(selA, selB);

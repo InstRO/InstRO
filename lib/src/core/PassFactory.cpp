@@ -4,7 +4,7 @@
 #include "instro/pass/selector/IdentifierMatcherSelector.h"
 #include "instro/pass/selector/ProgramEntrySelector.h"
 #include "instro/pass/selector/CallPathSelector.h"
-#include "instro/pass/selector/ConstructClassSelector.h"
+#include "instro/pass/selector/ConstructTraitSelector.h"
 #include "instro/pass/selector/ElevatorSelector.h"
 
 #include "instro/pass/adapter/ConstructHierarchyASTDotGenerator.h"
@@ -95,9 +95,9 @@ Pass* PassFactory::createCallpathSelector(Pass* callee, Pass* caller, std::strin
 	return newPass;
 }
 
-Pass* PassFactory::createConstructClassSelector(InstRO::Core::ConstructTraitType constructClass) {
-	Pass* newPass = new Pass(new Selector::ConstructClassSelector(constructClass), InstRO::Core::ChannelConfiguration(),
-													 "InstRO::Selector::ConstructClassSelector");
+Pass* PassFactory::createConstructTraitSelector(InstRO::Core::ConstructTraitType constructTrait) {
+	Pass* newPass = new Pass(new Selector::ConstructTraitSelector(constructTrait), InstRO::Core::ChannelConfiguration(),
+													 "InstRO::Selector::ConstructTraitSelector");
 	passManager->registerPass(newPass);
 	return newPass;
 }

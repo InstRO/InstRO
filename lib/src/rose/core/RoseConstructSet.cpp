@@ -57,7 +57,7 @@ std::string RoseConstruct::getIdentifier() const {
 
 		std::string filename(determineCorrectFilename());
 		std::string lineInfo(std::to_string(determineCorrectLineInfo()));
-		std::string constructString(specificConstructClassToString());
+		std::string constructString(specificConstructTraitToString());
 		std::string columnInfo(std::to_string(determineCorrectColumnInformation()));
 
 		identifier += filename + ":" + lineInfo + ":";

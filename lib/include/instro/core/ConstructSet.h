@@ -230,7 +230,7 @@ class Construct {
 	virtual std::string toDotString() const = 0;
 
  protected:
-	std::string specificConstructClassToString() const;
+	std::string specificConstructTraitToString() const;
 
  private:
 	const ConstructTrait constructTraits;	// traits can only be set once

@@ -1,7 +1,7 @@
 #ifndef INSTRO_CLANG_TOOLING_CLANG_CONSTRUCT_CLASS_INTERFACE_H
 #define INSTRO_CLANG_TOOLING_CLANG_CONSTRUCT_CLASS_INTERFACE_H
 
-#include "instro/tooling/ConstructClassInterface.h"
+#include "instro/tooling/ConstructTraitInterface.h"
 #include "instro/core/ConstructSet.h"
 
 #include "clang/AST/ASTContext.h"
@@ -9,16 +9,16 @@
 namespace InstRO {
 namespace Clang {
 namespace Tooling {
-namespace ConstructClassInterface {
+namespace ConstructTraitInterface {
 
-class ClangConstructClassInterface : public InstRO::Tooling::ConstructClassInterface::ConstructClassInterface {
+class ClangConstructTraitInterface : public InstRO::Tooling::ConstructTraitInterface::ConstructTraitInterface {
 
 public:
-	ClangConstructClassInterface(clang::ASTContext &context) : context(context) {}
-	ClangConstructClassInterface() = delete;
-	virtual ~ClangConstructClassInterface() {}
+	ClangConstructTraitInterface(clang::ASTContext &context) : context(context) {}
+	ClangConstructTraitInterface() = delete;
+	virtual ~ClangConstructTraitInterface() {}
 
-	InstRO::Core::ConstructSet getConstructsByClass(const InstRO::Core::ConstructTraitType constructClass) override;
+	InstRO::Core::ConstructSet getConstructsByTrait(const InstRO::Core::ConstructTraitType constructTrait) override;
 
 protected:
 	clang::ASTContext &context;

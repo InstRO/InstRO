@@ -1,15 +1,15 @@
 #include <memory>
 #include "instro/utility/MemoryManagement.h"
 #include "instro/rose/core/RoseConstructSet.h"
-#include "instro/rose/tooling/RoseConstructClassInterface.h"
+#include "instro/rose/tooling/RoseConstructTraitInterface.h"
 
 namespace InstRO {
 namespace Rose {
 namespace Tooling {
-namespace ConstructClassInterface {
+namespace ConstructTraitInterface {
 
-InstRO::Core::ConstructSet RoseConstructClassInterface::getConstructsByClass(
-		const InstRO::Core::ConstructTraitType constructClass) {
+InstRO::Core::ConstructSet RoseConstructTraitInterface::getConstructsByTrait(
+		const InstRO::Core::ConstructTraitType constructTrait) {
 
 	InstRO::Core::ConstructSet result;
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci(&result);
@@ -17,7 +17,7 @@ InstRO::Core::ConstructSet RoseConstructClassInterface::getConstructsByClass(
 	for (auto sgNode : SageInterface::querySubTree<SgNode>(proj, V_SgNode)) {
 		if (InstRO::Rose::Core::RoseConstructLevelPredicates::ConstructPredicate()(sgNode)) {
 			auto construct = InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(sgNode);
-			if (construct->getTraits().is(constructClass)) {
+			if (construct->getTraits().is(constructTrait)) {
 				csci.put(construct);
 			}
 		}
@@ -26,7 +26,7 @@ InstRO::Core::ConstructSet RoseConstructClassInterface::getConstructsByClass(
 	return result;
 }
 
-}	// ConstructClassInterface
+}	// ConstructTraitInterface
 }	// Tooling
 }	// Rose
 }	// InstRO

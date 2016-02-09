@@ -99,7 +99,7 @@ std::string operator+(const std::string& lhs, const ConstructTraitType& type) {
 }
 
 
-std::string Construct::specificConstructClassToString() const {
+std::string Construct::specificConstructTraitToString() const {
 	using CTLvl = InstRO::Core::ConstructTraitType;
 	auto cts = getTraits();
 	if (cts.is(CTLvl::CTConditionalStatement)) {

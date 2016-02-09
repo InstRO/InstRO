@@ -312,9 +312,9 @@ BaseConfigurationPassRegistry::BaseConfigurationPassRegistry(PassFactory *factor
 		context.expectInputPasses({2});
 		return factory->createCallpathSelector(context.inputPasses[0], context.inputPasses[1]);
 	});
-	registerPass("ConstructClassSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
+	registerPass("ConstructTraitSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
 		context.expectInputPasses({0});
-		return factory->createConstructClassSelector(context.getConstructTraitType("class"));
+		return factory->createConstructTraitSelector(context.getConstructTraitType("class"));
 	});
 	registerPass("AggregationStatementCountSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
 		context.expectInputPasses({0});

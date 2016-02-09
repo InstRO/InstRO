@@ -2,7 +2,7 @@
 
 #include "instro/core/Instrumentor.h"
 #include "instro/core/Singleton.h"
-#include "instro/tooling/ConstructClassInterface.h"
+#include "instro/tooling/ConstructTraitInterface.h"
 #include "instro/tooling/NamedConstructAccess.h"
 
 #include <string>
@@ -21,7 +21,7 @@ void ProgramEntrySelector::execute() {
 			analysisManager->getNamedConstructAccessFacility()->getConstructsByIdentifierName(mainMatcher);
 
 	auto allFunctions =
-			analysisManager->getGrammarInterface()->getConstructsByClass(InstRO::Core::ConstructTraitType::CTFunction);
+			analysisManager->getConstructTraitInterface()->getConstructsByTrait(InstRO::Core::ConstructTraitType::CTFunction);
 
 	// intersect everything called "*main" with all functions
 	outputSet = allFunctions.intersect(csByNameMain);

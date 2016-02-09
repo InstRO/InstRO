@@ -2,7 +2,7 @@
 #define INSTRO_ROSE_TOOLING_ROSE_CONSTRUCT_CLASS_INTERFACE_H
 
 #include "instro/core/ConstructSet.h"
-#include "instro/tooling/ConstructClassInterface.h"
+#include "instro/tooling/ConstructTraitInterface.h"
 
 #include "rose.h"
 
@@ -10,17 +10,17 @@ namespace InstRO {
 namespace Rose {
 namespace Tooling {
 
-namespace ConstructClassInterface {
+namespace ConstructTraitInterface {
 
-class RoseConstructClassInterface : public InstRO::Tooling::ConstructClassInterface::ConstructClassInterface {
+class RoseConstructTraitInterface : public InstRO::Tooling::ConstructTraitInterface::ConstructTraitInterface {
  protected:
 	SgProject *proj;
 
  public:
-	RoseConstructClassInterface() = delete;
-	RoseConstructClassInterface(SgProject *projArg) : proj(projArg) {}
+	RoseConstructTraitInterface() = delete;
+	RoseConstructTraitInterface(SgProject *projArg) : proj(projArg) {}
 
-	InstRO::Core::ConstructSet getConstructsByClass(const InstRO::Core::ConstructTraitType constructClass) override;
+	InstRO::Core::ConstructSet getConstructsByTrait(const InstRO::Core::ConstructTraitType constructTrait) override;
 };
 }
 }

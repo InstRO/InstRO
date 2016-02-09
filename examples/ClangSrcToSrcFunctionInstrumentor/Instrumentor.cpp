@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
 	InstRO::Clang::ClangInstrumentor instro(argc, const_cast<const char **>(argv), MyTool);
 
 	auto fac = instro.getFactory();
-	auto fDefSel = fac->createConstructClassSelector(InstRO::Core::ConstructTraitType::CTFunction);
+	auto fDefSel = fac->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTFunction);
 
 	fac->createClangCygProfileAdapter(fDefSel);
 
