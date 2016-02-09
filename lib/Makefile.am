@@ -31,13 +31,13 @@ CORE_HFILES= \
 ./include/instro/tooling/ConstructElevator.h \
 ./include/instro/tooling/ControlFlowGraph.h \
 ./include/instro/tooling/ExtendedCallGraph.h \
-./include/instro/tooling/ConstructClassInterface.h \
+./include/instro/tooling/ConstructTraitInterface.h \
 ./include/instro/tooling/NamedConstructAccess.h \
 ./include/instro/tooling/TransformationInterface.h \
 ./include/instro/pass/selector/ProgramEntrySelector.h \
 ./include/instro/pass/selector/IdentifierMatcherSelector.h \
 ./include/instro/pass/selector/CallPathSelector.h \
-./include/instro/pass/selector/ConstructClassSelector.h \
+./include/instro/pass/selector/ConstructTraitSelector.h \
 ./include/instro/pass/selector/ElevatorSelector.h \
 ./include/instro/pass/selector/BooleanCompoundSelector.h \
 ./include/instro/pass/adapter/DefaultInstrumentationAdapter.h \
@@ -63,7 +63,7 @@ CORE_SFILES= \
 ./src/pass/selector/ProgramEntrySelector.cpp \
 ./src/pass/selector/IdentifierMatcherSelector.cpp \
 ./src/pass/selector/CallPathSelector.cpp \
-./src/pass/selector/ConstructClassSelector.cpp \
+./src/pass/selector/ConstructTraitSelector.cpp \
 ./src/pass/selector/ElevatorSelector.cpp \
 ./src/pass/selector/BooleanCompoundSelector.cpp  \
 ./src/pass/adapter/DefaultInstrumentationAdapter.cpp  \
@@ -83,7 +83,7 @@ CLANG_HFILES= \
 ./include/instro/clang/core/Pass.h \
 ./include/instro/clang/support/InstROASTConsumer.h \
 ./include/instro/clang/tooling/ClangAnalysisInterface.h \
-./include/instro/clang/tooling/ClangConstructClassInterface.h \
+./include/instro/clang/tooling/ClangConstructTraitInterface.h \
 ./include/instro/support/BWLFileReader.h
 
 CLANG_SFILES= \
@@ -95,7 +95,7 @@ CLANG_SFILES= \
 ./src/clang/core/ClangPassFactory.cpp \
 ./src/clang/support/ClangConsumerFactory.cpp \
 ./src/clang/support/InstROASTConsumer.cpp \
-./src/clang/tooling/ClangConstructClassInterface.cpp \
+./src/clang/tooling/ClangConstructTraitInterface.cpp \
 ./src/support/BWLFileReader.cpp
 
 ROSE_HFILES= \
@@ -108,7 +108,7 @@ ROSE_HFILES= \
 ./include/instro/rose/tooling/RoseConstructElevator.h \
 ./include/instro/rose/tooling/RoseControlFlowGraph.h \
 ./include/instro/rose/tooling/RoseExtendedCallGraph.h \
-./include/instro/rose/tooling/RoseConstructClassInterface.h \
+./include/instro/rose/tooling/RoseConstructTraitInterface.h \
 ./include/instro/rose/tooling/RoseNamedConstructAccess.h \
 ./include/instro/rose/tooling/RoseTransformationInterface.h \
 ./include/instro/rose/utility/FunctionRenamer.h \
@@ -134,7 +134,7 @@ ROSE_SFILES= \
 ./src/rose/core/RosePassFactory.cpp \
 ./src/rose/tooling/RoseConstructElevator.cpp \
 ./src/rose/tooling/RoseNamedConstructAccess.cpp \
-./src/rose/tooling/RoseConstructClassInterface.cpp \
+./src/rose/tooling/RoseConstructTraitInterface.cpp \
 ./src/rose/utility/FunctionRenamer.cpp \
 ./src/rose/utility/ASTHelper.cpp \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionHelper.cpp \
