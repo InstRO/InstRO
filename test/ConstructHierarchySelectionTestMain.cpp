@@ -1,3 +1,5 @@
+// prevent any unused dependencies to boost_system
+#define BOOST_SYSTEM_NO_DEPRECATED
 
 #include "instro.h"
 #include <iostream>
