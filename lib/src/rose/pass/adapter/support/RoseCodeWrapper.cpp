@@ -76,7 +76,7 @@ void RoseCodeWrapper::instrumentPossibleExit(SgScopeStatement* scope, SgStatemen
 void RoseCodeWrapper::instrumentReturnStmt(SgScopeStatement* scope, SgReturnStmt* returnStmt,
 																					 SgStatement* instrumentStmt) {
 	auto returnExpr = returnStmt->get_expression();
-	if (returnExpr != nullptr && !(isSgValueExp(returnExpr)) && !(isSgVarRefExp(returnExpr))) {
+	if (returnExpr != nullptr && !(isSgValueExp(returnExpr)) && !(isSgVarRefExp(returnExpr)) && !(isSgNullExpression(returnExpr))) {
 		SageInterface::splitExpression(returnExpr);	// return statement transformation
 	}
 
