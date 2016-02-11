@@ -50,10 +50,12 @@ public:
 	}
 	void visit(SgIfStmt* node) {
 		addConditionStmtOrExpr(node->get_conditional());
+		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));	// whole conditional
 		nodeType = ECGNodeType::CONDITIONAL;
 	}
 	void visit(SgSwitchStatement* node) {
 		addConditionStmtOrExpr(node->get_item_selector());
+		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));	// whole conditional
 		nodeType = ECGNodeType::CONDITIONAL;
 	}
 	void visit(SgForStatement* node) {
@@ -63,20 +65,29 @@ public:
 		}
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node->get_test()));
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node->get_increment()));
+
+		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));	// whole loop
+
 		nodeType = ECGNodeType::LOOP;
 	}
 	void visit(SgWhileStmt* node) {
 		addConditionStmtOrExpr(node->get_condition());
+		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));	// whole loop
+
 		nodeType = ECGNodeType::LOOP;
 	}
 	void visit(SgDoWhileStmt* node) {
 		SgExpression* conditionExpr = isSgExprStatement(node->get_condition())->get_expression();
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(conditionExpr));
+		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));	// whole loop
 		nodeType = ECGNodeType::LOOP;
 	}
 	void visit(SgBasicBlock* node) {
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getFragment(node, node->get_startOfConstruct()));
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getFragment(node, node->get_endOfConstruct()));
+
+		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));	// whole scope
+
 		nodeType = ECGNodeType::SCOPE;
 	}
 
@@ -285,7 +296,7 @@ public:	// Visitor Interface
 			preOrderVisit(isSgWhileStmt(node));
 		} else if (isSgDoWhileStmt(node)) {
 			preOrderVisit(isSgDoWhileStmt(node));
-		} else if (isSgBasicBlock(node)) {
+		} else if (isSgBasicBlock(node) && Core::RoseConstructLevelPredicates::CLScopeStatementPredicate()(node)) {
 			preOrderVisit(isSgBasicBlock(node));
 		}
 	}
@@ -305,7 +316,7 @@ public:	// Visitor Interface
 			postOrderVisit(isSgWhileStmt(node));
 		} else if (isSgDoWhileStmt(node)) {
 			postOrderVisit(isSgDoWhileStmt(node));
-		} else if (isSgBasicBlock(node)) {
+		} else if (isSgBasicBlock(node) && Core::RoseConstructLevelPredicates::CLScopeStatementPredicate()(node)) {
 			postOrderVisit(isSgBasicBlock(node));
 		}
 	}
