@@ -15,7 +15,7 @@ if USELIBTOOL
 bin_PROGRAMS=
 
 if USEROSE
-bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter
+bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter RoseCallpathToKernelInstrumentor
 
 if HAVERAPIDJSON
 SUBDIRS= ConfigurationLoader
@@ -32,6 +32,10 @@ RoseInstrumentor_SOURCES = \
 RoseInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 RoseInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@
 
+RoseCallpathToKernelInstrumentor_SOURCES= \
+	./RoseCallpathToKernelInstrumentor.cpp
+RoseCallpathToKernelInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+RoseCallpathToKernelInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@
 
 # TODO Is this actually an example?
 ROSEInstROASTPrinter_SOURCES = \
@@ -39,14 +43,13 @@ ROSEInstROASTPrinter_SOURCES = \
 ROSEInstROASTPrinter_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 ROSEInstROASTPrinter_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
 
-
 else # USELIBTOOL
 
 bin_PROGRAMS=
 
 
 if USEROSE
-bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter
+bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter RoseCallpathToKernelInstrumentor
 
 if HAVERAPIDJSON
 SUBDIRS= ConfigurationLoader
@@ -64,6 +67,12 @@ RoseInstrumentor_SOURCES = \
 RoseInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_core.a $(top_builddir)/lib/libInstRO_rose.a
 RoseInstrumentor_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@  -L@BOOST_LIBDIR@
 RoseInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+
+RoseCallpathToKernelInstrumentor_SOURCES= \
+	./RoseCallpathToKernelInstrumentor.cpp
+RoseCallpathToKernelInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
+RoseCallpathToKernelInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_rose.a @ROSE_LINK_LIBRARIES@
+
 
 # TODO Is this actually an example?
 ROSEInstROASTPrinter_SOURCES = \

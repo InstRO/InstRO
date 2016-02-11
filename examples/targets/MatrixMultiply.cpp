@@ -2,11 +2,15 @@
 #include <cstdio>
 #include <cmath>
 
+inline void multiplicationKernel(const int i, const int j, const int k, const float *A, const int sizeA, const float *B, const int sizeB, float *C, const int sizeC){
+	C[i*sizeC + j] += A[i*sizeA + k] * B[k*sizeB + j];
+}
+
 void matrixMultiply(const float *A, const int sizeA, const float *B, const int sizeB, float *C, int sizeC) {
 	for(int i = 0; i < sizeA; ++i){
 		for(int j = 0; j < sizeB; ++j){
 			for(int k = 0; k < sizeC; ++k){
-				C[i*sizeC + j] += A[i*sizeA + k] * B[k*sizeB + j];
+				multiplicationKernel(i, j, k, A, sizeA, B, sizeB, C, sizeC);
 			}
 		}
 	}
