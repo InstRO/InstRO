@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
 	factory->createTestAdapter(cpSelector, "CallpathSelector", filename);
 
 	// from main to nothing
-	auto identifierSelector = factory->createIdentifierMatcherSelector({"foo"}); // should match nothing
+	auto identifierSelector = factory->createIdentifierMatcherSelector({"foo"});	// should match nothing
 	auto cpSelector2 = factory->createCallpathSelector(programEntrySelector, identifierSelector);
 	factory->createTestAdapter(cpSelector2, "EmptyCallpathSelector", filename);
 
@@ -42,7 +42,6 @@ int main(int argc, char **argv) {
 	auto idSelector2 = factory->createIdentifierMatcherSelector({"::bar"});
 	auto cpSelector3 = factory->createCallpathSelector(programEntrySelector, idSelector2);
 	factory->createTestAdapter(cpSelector3, "PathToBarSelector", filename);
-
 
 #ifdef CDEBUG
 #endif

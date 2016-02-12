@@ -5,9 +5,12 @@ callpath4.cpp:5:1--Function-::main
 callpath4.cpp:1:1--Function-::foo
 callpath4.cpp:3:1--Function-::bar
 callpath4.cpp:5:1--Function-::main
+callpath4.cpp:7:2--ConditionalStatement
+callpath4.cpp:7:18--ScopeStatement
 callpath4.cpp:7:18--Fragment
 callpath4.cpp:9:2--Fragment
 callpath4.cpp:9:9--Fragment
+callpath4.cpp:9:9--ScopeStatement
 callpath4.cpp:11:2--Fragment
 callpath4.cpp:8:3--Expression
 callpath4.cpp:10:3--Expression
@@ -20,5 +23,7 @@ callpath4.cpp:3:1--Function-::bar
 callpath4.cpp:5:1--Function-::main
 callpath4.cpp:7:5--Expression
 callpath4.cpp:7:18--Fragment
+callpath4.cpp:7:2--ConditionalStatement
+callpath4.cpp:7:18--ScopeStatement
 callpath4.cpp:8:3--Expression
 callpath4.cpp:9:2--Fragment

@@ -14,5 +14,8 @@ callpath5.cpp:12:3--Expression
 callpath5.cpp:13:2--Fragment
 callpath5.cpp:6:3--Expression
 callpath5.cpp:5:9--Expression
+callpath5.cpp:5:2--LoopStatement
+callpath5.cpp:11:2--ConditionalStatement
+callpath5.cpp:11:16--ScopeStatement
 
 +EmptyCallpathSelector

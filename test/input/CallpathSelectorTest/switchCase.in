@@ -8,5 +8,6 @@ switchCase.cpp:3:1--Function-::caseB
 switchCase.cpp:6:10--Expression
 switchCase.cpp:8:4--Expression
 switchCase.cpp:11:4--Expression
+switchCase.cpp:6:2--ConditionalStatement
 
 +EmptyCallpathSelector
