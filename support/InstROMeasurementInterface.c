@@ -4,9 +4,13 @@ void __instro_init() {}
 
 void __instro_fini() {}
 
-void __instro_start_function(size_t construct_hash, void *callsite) {}
+void __instro_start_function(size_t construct_hash, void *callsite) {
+	__cyg_profile_func_enter((void *) construct_hash, callsite);
+}
 
-void __instro_end_function(size_t construct_hash, void *callsite) {}
+void __instro_end_function(size_t construct_hash, void *callsite) {
+	__cyg_profile_func_exit((void *) construct_hash, callsite);
+}
 
 void __instro_start_simple_statement(size_t construct_hash) {}
 
