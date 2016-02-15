@@ -28,8 +28,9 @@ def runTestBinary(arguments, binary, inputDirectory):
         srcFile = k + ".cpp"
         specFile = k + ".in"
 
-        roseExtraArg = " --edg:no_warnings "
+        roseExtraArg = ""
         if arguments.compilerIndication == 'rose':
+            roseExtraArg += " --edg:no_warnings "
             roseExtraArg += ' --instro-library-path=' + arguments.build + '/test/.libs'
             roseExtraArg += ' --instro-library-name=InstRO_rtsupport'
             roseExtraArg += ' --instro-include=' + arguments.src + '/support'
