@@ -83,7 +83,10 @@ def runApply(arguments):
     
     failedRuns = []
     for b in testPrograms:
-        failedRuns += runTestBinary(arguments, b, inputDirectory)
+        if os.path.isfile(b):
+            failedRuns += runTestBinary(arguments, b, inputDirectory)
+        else:
+            failedRuns += [(b, 'not available')]
 
     if len(failedRuns) == 0:
         print("\n=================================")

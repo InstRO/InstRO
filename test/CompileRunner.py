@@ -32,27 +32,21 @@ def buildWithConfigureLine(configLine, baseDir):
         out = subprocess.check_output(fullQualInvocLine, shell=True)
         runnerLog.append('Configuring with ' + fullQualInvocLine)
     except subprocess.CalledProcessError:
-#        print(fullQualInvocLine)
         runnerLog.append('Configure failed: ' + fullQualInvocLine)
-#        raise Exception("The build failed while configure was run: " + fullQualInvocLine)
     
     # If configure succeeded we can now build InstRO
-    print(os.getcwd())
+#    print(os.getcwd())
 
     try:
         out = subprocess.check_output("make -j20", shell=True)
     except subprocess.CalledProcessError:
-#        print(fullQualInvocLine)
         runnerLog.append('Building failed with configure ' + fullQualInvocLine)
-#        raise Exception("Building failed with err code " + str(retCode) + fullQualInvocLine)
 
     try:
         out = subprocess.check_output("make check -j4", shell=True)
         runnerLog.append(out)
     except subprocess.CalledProcessError:
-#        print(fullQualInvocLine)
         runnerLog.append('Tests failed \n')
-#        raise Exception("Make check failed with error code " + str(retCode))
 
 def buildWithRose(arguments, baseDir):
     numBuilds = 1
@@ -135,10 +129,11 @@ def configureAndBuildFlavor(arguments):
         for s in runnerLog:
             strArr = s.splitlines()
             for ss in strArr:
-                if ss.find('make') != -1 or ss.find('Making') != -1:
+                if ss.find('make') != -1 or ss.find('Making') != -1 or ss.find('python ') != -1:
                     continue
                 print(ss)
-            print('#########################################\n')
+            if ss.find('Configuring ') == -1:
+                print('#########################################\n')
 
     finally:
         os.chdir(baseDir)
