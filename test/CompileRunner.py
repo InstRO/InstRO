@@ -28,8 +28,11 @@ def createAndCDToTempDir():
 
 def buildWithConfigureLine(configLine, baseDir):
     fullQualInvocLine = baseDir + "/" + configLine
+    FNULL = open(os.devnull, 'w')
+    
     try:
-        out = subprocess.check_output(fullQualInvocLine, shell=True)
+        print('Configuring ... ')
+        out = subprocess.check_output(fullQualInvocLine, shell=True, stderr=FNULL)
         runnerLog.append('Configuring with ' + fullQualInvocLine)
     except subprocess.CalledProcessError:
         runnerLog.append('Configure failed: ' + fullQualInvocLine)
@@ -38,15 +41,19 @@ def buildWithConfigureLine(configLine, baseDir):
 #    print(os.getcwd())
 
     try:
-        out = subprocess.check_output("make -j20", shell=True)
+        print('Building ... ')
+        out = subprocess.check_output("make -j20", shell=True, stderr=FNULL)
     except subprocess.CalledProcessError:
         runnerLog.append('Building failed with configure ' + fullQualInvocLine)
 
     try:
-        out = subprocess.check_output("make check -j4", shell=True)
+        print('Running tests ... ')
+        out = subprocess.check_output("make check -j4", shell=True, stderr=FNULL)
         runnerLog.append(out)
     except subprocess.CalledProcessError:
         runnerLog.append('Tests failed \n')
+
+    FNULL.close()
 
 def buildWithRose(arguments, baseDir):
     numBuilds = 1
@@ -125,7 +132,7 @@ def configureAndBuildFlavor(arguments):
         if arguments.llvmsrc != None and arguments.llvminstall != None:
             buildWithClang(arguments, baseDir)
 
-        print("    ====================     \n==== Global Test Summary ====")
+        print("\n#####===================#####\n==== Global Test Summary ====")
         for s in runnerLog:
             strArr = s.splitlines()
             for ss in strArr:
