@@ -1,7 +1,7 @@
 +CTFunctionSelector
-templContainer.cpp:6:2--Function-::container < double > ::container
-templContainer.cpp:8:2--Function-::container < double > ::insert
-templContainer.cpp:13:2--Function-::container < double > ::get
+templContainer.cpp:6:2--Function-::container<double>::container
+templContainer.cpp:8:2--Function-::container<double>::insert
+templContainer.cpp:13:2--Function-::container<double>::get
 templContainer.cpp:18:1--Function-::main
 
 +CTStatementSelector

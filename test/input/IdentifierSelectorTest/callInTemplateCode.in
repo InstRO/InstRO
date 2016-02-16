@@ -3,8 +3,8 @@ callInTemplateCode.cpp:5:1--Function-::foo
 
 +IdSelector-::f#
 callInTemplateCode.cpp:5:1--Function-::foo
-callInTemplateCode.cpp:5:1--Function-::foo < double > 
-callInTemplateCode.cpp:5:1--Function-::foo < int > 
+callInTemplateCode.cpp:5:1--Function-::foo<double>
+callInTemplateCode.cpp:5:1--Function-::foo<int>
 callInTemplateCode.cpp:10:2--Expression
 callInTemplateCode.cpp:12:2--Expression
 
@@ -13,8 +13,8 @@ callInTemplateCode.cpp:5:1--Function-::foo
 
 +IdSelector-#f#
 callInTemplateCode.cpp:5:1--Function-::foo
-callInTemplateCode.cpp:5:1--Function-::foo < double > 
-callInTemplateCode.cpp:5:1--Function-::foo < int > 
+callInTemplateCode.cpp:5:1--Function-::foo<double>
+callInTemplateCode.cpp:5:1--Function-::foo<int>
 callInTemplateCode.cpp:10:2--Expression
 callInTemplateCode.cpp:12:2--Expression
 

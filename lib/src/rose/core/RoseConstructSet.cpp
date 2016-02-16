@@ -1,5 +1,7 @@
 #include "instro/rose/core/RoseConstructSet.h"
 
+#include <cctype>
+
 #include "instro/utility/MemoryManagement.h"
 #include "rose.h"
 
@@ -66,6 +68,7 @@ std::string RoseConstruct::getIdentifier() const {
 		if (isSgFunctionDefinition(node)){
 			auto fDecl = isSgFunctionDefinition(node)->get_declaration();
 			identifier += "-" + fDecl->get_qualified_name().getString();
+			identifier.erase(std::remove_if(identifier.begin(), identifier.end(), ::isspace), identifier.end());
 		}
 
 		logIt(DEBUG) << "Generated identifier: " << identifier << std::endl;

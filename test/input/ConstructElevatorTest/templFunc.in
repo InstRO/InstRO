@@ -6,7 +6,7 @@ templFunc.cpp:13:2--SimpleStatement
 templFunc.cpp:14:2--SimpleStatement
 
 +Stmt2FuncLevelSelector
-templFunc.cpp:4:1--Function-::eq < 2 , 2 > 
+templFunc.cpp:4:1--Function-::eq<2,2>
 templFunc.cpp:8:1--Function-::test
 templFunc.cpp:4:1--Function-::eq
 templFunc.cpp:12:1--Function-::main

@@ -1,8 +1,8 @@
 +CTFunctionSelector
 callInTemplateCode.cpp:2:1--Function-::calculate
 callInTemplateCode.cpp:5:1--Function-::foo
-callInTemplateCode.cpp:5:1--Function-::foo < double > 
-callInTemplateCode.cpp:5:1--Function-::foo < int > 
+callInTemplateCode.cpp:5:1--Function-::foo<double>
+callInTemplateCode.cpp:5:1--Function-::foo<int>
 callInTemplateCode.cpp:9:1--Function-::bar
 callInTemplateCode.cpp:14:1--Function-::main
 

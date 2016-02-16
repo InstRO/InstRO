@@ -48,7 +48,7 @@ def runTestBinary(arguments, binary, inputDirectory):
         if arguments.compilerIndication == 'clang':
             invocationString += ' --'
             
-        toErr("\n[Running]\n" + binary + " " + srcFile)
+        toErr("Running\n" + binary + " " + srcFile)
         if False:
             toErr("Detailed invocation info: " + invocationString)
 
@@ -58,18 +58,16 @@ def runTestBinary(arguments, binary, inputDirectory):
             out = subprocess.check_output(invocationString, shell=True)
         except subprocess.CalledProcessError as e:
             errCode = e.returncode
-            toErr("[Error] Dumping STDOUT \n" + out)
-
-#        errCode = subprocess.call(invocationString, shell=True)
+            toErr("[Error] Dumping STDOUT \n" + e.output)
 
         if errCode == 0 and binary == "DefaultInstrumentationAdapterTest":
             try:
                 out = subprocess.call("./a.out", shell=True)
             except subprocess.CalledProcessError as e:
                 errCode = e.returncode
-                toErr("[Error] Problem when running binary.")
+                toErr("[Error] Problem when running binary: " + e.output)
 
-        toErr("[Done]")
+        toErr("Done")
         if errCode != 0:
             failedRuns.append((binary, srcFile))
 
