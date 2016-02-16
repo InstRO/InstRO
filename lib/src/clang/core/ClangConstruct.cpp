@@ -350,6 +350,7 @@ std::string ClangConstruct::getFunctionName(clang::FunctionDecl *decl) const {
 	std::string buffer;
 	llvm::raw_string_ostream rso(buffer);
 
+	rso << "::";
 	decl->printQualifiedName(rso);
 	clang::FunctionTemplateSpecializationInfo *templateSpecInfo = decl->getTemplateSpecializationInfo();
 	if (templateSpecInfo) {
