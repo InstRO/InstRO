@@ -16,6 +16,20 @@ using namespace InstRO::Core;
 using namespace InstRO::Clang::Core;
 
 namespace {
+	
+class PredicateMatcherHandler : public clang::ast_matchers::MatchFinder::MatchCallback {
+	public:
+		PredicateMatcherHandler() : matchedOnce(false) {}
+	
+		void run(const clang::ast_matchers::MatchFinder::MatchResult &result) override {
+			matchedOnce = true;
+		}
+		
+		bool matched() const { return matchedOnce; }
+		
+	private:
+		bool matchedOnce;
+};
 
 class DeclConstructTraitVisitor : public clang::DeclVisitor<DeclConstructTraitVisitor> {
  public:
@@ -49,6 +63,16 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
  public:
 	StmtConstructTraitVisitor(clang::ASTContext &context) : context(context), ct(ConstructTraitType::CTNoTraits) {}
 	ConstructTrait getContructTrait() { return ct; }
+	
+	void VisitBreakStmt(clang::BreakStmt *stmt) {
+		ct = ConstructTrait(ConstructTraitType::CTSimpleStatement);
+		handleStatementWithWrappableCheck(stmt);
+	}
+	
+	void VisitContinueStmt(clang::ContinueStmt *stmt) {
+		ct = ConstructTrait(ConstructTraitType::CTSimpleStatement);
+		handleStatementWithWrappableCheck(stmt);
+	}
 
 	void VisitIfStmt(clang::IfStmt *stmt) {
 		ct = ConstructTrait(ConstructTraitType::CTConditionalStatement);
@@ -76,13 +100,17 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 	}
 
 	void VisitCompoundStmt(clang::CompoundStmt *stmt) {
-		// ignore the top level compound statement of a function
-		auto matcher = clang::ast_matchers::stmt(clang::ast_matchers::hasParent(clang::ast_matchers::functionDecl()));
-		auto matches = clang::ast_matchers::match(matcher, *stmt, context);
-		if (matches.empty()) {
-			ct = ConstructTrait(ConstructTraitType::CTScopeStatement);
-			handleStatementWithWrappableCheck(stmt);
+		// ignore the top level compound statement of a function and switch statement
+		auto parents = context.getParents(*stmt);
+		if (parents.size() == 1) {
+			if (parents.front().get<clang::FunctionDecl>() || parents.front().get<clang::SwitchStmt>()) {
+				generateError(stmt);
+			} else {
+				ct = ConstructTrait(ConstructTraitType::CTScopeStatement);
+				handleStatementWithWrappableCheck(stmt);
+			}
 		} else {
+			InstRO::logIt(InstRO::DEBUG) << "Encountered a compound statement with more than one parent" << std::endl;
 			generateError(stmt);
 		}
 	}
@@ -117,6 +145,20 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		const clang::SourceManager &sm = context.getSourceManager();
 		std::string strLoc = "(" + std::to_string(sm.getSpellingLineNumber(location)) + "," +
 												 std::to_string(sm.getSpellingColumnNumber(location)) + ")";
+		
+		if (llvm::isa<clang::UnaryOperator>(stmt) || llvm::isa<clang::BinaryOperator>(stmt)) {
+			// interesting unary or binary expressions have at least one variable reference or function call
+			clang::ast_matchers::MatchFinder finder;
+			PredicateMatcherHandler handler;
+			finder.addMatcher(clang::ast_matchers::expr(clang::ast_matchers::hasDescendant(clang::ast_matchers::declRefExpr())), &handler);
+			finder.addMatcher(clang::ast_matchers::expr(clang::ast_matchers::hasDescendant(clang::ast_matchers::callExpr())), &handler);
+			finder.match(*stmt, context);
+			if (!handler.matched()) {
+				InstRO::logIt(InstRO::DEBUG) << "Encountered a boring operator expression" << std::endl;
+				generateError(stmt);
+				return;
+			}
+		}
 
 		bool isNotAStatement = false;
 		auto parents = context.getParents(*stmt);
@@ -124,7 +166,10 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 			if (const clang::Stmt *parent = parents.front().get<clang::Stmt>()) {
 				isNotAStatement = llvm::isa<clang::Expr>(*parent);
 				if (!isNotAStatement) {
-					if (const clang::IfStmt *ifStmt = llvm::dyn_cast<clang::IfStmt>(parent)) {
+					if (llvm::isa<clang::ReturnStmt>(parent)) {
+						// the expression inside a return statement cannot be a statement
+						isNotAStatement = true;
+					} else if (const clang::IfStmt *ifStmt = llvm::dyn_cast<clang::IfStmt>(parent)) {
 						// the conditional expression of a if statement is no statement
 						// the 'then' and 'else' statements can be expressions, so we cannot just check the type of the parent
 						isNotAStatement = stmt == ifStmt->getCond();
@@ -150,6 +195,11 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 			ct.add(ConstructTraitType::CTSimpleStatement);
 			handleStatementWithWrappableCheck(stmt);
 		}
+	}
+	
+	void VisitParenExpr(clang::ParenExpr *stmt) {
+		// ignore parentheses
+		generateError(stmt);
 	}
 
 	void VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr *stmt) {
@@ -354,14 +404,13 @@ std::string ClangConstruct::getFunctionName(clang::FunctionDecl *decl) const {
 	decl->printQualifiedName(rso);
 	clang::FunctionTemplateSpecializationInfo *templateSpecInfo = decl->getTemplateSpecializationInfo();
 	if (templateSpecInfo) {
-		rso << " < ";
+		rso << '<';
 		const clang::TemplateArgumentList *argList = templateSpecInfo->TemplateArguments;
 		for (unsigned i = 0; i < argList->size(); ++i) {
 			argList->get(i).print(getASTContext().getPrintingPolicy(), rso);
 			if (i < argList->size() - 1) {
 				rso << ',';
 			}
-			rso << ' ';
 		}
 		rso << '>';
 	}
