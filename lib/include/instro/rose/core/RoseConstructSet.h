@@ -89,7 +89,7 @@ struct IsStatementInForLoop {
 	}
 };
 
-struct CLExpressionPredicate : public CTPredicate {
+struct CTExpressionPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const override {
 		if (isSgExprListExp(n) || isSgFunctionRefExp(n) || isSgMemberFunctionRefExp(n)) {
 			return false;	// never accept these
@@ -137,7 +137,7 @@ struct CLExpressionPredicate : public CTPredicate {
 	}
 };
 
-struct CLLoopPredicate : public CTPredicate {
+struct CTLoopPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		if (isSgDoWhileStmt(n) || isSgWhileStmt(n) || isSgForStatement(n)) {
 			return true;
@@ -146,7 +146,7 @@ struct CLLoopPredicate : public CTPredicate {
 	}
 };
 
-struct CLConditionalPredicate : public CTPredicate {
+struct CTConditionalPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		if (isSgIfStmt(n) || isSgSwitchStatement(n)) {
 			return true;
@@ -155,7 +155,7 @@ struct CLConditionalPredicate : public CTPredicate {
 	}
 };
 
-struct CLScopeStatementPredicate : public CTPredicate {
+struct CTScopeStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 
 		if (!isSgBasicBlock(n)) {
@@ -175,19 +175,19 @@ struct CLScopeStatementPredicate : public CTPredicate {
 	}
 };
 
-struct CLFunctionPredicate : public CTPredicate {
+struct CTFunctionPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const { return isSgFunctionDefinition(n) != nullptr; }
 };
 
-struct CLFileScopePredicate : public CTPredicate {
+struct CTFileScopePredicate : public CTPredicate {
 	bool operator()(SgNode* n) const { return isSgFile(n) != nullptr; }
 };
 
-struct CLGlobalScopePredicate : public CTPredicate {
+struct CTGlobalScopePredicate : public CTPredicate {
 	bool operator()(SgNode* n) const { return isSgProject(n) != nullptr; }
 };
 
-struct CLSimpleStatementPredicate : public CTPredicate {
+struct CTSimpleStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		if (isSgDeclarationStatement(n)) {
 			if (isSgVariableDeclaration(n) && DefinedVariableDeclarationPredicate()(n)) {
@@ -231,16 +231,16 @@ struct CLSimpleStatementPredicate : public CTPredicate {
 		}
 
 		if (isSgStatement(n)) {
-			return !CLConditionalPredicate()(n) && !CLLoopPredicate()(n) && !CLFileScopePredicate()(n);
+			return !CTConditionalPredicate()(n) && !CTLoopPredicate()(n) && !CTFileScopePredicate()(n);
 		}
 		return false;
 	}
 };
 
-struct CLStatementPredicate : public CTPredicate {
+struct CTStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
-		if (CLConditionalPredicate()(n) || CLLoopPredicate()(n) || CLScopeStatementPredicate()(n) ||
-				CLSimpleStatementPredicate()(n)) {
+		if (CTConditionalPredicate()(n) || CTLoopPredicate()(n) || CTScopeStatementPredicate()(n) ||
+				CTSimpleStatementPredicate()(n)) {
 			return true;
 		}
 		return false;
@@ -261,8 +261,8 @@ struct CTWrappableStatementPredicate : public CTPredicate {
 
 struct ConstructPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
-		return CLGlobalScopePredicate()(n) || CLFileScopePredicate()(n) || CLFunctionPredicate()(n) ||
-					 CLStatementPredicate()(n) || CLExpressionPredicate()(n);
+		return CTGlobalScopePredicate()(n) || CTFileScopePredicate()(n) || CTFunctionPredicate()(n) ||
+					 CTStatementPredicate()(n) || CTExpressionPredicate()(n);
 	}
 };
 
@@ -278,7 +278,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// global scope
 	void visit(SgProject* node) {
-		if (RoseConstructLevelPredicates::CLGlobalScopePredicate()(node)) {
+		if (RoseConstructLevelPredicates::CTGlobalScopePredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTGlobalScope);
 		} else {
 			generateError(node);
@@ -287,7 +287,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// file scope
 	void visit(SgSourceFile* node) {
-		if (RoseConstructLevelPredicates::CLFileScopePredicate()(node)) {
+		if (RoseConstructLevelPredicates::CTFileScopePredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFileScope);
 		} else {
 			generateError(node);
@@ -296,7 +296,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// function
 	void visit(SgFunctionDefinition* node) {
-		if (RoseConstructLevelPredicates::CLFunctionPredicate()(node)) {
+		if (RoseConstructLevelPredicates::CTFunctionPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFunction);
 		} else {
 			generateError(node);
@@ -329,7 +329,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// scopes
 	void visit(SgBasicBlock* node) {
-		if (RoseConstructLevelPredicates::CLScopeStatementPredicate()(node)) {
+		if (RoseConstructLevelPredicates::CTScopeStatementPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTScopeStatement);
 			handleStatementWithWrappableCheck(node);
 		} else {
@@ -339,7 +339,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// statements
 	void visit(SgStatement* node) {
-		if (RoseConstructLevelPredicates::CLSimpleStatementPredicate()(node)) {
+		if (RoseConstructLevelPredicates::CTSimpleStatementPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTSimpleStatement);
 			handleStatementWithWrappableCheck(node);
 		} else {
@@ -359,7 +359,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// expressions
 	void visit(SgExpression* node) {
-		if (RoseConstructLevelPredicates::CLExpressionPredicate()(node)) {
+		if (RoseConstructLevelPredicates::CTExpressionPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTExpression);
 		} else {
 			generateError(node);

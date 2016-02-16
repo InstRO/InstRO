@@ -24,25 +24,25 @@ using namespace RoseConstructLevelPredicates;
 std::unique_ptr<CTPredicate> getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType) {
 	switch (traitType) {
 		case InstRO::Core::ConstructTraitType::CTExpression:
-			return std::make_unique<CLExpressionPredicate>(CLExpressionPredicate());
+			return std::make_unique<CTExpressionPredicate>();
 		case InstRO::Core::ConstructTraitType::CTStatement:
-			return std::make_unique<CLStatementPredicate>(CLStatementPredicate());
+			return std::make_unique<CTStatementPredicate>();
 		case InstRO::Core::ConstructTraitType::CTLoopStatement:
-			return std::make_unique<CLLoopPredicate>(CLLoopPredicate());
+			return std::make_unique<CTLoopPredicate>();
 		case InstRO::Core::ConstructTraitType::CTConditionalStatement:
-			return std::make_unique<CLConditionalPredicate>(CLConditionalPredicate());
+			return std::make_unique<CTConditionalPredicate>();
 		case InstRO::Core::ConstructTraitType::CTScopeStatement:
-			return std::make_unique<CLScopeStatementPredicate>(CLScopeStatementPredicate());
+			return std::make_unique<CTScopeStatementPredicate>();
 		case InstRO::Core::ConstructTraitType::CTSimpleStatement:
-			return std::make_unique<CLSimpleStatementPredicate>(CLSimpleStatementPredicate());
+			return std::make_unique<CTSimpleStatementPredicate>();
 		case InstRO::Core::ConstructTraitType::CTWrappableStatement:
-			return std::make_unique<CTWrappableStatementPredicate>(CTWrappableStatementPredicate());
+			return std::make_unique<CTWrappableStatementPredicate>();
 		case InstRO::Core::ConstructTraitType::CTFunction:
-			return std::make_unique<CLFunctionPredicate>(CLFunctionPredicate());
+			return std::make_unique<CTFunctionPredicate>();
 		case InstRO::Core::ConstructTraitType::CTFileScope:
-			return std::make_unique<CLFileScopePredicate>(CLFileScopePredicate());
+			return std::make_unique<CTFileScopePredicate>();
 		case InstRO::Core::ConstructTraitType::CTGlobalScope:
-			return std::make_unique<CLGlobalScopePredicate>(CLGlobalScopePredicate());
+			return std::make_unique<CTGlobalScopePredicate>();
 		default:
 			throw std::string("RoseConstructLevelPredicates: unknown trait type");
 	}

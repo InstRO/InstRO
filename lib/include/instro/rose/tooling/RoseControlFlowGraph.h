@@ -63,7 +63,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// scopes
 	void visit(SgBasicBlock* node) {
-		if (!Core::RoseConstructLevelPredicates::CLScopeStatementPredicate()(node)) {
+		if (!Core::RoseConstructLevelPredicates::CTScopeStatementPredicate()(node)) {
 			invalidate(node);
 			return;
 		}

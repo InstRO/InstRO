@@ -100,7 +100,7 @@ public:
 
 private:
 	void addConditionStmtOrExpr(SgStatement* conditionStmt) {
-		if (InstRO::Rose::Core::RoseConstructLevelPredicates::CLSimpleStatementPredicate()(conditionStmt)) {
+		if (InstRO::Rose::Core::RoseConstructLevelPredicates::CTSimpleStatementPredicate()(conditionStmt)) {
 			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(conditionStmt));
 		} else {
 			SgExpression* conditionalExpr = isSgExprStatement(conditionStmt)->get_expression();
@@ -245,7 +245,7 @@ public:	// Visitor Interface
 	}
 	void preOrderVisit(SgBasicBlock* node) {
 		// skip fileScope
-		if (!InstRO::Rose::Core::RoseConstructLevelPredicates::CLScopeStatementPredicate()(node)) {
+		if (!InstRO::Rose::Core::RoseConstructLevelPredicates::CTScopeStatementPredicate()(node)) {
 			return;
 		}
 		defaultPreOrderBehavior(node);
@@ -273,7 +273,7 @@ public:	// Visitor Interface
 		currentVisitNode.pop();
 	}
 	void postOrderVisit(SgBasicBlock* node) {
-		if (!InstRO::Rose::Core::RoseConstructLevelPredicates::CLScopeStatementPredicate()(node)) {
+		if (!InstRO::Rose::Core::RoseConstructLevelPredicates::CTScopeStatementPredicate()(node)) {
 			return;	// skip fileScope
 		}
 		currentVisitNode.pop();
@@ -296,7 +296,7 @@ public:	// Visitor Interface
 			preOrderVisit(isSgWhileStmt(node));
 		} else if (isSgDoWhileStmt(node)) {
 			preOrderVisit(isSgDoWhileStmt(node));
-		} else if (isSgBasicBlock(node) && Core::RoseConstructLevelPredicates::CLScopeStatementPredicate()(node)) {
+		} else if (isSgBasicBlock(node) && Core::RoseConstructLevelPredicates::CTScopeStatementPredicate()(node)) {
 			preOrderVisit(isSgBasicBlock(node));
 		}
 	}
@@ -316,7 +316,7 @@ public:	// Visitor Interface
 			postOrderVisit(isSgWhileStmt(node));
 		} else if (isSgDoWhileStmt(node)) {
 			postOrderVisit(isSgDoWhileStmt(node));
-		} else if (isSgBasicBlock(node) && Core::RoseConstructLevelPredicates::CLScopeStatementPredicate()(node)) {
+		} else if (isSgBasicBlock(node) && Core::RoseConstructLevelPredicates::CTScopeStatementPredicate()(node)) {
 			postOrderVisit(isSgBasicBlock(node));
 		}
 	}
