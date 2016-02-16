@@ -1,7 +1,13 @@
+from __future__ import print_function
+import sys
 import os
 import subprocess
 import argparse
 from multiprocessing import Pool
+
+
+def toErr(*objs):
+    print("[status] ", *objs, file=sys.stderr)
 
 cmdParser = argparse.ArgumentParser(description='Runs the test instrumentor executable on all input files.')
 cmdParser.add_argument('src', type=str, help="/path/to/instro/repo")
@@ -42,16 +48,28 @@ def runTestBinary(arguments, binary, inputDirectory):
         if arguments.compilerIndication == 'clang':
             invocationString += ' --'
             
-        print("\n[Running]\n" + binary + " " + srcFile)
+        toErr("\n[Running]\n" + binary + " " + srcFile)
         if False:
-            print("Detailed invocation info: " + invocationString)
+            toErr("Detailed invocation info: " + invocationString)
 
-        errCode = subprocess.call(invocationString, shell=True)
+        errCode = 0
+        out = ''
+        try:
+            out = subprocess.check_output(invocationString, shell=True)
+        except subprocess.CalledProcessError as e:
+            errCode = e.returncode
+            toErr("[Error] Dumping STDOUT \n" + out)
+
+#        errCode = subprocess.call(invocationString, shell=True)
 
         if errCode == 0 and binary == "DefaultInstrumentationAdapterTest":
-            errCode += subprocess.call("./a.out", shell=True)
+            try:
+                out = subprocess.call("./a.out", shell=True)
+            except subprocess.CalledProcessError as e:
+                errCode = e.returncode
+                toErr("[Error] Problem when running binary.")
 
-        print("[Done]")
+        toErr("[Done]")
         if errCode != 0:
             failedRuns.append((binary, srcFile))
 
@@ -73,6 +91,7 @@ def runApply(arguments):
         print("\n=================================")
         print("==== Tests finished normally ====")
         print("=================================\n")
+        return 0
     else:
         print("\n|=== Tests failed ===")
         print("|= Number of failing tests due to error: " + str(len(failedRuns)))

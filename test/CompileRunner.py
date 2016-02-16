@@ -18,6 +18,8 @@ cmdParser.add_argument('--llvm-install', type=str, dest='llvminstall', help="/pa
 cmdParser.add_argument('--rapidjson', type=str, dest='rapidjson', help="/path/to/rapidjson/repository")
 cmdParser.add_argument('--boost', type=str, dest='boost', help="/path/to/boost/installation")
 
+runnerLog = []
+
 def createAndCDToTempDir():
     tDir = tempfile.mkdtemp()
     os.chdir(tDir)
@@ -26,22 +28,31 @@ def createAndCDToTempDir():
 
 def buildWithConfigureLine(configLine, baseDir):
     fullQualInvocLine = baseDir + "/" + configLine
-    retCode = subprocess.call(fullQualInvocLine, shell=True)
-    if retCode != 0:
-        print(fullQualInvocLine)
-        raise Exception("The build failed while configure was run: " + fullQualInvocLine)
+    try:
+        out = subprocess.check_output(fullQualInvocLine, shell=True)
+        runnerLog.append('Configuring with ' + fullQualInvocLine)
+    except subprocess.CalledProcessError:
+#        print(fullQualInvocLine)
+        runnerLog.append('Configure failed: ' + fullQualInvocLine)
+#        raise Exception("The build failed while configure was run: " + fullQualInvocLine)
     
     # If configure succeeded we can now build InstRO
     print(os.getcwd())
-    retCode = subprocess.call("make -j20", shell=True)
-    if retCode != 0:
-        print(fullQualInvocLine)
-        raise Exception("Building failed with err code " + str(retCode) + fullQualInvocLine)
 
-    retCode = subprocess.call("make check -j4", shell=True)
-    if retCode != 0:
-        print(fullQualInvocLine)
-        raise Exception("Make check failed with error code " + str(retCode))
+    try:
+        out = subprocess.check_output("make -j20", shell=True)
+    except subprocess.CalledProcessError:
+#        print(fullQualInvocLine)
+        runnerLog.append('Building failed with configure ' + fullQualInvocLine)
+#        raise Exception("Building failed with err code " + str(retCode) + fullQualInvocLine)
+
+    try:
+        out = subprocess.check_output("make check -j4", shell=True)
+        runnerLog.append(out)
+    except subprocess.CalledProcessError:
+#        print(fullQualInvocLine)
+        runnerLog.append('Tests failed \n')
+#        raise Exception("Make check failed with error code " + str(retCode))
 
 def buildWithRose(arguments, baseDir):
     numBuilds = 1
@@ -108,6 +119,7 @@ def configureAndBuildFlavor(arguments):
     baseDir = os.getcwd()[0:os.getcwd().rfind('/')]
     tempDirectory = createAndCDToTempDir()
     checkArguments(arguments)
+
     try:
         # We want to check whether we have to build using ROSE, Clang, and RapidJson
         if arguments.boost == None:
@@ -118,6 +130,15 @@ def configureAndBuildFlavor(arguments):
 
         if arguments.llvmsrc != None and arguments.llvminstall != None:
             buildWithClang(arguments, baseDir)
+
+        print("    ====================     \n==== Global Test Summary ====")
+        for s in runnerLog:
+            strArr = s.splitlines()
+            for ss in strArr:
+                if ss.find('make') != -1 or ss.find('Making') != -1:
+                    continue
+                print(ss)
+            print('#########################################\n')
 
     finally:
         os.chdir(baseDir)
