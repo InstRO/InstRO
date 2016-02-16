@@ -3,6 +3,7 @@ import os
 import tempfile
 import shutil
 import argparse
+import time
 
 # The InstRO test runner should do:
 # - configure with the different flavors (depending on arguments)
@@ -115,6 +116,28 @@ def checkArguments(arguments):
     if arguments.rapidjson != None and os.path.isdir(arguments.rapidjson) == False:
         raise Exception("Provided rapidjson directory is not a directory.")
 
+def generateLogFileAndPrintToScreen():
+    outFile = 'TestSuite-compiletest-' + str(int(time.time()))
+    of = open(outFile, 'w')
+
+    sumHeader = "\n#####===================#####\n==== Global Test Summary ====\nThis has also been written to file " + outFile
+    of.write(sumHeader + '\n')
+    print(sumHeader)
+    for s in runnerLog:
+        strArr = s.splitlines()
+        for ss in strArr:
+            if ss.find('make') != -1 or ss.find('Making') != -1 or ss.find('python ') != -1:
+                continue
+            of.write(ss + '\n')
+            print(ss)
+        if ss.find('Configuring ') == -1:
+            separator = '#########################################\n'
+            of.write(separator + '\n')
+            print(separator)
+
+    of.close()
+
+
 # We get the parsed commandline arguments and build the flavors accordingly
 def configureAndBuildFlavor(arguments):
     baseDir = os.getcwd()[0:os.getcwd().rfind('/')]
@@ -132,19 +155,12 @@ def configureAndBuildFlavor(arguments):
         if arguments.llvmsrc != None and arguments.llvminstall != None:
             buildWithClang(arguments, baseDir)
 
-        print("\n#####===================#####\n==== Global Test Summary ====")
-        for s in runnerLog:
-            strArr = s.splitlines()
-            for ss in strArr:
-                if ss.find('make') != -1 or ss.find('Making') != -1 or ss.find('python ') != -1:
-                    continue
-                print(ss)
-            if ss.find('Configuring ') == -1:
-                print('#########################################\n')
-
     finally:
         os.chdir(baseDir)
         shutil.rmtree(tempDirectory)
+
+
+    generateLogFileAndPrintToScreen()
 
 args = cmdParser.parse_args()
 configureAndBuildFlavor(args)
