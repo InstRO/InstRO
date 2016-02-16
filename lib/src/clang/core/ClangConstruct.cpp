@@ -23,7 +23,6 @@ class PredicateMatcherHandler : public clang::ast_matchers::MatchFinder::MatchCa
 	
 		void run(const clang::ast_matchers::MatchFinder::MatchResult &result) override {
 			matchedOnce = true;
-			InstRO::logIt(InstRO::DEBUG) << "PredicateMatcherHandler.run" << std::endl;
 		}
 		
 		bool matched() const { return matchedOnce; }
