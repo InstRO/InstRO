@@ -18,6 +18,7 @@ cmdParser.add_argument('--llvm-src', type=str, dest='llvmsrc', help="/path/to/ll
 cmdParser.add_argument('--llvm-install', type=str, dest='llvminstall', help="/path/to/llvm/installation")
 cmdParser.add_argument('--rapidjson', type=str, dest='rapidjson', help="/path/to/rapidjson/repository")
 cmdParser.add_argument('--boost', type=str, dest='boost', help="/path/to/boost/installation")
+cmdParser.add_argument('--jobs', type=int, dest='numJobs', help='Option is forwarded to -j option of build system')
 
 runnerLog = []
 
@@ -27,7 +28,7 @@ def createAndCDToTempDir():
     return tDir
 
 
-def buildWithConfigureLine(configLine, baseDir):
+def buildWithConfigureLine(configLine, baseDir, numJobs):
     fullQualInvocLine = baseDir + "/" + configLine
     FNULL = open(os.devnull, 'w')
     
@@ -38,18 +39,15 @@ def buildWithConfigureLine(configLine, baseDir):
     except subprocess.CalledProcessError:
         runnerLog.append('Configure failed: ' + fullQualInvocLine)
     
-    # If configure succeeded we can now build InstRO
-#    print(os.getcwd())
-
     try:
         print('Building ... ')
-        out = subprocess.check_output("make -j20", shell=True, stderr=FNULL)
+        out = subprocess.check_output("make -j" + str(numJobs), shell=True, stderr=FNULL)
     except subprocess.CalledProcessError:
         runnerLog.append('Building failed with configure ' + fullQualInvocLine)
 
     try:
         print('Running tests ... ')
-        out = subprocess.check_output("make check -j4", shell=True, stderr=FNULL)
+        out = subprocess.check_output("make check -j" + str(numJobs), shell=True, stderr=FNULL)
         runnerLog.append(out)
     except subprocess.CalledProcessError:
         runnerLog.append('Tests failed \n')
@@ -60,7 +58,10 @@ def buildWithRose(arguments, baseDir):
     numBuilds = 1
     if arguments.rapidjson != None:
         numBuilds += 1
-
+    
+    numJobs = 24
+    if arguments.numJobs != None:
+        numJobs = arguments.numJobs
 
     for i in xrange(0, numBuilds):
         # we need to clean the build directory
@@ -73,7 +74,7 @@ def buildWithRose(arguments, baseDir):
         if arguments.rapidjson != None and i == 1:
             configureLine += "--with-rapidjson=" + arguments.rapidjson + " "
 
-        buildWithConfigureLine(configureLine, baseDir)
+        buildWithConfigureLine(configureLine, baseDir, numJobs)
 
     subprocess.call("rm -rf *", shell=True)
 
@@ -83,6 +84,9 @@ def buildWithClang(arguments, baseDir):
     if arguments.rapidjson != None:
         numBuilds += 1
 
+    numJobs = 24
+    if arguments.numJobs != None:
+        numJobs = arguments.numJobs
 
     for i in xrange(0, numBuilds):
         # we need to clean the build directory
@@ -96,7 +100,7 @@ def buildWithClang(arguments, baseDir):
         if arguments.rapidjson != None and i == 1:
             configureLine += "--with-rapidjson=" + arguments.rapidjson + " "
 
-        buildWithConfigureLine(configureLine, baseDir)
+        buildWithConfigureLine(configureLine, baseDir, numJobs)
         
     subprocess.call("rm -rf *", shell=True)
 
@@ -117,7 +121,7 @@ def checkArguments(arguments):
         raise Exception("Provided rapidjson directory is not a directory.")
 
 def generateLogFileAndPrintToScreen():
-    outFile = 'TestSuite-compiletest-' + str(int(time.time()))
+    outFile = 'test/TestSuite-compiletest-' + str(int(time.time()))
     of = open(outFile, 'w')
 
     sumHeader = "\n#####===================#####\n==== Global Test Summary ====\nThis has also been written to file " + outFile
