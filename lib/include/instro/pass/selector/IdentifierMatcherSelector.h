@@ -6,6 +6,13 @@
 namespace InstRO {
 namespace Selector {
 
+/**
+ * Matches any of the following against the matchRules list:
+ * - variable references
+ * - function names.
+ * As such, the selector can match appearances of variable names within expressions, such as res = a + b;
+ * Note: The matching does not consider declarations of variable names. Consequently int a = 42 would not be matched.
+ */
 class IdentifierMatcherSelector : public InstRO::Core::PassImplementation {
  protected:
 	std::vector<std::string> rules;

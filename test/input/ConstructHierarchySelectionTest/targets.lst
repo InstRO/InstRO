@@ -19,3 +19,4 @@ callInTemplateCode
 emptyBodies
 switchCase
 unaryOperators
+opOverload

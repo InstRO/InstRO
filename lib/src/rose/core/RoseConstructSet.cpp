@@ -108,8 +108,16 @@ int RoseConstruct::determineCorrectLineInfo() const {
 		}
 	}
 
+	// This should be implicit casts (maybe even inserted at the front-end stage)
 	if (isSgCastExp(node) && isSgCastExp(node)->isCompilerGenerated()) {
 		return isSgLocatedNode(node->get_parent())->get_startOfConstruct()->get_line();
+	}
+
+	// compiler generated member function reference expressions for operator overloading
+	if(isSgFunctionCallExp(node) && isSgFunctionCallExp(node)->isCompilerGenerated()){
+		auto ste = SageInterface::querySubTree<SgVarRefExp>(isSgFunctionCallExp(node)->get_function());
+		assert(ste.size() == 1 && "in the function call is referenced only one variable");
+		return isSgLocatedNode(ste[0])->get_startOfConstruct()->get_line();
 	}
 
 	return isSgLocatedNode(node)->get_startOfConstruct()->get_line();
@@ -149,6 +157,12 @@ std::string RoseConstruct::determineCorrectFilename() const {
 		return isSgLocatedNode(node->get_parent())->get_startOfConstruct()->get_filenameString();
 	}
 
+	// compiler generated member function reference expressions for operator overloading
+	if(isSgFunctionCallExp(node) && isSgFunctionCallExp(node)->isCompilerGenerated()){
+		auto ste = SageInterface::querySubTree<SgVarRefExp>(isSgFunctionCallExp(node)->get_function());
+		assert(ste.size() == 1 && "in the function call is referenced only one variable");
+		return isSgLocatedNode(ste[0])->get_startOfConstruct()->get_filenameString();
+	}
 
 	return isSgLocatedNode(node)->get_startOfConstruct()->get_filenameString();
 }
@@ -228,6 +242,13 @@ int RoseConstruct::determineCorrectColumnInformation() const {
 
 	if (isSgCastExp(node) && isSgCastExp(node)->isCompilerGenerated()) {
 		colInfo = isSgLocatedNode(node->get_parent())->get_startOfConstruct()->get_col();
+	}
+
+	// compiler generated member function reference expressions for operator overloading
+	if(isSgFunctionCallExp(node) && isSgFunctionCallExp(node)->isCompilerGenerated()){
+		auto ste = SageInterface::querySubTree<SgVarRefExp>(isSgFunctionCallExp(node)->get_function());
+		assert(ste.size() == 1 && "in the function call is referenced only one variable");
+		return isSgLocatedNode(ste[0])->get_startOfConstruct()->get_col();
 	}
 
 	return colInfo;
