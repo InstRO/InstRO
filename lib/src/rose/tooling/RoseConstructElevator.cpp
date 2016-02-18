@@ -53,7 +53,6 @@ std::set<std::shared_ptr<InstRO::Core::Construct> > lowerConstruct(std::shared_p
 }	// namespace ConstructElevatorHelper
 
 using namespace ConstructElevatorHelper;
-using namespace InstRO::Rose::Core::RoseConstructLevelPredicates;
 
 InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::ConstructSet &inputCS,
 																										InstRO::Core::ConstructTraitType traitType) {
@@ -65,7 +64,7 @@ InstRO::Core::ConstructSet ConstructElevator::raise(const InstRO::Core::Construc
 	for (auto construct : input) {
 		auto roseConstruct = InstRO::Rose::toRoseConstruct(construct);
 
-		auto predicate = InstRO::Rose::Core::RoseConstructLevelPredicates::getPredicateForTraitType(traitType);
+		auto predicate = InstRO::Rose::Core::RoseConstructTraitPredicates::getPredicateForTraitType(traitType);
 		std::shared_ptr<InstRO::Core::Construct> newConstruct = raiseConstruct(roseConstruct, std::move(predicate));
 
 		if (newConstruct != nullptr) {
@@ -88,7 +87,7 @@ InstRO::Core::ConstructSet ConstructElevator::lower(const InstRO::Core::Construc
 	for (auto construct : input) {
 		// CI: make sure it is a ROSE construct
 		auto roseConstruct = InstRO::Rose::toRoseConstruct(construct);
-		auto predicate = InstRO::Rose::Core::RoseConstructLevelPredicates::getPredicateForTraitType(traitType);
+		auto predicate = InstRO::Rose::Core::RoseConstructTraitPredicates::getPredicateForTraitType(traitType);
 		auto newConstructs = lowerConstruct(roseConstruct, std::move(predicate));
 
 		for (auto newConstruct : newConstructs) {

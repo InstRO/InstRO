@@ -15,7 +15,7 @@ InstRO::Core::ConstructSet RoseConstructTraitInterface::getConstructsByTrait(
 	InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci(&result);
 
 	for (auto sgNode : SageInterface::querySubTree<SgNode>(proj, V_SgNode)) {
-		if (InstRO::Rose::Core::RoseConstructLevelPredicates::ConstructPredicate()(sgNode)) {
+		if (InstRO::Rose::Core::RoseConstructTraitPredicates::ConstructPredicate()(sgNode)) {
 			auto construct = InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(sgNode);
 			if (construct->getTraits().is(constructTrait)) {
 				csci.put(construct);

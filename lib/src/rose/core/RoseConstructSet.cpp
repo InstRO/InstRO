@@ -18,9 +18,9 @@ std::shared_ptr<InstRO::Rose::Core::RoseConstruct> toRoseConstruct(std::shared_p
 
 namespace Core {
 
-namespace RoseConstructLevelPredicates {
+namespace RoseConstructTraitPredicates {
 
-using namespace RoseConstructLevelPredicates;
+using namespace RoseConstructTraitPredicates;
 std::unique_ptr<CTPredicate> getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType) {
 	switch (traitType) {
 		case InstRO::Core::ConstructTraitType::CTExpression:
@@ -44,11 +44,11 @@ std::unique_ptr<CTPredicate> getPredicateForTraitType(InstRO::Core::ConstructTra
 		case InstRO::Core::ConstructTraitType::CTGlobalScope:
 			return std::make_unique<CTGlobalScopePredicate>();
 		default:
-			throw std::string("RoseConstructLevelPredicates: unknown trait type");
+			throw std::string("RoseConstructTraitPredicates: unknown trait type");
 	}
 }
 
-}	// namespace RoseConstructLevelPredicates
+}	// namespace RoseConstructTraitPredicates
 
 std::string RoseConstruct::getIdentifier() const {
 	std::string identifier("");

@@ -63,7 +63,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// scopes
 	void visit(SgBasicBlock* node) {
-		if (!Core::RoseConstructLevelPredicates::CTScopeStatementPredicate()(node)) {
+		if (!Core::RoseConstructTraitPredicates::CTScopeStatementPredicate()(node)) {
 			invalidate(node);
 			return;
 		}
@@ -82,7 +82,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 	}
 
 	void visit(SgVariableDeclaration* node) {
-		if (!InstRO::Rose::Core::RoseConstructLevelPredicates::DefinedVariableDeclarationPredicate()(node)) {
+		if (!InstRO::Rose::Core::RoseConstructTraitPredicates::DefinedVariableDeclarationPredicate()(node)) {
 			invalidate(node);
 			return;
 		}
@@ -105,7 +105,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// expressions
 	void visit(SgExpression* node) {
-		if (Core::RoseConstructLevelPredicates::ExpressionInLoopOrConditionalHeader()(node)) {
+		if (Core::RoseConstructTraitPredicates::ExpressionInLoopOrConditionalHeader()(node)) {
 			nodeType = EXPR;
 			InfrastructureInterface::ConstructSetCompilerInterface csci(cs);
 			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));

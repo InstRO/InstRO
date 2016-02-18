@@ -16,7 +16,7 @@ namespace InstRO {
 namespace Rose {
 namespace Core {
 
-namespace RoseConstructLevelPredicates {
+namespace RoseConstructTraitPredicates {
 struct CTPredicate {
 	virtual bool operator()(SgNode* n) const = 0;
 	virtual ~CTPredicate() {}
@@ -269,7 +269,7 @@ struct ConstructPredicate : public CTPredicate {
 //// TODO actually use that mechanism
 std::unique_ptr<CTPredicate> getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType);
 
-}	// namespace RoseConstructLevelPredicates
+}	// namespace RoseConstructTraitPredicates
 
 class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
  public:
@@ -278,7 +278,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// global scope
 	void visit(SgProject* node) {
-		if (RoseConstructLevelPredicates::CTGlobalScopePredicate()(node)) {
+		if (RoseConstructTraitPredicates::CTGlobalScopePredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTGlobalScope);
 		} else {
 			generateError(node);
@@ -287,7 +287,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// file scope
 	void visit(SgSourceFile* node) {
-		if (RoseConstructLevelPredicates::CTFileScopePredicate()(node)) {
+		if (RoseConstructTraitPredicates::CTFileScopePredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFileScope);
 		} else {
 			generateError(node);
@@ -296,7 +296,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// function
 	void visit(SgFunctionDefinition* node) {
-		if (RoseConstructLevelPredicates::CTFunctionPredicate()(node)) {
+		if (RoseConstructTraitPredicates::CTFunctionPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFunction);
 		} else {
 			generateError(node);
@@ -329,7 +329,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// scopes
 	void visit(SgBasicBlock* node) {
-		if (RoseConstructLevelPredicates::CTScopeStatementPredicate()(node)) {
+		if (RoseConstructTraitPredicates::CTScopeStatementPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTScopeStatement);
 			handleStatementWithWrappableCheck(node);
 		} else {
@@ -339,7 +339,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// statements
 	void visit(SgStatement* node) {
-		if (RoseConstructLevelPredicates::CTSimpleStatementPredicate()(node)) {
+		if (RoseConstructTraitPredicates::CTSimpleStatementPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTSimpleStatement);
 			handleStatementWithWrappableCheck(node);
 		} else {
@@ -349,7 +349,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	void visit(SgVariableDeclaration* node) {
 		// CI: an initialized variable declaration is OK,
-		if (RoseConstructLevelPredicates::DefinedVariableDeclarationPredicate()(node)) {
+		if (RoseConstructTraitPredicates::DefinedVariableDeclarationPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTSimpleStatement);
 			handleStatementWithWrappableCheck(node);
 		} else {
@@ -359,7 +359,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	// expressions
 	void visit(SgExpression* node) {
-		if (RoseConstructLevelPredicates::CTExpressionPredicate()(node)) {
+		if (RoseConstructTraitPredicates::CTExpressionPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTExpression);
 		} else {
 			generateError(node);
@@ -376,7 +376,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 
 	void handleStatementWithWrappableCheck(SgNode* node) {
 		ct.add(InstRO::Core::ConstructTraitType::CTStatement);
-		if (RoseConstructLevelPredicates::CTWrappableStatementPredicate()(node)) {
+		if (RoseConstructTraitPredicates::CTWrappableStatementPredicate()(node)) {
 			ct.add(InstRO::Core::ConstructTraitType::CTWrappableStatement);
 		}
 	}

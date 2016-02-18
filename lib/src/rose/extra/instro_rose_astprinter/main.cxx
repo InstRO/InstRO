@@ -96,7 +96,7 @@ int main(int argc, char ** argv)
 			std::string nodeToString=constructToString(node);
 
 			std::string nodeFormatArgs;
-			if (InstRO::Rose::Core::RoseConstructLevelPredicates::ConstructPredicate()(node))
+			if (InstRO::Rose::Core::RoseConstructTraitPredicates::ConstructPredicate()(node))
 				nodeFormatArgs = ",shape=box,peripheries=2,style=filled, fillcolor=palegreen,fontsize=10,margin=0.02";
 			else
 				nodeFormatArgs = ",shape=box, style=filled,fillcolor=gray,fontsize=10,margin=0.02";// salmon
@@ -163,7 +163,7 @@ int main(int argc, char ** argv)
 			std::string nodeToString=constructToString(node);
 
 			std::string nodeFormatArgs;
-			if (InstRO::Rose::Core::RoseConstructLevelPredicates::ConstructPredicate()(node)) {
+			if (InstRO::Rose::Core::RoseConstructTraitPredicates::ConstructPredicate()(node)) {
 				nodeFormatArgs = ",shape=box,peripheries=2,style=filled, fillcolor=palegreen,fontsize=10,margin=0.02";
 			// Make sure we don't have any stray " in our strings		
 				std::replace(nodeFormatArgs.begin(), nodeFormatArgs.end(), '"', ' ');
@@ -177,7 +177,7 @@ int main(int argc, char ** argv)
 			while (parent != nullptr) {
 //				if (!(parent->get_file_info()==nullptr || parent->get_file_info()->isCompilerGenerated ())) {
 					// break with a non-null parent to create edge
-					if (InstRO::Rose::Core::RoseConstructLevelPredicates::ConstructPredicate()(parent)) break;
+					if (InstRO::Rose::Core::RoseConstructTraitPredicates::ConstructPredicate()(parent)) break;
 //				}
 				parent = parent->get_parent();					
 			}
@@ -188,7 +188,7 @@ int main(int argc, char ** argv)
 				toDoList.push_back(parent);
 
 	//			outFile << "\tn" << node << " [label=\"" << roseClassName << "\\n" << nodeToString << "\"" << nodeFormatArgs << "];" << std::endl;
-			if (InstRO::Rose::Core::RoseConstructLevelPredicates::ConstructPredicate()(node)) {
+			if (InstRO::Rose::Core::RoseConstructTraitPredicates::ConstructPredicate()(node)) {
 				outFile << "\tn" << node << " -> n" << parent <<";"<< std::endl;
 			}
 			
