@@ -3,8 +3,9 @@ multiVarDecl.cpp:2:1--Function-::main
 
 +CTStatementSelector
 multiVarDecl.cpp:3:2--SimpleStatement
+multiVarDecl.cpp:3:2--SimpleStatement
 multiVarDecl.cpp:4:2--SimpleStatement
 
 +CTExpressionSelector
-multiVarDecl.cpp:3:2--Expression
-multiVarDecl.cpp:3:2--Expression
+multiVarDecl.cpp:3:6--Expression
+multiVarDecl.cpp:3:17--Expression

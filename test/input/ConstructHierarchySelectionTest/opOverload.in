@@ -18,5 +18,5 @@ opOverload.cpp:15:2--SimpleStatement
 
 +CTExpressionSelector
 opOverload.cpp:6:3--Expression
-opOverload.cpp:12:2--Expression
+opOverload.cpp:12:6--Expression
 opOverload.cpp:14:2--Expression

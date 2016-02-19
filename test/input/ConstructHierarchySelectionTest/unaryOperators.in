@@ -18,18 +18,18 @@ unaryOperators.cpp:20:2--SimpleStatement
 unaryOperators.cpp:21:2--SimpleStatement
 
 +CTExpressionSelector
-unaryOperators.cpp:2:2--Expression
-unaryOperators.cpp:3:2--Expression
+unaryOperators.cpp:2:6--Expression
+unaryOperators.cpp:3:8--Expression
 unaryOperators.cpp:3:12--Expression
-unaryOperators.cpp:4:2--Expression
+unaryOperators.cpp:4:6--Expression
 unaryOperators.cpp:4:10--Expression
-unaryOperators.cpp:9:2--Expression
+unaryOperators.cpp:9:6--Expression
 unaryOperators.cpp:9:12--Expression
 unaryOperators.cpp:9:13--Expression
 unaryOperators.cpp:10:9--Expression
-unaryOperators.cpp:14:2--Expression
+unaryOperators.cpp:14:6--Expression
 unaryOperators.cpp:14:12--Expression
 unaryOperators.cpp:14:13--Expression
 unaryOperators.cpp:15:9--Expression
-unaryOperators.cpp:19:2--Expression
-unaryOperators.cpp:20:2--Expression
+unaryOperators.cpp:19:6--Expression
+unaryOperators.cpp:20:8--Expression

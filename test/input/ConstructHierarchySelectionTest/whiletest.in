@@ -21,6 +21,6 @@ whiletest.cpp:2:21--ScopeStatement
 whiletest.cpp:2:2--LoopStatement
 
 +CTExpressionSelector
-whiletest.cpp:2:2--Expression
+whiletest.cpp:2:13--Expression
 whiletest.cpp:3:3--Expression
 whiletest.cpp:4:7--Expression

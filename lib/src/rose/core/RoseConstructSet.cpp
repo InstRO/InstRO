@@ -94,17 +94,14 @@ int RoseConstruct::determineCorrectLineInfo() const {
 
 	// Assign initializers are marked as compiler generated -> retrieve correct position information
 	if (isSgAssignInitializer(node)) {
-		return Utility::ASTHelper::applyConsumerToAssignInitializer([](Sg_File_Info *info) { return info->get_line(); },
-																																isSgAssignInitializer(node));
+		return Utility::ASTHelper::applyConsumerToAssignInitializer(
+				[](SgInitializedName *n) { return n->get_startOfConstruct()->get_line(); }, isSgAssignInitializer(node));
 	}
 
 	// if the declaration is inside an if statement, then it is marked compiler generated
 	if (isSgVariableDeclaration(node)) {
-		if (isSgIfStmt(node->get_parent())) {
-			return isSgIfStmt(node->get_parent())->get_startOfConstruct()->get_line();
-		}
-		if (isSgWhileStmt(node->get_parent())) {
-			return isSgWhileStmt(node->get_parent())->get_startOfConstruct()->get_line();
+		if (Sg_File_Info *fi = Utility::ASTHelper::getFileInfoFromWhileOrIf(node->get_parent())) {
+			return fi->get_line();
 		}
 	}
 
@@ -139,18 +136,16 @@ std::string RoseConstruct::determineCorrectFilename() const {
 
 	// if the declaration is inside an if statement, then it is marked compiler generated
 	if (isSgVariableDeclaration(node)) {
-		if (isSgIfStmt(node->get_parent())) {
-			return isSgIfStmt(node->get_parent())->get_startOfConstruct()->get_filenameString();
-		}
-		if (isSgWhileStmt(node->get_parent())) {
-			return isSgWhileStmt(node->get_parent())->get_startOfConstruct()->get_filenameString();
+		if (Sg_File_Info *fi = Utility::ASTHelper::getFileInfoFromWhileOrIf(node->get_parent())) {
+			return fi->get_filenameString();
 		}
 	}
 
 	// Assign initializers are marked as compiler generated, s.a.
 	if (isSgAssignInitializer(node)) {
-		return Utility::ASTHelper::applyConsumerToAssignInitializer(
-				[](Sg_File_Info *info) { return info->get_filenameString(); }, isSgAssignInitializer(node));
+		return Utility::ASTHelper::applyConsumerToAssignInitializer([](SgInitializedName *n) {
+			return n->get_startOfConstruct()->get_filenameString();
+		}, isSgAssignInitializer(node));
 	}
 
 	if (isSgCastExp(node) && isSgCastExp(node)->isCompilerGenerated()) {
@@ -169,7 +164,7 @@ std::string RoseConstruct::determineCorrectFilename() const {
 
 /*
  * As it seems this is overly complex, we do not retrieve the correct values in all cases.
- * Especially for something like: for(; ; __i){..} we use the start column of the for loop as the
+ * Especially for something like: for(; ; ++i){..} we use the start column of the for loop as the
  * Construct column for the empty SimpleStatement constructs for init and test.
  * If something happens we do not account for, the returned column info is -1.
  */
@@ -183,18 +178,16 @@ int RoseConstruct::determineCorrectColumnInformation() const {
 
 	// if the declaration is inside an if statement, then it is marked compiler generated
 	if (isSgVariableDeclaration(node)) {
-		if (isSgIfStmt(node->get_parent())) {
-			return isSgIfStmt(node->get_parent())->get_startOfConstruct()->get_col();
-		}
-		if (isSgWhileStmt(node->get_parent())) {
-			return isSgWhileStmt(node->get_parent())->get_startOfConstruct()->get_col();
+		if (Sg_File_Info *fi = Utility::ASTHelper::getFileInfoFromWhileOrIf(node->get_parent())) {
+			return fi->get_col();
 		}
 	}
 
 	// Assign initializers are marked as compiler generated, s.a.
 	if (isSgAssignInitializer(node)) {
-		return Utility::ASTHelper::applyConsumerToAssignInitializer([](Sg_File_Info *info) { return info->get_col(); },
-																																isSgAssignInitializer(node));
+		return Utility::ASTHelper::applyConsumerToAssignInitializer([](SgInitializedName *n) {
+			return n->get_endOfConstruct()->get_col() - (n->get_name().get_length() - 1);
+		}, isSgAssignInitializer(node));
 	}
 
 	int colInfo = -1;

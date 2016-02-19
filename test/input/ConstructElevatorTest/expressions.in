@@ -11,18 +11,18 @@ expressions.cpp:1:1--Function-::foo
 expressions.cpp:9:1--Function-::main
 
 +Func2ExprLevelSelector
-expressions.cpp:2:2--Expression
-expressions.cpp:3:2--Expression
-expressions.cpp:4:2--Expression
+expressions.cpp:2:6--Expression
+expressions.cpp:3:9--Expression
+expressions.cpp:4:7--Expression
 expressions.cpp:6:2--Expression
 expressions.cpp:10:2--Expression
 
 +wpToExprStmtSelector
 expressions.cpp:2:2--SimpleStatement
-expressions.cpp:2:2--Expression
-expressions.cpp:3:2--Expression
+expressions.cpp:2:6--Expression
+expressions.cpp:3:9--Expression
 expressions.cpp:3:2--SimpleStatement
-expressions.cpp:4:2--Expression
+expressions.cpp:4:7--Expression
 expressions.cpp:4:2--SimpleStatement
 expressions.cpp:6:2--Expression
 expressions.cpp:6:2--SimpleStatement
