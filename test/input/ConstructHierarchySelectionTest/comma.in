@@ -4,16 +4,17 @@ comma.cpp:2:1--Function-::main
 
 +CTStatementSelector
 comma.cpp:3:2--SimpleStatement
+comma.cpp:3:2--SimpleStatement
 comma.cpp:4:2--SimpleStatement
 comma.cpp:5:2--SimpleStatement
 comma.cpp:6:2--SimpleStatement
 comma.cpp:8:2--SimpleStatement
 
 +CTExpressionSelector
-comma.cpp:3:2--Expression
-comma.cpp:3:2--Expression
-comma.cpp:4:2--Expression
-comma.cpp:5:2--Expression
+comma.cpp:3:6--Expression
+comma.cpp:3:13--Expression
+comma.cpp:4:6--Expression
+comma.cpp:5:6--Expression
 comma.cpp:5:10--Expression
 comma.cpp:6:2--Expression
 comma.cpp:6:7--Expression

@@ -13,7 +13,7 @@ identifier.cpp:15:2--SimpleStatement
 
 +CTExpressionSelector
 identifier.cpp:4:2--Expression
-identifier.cpp:8:2--Expression
-identifier.cpp:9:2--Expression
+identifier.cpp:8:9--Expression
+identifier.cpp:9:8--Expression
 identifier.cpp:10:2--Expression
 identifier.cpp:14:2--Expression

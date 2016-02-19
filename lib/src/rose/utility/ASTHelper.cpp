@@ -145,3 +145,14 @@ bool ASTHelper::isContainedInTemplateInstantiation(SgNode* node) {
 
 	return (templFuncDecl != nullptr) || (templMemFuncDecl != nullptr);
 }
+
+Sg_File_Info *ASTHelper::getFileInfoFromWhileOrIf(SgNode *n){
+		if (isSgIfStmt(n)) {
+			return isSgIfStmt(n)->get_startOfConstruct();
+		}
+		if (isSgWhileStmt(n)) {
+			return isSgWhileStmt(n)->get_startOfConstruct();
+		}
+	return nullptr;
+}
+

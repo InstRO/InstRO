@@ -27,22 +27,22 @@ test_01.cpp:13:2--LoopStatement
 test_01.cpp:13:30--ScopeStatement
 
 +CTExpressionSelector
-test_01.cpp:6:2--Expression
+test_01.cpp:6:6--Expression
 test_01.cpp:6:12--Expression
 test_01.cpp:6:12--Expression
 test_01.cpp:6:21--Expression
 test_01.cpp:7:9--Expression
 test_01.cpp:7:10--Expression
 test_01.cpp:7:22--Expression
-test_01.cpp:11:2--Expression
+test_01.cpp:11:6--Expression
 test_01.cpp:11:10--Expression
 test_01.cpp:11:10--Expression
-test_01.cpp:12:2--Expression
-test_01.cpp:13:7--Expression
+test_01.cpp:12:9--Expression
+test_01.cpp:13:11--Expression
 test_01.cpp:13:18--Expression
 test_01.cpp:13:25--Expression
 test_01.cpp:14:3--Expression
 test_01.cpp:14:10--Expression
 test_01.cpp:14:10--Expression
-test_01.cpp:20:2--Expression
+test_01.cpp:20:9--Expression
 test_01.cpp:20:15--Expression

@@ -9,5 +9,5 @@ arrowCall.cpp:8:2--SimpleStatement
 arrowCall.cpp:12:2--SimpleStatement
 
 +CTExpressionSelector
-arrowCall.cpp:7:2--Expression
+arrowCall.cpp:7:5--Expression
 arrowCall.cpp:8:2--Expression

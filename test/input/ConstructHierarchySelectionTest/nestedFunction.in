@@ -23,6 +23,6 @@ nestedFunction.cpp:7:10--ScopeStatement
 +CTExpressionSelector
 nestedFunction.cpp:5:6--Expression
 nestedFunction.cpp:6:11--Expression
-nestedFunction.cpp:13:2--Expression
+nestedFunction.cpp:13:6--Expression
 nestedFunction.cpp:15:2--Expression
 nestedFunction.cpp:15:8--Expression

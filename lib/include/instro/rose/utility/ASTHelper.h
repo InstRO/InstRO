@@ -82,22 +82,31 @@ typename std::result_of<CallableFileInfoConsumer(Sg_File_Info*)>::type applyCons
 }
 
 template <typename CallableFileInfoConsumer>
-typename std::result_of<CallableFileInfoConsumer(Sg_File_Info*)>::type applyConsumerToAssignInitializer(
+typename std::result_of<CallableFileInfoConsumer(SgInitializedName*)>::type applyConsumerToAssignInitializer(
 		CallableFileInfoConsumer cr, SgAssignInitializer* node) {
 	auto decl = isSgDeclarationStatement(node->get_parent()->get_parent());
-	if (decl) {
+	auto initName = isSgInitializedName(node->get_parent());
+
+	if (decl != nullptr) {	
+		// handle the case within an if statement
 		if (decl->isCompilerGenerated()) {
 			auto n = decl->get_parent();
 			auto ln = isSgLocatedNode(n);
 			if (ln == nullptr) {
 				throw std::string("The Assign initializer was in a weird position!");
 			}
-			return cr(ln->get_startOfConstruct());
+			return cr(initName);
 		}
-		return cr(decl->get_startOfConstruct());
+
+		// handle the "normal" assign initializer
+		return cr(initName);
 	}
 	throw std::string("The Assign initializer was in a weird position!");
 }
+
+/** Given a node it returns the file info if this node is either an if or a while. Returns nullptr otherwise */
+Sg_File_Info *getFileInfoFromWhileOrIf(SgNode *n);
+
 }
 
 }	// namespace Utility

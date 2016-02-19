@@ -13,7 +13,7 @@ loop2.cpp:3:1--Function-::foo
 loop2.cpp:10:1--Function-::main
 
 +Func2ExprLevelSelector
-loop2.cpp:4:2--Expression
+loop2.cpp:4:6--Expression
 loop2.cpp:5:8--Expression
 loop2.cpp:5:17--Expression
 loop2.cpp:6:3--Expression
@@ -21,7 +21,7 @@ loop2.cpp:11:2--Expression
 
 +wpToExprStmtSelector
 loop2.cpp:4:2--SimpleStatement
-loop2.cpp:4:2--Expression
+loop2.cpp:4:6--Expression
 loop2.cpp:5:2--SimpleStatement
 loop2.cpp:5:8--SimpleStatement
 loop2.cpp:5:8--Expression

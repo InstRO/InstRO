@@ -36,8 +36,8 @@ controlConstructs.cpp:8:2--LoopStatement
 controlConstructs.cpp:16:3--LoopStatement
 
 +CTExpressionSelector
-controlConstructs.cpp:8:7--Expression
-controlConstructs.cpp:15:2--Expression
+controlConstructs.cpp:8:11--Expression
+controlConstructs.cpp:15:10--Expression
 controlConstructs.cpp:5:6--Expression
 controlConstructs.cpp:6:3--Expression
 controlConstructs.cpp:8:18--Expression

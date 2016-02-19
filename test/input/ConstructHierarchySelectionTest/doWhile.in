@@ -15,6 +15,6 @@ doWhile.cpp:4:2--LoopStatement
 doWhile.cpp:4:5--ScopeStatement
 
 +CTExpressionSelector
-doWhile.cpp:3:2--Expression
+doWhile.cpp:3:6--Expression
 doWhile.cpp:5:3--Expression
 doWhile.cpp:6:11--Expression
