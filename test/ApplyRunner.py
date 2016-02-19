@@ -62,7 +62,7 @@ def runTestBinary(arguments, binary, inputDirectory):
 
         if errCode == 0 and binary == "DefaultInstrumentationAdapterTest":
             try:
-                out = subprocess.call("./a.out", shell=True)
+                out = subprocess.check_output("./a.out", shell=True)
             except subprocess.CalledProcessError as e:
                 errCode = e.returncode
                 toErr("[Error] Problem when running binary: " + e.output)
