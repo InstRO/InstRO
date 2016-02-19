@@ -14,24 +14,33 @@ namespace Adapter {
 /**
  * \author Roman Ness
  */
-class RoseDefaultInstrumentationAdapter : public InstRO::Adapter::DefaultInstrumentationAdapter {
+class RoseDefaultInstrumentationAdapter : public InstRO::Adapter::DefaultInstrumentationAdapter,
+																					public AstSimpleProcessing {
  public:
-	RoseDefaultInstrumentationAdapter(SgProject* project) : 
-			DefaultInstrumentationAdapter(), 
-			wrapper(project) {}
+	RoseDefaultInstrumentationAdapter(SgProject* project)
+			: DefaultInstrumentationAdapter(), wrapper(project), project(project) {}
+	virtual ~RoseDefaultInstrumentationAdapter() {}
+
+	void execute() override;
 
  protected:
-	void instrumentFunction(const std::shared_ptr<InstRO::Core::Construct> construct);
-	void instrumentLoop(const std::shared_ptr<InstRO::Core::Construct> construct);
-	void instrumentConditional(const std::shared_ptr<InstRO::Core::Construct> construct);
-	void instrumentScope(const std::shared_ptr<InstRO::Core::Construct> construct);
-	void instrumentStatement(const std::shared_ptr<InstRO::Core::Construct> construct);
-	void instrumentExpression(const std::shared_ptr<InstRO::Core::Construct> construct);
+	void instrumentFunction(const std::shared_ptr<InstRO::Core::Construct> construct) override;
+	void instrumentLoop(const std::shared_ptr<InstRO::Core::Construct> construct) override;
+	void instrumentConditional(const std::shared_ptr<InstRO::Core::Construct> construct) override;
+	void instrumentScope(const std::shared_ptr<InstRO::Core::Construct> construct) override;
+	void instrumentStatement(const std::shared_ptr<InstRO::Core::Construct> construct) override;
+	void instrumentExpression(const std::shared_ptr<InstRO::Core::Construct> construct) override;
+
+	void visit(SgNode* astNode) ;
+	void instrument(std::shared_ptr<InstRO::Core::Construct> construct);
 
  private:
- 	Support::RoseCodeWrapper wrapper;
+	Support::RoseCodeWrapper wrapper;
+	SgProject* project;
 
- 	void instrumentAsStatement(const std::shared_ptr<InstRO::Core::Construct> construct, std::string namePostfix);
+	std::map<SgNode*, std::shared_ptr<InstRO::Core::Construct> > sgNodesToInstrument;
+
+	void instrumentAsStatement(const std::shared_ptr<InstRO::Core::Construct> construct, std::string namePostfix);
 };
 
 }	// namespace Adapter

@@ -14,8 +14,7 @@ namespace Adapter {
 class DefaultInstrumentationAdapter : public InstRO::Core::PassImplementation {
  public:
 	DefaultInstrumentationAdapter() : PassImplementation() {}
-
-	void execute() override;
+	virtual ~DefaultInstrumentationAdapter() {}
 
  protected:
 	virtual void instrumentFunction(const std::shared_ptr<InstRO::Core::Construct> construct) = 0;
