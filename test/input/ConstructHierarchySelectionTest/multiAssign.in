@@ -1,0 +1,13 @@
+
++CTFunctionSelector
+multiAssign.cpp:2:1--Function-::main
+
++CTStatementSelector
+multiAssign.cpp:4:2--SimpleStatement
+multiAssign.cpp:5:2--SimpleStatement
+
++CTExpressionSelector
+multiAssign.cpp:4:2--Expression
+multiAssign.cpp:4:6--Expression
+multiAssign.cpp:4:10--Expression
+multiAssign.cpp:4:14--Expression
