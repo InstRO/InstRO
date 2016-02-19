@@ -20,3 +20,6 @@ emptyBodies
 switchCase
 unaryOperators
 opOverload
+identifier
+callpath
+test_01
