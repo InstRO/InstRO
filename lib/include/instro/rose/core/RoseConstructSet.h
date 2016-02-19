@@ -122,7 +122,7 @@ struct CTExpressionPredicate : public CTPredicate {
 			return false;
 		}
 
-		if (isSgCastExp(n) || isSgAddressOfOp(n)) {
+		if (isSgCastExp(n) || isSgAddressOfOp(n) || isSgCommaOpExp(n)) {
 			return false;
 		}
 		if (isSgUnaryOp(n) || isSgBinaryOp(n)) {

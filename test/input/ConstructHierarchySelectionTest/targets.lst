@@ -25,3 +25,6 @@ callpath
 test_01
 multiVarDecl
 multiAssign
+doWhile
+nestedFunction
+comma
