@@ -13,8 +13,16 @@ void RoseCodeWrapper::wrapStatement(SgStatement* stmt, std::string postfix, size
 		auto functionScope = SageInterface::getScope(stmt);
 		SageInterface::insertStatementBefore(
 				stmt, buildCallExpressionStatement(functionScope, std::string("__instro_start_") + postfix, id));
-		SageInterface::insertStatementAfter(
-				stmt, buildCallExpressionStatement(functionScope, std::string("__instro_end_") + postfix, id));
+
+		auto endFuncCall = buildCallExpressionStatement(functionScope, std::string("__instro_end_") + postfix, id);
+
+		// returns
+		auto returnStmts = SageInterface::querySubTree<SgReturnStmt>(stmt, V_SgReturnStmt);
+		for (auto returnStmt : returnStmts) {
+			instrumentReturnStmt(SageInterface::getEnclosingScope(returnStmt), returnStmt, endFuncCall);
+		}
+
+		SageInterface::insertStatementAfter(stmt, endFuncCall);
 	}
 }
 
