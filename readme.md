@@ -49,7 +49,7 @@ $ ./configure --with-boost=/PATH/TO/BOOST/BASE --with-rose=/PATH/TO/ROSE/BASE \
 $ make
 ```
 Optionally you can build and run the tests (requires Python) and install InstRO.
-```
+```bash
 $ make check
 >> builds and runs the test suite
 $ make install
@@ -58,7 +58,7 @@ $ make install
 
 InstRO comes with an examples directory, which includes some show-cases. In order to build these examples, invoke configure with additional `--enable-examples`.
 Building with examples enabled gives you a show-case target `example-run`.
-```
+```bash
 $ make example-run
 >> Applies an example InstRO instrumentation tool to a sample target application
 ```
