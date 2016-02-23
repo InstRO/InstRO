@@ -99,20 +99,6 @@ AC_ARG_ENABLE(examples,
 
 AM_CONDITIONAL(BUILD_EXAMPLES, [test x"$enable_examples" = x"yes"])
 
-# ------------------------------
-# 2.0.2) Add publication tools
-# ------------------------------
-
-#AC_ARG_ENABLE([publication-tools],
-#	AS_HELP_STRING([--disable-publication-tools], [disable building
-#									tools that were used in publications]),
-#		[case "${enableval}" in
-#						yes)	publications=true ;;
-#						no)		publications=false ;;
-#		esac],[publications=true])
-#
-AM_CONDITIONAL(BUILD_PUBLICATIONS_TOOLS, [test x$publications = xtrue])
-
 # -------------------------------
 # 2.1) add ROSE
 # -------------------------------
