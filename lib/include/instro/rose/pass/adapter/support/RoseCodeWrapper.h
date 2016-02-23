@@ -30,7 +30,7 @@ private:
 
 	std::set<SgSourceFile*> filesWithInclude;
 
-	void instrumentPossibleExit(SgScopeStatement* scope, SgStatement* exit, SgStatement* instrumentStmt);
+	void handleRelevantExits(SgScopeStatement* scope, SgStatement* instrumentStmt);
 	void instrumentReturnStmt(SgScopeStatement* scope, SgReturnStmt* returnStmt, SgStatement* instrumentStmt);
 
 	bool insertHeaderIfSource(SgLocatedNode* node);

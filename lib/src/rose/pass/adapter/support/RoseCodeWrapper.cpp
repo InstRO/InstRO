@@ -15,11 +15,9 @@ void RoseCodeWrapper::wrapStatement(SgStatement* stmt, std::string postfix, size
 				stmt, buildCallExpressionStatement(functionScope, std::string("__instro_start_") + postfix, id));
 
 		auto endFuncCall = buildCallExpressionStatement(functionScope, std::string("__instro_end_") + postfix, id);
-
-		// returns
-		auto returnStmts = SageInterface::querySubTree<SgReturnStmt>(stmt, V_SgReturnStmt);
-		for (auto returnStmt : returnStmts) {
-			instrumentReturnStmt(SageInterface::getEnclosingScope(returnStmt), returnStmt, endFuncCall);
+		// continues, breaks, returns
+		if (isSgScopeStatement(stmt)) {
+			handleRelevantExits(isSgScopeStatement(stmt), endFuncCall);
 		}
 
 		SageInterface::insertStatementAfter(stmt, endFuncCall);
@@ -52,39 +50,39 @@ void RoseCodeWrapper::instrumentFunction(SgFunctionDefinition* function, size_t 
 
 void RoseCodeWrapper::instrumentScope(SgScopeStatement* scope, size_t id) {
 	if (insertHeaderIfSource(scope)) {
-		// start
+		// scope start
 		SageInterface::prependStatement(buildCallExpressionStatement(scope, "__instro_start_scope", id), scope);
-		// continues and breaks
+
 		auto endFuncCall = buildCallExpressionStatement(scope, "__instro_end_scope", id);
-		auto potentialExits = SageInterface::querySubTree<SgStatement>(scope, V_SgBreakStmt);
-		auto continueStmts = SageInterface::querySubTree<SgStatement>(scope, V_SgContinueStmt);
-		potentialExits.insert(potentialExits.end(), continueStmts.begin(), continueStmts.end());
-		for (auto exit : potentialExits) {
-			instrumentPossibleExit(scope, exit, endFuncCall);
-		}
-		// returns
-		auto returnStmts = SageInterface::querySubTree<SgReturnStmt>(scope, V_SgReturnStmt);
-		for (auto returnStmt : returnStmts) {
-			instrumentReturnStmt(scope, returnStmt, endFuncCall);
-		}
+		// continues, breaks, returns
+		handleRelevantExits(scope, endFuncCall);
+
 		// scope end
 		SageInterface::appendStatement(endFuncCall, scope);
 	}
 }
 
-void RoseCodeWrapper::instrumentPossibleExit(SgScopeStatement* scope, SgStatement* exit, SgStatement* instrumentStmt) {
-	SgStatement* scopeEnclosingLoop = InstRO::Rose::Utility::ASTHelper::getEnclosingLoop(scope);
-	SgStatement* exitEnclosingLoop = InstRO::Rose::Utility::ASTHelper::getEnclosingLoop(exit);
-
-	if (scopeEnclosingLoop == exitEnclosingLoop) {
+void RoseCodeWrapper::handleRelevantExits(SgScopeStatement* scope, SgStatement* instrumentStmt) {
+	// breaks except those in inner loops or switches
+	for (auto exit : SageInterface::findBreakStmts(scope)) {
 		SageInterface::insertStatementBefore(exit, SageInterface::copyStatement(instrumentStmt));
+	}
+	// continues except those in inner loops
+	for (auto exit : SageInterface::findContinueStmts(scope)) {
+		SageInterface::insertStatementBefore(exit, SageInterface::copyStatement(instrumentStmt));
+	}
+	// all returns
+	auto returnStmts = SageInterface::querySubTree<SgReturnStmt>(scope, V_SgReturnStmt);
+	for (auto returnStmt : returnStmts) {
+		instrumentReturnStmt(scope, returnStmt, instrumentStmt);
 	}
 }
 
 void RoseCodeWrapper::instrumentReturnStmt(SgScopeStatement* scope, SgReturnStmt* returnStmt,
 																					 SgStatement* instrumentStmt) {
 	auto returnExpr = returnStmt->get_expression();
-	if (returnExpr != nullptr && !(isSgValueExp(returnExpr)) && !(isSgVarRefExp(returnExpr)) && !(isSgNullExpression(returnExpr))) {
+	if (returnExpr != nullptr && !(isSgValueExp(returnExpr)) && !(isSgVarRefExp(returnExpr)) &&
+			!(isSgNullExpression(returnExpr))) {
 		SageInterface::splitExpression(returnExpr);	// return statement transformation
 	}
 
