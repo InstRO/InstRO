@@ -4,6 +4,8 @@ AM_CPPFLAGS+= -Werror=return-type
 AM_CXXFLAGS=-std=c++11
 AM_CFLAGS=
 
+INSTRO_CORE_CPPFLAGS= -Wall -pedantic
+
 if DEBUG
 AM_CFLAGS += -g3 -O0 -Wall
 AM_CXXFLAGS += -g3 -O0 -Wall
@@ -160,9 +162,9 @@ ROSE_SFILES += ./src/rose/utility/RoseConfigurationPassRegistry.cpp
 CLANG_SFILES += ./src/clang/utility/ClangConfigurationPassRegistry.cpp
 endif
 
-
 if USELIBTOOL
-# LIBTOOL RULE FOR LIBINSTRO
+
+
 lib_LTLIBRARIES= libInstRO_core.la
 
 if USECLANG
@@ -188,7 +190,7 @@ libInstRO_clang_la_SOURCES= \
 	$(CLANG_SFILES) \
 	$(CLANG_HFILES)
 
-libInstRO_core_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+libInstRO_core_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ $(INSTRO_CORE_CPPFLAGS)
 
 libInstRO_rose_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@
 
@@ -211,14 +213,12 @@ if USEROSE
 lib_LIBRARIES += libInstRO_rose.a
 endif
 
-INSTRO_CORE_CPPFLAGS= -Wall -pedantic
 
 libInstRO_rose_a_SOURCES= \
 	$(CORE_SFILES) \
 	$(CORE_HFILES) \
 	$(ROSE_SFILES) \
 	$(ROSE_HFILES) 
-libInstRO_rose_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@
 
 libInstRO_core_a_SOURCES= \
 	$(CORE_SFILES) \
@@ -230,12 +230,16 @@ libInstRO_clang_a_SOURCES= \
 	$(CLANG_SFILES) \
 	$(CLANG_HFILES)
 
+
+libInstRO_core_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ $(INSTRO_CORE_CPPFLAGS)
+
+libInstRO_rose_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@
+
 libInstRO_clang_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) @LLVM_CXXFLAGS_FLAGS@ -I@LLVM_SRC_INCLUDE_PATH@ -I@CLANG_SRC_INCLUDE_PATH@ -I@BOOST_INCLUDEDIR@
 
 # We use LDFLAGS for this list according to https://www.gnu.org/software/automake/manual/html_node/Libtool-Flags.html#Libtool-Flags
 libInstRO_clang_a_LDFLAGS=@CLANG_LIBS_LIST@ @LLVM_LDFLAGS@
 
-libInstRO_core_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ $(INSTRO_CORE_CPPFLAGS)
 
 if HAVERAPIDJSON
 libInstRO_core_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@

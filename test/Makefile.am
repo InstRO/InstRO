@@ -40,10 +40,13 @@ libInstRO_rtsupport_dbg_la_SOURCES= \
 	$(RT_SUPPORT_HFILES)
 libInstRO_rtsupport_dbg_la_CFLAGS=-I$(top_srcdir)/support $(AM_CPPFLAGS) -DCDEBUG
 
+# Default flags we use for all our test-executables.
+DEFAULT_INSTRO_TEST_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+
 
 
 if USELIBTOOL
-# LIBTOOL RULE FOR LIBINSTRO
+DEFAULT_INSTRO_TEST_LDADD=libInstRO_test.la $(top_builddir)/lib/libInstRO_core.la -L@BOOST_LIBDIR@
 
 
 bin_PROGRAMS= \
@@ -52,6 +55,8 @@ bin_PROGRAMS= \
 	ConstructElevatorTest \
 	BooleanCompoundSelectorTest \
 	MatcherUnitTest \
+	CallpathSelectorTest \
+	DefaultInstrumentationAdapterTest \
 	UniqueCallpathTransformerTest
 
 
@@ -60,54 +65,80 @@ MatcherUnitTest_SOURCES= \
 	./unittest/MatcherTest.cpp
 
 MatcherUnitTest_LDADD=$(top_builddir)/lib/libInstRO_core.la
-MatcherUnitTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+MatcherUnitTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
 # Tests depending on the compiler infrastructure
 # This is the actual test executable
 ConstructHierarchySelectionTest_SOURCES= \
 	./ConstructHierarchySelectionTestMain.cpp
 
-ConstructHierarchySelectionTest_LDADD=libInstRO_test.la $(top_builddir)/lib/libInstRO_core.la
-ConstructHierarchySelectionTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+ConstructHierarchySelectionTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
+ConstructHierarchySelectionTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
 
 IdentifierSelectorTest_SOURCES= \
 	./IdentifierSelectorTest.cpp
 
-IdentifierSelectorTest_LDADD=libInstRO_test.la $(top_builddir)/lib/libInstRO_core.la
-IdentifierSelectorTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+IdentifierSelectorTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
+IdentifierSelectorTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
 ConstructElevatorTest_SOURCES= \
 	./ConstructElevatorSelectorTest.cpp
 
-ConstructElevatorTest_LDADD=libInstRO_test.la $(top_builddir)/lib/libInstRO_core.la
-ConstructElevatorTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+ConstructElevatorTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
+ConstructElevatorTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
 BooleanCompoundSelectorTest_SOURCES= \
 	./BooleanCompoundSelectorTest.cpp
 
-BooleanCompoundSelectorTest_LDADD=libInstRO_test.la $(top_builddir)/lib/libInstRO_core.la
-BooleanCompoundSelectorTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+BooleanCompoundSelectorTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
+BooleanCompoundSelectorTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
+
+DefaultInstrumentationAdapterTest_SOURCES= \
+	./DefaultInstrumentationAdapterTest.cpp
+
+DefaultInstrumentationAdapterTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
+DefaultInstrumentationAdapterTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
+
+# Test
+CallpathSelectorTest_SOURCES= \
+	./CallpathSelectorTest.cpp
+CallpathSelectorTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
+CallpathSelectorTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS)
+
 
 UniqueCallpathTransformerTest_SOURCES=./UniqueCallpathTransformerTestMain.cpp
-UniqueCallpathTransformerTest_LDADD=libInstRO_test.la $(top_builddir)/lib/libInstRO_core.la
-UniqueCallpathTransformerTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
+UniqueCallpathTransformerTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
+UniqueCallpathTransformerTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
 if USEROSE
-ConstructHierarchySelectionTest_CPPFLAGS+= -DUSE_ROSE -I$(top_srcdir)/../lib/include -I@ROSE_INCLUDEDIR@
-ConstructHierarchySelectionTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
 
-IdentifierSelectorTest_CPPFLAGS+= -DUSE_ROSE -I$(top_srcdir)/../lib/include -I@ROSE_INCLUDEDIR@
-IdentifierSelectorTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
+INSTRO_WITH_ROSE_CPPFLAGS= -DUSE_ROSE -I$(top_srcdir)/../lib/include -I@ROSE_INCLUDEDIR@
+INSTRO_WITH_ROSE_LDADD= $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
 
-ConstructElevatorTest_CPPFLAGS+= -DUSE_ROSE -I$(top_srcdir)/../lib/include -I@ROSE_INCLUDEDIR@
-ConstructElevatorTest_LDADD+=  $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
+ConstructHierarchySelectionTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
+ConstructHierarchySelectionTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
-BooleanCompoundSelectorTest_CPPFLAGS+= -DUSE_ROSE -I$(top_srcdir)/../lib/include -I@ROSE_INCLUDEDIR@
-BooleanCompoundSelectorTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
+IdentifierSelectorTest_CPPFLAGS+=  $(INSTRO_WITH_ROSE_CPPFLAGS)
+IdentifierSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
-UniqueCallpathTransformerTest_CPPFLAGS+= -I$(top_srcdir)/../lib/include -I@ROSE_INCLUDEDIR@
-UniqueCallpathTransformerTest_LDADD+= $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
+ConstructElevatorTest_CPPFLAGS+=  $(INSTRO_WITH_ROSE_CPPFLAGS)
+ConstructElevatorTest_LDADD+=  $(INSTRO_WITH_ROSE_LDADD)
+
+BooleanCompoundSelectorTest_CPPFLAGS+=  $(INSTRO_WITH_ROSE_CPPFLAGS)
+BooleanCompoundSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
+
+DefaultInstrumentationAdapterTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
+DefaultInstrumentationAdapterTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
+
+CallpathSelectorTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
+CallpathSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
+
+UniqueCallpathTransformerTest_CPPFLAGS+=  $(INSTRO_WITH_ROSE_CPPFLAGS)
+UniqueCallpathTransformerTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
+
+INSTRO_COMPILER_INDICATION="rose"
+
 endif
 
 if USECLANG
@@ -116,6 +147,7 @@ ConstructHierarchySelectionTest_LDADD+= $(top_builddir)/lib/libInstRO_clang.la
 endif
 
 else #USELIBTOOL
+DEFAULT_INSTRO_TEST_LDADD=libInstRO_test.a $(top_builddir)/lib/libInstRO_core.a -L@BOOST_LIBDIR@
 
 # Static test-library.
 # The library provides additional functionality in the instrumentor and the pass factory
@@ -143,6 +175,7 @@ bin_PROGRAMS= \
 	MatcherUnitTest \
 	UniqueCallpathTransformerTest
 endif
+
 # Once all tests are supported by both ROSE and Clang, remove the two conditionals
 if USECLANG
 bin_PROGRAMS= \
@@ -165,9 +198,6 @@ MatcherUnitTest_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 #
 # In general those executables rely on a compiler implementation as they read input files.
 #
-# Default flags we use for all our test-executables.
-DEFAULT_INSTRO_TEST_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
-DEFAULT_INSTRO_TEST_LDADD=libInstRO_test.a $(top_builddir)/lib/libInstRO_core.a -L@BOOST_LIBDIR@
 
 # FIXME: I have no clue, why it does not work, if I put here something like "none" and simply set this further down the line.
 # This workds fine for the ROSE based targets, however, for Clang this Variable is not set again.
@@ -252,11 +282,11 @@ ConstructHierarchySelectionTest: libInstRO_test.a $(top_srcdir)/test/ConstructHi
 
 endif
 
+endif #USELIBTOOL
+
 # In order to run 'make check'
 check:
 	./MatcherUnitTest
 	python $(top_srcdir)/test/ApplyRunner.py $(top_srcdir) $(top_builddir) $(INSTRO_COMPILER_INDICATION)
-
-endif #USELIBTOOL
 
 
