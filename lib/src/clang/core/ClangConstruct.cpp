@@ -16,19 +16,17 @@ using namespace InstRO::Core;
 using namespace InstRO::Clang::Core;
 
 namespace {
-	
+
 class PredicateMatcherHandler : public clang::ast_matchers::MatchFinder::MatchCallback {
-	public:
-		PredicateMatcherHandler() : matchedOnce(false) {}
-	
-		void run(const clang::ast_matchers::MatchFinder::MatchResult &result) override {
-			matchedOnce = true;
-		}
-		
-		bool matched() const { return matchedOnce; }
-		
-	private:
-		bool matchedOnce;
+ public:
+	PredicateMatcherHandler() : matchedOnce(false) {}
+
+	void run(const clang::ast_matchers::MatchFinder::MatchResult &result) override { matchedOnce = true; }
+
+	bool matched() const { return matchedOnce; }
+
+ private:
+	bool matchedOnce;
 };
 
 class DeclConstructTraitVisitor : public clang::DeclVisitor<DeclConstructTraitVisitor> {
@@ -63,12 +61,12 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
  public:
 	StmtConstructTraitVisitor(clang::ASTContext &context) : context(context), ct(ConstructTraitType::CTNoTraits) {}
 	ConstructTrait getContructTrait() { return ct; }
-	
+
 	void VisitBreakStmt(clang::BreakStmt *stmt) {
 		ct = ConstructTrait(ConstructTraitType::CTSimpleStatement);
 		handleStatementWithWrappableCheck(stmt);
 	}
-	
+
 	void VisitContinueStmt(clang::ContinueStmt *stmt) {
 		ct = ConstructTrait(ConstructTraitType::CTSimpleStatement);
 		handleStatementWithWrappableCheck(stmt);
@@ -145,16 +143,24 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		const clang::SourceManager &sm = context.getSourceManager();
 		std::string strLoc = "(" + std::to_string(sm.getSpellingLineNumber(location)) + "," +
 												 std::to_string(sm.getSpellingColumnNumber(location)) + ")";
-		
+
 		if (llvm::isa<clang::UnaryOperator>(stmt) || llvm::isa<clang::BinaryOperator>(stmt)) {
 			// interesting unary or binary expressions have at least one variable reference or function call
 			clang::ast_matchers::MatchFinder finder;
 			PredicateMatcherHandler handler;
-			finder.addMatcher(clang::ast_matchers::expr(clang::ast_matchers::hasDescendant(clang::ast_matchers::declRefExpr())), &handler);
-			finder.addMatcher(clang::ast_matchers::expr(clang::ast_matchers::hasDescendant(clang::ast_matchers::callExpr())), &handler);
+			finder.addMatcher(
+					clang::ast_matchers::expr(clang::ast_matchers::hasDescendant(clang::ast_matchers::declRefExpr())), &handler);
+			finder.addMatcher(clang::ast_matchers::expr(clang::ast_matchers::hasDescendant(clang::ast_matchers::callExpr())),
+												&handler);
 			finder.match(*stmt, context);
 			if (!handler.matched()) {
 				InstRO::logIt(InstRO::DEBUG) << "Encountered a boring operator expression" << std::endl;
+				generateError(stmt);
+				return;
+			}
+		} else if (clang::CastExpr *castExpr = llvm::dyn_cast<clang::CastExpr>(stmt)) {
+			if (castExpr->getCastKind() != clang::CastKind::CK_UserDefinedConversion) {
+				InstRO::logIt(InstRO::DEBUG) << "Encountered a boring cast expression" << std::endl;
 				generateError(stmt);
 				return;
 			}
@@ -196,7 +202,12 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 			handleStatementWithWrappableCheck(stmt);
 		}
 	}
-	
+
+	void VisitCXXThisExpr(clang::CXXThisExpr *stmt) {
+		// ignore 'this'
+		generateError(stmt);
+	}
+
 	void VisitParenExpr(clang::ParenExpr *stmt) {
 		// ignore parentheses
 		generateError(stmt);
