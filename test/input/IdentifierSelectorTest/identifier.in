@@ -4,5 +4,9 @@ identifier.cpp:10:2--Expression
 
 +IdSelector-#f#
 identifier.cpp:2:1--Function-::foobar
+identifier.cpp:9:2--SimpleStatement
 identifier.cpp:10:2--Expression
+
++IdSelector-#foo
+identifier.cpp:9:2--SimpleStatement
 

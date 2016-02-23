@@ -35,6 +35,7 @@ class NameMatchingASTTraversal : public ROSE_VisitorPatternDefaultBase {
 	void visit(SgTemplateFunctionRefExp* n) override;				// XXX does not occur in ast?
 	void visit(SgMemberFunctionRefExp* n) override;
 	void visit(SgTemplateMemberFunctionRefExp* n) override;	// XXX does not occur in ast?
+	void visit(SgVariableDeclaration* n) override;
 	void visit(SgNode* n) override;
 
  private:

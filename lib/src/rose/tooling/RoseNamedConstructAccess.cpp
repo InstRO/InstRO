@@ -2,6 +2,7 @@
 #include "instro/rose/core/RoseConstructSet.h"
 
 #include "instro/utility/Logger.h"
+#define INSTRO_LOG_LEVEL DEBUG
 
 #include <string>
 
@@ -43,6 +44,16 @@ void NameMatchingASTTraversal::visit(SgMemberFunctionRefExp* n) {
 }
 void NameMatchingASTTraversal::visit(SgTemplateMemberFunctionRefExp* n) {
 	handleFunctionRef(n->getAssociatedMemberFunctionDeclaration(), n);
+}
+void NameMatchingASTTraversal::visit(SgVariableDeclaration* n) {
+	if (InstRO::Rose::Core::RoseConstructTraitPredicates::DefinedVariableDeclarationPredicate()(n)) {
+		auto initializedName = n->get_variables()[0];
+		auto candidate = initializedName->get_qualified_name().getString();
+
+		if (matchingObject->isMatch(candidate)) {
+			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(n));
+		}
+	}
 }
 void NameMatchingASTTraversal::visit(SgNode* n) {
 	// default case: nothing to do here
