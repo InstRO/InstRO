@@ -34,7 +34,7 @@ We use the following version of compilers and libraries for building InstRO and 
 - autoconf 2.69
 - libtool 2.4
 - [https://github.com/miloyip/rapidjson](https://github.com/miloyip/rapidjson) (only for the json config feature)
-- Python 2.7.10 (only required for testing)
+- Python 2.7.10 (required for testing)
 
 ### Build Steps
 Install the required dependencies. We highly recommend to use our [InstRO/InstRO-ROSE](https://github.com/InstRO/InstRO-ROSE), fork as we added functionality and fixes that are not merged back to the original repository (yet).
@@ -43,12 +43,24 @@ Install the required dependencies. We highly recommend to use our [InstRO/InstRO
 $ ./make-config
 >> generates the configure script
 $ ./configure --with-boost=/PATH/TO/BOOST/BASE --with-rose=/PATH/TO/ROSE/BASE \
-  [--with-rapidjson=/PATH/TO/RAPIDJSON/BASE] [--enable-examples]
+  [--with-rapidjson=/PATH/TO/RAPIDJSON/BASE] [--enable-examples] [--prefix=path/to/where/install]
 >> generates the Makefiles
 $ make
 ```
+Optionally you can build and run the tests (requires Python) and install InstRO.
+```bash
+$ make check
+>> builds and runs the test suite
+$ make install
+>> installs the binaries to the given prefix
+```
 
 InstRO comes with an examples directory, which includes some show-cases. In order to build these examples, invoke configure with additional `--enable-examples`.
+Building with examples enabled gives you a show-case target `example-run`.
+```bash
+$ make example-run
+>> Applies an example InstRO instrumentation tool to a sample target application
+```
 
 To use the JSON configuration feature use the optional flag `--with-rapidjson`.
 
