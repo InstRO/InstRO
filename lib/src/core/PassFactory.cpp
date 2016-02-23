@@ -102,11 +102,6 @@ Pass* PassFactory::createConstructTraitSelector(InstRO::Core::ConstructTraitType
 	return newPass;
 }
 
-Pass* PassFactory::createAggregationStatementCountSelector(int threshold) {
-	// TODO implement me
-	throw std::string("Not yet Implemented");
-}
-
 Pass* PassFactory::createConstructHierarchyASTDotGenerator(Pass* pass, std::string fileName) {
 	Pass* newPass =
 			new Pass(new InstRO::Adapter::ConstructHierarchyASTDotGenerator(fileName),
