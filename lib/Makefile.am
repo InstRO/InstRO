@@ -162,7 +162,6 @@ ROSE_SFILES += ./src/rose/utility/RoseConfigurationPassRegistry.cpp
 CLANG_SFILES += ./src/clang/utility/ClangConfigurationPassRegistry.cpp
 endif
 
-if USELIBTOOL
 
 
 lib_LTLIBRARIES= libInstRO_core.la
@@ -194,60 +193,15 @@ libInstRO_core_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ $(INS
 
 libInstRO_rose_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@
 
+libInstRO_clang_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ @LLVM_CXXFLAGS_FLAGS@ -I@LLVM_SRC_INCLUDE_PATH@ -I@CLANG_SRC_INCLUDE_PATH@
+libInstRO_clang_la_LDFLAGS=@CLANG_LIBS_LIST@ @LLVM_LDFLAGS@
+
+
 if HAVERAPIDJSON
 libInstRO_core_la_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
 libInstRO_clang_la_CPPFLAGS = -I@RAPIDJSON_INCLUDEDIR@
 libInstRO_rose_la_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
 endif
-
-else #USELIBTOOL
-
-# STATIC LIBRARY FOR LIBINSTRO
-lib_LIBRARIES= libInstRO_core.a 
-
-if USECLANG
-lib_LIBRARIES += libInstRO_clang.a
-endif
-
-if USEROSE
-lib_LIBRARIES += libInstRO_rose.a
-endif
-
-
-libInstRO_rose_a_SOURCES= \
-	$(CORE_SFILES) \
-	$(CORE_HFILES) \
-	$(ROSE_SFILES) \
-	$(ROSE_HFILES) 
-
-libInstRO_core_a_SOURCES= \
-	$(CORE_SFILES) \
-	$(CORE_HFILES) 
-
-libInstRO_clang_a_SOURCES= \
-	$(CORE_SFILES) \
-	$(CORE_HFILES) \
-	$(CLANG_SFILES) \
-	$(CLANG_HFILES)
-
-
-libInstRO_core_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ $(INSTRO_CORE_CPPFLAGS)
-
-libInstRO_rose_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@
-
-libInstRO_clang_a_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) @LLVM_CXXFLAGS_FLAGS@ -I@LLVM_SRC_INCLUDE_PATH@ -I@CLANG_SRC_INCLUDE_PATH@ -I@BOOST_INCLUDEDIR@
-
-# We use LDFLAGS for this list according to https://www.gnu.org/software/automake/manual/html_node/Libtool-Flags.html#Libtool-Flags
-libInstRO_clang_a_LDFLAGS=@CLANG_LIBS_LIST@ @LLVM_LDFLAGS@
-
-
-if HAVERAPIDJSON
-libInstRO_core_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
-libInstRO_clang_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
-libInstRO_rose_a_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
-endif
-
-endif #USELIBTOOL
 
 include_HEADERS=./include/instro.h
 nodist_include_HEADERS=./include/instro/config.h

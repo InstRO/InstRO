@@ -11,7 +11,6 @@ AM_CFLAGS += -O2
 AM_CXXFLAGS += -O2
 endif
 
-if USELIBTOOL
 bin_PROGRAMS=
 
 if USEROSE
@@ -43,42 +42,3 @@ ROSEInstROASTPrinter_SOURCES = \
 ROSEInstROASTPrinter_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
 ROSEInstROASTPrinter_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
 
-else # USELIBTOOL
-
-bin_PROGRAMS=
-
-
-if USEROSE
-bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter RoseCallpathToKernelInstrumentor
-
-if HAVERAPIDJSON
-SUBDIRS= ConfigurationLoader
-endif
-
-endif #USEROSE
-
-if USECLANG
-SUBDIRS= ClangSrcToSrcFunctionInstrumentor
-endif
-
-RoseInstrumentor_SOURCES = \
-	./RoseInstrumentor.cpp
-
-RoseInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_core.a $(top_builddir)/lib/libInstRO_rose.a
-RoseInstrumentor_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@  -L@BOOST_LIBDIR@
-RoseInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
-
-RoseCallpathToKernelInstrumentor_SOURCES= \
-	./RoseCallpathToKernelInstrumentor.cpp
-RoseCallpathToKernelInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
-RoseCallpathToKernelInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_rose.a @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
-
-
-# TODO Is this actually an example?
-ROSEInstROASTPrinter_SOURCES = \
-	./RoseConstructASTExporter.cpp
-ROSEInstROASTPrinter_LDADD=$(top_builddir)/lib/libInstRO_core.a $(top_builddir)/lib/libInstRO_rose.a
-ROSEInstROASTPrinter_LDFLAGS=-L@ROSE_LIBDIR@ @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
-ROSEInstROASTPrinter_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
-
-endif # USELIBTOOL
