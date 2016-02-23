@@ -7,9 +7,17 @@
 #include <string>
 
 namespace InstRO {
+
+/**
+ * Defines a set of features that every InstRO Implementation should support.
+ *
+ * Specific implementations are free to offer more or more convenient components.
+ */
 class PassFactory {
  public:
-	/* CI: A PassFactory must be initialized with the PassManager. */
+	/**
+	 * A PassFactory must be initialized with the PassManager to register the created passes.
+	 */
 	PassFactory(PassManagement::PassManager* refManager) : passManager(refManager){};
 	virtual ~PassFactory() {}
 
@@ -28,7 +36,6 @@ class PassFactory {
 	Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList);
 	Pass* createCallpathSelector(Pass* passA, Pass* passB, std::string dotName = std::string(""));
 	Pass* createConstructTraitSelector(InstRO::Core::ConstructTraitType constructTrait);
-	Pass* createAggregationStatementCountSelector(int threshold);
 
 	Pass* createConstructRaisingElevator(Pass* pass, InstRO::Core::ConstructTraitType level);
 	Pass* createConstructLoweringElevator(Pass* pass, InstRO::Core::ConstructTraitType level);

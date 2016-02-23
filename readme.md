@@ -7,7 +7,6 @@ InstRO - a framework for building tailored compiler instrumentation.
 The following Passes are currently planned [ ] and implemented [x] in InstRO.
 
 #### Selectors
-- [ ] AggregationStatementSelector
 - [x] BooleanCompoundSelector 
 - [x] CallpathSelector
 - [x] ConstructTraitSelector

@@ -18,17 +18,25 @@ namespace PassManagement {
 class PassManager;
 }	// PassManagement
 
+/**
+ * \brief Interface to use, when constructing a new InstRO based instrumentation tool.
+ *
+ * The interface defines the methods which need to be overriden by the compiler specific implementation.
+ * Passes are added using the returned PassFactory.
+ * As of today, the PassManager used invokes all passes in the order of creation gouped by their methods. That is
+ * for each pass run init
+ * for each pass run execute
+ * for each pass run finalize
+ */
 class Instrumentor {
  public:
-	typedef enum CompilationPhase {
+	/**
+	 * Indicates at which point in the compilation process InstRO should apply.
+	 */
+	 typedef enum CompilationPhase {
 		firstPhase = 1,
 		defaultPhase = 1,
 		frontend = 1,
-		// CI: This may be possible at a later point, e.g. in CLANG, but it currently does not apply
-		//		afterOptimization,
-		//		afterAssebling,
-		//		afterLinking,
-		//		lastPhase
 	} CompilationPhase;
 
 	/** 
@@ -40,19 +48,30 @@ class Instrumentor {
 			: passManager(pm) {}
 
 	virtual ~Instrumentor() { delete passManager; }
-	
+
+	/**
+	 * Applies the configuration
+	 */
 	virtual void apply() = 0;
 
-	// Get a instance of the PassFactory. The PassFactory is internally managed and deconstructed.
-	// This method must be overridden by a platform specific implementation to return that platforms factory
+	/** 
+	 * Get an instance of the PassFactory. The PassFactory is internally managed and deconstructed.
+	 * This method must be overridden by a platform specific implementation to return that platforms factory
+	 */
 	virtual InstRO::PassFactory* getFactory(CompilationPhase phase = frontend) = 0;
 
-	// Get a instance of the PassManager. The PassManager is internally managed and deconstructed.
+	/**
+	 * Get an instance of the PassManager. The PassManager is internally managed and deconstructed.
+	 */
 	virtual const InstRO::PassManagement::PassManager* getPassManager() const { return passManager; }
 
+	/** Sets the default policy used whenever the pass manager encounters a necessary elevation */
 	void setConstructRaisingPolicyCrop() { constructRaisingPolicyElevate = false; };
+	/** Sets the default policy used whenever the pass manager encounters a necessary elevation */
 	void setConstructRaisingPolicyElevate() { constructRaisingPolicyElevate = true; }
+	/** Sets the default policy used whenever the pass manager encounters a necessary lowering */
 	void setConstructLoweringPolicyCrop() { constructLoweringPolicyElevate = false; }
+	/** Sets the default policy used whenever the pass manager encounters a necessary lowering */
 	void setConstructLoweringPolicyElevate() { constructLoweringPolicyElevate = true; }
 
 	bool getConstructRaisingPolicyCrop() const { return constructRaisingPolicyElevate; }
@@ -60,7 +79,9 @@ class Instrumentor {
 	bool getConstructLoweringPolicyCrop() const { return constructLoweringPolicyElevate; }
 	bool getConstructLoweringPolicyElevate() const { return constructLoweringPolicyElevate; }
 
-	// Interface to access the implementation specific Analysis Layer Container
+	/**
+	 * Interface to access the compiler specific implementation of the analysis layer.
+	 */
 	virtual Tooling::AnalysisManager* getAnalysisManager() = 0;
 
  protected:

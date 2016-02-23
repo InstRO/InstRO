@@ -18,7 +18,7 @@ namespace PassManagement {
 class PassManager;
 }
 
-/*
+/**
  * The Pass class is the administration class used within the pass manager.
  * It holds information necessary in order to singalize the pass implementation
  * whether it can be run or not.
@@ -98,7 +98,7 @@ class Pass {
 
 	std::unordered_map<Pass *, std::shared_ptr<Core::ConstructSet> > inputOverride;
 
-	/* Tells the pass which input passes it needs to know of */
+	// Tells the pass which input passes it needs to know of
 	InstRO::Core::ChannelConfiguration channelConfig;
 
 	// A Pointer to the compiler-specific implementation

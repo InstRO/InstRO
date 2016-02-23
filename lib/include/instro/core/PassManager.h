@@ -11,6 +11,9 @@ class ConstructSet;
 
 namespace PassManagement {
 
+/**
+ * Interface the Instrumentor relies on for the pass management.
+ */
 class PassManager {
  protected:
 	// Since the PassManager is an Interface and its children will not be able to access the collisionSet, the following
@@ -26,7 +29,7 @@ class PassManager {
 	 * The PassManager can implement this method to do whatever wiring is necessary in its specific implementation.
 	 */
 	virtual void registerPass(Pass *currentPass) = 0;
-	
+
 	/** Runs the configuration using whatever features the PassManager implementation provides */
 	virtual int execute() = 0;
 
