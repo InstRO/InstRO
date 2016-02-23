@@ -254,18 +254,6 @@ AM_CONDITIONAL(HAVERAPIDJSON, test x"$with_rapidjson" != xno -a $found_rapidjson
 AC_SUBST(RAPIDJSON_INCLUDEDIR)
 
 
-# ------ enable libtool support
-AC_ARG_ENABLE(libtool,
-AS_HELP_STRING([--enable-libtool],
-               [enable use of libtool, default: please no]),  
-[case "${enableval}" in
-             yes) libtool=true ;;
-             no)  libtool=false ;;
-             *)    AC_MSG_ERROR([bad value ${enableval} for --enable-libtool]) ;;
-esac],
-[libtool=false])
-
-AM_CONDITIONAL(USELIBTOOL, test x"$libtool" = x"true")
 AM_CONDITIONAL(USEROSE, test x"$with_rose" != xno)
 AM_CONDITIONAL(USECLANG, test x"$with_llvm_src" != xno)
 

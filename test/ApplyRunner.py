@@ -58,7 +58,7 @@ def runTestBinary(arguments, binary, inputDirectory):
             out = subprocess.check_output(invocationString, shell=True)
         except subprocess.CalledProcessError as e:
             errCode = e.returncode
-            toErr("[Error] Dumping STDOUT \n" + e.output)
+            toErr("[Error] Dumping STDOUT \n" + out + "\n" + e.output)
 
         if errCode == 0 and binary == "DefaultInstrumentationAdapterTest":
             try:
