@@ -67,6 +67,8 @@ void RoseDefaultInstrumentationAdapter::execute() {
 	}
 
 	this->traverse(project, Order::postorder);
+	// After the instrumentation is done, we right out an nm file providing the human readable identifiers	
+	InstRO::Tooling::IdentifierProvider::exportToNMFile(InstRO::Tooling::IdentifierProvider::getIdentifierMap(getInput(0)));
 }
 
 using InstRO::Core::ConstructTraitType;

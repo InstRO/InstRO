@@ -5,6 +5,9 @@
 
 #include <map>
 #include <string>
+#include <iomanip>
+#include <fstream>
+#include <algorithm>
 
 namespace InstRO {
 namespace Tooling {
@@ -16,11 +19,13 @@ namespace Tooling {
  * */
 namespace IdentifierProvider {
 
-	size_t getID(std::shared_ptr<Core::Construct> construct);
+size_t getID(std::shared_ptr<Core::Construct> construct);
 
-	std::string getIdentifier(std::shared_ptr<Core::Construct> construct);
-	// Create and return a mapping from a ConstructSet to human readable identifiers.
-	std::map<size_t, std::string> getIdentifierMap(const Core::ConstructSet *cs);
+std::string getIdentifier(std::shared_ptr<Core::Construct> construct);
+// Create and return a mapping from a ConstructSet to human readable identifiers.
+std::map<size_t, std::string> getIdentifierMap(const Core::ConstructSet *cs);
+
+void exportToNMFile(std::map<size_t, std::string> mapping, std::string filename = "instrumentedConstructs");
 }
 }
 }
