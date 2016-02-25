@@ -18,5 +18,5 @@ endif
 
 ConfigInstrumentor_SOURCES=./main.cpp
 ConfigInstrumentor_CPPFLAGS= -DUSE_ROSE $(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ -I@ROSE_INCLUDEDIR@ -I@RAPIDJSON_INCLUDEDIR@
-ConfigInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@  -L@BOOST_LIBDIR@
+ConfigInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ @BOOST_LINK_LIBRARIES@
 

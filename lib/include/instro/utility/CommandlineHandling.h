@@ -83,7 +83,7 @@ class GCCLikeCommandLinePreparationStrategy {
 		argVec.push_back(library);
 
 		for (auto arg : argVec) {
-			logIt(ERROR) << arg << " ";
+			logIt(DEBUG) << arg << " ";
 		}
 
 		return argVec;

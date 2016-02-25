@@ -316,11 +316,6 @@ BaseConfigurationPassRegistry::BaseConfigurationPassRegistry(PassFactory *factor
 		context.expectInputPasses({0});
 		return factory->createConstructTraitSelector(context.getConstructTraitType("class"));
 	});
-	registerPass("AggregationStatementCountSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
-		context.expectInputPasses({0});
-		return factory->createAggregationStatementCountSelector(context.getIntegerArgument("threshold"));
-	});
-
 	registerPass("ConstructLoweringElevator", [factory](ConfigurationParsingContext &context) -> Pass * {
 		context.expectInputPasses({1});
 		return factory->createConstructLoweringElevator(context.inputPasses[0], context.getConstructTraitType("level"));
