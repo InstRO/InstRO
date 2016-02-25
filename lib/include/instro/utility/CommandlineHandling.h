@@ -41,14 +41,14 @@ class GCCLikeCommandLinePreparationStrategy {
 			logIt(DEBUG) << "InstRO Include set to: " << vm[instroIncludeOptionName].as<std::string>() << std::endl;
 			instroIncludePathOption = vm[instroIncludeOptionName].as<std::string>();
 		} else {
-			instroIncludePathOption = getInstroInstallationPathname() + "/include";
+			instroIncludePathOption = getInstroRTIncludePathname();
 		}
 
 		if (vm.count(instroLibPathOptionName)) {
 			logIt(DEBUG) << "InstRO Library path set to: " << vm[instroLibPathOptionName].as<std::string>() << std::endl;
 			instroLibPathOption = vm[instroLibPathOptionName].as<std::string>();
 		} else {
-			instroLibPathOption = getInstroInstallationPathname() + "/lib";
+			instroLibPathOption = getInstroRTLibraryPathname();
 		}
 
 		if (vm.count(instroLibNameOptionName)) {
@@ -83,7 +83,7 @@ class GCCLikeCommandLinePreparationStrategy {
 		argVec.push_back(library);
 
 		for (auto arg : argVec) {
-			logIt(DEBUG) << arg << " ";
+			logIt(ERROR) << arg << " ";
 		}
 
 		return argVec;

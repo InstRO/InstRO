@@ -43,7 +43,7 @@ libInstRO_rtsupport_dbg_la_CFLAGS=-I$(top_srcdir)/support $(AM_CPPFLAGS) -DCDEBU
 # Default flags we use for all our test-executables.
 DEFAULT_INSTRO_TEST_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
-DEFAULT_INSTRO_TEST_LDADD=libInstRO_test.la $(top_builddir)/lib/libInstRO_core.la -L@BOOST_LIBDIR@
+DEFAULT_INSTRO_TEST_LDADD=libInstRO_test.la $(top_builddir)/lib/libInstRO_core.la @BOOST_LINK_LIBRARIES@
 
 
 bin_PROGRAMS= \
@@ -69,7 +69,7 @@ endif
 MatcherUnitTest_SOURCES= \
 	./unittest/MatcherTest.cpp
 
-MatcherUnitTest_LDADD=$(top_builddir)/lib/libInstRO_core.la
+MatcherUnitTest_LDADD=$(top_builddir)/lib/libInstRO_core.la @BOOST_LINK_LIBRARIES@
 MatcherUnitTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
 # Tests depending on the compiler infrastructure
@@ -119,7 +119,7 @@ UniqueCallpathTransformerTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
 if USEROSE
 
 INSTRO_WITH_ROSE_CPPFLAGS= -DUSE_ROSE -I$(top_srcdir)/../lib/include -I@ROSE_INCLUDEDIR@
-INSTRO_WITH_ROSE_LDADD= $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
+INSTRO_WITH_ROSE_LDADD= $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ @BOOST_LINK_LIBRARIES@
 
 ConstructHierarchySelectionTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 ConstructHierarchySelectionTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)

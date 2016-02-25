@@ -29,16 +29,16 @@ endif
 RoseInstrumentor_SOURCES = \
 	./RoseInstrumentor.cpp
 RoseInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
-RoseInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@
+RoseInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ @BOOST_LINK_LIBRARIES@
 
 RoseCallpathToKernelInstrumentor_SOURCES= \
 	./RoseCallpathToKernelInstrumentor.cpp
 RoseCallpathToKernelInstrumentor_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
-RoseCallpathToKernelInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
+RoseCallpathToKernelInstrumentor_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ @BOOST_LINK_LIBRARIES@
 
 # TODO Is this actually an example?
 ROSEInstROASTPrinter_SOURCES = \
 	./RoseConstructASTExporter.cpp
 ROSEInstROASTPrinter_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@ROSE_INCLUDEDIR@ -I@BOOST_INCLUDEDIR@
-ROSEInstROASTPrinter_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ -L@BOOST_LIBDIR@
+ROSEInstROASTPrinter_LDADD=$(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARIES@ @BOOST_LINK_LIBRARIES@
 

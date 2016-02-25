@@ -6,8 +6,22 @@
 #define INSTRO_USE_ROSE @CONFIG_USE_ROSE@
 #define INSTRO_USE_CLANG @CONFIG_USE_CLANG@
 
+namespace InstRO {
+namespace Config {
+struct BuildInstallConfig {
+	// This is always available (but useless?)
+	const char *const repositoryRelativePath = "@top_srcdir@";
 
-#define INSTRO_INSTALL_DIR "@CONFIG_INSTALL_DIR@"
-const char * const instroInstallIncludePath = INSTRO_INSTALL_DIR;
+	// This is always available (useless as well?)
+	const char *const buildRelativePath = "@top_builddir@";
 
+	// We probe at configure for the two paths
+	const char *const repositoryRealpath = "@am_aux_dir@";
+	const char *const builddirRealpath = "@am_build_dir@";
+
+	// This one may be empty, as the user does not need to specify it
+	const char *const prefixAbsolutePath = "@CONFIG_INSTALL_DIR@";
+};
+} // Config
+} // InstRO
 #endif

@@ -47,7 +47,8 @@ CORE_HFILES= \
 ./include/instro/pass/adapter/ConstructHierarchyASTDotGenerator.h \
 ./include/instro/utility/Logger.h \
 ./include/instro/utility/CommandlineHandling.h \
-./include/instro/utility/MemoryManagement.h
+./include/instro/utility/MemoryManagement.h \
+./include/instro/utility/Environment.h
 
 CORE_SFILES= \
 ./src/core/ConstructSet.cpp \
@@ -70,7 +71,8 @@ CORE_SFILES= \
 ./src/pass/selector/BooleanCompoundSelector.cpp  \
 ./src/pass/adapter/DefaultInstrumentationAdapter.cpp  \
 ./src/pass/adapter/ConstructPrinterAdapter.cpp \
-./src/utility/Logger.cpp
+./src/utility/Logger.cpp \
+./src/utility/Environment.cpp
 
 CLANG_HFILES= \
 ./include/instro/clang/pass/selector/ClangBlackWhitelistSelector.h \

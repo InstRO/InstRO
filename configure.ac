@@ -23,6 +23,7 @@ AC_CONFIG_MACRO_DIR([config/m4])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 PKG_PROG_PKG_CONFIG
 
+AM_DIR_EXPAND
 
 # -------------------------------
 # 1.3 config.h
@@ -30,7 +31,6 @@ PKG_PROG_PKG_CONFIG
 # As Automake prefers its version, let automake generate the header
 AC_CONFIG_SRCDIR([lib/include/instro.h])
 AM_CONFIG_HEADER([config.h])
-
 
 # -------------------------------
 # Checks for programs.
@@ -263,20 +263,25 @@ AC_SUBST(BOOST_LIBDIR)
 
 ROSE_CPPFLAGS="$BOOST_CPPFLAGS -I$ROSE_INCLUDEDIR -I$ROSE_INCLUDEDIR/rose"
 
-ROSE_LINK_LIBRARIES="-L$ROSE_LIBDIR -lrose $BOOST_IOSTREAMS_LIB $BOOST_SYSTEM_LIB $BOOST_REGEX_LIB"
+BOOST_LINK_LIBRARIES="-L$BOOST_LIBDIR $BOOST_IOSTREAMS_LIB $BOOST_SYSTEM_LIB $BOOST_REGEX_LIB"
+ROSE_LINK_LIBRARIES="-L$ROSE_LIBDIR -lrose"
 
 AC_MSG_NOTICE(["Boost: BOOST_IOSTREAMS == $BOOST_IOSTREAMS_LIB"])
 AC_MSG_NOTICE(["Boost: BOOST_SYSTEM == $BOOST_SYSTEM_LIB"])
 AC_MSG_NOTICE(["Boost: BOOST_REGEX == $BOOST_REGEX_LIB"])
 AC_MSG_NOTICE(["ROSE: ROSE_LINK_LIBRARIES := $ROSE_LINK_LIBRARIES"])
-
+AC_MSG_NOTICE(["aux path is set to: $am_aux_dir"])
+AC_MSG_NOTICE(["am build path is set to: $am_build_dir"])
 
 AC_SUBST(ROSE_CPPFLAGS)
 AC_SUBST(ROSE_CFLAGS)
 AC_SUBST(ROSE_CXXFLAGS)
 
+AC_SUBST(BOOST_LINK_LIBRARIES)
 AC_SUBST(ROSE_LINK_LIBRARIES)
 
+AC_SUBST(am_aux_dir)
+AC_SUBST(am_build_dir)
 # -------------------------------
 # 5) Checks for header files.
 # -------------------------------
