@@ -12,7 +12,9 @@ SUBDIRS= \
 if BUILD_EXAMPLES
 SUBDIRS+= examples
 
+# Runs a showcase. Note that it will build InstRO if it wasn't already built. However, it will use only one process to do so.
 example-run:
+	make -C $(top_builddir)
 	$(top_builddir)/examples/RoseCallpathToKernelInstrumentor $(top_srcdir)/examples/targets/MatrixMultiply.cpp
 
 endif

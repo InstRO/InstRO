@@ -11,7 +11,7 @@
 # 1.1 Init the Autoconf
 # -------------------------------
 AC_PREREQ([2.63])
-AC_INIT([instro], [0.3], [christian.iwainsky@sc.tu-darmstadt.de],[instro])
+AC_INIT([InstRO], [1.0], [christian.iwainsky@sc.tu-darmstadt.de],[instro])
 
 # 1.01 Set the aclocal
 
