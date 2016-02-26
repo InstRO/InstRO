@@ -3,6 +3,7 @@ import sys
 import os
 import subprocess
 import argparse
+import shutil
 from multiprocessing import Pool
 
 
@@ -31,17 +32,19 @@ def runTest(k, arguments, binary, inputDirectory):
 	srcFile = k + ".cpp"
 	specFile = k + ".in"
 	outFile = binary + '_' + k + '.out'
+	src2srcOutFile = binary + '_' + srcFile
 
 
 	roseExtraArg = ""
 	if arguments.compilerIndication == 'rose':
 		roseExtraArg += " --edg:no_warnings "
-  	roseExtraArg += ' --instro-library-path=' + arguments.build + '/test/.libs'
+  	roseExtraArg += ' --instro-library-path=../' + arguments.build + '/test/.libs'
   	roseExtraArg += ' --instro-library-name=InstRO_rtsupport'
-  	roseExtraArg += ' --instro-include=' + arguments.src + '/support'
+  	roseExtraArg += ' --instro-include=../' + arguments.src + '/support'
+  	roseExtraArg += ' -rose:o ' + src2srcOutFile
 
 	os.environ["INSTRO_TEST_INPUT_FILENAME"] = inputDirectory + '/' + binary + '/' + specFile
-	invocationString = "./" + binary + " "  + roseExtraArg + ' ' + inputDirectory + '/' + srcFile + ' -o ' + outFile
+	invocationString = "../" + binary + " "  + roseExtraArg + ' ' + inputDirectory + '/' + srcFile + ' -o ' + outFile
 	# we need to add the "--" to the invocation as we do not have JSON compilation databases
 	if arguments.compilerIndication == 'clang':
 		invocationString += ' --'
@@ -71,14 +74,35 @@ def runTest(k, arguments, binary, inputDirectory):
 	
 	if os.path.isfile(outFile):
 		os.remove(outFile)
+	if os.path.isfile(k+'.o'):
+		os.remove(k+'.o')
+	if os.path.isfile(src2srcOutFile):
+		os.remove(src2srcOutFile)
+
 	return failedRuns
 
 def runTestBinary(arguments, binary, inputDirectory):
 	targets = readTargetFileSpecification(binary, inputDirectory)
 
+	os.mkdir(binary+'_dir')
+	restoreDir = os.getcwd()
+	if os.path.isdir(binary+'_dir'):
+		os.chdir(binary+'_dir')
+	else:
+		raise Exception('creating binary dir failed', 'srsly!')
+
+	if not os.path.isabs(inputDirectory):
+		inputDirectory = '../' + inputDirectory
+	else:
+		raise Exception('expected relative path here', 'would be easier')
+
 	failedRuns = []
 	for k in targets:
 		failedRuns += runTest(k, arguments, binary, inputDirectory)
+
+	os.chdir(restoreDir)
+	if os.path.isdir(binary+'_dir'):
+		shutil.rmtree(binary+'_dir')
 
 	return failedRuns
 
@@ -88,7 +112,7 @@ def runApply(arguments):
 
 	inputDirectory = arguments.src + "/test/input"
 
-	os.environ['LD_LIBRARY_PATH'] = arguments.build+'/test/.libs:'+os.environ['LD_LIBRARY_PATH']
+	os.environ['LD_LIBRARY_PATH'] = os.path.abspath(arguments.build)+'/test/.libs:'+os.environ['LD_LIBRARY_PATH']
 
 	pool = Pool()
 	failedRuns = []
