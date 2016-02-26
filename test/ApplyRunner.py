@@ -7,7 +7,7 @@ from multiprocessing import Pool
 
 
 def toErr(*objs):
-    print("[status] ", *objs, file=sys.stderr)
+	print("[status] ", *objs, file=sys.stderr)
 
 cmdParser = argparse.ArgumentParser(description='Runs the test instrumentor executable on all input files.')
 cmdParser.add_argument('src', type=str, help="/path/to/instro/repo")
@@ -19,89 +19,108 @@ testPrograms = ["ConstructHierarchySelectionTest", "IdentifierSelectorTest", "Co
 
 # The list of targets is read from a targets.lst which resides in a test/input/BinaryName directory
 def readTargetFileSpecification(tInstrumentor, directory):
-    targets = []
-    inFile = open(directory + '/' + tInstrumentor + "/targets.lst")
-    for line in inFile:
-        targets.append(line.strip())
+	targets = []
+	inFile = open(directory + '/' + tInstrumentor + "/targets.lst")
+	for line in inFile:
+		targets.append(line.strip())
 
-    return targets
+	return targets
+
+def runTest(k, arguments, binary, inputDirectory):
+	failedRuns = []
+	srcFile = k + ".cpp"
+	specFile = k + ".in"
+	outFile = binary + '_' + k + '.out'
+
+
+	roseExtraArg = ""
+	if arguments.compilerIndication == 'rose':
+		roseExtraArg += " --edg:no_warnings "
+  	roseExtraArg += ' --instro-library-path=' + arguments.build + '/test/.libs'
+  	roseExtraArg += ' --instro-library-name=InstRO_rtsupport'
+  	roseExtraArg += ' --instro-include=' + arguments.src + '/support'
+
+	os.environ["INSTRO_TEST_INPUT_FILENAME"] = inputDirectory + '/' + binary + '/' + specFile
+	invocationString = "./" + binary + " "  + roseExtraArg + ' ' + inputDirectory + '/' + srcFile + ' -o ' + outFile
+	# we need to add the "--" to the invocation as we do not have JSON compilation databases
+	if arguments.compilerIndication == 'clang':
+		invocationString += ' --'
+            
+	toErr("Running\n" + binary + " " + srcFile)
+	if False:
+		toErr("Detailed invocation info: " + invocationString)
+
+	errCode = 0
+	out = ''
+	try:
+		out = subprocess.check_output(invocationString, shell=True)
+	except subprocess.CalledProcessError as e:
+		errCode = e.returncode
+		toErr("[Error] Dumping STDOUT \n" + out + "\n" + e.output)
+
+	if errCode == 0 and binary == "DefaultInstrumentationAdapterTest":
+		try:
+			out = subprocess.check_output('./'+outFile, shell=True)
+		except subprocess.CalledProcessError as e:
+			errCode = e.returncode
+			toErr("[Error] Problem when running binary: " + e.output)
+
+	toErr("Done")
+	if errCode != 0:
+		failedRuns.append((binary, srcFile))
+	
+	if os.path.isfile(outFile):
+		os.remove(outFile)
+	return failedRuns
 
 def runTestBinary(arguments, binary, inputDirectory):
-    targets = readTargetFileSpecification(binary, inputDirectory);
+	targets = readTargetFileSpecification(binary, inputDirectory)
 
-    failedRuns = []
-    for k in targets:
-        srcFile = k + ".cpp"
-        specFile = k + ".in"
+	failedRuns = []
+	for k in targets:
+		failedRuns += runTest(k, arguments, binary, inputDirectory)
 
-        roseExtraArg = ""
-        if arguments.compilerIndication == 'rose':
-            roseExtraArg += " --edg:no_warnings "
-            roseExtraArg += ' --instro-library-path=' + arguments.build + '/test/.libs'
-            roseExtraArg += ' --instro-library-name=InstRO_rtsupport'
-            roseExtraArg += ' --instro-include=' + arguments.src + '/support'
-
-        os.environ["INSTRO_TEST_INPUT_FILENAME"] = inputDirectory + '/' + binary + '/' + specFile
-        invocationString = "./" + binary + " "  + roseExtraArg + ' ' + inputDirectory + '/' + srcFile
-
-            # we need to add the "--" to the invocation as we do not have JSON compilation databases
-        if arguments.compilerIndication == 'clang':
-            invocationString += ' --'
-            
-        toErr("Running\n" + binary + " " + srcFile)
-        if False:
-            toErr("Detailed invocation info: " + invocationString)
-
-        errCode = 0
-        out = ''
-        try:
-            out = subprocess.check_output(invocationString, shell=True)
-        except subprocess.CalledProcessError as e:
-            errCode = e.returncode
-            toErr("[Error] Dumping STDOUT \n" + out + "\n" + e.output)
-
-        if errCode == 0 and binary == "DefaultInstrumentationAdapterTest":
-            try:
-                out = subprocess.check_output("./a.out", shell=True)
-            except subprocess.CalledProcessError as e:
-                errCode = e.returncode
-                toErr("[Error] Problem when running binary: " + e.output)
-
-        toErr("Done")
-        if errCode != 0:
-            failedRuns.append((binary, srcFile))
-
-    return failedRuns
+	return failedRuns
 
 # Runs each TestInstrumentor on the given target list
 def runApply(arguments):
-    baseDir = os.getcwd()[0:os.getcwd().rfind('/')]
-    
-    inputDirectory = arguments.src + "/test/input"
+	baseDir = os.getcwd()[0:os.getcwd().rfind('/')]
 
-    os.environ['LD_LIBRARY_PATH'] = arguments.build+'/test/.libs:'+os.environ['LD_LIBRARY_PATH']
-    
-    failedRuns = []
-    for b in testPrograms:
-        if os.path.isfile(b):
-            failedRuns += runTestBinary(arguments, b, inputDirectory)
-        else:
-            failedRuns += [(b, 'not available')]
+	inputDirectory = arguments.src + "/test/input"
 
-    if len(failedRuns) == 0:
-        print("\n=================================")
-        print("==== Tests finished normally ====")
-        print("=================================\n")
-        return 0
-    else:
-        print("\n|=== Tests failed ===")
-        print("|= Number of failing tests due to error: " + str(len(failedRuns)))
-        print("|--- Failing testcases:")
-        print("|---")
-        for fr in failedRuns:
-            print("|--- " + fr[0] + "\t" + fr[1])
-        print("|=== End report ===\n")
-        return -1
+	os.environ['LD_LIBRARY_PATH'] = arguments.build+'/test/.libs:'+os.environ['LD_LIBRARY_PATH']
+
+	pool = Pool()
+	failedRuns = []
+	collector = []
+	for b in testPrograms:
+		if os.path.isfile(b):
+			try:
+				collector.append(pool.apply_async(runTestBinary, (arguments, b, inputDirectory)))
+			except Exception as e:
+				print('Caught exception in running binaries ' + str(e))
+		else:
+			failedRuns += [(b, 'not available')]
+
+	for e in collector:
+		fr = e.get()
+		if len(fr) != 0:
+			failedRuns += fr
+
+	if len(failedRuns) == 0:
+		print("\n=================================")
+		print("==== Tests finished normally ====")
+		print("=================================\n")
+		return 0
+	else:
+		print("\n|=== Tests failed ===")
+		print("|= Number of failing tests due to error: " + str(len(failedRuns)))
+		print("|--- Failing testcases:")
+		print("|---")
+		for fr in failedRuns:
+			print("|--- " + fr[0] + "\t" + fr[1])
+		print("|=== End report ===\n")
+		return -1
 
 # we use two command line parameters to get build and source directory
 args = cmdParser.parse_args()
