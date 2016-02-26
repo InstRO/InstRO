@@ -122,6 +122,42 @@ SgStatement* RoseCodeWrapper::buildCallExpressionStatement(SgScopeStatement* con
 	return buildCallExpressionStatement(context, functionName, parameters);
 }
 
+
+
+
+void RoseArbitraryTextCodeWrapper::wrapStatement(SgLocatedNode *node, std::string beforeStr, std::string afterStr){
+	SageInterface::attachArbitraryText(node, beforeStr, PreprocessingInfo::before);
+	SageInterface::attachArbitraryText(node, afterStr, PreprocessingInfo::after);
+}
+
+void RoseArbitraryTextCodeWrapper::wrapExpression(SgLocatedNode *node, std::string beforeStr, std::string afterStr){
+	// TODO Implement me
+	logIt(ERROR) << "RoseArbitraryTextCodeWrapper::wrapExpression not implemented" << std::endl;
+}
+
+/**
+ * FIXME Handle exits of scopes (break, continue, return)
+ */
+void RoseArbitraryTextCodeWrapper::instrumentScope(SgScopeStatement *node, std::string beginStr, std::string endStr){
+	auto firstStmt = SageInterface::getFirstStatement(node);
+	auto lastStmt = SageInterface::getLastStatement(node);
+	if(firstStmt != nullptr){
+		SageInterface::attachArbitraryText(firstStmt, beginStr, PreprocessingInfo::before);
+	}
+	if(lastStmt != nullptr){
+		SageInterface::attachArbitraryText(lastStmt, endStr, PreprocessingInfo::after);
+	}
+}
+
+/**
+ * TODO A function isn't necessarily a scope in the sense of instrumentation 
+ */
+void RoseArbitraryTextCodeWrapper::instrumentFunction(SgFunctionDefinition *node, std::string beginStr,
+																													std::string endStr) {
+	auto fBody = node->get_body();
+	instrumentScope(fBody, beginStr, endStr);
+}
+
 }	// namespace Support
 }	// namespace Adapter
 }	// namespace Rose

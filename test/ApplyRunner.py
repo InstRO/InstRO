@@ -16,7 +16,7 @@ cmdParser.add_argument('build', type=str, help="/path/to/instro/repo")
 cmdParser.add_argument('compilerIndication', type=str, help="Which compiler is running? [rose/clang]")
 
 # This is the list of test programs which should be applied.
-testPrograms = ["ConstructHierarchySelectionTest", "IdentifierSelectorTest", "ConstructElevatorTest", "BooleanCompoundSelectorTest", "CallpathSelectorTest", "UniqueCallpathTransformerTest", "DefaultInstrumentationAdapterTest"]
+testPrograms = ["ConstructHierarchySelectionTest", "IdentifierSelectorTest", "ConstructElevatorTest", "BooleanCompoundSelectorTest", "CallpathSelectorTest", "UniqueCallpathTransformerTest", "DefaultInstrumentationAdapterTest", "ScorepRegionAdapterTest"]
 
 # The list of targets is read from a targets.lst which resides in a test/input/BinaryName directory
 def readTargetFileSpecification(tInstrumentor, directory):

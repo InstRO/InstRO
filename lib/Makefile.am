@@ -129,6 +129,7 @@ ROSE_HFILES= \
 ./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/ToolInitializer.h \
 ./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/instrobuilder.h \
 ./include/instro/rose/pass/adapter/RoseDefaultInstrumentationAdapter.h \
+./include/instro/rose/pass/adapter/RoseScorepRegionInstrumentationAdapter.h \
 ./include/instro/rose/pass/adapter/support/RoseCodeWrapper.h \
 ./include/instro/rose/pass/transformer/RoseUniqueCallpathTransformer.h \
 ./include/instro/rose/pass/transformer/RoseFunctionWrapper.h
@@ -152,6 +153,7 @@ ROSE_SFILES= \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/ToolInitializer.cpp \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/instrobuilder.cpp \
 ./src/rose/pass/adapter/RoseDefaultInstrumentationAdapter.cpp \
+./src/rose/pass/adapter/RoseScorepRegionInstrumentationAdapter.cpp \
 ./src/rose/pass/adapter/support/RoseCodeWrapper.cpp \
 ./src/rose/pass/transformer/RoseUniqueCallpathTransformer.cpp \
 ./src/rose/pass/transformer/RoseFunctionWrapper.cpp

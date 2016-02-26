@@ -38,6 +38,21 @@ private:
 
 };
 
+
+
+class RoseArbitraryTextCodeWrapper {
+	public:
+		RoseArbitraryTextCodeWrapper(SgProject *p) : project(p){}
+
+		void wrapStatement(SgLocatedNode *node, std::string beforeStr, std::string afterStr);
+		void wrapExpression(SgLocatedNode *node, std::string beforeStr, std::string afterStr);
+		void instrumentScope(SgScopeStatement *node, std::string beginStr, std::string endStr);
+		void instrumentFunction(SgFunctionDefinition *node, std::string beginStr, std::string endStr);
+
+	private:
+		SgProject *project;
+};
+
 }	// namespace Support
 }	// namespace Adapter
 }	// namespace Rose

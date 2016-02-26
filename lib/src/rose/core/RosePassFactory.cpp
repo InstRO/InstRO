@@ -2,6 +2,7 @@
 
 #include "instro/rose/pass/adapter/RoseStrategyBasedAdapter.h"
 #include "instro/rose/pass/adapter/RoseDefaultInstrumentationAdapter.h"
+#include "instro/rose/pass/adapter/RoseScorepRegionInstrumentationAdapter.h"
 #include "instro/rose/pass/transformer/RoseUniqueCallpathTransformer.h"
 
 #include <string>
@@ -19,6 +20,14 @@ Pass* RosePassFactory::createDefaultInstrumentationAdapter(InstRO::Pass* input) 
 }
 
 /* ROSE ONLY */
+
+InstRO::Pass* RosePassFactory::createScorepRegionInstrumentationAdapter(InstRO::Pass *input){
+	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseScorepRegionInstrumentationAdapter(project),
+													 InstRO::Core::ChannelConfiguration(input),
+													 "InstRO::Rose::Adapter::RoseScorepRegionInstrumentationAdapter");
+	passManager->registerPass(newPass);
+	return newPass;
+}
 
 InstRO::Pass* RosePassFactory::createRoseMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass* pass) {
 	auto initializer = std::make_shared<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePInitializer>();
