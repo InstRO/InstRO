@@ -30,6 +30,8 @@ class RoseScorepCodeWrapper {
 	std::string declareHandleIfNecessary(SgLocatedNode *node);
 	std::string generateRegionBeginString(std::string handleName, std::string identifier);
 	std::string generateRegionEndString(std::string handleName);
+	void handleReturnStatements(SgScopeStatement *scope, std::string identifier);
+	void handleRelevantExits(SgScopeStatement *scope, std::string identifier);
 
 	// helper
 	std::string generateRegionHandle(SgLocatedNode *node);
