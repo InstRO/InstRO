@@ -27,30 +27,12 @@ public:
 private:
 	SgProject* project;
 
-	std::set<SgSourceFile*> filesWithInclude;
-
 	void handleRelevantExits(SgScopeStatement* scope, SgStatement* instrumentStmt);
 	void instrumentReturnStmt(SgScopeStatement* scope, SgReturnStmt* returnStmt, SgStatement* instrumentStmt);
 
-	bool insertHeaderIfSource(SgLocatedNode* node);
 	SgStatement* buildCallExpressionStatement(SgScopeStatement* context, std::string functionName, SgExprListExp* parameters);
 	SgStatement* buildCallExpressionStatement(SgScopeStatement* context, std::string functionName, size_t id);
 
-};
-
-
-
-class RoseArbitraryTextCodeWrapper {
-	public:
-		RoseArbitraryTextCodeWrapper(SgProject *p) : project(p){}
-
-		void wrapStatement(SgLocatedNode *node, std::string beforeStr, std::string afterStr);
-		void wrapExpression(SgLocatedNode *node, std::string beforeStr, std::string afterStr);
-		void instrumentScope(SgScopeStatement *node, std::string beginStr, std::string endStr);
-		void instrumentFunction(SgFunctionDefinition *node, std::string beginStr, std::string endStr);
-
-	private:
-		SgProject *project;
 };
 
 }	// namespace Support

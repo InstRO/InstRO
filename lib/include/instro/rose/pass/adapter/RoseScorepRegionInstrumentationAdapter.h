@@ -1,15 +1,20 @@
 #ifndef INSTRO_ROSE_PASS_ADAPTER_SCOREP_REGION_ADAPTER_H
 #define INSTRO_ROSE_PASS_ADAPTER_SCOREP_REGION_ADAPTER_H
 
-#include "instro/rose/pass/adapter/RoseDefaultInstrumentationAdapter.h"
-#include "instro/rose/pass/adapter/support/RoseCodeWrapper.h"
+#include "instro/rose/pass/adapter/support/RosePostOrderInstrumentationAdapter.h"
+#include "instro/rose/pass/adapter/support/RoseScorepCodeWrapper.h"
 #include "rose.h"
 
 namespace InstRO {
 namespace Rose {
 namespace Adapter {
 
-class RoseScorepRegionInstrumentationAdapter : public InstRO::Rose::Adapter::RosePostOrderInstrumentationAdapter {
+/**
+ * Uses ScoreP's user regions mechanism to insert instrumentation.
+ *
+ * \author JP Lehr
+ */
+class RoseScorepRegionInstrumentationAdapter : public Support::RosePostOrderInstrumentationAdapter {
  public:
 	RoseScorepRegionInstrumentationAdapter(SgProject *p) : RosePostOrderInstrumentationAdapter(p), wrapper(p) {}
 
@@ -22,7 +27,7 @@ class RoseScorepRegionInstrumentationAdapter : public InstRO::Rose::Adapter::Ros
 	void instrumentExpression(const std::shared_ptr<InstRO::Core::Construct> construct) override;
 
  private:
-	Support::RoseArbitraryTextCodeWrapper wrapper;
+	Support::RoseScorepCodeWrapper wrapper;
 };
 }
 }

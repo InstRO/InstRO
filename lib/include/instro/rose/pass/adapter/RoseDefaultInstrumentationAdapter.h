@@ -3,6 +3,7 @@
 
 #include "instro/pass/adapter/DefaultInstrumentationAdapter.h"
 #include "instro/rose/pass/adapter/support/RoseCodeWrapper.h"
+#include "instro/rose/pass/adapter/support/RosePostOrderInstrumentationAdapter.h"
 #include "instro/rose/core/RoseConstructSet.h"
 
 #include <rose.h>
@@ -11,27 +12,10 @@ namespace InstRO {
 namespace Rose {
 namespace Adapter {
 
-class RosePostOrderInstrumentationAdapter : public InstRO::Adapter::DefaultInstrumentationAdapter,
-																						public AstSimpleProcessing {
- public:
-	RosePostOrderInstrumentationAdapter(SgProject* p) : DefaultInstrumentationAdapter(), project(p) {}
-	virtual ~RosePostOrderInstrumentationAdapter() {}
-
-	void execute() override;
-
- protected:
-	void visit(SgNode* astNode);
-	void instrument(std::shared_ptr<InstRO::Core::Construct> construct);
-
-	SgProject *project;
-	std::map<SgNode*, std::shared_ptr<InstRO::Core::Construct> > sgNodesToInstrument;
-
-};
-
 /**
  * \author Roman Ness
  */
-class RoseDefaultInstrumentationAdapter : public RosePostOrderInstrumentationAdapter {
+class RoseDefaultInstrumentationAdapter : public Support::RosePostOrderInstrumentationAdapter {
  public:
 	RoseDefaultInstrumentationAdapter(SgProject* project)
 			: RosePostOrderInstrumentationAdapter(project), wrapper(project) {}
