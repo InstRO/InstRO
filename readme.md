@@ -1,6 +1,5 @@
-# InstRO README
-
-InstRO - a framework for building tailored compiler instrumentation.
+# InstRO
+A framework for building tailored compiler instrumentation.
 
 ## Modules
 
