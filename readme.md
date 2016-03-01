@@ -33,7 +33,7 @@ We use the following version of compilers and libraries for building InstRO and 
 - automake 1.14
 - autoconf 2.69
 - libtool 2.4
-- [https://github.com/miloyip/rapidjson](https://github.com/miloyip/rapidjson) (optional, only for the json config feature)
+- [https://github.com/miloyip/rapidjson](https://github.com/miloyip/rapidjson) (optional, only for the JSON configuration feature)
 - Python 2.7.10 (required for testing)
 
 ### Build Steps
@@ -64,21 +64,29 @@ $ make example-run
 
 The JSON configuration feature requires the optional flag `--with-rapidjson`.
 
+### Documentation
+Documentation may be generated from the source code and all readme files via [Doxygen](http://doxygen.org). Navigate into the `docs` subdirectory and type `make`:
+
+```
+cd docs/
+make
+```
+
 ### Testing InstRO
-Run `make check` in the top level build directory. For more information, please consult the README in the test directory.
+Run `make check` in the top level build directory. For more information please consult the README in the test directory.
 
 ### Building with Clang
 Support for building the InstRO framework with the Clang compiler infrastructure is currently work in progress.
 
 ##Using InstRO
 InstRO includes a few examples which demonstrate some of its components.
-These examples can be found either in `$(builddir)/examples` or, if InstRO has been installed, in `$(installdir)/bin`.
+These examples can be found in either `$(builddir)/examples` or, if InstRO has been installed, in `$(installdir)/bin`.
 When installed, invoking an example is as easy as changing into the `bin` directory and invoking an example translator on a source file.
 ```
 $ ./RoseInstrumentor myInputFile.cpp
 ```
 The above command will create a simple `a.out` file, just like GCC would do.
-However, in order to run the transformed program one needs to add `$(installdir)/lib` to the `LD_LIBRARY_PATH` environment variable of the system.
+Running the transformed program may require adding `$(installdir)/lib` to the `LD_LIBRARY_PATH` environment variable of the system.
 
 ### Using InstRO with a measurement library
 InstRO has two implementations of the InstRO Measurement Interface.
@@ -90,11 +98,11 @@ In order to change the library implementation that InstRO should link the transf
 
 `--instro-library-path` tells the translator which directory it should add to the search list in order to find the desired library.
 
-`--instro-library-name` tells the translator which library is should link. NOTE: it expects solely the library name without the preceeding lib or succeeding .so.
+`--instro-library-name` tells the translator which library it should link. Note: Expects solely the library name without the preceeding lib or succeeding .so.
 
-`--instro-include` tells the translator where to look for headers which need to be included to declare inserted function signatures. This is only sensible to change, if an adapter does not use the InstRO Measurement Interface functions.
+`--instro-include` tells the translator where to look for headers which need to be included to declare inserted function signatures. This is only sensible to change if an adapter does not use the InstRO Measurement Interface functions.
 
-Thus, an invocation of a translator in the install directory, which uses the provided support library is as follows:
+Thus, an invocation of a translator in the install directory, which uses the provided support library, is as follows:
 ```
 $ ./RoseInstrumentor --instro-library-path=../lib --instro-library-name=InstRO_rtsupport myTarget.cpp
 ```
@@ -104,7 +112,7 @@ Please note that the `$(installdir)/include` directory is used as the default va
 
 InstRO is able to parse a configuration of connected passes from a JSON file using the `ConfigurationLoader` in the `InstRO::Utility` namespace if it was built with the rapidjson library. The JSON file must contain a global array of objects where each object represents a pass. Each pass object must specify the type name of the pass (without Rose or Clang specific prefixes) under the *type* key and a unique identifier using the *id* key. The *inputs* key may be used by a pass to specify multiple input passes via an array of pass identifiers. Passes may need additional arguments like a list of strings or a `ConstructTraitType`. For convenience, the *ConfigInstrumentor* is shipped as an example application which reads in the JSON file specified by the environment variable *INSTRO_CONFIG* and runs the resulting setup.
 
-The following JSON is an example which marks occurences of *printf* and *exit* and feeds them to a `ConstructRaisingElevator` which outputs their file scope to a `ConstructPrinterAdapter`:
+The following JSON is an example which marks occurences of `printf` and `exit` and feeds them to a `ConstructRaisingElevator` which outputs their file scope to a `ConstructPrinterAdapter`:
 ~~~
 [
   {
@@ -138,11 +146,9 @@ The following JSON is an example which marks occurences of *printf* and *exit* a
 
 ### Filenames
 
-Filenames are generally mixed case. That means a file starts with an uppercase letter and then uses cammel case.
-For example PassFactory.h
+Filenames are generally mixed case: A file starts with an uppercase letter and then uses cammel case, e.g, PassFactory.h.
 
 A file should be named like the class it contains. In general, we pursue a one-class-per-file policy, unless there is a very good reason for not following this guideline.
-
 
 ### Code style
 
@@ -150,12 +156,12 @@ We use an indentation with only tab characters, so that users may decide to disp
 
 Namespaces are not indented. Therefore, a class definition starts at column 0.
 
-We use include guards which correspond to the directory structure leading to the respective file. For example, a header file located at lib/include/instro/pass/foo/Foo.h has the include guard INSTRO_PASS_FOO_FOO_H.
+Include guards are to correspond to the directory structure leading to the respective file. For example, a header file located at lib/include/instro/pass/foo/Foo.h has the include guard INSTRO_PASS_FOO_FOO_H.
 
 A *clang-format* configuration file is included in the top level of the repository. The configuration assumes a tab width of two spaces.
 
 ### Naming
 
-Although we use namespaces to separate distinct entities, we still reflect this in the name of a class.
+Although we utilize namespaces to separate distinct entities, we still reflect this in the name of a class.
 For instance, a Pass which is specialized to work with ROSE would be named RosePass and put into the Rose namespace.
 
