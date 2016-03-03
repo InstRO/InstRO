@@ -41,7 +41,8 @@ class RoseScorepCodeWrapper {
 	std::string generateDeclareHandleMacro(std::string handleName);
 	std::string generateRegionBeginMacro(std::string handleName, std::string identifier);
 	std::string generateRegionEndMacro(std::string handleName);
-
+	SgStatement* prependAnchor(SgScopeStatement *scope);	
+	SgStatement* appendAnchor(SgScopeStatement *scope);
 };
 
 }	// Support
