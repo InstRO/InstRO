@@ -49,8 +49,8 @@ def buildWithConfigureLine(configLine, baseDir, numJobs):
         print('Running tests ... ')
         out = subprocess.check_output("make check -j" + str(numJobs), shell=True, stderr=FNULL)
         runnerLog.append(out)
-    except subprocess.CalledProcessError:
-        runnerLog.append('Tests failed \n')
+    except subprocess.CalledProcessError as e:
+			runnerLog.append('Tests failed: \n' + e.output)
 
     FNULL.close()
 

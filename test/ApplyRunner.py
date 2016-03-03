@@ -38,9 +38,13 @@ def runTest(k, arguments, binary, inputDirectory):
 	roseExtraArg = ""
 	if arguments.compilerIndication == 'rose':
 		roseExtraArg += " --edg:no_warnings "
-  	roseExtraArg += ' --instro-library-path=../' + arguments.build + '/test/.libs'
-  	roseExtraArg += ' --instro-library-name=InstRO_rtsupport'
-  	roseExtraArg += ' --instro-include=../' + arguments.src + '/support'
+		roseExtraArg += ' --instro-library-path=../' + arguments.build + '/test/.libs'
+		roseExtraArg += ' --instro-library-name=InstRO_rtsupport'
+		if os.path.isabs(arguments.src):
+			roseExtraArg += ' --instro-include=' + arguments.src + '/support'
+		else:
+			roseExtraArg += ' --instro-include=../' + arguments.src + 'support'
+
   	roseExtraArg += ' -rose:o ' + src2srcOutFile
 
 	os.environ["INSTRO_TEST_INPUT_FILENAME"] = inputDirectory + '/' + binary + '/' + specFile
@@ -93,8 +97,8 @@ def runTestBinary(arguments, binary, inputDirectory):
 
 	if not os.path.isabs(inputDirectory):
 		inputDirectory = '../' + inputDirectory
-	else:
-		raise Exception('expected relative path here', 'would be easier')
+#	else:
+#		raise Exception('expected relative path here', 'would be easier')
 
 	failedRuns = []
 	for k in targets:
@@ -126,8 +130,8 @@ def runApply(arguments):
 		else:
 			failedRuns += [(b, 'not available')]
 
-	for e in collector:
-		fr = e.get()
+	for elem in collector:
+		fr = elem.get()
 		if len(fr) != 0:
 			failedRuns += fr
 
