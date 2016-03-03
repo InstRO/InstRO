@@ -11,7 +11,7 @@ namespace InstRO {
 /**
  * Defines a set of features that every InstRO Implementation should support.
  *
- * Specific implementations are free to offer more or more convenient components.
+ * Specific implementations are free to offer additional or more convenient components.
  */
 class PassFactory {
  public:
@@ -22,8 +22,8 @@ class PassFactory {
 	virtual ~PassFactory() {}
 
 	Pass* createProgramEntrySelector();
-	Pass* createConstructHierarchyASTDotGenerator(Pass* pass, std::string fileName);
-	Pass* createConstructPrinterAdapter(Pass* pass);
+	Pass* createConstructHierarchyASTDotGenerator(Pass* input, std::string fileName);
+	Pass* createConstructPrinterAdapter(Pass* input);
 
 	/*
 	 * According to our minimal InstRO compliance file this is the list of components we need to provide.
@@ -34,7 +34,7 @@ class PassFactory {
 	Pass* createBooleanMinusSelector(Pass* passA, Pass* passB);
 
 	Pass* createIdentifierMatcherSelector(std::vector<std::string> matchList);
-	Pass* createCallpathSelector(Pass* passA, Pass* passB, std::string dotName = std::string(""));
+	Pass* createCallpathSelector(Pass* source, Pass* dest, std::string dotName = std::string(""));
 	Pass* createConstructTraitSelector(InstRO::Core::ConstructTraitType constructTrait);
 
 	Pass* createConstructRaisingElevator(Pass* pass, InstRO::Core::ConstructTraitType level);
