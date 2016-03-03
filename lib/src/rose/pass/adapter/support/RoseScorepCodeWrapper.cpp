@@ -13,24 +13,21 @@ void RoseScorepCodeWrapper::wrapStatement(SgLocatedNode* node, std::string ident
 	if (helper.insertHeaderIfSource("scorep/SCOREP_User.h", node)) {
 		std::string handleName = declareHandleIfNecessary(node);
 
-		SageInterface::attachArbitraryText(node, generateRegionBeginString(handleName, identifier),
+		SageInterface::attachArbitraryText(node, generateRegionBeginMacro(handleName, identifier),
 																			 PreprocessingInfo::before);
 		if(isSgScopeStatement(node)){
 			handleRelevantExits(isSgScopeStatement(node), identifier);
 		}
 		
-		SageInterface::attachArbitraryText(node, generateRegionEndString(handleName), PreprocessingInfo::after);
+		SageInterface::attachArbitraryText(node, generateRegionEndMacro(handleName), PreprocessingInfo::after);
 	}
 }
 
 void RoseScorepCodeWrapper::wrapExpression(SgLocatedNode* node, std::string identifier) {
 	// TODO Implement me
-	logIt(ERROR) << "RoseArbitraryTextCodeWrapper::wrapExpression not implemented" << std::endl;
+	logIt(ERROR) << "RoseScorepCodeWrapper::wrapExpression not implemented" << std::endl;
 }
 
-/**
- * FIXME Handle exits of scopes (break, continue, return)
- */
 void RoseScorepCodeWrapper::instrumentScope(SgScopeStatement* scope, std::string identifier) {
 	auto& helper = Utility::ASTTransformation::HeaderIncludeHelper::getInstance();
 	if (helper.insertHeaderIfSource("scorep/SCOREP_User.h", scope)) {
@@ -38,9 +35,10 @@ void RoseScorepCodeWrapper::instrumentScope(SgScopeStatement* scope, std::string
 
 		auto firstStmt = SageInterface::getFirstStatement(scope);
 		if (firstStmt != nullptr) {
+			// XXX nasty hack to guarantee ordering of hook placement
 			auto anchor = SageBuilder::buildNullStatement();
 			SageInterface::prependStatement(anchor, scope);
-			SageInterface::attachArbitraryText(anchor, generateRegionBeginString(handleName, identifier),
+			SageInterface::attachArbitraryText(anchor, generateRegionBeginMacro(handleName, identifier),
 																				 PreprocessingInfo::before);
 		}
 
@@ -48,7 +46,7 @@ void RoseScorepCodeWrapper::instrumentScope(SgScopeStatement* scope, std::string
 
 		auto anchor = SageBuilder::buildNullStatement();
 		SageInterface::appendStatement(anchor, scope);
-		SageInterface::attachArbitraryText(anchor, generateRegionEndString(handleName), PreprocessingInfo::before);
+		SageInterface::attachArbitraryText(anchor, generateRegionEndMacro(handleName), PreprocessingInfo::before);
 	}
 }
 
@@ -56,18 +54,18 @@ void RoseScorepCodeWrapper::instrumentFunction(SgFunctionDefinition* node, std::
 	auto& helper = Utility::ASTTransformation::HeaderIncludeHelper::getInstance();
 	if (helper.insertHeaderIfSource("scorep/SCOREP_User.h", node)) {
 		auto anchor = SageBuilder::buildNullStatement();
-		SgScopeStatement *fBody = node->get_body();
-		SageInterface::prependStatement(anchor, fBody);
+		SgScopeStatement *body = node->get_body();
+		SageInterface::prependStatement(anchor, body);
 
-		auto firstStmt = SageInterface::getFirstStatement(fBody);
+		auto firstStmt = SageInterface::getFirstStatement(body);
 		
 		if (firstStmt != nullptr) {
-			std::string handleName = declareHandleIfNecessary(fBody);
-			SageInterface::attachArbitraryText(anchor, generateRegionBeginString(handleName, identifier),
+			std::string handleName = declareHandleIfNecessary(body);
+			SageInterface::attachArbitraryText(anchor, generateRegionBeginMacro(handleName, identifier),
 																				 PreprocessingInfo::before);
 		}
 
-		handleReturnStatements(fBody, identifier);
+		handleReturnStatements(body, identifier);
 	}
 }
 
@@ -75,11 +73,11 @@ void RoseScorepCodeWrapper::handleRelevantExits(SgScopeStatement *scope, std::st
 	auto handleName = declareHandleIfNecessary(scope);
 
 	for(auto n : SageInterface::findBreakStmts(scope)){
-		SageInterface::attachArbitraryText(n, generateRegionEndString(handleName), PreprocessingInfo::before);
+		SageInterface::attachArbitraryText(n, generateRegionEndMacro(handleName), PreprocessingInfo::before);
 	}
 
 	for(auto n : SageInterface::findContinueStmts(scope)){
-		SageInterface::attachArbitraryText(n, generateRegionEndString(handleName), PreprocessingInfo::before);
+		SageInterface::attachArbitraryText(n, generateRegionEndMacro(handleName), PreprocessingInfo::before);
 	}
 
 	handleReturnStatements(scope, identifier);
@@ -95,7 +93,7 @@ void RoseScorepCodeWrapper::handleReturnStatements(SgScopeStatement* scope, std:
 			SageInterface::splitExpression(returnExpr);	// return statement transformation
 		}
 	
-		SageInterface::attachArbitraryText(n, generateRegionEndString(handleName), PreprocessingInfo::before);
+		SageInterface::attachArbitraryText(n, generateRegionEndMacro(handleName), PreprocessingInfo::before);
 	}
 }
 
@@ -105,21 +103,20 @@ std::string RoseScorepCodeWrapper::declareHandleIfNecessary(SgLocatedNode* node)
 
 		auto encFunction = SageInterface::getEnclosingFunctionDefinition(node, true);	// include "me"
 		auto firstStmt = SageInterface::getFirstStatement(encFunction);
-		SageInterface::attachArbitraryText(firstStmt, generateDeclareHandleString(handle), PreprocessingInfo::before);
+		SageInterface::attachArbitraryText(firstStmt, generateDeclareHandleMacro(handle), PreprocessingInfo::before);
 
 		handlesGenerated.insert({node, handle});
-		return handle;
 	}
 
 	return handlesGenerated.at(node);
 }
 
-std::string RoseScorepCodeWrapper::generateRegionBeginString(std::string handleName, std::string identifier) {
+std::string RoseScorepCodeWrapper::generateRegionBeginMacro(std::string handleName, std::string identifier) {
 	return std::string("SCOREP_USER_REGION_BEGIN( ") + handleName + std::string(", \"") + identifier +
 				 std::string("\", SCOREP_USER_REGION_TYPE_COMMON)");
 }
 
-std::string RoseScorepCodeWrapper::generateRegionEndString(std::string handleName) {
+std::string RoseScorepCodeWrapper::generateRegionEndMacro(std::string handleName) {
 	return std::string("SCOREP_USER_REGION_END( ") + handleName + std::string(")");
 }
 
@@ -127,7 +124,7 @@ std::string RoseScorepCodeWrapper::generateRegionHandle(SgLocatedNode* node) {
 	return "instro_reg_handle_" + std::to_string((size_t)node);
 }
 
-std::string RoseScorepCodeWrapper::generateDeclareHandleString(std::string handleName) {
+std::string RoseScorepCodeWrapper::generateDeclareHandleMacro(std::string handleName) {
 	return std::string("SCOREP_USER_REGION_DEFINE( ") + handleName + std::string(")");
 }
 }

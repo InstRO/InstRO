@@ -3,10 +3,8 @@
 
 #include "instro/utility/Logger.h"
 
-
 void InstRO::Rose::Adapter::RoseScorepRegionInstrumentationAdapter::instrumentFunction(
 		const std::shared_ptr<InstRO::Core::Construct> construct) {
-	
 	auto funcDef = isSgFunctionDefinition(InstRO::Rose::toRoseConstruct(construct)->getNode());
 	auto identifier = InstRO::Tooling::IdentifierProvider::getIdentifier(construct);
 

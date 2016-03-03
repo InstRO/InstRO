@@ -43,7 +43,7 @@ void RosePostOrderInstrumentationAdapter::instrument(std::shared_ptr<InstRO::Cor
 	}
 
 	else if (!ct.is(ConstructTraitType::CTStatement)) {
-		logIt(WARN) << "DefaultInstrumentationAdapter encountered incompatible Construct" << std::endl
+		logIt(WARN) << "PostOrderInstrumentationAdapter encountered incompatible Construct" << std::endl
 								<< "\t" << construct->toString() << std::endl;
 		return;
 	}
@@ -54,7 +54,7 @@ void RosePostOrderInstrumentationAdapter::instrument(std::shared_ptr<InstRO::Cor
 
 	else if (!ct.is(ConstructTraitType::CTWrappableStatement)) {
 		// TODO 2015-11 RN: actually we should create an enclosing scope in this case
-		logIt(WARN) << "DefaultInstrumentationAdapter encountered unwrappable Statement" << std::endl
+		logIt(WARN) << "PostOrderInstrumentationAdapter encountered unwrappable Statement" << std::endl
 								<< "\t" << construct->toString() << std::endl;
 		return;
 	}

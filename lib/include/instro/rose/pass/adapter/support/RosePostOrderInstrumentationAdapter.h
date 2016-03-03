@@ -12,7 +12,7 @@ namespace Adapter {
 namespace Support {
 
 /**
- * Provides functionality of invoking a post order visit on the Ast and dispatching the constructs which need to be
+ * Invokes a post order visit on the AST and dispatches the constructs which need to be
  * instrumented to the respective functions inherited from DefaultInstrumentationAdapter.
  *
  * \author Roman Ness, JP Lehr
@@ -33,7 +33,7 @@ class RosePostOrderInstrumentationAdapter : public InstRO::Adapter::DefaultInstr
 	std::map<SgNode*, std::shared_ptr<InstRO::Core::Construct> > sgNodesToInstrument;
 };
 
-} // Support
+}	// Support
 }	// Adapter
 }	// Rose
 }	// InstRO

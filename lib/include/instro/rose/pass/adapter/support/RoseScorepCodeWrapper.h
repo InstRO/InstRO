@@ -6,12 +6,17 @@
 
 #include "rose.h"
 
-
 namespace InstRO {
 namespace Rose {
 namespace Adapter {
 namespace Support {
 
+/**
+ * Wraps constructs within Scorep user region Macros. The registration order and placement of the individual identifiers
+ * is not specified and can be within the scope of another measurement hook.
+ *
+ * \author JP Lehr
+ */
 class RoseScorepCodeWrapper {
  public:
 	RoseScorepCodeWrapper(SgProject *p) : project(p) {}
@@ -28,18 +33,19 @@ class RoseScorepCodeWrapper {
 
 	// generates and declares if necessary
 	std::string declareHandleIfNecessary(SgLocatedNode *node);
-	std::string generateRegionBeginString(std::string handleName, std::string identifier);
-	std::string generateRegionEndString(std::string handleName);
 	void handleReturnStatements(SgScopeStatement *scope, std::string identifier);
 	void handleRelevantExits(SgScopeStatement *scope, std::string identifier);
 
 	// helper
 	std::string generateRegionHandle(SgLocatedNode *node);
-	std::string generateDeclareHandleString(std::string handleName);
+	std::string generateDeclareHandleMacro(std::string handleName);
+	std::string generateRegionBeginMacro(std::string handleName, std::string identifier);
+	std::string generateRegionEndMacro(std::string handleName);
+
 };
 
-} // Support
-} // Adapter
-} // Rose
-} // InstRO
+}	// Support
+}	// Adapter
+}	// Rose
+}	// InstRO
 #endif
