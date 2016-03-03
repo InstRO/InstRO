@@ -43,7 +43,7 @@ def runTest(k, arguments, binary, inputDirectory):
 		if os.path.isabs(arguments.src):
 			roseExtraArg += ' --instro-include=' + arguments.src + '/support'
 		else:
-			roseExtraArg += ' --instro-include=../' + arguments.src + 'support'
+			roseExtraArg += ' --instro-include=../' + arguments.src + '/support'
 
   	roseExtraArg += ' -rose:o ' + src2srcOutFile
 

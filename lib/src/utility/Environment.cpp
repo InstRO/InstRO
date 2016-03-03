@@ -2,6 +2,14 @@
 
 #include "instro/config.h"
 
+std::string InstRO::Utility::getEnvironmentVariable(std::string envVar) {
+	char *ev = getenv(envVar.c_str());
+	if (ev != nullptr) {
+		return std::string(ev);
+	} else {
+		throw std::string("The environment variable " + envVar + " was empty");
+	}
+}
 
 
 std::string InstRO::Utility::getInstroRTLibraryPathname(){
