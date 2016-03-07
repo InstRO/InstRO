@@ -112,7 +112,13 @@ def runApply(arguments):
 
 	inputDirectory = arguments.src + "/test/input"
 
-	os.environ['LD_LIBRARY_PATH'] = os.path.abspath(arguments.build)+'/test/.libs:'+os.environ['LD_LIBRARY_PATH']
+	newLDLIBS = os.path.abspath(arguments.build)+'/test/.libs'
+	currentLDLIBPATH = os.environ.get('LD_LIBRARY_PATH')
+	if currentLDLIBPATH is None:
+		# environment variable might not be set beforehand
+		os.environ['LD_LIBRARY_PATH'] = newLDLIBS
+	else:
+		os.environ['LD_LIBRARY_PATH'] = newLDLIBS+':'+currentLDLIBPATH
 
 	pool = Pool()
 	failedRuns = []
