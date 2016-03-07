@@ -34,19 +34,20 @@ def runTest(k, arguments, binary, inputDirectory):
 	outFile = binary + '_' + k + '.out'
 	src2srcOutFile = binary + '_' + srcFile
 
+	roseExtraArg = ' --edg:no_warnings'
+	roseExtraArg += ' -rose:o ' + src2srcOutFile
+	roseExtraArg += ' --instro-library-path=../' + arguments.build + '/test/.libs'
+	roseExtraArg += ' --instro-library-name=InstRO_rtsupport'
+	roseExtraArg += ' --instro-include=../' + arguments.src + '/support'
+  	
 
-	roseExtraArg = ""
+	os.environ['INSTRO_TEST_INPUT_FILENAME'] = inputDirectory + '/' + binary + '/' + specFile
+	invocationString = '../' + binary + ' '
 	if arguments.compilerIndication == 'rose':
-		roseExtraArg += " --edg:no_warnings "
-  	roseExtraArg += ' --instro-library-path=../' + arguments.build + '/test/.libs'
-  	roseExtraArg += ' --instro-library-name=InstRO_rtsupport'
-  	roseExtraArg += ' --instro-include=../' + arguments.src + '/support'
-  	roseExtraArg += ' -rose:o ' + src2srcOutFile
-
-	os.environ["INSTRO_TEST_INPUT_FILENAME"] = inputDirectory + '/' + binary + '/' + specFile
-	invocationString = "../" + binary + " "  + roseExtraArg + ' ' + inputDirectory + '/' + srcFile + ' -o ' + outFile
-	# we need to add the "--" to the invocation as we do not have JSON compilation databases
-	if arguments.compilerIndication == 'clang':
+		invocationString += roseExtraArg + ' ' + inputDirectory + '/' + srcFile + ' -o ' + outFile
+	elif arguments.compilerIndication == 'clang':
+		invocationString += inputDirectory + '/' + srcFile
+		# we need to add the "--" to the invocation as we do not have JSON compilation databases
 		invocationString += ' --'
             
 	toErr("Running\n" + binary + " " + srcFile)
