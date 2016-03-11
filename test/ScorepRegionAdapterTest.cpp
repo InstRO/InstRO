@@ -12,6 +12,10 @@ int main(int argc, char **argv){
 	throw std::string("The Default Instrumentation Adapter is not yet implemeted in Clang");
 #endif
 
+
+	auto ret = InstRO::Utility::getScorepIncludeFlags();
+	std::cerr << ret << std::endl;
+
 	auto factory = instrumentor.getFactory();
 
 	auto fDefSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTFunction);
