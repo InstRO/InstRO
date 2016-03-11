@@ -86,10 +86,10 @@ Pass* PassFactory::createIdentifierMatcherSelector(std::vector<std::string> matc
 	return newPass;
 }
 
-Pass* PassFactory::createCallpathSelector(Pass* callee, Pass* caller, std::string dotName) {
+Pass* PassFactory::createCallpathSelector(Pass* source, Pass* dest, std::string dotName) {
 	using ConfigTuple = InstRO::Core::ChannelConfiguration::ConfigTuple;
 	Pass* newPass = new Pass(new Selector::CallPathSelector(dotName),
-													 InstRO::Core::ChannelConfiguration(ConfigTuple(0, callee), ConfigTuple(1, caller)),
+													 InstRO::Core::ChannelConfiguration(ConfigTuple(0, source), ConfigTuple(1, dest)),
 													 "InstRO::Selector::CallPathSelector");
 	passManager->registerPass(newPass);
 	return newPass;
@@ -102,16 +102,16 @@ Pass* PassFactory::createConstructTraitSelector(InstRO::Core::ConstructTraitType
 	return newPass;
 }
 
-Pass* PassFactory::createConstructHierarchyASTDotGenerator(Pass* pass, std::string fileName) {
+Pass* PassFactory::createConstructHierarchyASTDotGenerator(Pass* input, std::string fileName) {
 	Pass* newPass =
 			new Pass(new InstRO::Adapter::ConstructHierarchyASTDotGenerator(fileName),
-							 InstRO::Core::ChannelConfiguration(pass), "InstRO::Adapter::ConstructHierarchyASTDotGenerator");
+							 InstRO::Core::ChannelConfiguration(input), "InstRO::Adapter::ConstructHierarchyASTDotGenerator");
 	passManager->registerPass(newPass);
 	return newPass;
 }
 
-Pass* PassFactory::createConstructPrinterAdapter(Pass* pass) {
-	Pass* newPass = new Pass(new InstRO::Adapter::ConstructPrinterAdapter(), InstRO::Core::ChannelConfiguration(pass),
+Pass* PassFactory::createConstructPrinterAdapter(Pass* input) {
+	Pass* newPass = new Pass(new InstRO::Adapter::ConstructPrinterAdapter(), InstRO::Core::ChannelConfiguration(input),
 													 "InstRO::Adapter::ConstructPrinterAdapter");
 	passManager->registerPass(newPass);
 	return newPass;

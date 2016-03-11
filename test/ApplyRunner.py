@@ -34,23 +34,26 @@ def runTest(k, arguments, binary, inputDirectory):
 	outFile = binary + '_' + k + '.out'
 	src2srcOutFile = binary + '_' + srcFile
 
-
-	roseExtraArg = ""
+	roseExtraArg = ' --edg:no_warnings'
+	roseExtraArg += ' -rose:o ' + src2srcOutFile
+	roseExtraArg += ' --instro-library-path=../' + arguments.build + '/test/.libs'
+	roseExtraArg += ' --instro-library-name=InstRO_rtsupport'
+  	
+	os.environ['INSTRO_TEST_INPUT_FILENAME'] = inputDirectory + '/' + binary + '/' + specFile
+	invocationString = '../' + binary + ' '
+	
 	if arguments.compilerIndication == 'rose':
-		roseExtraArg += " --edg:no_warnings "
-		roseExtraArg += ' --instro-library-path=../' + arguments.build + '/test/.libs'
-		roseExtraArg += ' --instro-library-name=InstRO_rtsupport'
 		if os.path.isabs(arguments.src):
 			roseExtraArg += ' --instro-include=' + arguments.src + '/support'
 		else:
 			roseExtraArg += ' --instro-include=../' + arguments.src + '/support'
 
-  	roseExtraArg += ' -rose:o ' + src2srcOutFile
+		roseExtraArg += ' -rose:o ' + src2srcOutFile
+		invocationString += roseExtraArg + ' ' + inputDirectory + '/' + srcFile + ' -o ' + outFile
 
-	os.environ["INSTRO_TEST_INPUT_FILENAME"] = inputDirectory + '/' + binary + '/' + specFile
-	invocationString = "../" + binary + " "  + roseExtraArg + ' ' + inputDirectory + '/' + srcFile + ' -o ' + outFile
-	# we need to add the "--" to the invocation as we do not have JSON compilation databases
-	if arguments.compilerIndication == 'clang':
+	elif arguments.compilerIndication == 'clang':
+		invocationString += inputDirectory + '/' + srcFile
+		# we need to add the "--" to the invocation as we do not have JSON compilation databases
 		invocationString += ' --'
             
 	toErr("Running\n" + binary + " " + srcFile)
@@ -116,7 +119,13 @@ def runApply(arguments):
 
 	inputDirectory = arguments.src + "/test/input"
 
-	os.environ['LD_LIBRARY_PATH'] = os.path.abspath(arguments.build)+'/test/.libs:'+os.environ['LD_LIBRARY_PATH']
+	newLDLIBS = os.path.abspath(arguments.build)+'/test/.libs'
+	currentLDLIBPATH = os.environ.get('LD_LIBRARY_PATH')
+	if currentLDLIBPATH is None:
+		# environment variable might not be set beforehand
+		os.environ['LD_LIBRARY_PATH'] = newLDLIBS
+	else:
+		os.environ['LD_LIBRARY_PATH'] = newLDLIBS+':'+currentLDLIBPATH
 
 	pool = Pool()
 	failedRuns = []
