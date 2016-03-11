@@ -56,5 +56,3 @@ std::string InstRO::Utility::getInstroInstallationPathname() {
 	throw std::string("InstRO was not able to determine reasonable default paths");
 }
 
-
-

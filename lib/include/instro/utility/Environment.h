@@ -32,26 +32,25 @@ std::string getInstroRTIncludePathname();
 // output in a string */
 template <typename... T>
 void runExecutable(std::string progName, T... args) {
-
 	auto pID = fork();
 	// no child process created
 	if (pID == -1) {
 		throw std::string("Forking went wrong");
 	}
 
-	if(pID == 0) {
+	if (pID == 0) {
 		// child - replace the image with another program
 		int err = execlp(progName.c_str(), progName.c_str(), (args.c_str())..., NULL);
-		if(err == -1) {
+		if (err == -1) {
 			// if returned error
 			logIt(ERROR) << "Running sub program. Msg: " << std::string(strerror(errno)) << std::endl;
 			exit(-1);
 		}
-		exit(0); // exit child process if no error occured
+		exit(0);	// exit child process if no error occured
 	} else {
 		// parent
 		int status;
-		if(waitpid(pID, &status, 0) == -1){
+		if (waitpid(pID, &status, 0) == -1) {
 			throw std::string("Waiting for child process went wrong...");
 		}
 	}
@@ -64,10 +63,10 @@ std::string runExecutableAndReturnResult(T... args) {
 	std::string instroTempFile(".instro_tmp_out");
 	try {
 		runExecutable(args...);
-		
+
 		std::ifstream in(instroTempFile);
-		
-		if(!in.is_open()) {
+
+		if (!in.is_open()) {
 			logIt(ERROR) << "Was not able to open file" << std::endl;
 		}
 
@@ -86,14 +85,16 @@ std::string runExecutableAndReturnResult(T... args) {
 
 /** Executes and retrieves the output for the scorep-config */
 std::string getScorepIncludeFlags() {
-	auto version = runExecutableAndReturnResult(std::string("/bin/sh"), std::string("-c"), std::string("scorep-config --version > .instro_tmp_out"));
+	auto version = runExecutableAndReturnResult(std::string("/bin/sh"), std::string("-c"),
+																							std::string("scorep-config --version > .instro_tmp_out"));
 
-	std::string cxxFlags("--cxxflags"); // for scorep 1.4.2
-	if(version.compare("1.2.2") == 0){
+	std::string cxxFlags("--cxxflags");	// for scorep 1.4.2
+	if (version.compare("1.2.2") == 0) {
 		cxxFlags = std::string(" --cppflags");
 	}
 
-	auto s = runExecutableAndReturnResult(std::string("/bin/sh"), std::string("-c"), std::string("scorep-config " + cxxFlags + " > .instro_tmp_out"));
+	auto s = runExecutableAndReturnResult(std::string("/bin/sh"), std::string("-c"),
+																				std::string("scorep-config " + cxxFlags + " > .instro_tmp_out"));
 	return s;
 }
 }
