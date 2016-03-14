@@ -20,11 +20,10 @@ static llvm::cl::OptionCategory instroTool("InstRO Clang Test");
  *
  * It expects a file with the expected items, one per line, exported to the environment variable
  * INSTRO_TEST_INPUT_FILENAME. The check is not performed on the fully qualified filename (as returned in the
- * Construct's identifier) but only the filename. 
+ * Construct's identifier) but only the filename.
  * Fully qualified path to the input file is strongly preferred.
  *
  */
-
 
 /**
  * Actual instrumentor

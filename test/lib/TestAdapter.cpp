@@ -37,6 +37,13 @@ void InstRO::Test::TestAdapter::execute() {
 	checkIfConstructSetMatches(getInput(0));
 }
 
+const std::multiset<std::string> &InstRO::Test::TestAdapter::getExpectedItems() const { return expectedItems; }
+
+bool InstRO::Test::TestAdapter::constructMatchesAnyExpectation(
+		std::string &testIdentifier, std::shared_ptr<InstRO::Core::Construct> construct) const {
+	return expectedItems.find(testIdentifier) != expectedItems.end();
+}
+
 void InstRO::Test::TestAdapter::checkIfConstructSetMatches(const InstRO::Core::ConstructSet *cs) {
 	auto idMap = InstRO::Tooling::IdentifierProvider::getIdentifierMap(cs);
 
@@ -44,20 +51,19 @@ void InstRO::Test::TestAdapter::checkIfConstructSetMatches(const InstRO::Core::C
 		std::string keyVal(idPair.second);
 		std::string testString(keyVal.substr(keyVal.rfind("/") + 1));
 
-		markedItems.insert(testString);
-
 		logIt(DEBUG) << "Marking " << keyVal << " as selected" << std::endl;
 
-		if (expectedItems.find(testString) != expectedItems.end()) {
-		} else {
-			InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface roci(cs);
-			auto cPos = std::find_if(roci.begin(), roci.end(), [&](const std::shared_ptr<InstRO::Core::Construct> c) {
-				return c->getID() == idPair.first;
-			});
+		InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface roci(cs);
+		auto cPos = std::find_if(roci.begin(), roci.end(), [&](const std::shared_ptr<InstRO::Core::Construct> c) {
+			return c->getID() == idPair.first;
+		});
 
+		if (!constructMatchesAnyExpectation(testString, *cPos)) {
 			addMarkedConstructs.insert(*cPos);
 			erroneouslyContainedInConstructSet.insert(testString);
 		}
+		// more sophisticated matching schemes may manually change the identifier to the corresponding item
+		markedItems.insert(testString);
 	}
 }
 

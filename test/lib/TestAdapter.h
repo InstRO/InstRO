@@ -54,6 +54,12 @@ class TestAdapter : public InstRO::Core::PassImplementation {
 	void execute() override;
 	void finalize() override;
 
+ protected:
+	virtual bool constructMatchesAnyExpectation(std::string &testIdentifier,
+																							std::shared_ptr<InstRO::Core::Construct> construct) const;
+
+	const std::multiset<std::string> &getExpectedItems() const;
+
  private:
 	void checkIfConstructSetMatches(const InstRO::Core::ConstructSet *cs);
 
