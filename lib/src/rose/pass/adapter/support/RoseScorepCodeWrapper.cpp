@@ -49,9 +49,9 @@ void RoseScorepCodeWrapper::instrumentFunction(SgFunctionDefinition* node, std::
 	auto& helper = Utility::ASTTransformation::HeaderIncludeHelper::getInstance();
 	if (helper.insertHeaderIfSource("scorep/SCOREP_User.h", node)) {
 		SgScopeStatement* body = node->get_body();
-		std::string handleName = declareHandleIfNecessary(body);
 
 		auto anchor = prependAnchor(body);
+		std::string handleName = declareHandleIfNecessary(body);
 		SageInterface::attachArbitraryText(anchor, generateRegionBeginMacro(handleName, identifier),
 																			 PreprocessingInfo::before);
 
