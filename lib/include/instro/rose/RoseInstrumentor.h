@@ -19,8 +19,8 @@ class RosePassFactory;
 class RoseInstrumentor : public Instrumentor {
  public:
 	RoseInstrumentor(int argc, char **argv) : passFactory(nullptr) {
-		InstRO::Utility::GCCLikeCommandLinePreparationStrategy prepStrat(&argc, &argv);
 
+		InstRO::Utility::RoseCLIPreparation prepStrat(&argc, &argv);
 		std::vector<std::string> argVec = prepStrat.getCommandLine();
 
 		project = ::frontend(argVec);

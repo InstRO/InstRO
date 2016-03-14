@@ -5,6 +5,8 @@
 #include "instro/rose/pass/adapter/RoseScorepRegionInstrumentationAdapter.h"
 #include "instro/rose/pass/transformer/RoseUniqueCallpathTransformer.h"
 
+#include "instro/utility/Environment.h"
+
 #include <string>
 #include <vector>
 
@@ -25,6 +27,33 @@ InstRO::Pass* RosePassFactory::createScorepRegionInstrumentationAdapter(InstRO::
 	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseScorepRegionInstrumentationAdapter(project),
 													 InstRO::Core::ChannelConfiguration(input),
 													 "InstRO::Rose::Adapter::RoseScorepRegionInstrumentationAdapter");
+
+	// we need to adjust the commandline...
+	auto ret = InstRO::Utility::getScorepIncludeFlags<std::string>();
+
+	auto pos = ret.find(" ");
+	auto first = ret.substr(0, pos);
+	auto second = ret.substr(pos+1, ret.size() - (pos+2));
+	
+	auto sgStrList = project->get_originalCommandLineArgumentList();
+
+	for(auto s : sgStrList){
+		std::cerr << s << std::endl;
+	}
+
+
+	std::vector<std::string> myArgv;
+	myArgv.push_back(sgStrList[0]);
+	myArgv.push_back(first);
+	myArgv.push_back(second);
+
+	for(int i = 1; i < sgStrList.size(); ++i){
+		myArgv.push_back(sgStrList[i]);
+	}
+
+	project->processCommandLine(myArgv);
+	project->parse();
+	
 	passManager->registerPass(newPass);
 	return newPass;
 }

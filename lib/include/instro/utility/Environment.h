@@ -84,7 +84,8 @@ std::string runExecutableAndReturnResult(T... args) {
 }
 
 /** Executes and retrieves the output for the scorep-config */
-std::string getScorepIncludeFlags() {
+template<typename T>
+T getScorepIncludeFlags() {
 	auto version = runExecutableAndReturnResult(std::string("/bin/sh"), std::string("-c"),
 																							std::string("scorep-config --version > .instro_tmp_out"));
 

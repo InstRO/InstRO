@@ -1,20 +1,15 @@
 
 #include "instro.h"
-
+#include "lib/RoseTestSupport.h"
 
 int main(int argc, char **argv){
-
 #if INSTRO_USE_ROSE
-	using InstrumentorType = InstRO::RoseInstrumentor;
+	using InstrumentorType = RoseTest::RoseTestInstrumentor;
 	InstrumentorType instrumentor(argc, argv);
 #endif
 #if INSTRO_USE_CLANG
 	throw std::string("The Default Instrumentation Adapter is not yet implemeted in Clang");
 #endif
-
-
-	auto ret = InstRO::Utility::getScorepIncludeFlags();
-	std::cerr << ret << std::endl;
 
 	auto factory = instrumentor.getFactory();
 
