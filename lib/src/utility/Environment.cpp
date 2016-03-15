@@ -56,3 +56,18 @@ std::string InstRO::Utility::getInstroInstallationPathname() {
 	throw std::string("InstRO was not able to determine reasonable default paths");
 }
 
+
+std::string InstRO::Utility::getScorepIncludeFlags() {
+	auto version = runExecutableAndReturnResult(std::string("/bin/sh"), std::string("-c"),
+																							std::string("scorep-config --version > .instro_tmp_out"));
+
+	std::string cxxFlags("--cxxflags");	// for scorep 1.4.2
+	if (version.compare("1.2.2") == 0) {
+		cxxFlags = std::string(" --cppflags");
+	}
+
+	auto s = runExecutableAndReturnResult(std::string("/bin/sh"), std::string("-c"),
+																				std::string("scorep-config " + cxxFlags + " > .instro_tmp_out"));
+	return s;
+}
+

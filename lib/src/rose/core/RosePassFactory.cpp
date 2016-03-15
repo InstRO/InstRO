@@ -29,18 +29,13 @@ InstRO::Pass* RosePassFactory::createScorepRegionInstrumentationAdapter(InstRO::
 													 "InstRO::Rose::Adapter::RoseScorepRegionInstrumentationAdapter");
 
 	// we need to adjust the commandline...
-	auto ret = InstRO::Utility::getScorepIncludeFlags<std::string>();
+	auto ret = InstRO::Utility::getScorepIncludeFlags();
 
 	auto pos = ret.find(" ");
 	auto first = ret.substr(0, pos);
 	auto second = ret.substr(pos+1, ret.size() - (pos+2));
 	
 	auto sgStrList = project->get_originalCommandLineArgumentList();
-
-	for(auto s : sgStrList){
-		std::cerr << s << std::endl;
-	}
-
 
 	std::vector<std::string> myArgv;
 	myArgv.push_back(sgStrList[0]);

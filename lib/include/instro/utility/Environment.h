@@ -84,20 +84,7 @@ std::string runExecutableAndReturnResult(T... args) {
 }
 
 /** Executes and retrieves the output for the scorep-config */
-template<typename T>
-T getScorepIncludeFlags() {
-	auto version = runExecutableAndReturnResult(std::string("/bin/sh"), std::string("-c"),
-																							std::string("scorep-config --version > .instro_tmp_out"));
-
-	std::string cxxFlags("--cxxflags");	// for scorep 1.4.2
-	if (version.compare("1.2.2") == 0) {
-		cxxFlags = std::string(" --cppflags");
-	}
-
-	auto s = runExecutableAndReturnResult(std::string("/bin/sh"), std::string("-c"),
-																				std::string("scorep-config " + cxxFlags + " > .instro_tmp_out"));
-	return s;
-}
+std::string getScorepIncludeFlags();
 }
 }
 #endif
