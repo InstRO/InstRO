@@ -30,6 +30,7 @@ class ClangConstruct : public InstRO::Core::Construct {
 	clang::Stmt* getAsStmt() const;
 
 	static void setASTContext(clang::ASTContext& context);
+	static clang::SourceManager& getSourceManager();
 
  private:
 	ConstructKind kind;
@@ -40,7 +41,6 @@ class ClangConstruct : public InstRO::Core::Construct {
 	static clang::ASTContext* astContext;
 
 	static clang::ASTContext& getASTContext();
-	static clang::SourceManager& getSourceManager();
 };
 }
 }

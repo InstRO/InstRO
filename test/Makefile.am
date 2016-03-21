@@ -13,14 +13,14 @@ endif
 
 
 TEST_SFILES= \
-						 ./lib/TestAdapter.cpp
+	./lib/TestAdapter.cpp
 TEST_HFILES= \
-						 ./lib/TestAdapter.h
+	./lib/TestAdapter.h
 
 RT_SUPPORT_HFILES= \
-						../support/InstROMeasurementInterface.h
+	../support/InstROMeasurementInterface.h
 RT_SUPPORT_SFILES= \
-						./IMITestInfrastructure.c
+	./IMITestInfrastructure.c
 
 lib_LTLIBRARIES= libInstRO_test.la libInstRO_rtsupport.la libInstRO_rtsupport_dbg.la
 
@@ -150,7 +150,7 @@ if USECLANG
 
 INSTRO_COMPILER_INDICATION="clang"
 
-ConstructHierarchySelectionTest: libInstRO_test.la $(top_srcdir)/test/ConstructHierarchySelectionTestMain.cpp $(top_builddir)/lib/.libs/libInstRO_clang.la $(top_builddir)/lib/.libs/libInstRO_core.la
+ConstructHierarchySelectionTest: libInstRO_test.la $(top_srcdir)/test/lib/ClangTestSupport.h $(top_srcdir)/test/ConstructHierarchySelectionTestMain.cpp $(top_builddir)/lib/.libs/libInstRO_clang.la $(top_builddir)/lib/.libs/libInstRO_core.la
 		$(CXX) $(LLVM_CXXFLAGS_FLAGS) -I$(LLVM_SRC_INCLUDE_PATH) -I$(CLANG_SRC_INCLUDE_PATH) -I$(BOOST_INCLUDEDIR) $(AM_CPPFLAGS) -DCDEBUG -I$(top_srcdir)/test $(top_srcdir)/test/ConstructHierarchySelectionTestMain.cpp .libs/libInstRO_test.a $(top_builddir)/lib/.libs/libInstRO_clang.a $(top_builddir)/lib/.libs/libInstRO_core.a $(CLANG_LIBS_LIST) $(LLVM_LDFLAGS) -o $@
 
 endif

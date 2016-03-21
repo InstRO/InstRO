@@ -30,9 +30,13 @@ class TestSummary {
 		addMarkedConstructs = std::move(additionallyMarkedConstructs);
 	}
 
+	const std::string &getLabel() const { return lbl; }
+
 	void printResults();
 
-	bool failed() { return unfoundSet.size() > 0 || addMarked.size() > 0; }
+	bool failed() const { return unfoundSet.size() > 0 || addMarked.size() > 0; }
+
+	void assumeFound(const std::multiset<std::string> &identifiers);
 
  private:
 	std::string lbl;
@@ -55,8 +59,8 @@ class TestAdapter : public InstRO::Core::PassImplementation {
 	void finalize() override;
 
  protected:
-	virtual bool constructMatchesAnyExpectation(std::string &testIdentifier,
-																							std::shared_ptr<InstRO::Core::Construct> construct) const;
+	virtual std::vector<std::string> constructMatchesAnyExpectation(
+			const std::string &testIdentifier, std::shared_ptr<InstRO::Core::Construct> construct) const;
 
 	const std::multiset<std::string> &getExpectedItems() const;
 
