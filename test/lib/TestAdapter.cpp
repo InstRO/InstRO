@@ -72,7 +72,7 @@ void InstRO::Test::TestAdapter::checkIfConstructSetMatches(const InstRO::Core::C
 		auto matchedIdentifiers = constructMatchesAnyExpectation(testString, *cPos);
 		if (matchedIdentifiers.empty()) {
 			addMarkedConstructs.insert(*cPos);
-			erroneouslyContainedInConstructSet.insert(matchedIdentifiers.begin(), matchedIdentifiers.end());
+			erroneouslyContainedInConstructSet.insert(testString);
 		}
 		// more sophisticated matching schemes may manually change the identifier to the corresponding item
 		markedItems.insert(matchedIdentifiers.begin(), matchedIdentifiers.end());

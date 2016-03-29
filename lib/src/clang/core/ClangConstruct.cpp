@@ -265,9 +265,9 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		generateError(stmt);
 	}
 
-	void VisitCXXOperatorCallExpr(clang::CXXOperatorCallExpr *stmt) {
-		ct = ConstructTrait(ConstructTraitType::CTSimpleStatement);
-		handleStatementWithWrappableCheck(stmt);
+	void VisitMemberExpr(clang::MemberExpr *stmt) {
+		// used e.g. by CXXMemberCallExpr to specify the member being called
+		generateError(stmt);
 	}
 
 	void VisitReturnStmt(clang::ReturnStmt *stmt) {
