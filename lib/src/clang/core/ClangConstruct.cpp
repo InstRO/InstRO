@@ -165,7 +165,7 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 
 			if (clang::UnaryOperator *unaryOp = llvm::dyn_cast<clang::UnaryOperator>(stmt)) {
 				if (unaryOp->getOpcode() == clang::UO_AddrOf) {
-					InstRO::logIt(InstRO::DEBUG) << "Encountered a boring address of operator" << std::endl;
+					InstRO::logIt(InstRO::DEBUG) << "Encountered a boring address-of operator" << std::endl;
 					generateError(stmt);
 					return;
 				}
@@ -203,6 +203,21 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 				}
 			} else if (parents.front().get<clang::Decl>()) {
 				isNotAStatement = true;
+			}
+		}
+
+		if (clang::BinaryOperator *binaryOp = llvm::dyn_cast<clang::BinaryOperator>(stmt)) {
+			if (binaryOp->getOpcode() == clang::BO_Comma) {
+				if (isNotAStatement) {
+					InstRO::logIt(InstRO::DEBUG) << "Encountered a boring comma operator" << std::endl;
+					generateError(stmt);
+					return;
+				} else {
+					// use the top level comma operator as pure statement
+					ct = ConstructTrait(ConstructTraitType::CTSimpleStatement);
+					handleStatementWithWrappableCheck(stmt);
+					return;
+				}
 			}
 		}
 
