@@ -1,7 +1,6 @@
 #ifndef INSTRO_TOOLING_ANALYSIS_INTERFACE_H
 #define INSTRO_TOOLING_ANALYSIS_INTERFACE_H
 
-
 #include "instro/tooling/NamedConstructAccess.h"
 #include "instro/tooling/ConstructElevator.h"
 #include "instro/tooling/ExtendedCallGraph.h"
@@ -32,7 +31,6 @@ class AnalysisManager {
 	// CI:  Explicit RawPointer to the Class. We do not release ownership
 	virtual NamedConstructAccess::NamedConstructAccess *getNamedConstructAccessFacility() = 0;
 };
-
 }
 }
 #endif

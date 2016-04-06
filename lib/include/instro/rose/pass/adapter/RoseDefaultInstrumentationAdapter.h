@@ -31,7 +31,7 @@ class RoseDefaultInstrumentationAdapter : public InstRO::Adapter::DefaultInstrum
 	void instrumentStatement(const std::shared_ptr<InstRO::Core::Construct> construct) override;
 	void instrumentExpression(const std::shared_ptr<InstRO::Core::Construct> construct) override;
 
-	void visit(SgNode* astNode) ;
+	void visit(SgNode* astNode);
 	void instrument(std::shared_ptr<InstRO::Core::Construct> construct);
 
  private:

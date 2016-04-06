@@ -11,7 +11,8 @@ namespace Tooling {
 
 class ClangAnalysisManager : public InstRO::Tooling::AnalysisManager {
  public:
- 	ClangAnalysisManager(clang::ASTContext &context) : cti(new ConstructTraitInterface::ClangConstructTraitInterface(context)) {}
+	ClangAnalysisManager(clang::ASTContext &context)
+			: cti(new ConstructTraitInterface::ClangConstructTraitInterface(context)) {}
 	ClangAnalysisManager() = delete;
 	virtual ~ClangAnalysisManager() {}
 

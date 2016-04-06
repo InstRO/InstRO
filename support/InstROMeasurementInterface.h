@@ -46,7 +46,6 @@ void __instro_start_function(size_t construct_hash, void *callsite) _INSTRO_WEAK
  */
 void __instro_end_function(size_t construct_hash, void *callsite) _INSTRO_WEAK_DECL;
 
-
 /*
  * Gets called before an instrumented statement is executed.
  */

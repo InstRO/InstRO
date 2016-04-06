@@ -8,9 +8,8 @@ namespace Tooling {
 namespace ConstructTraitInterface {
 
 class ConstructTraitInterface {
-public:
-	virtual ~ConstructTraitInterface() {
-	}
+ public:
+	virtual ~ConstructTraitInterface() {}
 
 	virtual InstRO::Core::ConstructSet getConstructsByTrait(const InstRO::Core::ConstructTraitType constructTrait) = 0;
 };

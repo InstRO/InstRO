@@ -33,13 +33,13 @@ class Instrumentor {
 	/**
 	 * Indicates at which point in the compilation process InstRO should apply.
 	 */
-	 typedef enum CompilationPhase {
+	typedef enum CompilationPhase {
 		firstPhase = 1,
 		defaultPhase = 1,
 		frontend = 1,
 	} CompilationPhase;
 
-	/** 
+	/**
 	 * Constructs an Instrumentor instance using the supplied PassManager.
 	 * If nothing is supplied it constructs an instance of SimplePassManager.
 	 * The instrumentor takes ownership of the PassManager
@@ -54,7 +54,7 @@ class Instrumentor {
 	 */
 	virtual void apply() = 0;
 
-	/** 
+	/**
 	 * Get an instance of the PassFactory. The PassFactory is internally managed and deconstructed.
 	 * This method must be overridden by a platform specific implementation to return that platforms factory
 	 */
@@ -86,10 +86,8 @@ class Instrumentor {
 
  protected:
 	InstRO::PassManagement::PassManager* passManager;
-	InstRO::Tooling::AnalysisManager* analysisManager;
 
 	bool constructRaisingPolicyElevate, constructLoweringPolicyElevate;
-
 };
 }
 #endif

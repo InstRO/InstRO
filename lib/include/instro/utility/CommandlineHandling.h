@@ -27,7 +27,6 @@ class GCCLikeCommandLinePreparationStrategy {
 				instroIncludeOptionName("instro-include"),
 				instroLibPathOptionName("instro-library-path"),
 				instroLibNameOptionName("instro-library-name") {
-
 		desc.add_options()(instroIncludeOptionName.c_str(), bpo::value<std::string>(),
 											 "sets where InstRO finds its supporting includes")(
 				instroLibPathOptionName.c_str(), bpo::value<std::string>(), "where InstRO finds the measurement library")(
@@ -68,10 +67,10 @@ class GCCLikeCommandLinePreparationStrategy {
 
 		// Find and remove the instro specific command line arguments
 		argVec.erase(std::remove_if(argVec.begin(), argVec.end(), [&](const std::string &arg) {
-									 return ((arg.find(instroIncludeOptionName) != std::string::npos) ||
-													 (arg.find(instroLibPathOptionName) != std::string::npos) ||
-													 (arg.find(instroLibNameOptionName) != std::string::npos));
-								 }), argVec.end());
+			return ((arg.find(instroIncludeOptionName) != std::string::npos) ||
+							(arg.find(instroLibPathOptionName) != std::string::npos) ||
+							(arg.find(instroLibNameOptionName) != std::string::npos));
+		}), argVec.end());
 
 		auto pos = argVec.begin();
 		std::advance(pos, 1);

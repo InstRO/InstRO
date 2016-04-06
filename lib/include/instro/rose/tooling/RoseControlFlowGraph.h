@@ -92,9 +92,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
 	}
 
-	void visit(SgForInitStatement* node) {
-		invalidate(node);
-	}
+	void visit(SgForInitStatement* node) { invalidate(node); }
 
 	// statements
 	void visit(SgStatement* node) {
@@ -131,10 +129,9 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 class RoseSingleFunctionCFGGenerator {
  public:
 	RoseSingleFunctionCFGGenerator(SgFunctionDefinition* funcDef) {
-
-		//XXX generate whole virtualcfg
+		// XXX generate whole virtualcfg
 		std::string name = funcDef->get_declaration()->get_name().getString();
-//		VirtualCFG::cfgToDot(funcDef, "virtualcfg-"+name+".dot");
+		//		VirtualCFG::cfgToDot(funcDef, "virtualcfg-"+name+".dot");
 
 		auto cfgStartNode = aquireControlFlowGraphNode(funcDef->cfgForBeginning());
 		cfg.setStartNode(cfgStartNode);
@@ -149,10 +146,10 @@ class RoseSingleFunctionCFGGenerator {
 			generate(cfgStartNode.getAssociatedConstructSet(), childCfgNode);
 		}
 
-		///XXX dump cfg
-//		cfg.print(name+".dot");
-//		logIt(INFO) << "RoseControlFlowGraph: " << boost::num_vertices(cfg.getGraph()) << " vertices and "
-//				<< boost::num_edges(cfg.getGraph()) << " edges" << std::endl;
+		/// XXX dump cfg
+		//		cfg.print(name+".dot");
+		//		logIt(INFO) << "RoseControlFlowGraph: " << boost::num_vertices(cfg.getGraph()) << " vertices and "
+		//				<< boost::num_edges(cfg.getGraph()) << " edges" << std::endl;
 	}
 
 	BoostCFG getCFG() { return std::move(cfg); }

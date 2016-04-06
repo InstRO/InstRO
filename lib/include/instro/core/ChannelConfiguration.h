@@ -94,13 +94,12 @@ class ChannelConfiguration {
 		inputChannelMap.insert(ct);
 		insertionHelper(tuples...);
 	}
-	void insertionHelper(ConfigTuple ct){
+	void insertionHelper(ConfigTuple ct) {
 		if (ct.second == nullptr) {
 			throw std::string("Empty pass as argument in Channel Configuration disallowed.");
 		}
 		inputChannelMap.insert(ct);
 	}
-
 };
 }
 }

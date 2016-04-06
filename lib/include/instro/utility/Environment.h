@@ -26,8 +26,6 @@ std::string getInstroInstallationPathname();
 std::string getInstroRTLibraryPathname();
 /** Returns the configure-time include path (either prefix or source directory) */
 std::string getInstroRTIncludePathname();
-
-
 }
 }
 #endif

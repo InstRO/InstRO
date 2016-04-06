@@ -21,12 +21,9 @@ class ConstructElevator {
 	virtual Core::ConstructSet lower(const Core::ConstructSet &input, Core::ConstructTraitType cl) = 0;
 
 	// Crop Construct up to, or down to a level. Compiler independent, as it does not require AST access
-	Core::ConstructSet crop(const Core::ConstructSet *input, Core::ConstructTraitType min,
-																	Core::ConstructTraitType max);
-	Core::ConstructSet crop(const Core::ConstructSet &input, Core::ConstructTraitType min,
-																	Core::ConstructTraitType max);
+	Core::ConstructSet crop(const Core::ConstructSet *input, Core::ConstructTraitType min, Core::ConstructTraitType max);
+	Core::ConstructSet crop(const Core::ConstructSet &input, Core::ConstructTraitType min, Core::ConstructTraitType max);
 };
-
 }
 }
 }

@@ -57,7 +57,6 @@ CORE_SFILES= \
 ./src/core/PassImplementation.cpp \
 ./src/core/SimplePassManager.cpp \
 ./src/core/Singleton.cpp \
-./src/tooling/AnalysisInterface.cpp \
 ./src/tooling/NamedConstructAccess.cpp \
 ./src/tooling/ConstructElevator.cpp \
 ./src/tooling/ExtendedCallGraph.cpp \

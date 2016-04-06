@@ -17,8 +17,3 @@
 #include "instro/clang/ClangPassFactory.h"
 #include "instro/clang/ClangInstrumentor.h"
 #endif
-
-#ifdef USING_LLVM
-#include "instro/llvmInstRO.h"
-#endif
-

@@ -99,7 +99,6 @@ struct CTExpressionPredicate : public CTPredicate {
 		}
 
 		if (ExpressionInLoopOrConditionalHeader()(n)) {
-
 			return true;
 		} else if (isSgValueExp(n) || isSgVarRefExp(n) || isSgNullExpression(n)) {
 			return false;
@@ -157,7 +156,6 @@ struct CTConditionalPredicate : public CTPredicate {
 
 struct CTScopeStatementPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
-
 		if (!isSgBasicBlock(n)) {
 			return false;
 		}
@@ -219,7 +217,7 @@ struct CTSimpleStatementPredicate : public CTPredicate {
 				return false;	// if with an expression as conditional
 			}
 
-			if (isSgNullExpression(expr) ) {
+			if (isSgNullExpression(expr)) {
 				return false;	// statement consisting only of semicolon
 			}
 
@@ -427,7 +425,6 @@ class RoseConstruct : public InstRO::Core::Construct {
 		return resultString;
 	}
 
-
  protected:
 	virtual int determineCorrectLineInfo() const;
 	virtual int determineCorrectColumnInformation() const;
@@ -463,7 +460,6 @@ class RoseFragment : public RoseConstruct {
  protected:
 	virtual int determineCorrectLineInfo() const override;
 	virtual int determineCorrectColumnInformation() const override;
-
 
  private:
 	Sg_File_Info* const info;

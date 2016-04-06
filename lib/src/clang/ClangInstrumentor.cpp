@@ -1,5 +1,7 @@
 #include "instro/clang/ClangInstrumentor.h"
 
+#include "instro/clang/core/ClangConsumerFactory.h"
+
 #include "instro/core/Singleton.h"
 #include "instro/utility/exception.h"
 
