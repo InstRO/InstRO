@@ -7,7 +7,6 @@
 
 #include "instro/core/PassFactory.h"
 #include "instro/core/PassManager.h"
-#include "instro/clang/core/Pass.h"
 #include "instro/clang/core/ClangPassExecuter.h"
 #include "instro/clang/core/ClangPassImplBase.h" // ASTContextProvider
 

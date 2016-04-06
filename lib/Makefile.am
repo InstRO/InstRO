@@ -84,7 +84,6 @@ CLANG_HFILES= \
 ./include/instro/clang/core/ClangConsumerFactory.h \
 ./include/instro/clang/core/ClangPassExecuter.h \
 ./include/instro/clang/core/ClangConstruct.h \
-./include/instro/clang/core/Pass.h \
 ./include/instro/clang/support/InstROASTConsumer.h \
 ./include/instro/clang/tooling/ClangAnalysisInterface.h \
 ./include/instro/clang/tooling/ClangConstructTraitInterface.h \
