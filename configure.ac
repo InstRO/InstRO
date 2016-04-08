@@ -23,6 +23,7 @@ AC_CONFIG_MACRO_DIR([config/m4])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 PKG_PROG_PKG_CONFIG
 
+# defined in ./config/m4/am_dir_expand
 AM_DIR_EXPAND
 
 # -------------------------------
@@ -107,31 +108,17 @@ AM_CONDITIONAL(BUILD_EXAMPLES, [test x"$enable_examples" = x"yes"])
 
 # -------------------------------
 # 2.1) add ROSE
+# defined in ./config/m4/am_check_rose.m4
 # -------------------------------
-AC_ARG_WITH(rose,
-[AS_HELP_STRING([--with-rose@<:@=ARG@:>@],[enable use of ROSE and optionally specify a non-standard install prefix @<:@default=no@:>@])]
-,[],[with_rose=no])
-
-ROSE_INCLUDEDIR=
-ROSE_LIBDIR=
-found_rose=0
-AS_IF([test x"$with_rose" != xno],
-[AS_IF([test x"$with_rose" = xyes],
-[AC_CHECK_HEADER([rose.h],[found_rose=1],[found_rose=0])],
-[ROSE_LIBDIR=$with_rose/lib
-AC_CHECK_FILE([$with_rose/include/rose.h],[found_rose=1 ; ROSE_INCLUDEDIR=$with_rose/include],[found_rose=0
-AC_CHECK_FILE([$with_rose/include/rose/rose.h],[found_rose=1 ; ROSE_INCLUDEDIR=$with_rose/include/rose],[found_rose=0])])])
-AS_IF([test $found_rose = 0],[AC_MSG_FAILURE([Failed to find the ROSE library])])],)
-
-
-## set @ROSE_INCLUDEDIR@ and @ROSE_LIBDIR@ variables
-AC_SUBST(ROSE_INCLUDEDIR)
-AC_SUBST(ROSE_LIBDIR)
+AM_CHECK_ROSE
+AC_MSG_NOTICE(["Rose libs at $ROSE_LIBDIR"])
+AC_MSG_NOTICE(["Rose includes at $ROSE_INCLUDEDIR"])
 
 # ---------------------------
 # 2.2) Add LLVM/Clang toolchain
 # XXX It is a little unfortunate but it seems that we need access to the source as well as the build/install
 # directory of llvm/clang.
+# defined in ./config/m4/am_check_clang.m4
 # ---------------------------
 AM_CHECK_CLANG
 AC_MSG_NOTICE(["Clang Libs: $CLANG_LIBS_LIST"])
@@ -148,21 +135,28 @@ AC_ARG_WITH([scorep],
 AM_CONDITIONAL(WITHSCOREP, test x"$with_scorep" != xno)
 AC_SUBST(WITHSCOREP)
 
+# -------------------------------
+# 4) Checks for libraries.
+# -------------------------------
 
 # -------------------------------
 # 4.1) add BOOST
 # -------------------------------
 AX_BOOST_BASE([1.47])
-# JP: This is just output, to see how boost flags look like
 AC_MSG_NOTICE(["ac_boost_path=$ac_boost_path"])
 AC_MSG_NOTICE(["BOOST_CPPFLAGS=$BOOST_CPPFLAGS"])
 AC_MSG_NOTICE(["BOOST_LDFLAGS=$BOOST_LDFLAGS"])
+
 AX_BOOST_IOSTREAMS
 AX_BOOST_SYSTEM
 AX_BOOST_REGEX
 # AX_BOOST_REQUIRE([1.47])
 BOOST_INCLUDEDIR="$ac_boost_path/include"
 BOOST_LIBDIR="$ac_boost_path/lib"
+
+# Export Boost variables
+AC_SUBST(BOOST_INCLUDEDIR)
+AC_SUBST(BOOST_LIBDIR)
 
 # -------------------------------
 # check for rapidjson
@@ -177,15 +171,6 @@ AC_SUBST(CONFIG_DISABLEEXCEPTIONS, [$found_llvm])
 AC_SUBST(CONFIG_USE_ROSE, [$found_rose])
 AC_SUBST(CONFIG_USE_CLANG, [$found_llvm])
 AC_SUBST(CONFIG_INSTALL_DIR, [$prefix])
-
-# -------------------------------
-# 4) Checks for libraries.
-# -------------------------------
-
-# Export Boost variables
-AC_SUBST(BOOST_INCLUDEDIR)
-AC_SUBST(BOOST_LIBDIR)
-
 
 # -------------------------------
 # 4.9) Set Variables.

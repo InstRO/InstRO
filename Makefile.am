@@ -1,7 +1,4 @@
 #
-# For necessary flags we use the naming USEXXX
-# For optional components we use the naming WITHYYY
-#
 
 #
 # Build the library
