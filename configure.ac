@@ -41,6 +41,12 @@ AC_PROG_CPP
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 
+# -------------------------------
+# Check for functions
+# -------------------------------
+AC_FUNC_FORK
+AC_FUNC_MALLOC
+AC_CHECK_FUNCS([strerror])
 
 # -------------------------------
 # 1.35 automake
@@ -127,79 +133,9 @@ AC_SUBST(ROSE_LIBDIR)
 # XXX It is a little unfortunate but it seems that we need access to the source as well as the build/install
 # directory of llvm/clang.
 # ---------------------------
-AC_ARG_WITH([llvm-src], 
-						[AS_HELP_STRING([--with-llvm-src@<:@=ARG@:>@], 
-						[Tells the build process the toplevel directory of the llvm/clang sources @<:@default=no@:>@])], 
-						[],[with_llvm_src=no])
-if test x"$with_llvm_src" != xno ; then
-	LLVM_SRC_PATH="$with_llvm_src"
-	CLANG_SRC_INCLUDE_PATH=$LLVM_SRC_PATH/tools/clang/include
-	LLVM_SRC_INCLUDE_PATH=$LLVM_SRC_PATH/include
-
-	AC_MSG_NOTICE(["Clang includes are searched in source tree at $CLANG_SRC_INCLUDE_PATH"])
-	AC_MSG_NOTICE(["LLVM includes are searched in source tree at $LLVM_SRC_INCLUDE_PATH"])
-
-else
-	LLVM_SRC_PATH="UDEF"
-	echo "No llvm top level source directory set"
-fi
-
-AC_ARG_WITH([llvm-install],
-						[AS_HELP_STRING([--with-llvm-install@<:@=ARG@:>@],
-						[Tells the build process the toplevel directory of the llvm/clang build @<:@default=no@:>@])],
-						[],[with_llvm_install=no])
-if test x"$with_llvm_install" != xno ; then
-	LLVM_INSTALL_PATH="$with_llvm_install"
-	CLANG_INSTALL_INCLUDE_PATH=$LLVM_INSTALL_PATH/include
-	LLVM_INSTALL_INCLUDE_PATH=$LLVM_INSTALL_PATH/include
-
-	# XXX This might go away
-	LLVM_LIB_PATH=$LLVM_INSTALL_PATH/lib
-
-	# As we use the installation path, we can use the LLVM config tool. This gives us the correct directory for -L
-	# XXX This is deprecated
-	LLVM_BIN_PATH=$LLVM_INSTALL_PATH/bin
-
-
-	AC_MSG_NOTICE(["LLVM install path has been set to $LLVM_INSTALL_PATH"])
-
-	# we list all the libraries we need to link, when we build with clang
-	CLANG_LIBS_LIST='-Wl,--start-group,-lclangAST,-lclangAnalysis,-lclangBasic,-lclangDriver,-lclangEdit,-lclangFrontend,-lclangFrontendTool,-lclangLex,-lclangParse,-lclangSema,-lclangEdit,-lclangASTMatchers,-lclangRewrite,-lclangRewriteFrontend,-lclangStaticAnalyzerFrontend,-lclangStaticAnalyzerCheckers,-lclangStaticAnalyzerCore,-lclangSerialization,-lclangToolingCore,-lclangTooling,--end-group'
-	
-	
-	AC_MSG_NOTICE(["Clang Libs: $CLANG_LIBS_LIST"])
-
-	# XXX It might be sufficient to have the source include files.
-	AC_SUBST(CLANG_SRC_INCLUDE_PATH)
-	AC_SUBST(LLVM_SRC_INCLUDE_PATH)
-	AC_SUBST(CLANG_INSTALL_INCLUDE_PATH)
-	AC_SUBST(LLVM_INSTALL_INCLUDE_PATH)
-
-	AC_SUBST(CLANG_LIBS_LIST)
-
-	LLVM_CXXFLAGS_FLAGS="\`$LLVM_BIN_PATH/llvm-config --cxxflags\`"
-	LLVM_LDFLAGS="\`$LLVM_BIN_PATH/llvm-config --ldflags --libs --system-libs\`"
-
-	AC_SUBST(LLVM_CXXFLAGS_FLAGS)
-	AC_SUBST(LLVM_LDFLAGS)
-else
-	LLVM_INSTALL_PATH="UDEF"
-	echo "No llvm installation path set"
-fi
-
-if test $LLVM_SRC_PATH != "UDEF" ; then
-	if test $LLVM_INSTALL_PATH == "UDEF" ; then
-		AC_MSG_ERROR(["Please set llvm-src as well as llvm-install"])
-	fi
-fi
-
-if test $LLVM_INSTALL_PATH != "UDEF" ; then
-	if test $LLVM_SRC_PATH == "UDEF" ; then
-		AC_MSG_ERROR(["Please set llvm-src as well as llvm-install"])
-	fi
-fi
-
-AS_IF([test x"${with_llvm_src}${with_llvm_install}" != xnono],[found_llvm=1], [found_llvm=0])
+AM_CHECK_CLANG
+AC_MSG_NOTICE(["Clang Libs: $CLANG_LIBS_LIST"])
+AC_MSG_NOTICE(["LLVM install path has been set to $LLVM_INSTALL_PATH"])
 
 # ------
 # Score P installation
@@ -230,26 +166,9 @@ BOOST_LIBDIR="$ac_boost_path/lib"
 
 # -------------------------------
 # check for rapidjson
+# defined in ./config/m4/am_check_rapidjson.m4
 # -------------------------------
-AC_ARG_WITH([rapidjson],
-[AS_HELP_STRING([--with-rapidjson@<:@=ARG@:>@],
-[support for parsing json configuration files @<:@default=check@:>@])],
-[],
-[with_rapidjson=check])
-
-RAPIDJSON_INCLUDEDIR=
-found_rapidjson=0
-AS_IF([test "x$with_rapidjson" != xno],
-[AS_IF([test "x$with_rapidjson" = xyes -o "x$with_rapidjson" = xcheck],
-[AC_CHECK_HEADER([rapidjson/document.h],[found_rapidjson=1],[found_rapidjson=0])],
-[AC_CHECK_FILE([$with_rapidjson/include/rapidjson/document.h],[found_rapidjson=1 ; RAPIDJSON_INCLUDEDIR=$with_rapidjson/include],[found_rapidjson=0])])
-AS_IF([test "x$with_rapidjson" != xcheck -a $found_rapidjson = 0],
-[AC_MSG_FAILURE([--with-rapidjson was given, but test for the header file failed])])
-])
-
-AM_CONDITIONAL(HAVERAPIDJSON, test x"$with_rapidjson" != xno -a $found_rapidjson = 1)
-AC_SUBST(RAPIDJSON_INCLUDEDIR)
-
+AM_CHECK_RAPIDJSON
 
 AM_CONDITIONAL(USEROSE, test x"$with_rose" != xno)
 AM_CONDITIONAL(USECLANG, test x"$with_llvm_src" != xno)
