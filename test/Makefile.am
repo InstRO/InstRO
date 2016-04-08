@@ -57,8 +57,14 @@ bin_PROGRAMS+= \
 	BooleanCompoundSelectorTest \
 	CallpathSelectorTest \
 	DefaultInstrumentationAdapterTest \
-	UniqueCallpathTransformerTest \
+	UniqueCallpathTransformerTest
+
+# There should be some nicer way instead of those nested conditional things...
+if WITHSCOREP
+bin_PROGRAMS+= \
 	ScorepRegionAdapterTest
+endif
+
 endif
 
 if USECLANG
@@ -106,12 +112,6 @@ DefaultInstrumentationAdapterTest_SOURCES= \
 DefaultInstrumentationAdapterTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
 DefaultInstrumentationAdapterTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
-ScorepRegionAdapterTest_SOURCES= \
-	./ScorepRegionAdapterTest.cpp
-
-ScorepRegionAdapterTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
-ScorepRegionAdapterTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
-
 
 # Test
 CallpathSelectorTest_SOURCES= \
@@ -144,14 +144,23 @@ BooleanCompoundSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 DefaultInstrumentationAdapterTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 DefaultInstrumentationAdapterTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
-ScorepRegionAdapterTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
-ScorepRegionAdapterTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
-
 CallpathSelectorTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 CallpathSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
 UniqueCallpathTransformerTest_CPPFLAGS+=  $(INSTRO_WITH_ROSE_CPPFLAGS)
 UniqueCallpathTransformerTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
+
+
+if WITHSCOREP
+ScorepRegionAdapterTest_SOURCES= \
+	./ScorepRegionAdapterTest.cpp
+ScorepRegionAdapterTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
+ScorepRegionAdapterTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
+
+ScorepRegionAdapterTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
+ScorepRegionAdapterTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
+endif # WITHSCOREP
+
 
 INSTRO_COMPILER_INDICATION="rose"
 

@@ -201,6 +201,17 @@ fi
 
 AS_IF([test x"${with_llvm_src}${with_llvm_install}" != xnono],[found_llvm=1], [found_llvm=0])
 
+# ------
+# Score P installation
+# ------
+AC_ARG_WITH([scorep], 
+						[AS_HELP_STRING([--with-scorep@<:@=ARG@:>@], 
+						[Path to the Score-P installation @<:@default=no@:>@])],
+						[], [with_scorep=no])
+
+AM_CONDITIONAL(WITHSCOREP, test x"$with_scorep" != xno)
+AC_SUBST(WITHSCOREP)
+
 
 # -------------------------------
 # 4.1) add BOOST
