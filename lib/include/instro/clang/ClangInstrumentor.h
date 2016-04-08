@@ -6,20 +6,16 @@
 #include "llvm/Support/CommandLine.h"
 
 #include "clang/Tooling/CommonOptionsParser.h"
-#include "clang/Tooling/Tooling.h"
 #include "clang/Tooling/Refactoring.h"
 
-#include "instro/core/SimplePassManager.h"
 #include "instro/core/Instrumentor.h"
-#include "instro/clang/core/ClangConsumerFactory.h"
 #include "instro/clang/ClangPassFactory.h"
-
 #include "instro/clang/tooling/ClangAnalysisInterface.h"
 
 namespace InstRO {
 namespace Clang {
 
-/*
+/**
  * In order to be runnable with Clang's refactoring tool this class has the
  * getClangConsumer() method, which will create the necessary instance and
  * return
@@ -38,11 +34,11 @@ class ClangInstrumentor : public InstRO::Instrumentor {
 	virtual InstRO::Tooling::AnalysisManager* getAnalysisManager() override;
 
 	/// \brief Runs the Instrumentor and its associated passes.
-	/// \note At the moment, ClangConstruct instances are only valid during execution of this method because the AST nodes
+	/// \note ClangConstruct instances are only valid during execution of this method because the AST nodes
 	/// are automatically deallocated after the specified source code file has been processed.
 	void virtual apply() override;
 
-	/// Initialize the AnalysisManager using the provided clang::ASTContext.
+	/// Initializes the AnalysisManager using the provided clang::ASTContext.
 	void initializeAnalysisManager(clang::ASTContext& context);
 
  protected:

@@ -43,7 +43,7 @@ class RoseInstrumentor : public Instrumentor {
 		return passFactory;
 	}
 
-	void apply() {
+	void apply() override {
 		passManager->execute();
 		project->unparse();
 		int err = project->compileOutput();
@@ -52,7 +52,7 @@ class RoseInstrumentor : public Instrumentor {
 		}
 	}
 
-	virtual Tooling::AnalysisManager *getAnalysisManager() { return ram; }
+	virtual Tooling::AnalysisManager *getAnalysisManager() override { return ram; }
 
  protected:
 	// Store the Project. It is required for all passes later on ..

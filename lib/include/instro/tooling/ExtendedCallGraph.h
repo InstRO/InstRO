@@ -13,34 +13,19 @@ namespace InstRO {
 namespace Tooling {
 namespace ExtendedCallGraph {
 
-enum ECGNodeType {
-	DEFAULT,
-	FUNCTION,
-	FUNCTION_CALL,
-	CONDITIONAL,
-	LOOP,
-	SCOPE
-};
+enum ECGNodeType { DEFAULT, FUNCTION, FUNCTION_CALL, CONDITIONAL, LOOP, SCOPE };
 
 class ExtendedCallGraphNode {
  public:
 	ExtendedCallGraphNode(InstRO::Core::ConstructSet cs, enum ECGNodeType type) : cs(cs), type(type) {}
 
 	// Explicit RAW Pointer. We do not release control of this CS
-	InstRO::Core::ConstructSet getAssociatedConstructSet() {
-		return cs;
-	}
-	enum ECGNodeType getNodeType() {
-		return type;
-	}
+	InstRO::Core::ConstructSet getAssociatedConstructSet() { return cs; }
+	enum ECGNodeType getNodeType() { return type; }
 
-	void setAssociatedConstructSet(InstRO::Core::ConstructSet cs) {
-		this->cs = cs;
-	}
+	void setAssociatedConstructSet(InstRO::Core::ConstructSet cs) { this->cs = cs; }
 
-	std::string toDotString() {
-		return cs.toDotString();
-	}
+	std::string toDotString() { return cs.toDotString(); }
 
 	friend std::ostream& operator<<(std::ostream& out, const ExtendedCallGraphNode& node) {
 		out << node.cs;
@@ -62,7 +47,7 @@ class ExtendedCallGraph {
 	ExtendedCallGraph();
 	~ExtendedCallGraph();
 
-	std::set<ExtendedCallGraphNode*> getNodeSetByCS(const Core::ConstructSet *cs);
+	std::set<ExtendedCallGraphNode*> getNodeSetByCS(const Core::ConstructSet* cs);
 
 	/** predicate is a functional with parameters(ExtendedCallGraphNode*, ExtendedCallGraph*) */
 	template <typename T>
@@ -75,7 +60,6 @@ class ExtendedCallGraph {
 	void swapConstructSet(InstRO::Core::ConstructSet oldCS, InstRO::Core::ConstructSet newCS);
 	/** redirect edges of pred and succ if true */
 	void removeNode(ExtendedCallGraphNode* node, bool redirectEdges);
-
 
 	std::set<ExtendedCallGraphNode*> getPredecessors(ExtendedCallGraphNode* start);
 	std::set<ExtendedCallGraphNode*> getSuccessors(ExtendedCallGraphNode* start);
@@ -92,9 +76,7 @@ class ExtendedCallGraph {
  private:
 	/** no copying allowed */
 	ExtendedCallGraph(const ExtendedCallGraph&) {}
-	ExtendedCallGraph& operator =(const ExtendedCallGraph& o) {
-		return *this;
-	}
+	ExtendedCallGraph& operator=(const ExtendedCallGraph& o) { return *this; }
 
 	std::string dumpToDotString(ExtendedCallGraphNode* node, std::string fillcolor = std::string("white"));
 
@@ -109,7 +91,6 @@ class ExtendedCallGraph {
 
 template <typename T>
 std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getNodeSet(T& predicate) {
-
 	std::set<ExtendedCallGraphNode*> results;
 
 	std::map<ExtendedCallGraphNode*, std::set<ExtendedCallGraphNode*> >::iterator it;
@@ -126,4 +107,4 @@ std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getNodeSet(T& predicate) {
 }	// Tooling
 }	// InstRO
 
-#endif // INSTRO_TOOLING_EXTENDED_CALLGRAPH
+#endif	// INSTRO_TOOLING_EXTENDED_CALLGRAPH

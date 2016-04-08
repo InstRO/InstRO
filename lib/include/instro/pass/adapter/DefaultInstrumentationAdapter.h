@@ -23,7 +23,6 @@ class DefaultInstrumentationAdapter : public InstRO::Core::PassImplementation {
 	virtual void instrumentScope(const std::shared_ptr<InstRO::Core::Construct> construct) = 0;
 	virtual void instrumentStatement(const std::shared_ptr<InstRO::Core::Construct> construct) = 0;
 	virtual void instrumentExpression(const std::shared_ptr<InstRO::Core::Construct> construct) = 0;
-
 };
 
 }	// namespace Adapter

@@ -85,6 +85,6 @@ std::string runExecutableAndReturnResult(T... args) {
 
 /** Executes and retrieves the output for the scorep-config */
 std::string getScorepIncludeFlags();
-}
-}
+} // Utility
+} // InstRO
 #endif

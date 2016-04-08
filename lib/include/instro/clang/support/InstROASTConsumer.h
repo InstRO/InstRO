@@ -3,13 +3,12 @@
 
 #include "clang/AST/ASTConsumer.h"
 
-#include "instro/clang/ClangPassFactory.h"
 #include "instro/core/PassManager.h"
-#include "instro/clang/core/ClangPassExecuter.h"
 
 namespace InstRO {
 namespace Clang {
 
+// forward declaration
 class ClangPassFactory;
 
 namespace Support {

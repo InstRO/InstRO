@@ -30,6 +30,13 @@ void InstRO::Test::TestSummary::printResults() {
 	}
 }
 
+void InstRO::Test::TestSummary::assumeFound(const std::multiset<std::string> &identifiers) {
+	for (auto identifier : identifiers) {
+		auto range = unfoundSet.equal_range(identifier);
+		unfoundSet.erase(range.first, range.second);
+	}
+}
+
 void InstRO::Test::TestAdapter::init() { expectedItems = readExpectedItemsFile(); }
 
 void InstRO::Test::TestAdapter::execute() {
@@ -39,9 +46,13 @@ void InstRO::Test::TestAdapter::execute() {
 
 const std::multiset<std::string> &InstRO::Test::TestAdapter::getExpectedItems() const { return expectedItems; }
 
-bool InstRO::Test::TestAdapter::constructMatchesAnyExpectation(
-		std::string &testIdentifier, std::shared_ptr<InstRO::Core::Construct> construct) const {
-	return expectedItems.find(testIdentifier) != expectedItems.end();
+std::vector<std::string> InstRO::Test::TestAdapter::constructMatchesAnyExpectation(
+		const std::string &testIdentifier, std::shared_ptr<InstRO::Core::Construct> construct) const {
+	if (expectedItems.find(testIdentifier) != expectedItems.end()) {
+		return std::vector<std::string>{testIdentifier};
+	} else {
+		return std::vector<std::string>();
+	}
 }
 
 void InstRO::Test::TestAdapter::checkIfConstructSetMatches(const InstRO::Core::ConstructSet *cs) {
@@ -58,12 +69,13 @@ void InstRO::Test::TestAdapter::checkIfConstructSetMatches(const InstRO::Core::C
 			return c->getID() == idPair.first;
 		});
 
-		if (!constructMatchesAnyExpectation(testString, *cPos)) {
+		auto matchedIdentifiers = constructMatchesAnyExpectation(testString, *cPos);
+		if (matchedIdentifiers.empty()) {
 			addMarkedConstructs.insert(*cPos);
 			erroneouslyContainedInConstructSet.insert(testString);
 		}
 		// more sophisticated matching schemes may manually change the identifier to the corresponding item
-		markedItems.insert(testString);
+		markedItems.insert(matchedIdentifiers.begin(), matchedIdentifiers.end());
 	}
 }
 

@@ -28,6 +28,7 @@ class PassExecuter {
  public:
 	PassExecuter(){};
 	PassExecuter(clang::ASTContext *ctx) : context(ctx){};
+	~PassExecuter() {}
 	virtual void execute(T *pass) = 0;
 
 	virtual void setASTContext(clang::ASTContext *ctxt) { context = ctxt; };

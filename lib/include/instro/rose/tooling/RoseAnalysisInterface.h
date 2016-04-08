@@ -35,7 +35,9 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 	virtual InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph *getECG() override { return extendedCallGraph; }
 	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraph *getCFG() override { return controlFlowGraph; }
 	virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override { return ce; }
-	virtual InstRO::Tooling::ConstructTraitInterface::ConstructTraitInterface *getConstructTraitInterface() override { return cti; }
+	virtual InstRO::Tooling::ConstructTraitInterface::ConstructTraitInterface *getConstructTraitInterface() override {
+		return cti;
+	}
 	virtual InstRO::Tooling::NamedConstructAccess::NamedConstructAccess *getNamedConstructAccessFacility() override {
 		return namedConstructAccessInstance;
 	}
@@ -53,4 +55,4 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 }	// Rose
 }	// InstRO
 
-#endif // INSTRO_ROSE_TOOLING_ROSE_ANALYSIS_INTERFACE
+#endif	// INSTRO_ROSE_TOOLING_ROSE_ANALYSIS_INTERFACE

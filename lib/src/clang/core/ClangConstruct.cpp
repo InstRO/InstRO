@@ -50,7 +50,7 @@ class DeclConstructTraitVisitor : public clang::DeclVisitor<DeclConstructTraitVi
 		if (decl->hasInit()) {
 			auto parents = context.getParents(*decl);
 			for (auto parent : parents) {
-				if (const clang::DeclStmt *declStmt = parent.get<clang::DeclStmt>()) {
+				if (parent.get<clang::DeclStmt>()) {
 					ct = ConstructTrait(ConstructTraitType::CTSimpleStatement);
 					handleStatementWithWrappableCheck(decl);
 					return;
@@ -162,6 +162,14 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 				generateError(stmt);
 				return;
 			}
+
+			if (clang::UnaryOperator *unaryOp = llvm::dyn_cast<clang::UnaryOperator>(stmt)) {
+				if (unaryOp->getOpcode() == clang::UO_AddrOf) {
+					InstRO::logIt(InstRO::DEBUG) << "Encountered a boring address-of operator" << std::endl;
+					generateError(stmt);
+					return;
+				}
+			}
 		} else if (clang::CastExpr *castExpr = llvm::dyn_cast<clang::CastExpr>(stmt)) {
 			if (castExpr->getCastKind() != clang::CastKind::CK_UserDefinedConversion) {
 				InstRO::logIt(InstRO::DEBUG) << "Encountered a boring cast expression" << std::endl;
@@ -193,8 +201,23 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 						isNotAStatement = stmt == whileStmt->getCond();
 					}
 				}
-			} else if (const clang::Decl *parent = parents.front().get<clang::Decl>()) {
+			} else if (parents.front().get<clang::Decl>()) {
 				isNotAStatement = true;
+			}
+		}
+
+		if (clang::BinaryOperator *binaryOp = llvm::dyn_cast<clang::BinaryOperator>(stmt)) {
+			if (binaryOp->getOpcode() == clang::BO_Comma) {
+				if (isNotAStatement) {
+					InstRO::logIt(InstRO::DEBUG) << "Encountered a boring comma operator" << std::endl;
+					generateError(stmt);
+					return;
+				} else {
+					// use the top level comma operator as pure statement
+					ct = ConstructTrait(ConstructTraitType::CTSimpleStatement);
+					handleStatementWithWrappableCheck(stmt);
+					return;
+				}
 			}
 		}
 
@@ -265,9 +288,9 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		generateError(stmt);
 	}
 
-	void VisitCXXOperatorCallExpr(clang::CXXOperatorCallExpr *stmt) {
-		ct = ConstructTrait(ConstructTraitType::CTSimpleStatement);
-		handleStatementWithWrappableCheck(stmt);
+	void VisitMemberExpr(clang::MemberExpr *stmt) {
+		// used e.g. by CXXMemberCallExpr to specify the member being called
+		generateError(stmt);
 	}
 
 	void VisitReturnStmt(clang::ReturnStmt *stmt) {

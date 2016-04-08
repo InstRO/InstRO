@@ -57,7 +57,6 @@ CORE_SFILES= \
 ./src/core/PassImplementation.cpp \
 ./src/core/SimplePassManager.cpp \
 ./src/core/Singleton.cpp \
-./src/tooling/AnalysisInterface.cpp \
 ./src/tooling/NamedConstructAccess.cpp \
 ./src/tooling/ConstructElevator.cpp \
 ./src/tooling/ExtendedCallGraph.cpp \
@@ -84,7 +83,6 @@ CLANG_HFILES= \
 ./include/instro/clang/core/ClangConsumerFactory.h \
 ./include/instro/clang/core/ClangPassExecuter.h \
 ./include/instro/clang/core/ClangConstruct.h \
-./include/instro/clang/core/Pass.h \
 ./include/instro/clang/support/InstROASTConsumer.h \
 ./include/instro/clang/tooling/ClangAnalysisInterface.h \
 ./include/instro/clang/tooling/ClangConstructTraitInterface.h \

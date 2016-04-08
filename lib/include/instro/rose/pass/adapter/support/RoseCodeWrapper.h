@@ -16,7 +16,7 @@ namespace Support {
  * \author Roman Ness
  */
 class RoseCodeWrapper {
-public:
+ public:
 	RoseCodeWrapper(SgProject* project) : project(project) {}
 
 	void wrapStatement(SgStatement* stmt, std::string postfix, size_t id);
@@ -24,7 +24,7 @@ public:
 	void instrumentFunction(SgFunctionDefinition* function, size_t id);
 	void instrumentScope(SgScopeStatement* scope, size_t id);
 
-private:
+ private:
 	SgProject* project;
 
 	void handleRelevantExits(SgScopeStatement* scope, SgStatement* instrumentStmt);
@@ -32,13 +32,11 @@ private:
 
 	SgStatement* buildCallExpressionStatement(SgScopeStatement* context, std::string functionName, SgExprListExp* parameters);
 	SgStatement* buildCallExpressionStatement(SgScopeStatement* context, std::string functionName, size_t id);
-
 };
 
 }	// namespace Support
 }	// namespace Adapter
 }	// namespace Rose
 }	// namespace InstRO
-
 
 #endif /* INSTRO_ROSE_PASS_ADAPTER_SUPPORT_ROSECODEWRAPPER_H_ */

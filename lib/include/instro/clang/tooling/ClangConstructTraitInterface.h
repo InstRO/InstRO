@@ -12,23 +12,19 @@ namespace Tooling {
 namespace ConstructTraitInterface {
 
 class ClangConstructTraitInterface : public InstRO::Tooling::ConstructTraitInterface::ConstructTraitInterface {
-
-public:
+ public:
 	ClangConstructTraitInterface(clang::ASTContext &context) : context(context) {}
 	ClangConstructTraitInterface() = delete;
 	virtual ~ClangConstructTraitInterface() {}
 
 	InstRO::Core::ConstructSet getConstructsByTrait(const InstRO::Core::ConstructTraitType constructTrait) override;
 
-protected:
+ protected:
 	clang::ASTContext &context;
-
 };
-
 }
 }
 }
 }
 
-
-#endif // INSTRO_CLANG_TOOLING_CLANG_CONSTRUCT_CLASS_INTERFACE_H
+#endif	// INSTRO_CLANG_TOOLING_CLANG_CONSTRUCT_CLASS_INTERFACE_H

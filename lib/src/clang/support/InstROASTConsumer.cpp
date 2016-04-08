@@ -1,8 +1,9 @@
 #include "instro/clang/support/InstROASTConsumer.h"
-#include "instro/clang/core/ClangConstruct.h"
 
+#include "instro/clang/core/ClangConstruct.h"
 #include "instro/core/Singleton.h"
 #include "instro/clang/ClangInstrumentor.h"
+#include "instro/clang/ClangPassFactory.h"
 
 #include "instro/utility/Logger.h"
 
@@ -17,6 +18,7 @@ void InstRO::Clang::Support::InstROASTConsumer::HandleTranslationUnit(clang::AST
 	InstRO::Clang::Core::ClangConstruct::setASTContext(context);
 	static_cast<InstRO::Clang::ClangInstrumentor*>(InstRO::getInstrumentorInstance())->initializeAnalysisManager(context);
 	factory->finishConstruction(&context);
+	
 	logIt(DEBUG) << "Calling execute in PassManager" << std::endl;
 	passManager->execute();
 }

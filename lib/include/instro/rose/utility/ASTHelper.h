@@ -46,10 +46,10 @@ bool isContainedInTemplateInstantiation(SgNode* node);
  * accordingly */
 template <typename CallableFileInfoConsumer>
 typename std::result_of<CallableFileInfoConsumer(Sg_File_Info*)>::type applyConsumerToTemplateInstantiationDecl(
-		CallableFileInfoConsumer cr, SgNode *node) {
-	SgTemplateInstantiationFunctionDecl *funcDecl =
+		CallableFileInfoConsumer cr, SgNode* node) {
+	SgTemplateInstantiationFunctionDecl* funcDecl =
 			SageInterface::getEnclosingNode<SgTemplateInstantiationFunctionDecl>(node, true);
-	SgTemplateInstantiationMemberFunctionDecl *memDecl =
+	SgTemplateInstantiationMemberFunctionDecl* memDecl =
 			SageInterface::getEnclosingNode<SgTemplateInstantiationMemberFunctionDecl>(node, true);
 
 	typename std::result_of<CallableFileInfoConsumer(Sg_File_Info*)>::type retVal;
@@ -86,7 +86,7 @@ typename std::result_of<CallableFileInfoConsumer(SgInitializedName*)>::type appl
 	auto decl = isSgDeclarationStatement(node->get_parent()->get_parent());
 	auto initName = isSgInitializedName(node->get_parent());
 
-	if (decl != nullptr) {	
+	if (decl != nullptr) {
 		// handle the case within an if statement
 		if (decl->isCompilerGenerated()) {
 			auto n = decl->get_parent();
@@ -104,8 +104,7 @@ typename std::result_of<CallableFileInfoConsumer(SgInitializedName*)>::type appl
 }
 
 /** Given a node it returns the file info if this node is either an if or a while. Returns nullptr otherwise */
-Sg_File_Info *getFileInfoFromWhileOrIf(SgNode *n);
-
+Sg_File_Info* getFileInfoFromWhileOrIf(SgNode* n);
 }
 
 }	// namespace Utility

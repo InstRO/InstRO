@@ -8,7 +8,6 @@ namespace InstRO {
 namespace Adapter {
 
 class ConstructPrinterAdapter : public InstRO::Core::PassImplementation {
-
  public:
 	ConstructPrinterAdapter() : PassImplementation() {}
 	void execute() override;

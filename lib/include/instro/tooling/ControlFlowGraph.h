@@ -9,17 +9,14 @@
 #include <boost/graph/labeled_graph.hpp>
 #include <boost/graph/graphviz.hpp>
 
-
 namespace InstRO {
 namespace Tooling {
 namespace ControlFlowGraph {
 
-enum CFGNodeType {
-	FUNC_ENTRY, FUNC_EXIT, SCOPE_ENTRY, SCOPE_EXIT, STMT, EXPR, NOT_SET
-};
+enum CFGNodeType { FUNC_ENTRY, FUNC_EXIT, SCOPE_ENTRY, SCOPE_EXIT, STMT, EXPR, NOT_SET };
 
-static const char* ACFGNodeTypeNames[] = { "FUNC_ENTRY", "FUNC_EXIT", "SCOPE_ENTRY", "SCOPE_EXIT", "STMT", "EXPR",
-		"NOT_SET" };
+static const char* ACFGNodeTypeNames[] = {"FUNC_ENTRY", "FUNC_EXIT", "SCOPE_ENTRY", "SCOPE_EXIT",
+																					"STMT",				"EXPR",			 "NOT_SET"};
 
 class ControlFlowGraphNode {
  public:
@@ -42,7 +39,9 @@ class ControlFlowGraphNode {
 	InstRO::Core::ConstructSet* cs;
 	CFGNodeType nodeType;
 
-	friend bool operator<(const ControlFlowGraphNode& node1, const ControlFlowGraphNode& node2) { return node1.cs < node2.cs; }
+	friend bool operator<(const ControlFlowGraphNode& node1, const ControlFlowGraphNode& node2) {
+		return node1.cs < node2.cs;
+	}
 
 	friend std::ostream& operator<<(std::ostream& out, const ControlFlowGraphNode& node) {
 		out << ACFGNodeTypeNames[node.nodeType] << *(node.cs);
@@ -50,36 +49,27 @@ class ControlFlowGraphNode {
 	}
 };
 
-typedef boost::labeled_graph<boost::adjacency_list<boost::setS, boost::vecS, boost::directedS, ControlFlowGraphNode>, InstRO::Core::ConstructSet> Graph;
+typedef boost::labeled_graph<boost::adjacency_list<boost::setS, boost::vecS, boost::directedS, ControlFlowGraphNode>,
+														 InstRO::Core::ConstructSet> Graph;
 
 class BoostCFG {
  public:
 	BoostCFG() {}
 
-	const Graph& getGraph() const {
-		return graph;
-	}
+	const Graph& getGraph() const { return graph; }
 
 	bool contains(ControlFlowGraphNode cfgNode) {
 		auto graphNode = boost::vertex_by_label(*cfgNode.getAssociatedConstructSet(), graph);
 		return graphNode != boost::graph_traits<Graph>::null_vertex();
 	}
 
-	void setStartNode(ControlFlowGraphNode cfgNode) {
-		startNode = cfgNode;
-	}
+	void setStartNode(ControlFlowGraphNode cfgNode) { startNode = cfgNode; }
 
-	ControlFlowGraphNode getStartNode() {
-		return startNode;
-	}
+	ControlFlowGraphNode getStartNode() { return startNode; }
 
-	void setEndNode(ControlFlowGraphNode cfgNode) {
-		endNode = cfgNode;
-	}
+	void setEndNode(ControlFlowGraphNode cfgNode) { endNode = cfgNode; }
 
-	ControlFlowGraphNode getEndNode() {
-		return endNode;
-	}
+	ControlFlowGraphNode getEndNode() { return endNode; }
 
 	void addNode(ControlFlowGraphNode cfgNode) {
 		auto cs = *cfgNode.getAssociatedConstructSet();
@@ -119,7 +109,7 @@ class ControlFlowGraph {
 	virtual ~ControlFlowGraph() {}
 
 	virtual ControlFlowGraphNode getCFGEntryNode(ControlFlowGraphNode) = 0;
-	virtual ControlFlowGraphNode getCFGExitNode (ControlFlowGraphNode) = 0;
+	virtual ControlFlowGraphNode getCFGExitNode(ControlFlowGraphNode) = 0;
 
 	virtual std::set<ControlFlowGraphNode> getCFGEntrySet(InstRO::Core::ConstructSet cs) = 0;
 	virtual std::set<ControlFlowGraphNode> getCFGExitSet(InstRO::Core::ConstructSet cs) = 0;
@@ -172,7 +162,7 @@ class AbstractControlFlowGraph : public ControlFlowGraph {
 	std::vector<BoostCFG> cfgs;
 };
 
-} // namespace ControlFlowGraph
+}	// namespace ControlFlowGraph
 }	// namespace Tooling
 }	// namespace InstRO
 

@@ -24,8 +24,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 	virtual std::string constructToString(std::shared_ptr<InstRO::Core::Construct> construct) { return std::string(""); }
 
  public:
-	ConstructHierarchyASTDotGenerator(std::string filename)
-			: PassImplementation(), fileName(filename) {}
+	ConstructHierarchyASTDotGenerator(std::string filename) : PassImplementation(), fileName(filename) {}
 	virtual void init() override { outFile.open(fileName, std::ios_base::out); };
 
 	virtual void execute() {
@@ -34,8 +33,8 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 		InstRO::Core::ConstructSet csAggregation, workList;
 		workList = *getInput(0);
 
-		while (workList.size()){
-			InstRO::Core::ConstructSet  toDoList;
+		while (workList.size()) {
+			InstRO::Core::ConstructSet toDoList;
 			InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci(&workList);
 			for (auto construct : csci) {
 				auto child = construct;
@@ -46,7 +45,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 
 				std::vector<InstRO::Core::ConstructTraitType> traitList;
 
-				if (child->getTraits() == InstRO::Core::ConstructTraitType::CTExpression){
+				if (child->getTraits() == InstRO::Core::ConstructTraitType::CTExpression) {
 					// For Simple, Scope, Loop and Conditional elevate and add to process list
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTLoopStatement);
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTScopeStatement);
@@ -54,16 +53,14 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTSimpleStatement);
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTWrappableStatement);
 
-				}
-				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTStatement)
+				} else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTStatement)
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTFunction);
 				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTFunction)
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTFileScope);
 				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTFileScope)
 					traitList.push_back(InstRO::Core::ConstructTraitType::CTGlobalScope);
-				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTGlobalScope) {}
-
-
+				else if (child->getTraits() == InstRO::Core::ConstructTraitType::CTGlobalScope) {
+				}
 
 				for (auto constructTrait : traitList) {
 					auto parentCS = elevator->raise(childCS, constructTrait);
@@ -75,10 +72,10 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 					if (rocsciChild.size() != 1 || rocsciParent.size() != 1)
 						throw std::string("Problem in ConstructHierarchyASTDotGenerator");
 					outFile << "\t" << rocsciChild.begin()->get()->getID() << " -> " << rocsciParent.begin()->get()->getID()
-						<< ";\n";
+									<< ";\n";
 					// add the discoreved node to the processing list
 					csAggregation = csAggregation.combine(parentCS);
-					toDoList=toDoList.combine(parentCS);
+					toDoList = toDoList.combine(parentCS);
 				}
 			}
 			workList = toDoList;
@@ -95,7 +92,6 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 
 	virtual void finalize() override { outFile.close(); };
 };
-
 }
 }
 

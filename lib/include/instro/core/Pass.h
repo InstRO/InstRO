@@ -46,10 +46,10 @@ class Pass {
 		delete (passImplementation);
 		passImplementation = nullptr;
 	}
-	
+
 	// CI: Tell the pass, that is is allowed to initialize itself
 	void initPass();
-	
+
 	// CI: Execute the pass, this generates the output-constructset
 	void executePass();
 
@@ -81,9 +81,13 @@ class Pass {
 
 	const std::vector<Pass *> getInputPasses() const { return channelConfig.getPasses(); };
 
-	Core::ConstructTraitType getMinInputLevelRequirement(Pass *pass) const { return channelConfig.getMinConstructLevel(pass); };
+	Core::ConstructTraitType getMinInputLevelRequirement(Pass *pass) const {
+		return channelConfig.getMinConstructLevel(pass);
+	};
 
-	Core::ConstructTraitType getMaxInputLevelRequirement(Pass *pass) const { return channelConfig.getMaxConstructLevel(pass); };
+	Core::ConstructTraitType getMaxInputLevelRequirement(Pass *pass) const {
+		return channelConfig.getMaxConstructLevel(pass);
+	};
 
  protected:
 	// Get the number of altered, invalidated or changed constructs. We expect the next higher construct that dominates

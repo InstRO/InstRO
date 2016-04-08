@@ -18,13 +18,11 @@ using InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraphNode;
 using InstRO::Tooling::ExtendedCallGraph::ECGNodeType;
 
 class RoseECGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
-public:
+ public:
 	RoseECGConstructSetGenerator() : nodeType(ECGNodeType::DEFAULT), csci(&cs) {}
 
 	// XXX this is smelly
-	ExtendedCallGraphNode* getECGNode() {
-		return new ExtendedCallGraphNode(cs, nodeType);
-	}
+	ExtendedCallGraphNode* getECGNode() { return new ExtendedCallGraphNode(cs, nodeType); }
 
 	InstRO::Core::ConstructSet getConstructSet() { return std::move(cs); }
 	enum ECGNodeType getNodeType() { return nodeType; }
@@ -94,11 +92,11 @@ public:
 	void visit(SgNode* n) {
 		// XXX this should not happen
 		std::cout << "RoseECGConstructSetGenerator Error. Got invalid node" << std::endl
-				<< n->unparseToString() << std::endl;
+							<< n->unparseToString() << std::endl;
 		exit(1);
 	}
 
-private:
+ private:
 	void addConditionStmtOrExpr(SgStatement* conditionStmt) {
 		if (InstRO::Rose::Core::RoseConstructTraitPredicates::CTSimpleStatementPredicate()(conditionStmt)) {
 			csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(conditionStmt));
@@ -115,38 +113,35 @@ private:
 };
 
 class RoseECGGenerator : public AstPrePostProcessing {
-public:
-	RoseECGGenerator() :
-			callgraph(new ExtendedCallGraph()) {
-	}
+ public:
+	RoseECGGenerator() : callgraph(new ExtendedCallGraph()) {}
 	~RoseECGGenerator() {}
 
 	ExtendedCallGraph* build(SgProject* project) {
-
-		std::vector<SgFunctionDefinition*> funcDefs = SageInterface::querySubTree<SgFunctionDefinition>(project, V_SgFunctionDefinition);
+		std::vector<SgFunctionDefinition*> funcDefs =
+				SageInterface::querySubTree<SgFunctionDefinition>(project, V_SgFunctionDefinition);
 		for (SgFunctionDefinition* funcDef : funcDefs) {
-
 			// visit function definition
 			traverse(funcDef);
 		}
 
-		///XXX
+		/// XXX
 		callgraph->print("extendedCallGraph.dot");
 
 		return callgraph;
 	}
 
-private:
+ private:
 	ExtendedCallGraphNode* getDefiningECGNode(SgFunctionDefinition* node) {
 		RoseECGConstructSetGenerator genCS;
 		node->accept(genCS);
 
 		std::string mangledName = node->get_declaration()->get_mangled_name();
 		if (uniqueDecls.find(mangledName) != uniqueDecls.end()) {
-
 			if (uniqueDecls[mangledName]->get_definition() == nullptr) {
 				auto ecgNode = genCS.getECGNode();
-				callgraph->swapConstructSet(uniqueNodes[mangledName]->getAssociatedConstructSet(), ecgNode->getAssociatedConstructSet());
+				callgraph->swapConstructSet(uniqueNodes[mangledName]->getAssociatedConstructSet(),
+																		ecgNode->getAssociatedConstructSet());
 			}
 
 		} else {
@@ -159,15 +154,12 @@ private:
 		}
 
 		return uniqueNodes[mangledName];
-
 	}
 
 	/** this method is only called if the definition cannot be found */
 	ExtendedCallGraphNode* getDefiningECGNode(SgFunctionDeclaration* node) {
-
 		std::string mangledName = node->get_mangled_name();
 		if (uniqueDecls.find(mangledName) == uniqueDecls.end()) {
-
 			RoseECGConstructSetGenerator genCS;
 			node->accept(genCS);
 			auto ecgNode = genCS.getECGNode();
@@ -179,9 +171,8 @@ private:
 		return uniqueNodes[mangledName];
 	}
 
-public:	// Visitor Interface
+ public:	// Visitor Interface
 	void preOrderVisit(SgFunctionDefinition* node) {
-
 		auto ecgNode = getDefiningECGNode(node);
 
 		currentVisitNode.push(ecgNode);
@@ -199,8 +190,8 @@ public:	// Visitor Interface
 
 		SgFunctionDeclaration* calledDecl = node->getAssociatedFunctionDeclaration();
 		if (calledDecl == nullptr) {
-
-			logIt(WARN) << "Virtual call in line "<< node->get_startOfConstruct()->get_line() << ": " << node->unparseToString() << std::endl;
+			logIt(WARN) << "Virtual call in line " << node->get_startOfConstruct()->get_line() << ": "
+									<< node->unparseToString() << std::endl;
 
 			auto arrowExp = isSgArrowExp(node->get_function());
 			if (arrowExp == nullptr) {
@@ -228,21 +219,11 @@ public:	// Visitor Interface
 			callgraph->addEdge(ecgNode, ecgNodeCall);
 		}
 	}
-	void preOrderVisit(SgIfStmt* node) {
-		defaultPreOrderBehavior(node);
-	}
-	void preOrderVisit(SgSwitchStatement* node) {
-		defaultPreOrderBehavior(node);
-	}
-	void preOrderVisit(SgForStatement* node) {
-		defaultPreOrderBehavior(node);
-	}
-	void preOrderVisit(SgWhileStmt* node) {
-		defaultPreOrderBehavior(node);
-	}
-	void preOrderVisit(SgDoWhileStmt* node) {
-		defaultPreOrderBehavior(node);
-	}
+	void preOrderVisit(SgIfStmt* node) { defaultPreOrderBehavior(node); }
+	void preOrderVisit(SgSwitchStatement* node) { defaultPreOrderBehavior(node); }
+	void preOrderVisit(SgForStatement* node) { defaultPreOrderBehavior(node); }
+	void preOrderVisit(SgWhileStmt* node) { defaultPreOrderBehavior(node); }
+	void preOrderVisit(SgDoWhileStmt* node) { defaultPreOrderBehavior(node); }
 	void preOrderVisit(SgBasicBlock* node) {
 		// skip fileScope
 		if (!InstRO::Rose::Core::RoseConstructTraitPredicates::CTScopeStatementPredicate()(node)) {
@@ -251,27 +232,15 @@ public:	// Visitor Interface
 		defaultPreOrderBehavior(node);
 	}
 
-	void postOrderVisit(SgFunctionDefinition* node) {
-		currentVisitNode.pop();
-	}
+	void postOrderVisit(SgFunctionDefinition* node) { currentVisitNode.pop(); }
 	void postOrderVisit(SgFunctionCallExp* node) {
 		// nothing pushed -> nothing to pop
 	}
-	void postOrderVisit(SgIfStmt* node) {
-		currentVisitNode.pop();
-	}
-	void postOrderVisit(SgSwitchStatement* node) {
-		currentVisitNode.pop();
-	}
-	void postOrderVisit(SgForStatement* node) {
-		currentVisitNode.pop();
-	}
-	void postOrderVisit(SgWhileStmt* node) {
-		currentVisitNode.pop();
-	}
-	void postOrderVisit(SgDoWhileStmt* node) {
-		currentVisitNode.pop();
-	}
+	void postOrderVisit(SgIfStmt* node) { currentVisitNode.pop(); }
+	void postOrderVisit(SgSwitchStatement* node) { currentVisitNode.pop(); }
+	void postOrderVisit(SgForStatement* node) { currentVisitNode.pop(); }
+	void postOrderVisit(SgWhileStmt* node) { currentVisitNode.pop(); }
+	void postOrderVisit(SgDoWhileStmt* node) { currentVisitNode.pop(); }
 	void postOrderVisit(SgBasicBlock* node) {
 		if (!InstRO::Rose::Core::RoseConstructTraitPredicates::CTScopeStatementPredicate()(node)) {
 			return;	// skip fileScope
@@ -321,17 +290,17 @@ public:	// Visitor Interface
 		}
 	}
 
-private:
+ private:
 	ExtendedCallGraph* callgraph;
 
-	std::stack<ExtendedCallGraphNode*>  currentVisitNode;
+	std::stack<ExtendedCallGraphNode*> currentVisitNode;
 
 	std::map<InstRO::Core::ConstructSet, ExtendedCallGraphNode*> csToGraphNode;
 
 	std::map<std::string, SgFunctionDeclaration*> uniqueDecls;	// unique function-declaration per function
 	std::map<std::string, ExtendedCallGraphNode*> uniqueNodes;	// unique graph node per mangled function name
 
-private:
+ private:
 	void defaultPreOrderBehavior(SgNode* node) {
 		RoseECGConstructSetGenerator genCS;
 		node->accept(genCS);
@@ -352,9 +321,7 @@ private:
 		}
 		return oldDecl;
 	}
-
 };
-
 }
 }
 }

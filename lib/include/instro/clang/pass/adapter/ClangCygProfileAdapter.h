@@ -7,7 +7,6 @@
 #include "clang/Basic/SourceLocation.h"
 #include "clang/Tooling/Core/Replacement.h"
 
-#include "instro/clang/core/Pass.h"
 #include "instro/clang/core/ClangPassImplBase.h"
 
 namespace InstRO {
