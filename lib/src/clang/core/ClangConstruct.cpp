@@ -143,10 +143,9 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 	void VisitExpr(clang::Expr *stmt) {
 		// in Clang every Expr is also a Stmt, therefore Expressions might also be SimpleStatements
 
-		clang::SourceLocation location = stmt->getLocStart();
-		const clang::SourceManager &sm = context.getSourceManager();
-		std::string strLoc = "(" + std::to_string(sm.getSpellingLineNumber(location)) + "," +
-												 std::to_string(sm.getSpellingColumnNumber(location)) + ")";
+		if (handleConstructsInControlStructures(stmt)) {
+			return;
+		}
 
 		if (llvm::isa<clang::UnaryOperator>(stmt) || llvm::isa<clang::BinaryOperator>(stmt)) {
 			// interesting unary or binary expressions have at least one variable reference or function call
@@ -187,18 +186,6 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 					if (llvm::isa<clang::ReturnStmt>(parent)) {
 						// the expression inside a return statement cannot be a statement
 						isNotAStatement = true;
-					} else if (const clang::IfStmt *ifStmt = llvm::dyn_cast<clang::IfStmt>(parent)) {
-						// the conditional expression of a if statement is no statement
-						// the 'then' and 'else' statements can be expressions, so we cannot just check the type of the parent
-						isNotAStatement = stmt == ifStmt->getCond();
-					} else if (const clang::ForStmt *forStmt = llvm::dyn_cast<clang::ForStmt>(parent)) {
-						// the 'init' and 'cond' parts are considered to be statements according to the C++ grammar, the 'inc' part
-						// is just an expression
-						isNotAStatement = stmt == forStmt->getInc();
-					} else if (const clang::DoStmt *doStmt = llvm::dyn_cast<clang::DoStmt>(parent)) {
-						isNotAStatement = stmt == doStmt->getCond();
-					} else if (const clang::WhileStmt *whileStmt = llvm::dyn_cast<clang::WhileStmt>(parent)) {
-						isNotAStatement = stmt == whileStmt->getCond();
 					}
 				}
 			} else if (parents.front().get<clang::Decl>()) {
@@ -224,7 +211,6 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		std::string nodeTypeName = stmt->getStmtClassName();
 		ct = ConstructTrait(ConstructTraitType::CTExpression);
 		if (!isNotAStatement) {
-			InstRO::logIt(InstRO::DEBUG) << nodeTypeName << " is a SimpleStatement " << strLoc << std::endl;
 			ct.add(ConstructTraitType::CTSimpleStatement);
 			handleStatementWithWrappableCheck(stmt);
 		}
@@ -241,38 +227,52 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 	}
 
 	void VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr *stmt) {
-		// literals are not considered interesting
-		generateError(stmt);
+		if (!handleConstructsInControlStructures(stmt)) {
+			// literals are not considered interesting
+			generateError(stmt);
+		}
 	}
 
 	void VisitIntegerLiteral(clang::IntegerLiteral *stmt) {
-		// literals are not considered interesting
-		generateError(stmt);
+		if (!handleConstructsInControlStructures(stmt)) {
+			// literals are not considered interesting
+			generateError(stmt);
+		}
 	}
 
 	void VisitFloatingLiteral(clang::FloatingLiteral *stmt) {
-		// literals are not considered interesting
-		generateError(stmt);
+		if (!handleConstructsInControlStructures(stmt)) {
+			// literals are not considered interesting
+			generateError(stmt);
+		}
 	}
 
 	void VisitCharacterLiteral(clang::CharacterLiteral *stmt) {
-		// literals are not considered interesting
-		generateError(stmt);
+		if (!handleConstructsInControlStructures(stmt)) {
+			// literals are not considered interesting
+			generateError(stmt);
+		}
 	}
 
 	void VisitStringLiteral(clang::StringLiteral *stmt) {
-		// literals are not considered interesting
-		generateError(stmt);
+		if (!handleConstructsInControlStructures(stmt)) {
+			// literals are not considered interesting
+			generateError(stmt);
+		}
 	}
 
 	void VisitCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralExpr *stmt) {
-		// literals are not considered interesting
-		generateError(stmt);
+		if (!handleConstructsInControlStructures(stmt)) {
+			// literals are not considered interesting
+			generateError(stmt);
+		}
 	}
 
 	void VisitDeclRefExpr(clang::DeclRefExpr *stmt) {
-		// references to declarations (variables) are not considered interesting
-		generateError(stmt);
+		if (!handleConstructsInControlStructures(stmt)) {
+			// references to declarations (variables) are not considered interesting
+			generateError(stmt);
+		}
 	}
 
 	void VisitImplicitCastExpr(clang::ImplicitCastExpr *stmt) {
@@ -301,9 +301,59 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 
 	void VisitStmt(clang::Stmt *stmt) { generateError(stmt); }
 
+	bool isExpressionInLoopOrConditionalHeader(const clang::Expr *expr) {
+		auto parents = context.getParents(*expr);
+		if (parents.empty()) {
+			return false;
+		}
+
+		auto &parent = parents.front();
+		if (const clang::IfStmt *ifStmt = parent.get<clang::IfStmt>()) {
+			return ifStmt->getCond() == expr;
+		} else if (const clang::SwitchStmt *switchStmt = parent.get<clang::SwitchStmt>()) {
+			return switchStmt->getCond() == expr;
+		} else if (const clang::ForStmt *forStmt = parent.get<clang::ForStmt>()) {
+			return forStmt->getInc() == expr;
+		} else if (const clang::DoStmt *doStmt = parent.get<clang::DoStmt>()) {
+			return doStmt->getCond() == expr;
+		} else if (const clang::WhileStmt *whileStmt = parent.get<clang::WhileStmt>()) {
+			return whileStmt->getCond();
+		} else if (const clang::ImplicitCastExpr *implCastExpr = parent.get<clang::ImplicitCastExpr>()) {
+			return isExpressionInLoopOrConditionalHeader(implCastExpr);
+		}
+
+		return false;
+	}
+
+	bool isStatementInForLoop(clang::Stmt *stmt) {
+		auto parents = context.getParents(*stmt);
+		if (parents.empty()) {
+			return false;
+		}
+
+		if (const clang::ForStmt *forStmt = parents.front().get<clang::ForStmt>()) {
+			return forStmt->getCond() == stmt || forStmt->getInit() == stmt;
+		}
+
+		return false;
+	}
+
  private:
 	clang::ASTContext &context;
 	ConstructTrait ct;
+
+	bool handleConstructsInControlStructures(clang::Expr *stmt) {
+		if (isExpressionInLoopOrConditionalHeader(stmt)) {
+			ct = ConstructTrait(ConstructTraitType::CTExpression);
+			return true;
+		} else if (isStatementInForLoop(stmt)) {
+			ct = ConstructTrait(ConstructTraitType::CTExpression);
+			ct.add(ConstructTraitType::CTSimpleStatement);
+			handleStatementWithWrappableCheck(stmt);
+			return true;
+		}
+		return false;
+	}
 
 	void handleStatementWithWrappableCheck(clang::Stmt *stmt) {
 		ct.add(ConstructTraitType::CTStatement);
