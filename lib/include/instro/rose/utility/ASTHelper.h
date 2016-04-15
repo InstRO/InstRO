@@ -42,6 +42,9 @@ bool isLoop(SgScopeStatement* scope);
 
 bool isContainedInTemplateInstantiation(SgNode* node);
 
+/** returns true if a void-returning function does not end with a return statement */
+bool voidFunctionEndsWithoutReturn(SgFunctionDefinition *fDef);
+
 /* Handles SgTemplateFunctionInstantiationDecl and SgTemplateMemberFunctionInstantiationDecl to dispatch the Consumer
  * accordingly */
 template <typename CallableFileInfoConsumer>

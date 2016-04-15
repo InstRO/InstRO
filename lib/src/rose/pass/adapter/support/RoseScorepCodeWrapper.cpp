@@ -1,5 +1,5 @@
 #include "instro/rose/pass/adapter/support/RoseScorepCodeWrapper.h"
-
+#include "instro/rose/utility/ASTHelper.h"
 #include "instro/rose/utility/ASTTransformer.h"
 #include "instro/utility/Logger.h"
 
@@ -56,6 +56,10 @@ void RoseScorepCodeWrapper::instrumentFunction(SgFunctionDefinition* node, std::
 																			 PreprocessingInfo::before);
 
 		handleReturnStatements(body, identifier);
+		if(Utility::ASTHelper::voidFunctionEndsWithoutReturn(node)){
+			anchor = appendAnchor(body);
+			SageInterface::attachArbitraryText(anchor, generateRegionEndMacro(handleName), PreprocessingInfo::before);
+		}
 	}
 }
 
