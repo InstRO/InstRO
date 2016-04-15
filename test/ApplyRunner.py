@@ -15,9 +15,10 @@ cmdParser = argparse.ArgumentParser(description='Runs the test instrumentor exec
 cmdParser.add_argument('src', type=str, help="/path/to/instro/repo")
 cmdParser.add_argument('build', type=str, help="/path/to/instro/repo")
 cmdParser.add_argument('compilerIndication', type=str, help="Which compiler is running? [rose/clang]")
+cmdParser.add_argument('optionals', nargs='*', default=[])
 
 # This is the list of test programs which should be applied.
-testPrograms = ["ConstructHierarchySelectionTest", "IdentifierSelectorTest", "ConstructElevatorTest", "BooleanCompoundSelectorTest", "CallpathSelectorTest", "UniqueCallpathTransformerTest", "DefaultInstrumentationAdapterTest", "ScorepRegionAdapterTest"]
+testPrograms = ["ConstructHierarchySelectionTest", "IdentifierSelectorTest", "ConstructElevatorTest", "BooleanCompoundSelectorTest", "CallpathSelectorTest", "UniqueCallpathTransformerTest", "DefaultInstrumentationAdapterTest"]
 
 # The list of targets is read from a targets.lst which resides in a test/input/BinaryName directory
 def readTargetFileSpecification(tInstrumentor, directory):
@@ -46,10 +47,10 @@ def runTest(k, arguments, binary, inputDirectory):
 	if binary == 'ScorepRegionAdapterTest':
 		roseExtraArg += ' -rose:skipfinalCompileStep'
   	
-	os.environ['INSTRO_TEST_INPUT_FILENAME'] = inputDirectory + '/' + binary + '/' + specFile
 	invocationString = '../' + binary + ' '
 	
 	if arguments.compilerIndication == 'rose':
+		# We add the necessary location infos (is actually still necessary?)
 		if os.path.isabs(arguments.src):
 			roseExtraArg += ' --instro-include=' + arguments.src + '/support'
 		else:
@@ -62,6 +63,7 @@ def runTest(k, arguments, binary, inputDirectory):
 		# we need to add the "--" to the invocation as we do not have JSON compilation databases
 		invocationString += ' --'
             
+	os.environ['INSTRO_TEST_INPUT_FILENAME'] = inputDirectory + '/' + binary + '/' + specFile
 	toErr("Running\n" + binary + " " + srcFile)
 	if False:
 		toErr("Detailed invocation info: " + invocationString)
@@ -139,6 +141,12 @@ def runTestBinary(arguments, binary, inputDirectory):
 
 # Runs each TestInstrumentor on the given target list
 def runApply(arguments):
+
+	# Depending on the additional information, add tests
+	if 'scorep' in arguments.optionals:
+		print('Adding ScorepRegionAdapterTest to the list of tests to run')
+		testPrograms.append('ScorepRegionAdapterTest')
+
 	baseDir = os.getcwd()[0:os.getcwd().rfind('/')]
 
 	inputDirectory = arguments.src + "/test/input"

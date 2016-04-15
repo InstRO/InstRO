@@ -45,6 +45,8 @@ DEFAULT_INSTRO_TEST_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
 DEFAULT_INSTRO_TEST_LDADD=libInstRO_test.la $(top_builddir)/lib/libInstRO_core.la @BOOST_LINK_LIBRARIES@
 
+# The variable is used to pass a list of optional parameters/information to the runner script
+OPTIONALS_LIST=''
 
 bin_PROGRAMS= \
 	MatcherUnitTest
@@ -63,6 +65,8 @@ bin_PROGRAMS+= \
 if WITHSCOREP
 bin_PROGRAMS+= \
 	ScorepRegionAdapterTest
+
+OPTIONALS_LIST+='scorep'
 endif
 
 endif
@@ -179,6 +183,6 @@ endif
 # In order to run 'make check'
 check:
 	./MatcherUnitTest
-	python $(top_srcdir)/test/ApplyRunner.py $(top_srcdir) $(top_builddir) $(INSTRO_COMPILER_INDICATION)
+	python $(top_srcdir)/test/ApplyRunner.py $(top_srcdir) $(top_builddir) $(INSTRO_COMPILER_INDICATION) $(OPTIONALS_LIST)
 
 
