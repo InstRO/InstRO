@@ -19,7 +19,6 @@ class RosePassFactory;
 class RoseInstrumentor : public Instrumentor {
  public:
 	RoseInstrumentor(int argc, char **argv) : passFactory(nullptr) {
-
 		InstRO::Utility::RoseCLIPreparation prepStrat(&argc, &argv);
 		std::vector<std::string> argVec = prepStrat.getCommandLine();
 
@@ -46,9 +45,11 @@ class RoseInstrumentor : public Instrumentor {
 	void apply() override {
 		passManager->execute();
 		project->unparse();
-		int err = project->compileOutput();
-		if (err) {
-			throw std::string("There was an error compiling the unparsed sources");
+		if (!project->get_skipfinalCompileStep()) {
+			int err = project->compileOutput();
+			if (err) {
+				throw std::string("There was an error compiling the unparsed sources");
+			}
 		}
 	}
 

@@ -4,6 +4,7 @@ import os
 import subprocess
 import argparse
 import shutil
+import time
 from multiprocessing import Pool
 
 
@@ -34,10 +35,16 @@ def runTest(k, arguments, binary, inputDirectory):
 	outFile = binary + '_' + k + '.out'
 	src2srcOutFile = binary + '_' + srcFile
 
+	# Add flags we want to pass to rose only translators
 	roseExtraArg = ' --edg:no_warnings'
 	roseExtraArg += ' -rose:o ' + src2srcOutFile
 	roseExtraArg += ' --instro-library-path=../' + arguments.build + '/test/.libs'
 	roseExtraArg += ' --instro-library-name=InstRO_rtsupport'
+
+	# Add flags we want to pass to scorep/rose only translators
+	# Skip final compile step for scorep test, since we need to compile using scorep!
+	if binary == 'ScorepRegionAdapterTest':
+		roseExtraArg += ' -rose:skipfinalCompileStep'
   	
 	os.environ['INSTRO_TEST_INPUT_FILENAME'] = inputDirectory + '/' + binary + '/' + specFile
 	invocationString = '../' + binary + ' '
@@ -48,7 +55,6 @@ def runTest(k, arguments, binary, inputDirectory):
 		else:
 			roseExtraArg += ' --instro-include=../' + arguments.src + '/support'
 
-		roseExtraArg += ' -rose:o ' + src2srcOutFile
 		invocationString += roseExtraArg + ' ' + inputDirectory + '/' + srcFile + ' -o ' + outFile
 
 	elif arguments.compilerIndication == 'clang':
@@ -68,9 +74,27 @@ def runTest(k, arguments, binary, inputDirectory):
 		errCode = e.returncode
 		toErr('[Error] code ' + str(errCode) + ' Dumping STDOUT \n' + out + '\n' + e.output)
 
-	if errCode == 0 and binary == "DefaultInstrumentationAdapterTest":
+	# we have to compile the source that was translated manually, as we need to invoke
+	# scorep and pass the --user --nocompiler instrumentation flags.
+	if errCode == 0 and binary == 'ScorepRegionAdapterTest':
 		try:
-			out = subprocess.check_output('./'+outFile, shell=True)
+			scorepInvocStr = 'scorep --user --nocompiler g++ ' + src2srcOutFile + ' -o ' + outFile
+			out = subprocess.check_output(scorepInvocStr, shell=True)
+		except subprocess.CalledProcessError as e:
+			errCode = e.returncode
+			toErr('[Error] Not able to call ScoreP. Make sure is available in PATH')
+
+	if errCode == 0 and (binary == "DefaultInstrumentationAdapterTest" or binary == "ScorepRegionAdapterTest"):
+		# Scorep runtime prints errors to stderr, so we need to pipe it to stdout for this python command.
+		# It seems that, although errorneous, 0 is returned, thus we check output for Score-P errors
+		# and raise the exception by hand.
+		# The sleep is to get around potential timestamp problems, when the test runner tries to delete a
+		# score-p directory, while score-p still copies the experiment data.
+		try:
+			out = subprocess.check_output('./'+outFile, stderr=subprocess.STDOUT, shell=True)
+			time.sleep(1.0)
+			if out.find('[Score-P]') != -1:
+				raise subprocess.CalledProcessError(-1, 'running ' + outFile, out)
 		except subprocess.CalledProcessError as e:
 			errCode = e.returncode
 			toErr("[Error] Problem when running binary: " + e.output)
