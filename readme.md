@@ -42,7 +42,7 @@ Install the required dependencies. We highly recommend to use our [InstRO/InstRO
 $ ./make-config
 >> generates the configure script
 $ ./configure --with-boost=/PATH/TO/BOOST/BASE --with-rose=/PATH/TO/ROSE/BASE \
-  [--with-rapidjson=/PATH/TO/RAPIDJSON/BASE] [--enable-examples] [--prefix=path/to/where/install]
+  [--with-rapidjson=/PATH/TO/RAPIDJSON/BASE] [--enable-examples] [--prefix=path/to/where/install][--with-scorep=yes]
 >> generates the Makefiles
 $ make
 ```
@@ -62,6 +62,10 @@ $ make example-run
 ```
 
 The JSON configuration feature requires the optional flag `--with-rapidjson`.
+
+InstRO is able to instrument with a specialized Score-P adapter.
+If you are planning to use this functionality it is recommended to also enable the tests using `--with-scorep=yes`.
+InstRO assumes that scorep can be found in your `PATH` variable.
 
 ### Documentation
 Documentation may be generated from the source code and all readme files via [Doxygen](http://doxygen.org). Navigate into the `docs` subdirectory and type `make`:

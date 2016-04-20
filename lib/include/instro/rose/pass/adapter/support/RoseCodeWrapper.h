@@ -27,14 +27,10 @@ class RoseCodeWrapper {
  private:
 	SgProject* project;
 
-	std::set<SgSourceFile*> filesWithInclude;
-
 	void handleRelevantExits(SgScopeStatement* scope, SgStatement* instrumentStmt);
 	void instrumentReturnStmt(SgScopeStatement* scope, SgReturnStmt* returnStmt, SgStatement* instrumentStmt);
 
-	bool insertHeaderIfSource(SgLocatedNode* node);
-	SgStatement* buildCallExpressionStatement(SgScopeStatement* context, std::string functionName,
-																						SgExprListExp* parameters);
+	SgStatement* buildCallExpressionStatement(SgScopeStatement* context, std::string functionName, SgExprListExp* parameters);
 	SgStatement* buildCallExpressionStatement(SgScopeStatement* context, std::string functionName, size_t id);
 };
 

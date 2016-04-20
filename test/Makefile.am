@@ -45,6 +45,8 @@ DEFAULT_INSTRO_TEST_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@
 
 DEFAULT_INSTRO_TEST_LDADD=libInstRO_test.la $(top_builddir)/lib/libInstRO_core.la @BOOST_LINK_LIBRARIES@
 
+# The variable is used to pass a list of optional parameters/information to the runner script
+OPTIONALS_LIST=''
 
 bin_PROGRAMS= \
 	MatcherUnitTest
@@ -58,6 +60,15 @@ bin_PROGRAMS+= \
 	CallpathSelectorTest \
 	DefaultInstrumentationAdapterTest \
 	UniqueCallpathTransformerTest
+
+# There should be some nicer way instead of those nested conditional things...
+if WITHSCOREP
+bin_PROGRAMS+= \
+	ScorepRegionAdapterTest
+
+OPTIONALS_LIST+='scorep'
+endif
+
 endif
 
 if USECLANG
@@ -69,7 +80,8 @@ endif
 MatcherUnitTest_SOURCES= \
 	./unittest/MatcherTest.cpp
 
-MatcherUnitTest_LDADD=$(top_builddir)/lib/libInstRO_core.la @BOOST_LINK_LIBRARIES@
+#MatcherUnitTest_LDADD=$(top_builddir)/lib/libInstRO_core.la @BOOST_LINK_LIBRARIES@
+MatcherUnitTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
 MatcherUnitTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
 # Tests depending on the compiler infrastructure
@@ -104,6 +116,7 @@ DefaultInstrumentationAdapterTest_SOURCES= \
 
 DefaultInstrumentationAdapterTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
 DefaultInstrumentationAdapterTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
+
 
 # Test
 CallpathSelectorTest_SOURCES= \
@@ -142,6 +155,18 @@ CallpathSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 UniqueCallpathTransformerTest_CPPFLAGS+=  $(INSTRO_WITH_ROSE_CPPFLAGS)
 UniqueCallpathTransformerTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
+
+if WITHSCOREP
+ScorepRegionAdapterTest_SOURCES= \
+	./ScorepRegionAdapterTest.cpp
+ScorepRegionAdapterTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
+ScorepRegionAdapterTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
+
+ScorepRegionAdapterTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
+ScorepRegionAdapterTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
+endif # WITHSCOREP
+
+
 INSTRO_COMPILER_INDICATION="rose"
 
 endif
@@ -151,13 +176,13 @@ if USECLANG
 INSTRO_COMPILER_INDICATION="clang"
 
 ConstructHierarchySelectionTest: libInstRO_test.la $(top_srcdir)/test/lib/ClangTestSupport.h $(top_srcdir)/test/ConstructHierarchySelectionTestMain.cpp $(top_builddir)/lib/.libs/libInstRO_clang.la $(top_builddir)/lib/.libs/libInstRO_core.la
-		$(CXX) $(LLVM_CXXFLAGS_FLAGS) -I$(LLVM_SRC_INCLUDE_PATH) -I$(CLANG_SRC_INCLUDE_PATH) -I$(BOOST_INCLUDEDIR) $(AM_CPPFLAGS) -DCDEBUG -I$(top_srcdir)/test $(top_srcdir)/test/ConstructHierarchySelectionTestMain.cpp .libs/libInstRO_test.a $(top_builddir)/lib/.libs/libInstRO_clang.a $(top_builddir)/lib/.libs/libInstRO_core.a $(CLANG_LIBS_LIST) $(LLVM_LDFLAGS) -o $@
+		$(CXX) $(LLVM_CXXFLAGS_FLAGS) -I$(LLVM_SRC_INCLUDE_PATH) -I$(CLANG_SRC_INCLUDE_PATH) -I$(BOOST_INCLUDEDIR) $(AM_CPPFLAGS) -DCDEBUG -I$(top_srcdir)/test $(top_srcdir)/test/ConstructHierarchySelectionTestMain.cpp .libs/libInstRO_test.a $(top_builddir)/lib/.libs/libInstRO_clang.a $(top_builddir)/lib/.libs/libInstRO_core.a $(CLANG_LIBS_LIST) $(LLVM_LDFLAGS) @BOOST_LINK_LIBRARIES@ -o $@
 
 endif
 
 # In order to run 'make check'
 check:
 	./MatcherUnitTest
-	python $(top_srcdir)/test/ApplyRunner.py $(top_srcdir) $(top_builddir) $(INSTRO_COMPILER_INDICATION)
+	python $(top_srcdir)/test/ApplyRunner.py $(top_srcdir) $(top_builddir) $(INSTRO_COMPILER_INDICATION) $(OPTIONALS_LIST)
 
 

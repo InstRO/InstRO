@@ -19,7 +19,7 @@ cmdParser.add_argument('--llvm-install', type=str, dest='llvminstall', help="/pa
 cmdParser.add_argument('--rapidjson', type=str, dest='rapidjson', help="/path/to/rapidjson/repository")
 cmdParser.add_argument('--boost', type=str, dest='boost', help="/path/to/boost/installation")
 cmdParser.add_argument('--jobs', type=int, dest='numJobs', help='Option is forwarded to -j option of build system')
-
+cmdParser.add_argument('--scorep', type=bool, help='Whether --with-scorep=yes should be considered in building and testing')
 runnerLog = []
 
 def createAndCDToTempDir():
@@ -49,16 +49,19 @@ def buildWithConfigureLine(configLine, baseDir, numJobs):
         print('Running tests ... ')
         out = subprocess.check_output("make check -j" + str(numJobs), shell=True, stderr=FNULL)
         runnerLog.append(out)
-    except subprocess.CalledProcessError:
-        runnerLog.append('Tests failed \n')
+    except subprocess.CalledProcessError as e:
+			runnerLog.append('Tests failed: \n' + e.output)
 
     FNULL.close()
 
 def buildWithRose(arguments, baseDir):
     numBuilds = 1
+
     if arguments.rapidjson != None:
         numBuilds += 1
-    
+    if arguments.scorep != None:
+        numBuilds +=1
+
     numJobs = 24
     if arguments.numJobs != None:
         numJobs = arguments.numJobs
@@ -71,8 +74,10 @@ def buildWithRose(arguments, baseDir):
         configureLine += "--with-boost=" + arguments.boost + " "
         configureLine += "--enable-examples "
 
-        if arguments.rapidjson != None and i == 1:
-            configureLine += "--with-rapidjson=" + arguments.rapidjson + " "
+        if arguments.rapidjson != None and i >= 1:
+					configureLine += "--with-rapidjson=" + arguments.rapidjson + " "
+        if arguments.scorep != None and i >= 2:
+					configureLine += ' --with-scorep=yes'
 
         buildWithConfigureLine(configureLine, baseDir, numJobs)
 

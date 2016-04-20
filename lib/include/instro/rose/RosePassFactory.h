@@ -24,6 +24,8 @@ class RosePassFactory : public InstRO::PassFactory {
 
 	/* ROSE ONLY */
 
+	InstRO::Pass* createScorepRegionInstrumentationAdapter(InstRO::Pass *input);
+
 	// RoseUniqueCallpathTransformer
 	InstRO::Pass* createRoseUniqueCallpathTransformer(Pass* input);
 	InstRO::Pass* createRoseUniqueCallpathTransformer(Pass* input, Pass* root, Pass* active);

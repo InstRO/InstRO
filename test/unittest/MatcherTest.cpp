@@ -27,14 +27,14 @@ void printSummary(){
 	}
 }
 
-bool hasPassed(){
-	bool passed(true);
+int numTestErrors(){
+	int testErrors = 0;
 	for(auto test : testcases){
 		if (!test.second) {
-			passed = false;
+			testErrors++;
 		}
 	}
-	return false;
+	return testErrors;
 }
 
 
@@ -87,5 +87,5 @@ int main(int argc, char **argv) {
 	TEST(foo21, m.isMatch("f o o ", "#f#"), true);
 
 	printSummary();
-	return hasPassed();
+	return numTestErrors();
 }

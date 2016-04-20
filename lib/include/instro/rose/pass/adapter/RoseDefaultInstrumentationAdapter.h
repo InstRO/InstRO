@@ -3,6 +3,7 @@
 
 #include "instro/pass/adapter/DefaultInstrumentationAdapter.h"
 #include "instro/rose/pass/adapter/support/RoseCodeWrapper.h"
+#include "instro/rose/pass/adapter/support/RosePostOrderInstrumentationAdapter.h"
 #include "instro/rose/core/RoseConstructSet.h"
 
 #include <rose.h>
@@ -14,14 +15,12 @@ namespace Adapter {
 /**
  * \author Roman Ness
  */
-class RoseDefaultInstrumentationAdapter : public InstRO::Adapter::DefaultInstrumentationAdapter,
-																					public AstSimpleProcessing {
+class RoseDefaultInstrumentationAdapter : public Support::RosePostOrderInstrumentationAdapter {
  public:
 	RoseDefaultInstrumentationAdapter(SgProject* project)
-			: DefaultInstrumentationAdapter(), wrapper(project), project(project) {}
+			: RosePostOrderInstrumentationAdapter(project), wrapper(project) {}
 	virtual ~RoseDefaultInstrumentationAdapter() {}
 
-	void execute() override;
 
  protected:
 	void instrumentFunction(const std::shared_ptr<InstRO::Core::Construct> construct) override;
@@ -31,14 +30,8 @@ class RoseDefaultInstrumentationAdapter : public InstRO::Adapter::DefaultInstrum
 	void instrumentStatement(const std::shared_ptr<InstRO::Core::Construct> construct) override;
 	void instrumentExpression(const std::shared_ptr<InstRO::Core::Construct> construct) override;
 
-	void visit(SgNode* astNode);
-	void instrument(std::shared_ptr<InstRO::Core::Construct> construct);
-
  private:
 	Support::RoseCodeWrapper wrapper;
-	SgProject* project;
-
-	std::map<SgNode*, std::shared_ptr<InstRO::Core::Construct> > sgNodesToInstrument;
 
 	void instrumentAsStatement(const std::shared_ptr<InstRO::Core::Construct> construct, std::string namePostfix);
 };

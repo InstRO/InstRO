@@ -2,7 +2,10 @@
 
 #include "instro/rose/pass/adapter/RoseStrategyBasedAdapter.h"
 #include "instro/rose/pass/adapter/RoseDefaultInstrumentationAdapter.h"
+#include "instro/rose/pass/adapter/RoseScorepRegionInstrumentationAdapter.h"
 #include "instro/rose/pass/transformer/RoseUniqueCallpathTransformer.h"
+
+#include "instro/utility/Environment.h"
 
 #include <string>
 #include <vector>
@@ -19,6 +22,36 @@ Pass* RosePassFactory::createDefaultInstrumentationAdapter(InstRO::Pass* input) 
 }
 
 /* ROSE ONLY */
+
+InstRO::Pass* RosePassFactory::createScorepRegionInstrumentationAdapter(InstRO::Pass *input){
+	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseScorepRegionInstrumentationAdapter(project),
+													 InstRO::Core::ChannelConfiguration(input),
+													 "InstRO::Rose::Adapter::RoseScorepRegionInstrumentationAdapter");
+
+	// we need to adjust the commandline...
+	auto ret = InstRO::Utility::getScorepIncludeFlags();
+
+	auto pos = ret.find(" ");
+	auto first = ret.substr(0, pos);
+	auto second = ret.substr(pos+1, ret.size() - (pos+2));
+	
+	auto sgStrList = project->get_originalCommandLineArgumentList();
+
+	std::vector<std::string> myArgv;
+	myArgv.push_back(sgStrList[0]);
+	myArgv.push_back(first);
+	myArgv.push_back(second);
+
+	for(int i = 1; i < sgStrList.size(); ++i){
+		myArgv.push_back(sgStrList[i]);
+	}
+
+	project->processCommandLine(myArgv);
+	project->parse();
+	
+	passManager->registerPass(newPass);
+	return newPass;
+}
 
 InstRO::Pass* RosePassFactory::createRoseMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass* pass) {
 	auto initializer = std::make_shared<InstRO::Rose::Adapter::StrategyBasedAdapterSupport::ScorePInitializer>();

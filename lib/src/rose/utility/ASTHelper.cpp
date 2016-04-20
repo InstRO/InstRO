@@ -137,6 +137,12 @@ std::string ASTHelper::getFunctionSignature(SgFunctionDefinition* funcDef) {
 	return ss.str();
 }
 
+bool ASTHelper::voidFunctionEndsWithoutReturn(SgFunctionDefinition* fDef) {
+	auto fDec = fDef->get_declaration();
+	auto fType = fDec->get_type();
+	return isSgTypeVoid(fType->get_return_type()) != nullptr;
+}
+
 bool ASTHelper::isContainedInTemplateInstantiation(SgNode* node) {
 	SgTemplateInstantiationFunctionDecl* templFuncDecl =
 			SageInterface::getEnclosingNode<SgTemplateInstantiationFunctionDecl>(node, true);

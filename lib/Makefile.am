@@ -116,6 +116,7 @@ ROSE_HFILES= \
 ./include/instro/rose/utility/FunctionRenamer.h \
 ./include/instro/rose/utility/ScopeStackGuard.hpp \
 ./include/instro/rose/utility/ASTHelper.h \
+./include/instro/rose/utility/ASTTransformer.h \
 ./include/instro/rose/pass/adapter/RoseStrategyBasedAdapter.h \
 ./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionHelper.h \
 ./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionPointSelector.h \
@@ -127,7 +128,10 @@ ROSE_HFILES= \
 ./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/ToolInitializer.h \
 ./include/instro/rose/pass/adapter/StrategyBasedAdapterSupport/instrobuilder.h \
 ./include/instro/rose/pass/adapter/RoseDefaultInstrumentationAdapter.h \
+./include/instro/rose/pass/adapter/RoseScorepRegionInstrumentationAdapter.h \
 ./include/instro/rose/pass/adapter/support/RoseCodeWrapper.h \
+./include/instro/rose/pass/adapter/support/RoseScorepCodeWrapper.h \
+./include/instro/rose/pass/adapter/support/RosePostOrderInstrumentationAdapter.h \
 ./include/instro/rose/pass/transformer/RoseUniqueCallpathTransformer.h \
 ./include/instro/rose/pass/transformer/RoseFunctionWrapper.h
 
@@ -139,6 +143,7 @@ ROSE_SFILES= \
 ./src/rose/tooling/RoseConstructTraitInterface.cpp \
 ./src/rose/utility/FunctionRenamer.cpp \
 ./src/rose/utility/ASTHelper.cpp \
+./src/rose/utility/ASTTransformer.cpp \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionHelper.cpp \
 ./src/rose/pass/adapter/RoseStrategyBasedAdapter.cpp \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/CodeInsertionPointSelector.cpp \
@@ -150,7 +155,10 @@ ROSE_SFILES= \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/ToolInitializer.cpp \
 ./src/rose/pass/adapter/StrategyBasedAdapterSupport/instrobuilder.cpp \
 ./src/rose/pass/adapter/RoseDefaultInstrumentationAdapter.cpp \
+./src/rose/pass/adapter/RoseScorepRegionInstrumentationAdapter.cpp \
 ./src/rose/pass/adapter/support/RoseCodeWrapper.cpp \
+./src/rose/pass/adapter/support/RoseScorepCodeWrapper.cpp \
+./src/rose/pass/adapter/support/RosePostOrderInstrumentationAdapter.cpp \
 ./src/rose/pass/transformer/RoseUniqueCallpathTransformer.cpp \
 ./src/rose/pass/transformer/RoseFunctionWrapper.cpp
 

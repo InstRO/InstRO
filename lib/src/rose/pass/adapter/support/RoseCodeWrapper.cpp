@@ -1,6 +1,7 @@
 #include "instro/rose/pass/adapter/support/RoseCodeWrapper.h"
 
 #include "instro/rose/utility/ASTHelper.h"
+#include "instro/rose/utility/ASTTransformer.h"
 #include "instro/utility/Logger.h"
 
 namespace InstRO {
@@ -9,7 +10,8 @@ namespace Adapter {
 namespace Support {
 
 void RoseCodeWrapper::wrapStatement(SgStatement* stmt, std::string postfix, size_t id) {
-	if (insertHeaderIfSource(stmt)) {
+	auto& helper = Utility::ASTTransformation::HeaderIncludeHelper::getInstance();
+	if (helper.insertHeaderIfSource("InstROMeasurementInterface.h", stmt)) {
 		auto functionScope = SageInterface::getScope(stmt);
 		SageInterface::insertStatementBefore(
 				stmt, buildCallExpressionStatement(functionScope, std::string("__instro_start_") + postfix, id));
@@ -25,14 +27,16 @@ void RoseCodeWrapper::wrapStatement(SgStatement* stmt, std::string postfix, size
 }
 
 void RoseCodeWrapper::wrapExpression(SgExpression* expr, size_t id) {
-	if (insertHeaderIfSource(expr)) {
+	auto& helper = Utility::ASTTransformation::HeaderIncludeHelper::getInstance();
+	if (helper.insertHeaderIfSource("InstROMeasurementInterface.h", expr)) {
 	}
 	// TODO implement me. Wrap expression in a function call. Instrument function.
 	logIt(ERROR) << "RoseCodeWrapper: wrapExpression() not implemented." << std::endl;
 }
 
 void RoseCodeWrapper::instrumentFunction(SgFunctionDefinition* function, size_t id) {
-	if (insertHeaderIfSource(function)) {
+	auto& helper = Utility::ASTTransformation::HeaderIncludeHelper::getInstance();
+	if (helper.insertHeaderIfSource("InstROMeasurementInterface.h", function)) {
 		// start
 		auto voidPointer = SageBuilder::buildCastExp(SageBuilder::buildIntVal(0),
 																								 SageBuilder::buildPointerType(SageBuilder::buildVoidType()));
@@ -49,7 +53,8 @@ void RoseCodeWrapper::instrumentFunction(SgFunctionDefinition* function, size_t 
 }
 
 void RoseCodeWrapper::instrumentScope(SgScopeStatement* scope, size_t id) {
-	if (insertHeaderIfSource(scope)) {
+	auto& helper = Utility::ASTTransformation::HeaderIncludeHelper::getInstance();
+	if (helper.insertHeaderIfSource("InstROMeasurementInterface.h", scope)) {
 		// scope start
 		SageInterface::prependStatement(buildCallExpressionStatement(scope, "__instro_start_scope", id), scope);
 
@@ -87,25 +92,6 @@ void RoseCodeWrapper::instrumentReturnStmt(SgScopeStatement* scope, SgReturnStmt
 	}
 
 	SageInterface::insertStatementBefore(returnStmt, SageInterface::copyStatement(instrumentStmt));
-}
-
-bool RoseCodeWrapper::insertHeaderIfSource(SgLocatedNode* node) {
-	SgSourceFile* sourceFile = isSgSourceFile(SageInterface::getEnclosingFileNode(node));
-	std::string fileInfoName = node->get_file_info()->get_filenameString();
-	std::string sourceFileName = sourceFile->getFileName();
-
-	// if the two names do not match, the construct originates from an include
-	if (sourceFile != nullptr && (fileInfoName == sourceFileName)) {
-		if (filesWithInclude.find(sourceFile) == filesWithInclude.end()) {
-			SageInterface::insertHeader("InstROMeasurementInterface.h", PreprocessingInfo::before, true,
-																	sourceFile->get_globalScope());
-			filesWithInclude.insert(sourceFile);
-			logIt(INFO) << "RoseCodeWrapper: inserted header in " << sourceFileName << std::endl;
-		}
-		return true;
-	}
-	logIt(WARN) << "RoseCodeWrapper: header instrumentation is not supported. " << fileInfoName << std::endl;
-	return false;
 }
 
 SgStatement* RoseCodeWrapper::buildCallExpressionStatement(SgScopeStatement* context, std::string functionName,

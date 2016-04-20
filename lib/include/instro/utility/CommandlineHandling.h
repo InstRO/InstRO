@@ -18,9 +18,9 @@ namespace bpo = boost::program_options;
  * supporting library (libimi).
  * Does not modify argc, argv (yet)
  */
-class GCCLikeCommandLinePreparationStrategy {
+class RoseCLIPreparation {
  public:
-	GCCLikeCommandLinePreparationStrategy(int *argc, char ***argv)
+	RoseCLIPreparation(int *argc, char ***argv)
 			: argcP(argc),
 				argvP(argv),
 				desc("InstRO options"),
