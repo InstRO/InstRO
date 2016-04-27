@@ -16,7 +16,7 @@ bin_PROGRAMS=
 if USEROSE
 bin_PROGRAMS += RoseInstrumentor ROSEInstROASTPrinter RoseCallpathToKernelInstrumentor
 
-if HAVERAPIDJSON
+if OPT_RAPIDJSON
 SUBDIRS= ConfigurationLoader
 endif
 

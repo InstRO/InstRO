@@ -11,7 +11,7 @@ SUBDIRS= \
 #
 # Build the examples
 #
-if BUILD_EXAMPLES
+if OPT_EXAMPLES
 SUBDIRS+= examples
 
 # Runs a showcase. Note that it will build InstRO if it wasn't already built. However, it will use only one process to do so.

@@ -62,7 +62,7 @@ bin_PROGRAMS+= \
 	UniqueCallpathTransformerTest
 
 # There should be some nicer way instead of those nested conditional things...
-if WITHSCOREP
+if OPT_SCOREP
 bin_PROGRAMS+= \
 	ScorepRegionAdapterTest
 
@@ -156,7 +156,7 @@ UniqueCallpathTransformerTest_CPPFLAGS+=  $(INSTRO_WITH_ROSE_CPPFLAGS)
 UniqueCallpathTransformerTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
 
-if WITHSCOREP
+if OPT_SCOREP
 ScorepRegionAdapterTest_SOURCES= \
 	./ScorepRegionAdapterTest.cpp
 ScorepRegionAdapterTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
@@ -164,7 +164,7 @@ ScorepRegionAdapterTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
 ScorepRegionAdapterTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 ScorepRegionAdapterTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
-endif # WITHSCOREP
+endif # OPT_SCOREP
 
 
 INSTRO_COMPILER_INDICATION="rose"

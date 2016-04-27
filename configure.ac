@@ -104,7 +104,7 @@ AC_ARG_ENABLE(examples,
 						no) ;;
 			esac],[enable_examples=no])
 
-AM_CONDITIONAL(BUILD_EXAMPLES, [test x"$enable_examples" = x"yes"])
+AM_CONDITIONAL(OPT_EXAMPLES, [test x"$enable_examples" = x"yes"])
 
 # -------------------------------
 # 2.1) add ROSE
@@ -113,6 +113,7 @@ AM_CONDITIONAL(BUILD_EXAMPLES, [test x"$enable_examples" = x"yes"])
 AM_CHECK_ROSE
 AC_MSG_NOTICE(["Rose libs at $ROSE_LIBDIR"])
 AC_MSG_NOTICE(["Rose includes at $ROSE_INCLUDEDIR"])
+AM_CONDITIONAL(USEROSE, test x"$with_rose" != xno)
 
 # ---------------------------
 # 2.2) Add LLVM/Clang toolchain
@@ -123,17 +124,17 @@ AC_MSG_NOTICE(["Rose includes at $ROSE_INCLUDEDIR"])
 AM_CHECK_CLANG
 AC_MSG_NOTICE(["Clang Libs: $CLANG_LIBS_LIST"])
 AC_MSG_NOTICE(["LLVM install path has been set to $LLVM_INSTALL_PATH"])
+AM_CONDITIONAL(USECLANG, test x"$with_llvm_src" != xno)
 
 # ------
 # Score P installation
 # ------
-AC_ARG_WITH([scorep], 
-						[AS_HELP_STRING([--with-scorep@<:@=ARG@:>@], 
-						[Path to the Score-P installation @<:@default=no@:>@])],
-						[], [with_scorep=no])
+AC_ARG_ENABLE([scorep], 
+						[AS_HELP_STRING([--enable-scorep@<:@=ARG@:>@], 
+						[Whether Score-P support should be included and tested. @<:@default=no@:>@])],
+						[], [enable_scorep=no])
 
-AM_CONDITIONAL(WITHSCOREP, test x"$with_scorep" != xno)
-AC_SUBST(WITHSCOREP)
+AM_CONDITIONAL(OPT_SCOREP, test x"$enable_scorep" != xno)
 
 # -------------------------------
 # 4) Checks for libraries.
@@ -164,9 +165,9 @@ AC_SUBST(BOOST_LIBDIR)
 # -------------------------------
 AM_CHECK_RAPIDJSON
 
-AM_CONDITIONAL(USEROSE, test x"$with_rose" != xno)
-AM_CONDITIONAL(USECLANG, test x"$with_llvm_src" != xno)
 
+
+# Set variables which are used in config.h.in
 AC_SUBST(CONFIG_DISABLEEXCEPTIONS, [$found_llvm])
 AC_SUBST(CONFIG_USE_ROSE, [$found_rose])
 AC_SUBST(CONFIG_USE_CLANG, [$found_llvm])
@@ -223,7 +224,7 @@ AC_CONFIG_FILES([Makefile
 	])
 
 # Build the shipped examples conditionally
-AM_COND_IF([BUILD_EXAMPLES],[
+AM_COND_IF([OPT_EXAMPLES],[
 	AC_CONFIG_FILES([
 			examples/Makefile
 			examples/ConfigurationLoader/Makefile

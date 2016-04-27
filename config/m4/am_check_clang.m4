@@ -31,7 +31,7 @@ if test x"$with_llvm_install" != xno ; then
 	LLVM_INSTALL_INCLUDE_PATH=$LLVM_INSTALL_PATH/include
 
 	# XXX This might go away
-	LLVM_LIB_PATH=$LLVM_INSTALL_PATH/lib
+#	LLVM_LIB_PATH=$LLVM_INSTALL_PATH/lib
 
 	# As we use the installation path, we can use the LLVM config tool. This gives us the correct directory for -L
 	# XXX This is deprecated

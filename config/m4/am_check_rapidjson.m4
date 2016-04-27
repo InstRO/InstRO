@@ -20,7 +20,7 @@ AS_IF([test "x$with_rapidjson" != xcheck -a $found_rapidjson = 0],
 [AC_MSG_FAILURE([--with-rapidjson was given, but test for the header file failed])])
 ])
 
-AM_CONDITIONAL(HAVERAPIDJSON, test x"$with_rapidjson" != xno -a $found_rapidjson = 1)
+AM_CONDITIONAL(OPT_RAPIDJSON, test x"$with_rapidjson" != xno -a $found_rapidjson = 1)
 AC_SUBST(RAPIDJSON_INCLUDEDIR)
 ])
 

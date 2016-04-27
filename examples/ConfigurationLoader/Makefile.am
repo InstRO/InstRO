@@ -12,7 +12,7 @@ AM_CXXFLAGS += -O2
 endif
 
 
-if HAVERAPIDJSON
+if OPT_RAPIDJSON
 bin_PROGRAMS = ConfigInstrumentor
 endif
 

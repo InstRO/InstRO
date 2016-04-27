@@ -163,7 +163,7 @@ ROSE_SFILES= \
 ./src/rose/pass/transformer/RoseFunctionWrapper.cpp
 
 
-if HAVERAPIDJSON
+if OPT_RAPIDJSON
 CORE_HFILES += ./include/instro/utility/ConfigurationLoader.h
 CORE_SFILES += ./src/support/ConfigurationLoader.cpp
 ROSE_SFILES += ./src/rose/utility/RoseConfigurationPassRegistry.cpp
@@ -205,7 +205,7 @@ libInstRO_clang_la_CPPFLAGS=$(AM_CPPFLAGS) $(CPPFLAGS) -I@BOOST_INCLUDEDIR@ @LLV
 libInstRO_clang_la_LDFLAGS=@CLANG_LIBS_LIST@ @LLVM_LDFLAGS@
 
 
-if HAVERAPIDJSON
+if OPT_RAPIDJSON
 libInstRO_core_la_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
 libInstRO_clang_la_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
 libInstRO_rose_la_CPPFLAGS += -I@RAPIDJSON_INCLUDEDIR@
