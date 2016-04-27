@@ -8,6 +8,8 @@
 #include <set>
 #include <functional>	// std::less
 
+#include "instro/core/ConstructTraitType.h"
+
 namespace InstRO {
 namespace Core {
 class Construct;
@@ -75,32 +77,6 @@ class ReadOnlyConstructSetCompilerInterface {
 
 namespace Core {
 
-enum class ConstructTraitType {
-	CTNoTraits = 0,	// XXX how to avoid this?
-	CTMin = 1,
-	// Please do not use fragments. They may become deprecated
-	CTFragment = 2,
-	// Any expression with observable behavior
-	CTExpression = 3,
-	CTStatement = 4,
-	// separate Loop, Conditional, Scope and Simple Statements
-	CTLoopStatement = 5,
-	CTConditionalStatement = 6,
-	CTScopeStatement = 7,
-	CTSimpleStatement = 8,
-	// a statement with observable behavior. No "pure" declarations, namespaces, classes, etc.
-	// Wrappable statements
-	CTWrappableStatement = 9,
-	CTFunction = 10,
-	CTFileScope = 11,
-	CTGlobalScope = 12,
-	CTMax = 13
-};
-
-
-std::string constructLevelToString(ConstructTraitType type);
-std::string constructLevelToStringShort(ConstructTraitType type);
-std::string operator+(const std::string& lhs, const ConstructTraitType& type);
 
 class ConstructTrait {
  public:
@@ -132,20 +108,20 @@ class ConstructTrait {
 
 	std::string toString() const {
 		if (cts.empty()) {
-			return InstRO::Core::constructLevelToString(ConstructTraitType::CTNoTraits);
+			return InstRO::Core::toString(ConstructTraitType::CTNoTraits);
 		}
 
 		std::stringstream ss;
 		ss << "[";
 		for (auto ct : cts) {
-			ss << InstRO::Core::constructLevelToString(ct) << " ";
+			ss << InstRO::Core::toString(ct) << " ";
 		}
 		ss << "]";
 		return ss.str();
 	}
 	std::string toStringShort() const {
 		if (cts.empty()) {
-			return InstRO::Core::constructLevelToString(ConstructTraitType::CTNoTraits);
+			return InstRO::Core::constructLevelToStringShort(ConstructTraitType::CTNoTraits);
 		}
 
 		std::stringstream ss;

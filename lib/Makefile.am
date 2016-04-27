@@ -28,6 +28,7 @@ CORE_HFILES= \
 ./include/instro/core/PassImplementation.h \
 ./include/instro/core/ChannelConfiguration.h \
 ./include/instro/core/Singleton.h \
+./include/instro/core/ConstructTraitType.h \
 ./include/instro/tooling/IdentifierProvider.h \
 ./include/instro/tooling/AnalysisInterface.h \
 ./include/instro/tooling/ConstructElevator.h \
@@ -57,6 +58,7 @@ CORE_SFILES= \
 ./src/core/PassImplementation.cpp \
 ./src/core/SimplePassManager.cpp \
 ./src/core/Singleton.cpp \
+./src/core/ConstructTraitType.cpp \
 ./src/tooling/NamedConstructAccess.cpp \
 ./src/tooling/ConstructElevator.cpp \
 ./src/tooling/ExtendedCallGraph.cpp \

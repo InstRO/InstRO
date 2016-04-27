@@ -210,33 +210,7 @@ InstRO::Core::ConstructTraitType ConfigurationParsingContext::getConstructTraitT
 			}
 		} else if (cttValue.IsString()) {
 			std::string cttString = cttValue.GetString();
-			if (cttString == "min") {
-				return InstRO::Core::ConstructTraitType::CTMin;
-			} else if (cttString == "expression") {
-				return InstRO::Core::ConstructTraitType::CTExpression;
-			} else if (cttString == "statement") {
-				return InstRO::Core::ConstructTraitType::CTStatement;
-			} else if (cttString == "loopStatement") {
-				return InstRO::Core::ConstructTraitType::CTLoopStatement;
-			} else if (cttString == "conditionalStatement") {
-				return InstRO::Core::ConstructTraitType::CTConditionalStatement;
-			} else if (cttString == "scopeStatement") {
-				return InstRO::Core::ConstructTraitType::CTScopeStatement;
-			} else if (cttString == "simpleStatement") {
-				return InstRO::Core::ConstructTraitType::CTSimpleStatement;
-			} else if (cttString == "wrappableStatement") {
-				return InstRO::Core::ConstructTraitType::CTWrappableStatement;
-			} else if (cttString == "function") {
-				return InstRO::Core::ConstructTraitType::CTFunction;
-			} else if (cttString == "fileScope") {
-				return InstRO::Core::ConstructTraitType::CTFileScope;
-			} else if (cttString == "globalScope") {
-				return InstRO::Core::ConstructTraitType::CTGlobalScope;
-			} else if (cttString == "max") {
-				return InstRO::Core::ConstructTraitType::CTMax;
-			} else {
-				InstRO::raise_exception(getId() + ": Unknown ConstructTraitType '" + cttString + "'");
-			}
+			return InstRO::Core::getConstructTraitTypeFromString(cttString);
 		} else {
 			InstRO::raise_exception(getId() + ": Cannot parse ConstructTraitType due to unknown value type");
 		}

@@ -7,7 +7,7 @@
 #include <memory>
 #include <initializer_list>
 
-#include "instro/core/ConstructSet.h"
+#include "instro/core/ConstructTraitType.h"
 #include "instro/core/PassFactory.h"
 
 #include "rapidjson/document.h"
