@@ -49,7 +49,8 @@ DEFAULT_INSTRO_TEST_LDADD=libInstRO_test.la $(top_builddir)/lib/libInstRO_core.l
 OPTIONALS_LIST=''
 
 bin_PROGRAMS= \
-	MatcherUnitTest
+	MatcherUnitTest \
+	ConstructTraitTypeTest
 
 if USEROSE
 bin_PROGRAMS+= \
@@ -80,9 +81,15 @@ endif
 MatcherUnitTest_SOURCES= \
 	./unittest/MatcherTest.cpp
 
-#MatcherUnitTest_LDADD=$(top_builddir)/lib/libInstRO_core.la @BOOST_LINK_LIBRARIES@
 MatcherUnitTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
-MatcherUnitTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
+MatcherUnitTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS) -I./unittest
+
+ConstructTraitTypeTest_SOURCES= \
+	./unittest/ConstructTraitTypeTest.cpp
+
+ConstructTraitTypeTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
+ConstructTraitTypeTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS) -I./unittest
+
 
 # Tests depending on the compiler infrastructure
 # This is the actual test executable
@@ -180,9 +187,15 @@ ConstructHierarchySelectionTest: libInstRO_test.la $(top_srcdir)/test/lib/ClangT
 
 endif
 
+
+
 # In order to run 'make check'
-check:
+#
+unittests: MatcherUnitTest ConstructTraitTypeTest
 	./MatcherUnitTest
+	./ConstructTraitTypeTest
+
+check: unittests
 	python $(top_srcdir)/test/ApplyRunner.py $(top_srcdir) $(top_builddir) $(INSTRO_COMPILER_INDICATION) $(OPTIONALS_LIST)
 
 

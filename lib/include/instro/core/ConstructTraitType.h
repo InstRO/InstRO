@@ -28,14 +28,24 @@ enum class ConstructTraitType {
 	CTMax = 13
 };
 
+/**
+ * Generates the Construct Traits name as a string
+ */
+std::string toString(const ConstructTraitType t);
+
+/**
+ * Parses the ConcstructTraits string representation and returns the respective enum class value
+ */
+ConstructTraitType getConstructTraitTypeFromString(std::string cttString);
+
+
+
+/**
+ * I'd suggest those are more for internal workk
+ */
 std::string constructLevelToString(ConstructTraitType type);
 std::string constructLevelToStringShort(ConstructTraitType type);
 std::string operator+(const std::string& lhs, const ConstructTraitType& type);
-
-
-std::string toString(const ConstructTraitType t);
-ConstructTraitType getConstructTraitTypeFromString(std::string cttString);
-
 }	// Core
 }	// InstRO
 
