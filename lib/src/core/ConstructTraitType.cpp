@@ -8,29 +8,29 @@ namespace Core {
 std::string toString(const ConstructTraitType t) { return constructLevelToString(t); }
 
 ConstructTraitType getConstructTraitTypeFromString(std::string cttString) {
-	if (cttString == "min") {
+	if (cttString == "Min") {
 		return InstRO::Core::ConstructTraitType::CTMin;
-	} else if (cttString == "expression") {
+	} else if (cttString == "Expression") {
 		return InstRO::Core::ConstructTraitType::CTExpression;
-	} else if (cttString == "statement") {
+	} else if (cttString == "Statement") {
 		return InstRO::Core::ConstructTraitType::CTStatement;
-	} else if (cttString == "loopStatement") {
+	} else if (cttString == "LoopStatement") {
 		return InstRO::Core::ConstructTraitType::CTLoopStatement;
-	} else if (cttString == "conditionalStatement") {
+	} else if (cttString == "ConditionalStatement") {
 		return InstRO::Core::ConstructTraitType::CTConditionalStatement;
-	} else if (cttString == "scopeStatement") {
+	} else if (cttString == "ScopeStatement") {
 		return InstRO::Core::ConstructTraitType::CTScopeStatement;
-	} else if (cttString == "simpleStatement") {
+	} else if (cttString == "SimpleStatement") {
 		return InstRO::Core::ConstructTraitType::CTSimpleStatement;
-	} else if (cttString == "wrappableStatement") {
+	} else if (cttString == "WrappableStatement") {
 		return InstRO::Core::ConstructTraitType::CTWrappableStatement;
-	} else if (cttString == "function") {
+	} else if (cttString == "Function") {
 		return InstRO::Core::ConstructTraitType::CTFunction;
-	} else if (cttString == "fileScope") {
+	} else if (cttString == "FileScope") {
 		return InstRO::Core::ConstructTraitType::CTFileScope;
-	} else if (cttString == "globalScope") {
+	} else if (cttString == "GlobalScope") {
 		return InstRO::Core::ConstructTraitType::CTGlobalScope;
-	} else if (cttString == "max") {
+	} else if (cttString == "Max") {
 		return InstRO::Core::ConstructTraitType::CTMax;
 	} else {
 		InstRO::raise_exception("InstRO::Core::getConstructTraitTypeFromString : Unknown ConstructTraitType '" + cttString + "'");

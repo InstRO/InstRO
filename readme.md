@@ -139,7 +139,7 @@ The following JSON is an example which marks occurences of `printf` and `exit` a
     "inputs":[
       "identifier"
     ],
-    "level":"fileScope"
+    "level":"FileScope"
   }
 ]
 ~~~
