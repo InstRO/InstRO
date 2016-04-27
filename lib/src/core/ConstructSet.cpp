@@ -287,25 +287,6 @@ size_t ReadOnlyConstructSetCompilerInterface::size() const { return csPtr->size(
 
 }	// End namespace InstRO
 
-InstRO::Core::ConstructTraitType& operator++(InstRO::Core::ConstructTraitType& f) {
-	InstRO::Core::ConstructLevelHelper::ConstructLevelHierarchy::raise(f);
-	return f;
-}
-
-InstRO::Core::ConstructTraitType& operator--(InstRO::Core::ConstructTraitType& f) {
-	InstRO::Core::ConstructLevelHelper::ConstructLevelHierarchy::lower(f);
-	return f;
-}
-
-InstRO::Core::ConstructTraitType& operator++(InstRO::Core::ConstructTraitType& f, int f2) {
-	InstRO::Core::ConstructLevelHelper::ConstructLevelHierarchy::raise(f);
-	return f;
-}
-
-InstRO::Core::ConstructTraitType& operator--(InstRO::Core::ConstructTraitType& f, int f2) {
-	InstRO::Core::ConstructLevelHelper::ConstructLevelHierarchy::lower(f);
-	return f;
-}
 
 std::ostream& operator<<(std::ostream& os, InstRO::Core::ConstructTraitType f) {
 	switch (f) {

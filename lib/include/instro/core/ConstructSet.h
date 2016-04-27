@@ -97,56 +97,6 @@ enum class ConstructTraitType {
 	CTMax = 13
 };
 
-// Derived from  "Advanced Enums  -  http://ideone.com/Htlg0G"
-namespace ConstructLevelHelper {
-template <typename E, E first>
-void raiseEnum(E& v) {
-	// If this is the last element in the construct level hierarchy, we can not raise anymore
-}
-
-template <typename E, E head, E next, E... tail>
-void raiseEnum(E& v) {
-	// if the current head matches, elevate to the next construct level
-	if (v == head)
-		v = next;
-	else
-		// check the next element in the list
-		raiseEnum<E, next, tail...>(v);
-}
-
-template <typename E, E first>
-void lowerEnum(E& v) {
-	// if the current construct level is the max level, lowing it means to go to the last element in the list
-}
-
-template <typename E, E head, E next, E... tail>
-void lowerEnum(E& v) {
-	if (v == next)
-		v = head;
-	else
-		lowerEnum<E, next, tail...>(v);
-}
-
-template <typename E, E min, E first, E second, E... values>
-struct ConstructTraitHierarchyTraverser {
-	static void raise(E& v) {
-		if (v == min)
-			v = first;
-		raiseEnum<E, min, first, second, values...>(v);
-	}
-	static void lower(E& v) { lowerEnum<E, min, first, second, values...>(v); }
-};
-
-/// Scalable way, C++11-ish
-typedef ConstructTraitHierarchyTraverser<
-		ConstructTraitType, ConstructTraitType::CTMin, ConstructTraitType::CTFragment, ConstructTraitType::CTExpression,
-		ConstructTraitType::CTStatement, ConstructTraitType::CTLoopStatement, ConstructTraitType::CTConditionalStatement,
-		ConstructTraitType::CTScopeStatement, ConstructTraitType::CTSimpleStatement,
-		// a statement with observable behavior. No "pure" declarations, namespaces, classes, etc.
-		// Wrappable statements
-		ConstructTraitType::CTWrappableStatement, ConstructTraitType::CTFunction, ConstructTraitType::CTFileScope,
-		ConstructTraitType::CTGlobalScope, ConstructTraitType::CTMax> ConstructLevelHierarchy;
-}
 
 std::string constructLevelToString(ConstructTraitType type);
 std::string constructLevelToStringShort(ConstructTraitType type);
