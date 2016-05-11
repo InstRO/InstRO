@@ -36,6 +36,10 @@ AM_CONFIG_HEADER([config.h])
 # -------------------------------
 # Checks for programs.
 # -------------------------------
+# request empty defaults for CFLAGS and CXXFLAGS (compiler flags are set in the respective makefiles depending on debugging)
+${CFLAGS=""}
+${CXXFLAGS=""}
+
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_CPP

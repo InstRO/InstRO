@@ -1,4 +1,4 @@
-#
+ACLOCAL_AMFLAGS=-I config/m4
 
 #
 # Build the library
