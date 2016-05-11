@@ -169,7 +169,7 @@ void RoseFunctionWrapper::wrapFunction(SgFunctionDeclaration* fDecl, const RoseN
 		if (defPrefix.empty() && wrapPrefix.empty()) {
 			logIt(WARN) << "Skipping node due to missing prefix for renaming: " << originalFunctionName << std::endl;
 			return;
-		} else {
+		} else if (definitionName != originalFunctionName.getString()) {
 			funcRenamer.renameFunctionDefinition(definitionName);
 			renamedFunctionDefinition = true;
 		}
@@ -306,7 +306,8 @@ std::string RoseFunctionWrapper::IdentityNameTransformer::operator()(const std::
 
 RoseMPIFunctionWrapper::RoseMPIFunctionWrapper() : RoseFunctionWrapper(PMPINameTransformer()) {}
 
-RoseMPIFunctionWrapper::RoseMPIFunctionWrapper(const std::string& definitionPrefix, const std::string& wrapperPrefix, bool useRenamingPass)
+RoseMPIFunctionWrapper::RoseMPIFunctionWrapper(const std::string& definitionPrefix, const std::string& wrapperPrefix,
+																							 bool useRenamingPass)
 		: RoseFunctionWrapper(PMPINameTransformer(), definitionPrefix, wrapperPrefix, useRenamingPass) {}
 
 std::string RoseMPIFunctionWrapper::PMPINameTransformer::operator()(const std::string& mpiName) {

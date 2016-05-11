@@ -35,10 +35,12 @@ RoseTransformer::RoseFunctionWrapper::NameTransformer getNameTransformer(const p
 	}
 }
 
-std::vector<std::string> getInputIdentifiers(const pt::ptree& testConfig) {
+std::vector<std::string> getIdentifiers(const pt::ptree& testConfig, const std::string& key) {
 	std::vector<std::string> identifiers;
-	for (const pt::ptree::value_type& v : testConfig.get_child("test.input")) {
-		identifiers.push_back(v.second.data());
+	if (testConfig.get_child_optional(key)) {
+		for (const pt::ptree::value_type& v : testConfig.get_child(key)) {
+			identifiers.push_back(v.second.data());
+		}
 	}
 	return identifiers;
 }
@@ -55,9 +57,12 @@ int main(int argc, char** argv) {
 	const std::string definitionPrefix = testConfig.get("test.definitionPrefix", std::string());
 	const std::string wrapperPrefix = testConfig.get("test.wrapperPrefix", std::string());
 
-	auto inputSelector = factory->createIdentifierMatcherSelector(getInputIdentifiers(testConfig));
-	auto functionWrapper = factory->createRoseFunctionWrapper(inputSelector, nullptr, getNameTransformer(testConfig),
-																														definitionPrefix, wrapperPrefix);
+	auto inputSelector = factory->createIdentifierMatcherSelector(getIdentifiers(testConfig, "test.input"));
+	auto renamingIdentifiers = getIdentifiers(testConfig, "test.renaming");
+	InstRO::Pass* renamingSelector =
+			renamingIdentifiers.empty() ? nullptr : factory->createIdentifierMatcherSelector(renamingIdentifiers);
+	auto functionWrapper = factory->createRoseFunctionWrapper(
+			inputSelector, renamingSelector, getNameTransformer(testConfig), definitionPrefix, wrapperPrefix);
 	auto functionWrapperExpressions =
 			factory->createConstructLoweringElevator(functionWrapper, InstRO::Core::ConstructTraitType::CTExpression);
 
