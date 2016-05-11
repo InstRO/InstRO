@@ -1,9 +1,9 @@
+#include "instro/pass/selector/ElevatorSelector.h"
+
 #include "instro/core/Instrumentor.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/core/Singleton.h"
 #include "instro/tooling/AnalysisInterface.h"
-
-#include "instro/pass/selector/ElevatorSelector.h"
 
 namespace InstRO {
 namespace Selector {
