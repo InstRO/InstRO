@@ -60,7 +60,8 @@ bin_PROGRAMS+= \
 	BooleanCompoundSelectorTest \
 	CallpathSelectorTest \
 	DefaultInstrumentationAdapterTest \
-	UniqueCallpathTransformerTest
+	UniqueCallpathTransformerTest \
+	FunctionWrapperTest
 
 # There should be some nicer way instead of those nested conditional things...
 if OPT_SCOREP
@@ -159,9 +160,12 @@ DefaultInstrumentationAdapterTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 CallpathSelectorTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 CallpathSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
-UniqueCallpathTransformerTest_CPPFLAGS+=  $(INSTRO_WITH_ROSE_CPPFLAGS)
+UniqueCallpathTransformerTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 UniqueCallpathTransformerTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
+FunctionWrapperTest_SOURCES=./FunctionWrapperTestMain.cpp
+FunctionWrapperTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD) $(INSTRO_WITH_ROSE_LDADD)
+FunctionWrapperTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS) $(INSTRO_WITH_ROSE_CPPFLAGS)
 
 if OPT_SCOREP
 ScorepRegionAdapterTest_SOURCES= \
