@@ -1,0 +1,9 @@
++FunctionWrapperTransformations
+foo.cpp:2:1--Function-::def_bar
+foo.cpp:4:1--Function-::def_foo
+transformation:0:0--Function-::bar
+transformation:0:0--Function-::foo
+
++FunctionWrapperTransformationExpressions
+transformation:0:0--Expression
+transformation:0:0--Expression
