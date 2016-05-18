@@ -183,7 +183,7 @@ if USECLANG
 INSTRO_COMPILER_INDICATION="clang"
 
 ConstructHierarchySelectionTest: libInstRO_test.la $(top_srcdir)/test/lib/ClangTestSupport.h $(top_srcdir)/test/ConstructHierarchySelectionTestMain.cpp $(top_builddir)/lib/.libs/libInstRO_clang.la $(top_builddir)/lib/.libs/libInstRO_core.la
-		$(CXX) $(LLVM_CXXFLAGS_FLAGS) -I$(LLVM_SRC_INCLUDE_PATH) -I$(CLANG_SRC_INCLUDE_PATH) -I$(BOOST_INCLUDEDIR) $(AM_CPPFLAGS) -DCDEBUG -I$(top_srcdir)/test $(top_srcdir)/test/ConstructHierarchySelectionTestMain.cpp .libs/libInstRO_test.a $(top_builddir)/lib/.libs/libInstRO_clang.a $(top_builddir)/lib/.libs/libInstRO_core.a $(CLANG_LIBS_LIST) $(LLVM_LDFLAGS) @BOOST_LINK_LIBRARIES@ -o $@
+		$(CXX) $(LLVM_CXXFLAGS_FLAGS) -I$(LLVM_SRC_INCLUDE_PATH) -I$(CLANG_SRC_INCLUDE_PATH) -I$(BOOST_INCLUDEDIR) $(AM_CPPFLAGS) -DCDEBUG -I$(top_srcdir)/test $(top_srcdir)/test/ConstructHierarchySelectionTestMain.cpp -L.libs -lInstRO_test -L$(top_builddir)/lib/.libs -lInstRO_clang -lInstRO_core $(CLANG_LIBS_LIST) $(LLVM_LDFLAGS) @BOOST_LINK_LIBRARIES@ -o $@
 
 endif
 

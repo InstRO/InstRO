@@ -33,7 +33,7 @@ Invoke the tests using `make check` in the toplevel directory.
 The different apply-tests are orchestrated by the Python script `ApplyRunner.py`, which takes care of invoking the TestInstrumentor-binaries on all input files.
 In order to add a TestInstrumentor the binary name needs to be added to the `testPrograms` list in the runner script.
 
-Right now, only selection testing is supported.
+At the moment (18 Mai 2016) 5 tests should fail for the ROSE implementation and 17 for the Clang implementation. Furthermore, the tests for the Clang implementation require static libraries due to linking issues with shared libraries.
 
 ### Selection tests
 
