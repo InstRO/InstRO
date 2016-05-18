@@ -13,6 +13,12 @@
 namespace RoseTransformer = InstRO::Rose::Transformer;
 namespace pt = boost::property_tree;
 
+// Test for the RoseFunctionWrapper transformer that examines the constructs selected by the transformer and their
+// expressions. For each test input file X.in a xml configuration file X.conf is expected to be available in the same
+// directory. This file is used to specify the operation mode of the transformer, e.g., the name transformer, definition
+// prefix, wrapper prefix, and the identifiers servering as input for the transformer and the optional renaming
+// selector.
+
 pt::ptree getConfig(const std::string& inFilename) {
 	boost::filesystem::path configFile = inFilename;
 	configFile.replace_extension("conf");
@@ -66,7 +72,8 @@ int main(int argc, char** argv) {
 	auto functionWrapperExpressions =
 			factory->createConstructLoweringElevator(functionWrapper, InstRO::Core::ConstructTraitType::CTExpression);
 
-#if 1
+#if 0
+	// debug output
 	factory->createConstructPrinterAdapter(functionWrapper);
 	factory->createConstructPrinterAdapter(functionWrapperExpressions);
 #endif

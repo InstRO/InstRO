@@ -83,13 +83,13 @@ MatcherUnitTest_SOURCES= \
 	./unittest/MatcherTest.cpp
 
 MatcherUnitTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
-MatcherUnitTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS) -I./unittest
+MatcherUnitTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS) -I./unittest
 
 ConstructTraitTypeTest_SOURCES= \
 	./unittest/ConstructTraitTypeTest.cpp
 
 ConstructTraitTypeTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
-ConstructTraitTypeTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS) -I./unittest
+ConstructTraitTypeTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS) -I./unittest
 
 
 # Tests depending on the compiler infrastructure
@@ -98,32 +98,32 @@ ConstructHierarchySelectionTest_SOURCES= \
 	./ConstructHierarchySelectionTestMain.cpp
 
 ConstructHierarchySelectionTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
-ConstructHierarchySelectionTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
+ConstructHierarchySelectionTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
 
 IdentifierSelectorTest_SOURCES= \
 	./IdentifierSelectorTest.cpp
 
 IdentifierSelectorTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
-IdentifierSelectorTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
+IdentifierSelectorTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
 ConstructElevatorTest_SOURCES= \
 	./ConstructElevatorSelectorTest.cpp
 
 ConstructElevatorTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
-ConstructElevatorTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
+ConstructElevatorTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
 BooleanCompoundSelectorTest_SOURCES= \
 	./BooleanCompoundSelectorTest.cpp
 
 BooleanCompoundSelectorTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
-BooleanCompoundSelectorTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
+BooleanCompoundSelectorTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
 DefaultInstrumentationAdapterTest_SOURCES= \
 	./DefaultInstrumentationAdapterTest.cpp
 
 DefaultInstrumentationAdapterTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
-DefaultInstrumentationAdapterTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
+DefaultInstrumentationAdapterTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
 
 # Test
@@ -131,11 +131,6 @@ CallpathSelectorTest_SOURCES= \
 	./CallpathSelectorTest.cpp
 CallpathSelectorTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
 CallpathSelectorTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS)
-
-
-UniqueCallpathTransformerTest_SOURCES=./UniqueCallpathTransformerTestMain.cpp
-UniqueCallpathTransformerTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
-UniqueCallpathTransformerTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
 if USEROSE
 
@@ -145,13 +140,13 @@ INSTRO_WITH_ROSE_LDADD= $(top_builddir)/lib/libInstRO_rose.la @ROSE_LINK_LIBRARI
 ConstructHierarchySelectionTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 ConstructHierarchySelectionTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
-IdentifierSelectorTest_CPPFLAGS+=  $(INSTRO_WITH_ROSE_CPPFLAGS)
+IdentifierSelectorTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 IdentifierSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
-ConstructElevatorTest_CPPFLAGS+=  $(INSTRO_WITH_ROSE_CPPFLAGS)
-ConstructElevatorTest_LDADD+=  $(INSTRO_WITH_ROSE_LDADD)
+ConstructElevatorTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
+ConstructElevatorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
-BooleanCompoundSelectorTest_CPPFLAGS+=  $(INSTRO_WITH_ROSE_CPPFLAGS)
+BooleanCompoundSelectorTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 BooleanCompoundSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
 DefaultInstrumentationAdapterTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
@@ -160,8 +155,9 @@ DefaultInstrumentationAdapterTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 CallpathSelectorTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 CallpathSelectorTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
 
-UniqueCallpathTransformerTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
-UniqueCallpathTransformerTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
+UniqueCallpathTransformerTest_SOURCES=./UniqueCallpathTransformerTestMain.cpp
+UniqueCallpathTransformerTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD) $(INSTRO_WITH_ROSE_LDADD)
+UniqueCallpathTransformerTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS) $(INSTRO_WITH_ROSE_CPPFLAGS)
 
 FunctionWrapperTest_SOURCES=./FunctionWrapperTestMain.cpp
 FunctionWrapperTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD) $(INSTRO_WITH_ROSE_LDADD)
@@ -171,7 +167,7 @@ if OPT_SCOREP
 ScorepRegionAdapterTest_SOURCES= \
 	./ScorepRegionAdapterTest.cpp
 ScorepRegionAdapterTest_LDADD=$(DEFAULT_INSTRO_TEST_LDADD)
-ScorepRegionAdapterTest_CPPFLAGS= $(DEFAULT_INSTRO_TEST_CPPFLAGS)
+ScorepRegionAdapterTest_CPPFLAGS=$(DEFAULT_INSTRO_TEST_CPPFLAGS)
 
 ScorepRegionAdapterTest_CPPFLAGS+= $(INSTRO_WITH_ROSE_CPPFLAGS)
 ScorepRegionAdapterTest_LDADD+= $(INSTRO_WITH_ROSE_LDADD)
