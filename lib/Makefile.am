@@ -73,7 +73,8 @@ CORE_SFILES= \
 ./src/pass/adapter/DefaultInstrumentationAdapter.cpp  \
 ./src/pass/adapter/ConstructPrinterAdapter.cpp \
 ./src/utility/Logger.cpp \
-./src/utility/Environment.cpp
+./src/utility/Environment.cpp \
+./src/utility/CommandlineHandling.cpp
 
 CLANG_HFILES= \
 ./include/instro/clang/pass/selector/ClangBlackWhitelistSelector.h \
