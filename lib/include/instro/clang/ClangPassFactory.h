@@ -5,7 +5,7 @@
 
 #include "clang/Tooling/Core/Replacement.h"
 
-#include "instro/core/PassFactory.h"
+#include "instro/PassFactory.h"
 #include "instro/core/PassManager.h"
 
 namespace clang {

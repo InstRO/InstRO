@@ -1,8 +1,8 @@
 #ifndef INSTRO_ROSE_ROSEPASSFACTORY_H
 #define INSTRO_ROSE_ROSEPASSFACTORY_H
 
-#include "instro/core/Pass.h"
-#include "instro/core/PassFactory.h"
+#include "instro/Pass.h"
+#include "instro/PassFactory.h"
 #include "instro/core/PassManager.h"
 #include "instro/rose/core/RosePassImplementation.h"
 #include "instro/rose/pass/transformer/RoseFunctionWrapper.h"

@@ -4,4 +4,4 @@
 -I/test/lib
 `$CLANG_INSTALL_PATH/bin/llvm-config --cxxflags`
 -I$LLVM_SOURCE
--I/shared/apps/boost/1.57.0/include
+-I$BOOST

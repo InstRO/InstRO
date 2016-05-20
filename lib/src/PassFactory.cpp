@@ -1,4 +1,5 @@
-#include "instro/core/PassFactory.h"
+#include "instro/PassFactory.h"
+#include "instro/Pass.h"
 
 #include "instro/pass/selector/BooleanCompoundSelector.h"
 #include "instro/pass/selector/IdentifierMatcherSelector.h"

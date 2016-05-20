@@ -1,7 +1,7 @@
 #include "../../../../include/instro/rose/pass/transformer/RoseUniqueCallpathTransformer.h"
 #include "instro/rose/utility/FunctionRenamer.h"
 
-#include "instro/core/Instrumentor.h"
+#include "instro/Instrumentor.h"
 #include "instro/core/Singleton.h"
 #include "instro/rose/core/RoseConstructSet.h"
 #include "instro/utility/Logger.h"

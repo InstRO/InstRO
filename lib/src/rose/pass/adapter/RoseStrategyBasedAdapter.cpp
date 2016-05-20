@@ -1,5 +1,5 @@
 #include <memory>	// Need shared PTR
-#include "instro/core/Pass.h"
+#include "instro/Pass.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/rose/core/RoseConstructSet.h"
 #include "instro/rose/pass/adapter/RoseStrategyBasedAdapter.h"

@@ -1,5 +1,5 @@
 #include "instro/core/Singleton.h"
-#include "instro/core/Instrumentor.h"
+#include "instro/Instrumentor.h"
 #include "instro/core/SimplePassManager.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/utility/Logger.h"

@@ -1,12 +1,13 @@
 #ifndef INSTRO_CORE_PASSFACTORY_H
 #define INSTRO_CORE_PASSFACTORY_H
 
-#include "instro/core/Pass.h"
 #include "instro/core/PassManager.h"
 
 #include <string>
 
 namespace InstRO {
+
+class Pass;
 
 /**
  * Defines a set of features that every InstRO Implementation should support.

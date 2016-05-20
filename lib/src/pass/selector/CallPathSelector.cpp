@@ -2,7 +2,7 @@
 
 #include "instro/pass/selector/CallPathSelector.h"
 
-#include "instro/core/Instrumentor.h"
+#include "instro/Instrumentor.h"
 #include "instro/core/Singleton.h"
 #include "instro/tooling/AnalysisInterface.h"
 

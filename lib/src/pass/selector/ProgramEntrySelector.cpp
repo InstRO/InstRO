@@ -1,6 +1,6 @@
 #include "instro/pass/selector/ProgramEntrySelector.h"
 
-#include "instro/core/Instrumentor.h"
+#include "instro/Instrumentor.h"
 #include "instro/core/Singleton.h"
 #include "instro/tooling/ConstructTraitInterface.h"
 #include "instro/tooling/NamedConstructAccess.h"

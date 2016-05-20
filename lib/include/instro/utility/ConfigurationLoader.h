@@ -8,7 +8,7 @@
 #include <initializer_list>
 
 #include "instro/core/ConstructTraitType.h"
-#include "instro/core/PassFactory.h"
+#include "instro/PassFactory.h"
 
 #include "rapidjson/document.h"
 

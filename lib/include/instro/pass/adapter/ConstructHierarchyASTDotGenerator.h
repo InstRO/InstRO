@@ -3,9 +3,9 @@
 
 #include <fstream>
 #include <string>
-#include "instro/core/Instrumentor.h"
+#include "instro/Instrumentor.h"
 #include "instro/core/Singleton.h"
-#include "instro/core/Pass.h"
+#include "instro/Pass.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/tooling/AnalysisInterface.h"
 

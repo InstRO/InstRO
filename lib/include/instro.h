@@ -3,9 +3,9 @@
  */
 #include "instro/config.h"
 
-#include "instro/core/Pass.h"
-#include "instro/core/PassFactory.h"
-#include "instro/core/Instrumentor.h"
+#include "instro/Pass.h"
+#include "instro/PassFactory.h"
+#include "instro/Instrumentor.h"
 
 #if INSTRO_USE_ROSE
 #include "instro/rose/core/RosePassImplementation.h"
@@ -17,3 +17,4 @@
 #include "instro/clang/ClangPassFactory.h"
 #include "instro/clang/ClangInstrumentor.h"
 #endif
+

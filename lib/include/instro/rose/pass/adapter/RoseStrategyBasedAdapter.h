@@ -3,7 +3,7 @@
 #include <memory>
 #include <utility>
 #include "include/instro/utility/MemoryManagement.h"
-#include "instro/core/Pass.h"
+#include "instro/Pass.h"
 #include "instro/rose/core/RosePassImplementation.h"
 
 #include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePLoopIterationStrategy.h"

@@ -10,7 +10,7 @@
 #include "instro/core/ConstructSet.h"
 #include "instro/core/PassManager.h"
 #include "instro/core/SimplePassManager.h"
-#include "instro/core/PassFactory.h"
+#include "instro/PassFactory.h"
 #include "instro/tooling/AnalysisInterface.h"
 
 namespace InstRO {

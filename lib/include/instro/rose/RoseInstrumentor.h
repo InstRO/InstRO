@@ -1,7 +1,7 @@
 #ifndef INSTRO_ROSE_INSTRUMENTOR_H
 #define INSTRO_ROSE_INSTRUMENTOR_H
 
-#include "instro/core/Instrumentor.h"
+#include "instro/Instrumentor.h"
 #include "instro/rose/RosePassFactory.h"
 #include "instro/rose/tooling/RoseAnalysisInterface.h"
 
@@ -31,6 +31,7 @@ class RoseInstrumentor : public Instrumentor {
 	~RoseInstrumentor() {
 		delete project;
 		delete passFactory;
+		delete ram;
 	}
 
 	virtual Rose::RosePassFactory *getFactory(

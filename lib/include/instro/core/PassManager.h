@@ -2,10 +2,10 @@
 #define INSTRO_CORE_PASSMANAGER_H
 
 #include <vector>
-#include "instro/core/Pass.h"
+#include "instro/Pass.h"
 
 namespace InstRO {
-namespace Core {
+	namespace Core {
 class ConstructSet;
 }
 
@@ -20,7 +20,6 @@ class PassManager {
 	const InstRO::Core::ConstructSet *getCollisionSet(InstRO::Pass *pass) { return pass->getCollisionSet(); }
 
  public:
-	friend Pass;
 
 	virtual ~PassManager() {}
 

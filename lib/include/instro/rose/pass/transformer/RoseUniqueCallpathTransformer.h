@@ -1,7 +1,7 @@
 #ifndef INSTRO_ROSE_UNIQUECALLPATHTRANSFORMER_H
 #define INSTRO_ROSE_UNIQUECALLPATHTRANSFORMER_H
 
-#include "instro/core/Pass.h"
+#include "instro/Pass.h"
 #include "instro/rose/core/RosePassImplementation.h"
 #include "instro/tooling/ExtendedCallGraph.h"
 

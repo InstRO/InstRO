@@ -1,7 +1,7 @@
 #ifndef INSTRO_ROSE_ADAPTER_ROSE_FUNCTION_WRAPPER_H
 #define INSTRO_ROSE_ADAPTER_ROSE_FUNCTION_WRAPPER_H
 
-#include "instro/core/Pass.h"
+#include "instro/Pass.h"
 #include "instro/rose/core/RosePassImplementation.h"
 
 #include "rose.h"

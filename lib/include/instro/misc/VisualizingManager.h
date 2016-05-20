@@ -7,7 +7,7 @@
 //#include "instro/interface.h"
 //#include "instro/core.h"
 // #include "instro/pass_management.h"
-#include "instro/core/Pass.h"
+#include "instro/Pass.h"
 
 namespace InstRO {
 class Pass;

@@ -8,7 +8,7 @@
 #include "clang/Tooling/CommonOptionsParser.h"
 #include "clang/Tooling/Refactoring.h"
 
-#include "instro/core/Instrumentor.h"
+#include "instro/Instrumentor.h"
 #include "instro/clang/ClangPassFactory.h"
 #include "instro/clang/tooling/ClangAnalysisInterface.h"
 

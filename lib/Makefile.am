@@ -20,10 +20,10 @@ ROSEINSTROASTPRINTER_SFILES=\
 
 CORE_HFILES= \
 ./include/instro.h \
+./include/instro/Instrumentor.h \
+./include/instro/Pass.h \
+./include/instro/PassFactory.h \
 ./include/instro/core/ConstructSet.h \
-./include/instro/core/Instrumentor.h \
-./include/instro/core/Pass.h \
-./include/instro/core/PassFactory.h \
 ./include/instro/core/PassManager.h \
 ./include/instro/core/PassImplementation.h \
 ./include/instro/core/ChannelConfiguration.h \
@@ -52,9 +52,9 @@ CORE_HFILES= \
 ./include/instro/utility/Environment.h
 
 CORE_SFILES= \
+./src/Pass.cpp \
+./src/PassFactory.cpp \
 ./src/core/ConstructSet.cpp \
-./src/core/Pass.cpp \
-./src/core/PassFactory.cpp \
 ./src/core/PassImplementation.cpp \
 ./src/core/SimplePassManager.cpp \
 ./src/core/Singleton.cpp \

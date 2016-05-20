@@ -1,5 +1,5 @@
 #include "instro/core/PassImplementation.h"
-#include "instro/core/Pass.h"
+#include "instro/Pass.h"
 
 namespace InstRO {
 namespace Core {

@@ -49,6 +49,7 @@ class RoseCLIPreparation {
 	std::string instroLibPathOption;
 	std::string instroLibNameOption;
 };
-}
-}
+
+} // Utility
+} // InstRO
 #endif

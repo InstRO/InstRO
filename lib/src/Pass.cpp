@@ -1,4 +1,4 @@
-#include "instro/core/Pass.h"
+#include "instro/Pass.h"
 #include "instro/utility/exception.h"
 #include "instro/utility/Logger.h"
 #include "instro/core/ChannelConfiguration.h"
