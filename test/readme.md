@@ -3,7 +3,7 @@
 The test suite comprises several test binaries which are invoked on a set of input files.
 In order to run the test suite for a single build, it is sufficient to call `make check` in the toplevel build directory.
 
-As of today, we expect four tests to fail for the Rose implementation (as that are mainly problems within Rose itself):
+At the moment (18 Mai 2016) we expect 4 tests to fail for the ROSE implementation (as that are mainly problems within ROSE itself) and 17 for the Clang implementation:
 ```
 |--- ConstructHierarchySelectionTest	templContainer.cpp
 |--- ConstructHierarchySelectionTest	controlConstructs.cpp
@@ -11,6 +11,27 @@ As of today, we expect four tests to fail for the Rose implementation (as that a
 |--- ConstructElevatorTest	templContainer.cpp
 ```
 
+```
+|--- IdentifierSelectorTest	not available
+|--- ConstructElevatorTest	not available
+|--- BooleanCompoundSelectorTest	not available
+|--- CallpathSelectorTest	not available
+|--- UniqueCallpathTransformerTest	not available
+|--- FunctionWrapperTest	not available
+|--- DefaultInstrumentationAdapterTest	not available
+|--- ConstructHierarchySelectionTest	memfunc.cpp
+|--- ConstructHierarchySelectionTest	loop2.cpp
+|--- ConstructHierarchySelectionTest	loop3.cpp
+|--- ConstructHierarchySelectionTest	templContainer.cpp
+|--- ConstructHierarchySelectionTest	dotCall.cpp
+|--- ConstructHierarchySelectionTest	arrowCall.cpp
+|--- ConstructHierarchySelectionTest	callInTemplateCode.cpp
+|--- ConstructHierarchySelectionTest	emptyBodies.cpp
+|--- ConstructHierarchySelectionTest	opOverload.cpp
+|--- ConstructHierarchySelectionTest	nestedFunction.cpp
+```
+
+Please note that the Clang implementation requires static libraries to be built due to linking issues with the shared ones.
 
 In general, the tests are split up into two scripts and organized as follows:
 - **Apply tests** are the tests run on a single invocation of `make check`.
@@ -32,8 +53,6 @@ Invoke the tests using `make check` in the toplevel directory.
 
 The different apply-tests are orchestrated by the Python script `ApplyRunner.py`, which takes care of invoking the TestInstrumentor-binaries on all input files.
 In order to add a TestInstrumentor the binary name needs to be added to the `testPrograms` list in the runner script.
-
-At the moment (18 Mai 2016) 5 tests should fail for the ROSE implementation and 17 for the Clang implementation. Furthermore, the tests for the Clang implementation require static libraries due to linking issues with shared libraries.
 
 ### Selection tests
 
