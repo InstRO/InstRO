@@ -18,7 +18,7 @@ ConfigurationLoader::ConfigurationLoader(std::unique_ptr<ConfigurationPassRegist
 
 ConfigurationLoader::PassMap ConfigurationLoader::getPasses() const { return passes; }
 
-Pass *ConfigurationLoader::getPass(const std::string &passId) const {
+Pass* ConfigurationLoader::getPass(const std::string& passId) const {
 	auto passIter = passes.find(passId);
 
 	if (passIter != passes.end()) {
@@ -28,15 +28,15 @@ Pass *ConfigurationLoader::getPass(const std::string &passId) const {
 	}
 }
 
-void ConfigurationLoader::load(const std::string &filename) {
+void ConfigurationLoader::load(const std::string& filename) {
 	ConfigurationParser parser(*this);
 	parser.parseFile(filename);
 }
 
 // ConfigurationParser
 
-void ConfigurationParser::parseFile(const std::string &filename) {
-	FILE *file = std::fopen(filename.c_str(), "r");
+void ConfigurationParser::parseFile(const std::string& filename) {
+	FILE* file = std::fopen(filename.c_str(), "r");
 	if (!file) {
 		logIt(ERROR) << "Failed to open file '" << filename << "'" << std::endl;
 		return;
@@ -60,11 +60,11 @@ void ConfigurationParser::parseFile(const std::string &filename) {
 	}
 }
 
-Pass *ConfigurationParser::parsePass(rapidjson::Value &passValue) {
+Pass* ConfigurationParser::parsePass(rapidjson::Value& passValue) {
 	std::string passId = passValue["id"].GetString();
 
 	// check whether the pass has already been parsed (due to a forward dependency)
-	if (Pass *pass = loader.getPass(passId)) {
+	if (Pass* pass = loader.getPass(passId)) {
 		return pass;
 	}
 
@@ -74,7 +74,7 @@ Pass *ConfigurationParser::parsePass(rapidjson::Value &passValue) {
 	std::string passType = passValue["type"].GetString();
 
 	// retrieve and invoke a parser for the specified type from the registry
-	Pass *pass = nullptr;
+	Pass* pass = nullptr;
 	auto passParser = loader.passRegistry->lookup(passType);
 	if (passParser) {
 		pass = passParser(context);
@@ -86,7 +86,7 @@ Pass *ConfigurationParser::parsePass(rapidjson::Value &passValue) {
 	return pass;
 }
 
-rapidjson::Value *ConfigurationParser::findPassValue(const std::string &passId) {
+rapidjson::Value* ConfigurationParser::findPassValue(const std::string& passId) {
 	for (auto passValueIter = doc.Begin(); passValueIter != doc.End(); ++passValueIter) {
 		std::string currentPassId = (*passValueIter)["id"].GetString();
 		if (currentPassId == passId) {
@@ -97,13 +97,13 @@ rapidjson::Value *ConfigurationParser::findPassValue(const std::string &passId) 
 	return nullptr;
 }
 
-std::vector<Pass *> ConfigurationParser::getInputPasses(rapidjson::Value &passValue) {
-	std::vector<Pass *> inputPasses;
+std::vector<Pass*> ConfigurationParser::getInputPasses(rapidjson::Value& passValue) {
+	std::vector<Pass*> inputPasses;
 	auto inputs = passValue.FindMember("inputs");
 
 	// check whether any passes have been specified because 'inputs' is optional
 	if (inputs != passValue.MemberEnd()) {
-		rapidjson::Value &inputsValue = inputs->value;
+		rapidjson::Value& inputsValue = inputs->value;
 		std::string passId = passValue["id"].GetString();
 		if (!inputsValue.IsArray()) {
 			InstRO::raise_exception(passId + ": 'inputs' must be an array");
@@ -112,10 +112,10 @@ std::vector<Pass *> ConfigurationParser::getInputPasses(rapidjson::Value &passVa
 		inputPasses.reserve(inputsValue.Size());
 		for (auto inputValueIter = inputsValue.Begin(); inputValueIter != inputsValue.End(); ++inputValueIter) {
 			std::string inputId = inputValueIter->GetString();
-			Pass *inputPass = loader.getPass(inputId);
+			Pass* inputPass = loader.getPass(inputId);
 			if (!inputPass) {
 				// pass has not been parsed yet (id used before declaration)
-				rapidjson::Value *inputPassValue = findPassValue(inputId);
+				rapidjson::Value* inputPassValue = findPassValue(inputId);
 				if (inputPassValue) {
 					inputPass = parsePass(*inputPassValue);
 				} else {
@@ -137,7 +137,7 @@ std::string ConfigurationParsingContext::getId() const { return passValue["id"].
 
 std::string ConfigurationParsingContext::getType() const { return passValue["type"].GetString(); }
 
-std::string ConfigurationParsingContext::getStringArgument(const char *memberName) const {
+std::string ConfigurationParsingContext::getStringArgument(const char* memberName) const {
 	auto memberIter = passValue.FindMember(memberName);
 
 	if (memberIter != passValue.MemberEnd()) {
@@ -148,8 +148,8 @@ std::string ConfigurationParsingContext::getStringArgument(const char *memberNam
 	}
 }
 
-std::string ConfigurationParsingContext::getStringArgumentOrDefault(const char *memberName,
-																																		const std::string &defaultArg) const {
+std::string ConfigurationParsingContext::getStringArgumentOrDefault(const char* memberName,
+																																		const std::string& defaultArg) const {
 	auto memberIter = passValue.FindMember(memberName);
 
 	if (memberIter != passValue.MemberEnd()) {
@@ -159,12 +159,12 @@ std::string ConfigurationParsingContext::getStringArgumentOrDefault(const char *
 	}
 }
 
-std::vector<std::string> ConfigurationParsingContext::getStringArguments(const char *memberName) const {
+std::vector<std::string> ConfigurationParsingContext::getStringArguments(const char* memberName) const {
 	std::vector<std::string> arguments;
 	auto memberIter = passValue.FindMember(memberName);
 
 	if (memberIter != passValue.MemberEnd()) {
-		rapidjson::Value &argumentsValue = memberIter->value;
+		rapidjson::Value& argumentsValue = memberIter->value;
 		if (!argumentsValue.IsArray()) {
 			InstRO::raise_exception(getId() + ": Member '" + std::string(memberName) + "' must be an array");
 		}
@@ -180,7 +180,7 @@ std::vector<std::string> ConfigurationParsingContext::getStringArguments(const c
 	return arguments;
 }
 
-int ConfigurationParsingContext::getIntegerArgument(const char *memberName) const {
+int ConfigurationParsingContext::getIntegerArgument(const char* memberName) const {
 	auto memberIter = passValue.FindMember(memberName);
 
 	if (memberIter != passValue.MemberEnd()) {
@@ -190,11 +190,11 @@ int ConfigurationParsingContext::getIntegerArgument(const char *memberName) cons
 	}
 }
 
-InstRO::Core::ConstructTraitType ConfigurationParsingContext::getConstructTraitType(const char *memberName) const {
+InstRO::Core::ConstructTraitType ConfigurationParsingContext::getConstructTraitType(const char* memberName) const {
 	auto memberIter = passValue.FindMember(memberName);
 
 	if (memberIter != passValue.MemberEnd()) {
-		rapidjson::Value &cttValue = memberIter->value;
+		rapidjson::Value& cttValue = memberIter->value;
 		if (cttValue.IsInt()) {
 			auto ctt = cttValue.GetInt();
 			// check whether the specified integer maps to a valid enumeration entry - must be in [CTMin, CTMax]
@@ -256,74 +256,75 @@ void ConfigurationParsingContext::expectInputPasses(std::initializer_list<unsign
 
 // BaseConfigurationPassRegistry
 
-BaseConfigurationPassRegistry::BaseConfigurationPassRegistry(PassFactory *factory) : factory(factory) {
+BaseConfigurationPassRegistry::BaseConfigurationPassRegistry(PassFactory* factory) : factory(factory) {
 	// TODO SR: merge these into one with an argument
-	registerPass("BooleanOrSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
+	registerPass("BooleanOrSelector", [factory](ConfigurationParsingContext& context) -> Pass* {
 		context.expectInputPasses({2});
 		return factory->createBooleanOrSelector(context.inputPasses[0], context.inputPasses[1]);
 	});
-	registerPass("BooleanAndSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
+	registerPass("BooleanAndSelector", [factory](ConfigurationParsingContext& context) -> Pass* {
 		context.expectInputPasses({2});
 		return factory->createBooleanAndSelector(context.inputPasses[0], context.inputPasses[1]);
 	});
-	registerPass("BooleanXorSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
+	registerPass("BooleanXorSelector", [factory](ConfigurationParsingContext& context) -> Pass* {
 		context.expectInputPasses({2});
 		return factory->createBooleanXorSelector(context.inputPasses[0], context.inputPasses[1]);
 	});
-	registerPass("BooleanMinusSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
+	registerPass("BooleanMinusSelector", [factory](ConfigurationParsingContext& context) -> Pass* {
 		context.expectInputPasses({2});
 		return factory->createBooleanMinusSelector(context.inputPasses[0], context.inputPasses[1]);
 	});
 
-	registerPass("ProgramEntrySelector", [factory](ConfigurationParsingContext &context) {
-		context.expectInputPasses({1});
+	registerPass("ProgramEntrySelector", [factory](ConfigurationParsingContext& context) {
+		context.expectInputPasses({0});
 		return factory->createProgramEntrySelector();
 	});
-	registerPass("IdentifierMatcherSelector", [factory](ConfigurationParsingContext &context) {
+	registerPass("IdentifierMatcherSelector", [factory](ConfigurationParsingContext& context) {
+		context.expectInputPasses({0});
 		return factory->createIdentifierMatcherSelector(context.getStringArguments());
 	});
-	registerPass("CallpathSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
+	registerPass("CallpathSelector", [factory](ConfigurationParsingContext& context) -> Pass* {
 		context.expectInputPasses({2});
 		return factory->createCallpathSelector(context.inputPasses[0], context.inputPasses[1]);
 	});
-	registerPass("ConstructTraitSelector", [factory](ConfigurationParsingContext &context) -> Pass * {
+	registerPass("ConstructTraitSelector", [factory](ConfigurationParsingContext& context) -> Pass* {
 		context.expectInputPasses({0});
 		return factory->createConstructTraitSelector(context.getConstructTraitType("class"));
 	});
-	registerPass("ConstructLoweringElevator", [factory](ConfigurationParsingContext &context) -> Pass * {
+	registerPass("ConstructLoweringElevator", [factory](ConfigurationParsingContext& context) -> Pass* {
 		context.expectInputPasses({1});
 		return factory->createConstructLoweringElevator(context.inputPasses[0], context.getConstructTraitType("level"));
 	});
-	registerPass("ConstructRaisingElevator", [factory](ConfigurationParsingContext &context) -> Pass * {
+	registerPass("ConstructRaisingElevator", [factory](ConfigurationParsingContext& context) -> Pass* {
 		context.expectInputPasses({1});
 		return factory->createConstructRaisingElevator(context.inputPasses[0], context.getConstructTraitType("level"));
 	});
-	registerPass("ConstructCroppingElevator", [factory](ConfigurationParsingContext &context) -> Pass * {
+	registerPass("ConstructCroppingElevator", [factory](ConfigurationParsingContext& context) -> Pass* {
 		context.expectInputPasses({1});
 		return factory->createConstructCroppingElevator(context.inputPasses[0], context.getConstructTraitType("minLevel"),
 																										context.getConstructTraitType("maxLevel"));
 	});
 
 	// Adapters
-	registerPass("DefaultInstrumentationAdapter", [factory](ConfigurationParsingContext &context) -> Pass * {
+	registerPass("DefaultInstrumentationAdapter", [factory](ConfigurationParsingContext& context) -> Pass* {
 		context.expectInputPasses({1});
 		return factory->createDefaultInstrumentationAdapter(context.inputPasses[0]);
 	});
 
-	registerPass("ConstructHierarchyASTDotGenerator", [factory](ConfigurationParsingContext &context) -> Pass * {
+	registerPass("ConstructHierarchyASTDotGenerator", [factory](ConfigurationParsingContext& context) -> Pass* {
 		context.expectInputPasses({1});
 		return factory->createConstructHierarchyASTDotGenerator(context.inputPasses[0],
 																														context.getStringArgument("filename"));
 	});
 
-	registerPass("ConstructPrinterAdapter", [factory](ConfigurationParsingContext &context) -> Pass * {
+	registerPass("ConstructPrinterAdapter", [factory](ConfigurationParsingContext& context) -> Pass* {
 		context.expectInputPasses({1});
 		return factory->createConstructPrinterAdapter(context.inputPasses[0]);
 
 	});
 }
 
-ConfigurationPassRegistry::PassParser BaseConfigurationPassRegistry::lookup(const std::string &passType) {
+ConfigurationPassRegistry::PassParser BaseConfigurationPassRegistry::lookup(const std::string& passType) {
 	auto passRegistryIter = passRegistry.find(passType);
 	if (passRegistryIter == passRegistry.end()) {
 		return PassParser();
@@ -332,9 +333,9 @@ ConfigurationPassRegistry::PassParser BaseConfigurationPassRegistry::lookup(cons
 	return passRegistryIter->second;
 }
 
-PassFactory *BaseConfigurationPassRegistry::getFactory() { return factory; }
+PassFactory* BaseConfigurationPassRegistry::getFactory() { return factory; }
 
-void BaseConfigurationPassRegistry::registerPass(const std::string &typeName, const PassParser &parser) {
+void BaseConfigurationPassRegistry::registerPass(const std::string& typeName, const PassParser& parser) {
 	// print a warning if a parser has already been registered for the specified id
 	if (passRegistry.find(typeName) != passRegistry.end()) {
 		logIt(WARN) << "A parser has already been registered for type '" << typeName << "'. Skipping..." << std::endl;
