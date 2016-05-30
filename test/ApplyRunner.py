@@ -18,7 +18,7 @@ cmdParser.add_argument('compilerIndication', type=str, help="Which compiler is r
 cmdParser.add_argument('optionals', nargs='*', default=[])
 
 # This is the list of test programs which should be applied.
-testPrograms = ["ConstructHierarchySelectionTest", "IdentifierSelectorTest", "ConstructElevatorTest", "BooleanCompoundSelectorTest", "CallpathSelectorTest", "UniqueCallpathTransformerTest", "DefaultInstrumentationAdapterTest"]
+testPrograms = ["ConstructHierarchySelectionTest", "IdentifierSelectorTest", "ConstructElevatorTest", "BooleanCompoundSelectorTest", "CallpathSelectorTest", "UniqueCallpathTransformerTest", "FunctionWrapperTest", "DefaultInstrumentationAdapterTest"]
 
 # The list of targets is read from a targets.lst which resides in a test/input/BinaryName directory
 def readTargetFileSpecification(tInstrumentor, directory):
