@@ -31,7 +31,7 @@ AM_DIR_EXPAND
 # -------------------------------
 # As Automake prefers its version, let automake generate the header
 AC_CONFIG_SRCDIR([lib/include/instro.h])
-AM_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADER([config.h])
 
 # -------------------------------
 # Checks for programs.

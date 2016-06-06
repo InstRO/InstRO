@@ -2,15 +2,44 @@
 #define INSTRO_UTILITY_COMMANDLINE_HANDLING_H
 
 #include "boost/program_options/options_description.hpp"
-#include "boost/program_options/variables_map.hpp"
 #include "boost/program_options/parsers.hpp"
+#include "boost/program_options/variables_map.hpp"
 
-#include "instro/utility/Logger.h"
 #include "instro/utility/Environment.h"
+#include "instro/utility/Logger.h"
+
+#include "instro/core/Options.h"
 
 namespace InstRO {
 namespace Utility {
 namespace bpo = boost::program_options;
+
+/**
+ * Commandline Handler for the basic InstRO command line options.
+ * Runs the parser and returns an OptionArguments struct which holds the
+ * actually supplied argument values.
+ */
+class CommandLineHandler {
+ public:
+	// This would then be required for all handlers.
+	typedef InstRO::Core::OptionArguments OptionArguments;
+
+	explicit CommandLineHandler(int argc, char** argv);
+	CommandLineHandler() = delete;
+
+	/** Runs the command line parser and build the OptionsArguments struct */
+	OptionArguments apply();
+
+	/** If not yet run, runs the parser and returns the OptionsArguments struct */
+	OptionArguments getArguments();
+
+ private:
+	bpo::command_line_parser cmdParser;
+	bpo::options_description desc;
+	bpo::variables_map vm;
+	OptionArguments args;
+	bool hasRun;
+};
 
 /**
  * The class provides functionality which adds the command line options instro-include, instro-library-path and
@@ -38,18 +67,14 @@ class RoseCLIPreparation {
  private:
 	int* argcP;
 	char*** argvP;
-	bpo::variables_map vm;
-	bpo::options_description desc;
 
-	const std::string instroIncludeOptionName;
-	const std::string instroLibPathOptionName;
-	const std::string instroLibNameOptionName;
+	CommandLineHandler clh;
 
 	std::string instroIncludePathOption;
 	std::string instroLibPathOption;
 	std::string instroLibNameOption;
 };
 
-} // Utility
-} // InstRO
+}	// Utility
+}	// InstRO
 #endif

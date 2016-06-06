@@ -7,8 +7,8 @@ AM_CFLAGS=
 INSTRO_CORE_CPPFLAGS= -Wall -pedantic
 
 if DEBUG
-AM_CFLAGS += -g3 -O0 -Wall
-AM_CXXFLAGS += -g3 -O0 -Wall
+AM_CFLAGS += -g3 -O0 -Wall -Wextra
+AM_CXXFLAGS += -g3 -O0 -Wall -Wextra
 else
 AM_CFLAGS += -g -O2
 AM_CXXFLAGS += -g -O2
@@ -24,6 +24,8 @@ CORE_HFILES= \
 ./include/instro/Pass.h \
 ./include/instro/PassFactory.h \
 ./include/instro/core/ConstructSet.h \
+./include/instro/core/OptionDefs.minc \
+./include/instro/core/Options.h \
 ./include/instro/core/PassManager.h \
 ./include/instro/core/PassImplementation.h \
 ./include/instro/core/ChannelConfiguration.h \
@@ -49,7 +51,8 @@ CORE_HFILES= \
 ./include/instro/utility/Logger.h \
 ./include/instro/utility/CommandlineHandling.h \
 ./include/instro/utility/MemoryManagement.h \
-./include/instro/utility/Environment.h
+./include/instro/utility/Environment.h \
+./include/instro/utility/Iterator.h
 
 CORE_SFILES= \
 ./src/Pass.cpp \
