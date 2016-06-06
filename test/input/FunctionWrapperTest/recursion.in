@@ -1,0 +1,7 @@
++FunctionWrapperTransformations
+recursion.cpp:11:2--Expression
+transformation:0:0--Function-::wrapper_factorial
+
++FunctionWrapperTransformationExpressions
+recursion.cpp:11:2--Expression
+transformation:0:0--Expression

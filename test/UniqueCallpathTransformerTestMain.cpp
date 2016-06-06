@@ -1,10 +1,6 @@
-
 #include "instro.h"
-#include <iostream>
 
-#if INSTRO_USE_ROSE
 #include "lib/RoseTestSupport.h"
-#endif
 
 #include "instro/utility/Logger.h"
 #include "instro/utility/Environment.h"
@@ -15,22 +11,14 @@
 #include <boost/algorithm/string/split.hpp>
 #include <sstream>
 
-/**
- * This is the TestInstrumentor implementation.
- *
- * It expects a file with the expected items, one per line, exported to the environment variable
- * INSTRO_TEST_INPUT_FILENAME. The check is not performed on the fully qualified filename (as returned in the
- * Construct's identifier) but only the filename.
- * Fully qualified path to the input file is strongly preferred.
- *
- */
+// Test for the RoseUniqueCallpathTransformer that examines the constructs selected by the transformer (newly created
+// functions and modified function calls). For each test input file X.in a separate X.active file, which contains a
+// space delimited list of identifiers, may exist to specify the input for an optional active selector. Note that the
+// test does not support specifying a root selector; adding support for this should be possible by reading the test
+// configuration from a single file, just like the FunctionWrapperTest. Currently, the name of the input function, i.e.
+// the one to create a unique call path for, is hardcoded to "::markMe".
 
-/**
-* This test verifies the output of the UniqueCallpathTransformer. The transformer selects all newly created functions
-* and modified function calls.
-*/
-
-std::vector<std::string> getActiveIdentifiers(const std::string &inFileName) {
+std::vector<std::string> getActiveIdentifiers(const std::string& inFileName) {
 	boost::filesystem::path activeFile = inFileName;
 	activeFile.replace_extension("active");
 
@@ -48,11 +36,9 @@ std::vector<std::string> getActiveIdentifiers(const std::string &inFileName) {
 	return actives;
 }
 
-int main(int argc, char **argv) {
-#if INSTRO_USE_ROSE
+int main(int argc, char** argv) {
 	using InstrumentorType = RoseTest::RoseTestInstrumentor;
 	InstrumentorType instrumentor(argc, argv);
-#endif
 
 	auto factory = instrumentor.getFactory();
 
@@ -61,8 +47,8 @@ int main(int argc, char **argv) {
 	auto identifierSelector = factory->createIdentifierMatcherSelector(std::vector<std::string>{"::markMe"});
 
 	auto activeIdentifiers = getActiveIdentifiers(filename);
-#if INSTRO_USE_ROSE
-	InstRO::Pass *ucpTransformer;
+
+	InstRO::Pass* ucpTransformer;
 	if (activeIdentifiers.empty()) {
 		ucpTransformer = factory->createRoseUniqueCallpathTransformer(identifierSelector);
 	} else {
@@ -71,9 +57,9 @@ int main(int argc, char **argv) {
 		auto activeSelector = factory->createBooleanAndSelector(activeIdentifierSelector, functionSelector);
 		ucpTransformer = factory->createRoseUniqueCallpathTransformer(identifierSelector, nullptr, activeSelector);
 	}
-#endif
 
 #if 0
+	// debug output
 	factory->createConstructPrinterAdapter(ucpTransformer);
 #endif
 

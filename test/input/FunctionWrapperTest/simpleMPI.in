@@ -1,0 +1,11 @@
++FunctionWrapperTransformations
+transformation:0:0--Function-::MPI_Comm_rank
+transformation:0:0--Function-::MPI_Finalize
+transformation:0:0--Function-::MPI_Init
+transformation:0:0--Function-::MPI_SomeTestFunction2
+
++FunctionWrapperTransformationExpressions
+transformation:0:0--Expression
+transformation:0:0--Expression
+transformation:0:0--Expression
+transformation:0:0--Expression

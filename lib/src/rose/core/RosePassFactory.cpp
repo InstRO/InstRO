@@ -23,7 +23,7 @@ Pass* RosePassFactory::createDefaultInstrumentationAdapter(InstRO::Pass* input) 
 
 /* ROSE ONLY */
 
-InstRO::Pass* RosePassFactory::createScorepRegionInstrumentationAdapter(InstRO::Pass *input){
+InstRO::Pass* RosePassFactory::createScorepRegionInstrumentationAdapter(InstRO::Pass* input) {
 	Pass* newPass = new Pass(new InstRO::Rose::Adapter::RoseScorepRegionInstrumentationAdapter(project),
 													 InstRO::Core::ChannelConfiguration(input),
 													 "InstRO::Rose::Adapter::RoseScorepRegionInstrumentationAdapter");
@@ -33,8 +33,8 @@ InstRO::Pass* RosePassFactory::createScorepRegionInstrumentationAdapter(InstRO::
 
 	auto pos = ret.find(" ");
 	auto first = ret.substr(0, pos);
-	auto second = ret.substr(pos+1, ret.size() - (pos+2));
-	
+	auto second = ret.substr(pos + 1, ret.size() - (pos + 2));
+
 	auto sgStrList = project->get_originalCommandLineArgumentList();
 
 	std::vector<std::string> myArgv;
@@ -42,13 +42,13 @@ InstRO::Pass* RosePassFactory::createScorepRegionInstrumentationAdapter(InstRO::
 	myArgv.push_back(first);
 	myArgv.push_back(second);
 
-	for(int i = 1; i < sgStrList.size(); ++i){
+	for (int i = 1; i < sgStrList.size(); ++i) {
 		myArgv.push_back(sgStrList[i]);
 	}
 
 	project->processCommandLine(myArgv);
 	project->parse();
-	
+
 	passManager->registerPass(newPass);
 	return newPass;
 }
@@ -127,13 +127,21 @@ InstRO::Pass* RosePassFactory::createRoseFunctionWrapper(
 		InstRO::Pass* input, InstRO::Pass* renaming,
 		InstRO::Rose::Transformer::RoseFunctionWrapper::NameTransformer nameTransformer,
 		const std::string& definitionPrefix, const std::string& wrapperPrefix) {
+	using ChannelConfiguration = InstRO::Core::ChannelConfiguration;
 	using ConfigTuple = InstRO::Core::ChannelConfiguration::ConfigTuple;
-	InstRO::Core::ChannelConfiguration cfg(ConfigTuple(0, input), ConfigTuple(1, renaming));
+
+	bool useRenamingPass = renaming != nullptr;
+	ChannelConfiguration cfg;
+	if (useRenamingPass) {
+		cfg = ChannelConfiguration(ConfigTuple(0, input), ConfigTuple(1, renaming));
+		cfg.setConstructLevel(renaming, InstRO::Core::ConstructTraitType::CTExpression,
+													InstRO::Core::ConstructTraitType::CTGlobalScope);
+	} else {
+		cfg = ChannelConfiguration(input);
+	}
 	cfg.setConstructLevel(input, InstRO::Core::ConstructTraitType::CTExpression,
 												InstRO::Core::ConstructTraitType::CTFunction);
-	cfg.setConstructLevel(renaming, InstRO::Core::ConstructTraitType::CTExpression,
-												InstRO::Core::ConstructTraitType::CTGlobalScope);
-	bool useRenamingPass = true;
+
 	InstRO::Pass* newPass = new InstRO::Pass(
 			new Transformer::RoseFunctionWrapper(nameTransformer, definitionPrefix, wrapperPrefix, useRenamingPass), cfg,
 			"InstRO::Rose::Transformer::RoseFunctionWrapper");
@@ -152,10 +160,23 @@ InstRO::Pass* RosePassFactory::createRoseMPIFunctionWrapper(InstRO::Pass* input)
 InstRO::Pass* RosePassFactory::createRoseMPIFunctionWrapper(InstRO::Pass* input, InstRO::Pass* renaming,
 																														const std::string& definitionPrefix,
 																														const std::string& wrapperPrefix) {
+	using ChannelConfiguration = InstRO::Core::ChannelConfiguration;
 	using ConfigTuple = InstRO::Core::ChannelConfiguration::ConfigTuple;
+
+	bool useRenamingPass = renaming != nullptr;
+	ChannelConfiguration cfg;
+	if (useRenamingPass) {
+		cfg = ChannelConfiguration(ConfigTuple(0, input), ConfigTuple(1, renaming));
+		cfg.setConstructLevel(renaming, InstRO::Core::ConstructTraitType::CTExpression,
+													InstRO::Core::ConstructTraitType::CTGlobalScope);
+	} else {
+		cfg = ChannelConfiguration(input);
+	}
+	cfg.setConstructLevel(input, InstRO::Core::ConstructTraitType::CTExpression,
+												InstRO::Core::ConstructTraitType::CTFunction);
+
 	InstRO::Pass* newPass =
-			new InstRO::Pass(new Transformer::RoseMPIFunctionWrapper(definitionPrefix, wrapperPrefix),
-											 InstRO::Core::ChannelConfiguration(ConfigTuple(0, input), ConfigTuple(1, renaming)),
+			new InstRO::Pass(new Transformer::RoseMPIFunctionWrapper(definitionPrefix, wrapperPrefix, useRenamingPass), cfg,
 											 "InstRO::Rose::Transformer::RoseMPIFunctionWrapper");
 	passManager->registerPass(newPass);
 	return newPass;

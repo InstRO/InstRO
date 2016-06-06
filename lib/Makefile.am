@@ -118,7 +118,6 @@ ROSE_HFILES= \
 ./include/instro/rose/tooling/RoseExtendedCallGraph.h \
 ./include/instro/rose/tooling/RoseConstructTraitInterface.h \
 ./include/instro/rose/tooling/RoseNamedConstructAccess.h \
-./include/instro/rose/tooling/RoseTransformationInterface.h \
 ./include/instro/rose/utility/FunctionRenamer.h \
 ./include/instro/rose/utility/ScopeStackGuard.hpp \
 ./include/instro/rose/utility/ASTHelper.h \
