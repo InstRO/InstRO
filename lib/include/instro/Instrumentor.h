@@ -1,17 +1,18 @@
 #ifndef INSTRO_CORE_INSTRUMENTOR_H
 #define INSTRO_CORE_INSTRUMENTOR_H
 
-#include <map>
-#include <string>
-#include <iostream>
-#include <vector>
-
 #include "instro/core/Singleton.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/core/PassManager.h"
 #include "instro/core/SimplePassManager.h"
 #include "instro/PassFactory.h"
 #include "instro/tooling/AnalysisInterface.h"
+
+#include <map>
+#include <string>
+#include <iostream>
+#include <vector>
+
 
 namespace InstRO {
 namespace PassManagement {

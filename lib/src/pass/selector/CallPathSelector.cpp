@@ -1,6 +1,6 @@
-#include "instro/utility/Logger.h"
-
 #include "instro/pass/selector/CallPathSelector.h"
+
+#include "instro/utility/Logger.h"
 
 #include "instro/Instrumentor.h"
 #include "instro/core/Singleton.h"

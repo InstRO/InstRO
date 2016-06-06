@@ -1,5 +1,5 @@
-#include "instro/Instrumentor.h"
 #include "instro/core/Singleton.h"
+#include "instro/Instrumentor.h"
 
 namespace InstRO {
 

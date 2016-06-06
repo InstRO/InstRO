@@ -1,6 +1,8 @@
 #ifndef INSTRO_CORE_CONSTRUCTSET_H
 #define INSTRO_CORE_CONSTRUCTSET_H
 
+#include "instro/core/ConstructTraitType.h"
+
 #include <string>
 #include <sstream>
 #include <memory>	// Shared pointers
@@ -8,7 +10,6 @@
 #include <set>
 #include <functional>	// std::less
 
-#include "instro/core/ConstructTraitType.h"
 
 namespace InstRO {
 namespace Core {

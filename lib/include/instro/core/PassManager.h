@@ -1,8 +1,8 @@
 #ifndef INSTRO_CORE_PASSMANAGER_H
 #define INSTRO_CORE_PASSMANAGER_H
 
-#include <vector>
 #include "instro/Pass.h"
+#include <vector>
 
 namespace InstRO {
 	namespace Core {

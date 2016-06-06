@@ -1,11 +1,12 @@
+#include "instro/core/ConstructSet.h"
+
+#include "instro/utility/Logger.h"
+
 #include <assert.h>
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
 #include <iterator>
-#include "instro/core/ConstructSet.h"
-
-#include "instro/utility/Logger.h"
 
 namespace InstRO {
 namespace Core {

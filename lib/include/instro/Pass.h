@@ -1,6 +1,10 @@
 #ifndef INSTRO_CORE_PASS_H
 #define INSTRO_CORE_PASS_H
 
+#include "instro/core/ConstructSet.h"
+#include "instro/core/ChannelConfiguration.h"
+#include "instro/core/PassImplementation.h"
+
 #include <map>
 #include <string>
 #include <iostream>
@@ -9,9 +13,6 @@
 #include <vector>
 #include <unordered_map>
 
-#include "instro/core/ConstructSet.h"
-#include "instro/core/ChannelConfiguration.h"
-#include "instro/core/PassImplementation.h"
 
 namespace InstRO {
 namespace PassManagement {

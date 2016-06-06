@@ -1,10 +1,10 @@
 #ifndef INSTRO_CORE_SIMPLE_PASSMANAGER_H
 #define INSTRO_CORE_SIMPLE_PASSMANAGER_H
 
-#include <vector>
-#include <algorithm>
-
 #include "instro/core/PassManager.h"
+
+#include <algorithm>
+#include <vector>
 
 namespace InstRO {
 namespace PassManagement {
@@ -21,28 +21,28 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 	SimplePassManager(){};
 
 	virtual ~SimplePassManager() {
-		for (Pass *p : passList) {
+		for (Pass* p : passList) {
 			delete p;
 		}
 	}
 
 	// Enable the Pass Manager to query the pass for its dependencies
-	void registerPass(Pass *currentPass) override;
+	void registerPass(Pass* currentPass) override;
 
 	/** Executes the actual configuration of passes */
 	int execute() override;
 
 	/** In a simple pass manager this function should just be left blang? */
-	virtual void setDependence(Pass *pred, Pass *pass) { throw std::string("Not implemented in SimplePassManager"); }
+	virtual void setDependence(Pass* pred, Pass* pass) { throw std::string("Not implemented in SimplePassManager"); }
 
-	virtual bool hasOutputDependencies(Pass *pass) {
+	virtual bool hasOutputDependencies(Pass* pass) {
 		for (auto p : passList) {
 			if ((p == pass) || (!hasInputDependencies(p))) {
 				continue;
 			}
 
 			auto cVec(getPredecessors(p));
-			if (std::find_if(cVec.begin(), cVec.end(), [pass](Pass *pp) { return pp == pass; }) != cVec.end()) {
+			if (std::find_if(cVec.begin(), cVec.end(), [pass](Pass* pp) { return pp == pass; }) != cVec.end()) {
 				return true;
 			}
 		}
@@ -50,14 +50,14 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 		return false;
 	}
 
-	virtual bool hasInputDependencies(Pass *pass) { return getPredecessors(pass).size() > 0; };
+	virtual bool hasInputDependencies(Pass* pass) { return getPredecessors(pass).size() > 0; };
 
  protected:
 	/** Retrieves the list of predecessors of pass p */
-	const std::vector<Pass *> getPredecessors(Pass *p) const { return p->getInputPasses(); };
+	const std::vector<Pass*> getPredecessors(Pass* p) const { return p->getInputPasses(); };
 
 	// We own the passes
-	std::vector<Pass *> passList;
+	std::vector<Pass*> passList;
 };
 
 }	// PassManagement

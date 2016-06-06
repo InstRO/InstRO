@@ -1,6 +1,7 @@
+#include "instro/pass/selector/IdentifierMatcherSelector.h"
+
 #include "instro/Instrumentor.h"
 #include "instro/tooling/NamedConstructAccess.h"
-#include "instro/pass/selector/IdentifierMatcherSelector.h"
 #include "instro/tooling/AnalysisInterface.h"
 #include "instro/core/Singleton.h"
 
