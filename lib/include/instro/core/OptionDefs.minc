@@ -13,6 +13,8 @@
  *
  * The macros (REGISTER_FIRST_OPTION, REGISTER_OPTION, REGISTER_LAST_OPTION) expect the following form:
  * MACRO_NAME( optionName, optionCommandlineIdentifier, argument's value data type, description )
+ *
+ * FIXME Do not simply Clang-Format this file! Expressions inside macros might be formatted not as-you-expect.
  */
 
 /* Simply to escape macro parameters */
@@ -27,12 +29,12 @@
 
 /* This is the list of options, excluding the first and the last option */
 #define OPTION_LIST                                                                                                 \
-	REGISTER_OPTION(instroLibraryPath, instro - library - path, std::string, "Where the instro support lib is found") \
-	REGISTER_OPTION(instroLibraryName, instro - library - name, std::string, "Name of instro support lib")
+	REGISTER_OPTION(instroLibraryPath, instro-library-path, std::string, "Where the instro support lib is found") \
+	REGISTER_OPTION(instroLibraryName, instro-library-name, std::string, "Name of instro support lib")
 
 /* The final option list. Names all available options. We treat first and last option specially. */
 #define REGISTER_OPTION_LIST                                                                                        \
-	REGISTER_FIRST_OPTION(instroIncludePath, instro - include, std::string, "Where instro support headers are found") \
+	REGISTER_FIRST_OPTION(instroIncludePath, instro-include, std::string, "Where instro support headers are found") \
 	LIST(OPTION)                                                                                                      \
 	REGISTER_LAST_OPTION(instrumentCtors, ictors, bool, "Whether InstRO should try to instrument constructors")
 
