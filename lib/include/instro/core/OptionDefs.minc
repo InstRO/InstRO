@@ -15,23 +15,24 @@
  * MACRO_NAME( optionName, optionCommandlineIdentifier, argument's value data type, description )
  */
 
- /* Simply to escape macro parameters */
+/* Simply to escape macro parameters */
 #define ESCAPE(X) X
-
-/* This is the list of options, excluding the first and the last option */
-#define OPTION_LIST \
-	REGISTER_OPTION(instroLibraryPath, instro-library-path, std::string, "Where the instro support lib is found") \
-	REGISTER_OPTION(instroLibraryName, instro-library-name, std::string, "Name of instro support lib")
 
 /* We can now write LIST(OPTION) to substitute it with OPTION_LIST define. */
 #define LIST(x) x##_LIST
 
-/* The final option list. Names all available options. We treat first and last option specially. */
-#define REGISTER_OPTION_LIST \
-REGISTER_FIRST_OPTION(instroIncludePath, instro-include, std::string, "Where instro support headers are found") \
-LIST(OPTION) \
-REGISTER_LAST_OPTION(instrumentCtors, ictors, bool, "Whether InstRO should try to instrument constructors")
-
 /* Used when first, last and all other options should register the same way. See i.e. utility/CommandLineHandling.cpp */
 #define OPTION(x, n, i, dt, de) x##_OPTION(n, i, dt, de)
+
+
+/* This is the list of options, excluding the first and the last option */
+#define OPTION_LIST                                                                                                 \
+	REGISTER_OPTION(instroLibraryPath, instro - library - path, std::string, "Where the instro support lib is found") \
+	REGISTER_OPTION(instroLibraryName, instro - library - name, std::string, "Name of instro support lib")
+
+/* The final option list. Names all available options. We treat first and last option specially. */
+#define REGISTER_OPTION_LIST                                                                                        \
+	REGISTER_FIRST_OPTION(instroIncludePath, instro - include, std::string, "Where instro support headers are found") \
+	LIST(OPTION)                                                                                                      \
+	REGISTER_LAST_OPTION(instrumentCtors, ictors, bool, "Whether InstRO should try to instrument constructors")
 
