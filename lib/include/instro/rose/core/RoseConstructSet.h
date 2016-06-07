@@ -264,6 +264,13 @@ struct ConstructPredicate : public CTPredicate {
 	}
 };
 
+struct CTOpenMPPredicate : public CTPredicate {
+	bool operator()(SgNode* n) const {
+		// TODO Implement me.
+		return isSgPragma(n) != nullptr;
+	}
+};
+
 //// TODO actually use that mechanism
 std::unique_ptr<CTPredicate> getPredicateForTraitType(InstRO::Core::ConstructTraitType traitType);
 
@@ -364,6 +371,14 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 		}
 	}
 
+	void visit(SgPragma* node) {
+		if (RoseConstructTraitPredicates::CTOpenMPPredicate()(node)) {
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
+		} else {
+			generateError(node);
+		}
+	}
+
 	// this should be an error
 	void visit(SgScopeStatement* node) { generateError(node); }
 	void visit(SgDeclarationStatement* node) { generateError(node); }
@@ -399,25 +414,8 @@ class RoseConstruct : public InstRO::Core::Construct {
 	// filename:startline--ConstructTrait[-functionName]
 	std::string getIdentifier() const;
 
-	virtual std::string toString() const override {
-		std::string className = node->class_name();
-		std::string unparse;
-
-		if (getTraits().is(InstRO::Core::ConstructTraitType::CTFunction)) {
-			// get only name of function
-			unparse = isSgFunctionDefinition(node)->get_declaration()->get_qualified_name().getString();
-		} else if (getTraits().is(InstRO::Core::ConstructTraitType::CTFileScope)) {
-			// get only name of file
-			unparse = isSgSourceFile(node)->getFileName();
-		} else if (getTraits().is(InstRO::Core::ConstructTraitType::CTGlobalScope)) {
-			unparse = std::string("GlobalScope");
-		} else {
-			unparse = node->unparseToString();
-			// escape " and \n (e.g. in string literals)
-		}
-		return className + std::string(" | ") + unparse;
-	}
-
+	virtual std::string toString() const override; 
+	
 	virtual std::string toDotString() const override {
 		std::string resultString = this->toString();
 		boost::replace_all(resultString, "\n", "\\n");
@@ -472,41 +470,12 @@ class RoseConstructProvider {
 		return instance;
 	}
 
-	std::shared_ptr<InstRO::Core::Construct> getFragment(SgNode* node, Sg_File_Info* fileInfo) {
-		if (node == nullptr || fileInfo == nullptr) {
-			throw std::string("RoseConstructProvider: attempted to getFragment for nullptr");
-		}
-
-		if (mapping.find(fileInfo) == mapping.end()) {
-			logIt(DEBUG) << "\tcreating new construct" << std::endl;
-			mapping[fileInfo] = std::make_shared<RoseFragment>(RoseFragment(node, fileInfo));
-		}
-		return mapping[fileInfo];
-	}
-
+	std::shared_ptr<InstRO::Core::Construct> getFragment(SgNode* node, Sg_File_Info* fileInfo);
 	/**
 	 * If there is no construct for a node a dummy construct is returned.
 	 * It can be safely inserted into construct sets without effect.
 	 */
-	std::shared_ptr<InstRO::Core::Construct> getConstruct(SgNode* const node) {
-		if (node == nullptr) {
-			throw std::string("RoseConstructProvider: attempted to getConstruct for nullptr");
-		}
-
-		if (mapping.find(node) == mapping.end()) {
-			logIt(DEBUG) << "\tcreating new construct" << std::endl;
-
-			ConstructGenerator gen;
-			node->accept(gen);
-
-			if (gen.getConstructTraits().is(InstRO::Core::ConstructTraitType::CTNoTraits)) {
-				mapping[node] = InstRO::Core::DummyConstruct::getInstance();
-			} else {
-				mapping[node] = std::make_shared<RoseConstruct>(RoseConstruct(node, gen.getConstructTraits()));
-			}
-		}
-		return mapping[node];
-	}
+	std::shared_ptr<InstRO::Core::Construct> getConstruct(SgNode* const node);
 
  private:
 	std::map<SgNode* const, std::shared_ptr<InstRO::Core::Construct> > mapping;

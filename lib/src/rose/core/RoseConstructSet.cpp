@@ -50,6 +50,25 @@ std::unique_ptr<CTPredicate> getPredicateForTraitType(InstRO::Core::ConstructTra
 
 }	// namespace RoseConstructTraitPredicates
 
+std::string RoseConstruct::toString() const {
+	std::string className = node->class_name();
+	std::string unparse;
+
+	if (getTraits().is(InstRO::Core::ConstructTraitType::CTFunction)) {
+		// get only name of function
+		unparse = isSgFunctionDefinition(node)->get_declaration()->get_qualified_name().getString();
+	} else if (getTraits().is(InstRO::Core::ConstructTraitType::CTFileScope)) {
+		// get only name of file
+		unparse = isSgSourceFile(node)->getFileName();
+	} else if (getTraits().is(InstRO::Core::ConstructTraitType::CTGlobalScope)) {
+		unparse = std::string("GlobalScope");
+	} else {
+		unparse = node->unparseToString();
+		// escape " and \n (e.g. in string literals)
+	}
+	return className + std::string(" | ") + unparse;
+}
+
 std::string RoseConstruct::getIdentifier() const {
 	std::string identifier("");
 
@@ -253,6 +272,39 @@ int RoseFragment::determineCorrectLineInfo() const {
 
 int RoseFragment::determineCorrectColumnInformation() const {
 	return info->get_col();
+}
+
+std::shared_ptr<InstRO::Core::Construct> RoseConstructProvider::getFragment(SgNode* node, Sg_File_Info* fileInfo) {
+	if (node == nullptr || fileInfo == nullptr) {
+		throw std::string("RoseConstructProvider: attempted to getFragment for nullptr");
+	}
+
+	if (mapping.find(fileInfo) == mapping.end()) {
+		logIt(DEBUG) << "\tcreating new construct" << std::endl;
+		mapping[fileInfo] = std::make_shared<RoseFragment>(RoseFragment(node, fileInfo));
+	}
+	return mapping[fileInfo];
+}
+
+
+std::shared_ptr<InstRO::Core::Construct> RoseConstructProvider::getConstruct(SgNode* const node) {
+	if (node == nullptr) {
+		throw std::string("RoseConstructProvider: attempted to getConstruct for nullptr");
+	}
+
+	if (mapping.find(node) == mapping.end()) {
+		logIt(DEBUG) << "\tcreating new construct" << std::endl;
+
+		ConstructGenerator gen;
+		node->accept(gen);
+
+		if (gen.getConstructTraits().is(InstRO::Core::ConstructTraitType::CTNoTraits)) {
+			mapping[node] = InstRO::Core::DummyConstruct::getInstance();
+		} else {
+			mapping[node] = std::make_shared<RoseConstruct>(RoseConstruct(node, gen.getConstructTraits()));
+		}
+	}
+	return mapping[node];
 }
 
 }	// namespace Core

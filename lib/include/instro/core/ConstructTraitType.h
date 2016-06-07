@@ -15,17 +15,18 @@ enum class ConstructTraitType {
 	CTExpression = 3,
 	CTStatement = 4,
 	// separate Loop, Conditional, Scope and Simple Statements
-	CTLoopStatement = 5,
-	CTConditionalStatement = 6,
-	CTScopeStatement = 7,
-	CTSimpleStatement = 8,
+	CTOpenMPStatement = 5,
+	CTLoopStatement = 6,
+	CTConditionalStatement = 7,
+	CTScopeStatement = 8,
+	CTSimpleStatement = 9,
 	// a statement with observable behavior. No "pure" declarations, namespaces, classes, etc.
 	// Wrappable statements
-	CTWrappableStatement = 9,
-	CTFunction = 10,
-	CTFileScope = 11,
-	CTGlobalScope = 12,
-	CTMax = 13
+	CTWrappableStatement = 10,
+	CTFunction = 11,
+	CTFileScope = 12,
+	CTGlobalScope = 13,
+	CTMax = 14
 };
 
 /**

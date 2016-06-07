@@ -7,6 +7,7 @@ int main(int argc, char** argv) {
 	try {
 		TEST(expr, getConstructTraitTypeFromString("Expression"), ConstructTraitType::CTExpression)
 		TEST(stmt, getConstructTraitTypeFromString("Statement"), ConstructTraitType::CTStatement)
+		TEST(omp, getConstructTraitTypeFromString("OpenMPStatement"), ConstructTraitType::CTOpenMPStatement)
 		TEST(loop, getConstructTraitTypeFromString("LoopStatement"), ConstructTraitType::CTLoopStatement)
 		TEST(cond, getConstructTraitTypeFromString("ConditionalStatement"), ConstructTraitType::CTConditionalStatement)
 		TEST(scope, getConstructTraitTypeFromString("ScopeStatement"), ConstructTraitType::CTScopeStatement)
@@ -18,6 +19,7 @@ int main(int argc, char** argv) {
 
 		TEST(expr2expr, getConstructTraitTypeFromString(toString(ConstructTraitType::CTExpression)), ConstructTraitType::CTExpression)
 		TEST(stmt2stmt, getConstructTraitTypeFromString(toString(ConstructTraitType::CTStatement)), ConstructTraitType::CTStatement)
+		TEST(omp2omp, getConstructTraitTypeFromString(toString(ConstructTraitType::CTOpenMPStatement)), ConstructTraitType::CTOpenMPStatement)
 		TEST(loop2loop, getConstructTraitTypeFromString(toString(ConstructTraitType::CTLoopStatement)), ConstructTraitType::CTLoopStatement)
 		TEST(cond2cond, getConstructTraitTypeFromString(toString(ConstructTraitType::CTConditionalStatement)), ConstructTraitType::CTConditionalStatement)
 		TEST(scope2scope, getConstructTraitTypeFromString(toString(ConstructTraitType::CTScopeStatement)), ConstructTraitType::CTScopeStatement)
