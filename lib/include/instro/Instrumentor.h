@@ -7,6 +7,7 @@
 #include "instro/core/SimplePassManager.h"
 #include "instro/PassFactory.h"
 #include "instro/tooling/AnalysisInterface.h"
+#include "instro/utility/Container.h"
 
 #include <map>
 #include <string>
@@ -66,6 +67,11 @@ class Instrumentor {
 	 */
 	virtual const InstRO::PassManagement::PassManager* getPassManager() const { return passManager; }
 
+	/**
+	 * Interface to access the compiler specific implementation of the analysis layer.
+	 */
+	virtual Tooling::AnalysisManager* getAnalysisManager() = 0;
+
 	/** Sets the default policy used whenever the pass manager encounters a necessary elevation */
 	void setConstructRaisingPolicyCrop() { constructRaisingPolicyElevate = false; };
 	/** Sets the default policy used whenever the pass manager encounters a necessary elevation */
@@ -80,14 +86,16 @@ class Instrumentor {
 	bool getConstructLoweringPolicyCrop() const { return constructLoweringPolicyElevate; }
 	bool getConstructLoweringPolicyElevate() const { return constructLoweringPolicyElevate; }
 
-	/**
-	 * Interface to access the compiler specific implementation of the analysis layer.
-	 */
-	virtual Tooling::AnalysisManager* getAnalysisManager() = 0;
+	/* Interface to register commandline handler objects, to add additional command line options */
+	static InstRO::Utility::MultitypeMap& getCmdLineHandlerMap() { return cmdLineHandlerMap; }
 
  protected:
 	InstRO::PassManagement::PassManager* passManager;
 
+	/* Stores a map to register command line handler */
+	static InstRO::Utility::MultitypeMap cmdLineHandlerMap;
+
+	// True means elevate, False means crop
 	bool constructRaisingPolicyElevate, constructLoweringPolicyElevate;
 };
 }

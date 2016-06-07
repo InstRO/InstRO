@@ -112,6 +112,16 @@ bool ASTHelper::isLoop(SgScopeStatement* scope) {
 	return isSgForStatement(scope) || isSgWhileStmt(scope) || isSgDoWhileStmt(scope);
 }
 
+bool ASTHelper::isConstructor(SgFunctionDefinition* fDef) { return isConstructor(fDef->get_declaration()); }
+bool ASTHelper::isConstructor(SgFunctionDeclaration* fDecl) {
+	return fDecl->get_specialFunctionModifier().isConstructor();
+}
+
+bool ASTHelper::isDestructor(SgFunctionDefinition* fDef) { return isDestructor(fDef->get_declaration()); }
+bool ASTHelper::isDestructor(SgFunctionDeclaration* fDecl) {
+	return fDecl->get_specialFunctionModifier().isDestructor();
+}
+
 /** \brief Returns the corresponding function signature like "foo(int,float*)" */
 std::string ASTHelper::getFunctionSignature(SgFunctionDefinition* funcDef) {
 	if (funcDef == NULL) {

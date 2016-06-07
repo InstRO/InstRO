@@ -1,5 +1,7 @@
 #include "instro/utility/CommandlineHandling.h"
 
+#include "instro/Instrumentor.h"
+
 #include "instro/core/OptionDefs.minc"	// Gives definition of register_option_list macro
 
 using namespace InstRO::Utility;
@@ -8,7 +10,7 @@ CommandLineHandler::CommandLineHandler(int argc, char** argv)
 		: cmdParser(argc, argv), desc("InstRO Base Options"), hasRun(false) {
 	namespace bpo = boost::program_options;
 
-	// We do not want to write the same expansion so many times.
+// We do not want to write the same expansion so many times.
 #define REGISTER_FIRST_OPTION(OptName, CmdName, DType, Desc) \
 	OPTION(REGISTER, ESCAPE(OptName), ESCAPE(CmdName), ESCAPE(DType), ESCAPE(Desc))
 #define REGISTER_LAST_OPTION(OptName, CmdName, DType, Desc) \
@@ -55,6 +57,8 @@ CommandLineHandler::OptionArguments CommandLineHandler::getArguments() {
 
 RoseCLIPreparation::RoseCLIPreparation(int* argc, char*** argv) : argcP(argc), argvP(argv), clh(*argc, *argv) {
 	Core::OptionArguments opts = clh.apply();
+	auto &optMap = Instrumentor::getCmdLineHandlerMap();
+
 	if (!opts.instroIncludePath.empty()) {
 		instroIncludePathOption = opts.instroIncludePath;
 	} else {
@@ -73,7 +77,7 @@ RoseCLIPreparation::RoseCLIPreparation(int* argc, char*** argv) : argcP(argc), a
 		instroLibNameOption = "imi";
 	}
 
-	std::cout << opts.instrumentCtors << std::endl;
+	optMap.insert("DefaultOpts", std::move(opts));
 }
 
 std::vector<std::string> RoseCLIPreparation::getCommandLine() {
@@ -84,6 +88,8 @@ std::vector<std::string> RoseCLIPreparation::getCommandLine() {
 
 	Core::Options optNames;
 	// Find and remove the instro specific command line arguments
+	// FIXME This works only if arguments are given as
+	// --arg-name=value
 	argVec.erase(std::remove_if(argVec.begin(), argVec.end(),
 															[&](const std::string& arg) {
 																for (auto s : optNames) {

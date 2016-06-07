@@ -1,6 +1,7 @@
 #ifndef INSTRO_ROSE_PASS_ADAPTER_ROSEDEFAULTINSTRUMENTATIONADAPTER_H_
 #define INSTRO_ROSE_PASS_ADAPTER_ROSEDEFAULTINSTRUMENTATIONADAPTER_H_
 
+
 #include "instro/pass/adapter/DefaultInstrumentationAdapter.h"
 #include "instro/rose/pass/adapter/support/RoseCodeWrapper.h"
 #include "instro/rose/pass/adapter/support/RosePostOrderInstrumentationAdapter.h"

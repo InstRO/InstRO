@@ -45,6 +45,12 @@ bool isContainedInTemplateInstantiation(SgNode* node);
 /** returns true if a void-returning function does not end with a return statement */
 bool voidFunctionEndsWithoutReturn(SgFunctionDefinition *fDef);
 
+bool isConstructor(SgFunctionDefinition* fDef);
+bool isConstructor(SgFunctionDeclaration* fDecl);
+
+bool isDestructor(SgFunctionDefinition* fDef);
+bool isDestructor(SgFunctionDeclaration* fDecl);
+
 /* Handles SgTemplateFunctionInstantiationDecl and SgTemplateMemberFunctionInstantiationDecl to dispatch the Consumer
  * accordingly */
 template <typename CallableFileInfoConsumer>

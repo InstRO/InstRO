@@ -8,3 +8,4 @@ scopes
 matchingIdentifiers
 identifierNesting
 nestedConstructs
+simpleRAII

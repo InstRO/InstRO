@@ -2,6 +2,9 @@
 
 #include "instro/rose/utility/ASTHelper.h"
 #include "instro/rose/utility/ASTTransformer.h"
+#include "instro/Instrumentor.h"
+#include "instro/utility/CommandlineHandling.h"
+
 #include "instro/utility/Logger.h"
 
 namespace InstRO {
@@ -35,6 +38,18 @@ void RoseCodeWrapper::wrapExpression(SgExpression* expr, size_t id) {
 }
 
 void RoseCodeWrapper::instrumentFunction(SgFunctionDefinition* function, size_t id) {
+	auto optionMap = Instrumentor::getCmdLineHandlerMap();
+	// If the user did not manually specify that he wants to instrument ctors, we skip them
+	auto optValue = optionMap.get<InstRO::Utility::CommandLineHandler::OptionArguments>("DefaultOpts");
+	if (!optValue->instrumentCtors && Utility::ASTHelper::isConstructor(function)) {
+		logIt(INFO) << "RoseCodeWrapper: Skipping constructor" << std::endl;
+		return;
+	}
+	if (!optValue->instrumentDtors && Utility::ASTHelper::isDestructor(function)) {
+		logIt(INFO) << "RoseCodeWrapper: Skipping destructor" << std::endl;
+		return;
+	}
+
 	auto& helper = Utility::ASTTransformation::HeaderIncludeHelper::getInstance();
 	if (helper.insertHeaderIfSource("InstROMeasurementInterface.h", function)) {
 		// start

@@ -52,9 +52,11 @@ CORE_HFILES= \
 ./include/instro/utility/CommandlineHandling.h \
 ./include/instro/utility/MemoryManagement.h \
 ./include/instro/utility/Environment.h \
-./include/instro/utility/Iterator.h
+./include/instro/utility/Iterator.h \
+./include/instro/utility/Container.h
 
 CORE_SFILES= \
+./src/Instrumentor.cpp \
 ./src/Pass.cpp \
 ./src/PassFactory.cpp \
 ./src/core/ConstructSet.cpp \
