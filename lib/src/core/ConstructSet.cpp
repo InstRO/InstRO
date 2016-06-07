@@ -32,6 +32,33 @@ std::string Construct::specificConstructTraitToString() const {
 	return InstRO::Core::toString(cts.max());
 }
 
+std::string ConstructTrait::toString() const {
+	if (cts.empty()) {
+		return InstRO::Core::toString(ConstructTraitType::CTNoTraits);
+	}
+
+	std::stringstream ss;
+	ss << "[";
+	for (auto ct : cts) {
+		ss << InstRO::Core::toString(ct) << " ";
+	}
+	ss << "]";
+	return ss.str();
+}
+
+std::string ConstructTrait::toStringShort() const {
+	if (cts.empty()) {
+		return InstRO::Core::constructLevelToStringShort(ConstructTraitType::CTNoTraits);
+	}
+
+	std::stringstream ss;
+	ss << "[";
+	for (auto ct : cts) {
+		ss << InstRO::Core::constructLevelToStringShort(ct) << " ";
+	}
+	ss << "]";
+	return ss.str();
+}
 
 ConstructTraitType ConstructSet::getMaxConstructLevel() const {
 	ConstructTraitType max = ConstructTraitType::CTMin;

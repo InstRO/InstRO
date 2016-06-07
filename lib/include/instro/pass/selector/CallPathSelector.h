@@ -3,6 +3,8 @@
 
 #include "instro/core/PassImplementation.h"
 
+#include <string>
+
 namespace InstRO {
 namespace Selector {
 

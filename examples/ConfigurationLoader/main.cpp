@@ -2,6 +2,7 @@
 #include "instro.h"
 
 #include "instro/utility/ConfigurationLoader.h"
+#include "instro/utility/MemoryManagement.h" // provide make_unique
 
 #include <cstdlib>
 #include <vector>

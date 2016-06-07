@@ -1,14 +1,13 @@
 #ifndef INSTRO_CORE_CHANNEL_CONFIGURATION_H
 #define INSTRO_CORE_CHANNEL_CONFIGURATION_H
 
-#include "instro/core/ConstructSet.h"
+#include "instro/core/ConstructTraitType.h"
 
 #include "instro/utility/Logger.h"
 
 #include <algorithm>
 #include <vector>
 #include <unordered_map>
-#include <cassert>
 #include <map>
 
 

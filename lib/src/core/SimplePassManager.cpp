@@ -1,12 +1,28 @@
 #include "instro/core/SimplePassManager.h"
 
-#include "instro/core/Singleton.h"
 #include "instro/Instrumentor.h"
+#include "instro/core/Singleton.h"
 #include "instro/core/ConstructSet.h"
+#include "instro/utility/MemoryManagement.h"
 #include "instro/utility/Logger.h"
 
 void InstRO::PassManagement::SimplePassManager::registerPass(Pass *currentPass) {
 	passList.push_back(currentPass);
+}
+
+bool InstRO::PassManagement::SimplePassManager::hasOutputDependencies(InstRO::Pass *pass) {
+	for (auto p : passList) {
+		if ((p == pass) || (!hasInputDependencies(p))) {
+			continue;
+		}
+
+		auto cVec(getPredecessors(p));
+		if (std::find_if(cVec.begin(), cVec.end(), [pass](Pass* pp) { return pp == pass; }) != cVec.end()) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 int InstRO::PassManagement::SimplePassManager::execute() {

@@ -4,7 +4,6 @@
 #include "instro/utility/exception.h"
 
 #include <map>
-#include <set>
 #include <string>
 #include <typeindex>
 #include <typeinfo>

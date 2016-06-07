@@ -41,7 +41,7 @@ ConstructTraitType getConstructTraitTypeFromString(std::string cttString);
 
 
 /**
- * I'd suggest those are more for internal workk
+ * I'd suggest those are more for internal work
  */
 std::string constructLevelToString(ConstructTraitType type);
 std::string constructLevelToStringShort(ConstructTraitType type);

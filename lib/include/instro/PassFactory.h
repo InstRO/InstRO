@@ -1,12 +1,15 @@
 #ifndef INSTRO_CORE_PASSFACTORY_H
 #define INSTRO_CORE_PASSFACTORY_H
 
-#include "instro/core/PassManager.h"
-
+//#include "instro/core/PassManager.h"
+#include "instro/core/ConstructTraitType.h"
 #include <string>
+#include <vector>
 
 namespace InstRO {
-
+namespace PassManagement{
+	class PassManager;
+}
 class Pass;
 
 /**

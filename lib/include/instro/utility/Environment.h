@@ -1,15 +1,13 @@
 #ifndef INSTRO_UTILITY_ENVIRONMENT_H
 #define INSTRO_UTILITY_ENVIRONMENT_H
 
-// This holds definitions from configure -- important for convenience ;)
-//#include "instro/config.h"
+#include "instro/utility/Logger.h"
 
 #include <string>
 #include <fstream>
 #include <iostream>
 
 #include "boost/filesystem.hpp"
-#include "instro/utility/Logger.h"
 
 #include "unistd.h"
 #include "sys/types.h"

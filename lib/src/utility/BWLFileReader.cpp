@@ -1,7 +1,6 @@
 
 #include "instro/utility/BWLFileReader.h"
-#include <vector>
-#include <iostream>
+#include "instro/utility/Logger.h"
 
 using namespace InstRO;
 
@@ -17,7 +16,7 @@ std::pair<std::vector<std::string>, std::vector<std::string> > Utility::BWLFileR
 
 void Utility::BWLFileReader::readFile() {
 	if (filename.empty()) {
-		std::cerr << "InstRO Error: The filename was empty in BWLFileReader\n" << std::endl;
+		logIt(ERROR) << "The filename was empty in BWLFileReader\n" << std::endl;
 		return;
 	}
 	std::ifstream inFile;

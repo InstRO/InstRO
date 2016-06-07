@@ -5,9 +5,8 @@
 #include "instro/core/ChannelConfiguration.h"
 #include "instro/core/PassImplementation.h"
 
-#include <map>
+#include <memory>
 #include <string>
-#include <iostream>
 #include <cassert>
 
 #include <vector>

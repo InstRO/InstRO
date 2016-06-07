@@ -2,7 +2,7 @@
 
 #include "instro/utility/exception.h"
 #include "instro/utility/Logger.h"
-#include "instro/core/ChannelConfiguration.h"
+//#include "instro/core/ChannelConfiguration.h"
 
 //// ChannelConfiguration
 

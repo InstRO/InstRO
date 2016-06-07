@@ -81,11 +81,6 @@ namespace Core {
 
 class ConstructTrait {
  public:
-	bool operator==(const ConstructTraitType& comparator) const {
-		if (cts.find(comparator) != cts.end())
-			return true;
-		return false;
-	}
 	ConstructTrait() = delete;
 
 	template <class... TraitList>
@@ -94,6 +89,12 @@ class ConstructTrait {
 	}
 
 	ConstructTrait(ConstructTraitType type) { add(type); }
+
+	bool operator==(const ConstructTraitType& comparator) const {
+		if (cts.find(comparator) != cts.end())
+			return true;
+		return false;
+	}
 
 	bool is(ConstructTraitType type) const {
 		if (cts.empty()) {
@@ -107,33 +108,8 @@ class ConstructTrait {
 	ConstructTraitType min() const { return *cts.cbegin(); }
 	const std::set<ConstructTraitType>& getTraitsAsSet() const { return cts; }
 
-	std::string toString() const {
-		if (cts.empty()) {
-			return InstRO::Core::toString(ConstructTraitType::CTNoTraits);
-		}
-
-		std::stringstream ss;
-		ss << "[";
-		for (auto ct : cts) {
-			ss << InstRO::Core::toString(ct) << " ";
-		}
-		ss << "]";
-		return ss.str();
-	}
-	std::string toStringShort() const {
-		if (cts.empty()) {
-			return InstRO::Core::constructLevelToStringShort(ConstructTraitType::CTNoTraits);
-		}
-
-		std::stringstream ss;
-		ss << "[";
-		for (auto ct : cts) {
-			ss << InstRO::Core::constructLevelToStringShort(ct) << " ";
-		}
-		ss << "]";
-		return ss.str();
-	}
-
+	std::string toString() const;
+	std::string toStringShort() const;
  private:
 	std::set<ConstructTraitType> cts;
 };

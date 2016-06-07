@@ -1,14 +1,12 @@
 #ifndef INSTRO_CORE_PASSIMPLEMENTATION_H
 #define INSTRO_CORE_PASSIMPLEMENTATION_H
 
-#include <initializer_list>
-#include <unordered_map>
+//#include <initializer_list>
+//#include <unordered_map>
 
 #include "instro/core/ConstructSet.h"
-#include "instro/utility/MemoryManagement.h"
-#include "instro/core/ChannelConfiguration.h"
-
-#include <cassert>
+//#include "instro/utility/MemoryManagement.h"
+//#include "instro/core/ChannelConfiguration.h"
 
 namespace InstRO {
 // We need a forward declaration of Pass, since Pass and PassImplementation are circular

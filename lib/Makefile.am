@@ -53,7 +53,8 @@ CORE_HFILES= \
 ./include/instro/utility/MemoryManagement.h \
 ./include/instro/utility/Environment.h \
 ./include/instro/utility/Iterator.h \
-./include/instro/utility/Container.h
+./include/instro/utility/Container.h \
+./include/instro/utility/BWLFileReader.h
 
 CORE_SFILES= \
 ./src/Instrumentor.cpp \
@@ -79,7 +80,8 @@ CORE_SFILES= \
 ./src/pass/adapter/ConstructPrinterAdapter.cpp \
 ./src/utility/Logger.cpp \
 ./src/utility/Environment.cpp \
-./src/utility/CommandlineHandling.cpp
+./src/utility/CommandlineHandling.cpp \
+./src/utility/BWLFileReader.cpp
 
 CLANG_HFILES= \
 ./include/instro/clang/pass/selector/ClangBlackWhitelistSelector.h \
@@ -93,8 +95,7 @@ CLANG_HFILES= \
 ./include/instro/clang/core/ClangConstruct.h \
 ./include/instro/clang/support/InstROASTConsumer.h \
 ./include/instro/clang/tooling/ClangAnalysisInterface.h \
-./include/instro/clang/tooling/ClangConstructTraitInterface.h \
-./include/instro/support/BWLFileReader.h
+./include/instro/clang/tooling/ClangConstructTraitInterface.h 
 
 CLANG_SFILES= \
 ./src/clang/pass/selector/ClangBlackWhitelistSelector.cpp \
@@ -105,8 +106,7 @@ CLANG_SFILES= \
 ./src/clang/core/ClangPassFactory.cpp \
 ./src/clang/support/ClangConsumerFactory.cpp \
 ./src/clang/support/InstROASTConsumer.cpp \
-./src/clang/tooling/ClangConstructTraitInterface.cpp \
-./src/support/BWLFileReader.cpp
+./src/clang/tooling/ClangConstructTraitInterface.cpp 
 
 ROSE_HFILES= \
 ./include/instro/rose/RoseInstrumentor.h  \
@@ -172,7 +172,7 @@ ROSE_SFILES= \
 
 if OPT_RAPIDJSON
 CORE_HFILES += ./include/instro/utility/ConfigurationLoader.h
-CORE_SFILES += ./src/support/ConfigurationLoader.cpp
+CORE_SFILES += ./src/utility/ConfigurationLoader.cpp
 ROSE_SFILES += ./src/rose/utility/RoseConfigurationPassRegistry.cpp
 CLANG_SFILES += ./src/clang/utility/ClangConfigurationPassRegistry.cpp
 endif

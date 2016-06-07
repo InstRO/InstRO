@@ -1,12 +1,12 @@
 #ifndef INSTRO_UTILITY_BWL_FILE_READER_H
 #define INSTRO_UTILITY_BWL_FILE_READER_H
 
+#include "boost/algorithm/string/predicate.hpp"
+#include "boost/algorithm/string.hpp"
+
 #include <string>
 #include <fstream>
 #include <vector>
-
-#include "boost/algorithm/string/predicate.hpp"
-#include "boost/algorithm/string.hpp"
 
 namespace InstRO {
 
@@ -33,10 +33,10 @@ class BWLFileReader {
 
  private:
 	std::string wSpecifier, bSpecifier;
-	bool hasBeenRead;
 	std::string filename;
 	std::vector<std::string> blacklist;
 	std::vector<std::string> whitelist;
+	bool hasBeenRead;
 };
 }	// end namespace util
 }	// end namespace InstRO

@@ -3,6 +3,7 @@
 
 #include "instro/core/PassManager.h"
 
+#include <string>
 #include <algorithm>
 #include <vector>
 
@@ -35,20 +36,7 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 	/** In a simple pass manager this function should just be left blang? */
 	virtual void setDependence(Pass* pred, Pass* pass) { throw std::string("Not implemented in SimplePassManager"); }
 
-	virtual bool hasOutputDependencies(Pass* pass) {
-		for (auto p : passList) {
-			if ((p == pass) || (!hasInputDependencies(p))) {
-				continue;
-			}
-
-			auto cVec(getPredecessors(p));
-			if (std::find_if(cVec.begin(), cVec.end(), [pass](Pass* pp) { return pp == pass; }) != cVec.end()) {
-				return true;
-			}
-		}
-
-		return false;
-	}
+	virtual bool hasOutputDependencies(Pass* pass);
 
 	virtual bool hasInputDependencies(Pass* pass) { return getPredecessors(pass).size() > 0; };
 
