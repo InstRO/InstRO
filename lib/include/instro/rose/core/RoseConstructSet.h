@@ -138,7 +138,7 @@ struct CTExpressionPredicate : public CTPredicate {
 };
 
 struct CTLoopPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const {
+	bool operator()(SgNode* n) const override {
 		if (isSgDoWhileStmt(n) || isSgWhileStmt(n) || isSgForStatement(n)) {
 			return true;
 		}
@@ -147,7 +147,7 @@ struct CTLoopPredicate : public CTPredicate {
 };
 
 struct CTConditionalPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const {
+	bool operator()(SgNode* n) const override {
 		if (isSgIfStmt(n) || isSgSwitchStatement(n)) {
 			return true;
 		}
@@ -156,7 +156,7 @@ struct CTConditionalPredicate : public CTPredicate {
 };
 
 struct CTScopeStatementPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const {
+	bool operator()(SgNode* n) const override {
 		if (!isSgBasicBlock(n)) {
 			return false;
 		}
@@ -175,19 +175,19 @@ struct CTScopeStatementPredicate : public CTPredicate {
 };
 
 struct CTFunctionPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const { return isSgFunctionDefinition(n) != nullptr; }
+	bool operator()(SgNode* n) const override { return isSgFunctionDefinition(n) != nullptr; }
 };
 
 struct CTFileScopePredicate : public CTPredicate {
-	bool operator()(SgNode* n) const { return isSgFile(n) != nullptr; }
+	bool operator()(SgNode* n) const override { return isSgFile(n) != nullptr; }
 };
 
 struct CTGlobalScopePredicate : public CTPredicate {
-	bool operator()(SgNode* n) const { return isSgProject(n) != nullptr; }
+	bool operator()(SgNode* n) const override { return isSgProject(n) != nullptr; }
 };
 
 struct CTSimpleStatementPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const {
+	bool operator()(SgNode* n) const override {
 		if (isSgDeclarationStatement(n)) {
 			if (isSgVariableDeclaration(n) && DefinedVariableDeclarationPredicate()(n)) {
 				return true;	// only variable declarations with initializer
@@ -236,10 +236,16 @@ struct CTSimpleStatementPredicate : public CTPredicate {
 	}
 };
 
+struct CTOpenMPPredicate : public CTPredicate {
+	bool operator()(SgNode* n) const override {
+		return isSgOmpBodyStatement(n) != nullptr;
+	}
+};
+
 struct CTStatementPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const {
+	bool operator()(SgNode* n) const override {
 		if (CTConditionalPredicate()(n) || CTLoopPredicate()(n) || CTScopeStatementPredicate()(n) ||
-				CTSimpleStatementPredicate()(n)) {
+				CTSimpleStatementPredicate()(n) || CTOpenMPPredicate()(n)) {
 			return true;
 		}
 		return false;
@@ -247,7 +253,7 @@ struct CTStatementPredicate : public CTPredicate {
 };
 
 struct CTWrappableStatementPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const {
+	bool operator()(SgNode* n) const override {
 		if (isSgReturnStmt(n)) {
 			return false;	// return stmts are not wrappable
 		}
@@ -259,16 +265,9 @@ struct CTWrappableStatementPredicate : public CTPredicate {
 };
 
 struct ConstructPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const {
+	bool operator()(SgNode* n) const override {
 		return CTGlobalScopePredicate()(n) || CTFileScopePredicate()(n) || CTFunctionPredicate()(n) ||
 					 CTStatementPredicate()(n) || CTExpressionPredicate()(n);
-	}
-};
-
-struct CTOpenMPPredicate : public CTPredicate {
-	bool operator()(SgNode* n) const {
-		// TODO Implement me.
-		return isSgOmpParallelStatement(n) != nullptr;
 	}
 };
 
@@ -367,6 +366,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	void visit(SgOmpBarrierStatement* node) {
 		if (RoseConstructTraitPredicates::CTOpenMPPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
+			handleStatementWithWrappableCheck(node);
 		} else {
 			generateError(node);
 		}
@@ -375,6 +375,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	void visit(SgOmpBodyStatement* node) {
 		if (RoseConstructTraitPredicates::CTOpenMPPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
+			handleStatementWithWrappableCheck(node);
 		} else {
 			generateError(node);
 		}
@@ -383,6 +384,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	void visit(SgOmpFlushStatement* node) {
 		if(RoseConstructTraitPredicates::CTOpenMPPredicate()(node)){
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
+			handleStatementWithWrappableCheck(node);
 		} else {
 			generateError(node);
 		}
@@ -391,6 +393,7 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 	void visit(SgOmpTaskwaitStatement* node) {
 		if (RoseConstructTraitPredicates::CTOpenMPPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
+			handleStatementWithWrappableCheck(node);
 		} else {
 			generateError(node);
 		}
@@ -403,28 +406,28 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 		} else {
 			generateError(node);
 		}
+	}
+
+	// this should be an error
+	void visit(SgScopeStatement* node) { generateError(node); }
+	void visit(SgDeclarationStatement* node) { generateError(node); }
+	void visit(SgNode* node) { generateError(node); }
+
+ private:
+	InstRO::Core::ConstructTrait ct;
+
+	void handleStatementWithWrappableCheck(SgNode* node) {
+		ct.add(InstRO::Core::ConstructTraitType::CTStatement);
+		if (RoseConstructTraitPredicates::CTWrappableStatementPredicate()(node)) {
+			ct.add(InstRO::Core::ConstructTraitType::CTWrappableStatement);
 		}
+	}
 
-		// this should be an error
-		void visit(SgScopeStatement * node) { generateError(node); }
-		void visit(SgDeclarationStatement * node) { generateError(node); }
-		void visit(SgNode * node) { generateError(node); }
-
-	 private:
-		InstRO::Core::ConstructTrait ct;
-
-		void handleStatementWithWrappableCheck(SgNode * node) {
-			ct.add(InstRO::Core::ConstructTraitType::CTStatement);
-			if (RoseConstructTraitPredicates::CTWrappableStatementPredicate()(node)) {
-				ct.add(InstRO::Core::ConstructTraitType::CTWrappableStatement);
-			}
-		}
-
-		void generateError(SgNode * node) {
-			ct = InstRO::Core::ConstructTraitType::CTNoTraits;
-			logIt(INFO) << "ConstructGenerator: Skipped SgNode " << node->class_name() << "\t" << node->unparseToString()
-									<< std::endl;
-		}
+	void generateError(SgNode* node) {
+		ct = InstRO::Core::ConstructTraitType::CTNoTraits;
+		logIt(INFO) << "ConstructGenerator: Skipped SgNode " << node->class_name() << "\t" << node->unparseToString()
+								<< std::endl;
+	}
 };
 
 class RoseConstruct : public InstRO::Core::Construct {

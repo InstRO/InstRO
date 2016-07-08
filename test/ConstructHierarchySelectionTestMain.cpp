@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
 
 #ifdef CDEBUG
 	factory->createConstructPrinterAdapter(ctStmtLvlSelector);
-	factory->createConstructPrinterAdapter(ctExprLvlSelector);
+	factory->createConstructPrinterAdapter(ctOmpLvlSelector);
 #endif
 
 	// sink, so we ignore the returned Pass *

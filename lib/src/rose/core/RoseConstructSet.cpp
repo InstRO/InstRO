@@ -27,6 +27,8 @@ std::unique_ptr<CTPredicate> getPredicateForTraitType(InstRO::Core::ConstructTra
 			return std::make_unique<CTExpressionPredicate>();
 		case InstRO::Core::ConstructTraitType::CTStatement:
 			return std::make_unique<CTStatementPredicate>();
+		case InstRO::Core::ConstructTraitType::CTOpenMPStatement:
+			return std::make_unique<CTOpenMPPredicate>();
 		case InstRO::Core::ConstructTraitType::CTLoopStatement:
 			return std::make_unique<CTLoopPredicate>();
 		case InstRO::Core::ConstructTraitType::CTConditionalStatement:
