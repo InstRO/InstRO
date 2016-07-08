@@ -32,3 +32,4 @@ ompMain
 assignInitInEnum
 ompTask
 ompAtomic
+ompMulti
