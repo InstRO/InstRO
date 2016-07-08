@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <fstream>
+#include <sstream>
 #include <queue>
 
 namespace InstRO {

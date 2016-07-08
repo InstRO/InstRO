@@ -5,10 +5,6 @@
 
 #include <map>
 #include <string>
-#include <iomanip>
-#include <fstream>
-#include <algorithm>
-
 namespace InstRO {
 namespace Tooling {
 

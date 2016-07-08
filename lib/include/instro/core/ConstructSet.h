@@ -4,7 +4,7 @@
 #include "instro/core/ConstructTraitType.h"
 
 #include <string>
-#include <sstream>
+#include <ostream>
 #include <memory>	// Shared pointers
 #include <vector>
 #include <set>

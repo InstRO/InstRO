@@ -6,7 +6,7 @@
 
 #include <set>
 #include <map>
-#include <iostream>
+#include <ostream>
 #include <string>
 
 namespace InstRO {

@@ -40,13 +40,13 @@ std::string ConstructTrait::toString() const {
 		return InstRO::Core::toString(ConstructTraitType::CTNoTraits);
 	}
 
-	std::stringstream ss;
-	ss << "[";
+	std::string str;
+	str += "[";
 	for (auto ct : cts) {
-		ss << InstRO::Core::toString(ct) << " ";
+		str += InstRO::Core::toString(ct) + " ";
 	}
-	ss << "]";
-	return ss.str();
+	str += "]";
+	return str;
 }
 
 std::string ConstructTrait::toStringShort() const {
@@ -54,13 +54,13 @@ std::string ConstructTrait::toStringShort() const {
 		return InstRO::Core::constructLevelToStringShort(ConstructTraitType::CTNoTraits);
 	}
 
-	std::stringstream ss;
-	ss << "[";
+	std::string str;
+	str += "[";
 	for (auto ct : cts) {
-		ss << InstRO::Core::constructLevelToStringShort(ct) << " ";
+		str += InstRO::Core::constructLevelToStringShort(ct) + " ";
 	}
-	ss << "]";
-	return ss.str();
+	str += "]";
+	return str;
 }
 
 ConstructTraitType ConstructSet::getMaxConstructLevel() const {

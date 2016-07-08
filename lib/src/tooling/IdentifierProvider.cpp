@@ -2,6 +2,12 @@
 
 #include "instro/utility/Logger.h"
 
+#include <sstream>
+#include <iomanip>
+#include <fstream>
+#include <algorithm>
+
+
 namespace InstRO {
 namespace Tooling {
 namespace IdentifierProvider {
