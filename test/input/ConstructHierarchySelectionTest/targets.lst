@@ -31,3 +31,4 @@ comma
 ompMain
 assignInitInEnum
 ompTask
+ompAtomic
