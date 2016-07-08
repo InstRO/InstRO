@@ -1,0 +1,12 @@
++CTFunctionSelector
+ompMain.cpp:3:1--Function-::main
+
++CTStatementSelector
+ompMain.cpp:9:2--SimpleStatement
+ompMain.cpp:6:2--ScopeStatement
+
++CTScopeSelector
+ompMain.cpp:6:2--ScopeStatement
+
++CTOpenMPSelector
+ompMain.cpp:5:1--OpenMPStatement

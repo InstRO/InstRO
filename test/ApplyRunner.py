@@ -37,7 +37,7 @@ def runTest(k, arguments, binary, inputDirectory):
 	src2srcOutFile = binary + '_' + srcFile
 
 	# Add flags we want to pass to rose only translators
-	roseExtraArg = ' --edg:no_warnings'
+	roseExtraArg = ' --edg:no_warnings -rose:openmp:ast_only'
 	roseExtraArg += ' -rose:o ' + src2srcOutFile
 	roseExtraArg += ' --instro-library-path=../' + arguments.build + '/test/.libs'
 	roseExtraArg += ' --instro-library-name=InstRO_rtsupport'

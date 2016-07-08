@@ -1,0 +1,6 @@
++CTFunctionSelector
+assignInitInEnum.cpp:8:1--Function-::main
+
++CTStatementSelector
+assignInitInEnum.cpp:8:14--SimpleStatement
+

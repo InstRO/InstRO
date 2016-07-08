@@ -13,6 +13,9 @@ namespace Core {
 std::string Construct::specificConstructTraitToString() const {
 	using CTLvl = InstRO::Core::ConstructTraitType;
 	auto cts = getTraits();
+	if (cts.is(CTLvl::CTOpenMPStatement)) {
+		return "OpenMPStatement";
+	}
 	if (cts.is(CTLvl::CTConditionalStatement)) {
 		return "ConditionalStatement";
 	}
@@ -255,7 +258,9 @@ std::ostream& operator<<(std::ostream& os, InstRO::Core::ConstructTraitType f) {
 		case InstRO::Core::ConstructTraitType::CTStatement:
 			os << "ConstructTraitType::CTStatement";
 			return os;
-
+		case InstRO::Core::ConstructTraitType::CTOpenMPStatement:
+			os << "ConstructTraitType::CTOpenMPStatement";
+			return os;
 		case InstRO::Core::ConstructTraitType::CTWrappableStatement:
 			os << "ConstructTraitType::CTWrappableStatement";
 			return os;

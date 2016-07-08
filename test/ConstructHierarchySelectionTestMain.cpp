@@ -24,7 +24,7 @@ static llvm::cl::OptionCategory instroTool("InstRO Clang Test");
  * Fully qualified path to the input file is strongly preferred.
  *
  */
-
+#define CDEBUG 1
 /**
  * Actual instrumentor
  *
@@ -64,6 +64,7 @@ int main(int argc, char **argv) {
 			factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTConditionalStatement);
 	auto ctScopeLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTScopeStatement);
 	auto ctExprLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTExpression);
+	auto ctOmpLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
 
 #ifdef CDEBUG
 	factory->createConstructPrinterAdapter(ctStmtLvlSelector);
@@ -77,6 +78,7 @@ int main(int argc, char **argv) {
 	factory->createTestAdapter(ctCondLvlSelector, "CTConditionalSelector", filename);
 	factory->createTestAdapter(ctScopeLvlSelector, "CTScopeSelector", filename);
 	factory->createTestAdapter(ctExprLvlSelector, "CTExpressionSelector", filename);
+	factory->createTestAdapter(ctOmpLvlSelector, "CTOpenMPSelector", filename);
 
 	instrumentor.apply();
 

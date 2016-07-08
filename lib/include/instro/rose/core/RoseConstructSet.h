@@ -104,8 +104,9 @@ struct CTExpressionPredicate : public CTPredicate {
 			return false;
 		}
 
+		// Only have assign initializers if they lead to observable behavior
 		if (isSgAssignInitializer(n)) {
-			if (isSgCtorInitializerList(n->get_parent()->get_parent())) {
+			if (isSgCtorInitializerList(n->get_parent()->get_parent()) || isSgEnumDeclaration(n->get_parent()->get_parent())) {
 				return false;
 			}
 			return true;
@@ -267,7 +268,7 @@ struct ConstructPredicate : public CTPredicate {
 struct CTOpenMPPredicate : public CTPredicate {
 	bool operator()(SgNode* n) const {
 		// TODO Implement me.
-		return isSgPragma(n) != nullptr;
+		return isSgOmpParallelStatement(n) != nullptr;
 	}
 };
 
@@ -362,16 +363,8 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 		}
 	}
 
-	// expressions
-	void visit(SgExpression* node) {
-		if (RoseConstructTraitPredicates::CTExpressionPredicate()(node)) {
-			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTExpression);
-		} else {
-			generateError(node);
-		}
-	}
-
-	void visit(SgPragma* node) {
+	// openmp
+	void visit(SgOmpBarrierStatement* node) {
 		if (RoseConstructTraitPredicates::CTOpenMPPredicate()(node)) {
 			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
 		} else {
@@ -379,26 +372,59 @@ class ConstructGenerator : public ROSE_VisitorPatternDefaultBase {
 		}
 	}
 
-	// this should be an error
-	void visit(SgScopeStatement* node) { generateError(node); }
-	void visit(SgDeclarationStatement* node) { generateError(node); }
-	void visit(SgNode* node) { generateError(node); }
-
- private:
-	InstRO::Core::ConstructTrait ct;
-
-	void handleStatementWithWrappableCheck(SgNode* node) {
-		ct.add(InstRO::Core::ConstructTraitType::CTStatement);
-		if (RoseConstructTraitPredicates::CTWrappableStatementPredicate()(node)) {
-			ct.add(InstRO::Core::ConstructTraitType::CTWrappableStatement);
+	void visit(SgOmpBodyStatement* node) {
+		if (RoseConstructTraitPredicates::CTOpenMPPredicate()(node)) {
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
+		} else {
+			generateError(node);
 		}
 	}
 
-	void generateError(SgNode* node) {
-		ct = InstRO::Core::ConstructTraitType::CTNoTraits;
-		logIt(INFO) << "ConstructGenerator: Skipped SgNode " << node->class_name() << "\t" << node->unparseToString()
-								<< std::endl;
+	void visit(SgOmpFlushStatement* node) {
+		if(RoseConstructTraitPredicates::CTOpenMPPredicate()(node)){
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
+		} else {
+			generateError(node);
+		}
 	}
+
+	void visit(SgOmpTaskwaitStatement* node) {
+		if (RoseConstructTraitPredicates::CTOpenMPPredicate()(node)) {
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
+		} else {
+			generateError(node);
+		}
+	}
+
+	// expressions
+	void visit(SgExpression* node) {
+		if (RoseConstructTraitPredicates::CTExpressionPredicate()(node)) {
+			ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTExpression);
+		} else {
+			generateError(node);
+		}
+		}
+
+		// this should be an error
+		void visit(SgScopeStatement * node) { generateError(node); }
+		void visit(SgDeclarationStatement * node) { generateError(node); }
+		void visit(SgNode * node) { generateError(node); }
+
+	 private:
+		InstRO::Core::ConstructTrait ct;
+
+		void handleStatementWithWrappableCheck(SgNode * node) {
+			ct.add(InstRO::Core::ConstructTraitType::CTStatement);
+			if (RoseConstructTraitPredicates::CTWrappableStatementPredicate()(node)) {
+				ct.add(InstRO::Core::ConstructTraitType::CTWrappableStatement);
+			}
+		}
+
+		void generateError(SgNode * node) {
+			ct = InstRO::Core::ConstructTraitType::CTNoTraits;
+			logIt(INFO) << "ConstructGenerator: Skipped SgNode " << node->class_name() << "\t" << node->unparseToString()
+									<< std::endl;
+		}
 };
 
 class RoseConstruct : public InstRO::Core::Construct {
