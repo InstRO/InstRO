@@ -148,6 +148,7 @@ ROSE_SFILES= \
 ./src/rose/tooling/RoseConstructElevator.cpp \
 ./src/rose/tooling/RoseNamedConstructAccess.cpp \
 ./src/rose/tooling/RoseConstructTraitInterface.cpp \
+./src/rose/tooling/RoseControlFlowGraph.cpp \
 ./src/rose/utility/FunctionRenamer.cpp \
 ./src/rose/utility/ASTHelper.cpp \
 ./src/rose/utility/ASTTransformer.cpp \
