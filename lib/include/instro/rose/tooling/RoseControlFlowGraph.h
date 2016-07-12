@@ -1,10 +1,10 @@
 #ifndef INSTRO_ROSE_TOOLING_ROSE_CONTROL_FLOW_GRAPH_H
 #define INSTRO_ROSE_TOOLING_ROSE_CONTROL_FLOW_GRAPH_H
 
-#include <set>
 #include <map>
 #include <queue>
 #include <rose.h>
+#include <set>
 
 #include "instro/rose/core/RoseConstructSet.h"
 #include "instro/tooling/ControlFlowGraph.h"
@@ -21,19 +21,20 @@ namespace ControlFlowGraph {
  * - handle that return statements are never in a scope
  */
 
-using namespace InstRO::Tooling::ControlFlowGraph;
+// The alias allows convenient access to members of the abstract type / interfaces
+namespace BCFG = InstRO::Tooling::ControlFlowGraph;
 
 class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
  public:
 	CFGConstructSetGenerator(unsigned int index)
-			: cs(new InstRO::Core::ConstructSet()), nodeType(NOT_SET), magicIndexVariable(index) {}
+			: cs(new InstRO::Core::ConstructSet()), nodeType(BCFG::NOT_SET), magicIndexVariable(index) {}
 
 	InstRO::Core::ConstructSet* getConstructSet() { return cs; }
-	CFGNodeType getNodeType() { return nodeType; }
+	BCFG::CFGNodeType getNodeType() { return nodeType; }
 
 	// FUNCTION ENTER or EXIT
 	void visit(SgFunctionDefinition* node);
-	
+
 	// conditionals
 	void visit(SgIfStmt* node) { invalidate(node); }
 	void visit(SgSwitchStatement* node) { invalidate(node); }
@@ -46,13 +47,12 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 	void visit(SgWhileStmt* node) { invalidate(node); }
 	void visit(SgDoWhileStmt* node) { invalidate(node); }
 
-
 	void visit(SgVariableDeclaration* node);
 	void visit(SgForInitStatement* node) { invalidate(node); }
 
 	// statements
 	void visit(SgStatement* node) {
-		nodeType = STMT;
+		nodeType = BCFG::STMT;
 		InfrastructureInterface::ConstructSetCompilerInterface csci(cs);
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
 	}
@@ -67,7 +67,7 @@ class CFGConstructSetGenerator : public ROSE_VisitorPatternDefaultBase {
 
  private:
 	InstRO::Core::ConstructSet* cs;
-	CFGNodeType nodeType;
+	BCFG::CFGNodeType nodeType;
 
 	unsigned magicIndexVariable;	// this index variable hold info of the rose VirtualCFG::CFGNode
 
@@ -78,21 +78,21 @@ class RoseSingleFunctionCFGGenerator {
  public:
 	RoseSingleFunctionCFGGenerator(SgFunctionDefinition* funcDef);
 
-	BoostCFG getCFG() { return std::move(cfg); }
+	BCFG::BoostCFG getCFG() { return std::move(cfg); }
 
  private:
-	BoostCFG cfg;
+	BCFG::BoostCFG cfg;
 	std::set<CFGNode> visitedCFGNodes;
-	std::map<CFGNode, ControlFlowGraphNode> mapping;
+	std::map<CFGNode, BCFG::ControlFlowGraphNode> mapping;
 
 	void generate(InstRO::Core::ConstructSet* previousNode, CFGNode vcfgNode);
 
-	ControlFlowGraphNode aquireControlFlowGraphNode(CFGNode cfgNode) {
+	BCFG::ControlFlowGraphNode aquireControlFlowGraphNode(CFGNode cfgNode) {
 		if (mapping.find(cfgNode) == mapping.end()) {
 			CFGConstructSetGenerator gen(cfgNode.getIndex());
 
 			cfgNode.getNode()->accept(gen);
-			mapping[cfgNode] = ControlFlowGraphNode(gen.getConstructSet(), gen.getNodeType());
+			mapping[cfgNode] = BCFG::ControlFlowGraphNode(gen.getConstructSet(), gen.getNodeType());
 		}
 		return mapping[cfgNode];
 	}
@@ -112,7 +112,7 @@ class RoseCFGGenerator {
 	}
 
  private:
-	std::vector<BoostCFG> cfgs;
+	std::vector<BCFG::BoostCFG> cfgs;
 };
 
 }	// namespace ControlFlowGraph

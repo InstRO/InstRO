@@ -47,7 +47,7 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 	NamedConstructAccess::RoseNamedConstructAccess *namedConstructAccessInstance;
 	ConstructElevator::ConstructElevator *ce;
 	ConstructTraitInterface::RoseConstructTraitInterface *cti;
-	ControlFlowGraph::ControlFlowGraph *controlFlowGraph;
+	InstRO::Tooling::ControlFlowGraph::ControlFlowGraph *controlFlowGraph;
 	ExtendedCallGraph::ExtendedCallGraph *extendedCallGraph;
 };
 

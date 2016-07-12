@@ -1,13 +1,13 @@
 #ifndef INSTRO_TOOLING_CONTROLFLOWGRAPH_H
 #define INSTRO_TOOLING_CONTROLFLOWGRAPH_H
 
-#include <vector>
-
 #include "instro/core/ConstructSet.h"
 
 #include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/labeled_graph.hpp>
 #include <boost/graph/graphviz.hpp>
+#include <boost/graph/labeled_graph.hpp>
+
+#include <vector>
 
 namespace InstRO {
 namespace Tooling {
@@ -50,7 +50,8 @@ class ControlFlowGraphNode {
 };
 
 typedef boost::labeled_graph<boost::adjacency_list<boost::setS, boost::vecS, boost::directedS, ControlFlowGraphNode>,
-														 InstRO::Core::ConstructSet> Graph;
+														 InstRO::Core::ConstructSet>
+		Graph;
 
 class BoostCFG {
  public:
@@ -122,41 +123,14 @@ class AbstractControlFlowGraph : public ControlFlowGraph {
  public:
 	AbstractControlFlowGraph(std::vector<BoostCFG> graphs) : cfgs(graphs) {}
 
-	ControlFlowGraphNode getCFGEntryNode(ControlFlowGraphNode cfgNode) override {
-		for (auto cfg : cfgs) {
-			if (cfg.contains(cfgNode)) {
-				return cfg.getStartNode();
-			}
-		}
-		throw std::string("ControlFlowGraph Error: found no corresponding CFG");
-	}
-	ControlFlowGraphNode getCFGExitNode(ControlFlowGraphNode cfgNode) override {
-		for (auto cfg : cfgs) {
-			if (cfg.contains(cfgNode)) {
-				return cfg.getEndNode();
-			}
-		}
-		throw std::string("ControlFlowGraph Error: found no corresponding CFG");
-	}
+	ControlFlowGraphNode getCFGEntryNode(ControlFlowGraphNode cfgNode) override;
+
+	ControlFlowGraphNode getCFGExitNode(ControlFlowGraphNode cfgNode) override;
 
 	std::set<ControlFlowGraphNode> getCFGEntrySet(InstRO::Core::ConstructSet cs) override;
 	std::set<ControlFlowGraphNode> getCFGExitSet(InstRO::Core::ConstructSet cs) override;
 
-	std::set<ControlFlowGraphNode> getCFGNodeSet(InstRO::Core::ConstructSet cs) override {
-		std::set<ControlFlowGraphNode> returnSet;
-
-		for (auto const& boostCFG : cfgs) {
-			Graph::vertex_iterator vertexIter, vertexEnd;
-			for (boost::tie(vertexIter, vertexEnd) = vertices(boostCFG.getGraph()); vertexIter != vertexEnd; vertexIter++) {
-				ControlFlowGraphNode node = boostCFG.getGraph().graph()[*vertexIter];
-
-				if (node.getAssociatedConstructSet()->intersects(cs)) {
-					returnSet.insert(node);
-				}
-			}
-		}
-		return returnSet;
-	}
+	std::set<ControlFlowGraphNode> getCFGNodeSet(InstRO::Core::ConstructSet cs) override;
 
  private:
 	std::vector<BoostCFG> cfgs;

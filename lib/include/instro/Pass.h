@@ -57,7 +57,7 @@ class Pass {
 	void finalizePass();
 
 	// Query the proxy pass for its output
-	Core::ConstructSet *getOutput() const { return passImplementation->getOutput(); };
+	Core::ConstructSet *getOutput() const { return passImplementation->getOutput(); }
 
 	// returns the ConstructSet for the input channel from
 	Core::ConstructSet *getInput(Pass *from) {
@@ -77,17 +77,17 @@ class Pass {
 		inputOverride[from] = sharedSet;
 	}
 
-	const std::string passName() const { return passNameString; };
+	const std::string passName() const { return passNameString; }
 
-	const std::vector<Pass *> getInputPasses() const { return channelConfig.getPasses(); };
+	const std::vector<Pass *> getInputPasses() const { return channelConfig.getPasses(); }
 
 	Core::ConstructTraitType getMinInputLevelRequirement(Pass *pass) const {
 		return channelConfig.getMinConstructLevel(pass);
-	};
+	}
 
 	Core::ConstructTraitType getMaxInputLevelRequirement(Pass *pass) const {
 		return channelConfig.getMaxConstructLevel(pass);
-	};
+	}
 
  protected:
 	// Get the number of altered, invalidated or changed constructs. We expect the next higher construct that dominates

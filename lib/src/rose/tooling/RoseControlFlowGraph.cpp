@@ -12,10 +12,10 @@ void CFGConstructSetGenerator::visit(SgFunctionDefinition* node) {
 
 	Sg_File_Info* fileInfo;
 	if (magicIndexVariable == 0) {
-		nodeType = FUNC_ENTRY;
+		nodeType = BCFG::FUNC_ENTRY;
 		fileInfo = node->get_body()->get_startOfConstruct();
 	} else if (magicIndexVariable == 3) {
-		nodeType = FUNC_EXIT;
+		nodeType = BCFG::FUNC_EXIT;
 		fileInfo = node->get_body()->get_endOfConstruct();
 	} else {
 		logIt(ERROR) << "CFGConstructSetGenerator: encountered Function with invalid index" << std::endl;
@@ -34,10 +34,10 @@ void CFGConstructSetGenerator::visit(SgBasicBlock* node) {
 
 	InfrastructureInterface::ConstructSetCompilerInterface csci(cs);
 	if (magicIndexVariable == 0) {
-		nodeType = SCOPE_ENTRY;
+		nodeType = BCFG::SCOPE_ENTRY;
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getFragment(node, node->get_startOfConstruct()));
 	} else if (magicIndexVariable == node->cfgIndexForEnd()) {
-		nodeType = SCOPE_EXIT;
+		nodeType = BCFG::SCOPE_EXIT;
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getFragment(node, node->get_endOfConstruct()));
 	} else {
 		invalidate(node);
@@ -50,7 +50,7 @@ void CFGConstructSetGenerator::visit(SgVariableDeclaration* node) {
 		return;
 	}
 
-	nodeType = STMT;
+	nodeType = BCFG::STMT;
 	InfrastructureInterface::ConstructSetCompilerInterface csci(cs);
 	csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
 }
@@ -58,7 +58,7 @@ void CFGConstructSetGenerator::visit(SgVariableDeclaration* node) {
 // expressions
 void CFGConstructSetGenerator::visit(SgExpression* node) {
 	if (Core::RoseConstructTraitPredicates::ExpressionInLoopOrConditionalHeader()(node)) {
-		nodeType = EXPR;
+		nodeType = BCFG::EXPR;
 		InfrastructureInterface::ConstructSetCompilerInterface csci(cs);
 		csci.put(InstRO::Rose::Core::RoseConstructProvider::getInstance().getConstruct(node));
 	} else {

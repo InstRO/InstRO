@@ -1,8 +1,10 @@
 #ifndef INSTRO_TOOLING_NAMED_CONSTRUCT_ACCESS_H
 #define INSTRO_TOOLING_NAMED_CONSTRUCT_ACCESS_H
 
-#include <vector>
 #include "instro/core/ConstructSet.h"
+
+#include <string>
+#include <vector>
 
 namespace InstRO {
 namespace Tooling {
