@@ -1,4 +1,6 @@
 #include "instro/rose/tooling/RoseControlFlowGraph.h"
+#include "instro/rose/core/RoseConstructPredicates.h"
+
 namespace InstRO {
 namespace Rose {
 namespace Tooling {

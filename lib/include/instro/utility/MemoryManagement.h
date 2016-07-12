@@ -1,5 +1,8 @@
 #ifndef INSTRO_UTILITY_MEMORY_MANAGEMENT_H
 #define INSTRO_UTILITY_MEMORY_MANAGEMENT_H
+
+#include <memory>
+
 namespace std {
 
 #ifdef PROVIDE_MAKE_UNIQUE

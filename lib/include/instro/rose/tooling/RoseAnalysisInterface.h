@@ -24,6 +24,7 @@ class RoseAnalysisManager : public InstRO::Tooling::AnalysisManager {
 				extendedCallGraph((new ExtendedCallGraph::RoseECGGenerator())->build(proj)) {}
 
 	RoseAnalysisManager() = delete;
+
 	~RoseAnalysisManager() {
 		delete namedConstructAccessInstance;
 		delete ce;

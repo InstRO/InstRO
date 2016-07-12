@@ -1,5 +1,7 @@
 #include "instro/tooling/ExtendedCallGraph.h"
 
+#include "instro/utility/Logger.h"
+
 #include <cassert>
 #include <fstream>
 #include <sstream>

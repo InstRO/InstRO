@@ -1,5 +1,6 @@
 #include "rose.h"
 #include "instro/rose/core/RoseConstructSet.h"
+#include "instro/rose/core/RoseConstructPredicates.h"
 
 #include <fstream>
 #include <string>

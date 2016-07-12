@@ -112,6 +112,7 @@ ROSE_HFILES= \
 ./include/instro/rose/RoseInstrumentor.h  \
 ./include/instro/rose/RosePassFactory.h  \
 ./include/instro/rose/core/RoseConstructSet.h  \
+./include/instro/rose/core/RoseConstructPredicates.h \
 ./include/instro/rose/core/RosePass.h  \
 ./include/instro/rose/core/RoseLegacySelector.h \
 ./include/instro/rose/tooling/RoseAnalysisInterface.h  \
@@ -149,6 +150,7 @@ ROSE_SFILES= \
 ./src/rose/tooling/RoseNamedConstructAccess.cpp \
 ./src/rose/tooling/RoseConstructTraitInterface.cpp \
 ./src/rose/tooling/RoseControlFlowGraph.cpp \
+./src/rose/tooling/RoseExtendedCallGraph.cpp \
 ./src/rose/utility/FunctionRenamer.cpp \
 ./src/rose/utility/ASTHelper.cpp \
 ./src/rose/utility/ASTTransformer.cpp \

@@ -3,6 +3,7 @@
 
 #include "instro/core/ConstructSet.h"
 #include "instro/rose/core/RoseConstructSet.h"
+#include "instro/rose/core/RoseConstructPredicates.h"
 #include "instro/rose/tooling/RoseConstructElevator.h"
 
 #include "instro/utility/Logger.h"

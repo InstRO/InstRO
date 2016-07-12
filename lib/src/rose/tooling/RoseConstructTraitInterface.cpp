@@ -1,7 +1,10 @@
-#include <memory>
 #include "instro/utility/MemoryManagement.h"
 #include "instro/rose/core/RoseConstructSet.h"
+#include "instro/rose/core/RoseConstructPredicates.h"
 #include "instro/rose/tooling/RoseConstructTraitInterface.h"
+
+#include <memory>
+
 
 namespace InstRO {
 namespace Rose {

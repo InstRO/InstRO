@@ -1,4 +1,5 @@
 #include "instro/rose/core/RoseConstructSet.h"
+#include "instro/rose/core/RoseConstructPredicates.h"
 
 #include <cctype>
 
@@ -268,13 +269,9 @@ int RoseConstruct::determineCorrectColumnInformation() const {
 	return colInfo;
 }
 
-int RoseFragment::determineCorrectLineInfo() const {
-	return info->get_line();
-}
+int RoseFragment::determineCorrectLineInfo() const { return info->get_line(); }
 
-int RoseFragment::determineCorrectColumnInformation() const {
-	return info->get_col();
-}
+int RoseFragment::determineCorrectColumnInformation() const { return info->get_col(); }
 
 std::shared_ptr<InstRO::Core::Construct> RoseConstructProvider::getFragment(SgNode* node, Sg_File_Info* fileInfo) {
 	if (node == nullptr || fileInfo == nullptr) {
@@ -288,6 +285,144 @@ std::shared_ptr<InstRO::Core::Construct> RoseConstructProvider::getFragment(SgNo
 	return mapping[fileInfo];
 }
 
+// global scope
+void ConstructGenerator::visit(SgProject* node) {
+	if (RoseConstructTraitPredicates::CTGlobalScopePredicate()(node)) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTGlobalScope);
+	} else {
+		generateError(node);
+	}
+}
+
+// file scope
+void ConstructGenerator::visit(SgSourceFile* node) {
+	if (RoseConstructTraitPredicates::CTFileScopePredicate()(node)) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFileScope);
+	} else {
+		generateError(node);
+	}
+}
+
+// function
+void ConstructGenerator::visit(SgFunctionDefinition* node) {
+	if (RoseConstructTraitPredicates::CTFunctionPredicate()(node)) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTFunction);
+	} else {
+		generateError(node);
+	}
+}
+
+// conditionals
+void ConstructGenerator::visit(SgIfStmt* node) {
+	ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTConditionalStatement);
+	handleStatementWithWrappableCheck(node);
+}
+void ConstructGenerator::visit(SgSwitchStatement* node) {
+	ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTConditionalStatement);
+	handleStatementWithWrappableCheck(node);
+}
+
+// loops
+void ConstructGenerator::visit(SgForStatement* node) {
+	ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTLoopStatement);
+	handleStatementWithWrappableCheck(node);
+}
+void ConstructGenerator::visit(SgWhileStmt* node) {
+	ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTLoopStatement);
+	handleStatementWithWrappableCheck(node);
+}
+void ConstructGenerator::visit(SgDoWhileStmt* node) {
+	ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTLoopStatement);
+	handleStatementWithWrappableCheck(node);
+}
+
+// scopes
+void ConstructGenerator::visit(SgBasicBlock* node) {
+	if (RoseConstructTraitPredicates::CTScopeStatementPredicate()(node)) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTScopeStatement);
+		handleStatementWithWrappableCheck(node);
+	} else {
+		generateError(node);
+	}
+}
+
+// statements
+void ConstructGenerator::visit(SgStatement* node) {
+	if (RoseConstructTraitPredicates::CTSimpleStatementPredicate()(node)) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTSimpleStatement);
+		handleStatementWithWrappableCheck(node);
+	} else {
+		generateError(node);
+	}
+}
+
+void ConstructGenerator::visit(SgVariableDeclaration* node) {
+	// CI: an initialized variable declaration is OK,
+	if (RoseConstructTraitPredicates::DefinedVariableDeclarationPredicate()(node)) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTSimpleStatement);
+		handleStatementWithWrappableCheck(node);
+	} else {
+		generateError(node);
+	}
+}
+
+// openmp
+void ConstructGenerator::visit(SgOmpBarrierStatement* node) {
+	if (RoseConstructTraitPredicates::CTOpenMPPredicate()(node)) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
+		handleStatementWithWrappableCheck(node);
+	} else {
+		generateError(node);
+	}
+}
+
+void ConstructGenerator::visit(SgOmpBodyStatement* node) {
+	if (RoseConstructTraitPredicates::CTOpenMPPredicate()(node)) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
+		handleStatementWithWrappableCheck(node);
+	} else {
+		generateError(node);
+	}
+}
+
+void ConstructGenerator::visit(SgOmpFlushStatement* node) {
+	if (RoseConstructTraitPredicates::CTOpenMPPredicate()(node)) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
+		handleStatementWithWrappableCheck(node);
+	} else {
+		generateError(node);
+	}
+}
+
+void ConstructGenerator::visit(SgOmpTaskwaitStatement* node) {
+	if (RoseConstructTraitPredicates::CTOpenMPPredicate()(node)) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
+		handleStatementWithWrappableCheck(node);
+	} else {
+		generateError(node);
+	}
+}
+
+// expressions
+void ConstructGenerator::visit(SgExpression* node) {
+	if (RoseConstructTraitPredicates::CTExpressionPredicate()(node)) {
+		ct = InstRO::Core::ConstructTrait(InstRO::Core::ConstructTraitType::CTExpression);
+	} else {
+		generateError(node);
+	}
+}
+void ConstructGenerator::handleStatementWithWrappableCheck(SgNode* node) {
+	ct.add(InstRO::Core::ConstructTraitType::CTStatement);
+	if (RoseConstructTraitPredicates::CTWrappableStatementPredicate()(node)) {
+		ct.add(InstRO::Core::ConstructTraitType::CTWrappableStatement);
+	}
+}
+
+void ConstructGenerator::generateError(SgNode* node) {
+	ct = InstRO::Core::ConstructTraitType::CTNoTraits;
+	logIt(INFO) << "ConstructGenerator: Skipped SgNode " << node->class_name() << "\t" << node->unparseToString()
+							<< std::endl;
+}
 
 std::shared_ptr<InstRO::Core::Construct> RoseConstructProvider::getConstruct(SgNode* const node) {
 	if (node == nullptr) {

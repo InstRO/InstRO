@@ -2,7 +2,6 @@
 #define INSTRO_TOOLING_EXTENDED_CALLGRAPH_H
 
 #include "instro/core/ConstructSet.h"
-#include "instro/utility/Logger.h"
 
 #include <set>
 #include <map>

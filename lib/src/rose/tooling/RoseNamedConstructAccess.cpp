@@ -1,5 +1,6 @@
 #include "instro/rose/tooling/RoseNamedConstructAccess.h"
 #include "instro/rose/core/RoseConstructSet.h"
+#include "instro/rose/core/RoseConstructPredicates.h"
 
 #include "instro/utility/Logger.h"
 #define INSTRO_LOG_LEVEL DEBUG
