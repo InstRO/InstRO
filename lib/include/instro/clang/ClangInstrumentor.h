@@ -1,16 +1,16 @@
 #ifndef INSTRO_CLANG_CLANGINSTRUMENTOR_H
 #define INSTRO_CLANG_CLANGINSTRUMENTOR_H
 
-#include <memory>
+#include "instro/Instrumentor.h"
+#include "instro/clang/ClangPassFactory.h"
+#include "instro/clang/tooling/ClangAnalysisInterface.h"
 
 #include "llvm/Support/CommandLine.h"
 
 #include "clang/Tooling/CommonOptionsParser.h"
 #include "clang/Tooling/Refactoring.h"
 
-#include "instro/Instrumentor.h"
-#include "instro/clang/ClangPassFactory.h"
-#include "instro/clang/tooling/ClangAnalysisInterface.h"
+#include <memory>
 
 namespace InstRO {
 namespace Clang {

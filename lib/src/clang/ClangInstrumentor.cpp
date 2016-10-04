@@ -1,5 +1,5 @@
 #include "instro/clang/ClangInstrumentor.h"
-
+#include "instro/utility/MemoryManagement.h"
 #include "instro/clang/core/ClangConsumerFactory.h"
 
 #include "instro/core/Singleton.h"

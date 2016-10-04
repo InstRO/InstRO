@@ -71,3 +71,9 @@ std::string InstRO::Utility::getScorepIncludeFlags() {
 	return s;
 }
 
+void InstRO::Utility::printErrorAndExit(int errNo) {
+	logIt(ERROR) << "Running sub program. Msg: " << std::string(strerror(errno)) << std::endl;
+	exit(-1);
+}
+
+void InstRO::Utility::exitNoError() { exit(0); }

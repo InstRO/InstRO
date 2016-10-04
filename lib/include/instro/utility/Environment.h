@@ -25,6 +25,9 @@ std::string getInstroRTLibraryPathname();
 /** Returns the configure-time include path (either prefix or source directory) */
 std::string getInstroRTIncludePathname();
 
+void printErrorAndExit(int errNo);
+void exitNoError();
+
 ///@cond
 //** Should be used internally - if absolutely necessary. Executes a programm (assumed to be in PATH) and returns the
 // output in a string */
@@ -41,10 +44,9 @@ void runExecutable(std::string progName, T... args) {
 		int err = execlp(progName.c_str(), progName.c_str(), (args.c_str())..., NULL);
 		if (err == -1) {
 			// if returned error
-			logIt(ERROR) << "Running sub program. Msg: " << std::string(strerror(errno)) << std::endl;
-			exit(-1);
+			printErrorAndExit(errno);
 		}
-		exit(0);	// exit child process if no error occured
+		exitNoError();	// exit child process if no error occured
 	} else {
 		// parent
 		int status;

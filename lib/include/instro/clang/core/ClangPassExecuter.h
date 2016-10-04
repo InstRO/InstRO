@@ -1,13 +1,13 @@
 #ifndef INSTRO_CLANG_CORE_PASSMANAGEMENT_PASSEXECUTOR_H
 #define INSTRO_CLANG_CORE_PASSMANAGEMENT_PASSEXECUTOR_H
 
-#include <iostream>
-#include <cassert>
-
 #include "clang/AST/ASTContext.h"
 #include "clang/AST/RecursiveASTVisitor.h"
 
 #include "instro/core/PassImplementation.h"
+
+#include <iostream>
+#include <cassert>
 
 namespace InstRO {
 namespace Clang {

@@ -2,7 +2,6 @@
 #define BOOST_SYSTEM_NO_DEPRECATED
 
 #include "instro.h"
-#include <iostream>
 
 #if INSTRO_USE_ROSE
 #include "lib/RoseTestSupport.h"
@@ -15,6 +14,8 @@ static llvm::cl::OptionCategory instroTool("InstRO Clang Test");
 
 #include "instro/utility/Logger.h"
 #include "instro/utility/Environment.h"
+
+#include <iostream>
 /**
  * This is the TestInstrumentor implementation.
  *

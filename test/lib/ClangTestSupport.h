@@ -1,12 +1,13 @@
 #ifndef TEST_LIB_CLANGTESTSUPPORT_H
 #define TEST_LIB_CLANGTESTSUPPORT_H
 
-#include <sstream>
-#include <regex>
-
 #include "instro.h"
 #include "instro/clang/core/ClangConstruct.h"
 #include "lib/TestAdapter.h"
+
+#include <sstream>
+#include <regex>
+
 
 namespace ClangTest {
 
