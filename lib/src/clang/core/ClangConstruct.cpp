@@ -17,12 +17,6 @@ using namespace InstRO::Clang::Core;
 
 namespace {
 
-namespace funcs {
-	auto& front(clang::ASTContext::DynTypedNodeList l) {
-		return *(l.begin());
-	}
-}
-
 class PredicateMatcherHandler : public clang::ast_matchers::MatchFinder::MatchCallback {
  public:
 	PredicateMatcherHandler() : matchedOnce(false) {}
@@ -133,7 +127,6 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		auto parents = context.getParents(*stmt);
 		if (parents.size() == 1) {
 			if (parents[0].get<clang::FunctionDecl>() || parents[0].get<clang::SwitchStmt>()) {
-			//if (parents.front().get<clang::FunctionDecl>() || parents.front().get<clang::SwitchStmt>()) {
 				generateError(stmt);
 			} else {
 				ct = ConstructTrait(ConstructTraitType::CTScopeStatement);
@@ -188,7 +181,6 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		auto parents = context.getParents(*stmt);
 		if (parents.size() == 1) {
 			if (const clang::Stmt *parent = parents[0].get<clang::Stmt>()) {
-			//if (const clang::Stmt *parent = parents.front().get<clang::Stmt>()) {
 				isNotAStatement = llvm::isa<clang::Expr>(*parent);
 				if (!isNotAStatement) {
 					if (llvm::isa<clang::ReturnStmt>(parent)) {
@@ -197,7 +189,6 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 					}
 				}
 			} else if (parents[0].get<clang::Decl>()) {
-			//} else if (parents.front().get<clang::Decl>()) {
 				isNotAStatement = true;
 			}
 		}
@@ -317,7 +308,6 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		}
 
 		auto &parent = parents[0];
-		//auto &parent = parents.front();
 		if (const clang::IfStmt *ifStmt = parent.get<clang::IfStmt>()) {
 			return ifStmt->getCond() == expr;
 		} else if (const clang::SwitchStmt *switchStmt = parent.get<clang::SwitchStmt>()) {
@@ -342,7 +332,6 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		}
 
 		if (const clang::ForStmt *forStmt = parents[0].get<clang::ForStmt>()) {
-		//if (const clang::ForStmt *forStmt = parents.front().get<clang::ForStmt>()) {
 			return forStmt->getCond() == stmt || forStmt->getInit() == stmt;
 		}
 
