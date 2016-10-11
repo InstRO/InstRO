@@ -23,6 +23,7 @@ enum class ConstructKind {
 	CK_Stmt = 2,
 };
 
+
 /**
  * @brief A Construct representing AST nodes of the Clang compiler infrastructure.
  * A ClangConstruct represents either a declaration or a statement.
@@ -76,6 +77,7 @@ class ClangConstruct : public InstRO::Core::Construct {
 	static clang::SourceManager& getSourceManager();
 
  private:
+
 	ConstructKind kind;
 	void* construct;
 

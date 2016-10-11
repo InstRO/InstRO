@@ -76,8 +76,8 @@ InstRO::Clang::VisitingPassExecuter<T>::VisitingPassExecuter(clang::ASTContext *
 template <typename T>
 void InstRO::Clang::VisitingPassExecuter<T>::execute(T *pass) {
 	assert(pass != nullptr);
-	assert(context != nullptr);
-	assert(context->getTranslationUnitDecl() != nullptr && "translation unit null");
+	assert(this->context != nullptr);
+	assert(this->context->getTranslationUnitDecl() != nullptr && "translation unit null");
 	// traverse the Clang AST
 	pass->TraverseDecl(this->context->getTranslationUnitDecl());
 }
