@@ -8,12 +8,9 @@ find_package(Boost REQUIRED COMPONENTS system iostreams program_options)
 # TODO I think we can move this to the respective targets
 include_directories(${LLVM_INCLUDE_DIRS})
 include_directories(${LLVM_DEFINITIONS})
-#include_directories(${CMAKE_SOURCE_DIR}/lib/include)
 
 # Standard compile options InstRO uses
 set(instro_default_options -std=c++14 -Werror=return-type)
-
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${instro_default_options}")
 
 # To select the Compiler backend InstRO wants to use
 # TODO As soon as we port the Rose build to CMake, we need to make this configurable
