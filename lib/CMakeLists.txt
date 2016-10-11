@@ -1,9 +1,11 @@
+# Process part-libraries
 add_subdirectory(src/clang)
 add_subdirectory(src/core)
 add_subdirectory(src/pass)
 add_subdirectory(src/tooling)
 add_subdirectory(src/utility)
 
+# The InstRO library
 add_library(InstRO SHARED src/Instrumentor 
 											src/Pass 
 											src/PassFactory)

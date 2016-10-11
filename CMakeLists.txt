@@ -3,19 +3,27 @@ cmake_minimum_required(VERSION 3.4.3)
 project(InstRO)
 
 find_package(Clang REQUIRED CONFIG)
-
 find_package(Boost REQUIRED COMPONENTS system iostreams program_options)
 
+# TODO I think we can move this to the respective targets
 include_directories(${LLVM_INCLUDE_DIRS})
 include_directories(${LLVM_DEFINITIONS})
+#include_directories(${CMAKE_SOURCE_DIR}/lib/include)
 
+# Standard compile options InstRO uses
 set(instro_default_options -std=c++14 -Werror=return-type)
 
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${instro_default_options}")
 
+# To select the Compiler backend InstRO wants to use
+# TODO As soon as we port the Rose build to CMake, we need to make this configurable
 set(INSTRO_USE_CLANG True)
+# Whether we can use exceptions
 set(INSTRO_DISABLE_EXCEPTIONS False)
+# Generate the needed lib/include/instro/config.h file
 configure_file(cconfig.h.in ${CMAKE_SOURCE_DIR}/lib/include/instro/config.h)
 
+# Process the subsequent directories
 add_subdirectory(lib)
 add_subdirectory(support)
 add_subdirectory(test)
