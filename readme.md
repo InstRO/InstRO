@@ -89,10 +89,12 @@ Support for building the InstRO framework with the Clang compiler infrastructure
 #### Build steps
 At least in our environment the following steps are sufficient. However, as noted building with Clang is work in progress.
 
-```
-mkdir build && cd build
-cmake ../repo
-make
+```bash
+$ mkdir build && cd build
+>> We want to build out-of-tree
+$ cmake ../repo
+>> Generating the Makefiles
+$ make
 ```
 
 ## Using InstRO
