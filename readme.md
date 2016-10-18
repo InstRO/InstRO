@@ -83,7 +83,7 @@ Support for building the InstRO framework with the Clang compiler infrastructure
 
 #### Dependencies
 - CMake >= 3.4.3
-- Clang 3.9
+- Clang 3.9 (enabled exceptions and RTTI)
 - Boost 1.60
 
 #### Build steps
