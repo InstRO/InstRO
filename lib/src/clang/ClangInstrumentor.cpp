@@ -6,7 +6,10 @@
 #include "instro/utility/exception.h"
 
 InstRO::Clang::ClangInstrumentor::ClangInstrumentor(int argc, const char** argv, llvm::cl::OptionCategory& llvmThing)
-		: argc(argc), argv(argv), cop(argc, argv, llvmThing), tool(cop.getCompilations(), cop.getSourcePathList()) {
+		: argc(argc),
+			argv(argv),
+			cop(argc, argv, llvmThing, llvm::cl::NumOccurrencesFlag::Optional),
+			tool(cop.getCompilations(), cop.getSourcePathList()) {
 	InstRO::setInstrumentorInstance(this);
 }
 

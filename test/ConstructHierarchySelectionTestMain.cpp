@@ -45,6 +45,7 @@ int main(int argc, char **argv) {
 /*
  * We want to use the same binary for both Rose and Clang
  */
+try {
 #if INSTRO_USE_ROSE
 	using InstrumentorType = RoseTest::RoseTestInstrumentor;
 	InstrumentorType instrumentor(argc, argv);
@@ -85,4 +86,8 @@ int main(int argc, char **argv) {
 
 	// Returns false if everything was fine, true otherwise
 	return instrumentor.testFailed();
+} catch (std::string &s) {
+	std::cout << s << std::endl;
+	return -1;
+}
 }

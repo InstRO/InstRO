@@ -81,7 +81,23 @@ Run `make check` in the top level build directory. For more information please c
 ### Building with Clang
 Support for building the InstRO framework with the Clang compiler infrastructure is currently work in progress.
 
-##Using InstRO
+#### Dependencies
+- CMake >= 3.4.3
+- Clang 3.9 (enabled exceptions and RTTI)
+- Boost 1.60
+
+#### Build steps
+At least in our environment the following steps are sufficient. However, as noted building with Clang is work in progress.
+
+```bash
+$ mkdir build && cd build
+>> We want to build out-of-tree
+$ cmake ../repo
+>> Generating the Makefiles
+$ make
+```
+
+## Using InstRO
 InstRO includes a few examples which demonstrate some of its components.
 These examples can be found in either `$(builddir)/examples` or, if InstRO has been installed, in `$(installdir)/bin`.
 When installed, invoking an example is as easy as changing into the `bin` directory and invoking an example translator on a source file.

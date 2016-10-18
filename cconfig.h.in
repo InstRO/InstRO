@@ -1,0 +1,35 @@
+/*
+ * This file is used by the CMake build system to generate a config,in file.
+ * DO NOT CHANGE THIS FILE!
+ *
+ */
+
+#ifndef INSTRO_CONFIG_H
+#define INSTRO_CONFIG_H
+
+
+#cmakedefine01 INSTRO_DISABLE_EXCEPTIONS @USE_EXCEPTIONS@
+#cmakedefine01 INSTRO_USE_CLANG @NOT_IN_THE_NAME@
+
+
+
+namespace InstRO {
+namespace Config {
+struct BuildInstallConfig {
+	// This is always available (but useless?)
+	const char *const repositoryRelativePath = "@top_srcdir@";
+
+	// This is always available (useless as well?)
+	const char *const buildRelativePath = "@top_builddir@";
+
+	// We probe at configure for the two paths
+	const char *const repositoryRealpath = "@am_aux_dir@";
+	const char *const builddirRealpath = "@am_build_dir@";
+
+	// This one may be empty, as the user does not need to specify it
+	const char *const prefixAbsolutePath = "@CONFIG_INSTALL_DIR@";
+};
+} // Config
+} // InstRO
+
+#endif
