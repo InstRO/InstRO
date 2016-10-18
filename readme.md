@@ -160,6 +160,22 @@ The following JSON is an example which marks occurences of `printf` and `exit` a
 ]
 ~~~
 
+## Contributing to InstRO
+
+If you want to contribute to InstRO, please check the Issue page for open ToDos.
+If you encounter a problem while using InstRO, please also file a bug report on the Issue page.
+
+Further, we developed a workflow on how we manage to create and close issues. In this list, we assume the issue is already present, as it is a feature request or a bug report.
+
+1. You assign yourself as the responsible person.
+2. In case the issue requires several sub-issues and more involved research, you create a project.
+  * The name of the project is #IssueNumber Title Of The Issue.
+  * You should add columns for "in-progress" and "done". If you feel like more columns are necessary, create them as well.
+  * Assign the issue to the "in-progress" column.
+3. As you are responsible for the issue/project, you should check newly arising issues whether they are connected or not.
+  * If they are connected, add them to the respective project.
+4. If the project and all its issues are "done", you prepend the project name with the commit-has of the last commit related to that project.
+5. You close the top-level (first) issue - to which the project name corresponds to.
 
 ## Style guidelines
 
