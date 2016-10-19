@@ -33,3 +33,4 @@ assignInitInEnum
 ompTask
 ompAtomic
 ompMulti
+initVariable

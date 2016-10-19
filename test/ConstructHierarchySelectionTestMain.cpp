@@ -69,8 +69,9 @@ try {
 	auto ctOmpLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
 
 #ifdef CDEBUG
+	factory->createConstructPrinterAdapter(ctFuncLvlSelector);
+	std::cout << " ------ \n";
 	factory->createConstructPrinterAdapter(ctStmtLvlSelector);
-	factory->createConstructPrinterAdapter(ctOmpLvlSelector);
 #endif
 
 	// sink, so we ignore the returned Pass *

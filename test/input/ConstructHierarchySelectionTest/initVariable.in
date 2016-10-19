@@ -1,8 +1,10 @@
 +CTFunctionSelector
-initVariable.cpp:1:1--Function--::foo
+initVariable.cpp:1:1--Function-::foo
+initVariable.cpp:3:1--Function-::main
 
 +CTStatementSelector
 initVariable.cpp:1:14--SimpleStatement
+initVariable.cpp:3:14--SimpleStatement
 
 +CTExpressionSelector
 initVariable.cpp:1:21--Expression
