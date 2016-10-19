@@ -1,6 +1,7 @@
 #include "instro/clang/core/ClangConstruct.h"
 
 #include "instro/utility/exception.h"
+#define INSTRO_LOG_LEVEL INFO
 #include "instro/utility/Logger.h"
 
 #include "llvm/Support/raw_ostream.h"
@@ -48,6 +49,12 @@ class DeclConstructTraitVisitor : public clang::DeclVisitor<DeclConstructTraitVi
 
 	void VisitVarDecl(clang::VarDecl *decl) {
 		if (decl->hasInit()) {
+			// As of today we do not consider ctors as initializers (which is probably dubious)
+			if (llvm::isa<clang::CXXConstructExpr>(decl->getInit())) {
+				InstRO::logIt(InstRO::INFO) << "Skipping Constructor initializer" << std::endl;
+				generateError(decl);
+				return;
+			}
 			auto parents = context.getParents(*decl);
 			for (auto parent : parents) {
 				if (parent.get<clang::DeclStmt>()) {
@@ -144,6 +151,12 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		// in Clang every Expr is also a Stmt, therefore Expressions might also be SimpleStatements
 
 		if (handleConstructsInControlStructures(stmt)) {
+			return;
+		}
+
+		// We do not consider constructor expressions to be expressions
+		if(llvm::isa<clang::CXXConstructExpr>(stmt)){
+			InstRO::logIt(InstRO::INFO) << "Skipping CXXConstructExpr in expression generation" << std::endl;
 			return;
 		}
 
