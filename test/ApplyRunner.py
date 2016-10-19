@@ -13,7 +13,7 @@ def toErr(*objs):
 
 cmdParser = argparse.ArgumentParser(description='Runs the test instrumentor executable on all input files.')
 cmdParser.add_argument('src', type=str, help="/path/to/instro/repo")
-cmdParser.add_argument('build', type=str, help="/path/to/instro/repo")
+cmdParser.add_argument('build', type=str, help="/path/to/instro/build")
 cmdParser.add_argument('compilerIndication', type=str, help="Which compiler is running? [rose/clang]")
 cmdParser.add_argument('optionals', nargs='*', default=[])
 
