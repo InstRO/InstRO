@@ -155,7 +155,7 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		}
 
 		// We do not consider constructor expressions to be expressions
-		if(llvm::isa<clang::CXXConstructExpr>(stmt)){
+		if (llvm::isa<clang::CXXConstructExpr>(stmt)) {
 			InstRO::logIt(InstRO::INFO) << "Skipping CXXConstructExpr in expression generation" << std::endl;
 			return;
 		}
