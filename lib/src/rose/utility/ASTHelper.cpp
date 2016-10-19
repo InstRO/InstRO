@@ -124,7 +124,7 @@ bool ASTHelper::isDestructor(SgFunctionDeclaration* fDecl) {
 
 /** \brief Returns the corresponding function signature like "foo(int,float*)" */
 std::string ASTHelper::getFunctionSignature(SgFunctionDefinition* funcDef) {
-	if (funcDef == NULL) {
+	if (funcDef == nullptr) {
 		std::cout << "getFunctionSignature: funcDef was null" << std::endl;
 		return "null";
 	}

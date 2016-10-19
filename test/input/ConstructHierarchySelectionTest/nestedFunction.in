@@ -1,7 +1,7 @@
 
 +CTFunctionSelector
 nestedFunction.cpp:2:1--Function-::main
-nestedFunction.cpp:4:2--Function-A::absolut
+nestedFunction.cpp:4:2--Function-::main(int,char**)::A::absolut
 
 +CTStatementSelector
 nestedFunction.cpp:5:3--ConditionalStatement

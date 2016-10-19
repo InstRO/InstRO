@@ -89,7 +89,19 @@ std::string RoseConstruct::getIdentifier() const {
 
 		if (isSgFunctionDefinition(node)){
 			auto fDecl = isSgFunctionDefinition(node)->get_declaration();
-			identifier += "-" + fDecl->get_qualified_name().getString();
+			// we want to construct the fully qualified name here (like Clang does)
+			SgScopeStatement* scope = SageInterface::getEnclosingScope(fDecl);
+			std::string qualification;
+			while (scope != SageInterface::getGlobalScope(fDecl)) {
+				if (isSgFunctionDefinition(scope)) {
+					qualification = Utility::ASTHelper::getFunctionSignature(isSgFunctionDefinition(scope));
+				}
+				scope = SageInterface::getEnclosingScope(scope);
+			}
+			if (qualification.size() != 0) {
+				qualification = qualification + "::";
+			}
+			identifier += "-" + qualification + fDecl->get_qualified_name().getString();
 			identifier.erase(std::remove_if(identifier.begin(), identifier.end(), ::isspace), identifier.end());
 		}
 

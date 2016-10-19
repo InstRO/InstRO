@@ -515,8 +515,9 @@ std::string ClangConstruct::getFunctionName(clang::FunctionDecl *decl) const {
 		}
 		rso << '>';
 	}
-
-	return rso.str();
+	auto identifier = rso.str();
+	identifier.erase(std::remove_if(identifier.begin(), identifier.end(), ::isspace), identifier.end());
+	return identifier;
 }
 
 clang::Decl *ClangConstruct::getAsDecl() const {
