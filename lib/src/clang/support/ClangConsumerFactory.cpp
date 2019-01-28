@@ -1,8 +1,8 @@
 #include "instro/clang/core/ClangConsumerFactory.h"
 
-InstRO::Clang::Support::ClangConsumerFactory::ClangConsumerFactory(InstRO::PassManagement::PassManager *manager,
-																																	 clang::tooling::Replacements &replacements,
-																																	 InstRO::Clang::ClangPassFactory *fac)
+InstRO::Clang::Support::ClangConsumerFactory::ClangConsumerFactory(InstRO::PassManagement::PassManager* manager,
+																																	 clang::tooling::Replacements& replacements,
+																																	 InstRO::Clang::ClangPassFactory* fac)
 		: manager(manager), replacements(replacements), factory(fac) {}
 
 InstRO::Clang::Support::ClangConsumerFactory::~ClangConsumerFactory() {}
@@ -14,6 +14,6 @@ std::unique_ptr<clang::ASTConsumer> InstRO::Clang::Support::ClangConsumerFactory
 }
 
 std::unique_ptr<clang::ASTConsumer> InstRO::Clang::Support::ClangConsumerFactory::CreateASTConsumer(
-		clang::CompilerInstance &ci, llvm::StringRef strRef) {
+		clang::CompilerInstance& ci, llvm::StringRef strRef) {
 	return std::unique_ptr<clang::ASTConsumer>(new InstRO::Clang::Support::InstROASTConsumer(manager, factory));
 }

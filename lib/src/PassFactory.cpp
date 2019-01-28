@@ -2,11 +2,11 @@
 #include "instro/Pass.h"
 
 #include "instro/pass/selector/BooleanCompoundSelector.h"
-#include "instro/pass/selector/IdentifierMatcherSelector.h"
-#include "instro/pass/selector/ProgramEntrySelector.h"
 #include "instro/pass/selector/CallPathSelector.h"
 #include "instro/pass/selector/ConstructTraitSelector.h"
 #include "instro/pass/selector/ElevatorSelector.h"
+#include "instro/pass/selector/IdentifierMatcherSelector.h"
+#include "instro/pass/selector/ProgramEntrySelector.h"
 
 #include "instro/pass/adapter/ConstructHierarchyASTDotGenerator.h"
 #include "instro/pass/adapter/ConstructPrinterAdapter.h"

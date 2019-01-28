@@ -2,12 +2,12 @@
 #include "instro.h"
 
 #include "instro/utility/ConfigurationLoader.h"
-#include "instro/utility/MemoryManagement.h" // provide make_unique
+#include "instro/utility/MemoryManagement.h"	// provide make_unique
 
 #include <cstdlib>
-#include <vector>
-#include <string>
 #include <iostream>
+#include <string>
+#include <vector>
 
 int main(int argc, char** argv) {
 	try {

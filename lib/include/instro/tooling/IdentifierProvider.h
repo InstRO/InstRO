@@ -19,11 +19,11 @@ size_t getID(std::shared_ptr<Core::Construct> construct);
 
 std::string getIdentifier(std::shared_ptr<Core::Construct> construct);
 // Create and return a mapping from a ConstructSet to human readable identifiers.
-std::map<size_t, std::string> getIdentifierMap(const Core::ConstructSet *cs);
+std::map<size_t, std::string> getIdentifierMap(const Core::ConstructSet* cs);
 
 void exportToNMFile(std::map<size_t, std::string> mapping, std::string filename = "instrumentedConstructs");
-}
-}
-}
+}	// namespace IdentifierProvider
+}	// namespace Tooling
+}	// namespace InstRO
 
 #endif

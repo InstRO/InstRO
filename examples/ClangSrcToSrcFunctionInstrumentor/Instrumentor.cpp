@@ -1,6 +1,6 @@
-#include "llvm/Support/CommandLine.h"
-#include "clang/Tooling/Refactoring.h"
 #include "clang/Tooling/CommonOptionsParser.h"
+#include "clang/Tooling/Refactoring.h"
+#include "llvm/Support/CommandLine.h"
 
 #include "instro/clang/ClangInstrumentor.h"
 #include "instro/utility/Logger.h"
@@ -13,10 +13,10 @@
 
 static llvm::cl::OptionCategory MyTool("my tool");
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
 	InstRO::logIt(InstRO::INFO) << "Start" << std::endl;
 
-	InstRO::Clang::ClangInstrumentor instro(argc, const_cast<const char **>(argv), MyTool);
+	InstRO::Clang::ClangInstrumentor instro(argc, const_cast<const char**>(argv), MyTool);
 
 	auto fac = instro.getFactory();
 	auto fDefSel = fac->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTFunction);

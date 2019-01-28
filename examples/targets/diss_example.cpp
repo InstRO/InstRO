@@ -14,4 +14,3 @@ int main(int argc, char** argv) {
 	example(10, 100.0);
 	return 0;
 }
-

@@ -1,14 +1,14 @@
 #ifndef INSTRO_UTILITY_CONFIGURATIONLOADER_H
 #define INSTRO_UTILITY_CONFIGURATIONLOADER_H
 
+#include <functional>
+#include <initializer_list>
+#include <memory>
 #include <string>
 #include <unordered_map>
-#include <functional>
-#include <memory>
-#include <initializer_list>
 
-#include "instro/core/ConstructTraitType.h"
 #include "instro/PassFactory.h"
+#include "instro/core/ConstructTraitType.h"
 
 #include "rapidjson/document.h"
 
@@ -196,7 +196,7 @@ class ClangConfigurationPassRegistry : public BaseConfigurationPassRegistry {
  public:
 	ClangConfigurationPassRegistry(InstRO::Clang::ClangPassFactory* factory);
 };
-}
-}
+}	// namespace Utility
+}	// namespace InstRO
 
 #endif

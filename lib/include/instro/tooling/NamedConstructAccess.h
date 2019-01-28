@@ -11,12 +11,12 @@ namespace Tooling {
 namespace NamedConstructAccess {
 
 /**
-* This class is an interface for a matching algorithm to match named constructs against
-* patterns potentially holding wildcards. The Matcher contains all information for the matching process, i.e. user
-* defined strings , etc.
-* \ingroup Tooling
-* \author Jan-Patrick Lehr, Christian Iwainsky
-*/
+ * This class is an interface for a matching algorithm to match named constructs against
+ * patterns potentially holding wildcards. The Matcher contains all information for the matching process, i.e. user
+ * defined strings , etc.
+ * \ingroup Tooling
+ * \author Jan-Patrick Lehr, Christian Iwainsky
+ */
 class Matcher {
  public:
 	Matcher(){};
@@ -28,11 +28,11 @@ class Matcher {
 };
 
 /**
-* This class implements a wildcard string matching.
-* The '#' character is considered to be the Wildcard which can substitute 0,..,n characters.
-*
-* \author Jan-Patrick Lehr
-*/
+ * This class implements a wildcard string matching.
+ * The '#' character is considered to be the Wildcard which can substitute 0,..,n characters.
+ *
+ * \author Jan-Patrick Lehr
+ */
 class WildcardedStringMatcher : public Matcher {
  public:
 	/** Initializes the wild card char to # */
@@ -63,20 +63,20 @@ class NamedConstructAccess {
 	virtual ~NamedConstructAccess() {}
 
 	// a) any userdefined symbols, e.g. variable names, function / method names, labels
-	virtual InstRO::Core::ConstructSet getConstructsByIdentifierName(Matcher &) = 0;
+	virtual InstRO::Core::ConstructSet getConstructsByIdentifierName(Matcher&) = 0;
 
 	// b) + contents of strings and comments
-	virtual InstRO::Core::ConstructSet getConstructsByUserTextStringMatch(Matcher &) {
+	virtual InstRO::Core::ConstructSet getConstructsByUserTextStringMatch(Matcher&) {
 		throw std::string("NamedConstructAccess::getConstructsByUserTextStringMatch() is not implemented.");
 	}
 
 	// c) raw source code
-	virtual InstRO::Core::ConstructSet getConstructsByCodeMatch(Matcher &) {
+	virtual InstRO::Core::ConstructSet getConstructsByCodeMatch(Matcher&) {
 		throw std::string("NamedConstructAccess::getConstructsByCodeMatch() is not implemented.");
 	}
 };
-}
-}
-}
+}	// namespace NamedConstructAccess
+}	// namespace Tooling
+}	// namespace InstRO
 
 #endif

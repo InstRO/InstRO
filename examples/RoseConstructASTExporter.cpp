@@ -1,11 +1,11 @@
-#include "rose.h"
-#include "instro/rose/core/RoseConstructSet.h"
 #include "instro/rose/core/RoseConstructPredicates.h"
+#include "instro/rose/core/RoseConstructSet.h"
+#include "rose.h"
 
 #include <fstream>
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
 // http://stackoverflow.com/questions/8520560/get-a-file-name-from-a-path
 struct MatchPathSeparator {
@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
 					<< std::endl;
 
 	std::vector<SgNode*> nodes = NodeQuery::querySubTree(project, V_SgNode);
-	std::vector<SgNode *> processing, toDoList, doneList;
+	std::vector<SgNode*> processing, toDoList, doneList;
 	std::map<SgNode*, int> nodeToIDMap;
 	for (auto node : nodes) {
 		if (node->get_file_info() == nullptr || node->get_file_info()->isCompilerGenerated())
@@ -96,9 +96,9 @@ int main(int argc, char** argv) {
 			std::replace(nodeToString.begin(), nodeToString.end(), '"', ' ');
 
 			//			outFile << "\tn" << node << " [label=\"" << roseClassName << "\\n" << instroConstructName << "\\n" <<
-			//nodeToString << "\"" << nodeFormatArgs << "];" << std::endl;
-			outFile << "\tn" << node << " [label=\"" << roseClassName << "\\n" << nodeToString << "\\nID "
-							<< nodeToIDMap[node] << "\"" << nodeFormatArgs << "];" << std::endl;
+			// nodeToString << "\"" << nodeFormatArgs << "];" << std::endl;
+			outFile << "\tn" << node << " [label=\"" << roseClassName << "\\n"
+							<< nodeToString << "\\nID " << nodeToIDMap[node] << "\"" << nodeFormatArgs << "];" << std::endl;
 
 			// if the parent of the current node is compiler generated, get the next non-compiler generated node and uses it
 			// instead
@@ -166,7 +166,7 @@ int main(int argc, char** argv) {
 				outFile << "\tn" << node << " [label=\"" << instroConstructName << "\\nID " << nodeToIDMap[node] << "\""
 								<< nodeFormatArgs << "];" << std::endl;
 				//			outFile << "\tn" << node << " [label=\"" << roseClassName << "\\n" << nodeToString << "\"" <<
-				//nodeFormatArgs << "];" << std::endl;
+				// nodeFormatArgs << "];" << std::endl;
 			}
 			// if the parent of the current node is compiler generated, get the next non-compiler generated node and uses it
 			// instead
@@ -187,7 +187,7 @@ int main(int argc, char** argv) {
 			toDoList.push_back(parent);
 
 			//			outFile << "\tn" << node << " [label=\"" << roseClassName << "\\n" << nodeToString << "\"" <<
-			//nodeFormatArgs << "];" << std::endl;
+			// nodeFormatArgs << "];" << std::endl;
 			if (InstRO::Rose::Core::RoseConstructTraitPredicates::ConstructPredicate()(node)) {
 				outFile << "\tn" << node << " -> n" << parent << ";" << std::endl;
 			}
@@ -196,6 +196,4 @@ int main(int argc, char** argv) {
 
 	outFile << "}" << std::endl;
 	outFile.close();
-
-
 }

@@ -1,9 +1,9 @@
 #define USE_ROSE
 #include "instro.h"
 
-#include <vector>
-#include <string>
 #include <iostream>
+#include <string>
+#include <vector>
 
 int main(int argc, char** argv) {
 	try {

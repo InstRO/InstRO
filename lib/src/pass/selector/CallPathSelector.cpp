@@ -12,7 +12,7 @@ namespace InstRO {
 namespace Selector {
 
 void CallPathSelector::execute() {
-	Tooling::ExtendedCallGraph::ExtendedCallGraph *ecg = getInstrumentorInstance()->getAnalysisManager()->getECG();
+	Tooling::ExtendedCallGraph::ExtendedCallGraph* ecg = getInstrumentorInstance()->getAnalysisManager()->getECG();
 	auto fromNodes = ecg->getNodeSetByCS(getInput(0));
 	auto toNodes = ecg->getNodeSetByCS(getInput(1));
 
@@ -35,5 +35,5 @@ void CallPathSelector::execute() {
 	}
 }
 
-}	// Selector
-}	// InstRO
+}	// namespace Selector
+}	// namespace InstRO

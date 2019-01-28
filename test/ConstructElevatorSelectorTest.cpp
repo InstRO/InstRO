@@ -6,10 +6,10 @@
 #include "lib/RoseTestSupport.h"
 #endif
 
-#include "instro/utility/Logger.h"
 #include "instro/utility/Environment.h"
+#include "instro/utility/Logger.h"
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
 /*
  * We want to use the same binary for both Rose and Clang
  */

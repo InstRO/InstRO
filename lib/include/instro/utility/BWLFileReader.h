@@ -1,11 +1,11 @@
 #ifndef INSTRO_UTILITY_BWL_FILE_READER_H
 #define INSTRO_UTILITY_BWL_FILE_READER_H
 
-#include "boost/algorithm/string/predicate.hpp"
 #include "boost/algorithm/string.hpp"
+#include "boost/algorithm/string/predicate.hpp"
 
-#include <string>
 #include <fstream>
+#include <string>
 #include <vector>
 
 namespace InstRO {
@@ -22,7 +22,7 @@ class BWLFileReader {
 	 * Returns the parsed black and whitelist, where the first member of the pair is
 	 * the blacklist and the second is the whitelist
 	 */
-	std::pair<std::vector<std::string>, std::vector<std::string> > getBWList();
+	std::pair<std::vector<std::string>, std::vector<std::string>> getBWList();
 
 	/*
 	 * Should this be private?
@@ -38,7 +38,7 @@ class BWLFileReader {
 	std::vector<std::string> whitelist;
 	bool hasBeenRead;
 };
-}	// end namespace util
+}	// namespace Utility
 }	// end namespace InstRO
 
 #endif

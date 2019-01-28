@@ -1,10 +1,10 @@
 #include "instro/utility/ConfigurationLoader.h"
 
-#include "instro/utility/exception.h"
 #include "instro/utility/Logger.h"
+#include "instro/utility/exception.h"
 
-#include "rapidjson/filereadstream.h"
 #include "rapidjson/error/en.h"
+#include "rapidjson/filereadstream.h"
 
 #include <type_traits>	//std::underlying_type
 
@@ -320,7 +320,6 @@ BaseConfigurationPassRegistry::BaseConfigurationPassRegistry(PassFactory* factor
 	registerPass("ConstructPrinterAdapter", [factory](ConfigurationParsingContext& context) -> Pass* {
 		context.expectInputPasses({1});
 		return factory->createConstructPrinterAdapter(context.inputPasses[0]);
-
 	});
 }
 

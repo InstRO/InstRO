@@ -7,8 +7,8 @@
 #include <vector>
 
 namespace InstRO {
-namespace PassManagement{
-	class PassManager;
+namespace PassManagement {
+class PassManager;
 }
 class Pass;
 
@@ -22,7 +22,7 @@ class PassFactory {
 	/**
 	 * A PassFactory must be initialized with the PassManager to register the created passes.
 	 */
-	PassFactory(PassManagement::PassManager* refManager) : passManager(refManager){};
+	PassFactory(PassManagement::PassManager* refManager) : passManager(refManager) {}
 	virtual ~PassFactory() {}
 
 	Pass* createProgramEntrySelector();
@@ -51,5 +51,5 @@ class PassFactory {
  protected:
 	PassManagement::PassManager* passManager;
 };
-}
+}	// namespace InstRO
 #endif

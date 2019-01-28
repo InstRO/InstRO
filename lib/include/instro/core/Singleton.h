@@ -6,6 +6,6 @@ class Instrumentor;
 
 InstRO::Instrumentor* getInstrumentorInstance();
 void setInstrumentorInstance(InstRO::Instrumentor* instance);
-}
+}	// namespace InstRO
 
 #endif	// INSTRO_SINGLETON_H

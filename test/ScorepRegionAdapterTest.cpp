@@ -2,7 +2,7 @@
 #include "instro.h"
 #include "lib/RoseTestSupport.h"
 
-int main(int argc, char **argv){
+int main(int argc, char** argv) {
 #if INSTRO_USE_ROSE
 	using InstrumentorType = RoseTest::RoseTestInstrumentor;
 	InstrumentorType instrumentor(argc, argv);

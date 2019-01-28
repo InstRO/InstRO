@@ -1,16 +1,14 @@
 #include "instro/core/SimplePassManager.h"
 
 #include "instro/Instrumentor.h"
-#include "instro/core/Singleton.h"
 #include "instro/core/ConstructSet.h"
-#include "instro/utility/MemoryManagement.h"
+#include "instro/core/Singleton.h"
 #include "instro/utility/Logger.h"
+#include "instro/utility/MemoryManagement.h"
 
-void InstRO::PassManagement::SimplePassManager::registerPass(Pass *currentPass) {
-	passList.push_back(currentPass);
-}
+void InstRO::PassManagement::SimplePassManager::registerPass(Pass* currentPass) { passList.push_back(currentPass); }
 
-bool InstRO::PassManagement::SimplePassManager::hasOutputDependencies(InstRO::Pass *pass) {
+bool InstRO::PassManagement::SimplePassManager::hasOutputDependencies(InstRO::Pass* pass) {
 	for (auto p : passList) {
 		if ((p == pass) || (!hasInputDependencies(p))) {
 			continue;
@@ -28,27 +26,26 @@ bool InstRO::PassManagement::SimplePassManager::hasOutputDependencies(InstRO::Pa
 int InstRO::PassManagement::SimplePassManager::execute() {
 	logIt(INFO) << "InstRO::PassManagement::SimplePassManager::execute()" << std::endl;
 
-	for (Pass *pass : passList) {
+	for (Pass* pass : passList) {
 		pass->initPass();
 	}
 
 	int passCount = 1;
 
-	for (Pass *pass : passList) {
+	for (Pass* pass : passList) {
 		logIt(INFO) << "Executing pass [" << passCount << "]:\t" << pass->passName() << std::endl;
 		logIt(DEBUG) << "\tInput dependencies:\t" << hasInputDependencies(pass) << "\n\tOutput dependencies:\t"
 								 << hasOutputDependencies(pass) << std::endl;
 
-		for (auto &i : getPredecessors(pass)) {
+		for (auto& i : getPredecessors(pass)) {
 			// CI: do we have to perform some form of elevation
 			if (i->getOutput()->getMinConstructLevel() < pass->getMinInputLevelRequirement(i) ||
 					i->getOutput()->getMaxConstructLevel() > pass->getMaxInputLevelRequirement(i)) {
-
 				logIt(WARN) << " [WARN] construct level mismatch "
-						<< "\texpected " << pass->getMinInputLevelRequirement(i) << " - "
-						<< pass->getMaxInputLevelRequirement(i) << std::endl
-						<< "\tprovided " << i->getOutput()->getMinConstructLevel() << " - "
-						<< i->getOutput()->getMaxConstructLevel() << std::endl;
+										<< "\texpected " << pass->getMinInputLevelRequirement(i) << " - "
+										<< pass->getMaxInputLevelRequirement(i) << std::endl
+										<< "\tprovided " << i->getOutput()->getMinConstructLevel() << " - "
+										<< i->getOutput()->getMaxConstructLevel() << std::endl;
 
 				// We need to cast the construct set
 				Core::ConstructSet originalConstructSet = *(i->getOutput());
@@ -62,7 +59,7 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 				if (InstRO::getInstrumentorInstance()->getConstructRaisingPolicyCrop()) {
 					cropMin = pass->getMinInputLevelRequirement(i);
 				}
-				
+
 				auto copy = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator()->crop(originalConstructSet,
 																																																	 cropMin, cropMax);
 				if (InstRO::getInstrumentorInstance()->getConstructRaisingPolicyElevate()) {
@@ -83,7 +80,7 @@ int InstRO::PassManagement::SimplePassManager::execute() {
 	}
 
 	// release ConstructSet and finalize
-	for (Pass *pass : passList) {
+	for (Pass* pass : passList) {
 		pass->finalizePass();
 	}
 

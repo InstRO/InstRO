@@ -1,7 +1,6 @@
 #include "instro/core/ConstructTraitType.h"
 #include "instro/utility/exception.h"
 
-
 namespace InstRO {
 namespace Core {
 
@@ -14,7 +13,7 @@ ConstructTraitType getConstructTraitTypeFromString(std::string cttString) {
 		return InstRO::Core::ConstructTraitType::CTExpression;
 	} else if (cttString == "Statement") {
 		return InstRO::Core::ConstructTraitType::CTStatement;
-	} else if(cttString == "OpenMPStatement"){
+	} else if (cttString == "OpenMPStatement") {
 		return InstRO::Core::ConstructTraitType::CTOpenMPStatement;
 	} else if (cttString == "LoopStatement") {
 		return InstRO::Core::ConstructTraitType::CTLoopStatement;
@@ -35,7 +34,8 @@ ConstructTraitType getConstructTraitTypeFromString(std::string cttString) {
 	} else if (cttString == "Max") {
 		return InstRO::Core::ConstructTraitType::CTMax;
 	} else {
-		InstRO::raise_exception("InstRO::Core::getConstructTraitTypeFromString : Unknown ConstructTraitType '" + cttString + "'");
+		InstRO::raise_exception("InstRO::Core::getConstructTraitTypeFromString : Unknown ConstructTraitType '" + cttString +
+														"'");
 	}
 }
 
@@ -107,5 +107,5 @@ std::string operator+(const std::string& lhs, const ConstructTraitType& type) {
 	return std::string(lhs).append(constructLevelToString(type));
 }
 
-}	// Core
-}	// InstRO
+}	// namespace Core
+}	// namespace InstRO

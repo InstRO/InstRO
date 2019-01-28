@@ -1,24 +1,23 @@
 #ifndef INSTRO_CORE_INSTRUMENTOR_H
 #define INSTRO_CORE_INSTRUMENTOR_H
 
-#include "instro/core/Singleton.h"
+#include "instro/PassFactory.h"
 #include "instro/core/ConstructSet.h"
 #include "instro/core/PassManager.h"
 #include "instro/core/SimplePassManager.h"
-#include "instro/PassFactory.h"
+#include "instro/core/Singleton.h"
 #include "instro/tooling/AnalysisInterface.h"
 #include "instro/utility/Container.h"
 
+#include <iostream>
 #include <map>
 #include <string>
-#include <iostream>
 #include <vector>
-
 
 namespace InstRO {
 namespace PassManagement {
 class PassManager;
-}	// PassManagement
+}	// namespace PassManagement
 
 /**
  * \brief Interface to use, when constructing a new InstRO based instrumentation tool.
@@ -73,7 +72,7 @@ class Instrumentor {
 	virtual Tooling::AnalysisManager* getAnalysisManager() = 0;
 
 	/** Sets the default policy used whenever the pass manager encounters a necessary elevation */
-	void setConstructRaisingPolicyCrop() { constructRaisingPolicyElevate = false; };
+	void setConstructRaisingPolicyCrop() { constructRaisingPolicyElevate = false; }
 	/** Sets the default policy used whenever the pass manager encounters a necessary elevation */
 	void setConstructRaisingPolicyElevate() { constructRaisingPolicyElevate = true; }
 	/** Sets the default policy used whenever the pass manager encounters a necessary lowering */
@@ -98,5 +97,5 @@ class Instrumentor {
 	// True means elevate, False means crop
 	bool constructRaisingPolicyElevate, constructLoweringPolicyElevate;
 };
-}
+}	// namespace InstRO
 #endif

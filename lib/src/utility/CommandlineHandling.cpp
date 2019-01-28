@@ -57,7 +57,7 @@ CommandLineHandler::OptionArguments CommandLineHandler::getArguments() {
 
 RoseCLIPreparation::RoseCLIPreparation(int* argc, char*** argv) : argcP(argc), argvP(argv), clh(*argc, *argv) {
 	Core::OptionArguments opts = clh.apply();
-	auto &optMap = Instrumentor::getCmdLineHandlerMap();
+	auto& optMap = Instrumentor::getCmdLineHandlerMap();
 
 	if (!opts.instroIncludePath.empty()) {
 		instroIncludePathOption = opts.instroIncludePath;
@@ -116,4 +116,3 @@ std::vector<std::string> RoseCLIPreparation::getCommandLine() {
 
 	return argVec;
 }
-

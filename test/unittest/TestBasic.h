@@ -10,7 +10,7 @@ void good(std::string testName) { testcases[testName] = true; }
 void bad(std::string testName) { testcases[testName] = false; }
 
 #define TEST(NAME, CALL, RES)      \
-	auto NAME = [&](const char* n) { \
+	auto NAME = [&](const char *n) { \
 		if (CALL == RES) {             \
 			good(n);                     \
 		} else {                       \
@@ -34,4 +34,3 @@ int numTestErrors() {
 	}
 	return testErrors;
 }
-

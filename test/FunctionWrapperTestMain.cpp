@@ -1,10 +1,10 @@
 #include "instro.h"
 
-#include "lib/RoseTestSupport.h"
 #include "instro/rose/pass/transformer/RoseFunctionWrapper.h"
+#include "lib/RoseTestSupport.h"
 
-#include "instro/utility/Logger.h"
 #include "instro/utility/Environment.h"
+#include "instro/utility/Logger.h"
 
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/ptree.hpp>

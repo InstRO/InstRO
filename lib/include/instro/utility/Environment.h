@@ -3,15 +3,15 @@
 
 #include "instro/utility/Logger.h"
 
-#include <string>
 #include <fstream>
 #include <iostream>
+#include <string>
 
 #include "boost/filesystem.hpp"
 
-#include "unistd.h"
 #include "sys/types.h"
 #include "sys/wait.h"
+#include "unistd.h"
 
 namespace InstRO {
 namespace Utility {
@@ -76,7 +76,7 @@ std::string runExecutableAndReturnResult(T... args) {
 		std::remove(instroTempFile.c_str());
 
 		return line;
-	} catch (std::string &s) {
+	} catch (std::string& s) {
 		logIt(ERROR) << s << std::endl;
 	}
 
@@ -85,6 +85,6 @@ std::string runExecutableAndReturnResult(T... args) {
 
 /** Executes and retrieves the output for the scorep-config */
 std::string getScorepIncludeFlags();
-} // Utility
-} // InstRO
+}	// namespace Utility
+}	// namespace InstRO
 #endif

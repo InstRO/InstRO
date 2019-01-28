@@ -1,9 +1,7 @@
 
 #include "instro.h"
 
-
-int main(int argc, char **argv){
-
+int main(int argc, char** argv) {
 #if INSTRO_USE_ROSE
 	using InstrumentorType = InstRO::RoseInstrumentor;
 	InstrumentorType instrumentor(argc, argv);

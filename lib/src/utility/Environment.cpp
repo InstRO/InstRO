@@ -3,7 +3,7 @@
 #include "instro/config.h"
 
 std::string InstRO::Utility::getEnvironmentVariable(std::string envVar) {
-	char *ev = getenv(envVar.c_str());
+	char* ev = getenv(envVar.c_str());
 	if (ev != nullptr) {
 		return std::string(ev);
 	} else {
@@ -55,7 +55,6 @@ std::string InstRO::Utility::getInstroInstallationPathname() {
 
 	throw std::string("InstRO was not able to determine reasonable default paths");
 }
-
 
 std::string InstRO::Utility::getScorepIncludeFlags() {
 	auto version = runExecutableAndReturnResult(std::string("/bin/sh"), std::string("-c"),

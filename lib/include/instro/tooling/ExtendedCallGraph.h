@@ -3,9 +3,9 @@
 
 #include "instro/core/ConstructSet.h"
 
-#include <set>
 #include <map>
 #include <ostream>
+#include <set>
 #include <string>
 
 namespace InstRO {
@@ -80,8 +80,8 @@ class ExtendedCallGraph {
 	std::string dumpToDotString(ExtendedCallGraphNode* node, std::string fillcolor = std::string("white"));
 
  private:
-	std::map<ExtendedCallGraphNode*, std::set<ExtendedCallGraphNode*> > predecessors;
-	std::map<ExtendedCallGraphNode*, std::set<ExtendedCallGraphNode*> > successors;
+	std::map<ExtendedCallGraphNode*, std::set<ExtendedCallGraphNode*>> predecessors;
+	std::map<ExtendedCallGraphNode*, std::set<ExtendedCallGraphNode*>> successors;
 
 	std::map<InstRO::Core::ConstructSet, ExtendedCallGraphNode*> csToGraphNode;
 
@@ -92,7 +92,7 @@ template <typename T>
 std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getNodeSet(T& predicate) {
 	std::set<ExtendedCallGraphNode*> results;
 
-	std::map<ExtendedCallGraphNode*, std::set<ExtendedCallGraphNode*> >::iterator it;
+	std::map<ExtendedCallGraphNode*, std::set<ExtendedCallGraphNode*>>::iterator it;
 	for (it = predecessors.begin(); it != predecessors.end(); ++it) {
 		if (predicate(it->first, this)) {
 			results.insert(it->first);
@@ -102,8 +102,8 @@ std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getNodeSet(T& predicate) {
 	return results;
 }
 
-}	// ExtendedCallGraph
-}	// Tooling
-}	// InstRO
+}	// namespace ExtendedCallGraph
+}	// namespace Tooling
+}	// namespace InstRO
 
 #endif	// INSTRO_TOOLING_EXTENDED_CALLGRAPH

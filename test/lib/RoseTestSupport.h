@@ -60,6 +60,6 @@ class RoseTestInstrumentor : public InstRO::RoseInstrumentor {
  private:
 	std::unique_ptr<RoseTestFactory> fac;
 };
-}
+}	// namespace RoseTest
 
 #endif

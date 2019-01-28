@@ -27,5 +27,5 @@ void ProgramEntrySelector::execute() {
 	outputSet = allFunctions.intersect(csByNameMain);
 }
 
-}	// Selector
-}	// InstRO
+}	// namespace Selector
+}	// namespace InstRO

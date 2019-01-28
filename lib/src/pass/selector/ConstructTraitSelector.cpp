@@ -1,8 +1,8 @@
 #include "instro/pass/selector/ConstructTraitSelector.h"
 
-#include "instro/tooling/AnalysisInterface.h"
 #include "instro/Instrumentor.h"
 #include "instro/core/Singleton.h"
+#include "instro/tooling/AnalysisInterface.h"
 
 namespace InstRO {
 namespace Selector {

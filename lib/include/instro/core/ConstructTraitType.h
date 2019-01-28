@@ -39,15 +39,13 @@ std::string toString(const ConstructTraitType t);
  */
 ConstructTraitType getConstructTraitTypeFromString(std::string cttString);
 
-
-
 /**
  * I'd suggest those are more for internal work
  */
 std::string constructLevelToString(ConstructTraitType type);
 std::string constructLevelToStringShort(ConstructTraitType type);
 std::string operator+(const std::string& lhs, const ConstructTraitType& type);
-}	// Core
-}	// InstRO
+}	// namespace Core
+}	// namespace InstRO
 
 #endif

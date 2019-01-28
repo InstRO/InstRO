@@ -1,22 +1,21 @@
-#include <memory>		 // We need shared pointers
-#include <list>			 // We use List in the GrammarInterface
-#include <iostream>	// We use Cout ..
-#include "instro/core/ConstructSet.h"
 #include "instro/tooling/NamedConstructAccess.h"
+#include "instro/core/ConstructSet.h"
+#include <iostream>	// We use Cout ..
+#include <list>			 // We use List in the GrammarInterface
+#include <memory>		 // We need shared pointers
 
 #define INSTRO_LOG_LEVEL ERROR
 #include "instro/utility/Logger.h"
-
 
 namespace InstRO {
 namespace Tooling {
 namespace NamedConstructAccess {
 
-
 bool WildcardedStringMatcher::bMatch(std::string candidate, std::string pattern) {
-	logIt(DEBUG) << "\nMatcher started for candidate: \"" << candidate << "\" pattern: \"" << pattern << "\"" << std::endl;
+	logIt(DEBUG) << "\nMatcher started for candidate: \"" << candidate << "\" pattern: \"" << pattern << "\""
+							 << std::endl;
 
-//	matchingStringList.clear();
+	//	matchingStringList.clear();
 
 	int i = 0;					// index in the wild carded string
 	int j = 0;					// index in the string
@@ -71,13 +70,11 @@ bool WildcardedStringMatcher::bMatch(std::string candidate, std::string pattern)
 	}
 
 	if (i >= pattern.length() - 1 && pattern[pattern.length() - 1] == WILDCARDCHAR) {
-
 		logIt(INFO) << "\nFirst case " << std::endl;
 		logIt(DEBUG) << pattern << " matches: " << candidate << "\nPartial Match: " << partialMatch << std::endl;
 
 		return true;
 	} else if (j == candidate.length() && i == pattern.length()) {
-
 		logIt(INFO) << "\nSecond Case" << std::endl;
 		logIt(DEBUG) << pattern << " matches: " << candidate << "\nPartial Match: " << partialMatch << std::endl;
 
@@ -88,19 +85,17 @@ bool WildcardedStringMatcher::bMatch(std::string candidate, std::string pattern)
 	}
 }
 
-bool WildcardedStringMatcher::isMatch(std::string candidate, std::string pattern) {
-	return bMatch(candidate, pattern);
-}
+bool WildcardedStringMatcher::isMatch(std::string candidate, std::string pattern) { return bMatch(candidate, pattern); }
 
 bool WildcardedStringMatcher::isMatch(std::string candidate) {
-	for(auto p : patterns){
-		if(bMatch(candidate, p)){
+	for (auto p : patterns) {
+		if (bMatch(candidate, p)) {
 			return true;
 		}
 	}
 	return false;
 }
 
-}
-}
-}
+}	// namespace NamedConstructAccess
+}	// namespace Tooling
+}	// namespace InstRO

@@ -12,8 +12,8 @@
 static llvm::cl::OptionCategory instroTool("InstRO Clang Test");
 #endif
 
-#include "instro/utility/Logger.h"
 #include "instro/utility/Environment.h"
+#include "instro/utility/Logger.h"
 
 #include <iostream>
 /**
@@ -41,54 +41,54 @@ static llvm::cl::OptionCategory instroTool("InstRO Clang Test");
  * If all selectors produce the expected ConstructSet the app returns 0.
  */
 
-int main(int argc, char **argv) {
-/*
- * We want to use the same binary for both Rose and Clang
- */
-try {
+int main(int argc, char** argv) {
+	/*
+	 * We want to use the same implementation for both Rose and Clang
+	 */
+	try {
 #if INSTRO_USE_ROSE
-	using InstrumentorType = RoseTest::RoseTestInstrumentor;
-	InstrumentorType instrumentor(argc, argv);
+		using InstrumentorType = RoseTest::RoseTestInstrumentor;
+		InstrumentorType instrumentor(argc, argv);
 #endif
 #if INSTRO_USE_CLANG
-	using InstrumentorType = ClangTest::ClangTestInstrumentor;
-	InstrumentorType instrumentor(argc, argv, instroTool);
+		using InstrumentorType = ClangTest::ClangTestInstrumentor;
+		InstrumentorType instrumentor(argc, argv, instroTool);
 #endif
 
-	auto factory = instrumentor.getFactory();
+		auto factory = instrumentor.getFactory();
 
-	std::string filename = InstRO::Utility::getEnvironmentVariable("INSTRO_TEST_INPUT_FILENAME");
+		std::string filename = InstRO::Utility::getEnvironmentVariable("INSTRO_TEST_INPUT_FILENAME");
 
-	auto ctFuncLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTFunction);
-	auto ctLoopLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTLoopStatement);
-	auto ctStmtLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTStatement);
-	auto ctCondLvlSelector =
-			factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTConditionalStatement);
-	auto ctScopeLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTScopeStatement);
-	auto ctExprLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTExpression);
-	auto ctOmpLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
+		auto ctFuncLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTFunction);
+		auto ctLoopLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTLoopStatement);
+		auto ctStmtLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTStatement);
+		auto ctCondLvlSelector =
+				factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTConditionalStatement);
+		auto ctScopeLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTScopeStatement);
+		auto ctExprLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTExpression);
+		auto ctOmpLvlSelector = factory->createConstructTraitSelector(InstRO::Core::ConstructTraitType::CTOpenMPStatement);
 
 #ifdef CDEBUG
-	factory->createConstructPrinterAdapter(ctFuncLvlSelector);
-	std::cout << " ------ \n";
-	factory->createConstructPrinterAdapter(ctStmtLvlSelector);
+		factory->createConstructPrinterAdapter(ctFuncLvlSelector);
+		std::cout << " ------ \n";
+		factory->createConstructPrinterAdapter(ctStmtLvlSelector);
 #endif
 
-	// sink, so we ignore the returned Pass *
-	factory->createTestAdapter(ctFuncLvlSelector, "CTFunctionSelector", filename);
-	factory->createTestAdapter(ctLoopLvlSelector, "CTLoopSelector", filename);
-	factory->createTestAdapter(ctStmtLvlSelector, "CTStatementSelector", filename);
-	factory->createTestAdapter(ctCondLvlSelector, "CTConditionalSelector", filename);
-	factory->createTestAdapter(ctScopeLvlSelector, "CTScopeSelector", filename);
-	factory->createTestAdapter(ctExprLvlSelector, "CTExpressionSelector", filename);
-	factory->createTestAdapter(ctOmpLvlSelector, "CTOpenMPSelector", filename);
+		// sink, so we ignore the returned Pass *
+		factory->createTestAdapter(ctFuncLvlSelector, "CTFunctionSelector", filename);
+		factory->createTestAdapter(ctLoopLvlSelector, "CTLoopSelector", filename);
+		factory->createTestAdapter(ctStmtLvlSelector, "CTStatementSelector", filename);
+		factory->createTestAdapter(ctCondLvlSelector, "CTConditionalSelector", filename);
+		factory->createTestAdapter(ctScopeLvlSelector, "CTScopeSelector", filename);
+		factory->createTestAdapter(ctExprLvlSelector, "CTExpressionSelector", filename);
+		factory->createTestAdapter(ctOmpLvlSelector, "CTOpenMPSelector", filename);
 
-	instrumentor.apply();
+		instrumentor.apply();
 
-	// Returns false if everything was fine, true otherwise
-	return instrumentor.testFailed();
-} catch (std::string &s) {
-	std::cout << s << std::endl;
-	return -1;
-}
+		// Returns false if everything was fine, true otherwise
+		return instrumentor.testFailed();
+	} catch (std::string& s) {
+		std::cout << s << std::endl;
+		return -1;
+	}
 }

@@ -1,13 +1,13 @@
 #ifndef INSTRO_PASS_CONSTRUCT_HIERARCHY_AST_DOT_GENERATOR_H
 #define INSTRO_PASS_CONSTRUCT_HIERARCHY_AST_DOT_GENERATOR_H
 
-#include <fstream>
-#include <string>
 #include "instro/Instrumentor.h"
-#include "instro/core/Singleton.h"
 #include "instro/Pass.h"
 #include "instro/core/ConstructSet.h"
+#include "instro/core/Singleton.h"
 #include "instro/tooling/AnalysisInterface.h"
+#include <fstream>
+#include <string>
 
 namespace InstRO {
 namespace Adapter {
@@ -92,7 +92,7 @@ class ConstructHierarchyASTDotGenerator : public InstRO::Core::PassImplementatio
 
 	virtual void finalize() override { outFile.close(); };
 };
-}
-}
+}	// namespace Adapter
+}	// namespace InstRO
 
 #endif

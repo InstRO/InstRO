@@ -5,21 +5,22 @@
 using namespace InstRO::Clang::Selector;
 
 ClangBlackWhitelistSelector::ClangBlackWhitelistSelector(std::vector<std::string> blacklist,
-																															std::vector<std::string> whitelist)
-		: ClangPassImplBase<ClangBlackWhitelistSelector>(new InstRO::Clang::VisitingPassExecuter<ClangBlackWhitelistSelector>()),
+																												 std::vector<std::string> whitelist)
+		: ClangPassImplBase<ClangBlackWhitelistSelector>(
+					new InstRO::Clang::VisitingPassExecuter<ClangBlackWhitelistSelector>()),
 			blacklist(blacklist),
 			whitelist(whitelist) {
 	std::cout << "Creating BW Selector with blacklist(-) and whitelist (+):\n";
-	for (auto &s : blacklist) {
+	for (auto& s : blacklist) {
 		std::cout << "- " << s << "\n";
 	}
-	for (auto &s : whitelist) {
+	for (auto& s : whitelist) {
 		std::cout << "+ " << s << "\n";
 	}
 	std::cout << std::endl;
 }
 
-bool ClangBlackWhitelistSelector::VisitFunctionDecl(clang::FunctionDecl *decl) {
+bool ClangBlackWhitelistSelector::VisitFunctionDecl(clang::FunctionDecl* decl) {
 	/*
 	 * We match the black and white list entries against the function name
 	 */
@@ -47,14 +48,10 @@ void ClangBlackWhitelistSelector::readFilterFile(std::string filename) {
 	whitelist = lists.second;
 }
 
-bool ClangBlackWhitelistSelector::isOnList(std::string functionName, std::vector<std::string> &list) {
+bool ClangBlackWhitelistSelector::isOnList(std::string functionName, std::vector<std::string>& list) {
 	return std::find(list.begin(), list.end(), functionName) != list.end();
 }
 
-void ClangBlackWhitelistSelector::addBlacklistEntry(std::string functionName) {
-	blacklist.push_back(functionName);
-}
+void ClangBlackWhitelistSelector::addBlacklistEntry(std::string functionName) { blacklist.push_back(functionName); }
 
-void ClangBlackWhitelistSelector::addWhitelistEntry(std::string functionName) {
-	whitelist.push_back(functionName);
-}
+void ClangBlackWhitelistSelector::addWhitelistEntry(std::string functionName) { whitelist.push_back(functionName); }

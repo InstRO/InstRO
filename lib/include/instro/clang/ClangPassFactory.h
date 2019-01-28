@@ -11,7 +11,7 @@
 namespace clang {
 // forward declaration
 class ASTContext;
-}
+}	// namespace clang
 
 namespace InstRO {
 namespace Clang {
@@ -20,13 +20,13 @@ namespace Clang {
 class ASTContextProvider;
 
 /**
-* The PassFactory exposes a handle to the created pass by a raw pointer.
-* This does _not_ transfer ownership.
-*/
+ * The PassFactory exposes a handle to the created pass by a raw pointer.
+ * This does _not_ transfer ownership.
+ */
 class ClangPassFactory : public InstRO::PassFactory {
  public:
 	ClangPassFactory(InstRO::PassManagement::PassManager* manager, clang::tooling::Replacements& reps)
-			: InstRO::PassFactory(manager), replacements(reps){};
+			: InstRO::PassFactory(manager), replacements(reps) {}
 
 	InstRO::Pass* createDefaultInstrumentationAdapter(InstRO::Pass* input) { return nullptr; }
 
@@ -43,6 +43,6 @@ class ClangPassFactory : public InstRO::PassFactory {
  private:
 	clang::tooling::Replacements& replacements;
 };
-}	// Clang
-}	// INstRO
+}	// namespace Clang
+}	// namespace InstRO
 #endif

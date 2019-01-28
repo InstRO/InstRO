@@ -1,6 +1,7 @@
 #include "instro/clang/ClangInstrumentor.h"
-#include "instro/utility/MemoryManagement.h"
 #include "instro/clang/core/ClangConsumerFactory.h"
+#include "instro/clang/support/ClangHelpers.h"
+#include "instro/utility/MemoryManagement.h"
 
 #include "instro/core/Singleton.h"
 #include "instro/utility/exception.h"
@@ -15,7 +16,8 @@ InstRO::Clang::ClangInstrumentor::ClangInstrumentor(int argc, const char** argv,
 
 InstRO::Clang::ClangPassFactory* InstRO::Clang::ClangInstrumentor::getFactory(CompilationPhase phase) {
 	if (fac == nullptr) {
-		fac.reset(new InstRO::Clang::ClangPassFactory(passManager, tool.getReplacements()));
+		clang::tooling::Replacements repls = InstRO::Clang::Support::mergeToolReplacements(tool);
+		fac.reset(new InstRO::Clang::ClangPassFactory(passManager, repls));
 	}
 	return fac.get();
 }
@@ -25,7 +27,8 @@ clang::tooling::RefactoringTool& InstRO::Clang::ClangInstrumentor::getTool() { r
 void InstRO::Clang::ClangInstrumentor::apply() {
 	std::cout << "Preparing to run Clang tool" << std::endl;
 
-	InstRO::Clang::Support::ClangConsumerFactory f(passManager, tool.getReplacements(), getFactory());
+	auto repls = InstRO::Clang::Support::mergeToolReplacements(tool);
+	InstRO::Clang::Support::ClangConsumerFactory f(passManager, repls, getFactory());
 	tool.runAndSave(clang::tooling::newFrontendActionFactory<InstRO::Clang::Support::ClangConsumerFactory>(&f).get());
 }
 

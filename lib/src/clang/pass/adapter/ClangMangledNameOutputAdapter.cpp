@@ -12,7 +12,7 @@ ClangMangledNameOutputAdapter::ClangMangledNameOutputAdapter()
 					new InstRO::Clang::NonVisitingPassExecuter<ClangMangledNameOutputAdapter>()),
 			outfileName("instro-temp-file") {}
 
-bool ClangMangledNameOutputAdapter::VisitFunctionDecl(clang::FunctionDecl *fDecl) { return true; }
+bool ClangMangledNameOutputAdapter::VisitFunctionDecl(clang::FunctionDecl* fDecl) { return true; }
 
 void ClangMangledNameOutputAdapter::exec() {
 	if (context == nullptr) {
@@ -35,13 +35,14 @@ void ClangMangledNameOutputAdapter::exec() {
 	outStream.close();
 }
 
-void ClangMangledNameOutputAdapter::print(std::ostream &outStream, const InstRO::Core::ConstructSet *cs, clang::ASTContext *astContext) {
+void ClangMangledNameOutputAdapter::print(std::ostream& outStream, const InstRO::Core::ConstructSet* cs,
+																					clang::ASTContext* astContext) {
 	outStream << "Printing ConstructSet " << cs << "\n";
 	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface rcsci(cs);
-	for (auto &c : rcsci) {
+	for (auto& c : rcsci) {
 		auto construct = std::dynamic_pointer_cast<InstRO::Clang::Core::ClangConstruct>(c);
-		if (clang::Decl *decl = construct->getAsDecl()) {
-			clang::NamedDecl *nDecl = llvm::dyn_cast<clang::NamedDecl>(decl);
+		if (clang::Decl* decl = construct->getAsDecl()) {
+			clang::NamedDecl* nDecl = llvm::dyn_cast<clang::NamedDecl>(decl);
 			if (nDecl) {
 				auto mc = astContext->createMangleContext();
 				std::string str;
@@ -49,7 +50,7 @@ void ClangMangledNameOutputAdapter::print(std::ostream &outStream, const InstRO:
 				mc->mangleName(nDecl, s);
 				outStream << nDecl->getNameAsString() << " :: " << s.str() << "\n";
 			}
-		} else if (clang::Stmt *stmt = construct->getAsStmt()) {
+		} else if (clang::Stmt* stmt = construct->getAsStmt()) {
 			std::string str;
 			llvm::raw_string_ostream s(str);
 			stmt->printPretty(s, nullptr, astContext->getPrintingPolicy());

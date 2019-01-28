@@ -5,14 +5,14 @@
 
 using namespace InstRO::Clang::Adapter;
 
-ClangCygProfileAdapter::ClangCygProfileAdapter(clang::tooling::Replacements &reps, clang::SourceManager *sm)
+ClangCygProfileAdapter::ClangCygProfileAdapter(clang::tooling::Replacements& reps, clang::SourceManager* sm)
 		: ClangPassImplBase(new InstRO::Clang::VisitingPassExecuter<ClangCygProfileAdapter>()),
 			sm(sm),
 			replacements(reps),
 			labelCount(0),
 			cygProfFuncPtrName("__instro_func_ptr") {}
 
-bool ClangCygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *decl) {
+bool ClangCygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl* decl) {
 	if (context == nullptr) {
 		logIt(ERROR) << "Context NULL, stopping adapter pass." << std::endl;
 		return false;
@@ -20,10 +20,10 @@ bool ClangCygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *decl) {
 	// The context is in ClangPassImplementation
 	sm = &context->getSourceManager();
 
-	const InstRO::Core::ConstructSet *c = getInput(0);
+	const InstRO::Core::ConstructSet* c = getInput(0);
 	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface rcsci(c);
 
-	for (auto &construct : rcsci) {
+	for (auto& construct : rcsci) {
 		if (std::dynamic_pointer_cast<InstRO::Clang::Core::ClangConstruct>(construct)->getAsDecl() == decl) {
 			// the function declaration we are visiting has actually been selected
 			dispatch(decl);
@@ -34,24 +34,24 @@ bool ClangCygProfileAdapter::VisitFunctionDecl(clang::FunctionDecl *decl) {
 	return true;
 }
 
-void ClangCygProfileAdapter::dispatch(clang::Decl *c) {
+void ClangCygProfileAdapter::dispatch(clang::Decl* c) {
 	logIt(DEBUG) << "Dispatching..." << std::endl;
-	clang::CXXMethodDecl *mDef = llvm::dyn_cast<clang::CXXMethodDecl>(c);
+	clang::CXXMethodDecl* mDef = llvm::dyn_cast<clang::CXXMethodDecl>(c);
 	if (mDef != nullptr) {
 		transform(sm, mDef);
 		return;
 	}
 
-	clang::FunctionDecl *fDef = llvm::dyn_cast<clang::FunctionDecl>(c);
+	clang::FunctionDecl* fDef = llvm::dyn_cast<clang::FunctionDecl>(c);
 	if (fDef != nullptr) {
 		// Inside this case we need to check for the overload
 		transform(sm, fDef);
 	}
 }
 
-void ClangCygProfileAdapter::transform(clang::SourceManager *sm, clang::FunctionDecl *decl) {
+void ClangCygProfileAdapter::transform(clang::SourceManager* sm, clang::FunctionDecl* decl) {
 	// We are assuming we are only instrumenting function definitions!
-	clang::FunctionDecl *fDef = llvm::dyn_cast<clang::FunctionDecl>(decl);
+	clang::FunctionDecl* fDef = llvm::dyn_cast<clang::FunctionDecl>(decl);
 
 	// Depending on whether the funciton is overloaded we need to generate different strings
 	logIt(DEBUG) << "Trying to query the decl context" << std::endl;
@@ -59,32 +59,32 @@ void ClangCygProfileAdapter::transform(clang::SourceManager *sm, clang::Function
 	std::string entryReplaceStr = generateFunctionEntry(fDef);
 	std::string exitReplaceStr = generateFunctionExit(fDef);
 
-	clang::Stmt *fBodyStmt = fDef->getBody();
+	clang::Stmt* fBodyStmt = fDef->getBody();
 
 	// I assume that a function body always is a compound statement
-	clang::CompoundStmt *fBody = llvm::dyn_cast<clang::CompoundStmt>(fBodyStmt);
+	clang::CompoundStmt* fBody = llvm::dyn_cast<clang::CompoundStmt>(fBodyStmt);
 
 	instrumentFunctionBody(fBody, entryReplaceStr, exitReplaceStr);
 }
 
-bool ClangCygProfileAdapter::isOverloadedFunction(clang::FunctionDecl *decl) {
+bool ClangCygProfileAdapter::isOverloadedFunction(clang::FunctionDecl* decl) {
 	auto funcLookUp = decl->getEnclosingNamespaceContext()->lookup(decl->getNameInfo().getName());
 	int overloadCount = 0;
-	for (auto &res : funcLookUp) {
-		clang::FunctionDecl *testDecl = llvm::dyn_cast<clang::FunctionDecl>(res);
+	for (auto& res : funcLookUp) {
+		clang::FunctionDecl* testDecl = llvm::dyn_cast<clang::FunctionDecl>(res);
 		if (testDecl != nullptr) {
 			// the found declaration actually is a function declaration
 			if (decl->getDeclName() != testDecl->getDeclName()) {
 				continue;
 			}
 			clang::QualType qt = testDecl->getType();
-			const clang::Type *typePtr = qt.getTypePtr();
+			const clang::Type* typePtr = qt.getTypePtr();
 			// In clang a function can be of two types
-			const clang::FunctionType *fType = llvm::dyn_cast<clang::FunctionType>(typePtr);
+			const clang::FunctionType* fType = llvm::dyn_cast<clang::FunctionType>(typePtr);
 			if (fType != nullptr) {
 				clang::QualType dqt = decl->getType();
-				const clang::Type *dtypePtr = dqt.getTypePtr();
-				const clang::FunctionType *dfType = llvm::dyn_cast<clang::FunctionType>(dtypePtr);
+				const clang::Type* dtypePtr = dqt.getTypePtr();
+				const clang::FunctionType* dfType = llvm::dyn_cast<clang::FunctionType>(dtypePtr);
 				if (dfType && fType == dfType) {
 				} else {
 					overloadCount++;
@@ -98,22 +98,22 @@ bool ClangCygProfileAdapter::isOverloadedFunction(clang::FunctionDecl *decl) {
 	return (overloadCount > 0);
 }
 
-void ClangCygProfileAdapter::transform(clang::SourceManager *sm, clang::CXXMethodDecl *decl) {
-	clang::CXXMethodDecl *fDef = llvm::dyn_cast<clang::CXXMethodDecl>(decl);
+void ClangCygProfileAdapter::transform(clang::SourceManager* sm, clang::CXXMethodDecl* decl) {
+	clang::CXXMethodDecl* fDef = llvm::dyn_cast<clang::CXXMethodDecl>(decl);
 
 	std::string entryReplaceStr = generateMethodEntry(fDef);
 	std::string exitReplaceStr = generateMethodExit(fDef);
 
 	// We are assuming we are only instrumenting function definitions!
-	clang::Stmt *fBodyStmt = fDef->getBody();
+	clang::Stmt* fBodyStmt = fDef->getBody();
 	// I assume that a function body always is a compound statement
-	clang::CompoundStmt *fBody = llvm::dyn_cast<clang::CompoundStmt>(fBodyStmt);
+	clang::CompoundStmt* fBody = llvm::dyn_cast<clang::CompoundStmt>(fBodyStmt);
 
 	instrumentFunctionBody(fBody, entryReplaceStr, exitReplaceStr);
 }
 
-void ClangCygProfileAdapter::instrumentFunctionBody(clang::CompoundStmt *body, std::string &entryStr,
-																															std::string &exitStr) {
+void ClangCygProfileAdapter::instrumentFunctionBody(clang::CompoundStmt* body, std::string& entryStr,
+																										std::string& exitStr) {
 	// If the function body is empty, we need to insert calls in reverse order
 	if (body->size() == 0) {
 		handleEmptyBody(body, entryStr, exitStr);
@@ -124,24 +124,23 @@ void ClangCygProfileAdapter::instrumentFunctionBody(clang::CompoundStmt *body, s
 
 	// We add the calls to our entry functions
 	clang::tooling::Replacement repMent(*sm, body->getLBracLoc(), 1, std::string("{" + entryStr));
-	replacements.insert(repMent);
+	replacements.add(repMent);
 }
 
-void ClangCygProfileAdapter::handleEmptyBody(clang::CompoundStmt *body, std::string &entryStr,
-																											 std::string &exitStr) {
+void ClangCygProfileAdapter::handleEmptyBody(clang::CompoundStmt* body, std::string& entryStr, std::string& exitStr) {
 	/*
 	 * If this is an empty body we insert the exit function at the end and replace
 	 * the opening bracket with the opening bracket followed by the function call
 	 * to the measurement function
 	 */
-	replacements.insert(clang::tooling::Replacement(*sm, body->getRBracLoc(), 0, exitStr));
-	replacements.insert(clang::tooling::Replacement(*sm, body->getLBracLoc(), 1, std::string("{" + entryStr)));
+	replacements.add(clang::tooling::Replacement(*sm, body->getRBracLoc(), 0, exitStr));
+	replacements.add(clang::tooling::Replacement(*sm, body->getLBracLoc(), 1, std::string("{" + entryStr)));
 }
 
-void ClangCygProfileAdapter::instrumentReturnStatements(clang::CompoundStmt *body, std::string &entryStr,
-																																	std::string &exitStr) {
-	for (auto &st : body->body()) {
-		clang::ReturnStmt *rSt = llvm::dyn_cast<clang::ReturnStmt>(st);
+void ClangCygProfileAdapter::instrumentReturnStatements(clang::CompoundStmt* body, std::string& entryStr,
+																												std::string& exitStr) {
+	for (auto& st : body->body()) {
+		clang::ReturnStmt* rSt = llvm::dyn_cast<clang::ReturnStmt>(st);
 		if (rSt != nullptr) {
 			/*
 			 * If an expression other than just a literal or a declaration reference we want to transform
@@ -152,18 +151,18 @@ void ClangCygProfileAdapter::instrumentReturnStatements(clang::CompoundStmt *bod
 			}
 
 			// instrument return statements
-			replacements.insert(clang::tooling::Replacement(*sm, rSt->getLocStart(), 0, exitStr));
+			replacements.add(clang::tooling::Replacement(*sm, rSt->getLocStart(), 0, exitStr));
 		} else if (st == body->body_back()) {
 			// instrument end of function without return stmt
-			replacements.insert(clang::tooling::Replacement(*sm, body->getRBracLoc(), 0, exitStr));
+			replacements.add(clang::tooling::Replacement(*sm, body->getRBracLoc(), 0, exitStr));
 		}
 	}
 }
-void ClangCygProfileAdapter::transformReturnStmt(clang::ReturnStmt *retStmt) {
+void ClangCygProfileAdapter::transformReturnStmt(clang::ReturnStmt* retStmt) {
 	/*
 	 * create temporary variable to store the expression hidden in the return stmt
 	 */
-	clang::Expr *e = retStmt->getRetValue();
+	clang::Expr* e = retStmt->getRetValue();
 	clang::QualType t = e->getType();
 
 	// clangs style to get the "original string representation" of the expression
@@ -176,13 +175,13 @@ void ClangCygProfileAdapter::transformReturnStmt(clang::ReturnStmt *retStmt) {
 	std::string tVar(t.getAsString() + iVarName + " = " + s.str() + ";");
 
 	// refer in return statement to newly created variable
-	replacements.insert(clang::tooling::Replacement(*sm, e, iVarName));
+	replacements.add(clang::tooling::Replacement(*sm, e, iVarName));
 
 	// insert the declaration of the newly created temporary
-	replacements.insert(clang::tooling::Replacement(*sm, retStmt->getLocStart(), 0, tVar));
+	replacements.add(clang::tooling::Replacement(*sm, retStmt->getLocStart(), 0, tVar));
 }
 
-std::string ClangCygProfileAdapter::generateFunctionEntry(clang::FunctionDecl *d) {
+std::string ClangCygProfileAdapter::generateFunctionEntry(clang::FunctionDecl* d) {
 	if (isOverloadedFunction(d)) {
 		std::string declStr = generateFunctionPointerDecl(cygProfFuncPtrName, d);
 		std::string callStr = generateCallTo("enter", cygProfFuncPtrName);
@@ -192,7 +191,7 @@ std::string ClangCygProfileAdapter::generateFunctionEntry(clang::FunctionDecl *d
 	}
 }
 
-std::string ClangCygProfileAdapter::generateFunctionExit(clang::FunctionDecl *d) {
+std::string ClangCygProfileAdapter::generateFunctionExit(clang::FunctionDecl* d) {
 	if (isOverloadedFunction(d)) {
 		return generateCallTo("exit", cygProfFuncPtrName);
 	} else {
@@ -200,8 +199,7 @@ std::string ClangCygProfileAdapter::generateFunctionExit(clang::FunctionDecl *d)
 	}
 }
 
-std::string ClangCygProfileAdapter::generateFunctionPointerDecl(std::string declName,
-																																					clang::FunctionDecl *d) {
+std::string ClangCygProfileAdapter::generateFunctionPointerDecl(std::string declName, clang::FunctionDecl* d) {
 	std::string funcRefSnippet("");
 	// we need to create something like
 	// foo_t (* thisFoo) (foo_t1, foo_t2) = foo;
@@ -231,7 +229,7 @@ std::string ClangCygProfileAdapter::generateCallTo(std::string fName, std::strin
 	return snippet;
 }
 
-std::string ClangCygProfileAdapter::generateCallTo(std::string fName, clang::FunctionDecl *d) {
+std::string ClangCygProfileAdapter::generateCallTo(std::string fName, clang::FunctionDecl* d) {
 	std::string snippet("__cyg_profile_func_");
 	snippet += fName;
 	snippet += "((void*) ";
@@ -243,7 +241,7 @@ std::string ClangCygProfileAdapter::generateCallTo(std::string fName, clang::Fun
 	return snippet;
 }
 
-std::string ClangCygProfileAdapter::generateMethodEntry(clang::CXXMethodDecl *d) {
+std::string ClangCygProfileAdapter::generateMethodEntry(clang::CXXMethodDecl* d) {
 	/*
 	 * For member function we insert inline assembly since, we are not allowed to take a function pointer
 	 * for member functions
@@ -258,7 +256,7 @@ std::string ClangCygProfileAdapter::generateMethodEntry(clang::CXXMethodDecl *d)
 	return asmString;
 }
 
-std::string ClangCygProfileAdapter::generateMethodExit(clang::CXXMethodDecl *d) {
+std::string ClangCygProfileAdapter::generateMethodExit(clang::CXXMethodDecl* d) {
 	/*
 	 * For member function we insert inline assembly since, we are not allowed to take a function pointer
 	 * for member functions
@@ -272,7 +270,7 @@ std::string ClangCygProfileAdapter::generateMethodExit(clang::CXXMethodDecl *d) 
 	return asmString;
 }
 
-bool ClangCygProfileAdapter::retStmtNeedsTransformation(clang::ReturnStmt *st) {
+bool ClangCygProfileAdapter::retStmtNeedsTransformation(clang::ReturnStmt* st) {
 	/*
 	 * We want to check whether the expression within the Return statement is of
 	 * type
@@ -284,7 +282,7 @@ bool ClangCygProfileAdapter::retStmtNeedsTransformation(clang::ReturnStmt *st) {
 	 * DeclRefExpr
 	 * For all other expression types we need to transform the return statement
 	 */
-	clang::Expr *retExpr = st->getRetValue();
+	clang::Expr* retExpr = st->getRetValue();
 	if (llvm::dyn_cast<clang::CXXBoolLiteralExpr>(retExpr) != nullptr) {
 		return false;
 	}

@@ -8,10 +8,9 @@ namespace InstRO {
 namespace Tooling {
 namespace ConstructElevator {
 
-InstRO::Core::ConstructSet ConstructElevator::crop(const InstRO::Core::ConstructSet &inputCS,
+InstRO::Core::ConstructSet ConstructElevator::crop(const InstRO::Core::ConstructSet& inputCS,
 																									 InstRO::Core::ConstructTraitType min,
 																									 InstRO::Core::ConstructTraitType max) {
-
 	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface input(&inputCS);
 
 	InstRO::Core::ConstructSet outputCS;
@@ -26,13 +25,13 @@ InstRO::Core::ConstructSet ConstructElevator::crop(const InstRO::Core::Construct
 	}
 	return outputCS;
 }
-InstRO::Core::ConstructSet ConstructElevator::raise(const Core::ConstructSet *input, Core::ConstructTraitType cl) {
+InstRO::Core::ConstructSet ConstructElevator::raise(const Core::ConstructSet* input, Core::ConstructTraitType cl) {
 	return raise(*input, cl);
 }
-InstRO::Core::ConstructSet ConstructElevator::lower(const Core::ConstructSet *input, Core::ConstructTraitType cl) {
+InstRO::Core::ConstructSet ConstructElevator::lower(const Core::ConstructSet* input, Core::ConstructTraitType cl) {
 	return lower(*input, cl);
 }
-InstRO::Core::ConstructSet ConstructElevator::crop(const InstRO::Core::ConstructSet *inputCS,
+InstRO::Core::ConstructSet ConstructElevator::crop(const InstRO::Core::ConstructSet* inputCS,
 																									 InstRO::Core::ConstructTraitType min,
 																									 InstRO::Core::ConstructTraitType max) {
 	return crop(*inputCS, min, max);

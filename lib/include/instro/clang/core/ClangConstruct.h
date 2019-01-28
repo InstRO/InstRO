@@ -16,13 +16,12 @@ class InstROASTConsumer;	// forward declaration
 namespace Core {
 
 /**
-* @brief The kind of node a ClangConstruct represents.
-*/
+ * @brief The kind of node a ClangConstruct represents.
+ */
 enum class ConstructKind {
 	CK_Declaration = 1,
 	CK_Stmt = 2,
 };
-
 
 /**
  * @brief A Construct representing AST nodes of the Clang compiler infrastructure.
@@ -77,7 +76,6 @@ class ClangConstruct : public InstRO::Core::Construct {
 	static clang::SourceManager& getSourceManager();
 
  private:
-
 	ConstructKind kind;
 	void* construct;
 
@@ -88,8 +86,8 @@ class ClangConstruct : public InstRO::Core::Construct {
 	static clang::ASTContext& getASTContext();
 	static void setASTContext(clang::ASTContext& context);
 };
-}
-}
-}
+}	// namespace Core
+}	// namespace Clang
+}	// namespace InstRO
 
 #endif	// INSTRO_CLANG_CORE_CLANGCONSTRUCT_H

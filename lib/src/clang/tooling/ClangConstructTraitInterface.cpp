@@ -10,19 +10,19 @@ namespace {
 
 class ConstructCollector : public clang::RecursiveASTVisitor<ConstructCollector> {
  public:
-	ConstructCollector(ConstructTraitType constructTrait, ConstructSet *constructs)
+	ConstructCollector(ConstructTraitType constructTrait, ConstructSet* constructs)
 			: constructTrait(constructTrait), csci(constructs) {}
 
 	bool shouldVisitTemplateInstantiations() { return true; }
 
-	bool VisitDecl(clang::Decl *decl) {
+	bool VisitDecl(clang::Decl* decl) {
 		auto construct = std::make_shared<InstRO::Clang::Core::ClangConstruct>(decl);
 		processConstruct(construct);
 
 		return true;
 	}
 
-	bool VisitStmt(clang::Stmt *stmt) {
+	bool VisitStmt(clang::Stmt* stmt) {
 		auto construct = std::make_shared<InstRO::Clang::Core::ClangConstruct>(stmt);
 		processConstruct(construct);
 
@@ -39,7 +39,7 @@ class ConstructCollector : public clang::RecursiveASTVisitor<ConstructCollector>
 		}
 	}
 };
-}
+}	// namespace
 
 using namespace InstRO::Clang::Tooling;
 using namespace InstRO::Clang::Tooling::ConstructTraitInterface;

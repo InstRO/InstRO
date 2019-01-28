@@ -52,6 +52,6 @@ class ClangInstrumentor : public InstRO::Instrumentor {
 	std::unique_ptr<InstRO::Clang::ClangPassFactory> fac;
 	std::unique_ptr<InstRO::Clang::Tooling::ClangAnalysisManager> cam;
 };
-}	// Clang
-}	// InstRO
+}	// namespace Clang
+}	// namespace InstRO
 #endif

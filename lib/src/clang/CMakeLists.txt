@@ -20,10 +20,14 @@ set(ccsd ${CMAKE_CURRENT_SOURCE_DIR})
 # TODO Include the Rapidjson library
 # ${ccsd}/utility/ClangConfigurationPassRegistry)
 
+string(REGEX REPLACE "clang-format|clang-import-test|clang-rename|clang-refactor|clang-reorder-fields|modularize|clang-tidy|clangd" "" CLANG_EXPORTED_TARGETS "${CLANG_EXPORTED_TARGETS}")
+
+message(STATUS "Clang libs: " ${CLANG_EXPORTED_TARGETS})
+
 target_sources(InstRO_clang PUBLIC ${clang_core_files})
 target_link_libraries(InstRO_clang PUBLIC InstRO_clang_core 
 																					InstRO_clang_adapter 
 																					InstRO_clang_selector 
 																					InstRO_clang_support 
-																					InstRO_clang_tooling 
-																					${CLANG_EXPORTED_TARGETS})
+																					InstRO_clang_tooling
+																				  ${CLANG_EXPORTED_TARGETS})

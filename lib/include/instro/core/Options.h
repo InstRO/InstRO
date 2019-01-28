@@ -17,13 +17,13 @@ namespace Core {
 struct Options {
 	typedef std::string value_type;
 #define REGISTER_FIRST_OPTION(OptName, CmdName, DType, Desc) \
-	value_type OptName = #CmdName; \
+	value_type OptName = #CmdName;                             \
 	OPTIONS_ITERATOR(begin, OptName)
 
 #define REGISTER_OPTION(OptName, CmdName, DType, Desc) value_type OptName = #CmdName;
 
 #define REGISTER_LAST_OPTION(OptName, CmdName, DType, Desc) \
-	value_type OptName = #CmdName; \
+	value_type OptName = #CmdName;                            \
 	OPTIONS_ITERATOR(end, ESCAPE(OptName + 1))
 
 	REGISTER_OPTION_LIST
@@ -35,7 +35,7 @@ struct Options {
 
 /**
  * Structure for the actual runtime values of the possible arguments.
- * 
+ *
  * Are accessed like:
  * OptionArguments args = handler.apply();
  * auto value = args.OptName;
@@ -54,6 +54,6 @@ struct OptionArguments {
 };
 
 #undef REGISTER_OPTION_LIST
-}	// Core
-}	// InstRO
+}	// namespace Core
+}	// namespace InstRO
 #endif

@@ -1,8 +1,8 @@
 #define INSTRO_LOG_LEVEL ERROR
 
 #include "TestAdapter.h"
-#include "instro/utility/Logger.h"
 #include "instro/tooling/IdentifierProvider.h"
+#include "instro/utility/Logger.h"
 
 void InstRO::Test::TestSummary::printResults() {
 	if (unfoundSet.size() > 0 || addMarked.size() > 0) {

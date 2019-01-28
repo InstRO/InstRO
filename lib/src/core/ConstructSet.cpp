@@ -2,11 +2,11 @@
 
 #include "instro/utility/Logger.h"
 
-#include <assert.h>
-#include <vector>
-#include <unordered_map>
 #include <algorithm>
+#include <assert.h>
 #include <iterator>
+#include <unordered_map>
+#include <vector>
 
 namespace InstRO {
 namespace Core {
@@ -99,12 +99,12 @@ void ConstructSet::erase(const std::shared_ptr<Construct>& construct) { construc
 void ConstructSet::put(ConstructSet cs) { constructs.insert(cs.begin(), cs.end()); }
 void ConstructSet::erase(ConstructSet cs) { constructs.erase(cs.begin(), cs.end()); }
 
-std::set<std::shared_ptr<Construct> >::iterator ConstructSet::begin() { return constructs.begin(); }
-std::set<std::shared_ptr<Construct> >::iterator ConstructSet::end() { return constructs.end(); }
-std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::begin() const { return constructs.cbegin(); }
-std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::end() const { return constructs.cend(); }
-std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::cbegin() const { return constructs.cbegin(); }
-std::set<std::shared_ptr<Construct> >::const_iterator ConstructSet::cend() const { return constructs.cend(); }
+std::set<std::shared_ptr<Construct>>::iterator ConstructSet::begin() { return constructs.begin(); }
+std::set<std::shared_ptr<Construct>>::iterator ConstructSet::end() { return constructs.end(); }
+std::set<std::shared_ptr<Construct>>::const_iterator ConstructSet::begin() const { return constructs.cbegin(); }
+std::set<std::shared_ptr<Construct>>::const_iterator ConstructSet::end() const { return constructs.cend(); }
+std::set<std::shared_ptr<Construct>>::const_iterator ConstructSet::cbegin() const { return constructs.cbegin(); }
+std::set<std::shared_ptr<Construct>>::const_iterator ConstructSet::cend() const { return constructs.cend(); }
 
 bool ConstructSet::contains(const std::shared_ptr<Construct>& construct) const {
 	if (constructs.find(construct) == constructs.end())
@@ -116,9 +116,7 @@ bool ConstructSet::contains(const std::shared_ptr<Construct>& construct) const {
 ConstructSet ConstructSet::combine(const ConstructSet& other) const {
 	ConstructSet retSet;
 
-	std::set_union(
-			begin(), end(), other.begin(), other.end(),
-			std::inserter(retSet, retSet.begin()));
+	std::set_union(begin(), end(), other.begin(), other.end(), std::inserter(retSet, retSet.begin()));
 
 	return retSet;
 }
@@ -126,9 +124,7 @@ ConstructSet ConstructSet::combine(const ConstructSet& other) const {
 ConstructSet ConstructSet::intersect(const ConstructSet& other) const {
 	ConstructSet retSet;
 
-	std::set_intersection(
-			begin(), end(), other.begin(), other.end(),
-			std::inserter(retSet, retSet.begin()));
+	std::set_intersection(begin(), end(), other.begin(), other.end(), std::inserter(retSet, retSet.begin()));
 
 	return retSet;
 }
@@ -136,9 +132,7 @@ ConstructSet ConstructSet::intersect(const ConstructSet& other) const {
 ConstructSet ConstructSet::relativeComplement(const ConstructSet& other) const {
 	ConstructSet retSet;
 
-	std::set_difference(
-			begin(), end(), other.begin(), other.end(),
-			std::inserter(retSet, retSet.begin()));
+	std::set_difference(begin(), end(), other.begin(), other.end(), std::inserter(retSet, retSet.begin()));
 
 	return retSet;
 }
@@ -146,29 +140,25 @@ ConstructSet ConstructSet::relativeComplement(const ConstructSet& other) const {
 ConstructSet ConstructSet::symmertricDifference(const ConstructSet& other) const {
 	ConstructSet retSet;
 
-	std::set_symmetric_difference(
-			begin(), end(), other.begin(), other.end(),
-			std::inserter(retSet, retSet.begin()));
+	std::set_symmetric_difference(begin(), end(), other.begin(), other.end(), std::inserter(retSet, retSet.begin()));
 
 	return retSet;
 }
 
-bool ConstructSet::intersects(const ConstructSet& other) const {
-	return !(this->intersect(other).empty());
-}
+bool ConstructSet::intersects(const ConstructSet& other) const { return !(this->intersect(other).empty()); }
 
 std::string ConstructSet::toString() const {
-      std::string str;
-      auto constructIter = begin();
-      while (constructIter != end()) {
-          auto currentIter = constructIter++;
-          auto constructPtr = *currentIter;
-          str += constructPtr->toString();
-          if (constructIter != end()) {
-              str += ", ";
-          }
-      }
-      return str;
+	std::string str;
+	auto constructIter = begin();
+	while (constructIter != end()) {
+		auto currentIter = constructIter++;
+		auto constructPtr = *currentIter;
+		str += constructPtr->toString();
+		if (constructIter != end()) {
+			str += ", ";
+		}
+	}
+	return str;
 }
 
 std::string ConstructSet::toDotString() const {
@@ -183,7 +173,7 @@ std::string ConstructSet::toDotString() const {
 }	// namespace Core
 
 namespace InfrastructureInterface {
-ConstructSetCompilerInterface::ConstructSetCompilerInterface(Core::ConstructSet* pcs) : csPtr(pcs){}
+ConstructSetCompilerInterface::ConstructSetCompilerInterface(Core::ConstructSet* pcs) : csPtr(pcs) {}
 
 void ConstructSetCompilerInterface::put(const std::shared_ptr<Core::Construct>& construct) { csPtr->put(construct); }
 void ConstructSetCompilerInterface::erase(const std::shared_ptr<Core::Construct>& construct) {
@@ -195,12 +185,12 @@ bool ConstructSetCompilerInterface::contains(const std::shared_ptr<Core::Constru
 	return csPtr->contains(construct);
 }
 
-std::set<std::shared_ptr<Core::Construct> >::iterator ConstructSetCompilerInterface::begin() { return csPtr->begin(); }
-std::set<std::shared_ptr<Core::Construct> >::iterator ConstructSetCompilerInterface::end() { return csPtr->end(); }
-std::set<std::shared_ptr<Core::Construct> >::const_iterator ConstructSetCompilerInterface::cbegin() const {
+std::set<std::shared_ptr<Core::Construct>>::iterator ConstructSetCompilerInterface::begin() { return csPtr->begin(); }
+std::set<std::shared_ptr<Core::Construct>>::iterator ConstructSetCompilerInterface::end() { return csPtr->end(); }
+std::set<std::shared_ptr<Core::Construct>>::const_iterator ConstructSetCompilerInterface::cbegin() const {
 	return csPtr->cbegin();
 }
-std::set<std::shared_ptr<Core::Construct> >::const_iterator ConstructSetCompilerInterface::cend() const {
+std::set<std::shared_ptr<Core::Construct>>::const_iterator ConstructSetCompilerInterface::cend() const {
 	return csPtr->cend();
 }
 
@@ -209,25 +199,24 @@ bool ConstructSetCompilerInterface::empty() { return csPtr->empty(); }
 size_t ConstructSetCompilerInterface::size() { return csPtr->size(); }
 
 ReadOnlyConstructSetCompilerInterface::ReadOnlyConstructSetCompilerInterface(const Core::ConstructSet* pcs)
-		: csPtr(pcs){}
+		: csPtr(pcs) {}
 
 bool ReadOnlyConstructSetCompilerInterface::contains(const std::shared_ptr<Core::Construct>& construct) const {
 	return csPtr->contains(construct);
 }
 
-std::set<std::shared_ptr<Core::Construct> >::const_iterator ReadOnlyConstructSetCompilerInterface::begin() const {
+std::set<std::shared_ptr<Core::Construct>>::const_iterator ReadOnlyConstructSetCompilerInterface::begin() const {
 	return csPtr->cbegin();
 }
-std::set<std::shared_ptr<Core::Construct> >::const_iterator ReadOnlyConstructSetCompilerInterface::end() const {
+std::set<std::shared_ptr<Core::Construct>>::const_iterator ReadOnlyConstructSetCompilerInterface::end() const {
 	return csPtr->cend();
 }
 
 bool ReadOnlyConstructSetCompilerInterface::empty() const { return csPtr->empty(); }
 size_t ReadOnlyConstructSetCompilerInterface::size() const { return csPtr->size(); }
-}
+}	// namespace InfrastructureInterface
 
 }	// End namespace InstRO
-
 
 std::ostream& operator<<(std::ostream& os, InstRO::Core::ConstructTraitType f) {
 	switch (f) {
@@ -281,8 +270,8 @@ std::ostream& operator<<(std::ostream& os, InstRO::Core::ConstructTraitType f) {
 }
 
 namespace std {
-bool less<std::shared_ptr<InstRO::Core::Construct> >::operator()(const std::shared_ptr<InstRO::Core::Construct>& a,
-		const std::shared_ptr<InstRO::Core::Construct>& b) const {
+bool less<std::shared_ptr<InstRO::Core::Construct>>::operator()(
+		const std::shared_ptr<InstRO::Core::Construct>& a, const std::shared_ptr<InstRO::Core::Construct>& b) const {
 	return a < b;
 }
-}
+}	// namespace std

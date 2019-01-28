@@ -3,8 +3,8 @@
 
 #include "clang/AST/RecursiveASTVisitor.h"
 
-#include "instro/utility/BWLFileReader.h"
 #include "instro/clang/core/ClangPassImplBase.h"
+#include "instro/utility/BWLFileReader.h"
 
 namespace InstRO {
 namespace Clang {
@@ -17,11 +17,11 @@ namespace Selector {
 class ClangBlackWhitelistSelector : public InstRO::Clang::ClangPassImplBase<ClangBlackWhitelistSelector> {
  public:
 	ClangBlackWhitelistSelector(std::vector<std::string> blacklist, std::vector<std::string> whitelist);
-	bool VisitFunctionDecl(clang::FunctionDecl *decl);
+	bool VisitFunctionDecl(clang::FunctionDecl* decl);
 
 	void readFilterFile(std::string filename);
 
-	bool isOnList(std::string functionName, std::vector<std::string> &list);
+	bool isOnList(std::string functionName, std::vector<std::string>& list);
 
 	void addBlacklistEntry(std::string functionName);
 	void addWhitelistEntry(std::string functionName);
@@ -30,7 +30,7 @@ class ClangBlackWhitelistSelector : public InstRO::Clang::ClangPassImplBase<Clan
 	std::vector<std::string> blacklist;
 	std::vector<std::string> whitelist;
 };
-}	// Selector
-}	// Clang
-}	// InstRO
+}	// namespace Selector
+}	// namespace Clang
+}	// namespace InstRO
 #endif

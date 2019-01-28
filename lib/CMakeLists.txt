@@ -5,6 +5,8 @@ add_subdirectory(src/pass)
 add_subdirectory(src/tooling)
 add_subdirectory(src/utility)
 
+message(STATUS "Clang to use: " ${Clang_DIR})
+
 # The InstRO library
 add_library(InstRO SHARED src/Instrumentor 
 											src/Pass 

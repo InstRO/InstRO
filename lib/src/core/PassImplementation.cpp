@@ -4,6 +4,6 @@
 namespace InstRO {
 namespace Core {
 
-const InstRO::Core::ConstructSet *PassImplementation::getInput(int channel) { return managingPass->getInput(channel); }
-}
-}
+const InstRO::Core::ConstructSet* PassImplementation::getInput(int channel) { return managingPass->getInput(channel); }
+}	// namespace Core
+}	// namespace InstRO

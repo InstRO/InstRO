@@ -4,8 +4,8 @@
 #include <memory>
 
 #include "clang/AST/ASTConsumer.h"
-#include "clang/Tooling/Core/Replacement.h"
 #include "clang/Frontend/FrontendAction.h"
+#include "clang/Tooling/Core/Replacement.h"
 
 #include "instro/clang/support/InstROASTConsumer.h"
 
@@ -15,19 +15,19 @@ namespace Support {
 class ClangConsumerFactory : public clang::ASTFrontendAction {
  public:
 	ClangConsumerFactory() = delete;
-	ClangConsumerFactory(const ClangConsumerFactory &other) = delete;
-	ClangConsumerFactory(InstRO::PassManagement::PassManager *manager, clang::tooling::Replacements &replacements,
-											 InstRO::Clang::ClangPassFactory *fac);
+	ClangConsumerFactory(const ClangConsumerFactory& other) = delete;
+	ClangConsumerFactory(InstRO::PassManagement::PassManager* manager, clang::tooling::Replacements& replacements,
+											 InstRO::Clang::ClangPassFactory* fac);
 	~ClangConsumerFactory();
 	std::unique_ptr<clang::ASTConsumer> newASTConsumer();
-	std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance &ci, llvm::StringRef strRef);
+	std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance& ci, llvm::StringRef strRef);
 
  private:
-	InstRO::PassManagement::PassManager *manager;
-	clang::tooling::Replacements &replacements;
-	InstRO::Clang::ClangPassFactory *factory;
+	InstRO::PassManagement::PassManager* manager;
+	clang::tooling::Replacements& replacements;
+	InstRO::Clang::ClangPassFactory* factory;
 };
-}	// Support
-}	// Clang
-}	// Instro
+}	// namespace Support
+}	// namespace Clang
+}	// namespace InstRO
 #endif

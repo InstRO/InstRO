@@ -12,7 +12,7 @@ class ConstructPrinterAdapter : public InstRO::Core::PassImplementation {
 	ConstructPrinterAdapter() : PassImplementation() {}
 	void execute() override;
 };
-}
-}
+}	// namespace Adapter
+}	// namespace InstRO
 
 #endif

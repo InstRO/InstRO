@@ -24,6 +24,6 @@ class BooleanCompoundSelector : public InstRO::Core::PassImplementation {
 };
 
 }	// namespace Selector
-}	// namepsace InstRO
+}	// namespace InstRO
 
 #endif	// INSTRO_CORE_BOOLEANCOMPOUNDSELECTOR_H

@@ -43,7 +43,7 @@ class ConstructCroppingElevator : public ConstructElevatorSelector {
  private:
 	InstRO::Core::ConstructTraitType maxLevel;
 };
-}
-}
+}	// namespace Selector
+}	// namespace InstRO
 
 #endif

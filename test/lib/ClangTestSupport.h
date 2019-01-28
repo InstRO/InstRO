@@ -3,23 +3,23 @@
 
 #include "instro.h"
 #include "instro/clang/core/ClangConstruct.h"
+#include "instro/clang/support/ClangHelpers.h"
 #include "lib/TestAdapter.h"
 
-#include <sstream>
 #include <regex>
-
+#include <sstream>
 
 namespace ClangTest {
 
 class ClangTestAdapter : public InstRO::Test::TestAdapter {
  public:
-	ClangTestAdapter(std::string lab, std::string filename, InstRO::Test::TestSummary *tr,
-									 std::multiset<std::string> &initializerExpressions)
+	ClangTestAdapter(std::string lab, std::string filename, InstRO::Test::TestSummary* tr,
+									 std::multiset<std::string>& initializerExpressions)
 			: InstRO::Test::TestAdapter(lab, filename, tr), initializerExpressions(initializerExpressions) {}
 
  protected:
 	std::vector<std::string> constructMatchesAnyExpectation(
-			const std::string &testIdentifier, std::shared_ptr<InstRO::Core::Construct> construct) const override {
+			const std::string& testIdentifier, std::shared_ptr<InstRO::Core::Construct> construct) const override {
 		std::vector<std::string> matchedIdentifiers;
 		if (getExpectedItems().find(testIdentifier) != getExpectedItems().end()) {
 			matchedIdentifiers.push_back(testIdentifier);
@@ -28,8 +28,8 @@ class ClangTestAdapter : public InstRO::Test::TestAdapter {
 			// separate AST node for that)
 			std::shared_ptr<InstRO::Clang::Core::ClangConstruct> clangConstruct =
 					std::dynamic_pointer_cast<InstRO::Clang::Core::ClangConstruct>(construct);
-			if (clang::Decl *decl = clangConstruct->getAsDecl()) {
-				if (clang::VarDecl *varDecl = llvm::dyn_cast<clang::VarDecl>(decl)) {
+			if (clang::Decl* decl = clangConstruct->getAsDecl()) {
+				if (clang::VarDecl* varDecl = llvm::dyn_cast<clang::VarDecl>(decl)) {
 					createInitializerExpressionIdentifier(testIdentifier, varDecl);
 				}
 			}
@@ -45,9 +45,9 @@ class ClangTestAdapter : public InstRO::Test::TestAdapter {
 	}
 
  private:
-	std::multiset<std::string> &initializerExpressions;
+	std::multiset<std::string>& initializerExpressions;
 
-	void createInitializerExpressionIdentifier(const std::string &testIdentifier, clang::VarDecl *varDecl) const {
+	void createInitializerExpressionIdentifier(const std::string& testIdentifier, clang::VarDecl* varDecl) const {
 		std::regex identifierPrefixPattern("(.+:)\\d+:\\d+--\\w+");
 		std::smatch prefixMatch;
 		if (!std::regex_match(testIdentifier, prefixMatch, identifierPrefixPattern)) {
@@ -64,7 +64,7 @@ class ClangTestAdapter : public InstRO::Test::TestAdapter {
 		initializerIdentifier << prefixMatch[1].str();
 
 		// find location of the variable name in the declaration
-		const clang::SourceManager &srcMgr = InstRO::Clang::Core::ClangConstruct::getSourceManager();
+		const clang::SourceManager& srcMgr = InstRO::Clang::Core::ClangConstruct::getSourceManager();
 		clang::SourceLocation nameLocStart = varDecl->getLocation();
 		unsigned nameLine = srcMgr.getSpellingLineNumber(nameLocStart);
 		unsigned nameColumn = srcMgr.getSpellingColumnNumber(nameLocStart);
@@ -74,8 +74,8 @@ class ClangTestAdapter : public InstRO::Test::TestAdapter {
 		initializerExpressions.insert(initializerIdentifier.str());
 	}
 
-	void matchOvershadowedExpression(const std::string &testIdentifier,
-																	 std::vector<std::string> &matchedIdentifiers) const {
+	void matchOvershadowedExpression(const std::string& testIdentifier,
+																	 std::vector<std::string>& matchedIdentifiers) const {
 		std::regex positionPattern(".+:(\\d+):(\\d+)--(\\w+)");
 		std::smatch positionMatch;
 		if (!std::regex_match(testIdentifier, positionMatch, positionPattern)) {
@@ -115,15 +115,15 @@ class ClangTestInstrumentor;
  */
 class ClangTestFactory : public InstRO::Clang::ClangPassFactory {
  public:
-	ClangTestFactory(InstRO::PassManagement::PassManager *manager, clang::tooling::Replacements &reps)
+	ClangTestFactory(InstRO::PassManagement::PassManager* manager, clang::tooling::Replacements& reps)
 			: InstRO::Clang::ClangPassFactory(manager, reps) {}
 
-	InstRO::Pass *createTestAdapter(InstRO::Pass *input, std::string label, std::string filename) {
+	InstRO::Pass* createTestAdapter(InstRO::Pass* input, std::string label, std::string filename) {
 		std::unique_ptr<InstRO::Test::TestSummary> tr(new InstRO::Test::TestSummary(label));
 		testSummaries.push_back(std::move(tr));
 
 		auto pImpl = new ClangTest::ClangTestAdapter(label, filename, testSummaries.back().get(), initializerExpressions);
-		InstRO::Pass *p = new InstRO::Pass(pImpl, InstRO::Core::ChannelConfiguration(input), "TestAdapter");
+		InstRO::Pass* p = new InstRO::Pass(pImpl, InstRO::Core::ChannelConfiguration(input), "TestAdapter");
 		passManager->registerPass(p);
 		return p;
 	}
@@ -139,13 +139,14 @@ class ClangTestFactory : public InstRO::Clang::ClangPassFactory {
  */
 class ClangTestInstrumentor : public InstRO::Clang::ClangInstrumentor {
  public:
-	ClangTestInstrumentor(int argc, char **argv, llvm::cl::OptionCategory &llvmThing)
-			: InstRO::Clang::ClangInstrumentor(argc, const_cast<const char **>(argv), llvmThing) {}
+	ClangTestInstrumentor(int argc, char** argv, llvm::cl::OptionCategory& llvmThing)
+			: InstRO::Clang::ClangInstrumentor(argc, const_cast<const char**>(argv), llvmThing) {}
 
-	ClangTestFactory *getFactory(
+	ClangTestFactory* getFactory(
 			InstRO::Instrumentor::CompilationPhase phase = InstRO::Instrumentor::CompilationPhase::frontend) override {
 		if (fac == nullptr) {
-			fac.reset(new ClangTestFactory(passManager, getTool().getReplacements()));
+			auto repls = InstRO::Clang::Support::mergeToolReplacements(getTool());
+			fac.reset(new ClangTestFactory(passManager, repls));
 		}
 		return fac.get();
 	}
@@ -153,7 +154,7 @@ class ClangTestInstrumentor : public InstRO::Clang::ClangInstrumentor {
 	bool testFailed() {
 		bool hasTestFailed(false);
 
-		for (std::unique_ptr<InstRO::Test::TestSummary> &tr : fac->testSummaries) {
+		for (std::unique_ptr<InstRO::Test::TestSummary>& tr : fac->testSummaries) {
 			// forward initializer expressions generated by variable declarations to the expression summary
 			if (tr->getLabel().find("Expression") != std::string::npos) {
 				tr->assumeFound(fac->initializerExpressions);
@@ -170,6 +171,6 @@ class ClangTestInstrumentor : public InstRO::Clang::ClangInstrumentor {
  private:
 	std::unique_ptr<ClangTestFactory> fac;
 };
-}
+}	// namespace ClangTest
 
 #endif

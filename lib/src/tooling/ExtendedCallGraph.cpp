@@ -4,35 +4,28 @@
 
 #include <cassert>
 #include <fstream>
-#include <sstream>
 #include <queue>
+#include <sstream>
 
 namespace InstRO {
 namespace Tooling {
 namespace ExtendedCallGraph {
 
+ExtendedCallGraph::ExtendedCallGraph() {}
 
-ExtendedCallGraph::ExtendedCallGraph() {
-}
+ExtendedCallGraph::~ExtendedCallGraph() {}
 
-ExtendedCallGraph::~ExtendedCallGraph() {
-}
-
-ExtendedCallGraphNode* ExtendedCallGraph::addNode(ExtendedCallGraphNode* node) {
-
+ExtendedCallGraphNode *ExtendedCallGraph::addNode(ExtendedCallGraphNode *node) {
 	if (csToGraphNode.count(node->getAssociatedConstructSet()) == 0) {
-
 		csToGraphNode[node->getAssociatedConstructSet()] = node;
 
-		predecessors[node] = std::set<ExtendedCallGraphNode*>();
-		successors[node] = std::set<ExtendedCallGraphNode*>();
+		predecessors[node] = std::set<ExtendedCallGraphNode *>();
+		successors[node] = std::set<ExtendedCallGraphNode *>();
 	}
-		return csToGraphNode[node->getAssociatedConstructSet()];
-
+	return csToGraphNode[node->getAssociatedConstructSet()];
 }
 
-void ExtendedCallGraph::addEdge(ExtendedCallGraphNode* from, ExtendedCallGraphNode* to) {
-
+void ExtendedCallGraph::addEdge(ExtendedCallGraphNode *from, ExtendedCallGraphNode *to) {
 	assert(from);
 	assert(to);
 
@@ -43,8 +36,7 @@ void ExtendedCallGraph::addEdge(ExtendedCallGraphNode* from, ExtendedCallGraphNo
 	successors[realFrom].insert(realTo);
 }
 
-void ExtendedCallGraph::removeNode(ExtendedCallGraphNode* node, bool redirectEdges) {
-
+void ExtendedCallGraph::removeNode(ExtendedCallGraphNode *node, bool redirectEdges) {
 	for (auto succ : getSuccessors(node)) {
 		predecessors[succ].erase(node);
 	}
@@ -53,7 +45,6 @@ void ExtendedCallGraph::removeNode(ExtendedCallGraphNode* node, bool redirectEdg
 		successors[pred].erase(node);
 
 		for (auto succ : getSuccessors(node)) {
-
 			if (redirectEdges) {
 				predecessors[succ].insert(pred);
 				successors[pred].insert(succ);
@@ -65,8 +56,8 @@ void ExtendedCallGraph::removeNode(ExtendedCallGraphNode* node, bool redirectEdg
 	successors.erase(node);
 }
 
-std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getNodeSetByCS(const Core::ConstructSet *cs) {
-	std::set<ExtendedCallGraphNode*> returnSet;
+std::set<ExtendedCallGraphNode *> ExtendedCallGraph::getNodeSetByCS(const Core::ConstructSet *cs) {
+	std::set<ExtendedCallGraphNode *> returnSet;
 	for (auto node : getNodeSet()) {
 		if (node->getAssociatedConstructSet().intersects(*cs)) {
 			returnSet.insert(node);
@@ -75,34 +66,30 @@ std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getNodeSetByCS(const Core::C
 	return returnSet;
 }
 
-std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getNodeSet() {
-	std::set<ExtendedCallGraphNode*> nodes;
+std::set<ExtendedCallGraphNode *> ExtendedCallGraph::getNodeSet() {
+	std::set<ExtendedCallGraphNode *> nodes;
 	for (auto pair : predecessors) {
 		nodes.insert(pair.first);
 	}
 	return nodes;
 }
 
-std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getPredecessors(ExtendedCallGraphNode* start) {
+std::set<ExtendedCallGraphNode *> ExtendedCallGraph::getPredecessors(ExtendedCallGraphNode *start) {
 	return predecessors[start];
 }
 
-std::set<ExtendedCallGraphNode*> ExtendedCallGraph::getSuccessors(ExtendedCallGraphNode* start) {
+std::set<ExtendedCallGraphNode *> ExtendedCallGraph::getSuccessors(ExtendedCallGraphNode *start) {
 	return successors[start];
 }
 
-int ExtendedCallGraph::getPredecessorCount(ExtendedCallGraphNode* start) {
-	return predecessors[start].size();
-}
+int ExtendedCallGraph::getPredecessorCount(ExtendedCallGraphNode *start) { return predecessors[start].size(); }
 
-int ExtendedCallGraph::getSuccessorCount(ExtendedCallGraphNode* start) {
-	return successors[start].size();
-}
+int ExtendedCallGraph::getSuccessorCount(ExtendedCallGraphNode *start) { return successors[start].size(); }
 
-InstRO::Core::ConstructSet ExtendedCallGraph::getAllReachablePredecessors(std::set<ExtendedCallGraphNode*> startNodes) {
-
-	std::set<ExtendedCallGraphNode*> visitedNodes = startNodes;
-	std::queue<ExtendedCallGraphNode*> todo;
+InstRO::Core::ConstructSet ExtendedCallGraph::getAllReachablePredecessors(
+		std::set<ExtendedCallGraphNode *> startNodes) {
+	std::set<ExtendedCallGraphNode *> visitedNodes = startNodes;
+	std::queue<ExtendedCallGraphNode *> todo;
 	for (auto n : startNodes) {
 		todo.push(n);
 	}
@@ -121,10 +108,9 @@ InstRO::Core::ConstructSet ExtendedCallGraph::getAllReachablePredecessors(std::s
 
 	return getConstructSet(visitedNodes);
 }
-InstRO::Core::ConstructSet ExtendedCallGraph::getAllReachableSuccessors(std::set<ExtendedCallGraphNode*> startNodes) {
-
-	std::set<ExtendedCallGraphNode*> visitedNodes = startNodes;
-	std::queue<ExtendedCallGraphNode*> todo;
+InstRO::Core::ConstructSet ExtendedCallGraph::getAllReachableSuccessors(std::set<ExtendedCallGraphNode *> startNodes) {
+	std::set<ExtendedCallGraphNode *> visitedNodes = startNodes;
+	std::queue<ExtendedCallGraphNode *> todo;
 	for (auto n : startNodes) {
 		todo.push(n);
 	}
@@ -144,7 +130,7 @@ InstRO::Core::ConstructSet ExtendedCallGraph::getAllReachableSuccessors(std::set
 	return getConstructSet(visitedNodes);
 }
 
-InstRO::Core::ConstructSet ExtendedCallGraph::getConstructSet(std::set<ExtendedCallGraphNode*> graphNodes) {
+InstRO::Core::ConstructSet ExtendedCallGraph::getConstructSet(std::set<ExtendedCallGraphNode *> graphNodes) {
 	InstRO::Core::ConstructSet returnSet;
 
 	for (auto graphNode : graphNodes) {
@@ -155,98 +141,89 @@ InstRO::Core::ConstructSet ExtendedCallGraph::getConstructSet(std::set<ExtendedC
 }
 
 void ExtendedCallGraph::swapConstructSet(InstRO::Core::ConstructSet oldCS, InstRO::Core::ConstructSet newCS) {
-
 	if (csToGraphNode.find(oldCS) == csToGraphNode.end()) {
-		return; // not in graph yet -> nothing to swap
+		return;	// not in graph yet -> nothing to swap
 	}
 
-	ExtendedCallGraphNode* graphNode = csToGraphNode[oldCS];
+	ExtendedCallGraphNode *graphNode = csToGraphNode[oldCS];
 	graphNode->setAssociatedConstructSet(newCS);
 
 	csToGraphNode.erase(oldCS);
 	csToGraphNode[newCS] = graphNode;
-
 }
 
-ExtendedCallGraphNode* ExtendedCallGraph::getNodeWithExactConstructSet(InstRO::Core::ConstructSet cs) {
+ExtendedCallGraphNode *ExtendedCallGraph::getNodeWithExactConstructSet(InstRO::Core::ConstructSet cs) {
 	return csToGraphNode[cs];
 }
 
 void ExtendedCallGraph::dump() {
-
 	std::cout << "== Dumping Extended Callgraph ==" << std::endl;
 
-	for (ExtendedCallGraphNode* fromNode : getNodeSet()) {
+	for (ExtendedCallGraphNode *fromNode : getNodeSet()) {
 		std::cout << fromNode->getAssociatedConstructSet() << " : " << getSuccessorCount(fromNode) << std::endl;
-		for (ExtendedCallGraphNode* toNode : getSuccessors(fromNode)) {
+		for (ExtendedCallGraphNode *toNode : getSuccessors(fromNode)) {
 			std::cout << "  -->\t" << toNode->getAssociatedConstructSet() << std::endl;
 		}
 	}
 }
 
-
-void ExtendedCallGraph::print(std::string filename, std::set<ExtendedCallGraphNode*> specialNodes) {
-
+void ExtendedCallGraph::print(std::string filename, std::set<ExtendedCallGraphNode *> specialNodes) {
 	std::ofstream outfile(filename, std::ofstream::out);
 	outfile << "digraph callgraph {\nnode [shape=oval, style=filled]\n";
 
-	for (ExtendedCallGraphNode* fromNode : this->getNodeSet()) {
-
+	for (ExtendedCallGraphNode *fromNode : this->getNodeSet()) {
 		if (specialNodes.find(fromNode) != specialNodes.end()) {
 			outfile << dumpToDotString(fromNode, "yellow") << std::endl;
 		} else {
 			outfile << dumpToDotString(fromNode) << std::endl;
 		}
 
-		for (ExtendedCallGraphNode* toNode : this->getSuccessors(fromNode)) {
+		for (ExtendedCallGraphNode *toNode : this->getSuccessors(fromNode)) {
 			outfile << "\"" << fromNode << "\" -> \"" << toNode << "\"" << std::endl;
 		}
-
 	}
 	outfile << "\n}" << std::endl;
 	outfile.close();
 }
 
-std::string ExtendedCallGraph::dumpToDotString(ExtendedCallGraphNode* node, std::string fillcolor) {
-
+std::string ExtendedCallGraph::dumpToDotString(ExtendedCallGraphNode *node, std::string fillcolor) {
 	std::string nodeType;
 	std::string color = "black";
 
-
 	switch (node->getNodeType()) {
-	case ECGNodeType::FUNCTION:
-		nodeType = "FUNCTION";
-		color = "red";
-		break;
-	case ECGNodeType::FUNCTION_CALL:
-		nodeType = "CALL";
-		color = "green";
-		break;
-	case ECGNodeType::CONDITIONAL:
-		nodeType = "CONDITIONAL";
-		color = "blue";
-		break;
-	case ECGNodeType::LOOP:
-		nodeType = "LOOP";
-		color = "orange";
-		break;
-	case ECGNodeType::SCOPE:
-		nodeType = "SCOPE";
-		break;
-	case ECGNodeType::DEFAULT:
-		nodeType = "DEFAULT";
-		break;
-	default:
-		assert(false);
+		case ECGNodeType::FUNCTION:
+			nodeType = "FUNCTION";
+			color = "red";
+			break;
+		case ECGNodeType::FUNCTION_CALL:
+			nodeType = "CALL";
+			color = "green";
+			break;
+		case ECGNodeType::CONDITIONAL:
+			nodeType = "CONDITIONAL";
+			color = "blue";
+			break;
+		case ECGNodeType::LOOP:
+			nodeType = "LOOP";
+			color = "orange";
+			break;
+		case ECGNodeType::SCOPE:
+			nodeType = "SCOPE";
+			break;
+		case ECGNodeType::DEFAULT:
+			nodeType = "DEFAULT";
+			break;
+		default:
+			assert(false);
 	}
 
 	std::stringstream ss;
-	ss <<  "\"" << node << "\" [label=\"" << nodeType << "\\n" << node->toDotString()
-			<< "\", color=" << color << " , fillcolor=" << fillcolor << "]";
+	ss << "\"" << node << "\" [label=\"" << nodeType << "\\n"
+		 << node->toDotString() << "\", color=" << color << " , fillcolor=" << fillcolor << "]";
 
 	return ss.str();
 }
 
-}	// ExtendedCallGraph
-}	// Tooling
-}	// InstRO
+}	// namespace ExtendedCallGraph
+}	// namespace Tooling
+}	// namespace InstRO

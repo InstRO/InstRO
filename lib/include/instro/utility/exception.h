@@ -3,9 +3,9 @@
 
 #include "instro/config.h"
 
-#include <string>
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
+#include <string>
 
 namespace InstRO {
 
@@ -21,6 +21,6 @@ __attribute__((noreturn)) inline void raise_exception(const char* msg) {
 }
 
 __attribute__((noreturn)) inline void raise_exception(const std::string& msg) { raise_exception(msg.c_str()); }
-}
+}	// namespace InstRO
 
 #endif

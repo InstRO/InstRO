@@ -2,8 +2,8 @@
 
 #include "instro/core/ConstructSet.h"
 
-#include <iostream>
 #include <iomanip>	// setw
+#include <iostream>
 
 namespace InstRO {
 namespace Adapter {
@@ -24,8 +24,8 @@ void ConstructPrinterAdapter::execute() {
 
 	unsigned long count = 0;
 	for (auto construct : cs) {
-		std::cout << std::setw(4) << count << ": " << construct->getTraits().toStringShort()
-							<< ":  " << construct->toString() << std::endl;
+		std::cout << std::setw(4) << count << ": " << construct->getTraits().toStringShort() << ":  "
+							<< construct->toString() << std::endl;
 		count++;
 	}
 }

@@ -1,5 +1,5 @@
 
-add_library(InstRO_clang_tooling  SHARED ClangConstructTraitInterface)
+add_library(InstRO_clang_tooling SHARED ClangConstructTraitInterface)
 
 
 target_compile_options(InstRO_clang_tooling PUBLIC ${instro_default_options})

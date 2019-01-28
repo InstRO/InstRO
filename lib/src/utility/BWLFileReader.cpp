@@ -6,7 +6,7 @@ using namespace InstRO;
 
 Utility::BWLFileReader::BWLFileReader(std::string filename) : wSpecifier("+"), bSpecifier("-"), filename(filename) {}
 
-std::pair<std::vector<std::string>, std::vector<std::string> > Utility::BWLFileReader::getBWList() {
+std::pair<std::vector<std::string>, std::vector<std::string>> Utility::BWLFileReader::getBWList() {
 	if (!hasBeenRead) {
 		readFile();
 	}

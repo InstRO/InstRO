@@ -14,7 +14,7 @@ class ConstructTraitInterface {
 	virtual InstRO::Core::ConstructSet getConstructsByTrait(const InstRO::Core::ConstructTraitType constructTrait) = 0;
 };
 
-}	// GrammarInterface
-}	// Tooling
-}	// InstRO
+}	// namespace ConstructTraitInterface
+}	// namespace Tooling
+}	// namespace InstRO
 #endif

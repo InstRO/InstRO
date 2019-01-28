@@ -2,13 +2,13 @@
 
 #include "lib/RoseTestSupport.h"
 
-#include "instro/utility/Logger.h"
 #include "instro/utility/Environment.h"
+#include "instro/utility/Logger.h"
 
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/trim.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
-#include <boost/algorithm/string/trim.hpp>
-#include <boost/algorithm/string/split.hpp>
 #include <sstream>
 
 // Test for the RoseUniqueCallpathTransformer that examines the constructs selected by the transformer (newly created

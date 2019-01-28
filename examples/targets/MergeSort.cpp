@@ -1,8 +1,8 @@
+#include <algorithm>
 #include <cassert>
 #include <vector>
-#include <algorithm>
 
-void sort_merge(const int *source, const int start, const int end, int *dest) {
+void sort_merge(const int* source, const int start, const int end, int* dest) {
 	int l = start;
 	int m = (end + start) / 2;
 	int r = m;
@@ -17,7 +17,7 @@ void sort_merge(const int *source, const int start, const int end, int *dest) {
 	}
 }
 
-void sort_split(int *source, const int start, const int end, int *dest) {
+void sort_split(int* source, const int start, const int end, int* dest) {
 	if (end - start < 2) {
 		return;
 	}
@@ -28,7 +28,7 @@ void sort_split(int *source, const int start, const int end, int *dest) {
 	std::copy_n(dest + start, end - start, source + start);
 }
 
-std::vector<int> sort(std::vector<int> &arrayToSort) {
+std::vector<int> sort(std::vector<int>& arrayToSort) {
 	const int head = 0;
 	std::vector<int> result;
 	result.reserve(arrayToSort.size());
@@ -36,11 +36,9 @@ std::vector<int> sort(std::vector<int> &arrayToSort) {
 	return result;
 }
 
-
-int main(int argc, char **argv) {
-	
+int main(int argc, char** argv) {
 	std::vector<int> arr;
-	for(int i = 100; i > 0; --i){
+	for (int i = 100; i > 0; --i) {
 		arr.push_back(i);
 	}
 	std::iota(arr.begin(), arr.end(), 0);
@@ -48,9 +46,9 @@ int main(int argc, char **argv) {
 
 	std::vector<int> sortedArr = sort(arr);
 
-	for(int i = 1; i < 100; ++i){
-		assert(sortedArr[i-1] < sortedArr[i]);
+	for (int i = 1; i < 100; ++i) {
+		assert(sortedArr[i - 1] < sortedArr[i]);
 	}
-	
-	return 0; 
+
+	return 0;
 }

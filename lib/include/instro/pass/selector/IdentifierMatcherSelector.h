@@ -3,8 +3,8 @@
 
 #include "instro/core/PassImplementation.h"
 
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace InstRO {
 namespace Selector {
@@ -27,7 +27,7 @@ class IdentifierMatcherSelector : public InstRO::Core::PassImplementation {
 
  protected:
 };
-}
-}
+}	// namespace Selector
+}	// namespace InstRO
 
 #endif	// INSTRO_CORE_IDENTIFYERSELECTOR_H

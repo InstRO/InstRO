@@ -1,8 +1,9 @@
-cmake_minimum_required(VERSION 3.4.3)
+cmake_minimum_required(VERSION 3.5)
 
 project(InstRO)
 
 find_package(Clang REQUIRED CONFIG)
+find_package(LLVM REQUIRED CONFIG)
 find_package(Boost REQUIRED COMPONENTS system iostreams program_options)
 
 # TODO I think we can move this to the respective targets
@@ -12,6 +13,8 @@ include_directories(${LLVM_DEFINITIONS})
 # Standard compile options InstRO uses
 set(instro_default_options -std=c++14 -Werror=return-type)
 include_directories(${CMAKE_BINARY_DIR}/lib/include)
+# FIXME: Make this configurable.
+INCLUDE_DIRECTORIES(/opt/modules/sw_repo/boost/1.64/include)
 
 # To select the Compiler backend InstRO wants to use
 # TODO As soon as we port the Rose build to CMake, we need to make this configurable

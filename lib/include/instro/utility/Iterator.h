@@ -29,6 +29,6 @@ class OptionsIterator {
 	bool operator!=(const OptionsIterator<T>& o) { return (data + pos) != (o.data + o.pos); }
 };
 
-}	// Utility
-}	// InstRO
+}	// namespace Utility
+}	// namespace InstRO
 #endif

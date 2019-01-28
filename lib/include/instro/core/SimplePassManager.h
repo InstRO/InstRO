@@ -3,8 +3,8 @@
 
 #include "instro/core/PassManager.h"
 
-#include <string>
 #include <algorithm>
+#include <string>
 #include <vector>
 
 namespace InstRO {
@@ -48,6 +48,6 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 	std::vector<Pass*> passList;
 };
 
-}	// PassManagement
-}	// InstRO
+}	// namespace PassManagement
+}	// namespace InstRO
 #endif

@@ -69,6 +69,6 @@ std::set<ControlFlowGraphNode> AbstractControlFlowGraph::getCFGNodeSet(InstRO::C
 	return returnSet;
 }
 
-}	// ControlFlowGraph
-}	// Tooling
-}	// InstRO
+}	// namespace ControlFlowGraph
+}	// namespace Tooling
+}	// namespace InstRO

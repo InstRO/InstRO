@@ -6,10 +6,9 @@
 #include "instro/utility/Logger.h"
 
 #include <algorithm>
-#include <vector>
-#include <unordered_map>
 #include <map>
-
+#include <unordered_map>
+#include <vector>
 
 namespace InstRO {
 class Pass;
@@ -23,12 +22,12 @@ namespace Core {
  */
 class ChannelConfiguration {
  public:
-	typedef std::pair<int, Pass *> ConfigTuple;
+	typedef std::pair<int, Pass*> ConfigTuple;
 
 	ChannelConfiguration() {}
 
 	/* Implicitly sets the channel that p corresponds to to zero */
-	ChannelConfiguration(Pass *p) {
+	ChannelConfiguration(Pass* p) {
 		if (p == nullptr) {
 			throw std::string("Empty pass as argument in Channel Configuration disallowed.");
 		}
@@ -46,44 +45,44 @@ class ChannelConfiguration {
 		inputChannelMap.insert(ct);
 		insertionHelper(tuples...);
 
-		for (const auto &t : inputChannelMap) {
+		for (const auto& t : inputChannelMap) {
 			inputChannelMin[t.second] = InstRO::Core::ConstructTraitType::CTMin;
 			inputChannelMax[t.second] = InstRO::Core::ConstructTraitType::CTMax;
 		}
 	}
 
 	/** Explicitly set the level of a given Pass to the min and max Construct levels */
-	void setConstructLevel(Pass *inputPass, InstRO::Core::ConstructTraitType minLevel,
+	void setConstructLevel(Pass* inputPass, InstRO::Core::ConstructTraitType minLevel,
 												 InstRO::Core::ConstructTraitType maxLevel) {
 		inputChannelMin[inputPass] = minLevel;
 		inputChannelMax[inputPass] = maxLevel;
 	}
 
 	/** Sets the minimal Construct level the Pass expects in the input set for inputPass */
-	const InstRO::Core::ConstructTraitType getMinConstructLevel(Pass *inputPass) const {
+	const InstRO::Core::ConstructTraitType getMinConstructLevel(Pass* inputPass) const {
 		return inputChannelMin.at(inputPass);
 	}
 
 	/** Sets the maximal Construct level the Pass expects in the input set for inputPass */
-	const InstRO::Core::ConstructTraitType getMaxConstructLevel(Pass *inputPass) const {
+	const InstRO::Core::ConstructTraitType getMaxConstructLevel(Pass* inputPass) const {
 		return inputChannelMax.at(inputPass);
 	}
 
 	/** Generates a list of Passes the pass depends on */
-	std::vector<InstRO::Pass *> const getPasses() const {
-		std::vector<Pass *> res(inputChannelMap.size());
+	std::vector<InstRO::Pass*> const getPasses() const {
+		std::vector<Pass*> res(inputChannelMap.size());
 		std::transform(inputChannelMap.begin(), inputChannelMap.end(), res.begin(),
-									 [](std::pair<int, Pass *> p) { return p.second; });
+									 [](std::pair<int, Pass*> p) { return p.second; });
 		return res;
 	}
 
 	/** Returns the output fetched from the preceeding pass connected to channel */
-	InstRO::Core::ConstructSet *getConstructSetForChannel(int channel) const;
+	InstRO::Core::ConstructSet* getConstructSetForChannel(int channel) const;
 
  private:
-	std::map<int, Pass *> inputChannelMap;
-	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMin;
-	std::unordered_map<Pass *, InstRO::Core::ConstructTraitType> inputChannelMax;
+	std::map<int, Pass*> inputChannelMap;
+	std::unordered_map<Pass*, InstRO::Core::ConstructTraitType> inputChannelMin;
+	std::unordered_map<Pass*, InstRO::Core::ConstructTraitType> inputChannelMax;
 
 	/** Helpers to get the insertion and nullptr checking working */
 	template <class PT, class... PassTuplesT>
@@ -101,7 +100,7 @@ class ChannelConfiguration {
 		inputChannelMap.insert(ct);
 	}
 };
-}
-}
+}	// namespace Core
+}	// namespace InstRO
 
 #endif

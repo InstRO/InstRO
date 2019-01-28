@@ -3,13 +3,12 @@
 
 #include "instro/core/ConstructTraitType.h"
 
-#include <string>
-#include <ostream>
-#include <memory>	// Shared pointers
-#include <vector>
-#include <set>
 #include <functional>	// std::less
-
+#include <memory>			 // Shared pointers
+#include <ostream>
+#include <set>
+#include <string>
+#include <vector>
 
 namespace InstRO {
 namespace Core {
@@ -27,7 +26,7 @@ class ConstructSet;
  */
 namespace std {
 template <>
-struct less<std::shared_ptr<InstRO::Core::Construct> > {
+struct less<std::shared_ptr<InstRO::Core::Construct>> {
 	bool operator()(const std::shared_ptr<InstRO::Core::Construct>& a,
 									const std::shared_ptr<InstRO::Core::Construct>& b) const;
 };
@@ -50,10 +49,10 @@ class ConstructSetCompilerInterface {
 	void erase(Core::ConstructSet cs);
 	bool contains(const std::shared_ptr<Core::Construct>& construct);
 
-	std::set<std::shared_ptr<Core::Construct> >::iterator begin();
-	std::set<std::shared_ptr<Core::Construct> >::iterator end();
-	std::set<std::shared_ptr<Core::Construct> >::const_iterator cbegin() const;
-	std::set<std::shared_ptr<Core::Construct> >::const_iterator cend() const;
+	std::set<std::shared_ptr<Core::Construct>>::iterator begin();
+	std::set<std::shared_ptr<Core::Construct>>::iterator end();
+	std::set<std::shared_ptr<Core::Construct>>::const_iterator cbegin() const;
+	std::set<std::shared_ptr<Core::Construct>>::const_iterator cend() const;
 	void clear();
 	bool empty();
 	size_t size();
@@ -69,15 +68,14 @@ class ReadOnlyConstructSetCompilerInterface {
 
 	bool contains(const std::shared_ptr<Core::Construct>& construct) const;
 
-	std::set<std::shared_ptr<Core::Construct> >::const_iterator begin() const;
-	std::set<std::shared_ptr<Core::Construct> >::const_iterator end() const;
+	std::set<std::shared_ptr<Core::Construct>>::const_iterator begin() const;
+	std::set<std::shared_ptr<Core::Construct>>::const_iterator end() const;
 	bool empty() const;
 	size_t size() const;
 };
 }	// namespace InfrastructureInterface
 
 namespace Core {
-
 
 class ConstructTrait {
  public:
@@ -110,6 +108,7 @@ class ConstructTrait {
 
 	std::string toString() const;
 	std::string toStringShort() const;
+
  private:
 	std::set<ConstructTraitType> cts;
 };
@@ -176,7 +175,7 @@ class ConstructSet {
 	typedef std::set<value_type>::iterator iterator;
 	typedef std::set<value_type>::const_iterator const_iterator;
 
-	ConstructSet(){};
+	ConstructSet() {}
 
 	ConstructTraitType getMaxConstructLevel() const;
 	ConstructTraitType getMinConstructLevel() const;

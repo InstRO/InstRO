@@ -1,9 +1,9 @@
 #ifndef INSTRO_CORE_VISUALPASSMANAGER_H
 #define INSTRO_CORE_VISUALPASSMANAGER_H
 
-#include <vector>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <vector>
 // CI: This Class Extends the PassManger to enable output of the configuration graph
 #include "instro/core/PassManager.h"
 #include "instro/core/SimplePassManager.h"
@@ -47,7 +47,7 @@ class VisualizingPassManager : public PassManagement::SimplePassManager {
 	}
 };
 
-}	// End namespace PassManagement
+}	// namespace Extra
 }	// End namespace InstRO
 
 #endif

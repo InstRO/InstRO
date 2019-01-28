@@ -11,26 +11,26 @@ namespace Tooling {
 
 class ClangAnalysisManager : public InstRO::Tooling::AnalysisManager {
  public:
-	ClangAnalysisManager(clang::ASTContext &context)
+	ClangAnalysisManager(clang::ASTContext& context)
 			: cti(new ConstructTraitInterface::ClangConstructTraitInterface(context)) {}
 	ClangAnalysisManager() = delete;
 	virtual ~ClangAnalysisManager() {}
 
-	virtual InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph *getECG() override { return nullptr; }
-	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraph *getCFG() override { return nullptr; }
-	virtual InstRO::Tooling::ConstructElevator::ConstructElevator *getCSElevator() override { return nullptr; }
-	virtual InstRO::Tooling::ConstructTraitInterface::ConstructTraitInterface *getConstructTraitInterface() override {
+	virtual InstRO::Tooling::ExtendedCallGraph::ExtendedCallGraph* getECG() override { return nullptr; }
+	virtual InstRO::Tooling::ControlFlowGraph::ControlFlowGraph* getCFG() override { return nullptr; }
+	virtual InstRO::Tooling::ConstructElevator::ConstructElevator* getCSElevator() override { return nullptr; }
+	virtual InstRO::Tooling::ConstructTraitInterface::ConstructTraitInterface* getConstructTraitInterface() override {
 		return cti.get();
 	}
-	virtual InstRO::Tooling::NamedConstructAccess::NamedConstructAccess *getNamedConstructAccessFacility() override {
+	virtual InstRO::Tooling::NamedConstructAccess::NamedConstructAccess* getNamedConstructAccessFacility() override {
 		return nullptr;
 	}
 
  protected:
 	std::unique_ptr<ConstructTraitInterface::ClangConstructTraitInterface> cti;
 };
-}
-}
-}
+}	// namespace Tooling
+}	// namespace Clang
+}	// namespace InstRO
 
 #endif	// INSTRO_CLANG_TOOLING_CLANG_ANALYSIS_INTERFACE_H

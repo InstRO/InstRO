@@ -1,14 +1,14 @@
 #ifndef INSTRO_CLANG_CORE_CLANGADAPTERPASS_H
 #define INSTRO_CLANG_CORE_CLANGADAPTERPASS_H
 
-#include <iostream>
 #include <cassert>
+#include <iostream>
 #include <memory>
 
 #include "clang/AST/ASTContext.h"
 
-#include "instro/core/PassImplementation.h"
 #include "ClangPassExecuter.h"
+#include "instro/core/PassImplementation.h"
 
 namespace InstRO {
 namespace Clang {
@@ -18,12 +18,12 @@ namespace Clang {
  */
 class ASTContextProvider {
  public:
-	void setASTContext(clang::ASTContext *ctx) { context = ctx; }
+	void setASTContext(clang::ASTContext* ctx) { context = ctx; }
 
-	clang::ASTContext *getASTContext() { return context; }
+	clang::ASTContext* getASTContext() { return context; }
 
  protected:
-	clang::ASTContext *context;
+	clang::ASTContext* context;
 };
 
 /*
@@ -36,13 +36,13 @@ class ClangPassImplBase : public InstRO::Clang::ASTContextProvider,
 													public InstRO::Core::PassImplementation,
 													public clang::RecursiveASTVisitor<T> {
  public:
-	ClangPassImplBase(PassExecuter<T> *pexec) : InstRO::Core::PassImplementation(), executer(pexec) {}
+	ClangPassImplBase(PassExecuter<T>* pexec) : InstRO::Core::PassImplementation(), executer(pexec) {}
 	ClangPassImplBase() = delete;
 
 	virtual void execute() final override {
 		assert(executer != nullptr);
 		executer->setASTContext(context);
-		executer->execute(static_cast<T *>(this));
+		executer->execute(static_cast<T*>(this));
 	};
 
 	virtual void exec(){};
@@ -54,6 +54,6 @@ class ClangPassImplBase : public InstRO::Clang::ASTContextProvider,
  protected:
 	std::unique_ptr<PassExecuter<T>> executer;
 };
-}
-}
+}	// namespace Clang
+}	// namespace InstRO
 #endif
