@@ -80,6 +80,7 @@ void InstRO::Clang::VisitingPassExecuter<T>::execute(T *pass) {
 	assert(this->context->getTranslationUnitDecl() != nullptr && "translation unit null");
 	// traverse the Clang AST
 	pass->TraverseDecl(this->context->getTranslationUnitDecl());
+	this->context->
 }
 
 template <typename T>

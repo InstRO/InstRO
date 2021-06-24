@@ -19,13 +19,16 @@ namespace Clang {
 // forward declaration
 class ASTContextProvider;
 
+// Maps a file name to Replacements.
+using ReplacementsMap = std::map<std::string, clang::tooling::Replacements>;
+
 /**
 * The PassFactory exposes a handle to the created pass by a raw pointer.
 * This does _not_ transfer ownership.
 */
 class ClangPassFactory : public InstRO::PassFactory {
  public:
-	ClangPassFactory(InstRO::PassManagement::PassManager* manager, clang::tooling::Replacements& reps)
+	ClangPassFactory(InstRO::PassManagement::PassManager* manager, ReplacementsMap& reps)
 			: InstRO::PassFactory(manager), replacements(reps){};
 
 	InstRO::Pass* createDefaultInstrumentationAdapter(InstRO::Pass* input) { return nullptr; }
@@ -41,7 +44,7 @@ class ClangPassFactory : public InstRO::PassFactory {
 	std::set<InstRO::Clang::ASTContextProvider*> lazyContextProvidingMap;
 
  private:
-	clang::tooling::Replacements& replacements;
+	ReplacementsMap& replacements;
 };
 }	// Clang
 }	// INstRO

@@ -1,11 +1,12 @@
 #ifndef INSTRO_CLANG_CLANGCONSUMERFACTORY_H
 #define INSTRO_CLANG_CLANGCONSUMERFACTORY_H
 
+#include <instro.h>
 #include <memory>
 
 #include "clang/AST/ASTConsumer.h"
-#include "clang/Tooling/Core/Replacement.h"
 #include "clang/Frontend/FrontendAction.h"
+#include "clang/Tooling/Core/Replacement.h"
 
 #include "instro/clang/support/InstROASTConsumer.h"
 
@@ -16,7 +17,7 @@ class ClangConsumerFactory : public clang::ASTFrontendAction {
  public:
 	ClangConsumerFactory() = delete;
 	ClangConsumerFactory(const ClangConsumerFactory &other) = delete;
-	ClangConsumerFactory(InstRO::PassManagement::PassManager *manager, clang::tooling::Replacements &replacements,
+	ClangConsumerFactory(InstRO::PassManagement::PassManager *manager, ReplacementsMap& Replacements,
 											 InstRO::Clang::ClangPassFactory *fac);
 	~ClangConsumerFactory();
 	std::unique_ptr<clang::ASTConsumer> newASTConsumer();
@@ -24,7 +25,7 @@ class ClangConsumerFactory : public clang::ASTFrontendAction {
 
  private:
 	InstRO::PassManagement::PassManager *manager;
-	clang::tooling::Replacements &replacements;
+	ReplacementsMap &replacements;
 	InstRO::Clang::ClangPassFactory *factory;
 };
 }	// Support

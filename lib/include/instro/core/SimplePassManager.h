@@ -34,11 +34,11 @@ class SimplePassManager : public InstRO::PassManagement::PassManager {
 	int execute() override;
 
 	/** In a simple pass manager this function should just be left blang? */
-	virtual void setDependence(Pass* pred, Pass* pass) { throw std::string("Not implemented in SimplePassManager"); }
+	void setDependence(Pass* pred, Pass* pass) override { throw std::string("Not implemented in SimplePassManager"); }
 
 	virtual bool hasOutputDependencies(Pass* pass);
 
-	virtual bool hasInputDependencies(Pass* pass) { return getPredecessors(pass).size() > 0; };
+	bool hasInputDependencies(Pass* pass) override { return getPredecessors(pass).size() > 0; };
 
  protected:
 	/** Retrieves the list of predecessors of pass p */

@@ -439,7 +439,7 @@ std::string ClangConstruct::toString() const {
 		}
 	} else if (ct.is(ConstructTraitType::CTFileScope)) {
 		if (clang::TranslationUnitDecl *translationDecl = llvm::dyn_cast<clang::TranslationUnitDecl>(getAsDecl())) {
-			rso << getSourceManager().getFilename(translationDecl->getLocStart());
+			rso << getSourceManager().getFilename(translationDecl->getBeginLoc());
 		} else {
 			InstRO::raise_exception("Invalid TranslationUnitDecl");
 		}
@@ -474,9 +474,9 @@ std::string ClangConstruct::getIdentifier() const {
 
 	clang::SourceLocation location;
 	if (clang::Decl *decl = getAsDecl()) {
-		location = decl->getLocStart();
+		location = decl->getBeginLoc();
 	} else if (clang::Stmt *stmt = getAsStmt()) {
-		location = stmt->getLocStart();
+		location = stmt->getBeginLoc();
 	} else {
 		InstRO::raise_exception("Unknown type in ClangConstruct");
 	}
