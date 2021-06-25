@@ -115,7 +115,7 @@ class ClangTestInstrumentor;
  */
 class ClangTestFactory : public InstRO::Clang::ClangPassFactory {
  public:
-	ClangTestFactory(InstRO::PassManagement::PassManager *manager, clang::tooling::Replacements &reps)
+	ClangTestFactory(InstRO::PassManagement::PassManager *manager, InstRO::Clang::ReplacementsMap &reps)
 			: InstRO::Clang::ClangPassFactory(manager, reps) {}
 
 	InstRO::Pass *createTestAdapter(InstRO::Pass *input, std::string label, std::string filename) {

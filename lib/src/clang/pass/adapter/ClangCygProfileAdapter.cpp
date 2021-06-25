@@ -5,7 +5,7 @@
 
 using namespace InstRO::Clang::Adapter;
 
-ClangCygProfileAdapter::ClangCygProfileAdapter(clang::tooling::Replacements &reps, clang::SourceManager *sm)
+ClangCygProfileAdapter::ClangCygProfileAdapter(ReplacementsMap &reps, clang::SourceManager *sm)
 		: ClangPassImplBase(new InstRO::Clang::VisitingPassExecuter<ClangCygProfileAdapter>()),
 			sm(sm),
 			replacements(reps),
@@ -124,7 +124,7 @@ void ClangCygProfileAdapter::instrumentFunctionBody(clang::CompoundStmt *body, s
 
 	// We add the calls to our entry functions
 	clang::tooling::Replacement repMent(*sm, body->getLBracLoc(), 1, std::string("{" + entryStr));
-	replacements.insert(repMent);
+	insertReplacement(repMent);
 }
 
 void ClangCygProfileAdapter::handleEmptyBody(clang::CompoundStmt *body, std::string &entryStr,
@@ -134,8 +134,8 @@ void ClangCygProfileAdapter::handleEmptyBody(clang::CompoundStmt *body, std::str
 	 * the opening bracket with the opening bracket followed by the function call
 	 * to the measurement function
 	 */
-	replacements.insert(clang::tooling::Replacement(*sm, body->getRBracLoc(), 0, exitStr));
-	replacements.insert(clang::tooling::Replacement(*sm, body->getLBracLoc(), 1, std::string("{" + entryStr)));
+	insertReplacement(clang::tooling::Replacement(*sm, body->getRBracLoc(), 0, exitStr));
+	insertReplacement(clang::tooling::Replacement(*sm, body->getLBracLoc(), 1, std::string("{" + entryStr)));
 }
 
 void ClangCygProfileAdapter::instrumentReturnStatements(clang::CompoundStmt *body, std::string &entryStr,
@@ -152,10 +152,10 @@ void ClangCygProfileAdapter::instrumentReturnStatements(clang::CompoundStmt *bod
 			}
 
 			// instrument return statements
-			replacements.insert(clang::tooling::Replacement(*sm, rSt->getLocStart(), 0, exitStr));
+			insertReplacement(clang::tooling::Replacement(*sm, rSt->getBeginLoc(), 0, exitStr));
 		} else if (st == body->body_back()) {
 			// instrument end of function without return stmt
-			replacements.insert(clang::tooling::Replacement(*sm, body->getRBracLoc(), 0, exitStr));
+			insertReplacement(clang::tooling::Replacement(*sm, body->getRBracLoc(), 0, exitStr));
 		}
 	}
 }
@@ -176,10 +176,10 @@ void ClangCygProfileAdapter::transformReturnStmt(clang::ReturnStmt *retStmt) {
 	std::string tVar(t.getAsString() + iVarName + " = " + s.str() + ";");
 
 	// refer in return statement to newly created variable
-	replacements.insert(clang::tooling::Replacement(*sm, e, iVarName));
+	insertReplacement(clang::tooling::Replacement(*sm, e, iVarName));
 
 	// insert the declaration of the newly created temporary
-	replacements.insert(clang::tooling::Replacement(*sm, retStmt->getLocStart(), 0, tVar));
+	insertReplacement(clang::tooling::Replacement(*sm, retStmt->getBeginLoc(), 0, tVar));
 }
 
 std::string ClangCygProfileAdapter::generateFunctionEntry(clang::FunctionDecl *d) {
@@ -305,3 +305,10 @@ bool ClangCygProfileAdapter::retStmtNeedsTransformation(clang::ReturnStmt *st) {
 	}
 	return true;
 }
+
+void ClangCygProfileAdapter::insertReplacement(clang::tooling::Replacement rep) {
+	auto file = rep.getFilePath().str();
+	auto& reps = replacements[file];
+	reps.add(rep);
+}
+

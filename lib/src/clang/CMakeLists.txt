@@ -9,7 +9,7 @@ add_subdirectory(tooling)
 #add_subdirectory(utility)
 
 # To build the clang abstraction layer implementation
-add_library(InstRO_clang SHARED ClangInstrumentor)
+add_library(InstRO_clang SHARED ClangInstrumentor.cpp)
 
 target_include_directories(InstRO_clang PUBLIC "${CMAKE_SOURCE_DIR}/lib/include")
 target_compile_options(InstRO_clang PUBLIC ${instro_default_options})
@@ -19,6 +19,8 @@ set(ccsd ${CMAKE_CURRENT_SOURCE_DIR})
 
 # TODO Include the Rapidjson library
 # ${ccsd}/utility/ClangConfigurationPassRegistry)
+
+message("Clang files: ${clang_core_files}")
 
 target_sources(InstRO_clang PUBLIC ${clang_core_files})
 target_link_libraries(InstRO_clang PUBLIC InstRO_clang_core 

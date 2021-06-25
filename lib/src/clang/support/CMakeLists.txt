@@ -1,6 +1,6 @@
 
-add_library(InstRO_clang_support SHARED ClangConsumerFactory
-																	InstROASTConsumer)
+add_library(InstRO_clang_support SHARED ClangConsumerFactory.cpp
+																	InstROASTConsumer.cpp)
 
 
 target_compile_options(InstRO_clang_support PUBLIC ${instro_default_options})

@@ -6,9 +6,9 @@ add_subdirectory(src/tooling)
 add_subdirectory(src/utility)
 
 # The InstRO library
-add_library(InstRO SHARED src/Instrumentor 
-											src/Pass 
-											src/PassFactory)
+add_library(InstRO SHARED src/Instrumentor.cpp
+											src/Pass.cpp
+											src/PassFactory.cpp)
 
 target_include_directories(InstRO PUBLIC "${CMAKE_SOURCE_DIR}/lib/include")
 target_compile_options(InstRO PUBLIC ${instro_default_options})

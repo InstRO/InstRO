@@ -2,6 +2,7 @@
 #define INSTRO_CLANG_PASS_ADAPTER_CLANGCYGPROFILEADAPTER_H
 
 #include <cassert>
+#include <instro.h>
 
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/Basic/SourceLocation.h"
@@ -15,7 +16,7 @@ namespace Adapter {
 
 class ClangCygProfileAdapter : public InstRO::Clang::ClangPassImplBase<ClangCygProfileAdapter> {
  public:
-	ClangCygProfileAdapter(clang::tooling::Replacements &replacements, clang::SourceManager *sm);
+	ClangCygProfileAdapter(ReplacementsMap &replacements, clang::SourceManager *sm);
 
 	bool VisitFunctionDecl(clang::FunctionDecl *decl);
 
@@ -39,9 +40,11 @@ class ClangCygProfileAdapter : public InstRO::Clang::ClangPassImplBase<ClangCygP
 	bool retStmtNeedsTransformation(clang::ReturnStmt *st);
 	void transformReturnStmt(clang::ReturnStmt *retStmt);
 
+	void insertReplacement(clang::tooling::Replacement rep);
+
  private:
 	clang::SourceManager *sm;
-	clang::tooling::Replacements &replacements;
+	ReplacementsMap &replacements;
 	int labelCount;
 	const std::string cygProfFuncPtrName;
 };
