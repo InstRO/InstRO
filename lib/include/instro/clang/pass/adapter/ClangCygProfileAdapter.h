@@ -40,7 +40,7 @@ class ClangCygProfileAdapter : public InstRO::Clang::ClangPassImplBase<ClangCygP
 	bool retStmtNeedsTransformation(clang::ReturnStmt *st);
 	void transformReturnStmt(clang::ReturnStmt *retStmt);
 
-	void insertReplacement(clang::tooling::Replacement rep);
+	bool insertReplacement(clang::tooling::Replacement rep);
 
  private:
 	clang::SourceManager *sm;

@@ -306,9 +306,13 @@ bool ClangCygProfileAdapter::retStmtNeedsTransformation(clang::ReturnStmt *st) {
 	return true;
 }
 
-void ClangCygProfileAdapter::insertReplacement(clang::tooling::Replacement rep) {
+bool ClangCygProfileAdapter::insertReplacement(clang::tooling::Replacement rep) {
 	auto file = rep.getFilePath().str();
 	auto& reps = replacements[file];
-	reps.add(rep);
+	if (auto err = reps.add(rep)) {
+		logIt(ERROR) << "Error while applying replacement: " << llvm::toString(std::move(err)) << "\n";
+		return false;
+	}
+	return true;
 }
 
