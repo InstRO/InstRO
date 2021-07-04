@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.4.3)
 
 project(InstRO)
 
+find_package(LLVM REQUIRED)
 find_package(Clang REQUIRED CONFIG)
 find_package(Boost REQUIRED COMPONENTS system iostreams program_options)
 
