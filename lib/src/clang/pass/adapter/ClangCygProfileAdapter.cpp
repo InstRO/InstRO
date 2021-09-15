@@ -4,6 +4,66 @@
 #include "instro/utility/Logger.h"
 
 using namespace InstRO::Clang::Adapter;
+using namespace clang;
+
+void addReplacement(clang::tooling::Replacements& reps, clang::tooling::Replacement r) {
+	if (auto err = reps.add(r)) {
+		logIt(InstRO::ERROR) << "Error while applying replacement: " << llvm::toString(std::move(err)) << "\nTrying to merge.\n";
+	}
+}
+
+// Returns `R` with new range that refers to code after `Replaces` being
+// applied.
+tooling::Replacement
+getReplacementInChangedCode(const tooling::Replacements &Replaces,
+														const tooling::Replacement &R) {
+	unsigned NewStart = Replaces.getShiftedCodePosition(R.getOffset());
+	unsigned NewEnd =
+			Replaces.getShiftedCodePosition(R.getOffset() + R.getLength());
+	return tooling::Replacement(R.getFilePath(), NewStart, NewEnd - NewStart,
+															R.getReplacementText());
+}
+
+// Adds a replacement `R` into `Replaces` or merges it into `Replaces` by
+// applying all existing Replaces first if there is conflict.
+void addOrMergeReplacement(const tooling::Replacement &R,
+													 tooling::Replacements *Replaces) {
+	auto Err = Replaces->add(R);
+	if (Err) {
+		llvm::consumeError(std::move(Err));
+		auto Replace = getReplacementInChangedCode(*Replaces, R);
+		*Replaces = Replaces->merge(tooling::Replacements(Replace));
+	}
+}
+
+tooling::Replacements& ClangCygProfileAdapter::getReplacements(const tooling::Replacement& rep) {
+	auto file = rep.getFilePath().str();
+	auto& reps = replacements[file];
+	return reps;
+}
+
+bool ClangCygProfileAdapter::mergeReplacmenets(const clang::tooling::Replacements& toMerge) {
+	auto file = toMerge.begin()->getFilePath().str();
+	auto& reps = replacements[file];
+	replacements[file] = reps.merge(toMerge);
+	return true;
+}
+
+
+bool ClangCygProfileAdapter::insertReplacement(clang::tooling::Replacement rep) {
+	auto& reps = getReplacements(rep);
+
+//	clang::tooling::Replacements toMerge(rep);
+//	replacements[file] = reps.merge(toMerge);
+
+
+	if (auto err = reps.add(rep)) {
+		logIt(ERROR) << "Error while applying replacement: " << llvm::toString(std::move(err)) << "\nTrying to merge.\n";
+//		clang::tooling::Replacements toMerge(rep);
+//		replacements[file] = reps.merge(toMerge);
+	}
+	return true;
+}
 
 ClangCygProfileAdapter::ClangCygProfileAdapter(ReplacementsMap &reps, clang::SourceManager *sm)
 		: ClangPassImplBase(new InstRO::Clang::VisitingPassExecuter<ClangCygProfileAdapter>()),
@@ -61,6 +121,15 @@ void ClangCygProfileAdapter::transform(clang::SourceManager *sm, clang::Function
 
 	clang::Stmt *fBodyStmt = fDef->getBody();
 
+	if (!fBodyStmt) {
+		if (!fDef->isDefaulted() && !fDef->isDeleted()) {
+			logIt(WARN) << "Cannot instrument function " << fDef->getQualifiedNameAsString() << " : body is empty."
+									<< std::endl;
+			fDef->dump();
+		}
+		return;
+	}
+
 	// I assume that a function body always is a compound statement
 	clang::CompoundStmt *fBody = llvm::dyn_cast<clang::CompoundStmt>(fBodyStmt);
 
@@ -106,6 +175,16 @@ void ClangCygProfileAdapter::transform(clang::SourceManager *sm, clang::CXXMetho
 
 	// We are assuming we are only instrumenting function definitions!
 	clang::Stmt *fBodyStmt = fDef->getBody();
+
+	if (!fBodyStmt) {
+		if (!fDef->isDefaulted() && !fDef->isDeleted()) {
+			logIt(WARN) << "Cannot instrument function " << fDef->getQualifiedNameAsString() << " : body is empty."
+									<< std::endl;
+			fDef->dump();
+		}
+		return;
+	}
+
 	// I assume that a function body always is a compound statement
 	clang::CompoundStmt *fBody = llvm::dyn_cast<clang::CompoundStmt>(fBodyStmt);
 
@@ -140,19 +219,87 @@ void ClangCygProfileAdapter::handleEmptyBody(clang::CompoundStmt *body, std::str
 
 void ClangCygProfileAdapter::instrumentReturnStatements(clang::CompoundStmt *body, std::string &entryStr,
 																																	std::string &exitStr) {
+	// TODO: Fix multiple return statements
+
 	for (auto &st : body->body()) {
 		clang::ReturnStmt *rSt = llvm::dyn_cast<clang::ReturnStmt>(st);
+
+
+
 		if (rSt != nullptr) {
+			logIt(ERROR) << "Return statement detected: \n";
+			rSt->dumpPretty(*context);
+
+			clang::tooling::Replacements toMerge;
+
 			/*
 			 * If an expression other than just a literal or a declaration reference we want to transform
 			 * the return statement, so that we capture the time it takes to evaluate the expression
 			 */
 			if (retStmtNeedsTransformation(rSt)) {
-				transformReturnStmt(rSt);
+				//transformReturnStmt(rSt);
+				/*
+	 * create temporary variable to store the expression hidden in the return stmt
+	 */
+				clang::Expr *e = rSt->getRetValue();
+				clang::QualType t = e->getType();
+
+				// clangs style to get the "original string representation" of the expression
+				std::string exprStr;
+				llvm::raw_string_ostream s(exprStr);
+				e->printPretty(s, 0, context->getPrintingPolicy());
+				// ---
+
+				std::string iVarName(" __instro_" + std::to_string(reinterpret_cast<unsigned long>(this)));
+				std::string tVar(t.getAsString() + iVarName + " = " + s.str() + ";");
+
+
+				logIt(ERROR) << "Replace return statement with temp variable:\n";
+				logIt(ERROR) << "Old code: " << exprStr << "\n";
+				logIt(ERROR) << "New code: " << iVarName << "\n";
+
+				auto tempVarRep = clang::tooling::Replacement(*sm, e, iVarName);
+
+				// FIXME: For some reason the start and end locations sometimes belong to different FiledIDs.
+				if (tempVarRep.getLength() >= 10000) {
+					logIt(ERROR) << "Unusual replacement length: " << tempVarRep.getLength() << "\n";
+					auto range = CharSourceRange::getTokenRange(e->getSourceRange());
+
+					SourceLocation SpellingBegin = sm->getSpellingLoc(range.getBegin());
+					SourceLocation SpellingEnd = sm->getSpellingLoc(range.getEnd());
+
+					std::pair<FileID, unsigned> Start = sm->getDecomposedLoc(SpellingBegin);
+					std::pair<FileID, unsigned> End = sm->getDecomposedLoc(SpellingEnd);
+					if (Start.first != End.first) {
+						auto file1 = sm->getFileEntryRefForID(Start.first);
+						auto file2 = sm->getFileEntryRefForID(End.first);
+						if (file1 && file2) {
+							logIt(ERROR) << "Different file IDs for same replacement: " << file1->getName().str() << ", " << file2->getName().str() << "\n";
+						} else {
+							logIt(ERROR) << "Unable to determine source files\n";
+						}
+						logIt(ERROR) << "Skipping...\n";
+						continue;
+					}
+
+
+				}
+				insertReplacement(tempVarRep);
+
+				// insert the declaration of the newly created temporary
+				insertReplacement( clang::tooling::Replacement(*sm, rSt->getBeginLoc(), 0, tVar));
 			}
 
+			logIt(ERROR) << "ExitStr: " << exitStr << "\n";
+
+
 			// instrument return statements
-			insertReplacement(clang::tooling::Replacement(*sm, rSt->getBeginLoc(), 0, exitStr));
+			auto retRep = clang::tooling::Replacement(*sm, rSt->getBeginLoc(), 0, exitStr);
+			addOrMergeReplacement(retRep, &getReplacements(retRep));
+			//addReplacement(toMerge,clang::tooling::Replacement(*sm, rSt->getBeginLoc(), 0, exitStr));
+			//mergeReplacmenets(toMerge);
+
+
 		} else if (st == body->body_back()) {
 			// instrument end of function without return stmt
 			insertReplacement(clang::tooling::Replacement(*sm, body->getRBracLoc(), 0, exitStr));
@@ -174,6 +321,11 @@ void ClangCygProfileAdapter::transformReturnStmt(clang::ReturnStmt *retStmt) {
 
 	std::string iVarName(" __instro_" + std::to_string(reinterpret_cast<unsigned long>(this)));
 	std::string tVar(t.getAsString() + iVarName + " = " + s.str() + ";");
+
+
+	logIt(ERROR) << "Replace return statement with temp variable:\n";
+	logIt(ERROR) << "Old code: " << exprStr << "\n";
+	logIt(ERROR) << "New code: " << iVarName << "\n";
 
 	// refer in return statement to newly created variable
 	insertReplacement(clang::tooling::Replacement(*sm, e, iVarName));
@@ -306,13 +458,5 @@ bool ClangCygProfileAdapter::retStmtNeedsTransformation(clang::ReturnStmt *st) {
 	return true;
 }
 
-bool ClangCygProfileAdapter::insertReplacement(clang::tooling::Replacement rep) {
-	auto file = rep.getFilePath().str();
-	auto& reps = replacements[file];
-	if (auto err = reps.add(rep)) {
-		logIt(ERROR) << "Error while applying replacement: " << llvm::toString(std::move(err)) << "\n";
-		return false;
-	}
-	return true;
-}
+
 
