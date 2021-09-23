@@ -6,6 +6,31 @@
 using namespace InstRO::Clang::Adapter;
 using namespace clang;
 
+class ReturnCollector : public clang::RecursiveASTVisitor<ReturnCollector> {
+ public:
+	using ReturnStmtList = llvm::SmallVector<clang::ReturnStmt*, 4>;
+
+	static ReturnStmtList collectReturnStmts(clang::Decl* decl) {
+		ReturnCollector collector;
+		collector.TraverseDecl(decl);
+		return collector.collected;
+	}
+
+	static ReturnStmtList collectReturnStmts(clang::CompoundStmt* body) {
+		ReturnCollector collector;
+		collector.TraverseCompoundStmt(body);
+		return collector.collected;
+	}
+
+	bool VisitReturnStmt(clang::ReturnStmt *retSt) {
+		collected.push_back(retSt);
+		return true;
+	}
+
+ private:
+	ReturnStmtList collected;
+};
+
 void addReplacement(clang::tooling::Replacements& reps, clang::tooling::Replacement r) {
 	if (auto err = reps.add(r)) {
 		logIt(InstRO::ERROR) << "Error while applying replacement: " << llvm::toString(std::move(err)) << "\nTrying to merge.\n";
@@ -217,11 +242,98 @@ void ClangCygProfileAdapter::handleEmptyBody(clang::CompoundStmt *body, std::str
 	insertReplacement(clang::tooling::Replacement(*sm, body->getLBracLoc(), 1, std::string("{" + entryStr)));
 }
 
+
 void ClangCygProfileAdapter::instrumentReturnStatements(clang::CompoundStmt *body, std::string &entryStr,
 																																	std::string &exitStr) {
 	// TODO: Fix multiple return statements
 
-	for (auto &st : body->body()) {
+
+	auto instrumentReturnStmt = [&](clang::ReturnStmt* rSt) {
+		logIt(ERROR) << "Return statement detected: \n";
+		rSt->dumpPretty(*context);
+
+		clang::tooling::Replacements toMerge;
+
+		/*
+		 * If an expression other than just a literal or a declaration reference we want to transform
+		 * the return statement, so that we capture the time it takes to evaluate the expression
+		 */
+		if (retStmtNeedsTransformation(rSt)) {
+			//transformReturnStmt(rSt);
+			/*
+ * create temporary variable to store the expression hidden in the return stmt
+ */
+			clang::Expr *e = rSt->getRetValue();
+			clang::QualType t = e->getType();
+
+			// clangs style to get the "original string representation" of the expression
+			std::string exprStr;
+			llvm::raw_string_ostream s(exprStr);
+			e->printPretty(s, 0, context->getPrintingPolicy());
+			// ---
+
+			std::string iVarName(" __instro_" + std::to_string(reinterpret_cast<unsigned long>(this)));
+			std::string tVar(t.getAsString() + iVarName + " = " + s.str() + ";");
+
+
+			logIt(ERROR) << "Replace return statement with temp variable:\n";
+			logIt(ERROR) << "Old code: " << exprStr << "\n";
+			logIt(ERROR) << "New code: " << iVarName << "\n";
+
+			auto tempVarRep = clang::tooling::Replacement(*sm, e, iVarName);
+
+			// FIXME: For some reason the start and end locations sometimes belong to different FiledIDs.
+			if (tempVarRep.getLength() >= 10000) {
+				logIt(ERROR) << "Unusual replacement length: " << tempVarRep.getLength() << "\n";
+				auto range = CharSourceRange::getTokenRange(e->getSourceRange());
+
+				SourceLocation SpellingBegin = sm->getSpellingLoc(range.getBegin());
+				SourceLocation SpellingEnd = sm->getSpellingLoc(range.getEnd());
+
+				std::pair<FileID, unsigned> Start = sm->getDecomposedLoc(SpellingBegin);
+				std::pair<FileID, unsigned> End = sm->getDecomposedLoc(SpellingEnd);
+				if (Start.first != End.first) {
+					auto file1 = sm->getFileEntryRefForID(Start.first);
+					auto file2 = sm->getFileEntryRefForID(End.first);
+					if (file1 && file2) {
+						logIt(ERROR) << "Different file IDs for same replacement: " << file1->getName().str() << ", " << file2->getName().str() << "\n";
+					} else {
+						logIt(ERROR) << "Unable to determine source files\n";
+					}
+					logIt(ERROR) << "Skipping...\n";
+					return;
+				}
+
+
+			}
+			insertReplacement(tempVarRep);
+
+			// insert the declaration of the newly created temporary
+			insertReplacement( clang::tooling::Replacement(*sm, rSt->getBeginLoc(), 0, tVar));
+		}
+
+		logIt(ERROR) << "ExitStr: " << exitStr << "\n";
+
+
+		// instrument return statements
+		auto retRep = clang::tooling::Replacement(*sm, rSt->getBeginLoc(), 0, exitStr);
+		addOrMergeReplacement(retRep, &getReplacements(retRep));
+		//addReplacement(toMerge,clang::tooling::Replacement(*sm, rSt->getBeginLoc(), 0, exitStr));
+		//mergeReplacmenets(toMerge);
+
+	};
+
+	auto returnStmts = ReturnCollector::collectReturnStmts(body);
+
+	std::for_each(returnStmts.begin(), returnStmts.end(), instrumentReturnStmt);
+
+	auto lastStmt = body->body_back();
+	if (!isa<ReturnStmt>(lastStmt)) {
+		// instrument end of function without return stmt
+		insertReplacement(clang::tooling::Replacement(*sm, body->getRBracLoc(), 0, exitStr));
+	}
+
+	/*for (auto &st : body->body()) {
 		clang::ReturnStmt *rSt = llvm::dyn_cast<clang::ReturnStmt>(st);
 
 
@@ -232,15 +344,15 @@ void ClangCygProfileAdapter::instrumentReturnStatements(clang::CompoundStmt *bod
 
 			clang::tooling::Replacements toMerge;
 
-			/*
+			*//*
 			 * If an expression other than just a literal or a declaration reference we want to transform
 			 * the return statement, so that we capture the time it takes to evaluate the expression
-			 */
+			 *//*
 			if (retStmtNeedsTransformation(rSt)) {
 				//transformReturnStmt(rSt);
-				/*
+				*//*
 	 * create temporary variable to store the expression hidden in the return stmt
-	 */
+	 *//*
 				clang::Expr *e = rSt->getRetValue();
 				clang::QualType t = e->getType();
 
@@ -304,7 +416,7 @@ void ClangCygProfileAdapter::instrumentReturnStatements(clang::CompoundStmt *bod
 			// instrument end of function without return stmt
 			insertReplacement(clang::tooling::Replacement(*sm, body->getRBracLoc(), 0, exitStr));
 		}
-	}
+	}*/
 }
 void ClangCygProfileAdapter::transformReturnStmt(clang::ReturnStmt *retStmt) {
 	/*
@@ -437,6 +549,9 @@ bool ClangCygProfileAdapter::retStmtNeedsTransformation(clang::ReturnStmt *st) {
 	 * For all other expression types we need to transform the return statement
 	 */
 	clang::Expr *retExpr = st->getRetValue();
+	if (!retExpr) {
+		return false;
+	}
 	if (llvm::dyn_cast<clang::CXXBoolLiteralExpr>(retExpr) != nullptr) {
 		return false;
 	}
