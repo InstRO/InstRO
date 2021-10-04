@@ -31,11 +31,6 @@ class ReturnCollector : public clang::RecursiveASTVisitor<ReturnCollector> {
 	ReturnStmtList collected;
 };
 
-void addReplacement(clang::tooling::Replacements& reps, clang::tooling::Replacement r) {
-	if (auto err = reps.add(r)) {
-		logIt(InstRO::ERROR) << "Error while applying replacement: " << llvm::toString(std::move(err)) << "\nTrying to merge.\n";
-	}
-}
 
 // Returns `R` with new range that refers to code after `Replaces` being
 // applied.
@@ -83,7 +78,7 @@ bool ClangCygProfileAdapter::insertReplacement(clang::tooling::Replacement rep) 
 
 
 	if (auto err = reps.add(rep)) {
-		logIt(ERROR) << "Error while applying replacement: " << llvm::toString(std::move(err)) << "\nTrying to merge.\n";
+		logIt(ERROR) << "Error while applying replacement: " << llvm::toString(std::move(err)) << "\nIs the definition in a template?.\n";
 		assert(false && "Replacement failed");
 //		clang::tooling::Replacements toMerge(rep);
 //		replacements[file] = reps.merge(toMerge);
@@ -124,6 +119,10 @@ void ClangCygProfileAdapter::dispatch(clang::Decl *c) {
 	logIt(DEBUG) << "Dispatching..." << std::endl;
 	clang::CXXMethodDecl *mDef = llvm::dyn_cast<clang::CXXMethodDecl>(c);
 	if (mDef != nullptr) {
+		if (mDef->isTemplateInstantiation()) {
+			logIt(DEBUG) << "Method is template instantiation - skipping...\n";
+			return;
+		}
 		transform(sm, mDef);
 		return;
 	}
@@ -158,6 +157,8 @@ void ClangCygProfileAdapter::transform(clang::SourceManager *sm, clang::Function
 
 	// I assume that a function body always is a compound statement
 	clang::CompoundStmt *fBody = llvm::dyn_cast<clang::CompoundStmt>(fBodyStmt);
+
+	logIt(DEBUG) << "Instrumenting function: " << decl->getQualifiedNameAsString() << "\n";
 
 	instrumentFunctionBody(fBody, entryReplaceStr, exitReplaceStr);
 }
@@ -213,6 +214,8 @@ void ClangCygProfileAdapter::transform(clang::SourceManager *sm, clang::CXXMetho
 
 	// I assume that a function body always is a compound statement
 	clang::CompoundStmt *fBody = llvm::dyn_cast<clang::CompoundStmt>(fBodyStmt);
+
+	logIt(DEBUG) << "Instrumenting method: " << decl->getQualifiedNameAsString() << "\n";
 
 	instrumentFunctionBody(fBody, entryReplaceStr, exitReplaceStr);
 }
