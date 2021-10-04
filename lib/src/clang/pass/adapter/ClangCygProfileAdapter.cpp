@@ -274,8 +274,15 @@ void ClangCygProfileAdapter::instrumentReturnStatements(clang::CompoundStmt *bod
 			e->printPretty(s, 0, context->getPrintingPolicy());
 			// ---
 
-			std::string iVarName(" __instro_" + std::to_string(reinterpret_cast<unsigned long>(this)));
-			std::string tVar(t.getAsString() + iVarName + " = " + s.str() + ";");
+			std::string typeString;
+			if (t->isDependentType()) {
+				typeString = "decltype(" + exprStr + ")";
+			} else {
+				typeString = t.getAsString();
+			}
+
+			std::string iVarName(" __instro_" + std::to_string(reinterpret_cast<unsigned long>(e)));
+			std::string tVar(typeString + iVarName + " = " + exprStr + ";");
 
 
 			logIt(DEBUG) << "Replace return statement with temp variable:\n";
