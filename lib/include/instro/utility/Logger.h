@@ -9,7 +9,11 @@ enum LogLevel { ERROR, WARN, INFO, DEBUG };
 
 /* Default Log Level */
 #ifndef INSTRO_LOG_LEVEL
+#ifdef INSTRO_LOG_DEBUG
+#define INSTRO_LOG_LEVEL DEBUG
+#else
 #define INSTRO_LOG_LEVEL WARN
+#endif
 #endif
 
 /**

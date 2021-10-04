@@ -6,6 +6,12 @@ find_package(LLVM REQUIRED)
 find_package(Clang REQUIRED CONFIG)
 find_package(Boost REQUIRED COMPONENTS system iostreams program_options)
 
+option(ENABLE_DEBUG_OUTPUT OFF "Enables logging debug messages")
+if (ENABLE_DEBUG_OUTPUT)
+    add_definitions("-DINSTRO_LOG_DEBUG")
+endif()
+
+
 # TODO I think we can move this to the respective targets
 include_directories(${LLVM_INCLUDE_DIRS})
 include_directories(${LLVM_DEFINITIONS})

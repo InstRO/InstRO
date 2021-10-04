@@ -228,7 +228,7 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 		std::string nodeTypeName = stmt->getStmtClassName();
 		ct = ConstructTrait(ConstructTraitType::CTExpression);
 		if (!isNotAStatement) {
-			InstRO::logIt(InstRO::INFO) << nodeTypeName << " is a simple statement." << std::endl;
+			InstRO::logIt(InstRO::DEBUG) << nodeTypeName << " is a simple statement." << std::endl;
 			ct.add(ConstructTraitType::CTSimpleStatement);
 			handleStatementWithWrappableCheck(stmt);
 		}
