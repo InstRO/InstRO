@@ -142,8 +142,8 @@ void ClangCygProfileAdapter::transform(clang::SourceManager *sm, clang::Function
 	// Depending on whether the funciton is overloaded we need to generate different strings
 	logIt(DEBUG) << "Trying to query the decl context" << std::endl;
 
-	std::string entryReplaceStr = generateFunctionEntry(fDef);
-	std::string exitReplaceStr = generateFunctionExit(fDef);
+	std::string entryReplaceStr = "\n" + generateFunctionEntry(fDef);
+	std::string exitReplaceStr = "\n" + generateFunctionExit(fDef) + "\n";
 
 	clang::Stmt *fBodyStmt = fDef->getBody();
 
@@ -196,8 +196,8 @@ bool ClangCygProfileAdapter::isOverloadedFunction(clang::FunctionDecl *decl) {
 void ClangCygProfileAdapter::transform(clang::SourceManager *sm, clang::CXXMethodDecl *decl) {
 	clang::CXXMethodDecl *fDef = llvm::dyn_cast<clang::CXXMethodDecl>(decl);
 
-	std::string entryReplaceStr = generateMethodEntry(fDef);
-	std::string exitReplaceStr = generateMethodExit(fDef);
+	std::string entryReplaceStr = "\n" + generateMethodEntry(fDef);
+	std::string exitReplaceStr = "\n" + generateMethodExit(fDef) + "\n";
 
 	// We are assuming we are only instrumenting function definitions!
 	clang::Stmt *fBodyStmt = fDef->getBody();

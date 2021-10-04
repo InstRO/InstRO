@@ -13,10 +13,15 @@ fi
 tmp_dir="Instrumented"
 src_file="$1"
 
-mkdir -p $tmp_dir
+if [ ! -d $tmp_dir ]; then
+  mkdir $tmp_dir
+fi
 
 cp $src_file $tmp_dir
 instro_target="$tmp_dir/$(basename $src_file)"
+
+# Remove comments (needed for FileCheck to work properly)
+sed -i '/^[[:blank:]]*\/\//d' $instro_target
 
 @INSTRO_BIN_DIR@/examples/ClangInstrumentor $instro_target
 if [ $? -ne 0 ]; then
