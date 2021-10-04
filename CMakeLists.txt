@@ -6,10 +6,18 @@ find_package(LLVM REQUIRED)
 find_package(Clang REQUIRED CONFIG)
 find_package(Boost REQUIRED COMPONENTS system iostreams program_options)
 
+list(APPEND CMAKE_MODULE_PATH
+        ${LLVM_CMAKE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+include(AddLLVM)
+include(llvm-lit)
+
 option(ENABLE_DEBUG_OUTPUT OFF "Enables logging debug messages")
 if (ENABLE_DEBUG_OUTPUT)
     add_definitions("-DINSTRO_LOG_DEBUG")
 endif()
+
 
 
 # TODO I think we can move this to the respective targets

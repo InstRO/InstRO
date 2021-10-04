@@ -1,0 +1,31 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]; then
+    echo "Need input file as argument"
+    exit
+fi
+
+if [ ! -f "$1" ]; then
+    echo "Source file invalid."
+    exit
+fi
+
+tmp_dir="Instrumented"
+src_file="$1"
+
+mkdir -p $tmp_dir
+
+cp $src_file $tmp_dir
+instro_target="$tmp_dir/$(basename $src_file)"
+
+@INSTRO_BIN_DIR@/examples/ClangInstrumentor $instro_target
+if [ $? -ne 0 ]; then
+    echo "Instrumentation failed"
+fi
+
+cat $instro_target
+
+
+
+
+
